@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ proyecto.Nombre }} - IICA Chile</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Estilos Institucionales -->
+    <link href="{{ url_for('static', filename='css/institucional.css') }}" rel="stylesheet">
+    
+    <style>
+        .project-hero {
+            background: linear-gradient(135deg, #0B6F39 0%, #28a745 100%);
+            color: white;
+            padding: 3rem 0;
+        }
+        
+        .project-detail-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .project-detail-card .card-header {
+            background: linear-gradient(135deg, #0B6F39 0%, #28a745 100%);
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #0B6F39 0%, #28a745 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.75rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #0B6F39;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-left: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -0.5rem;
+            top: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+            background: #0B6F39;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #0B6F39;
+        }
+        
+        .action-buttons {
+            position: sticky;
+            top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-institucional">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="https://iica.int/sites/default/files/iica_logo_0.png" 
+                     alt="Logo IICA Chile" 
+                     class="logo-institucional me-2">
+                IICA Chile
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/">
+                    <i class="bi bi-arrow-left me-1"></i>Volver a Proyectos
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Project Hero -->
+    <section class="project-hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="display-5 fw-bold mb-3">{{ proyecto.Nombre }}</h1>
+                    <p class="lead mb-3">{{ proyecto['Área de interés'] }}</p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <span class="badge badge-custom fs-6">{{ proyecto.Fuente }}</span>
+                        <span class="badge bg-{% if proyecto.Estado == 'Abierto' %}success{% else %}secondary{% endif %} fs-6">
+                            {{ proyecto.Estado }}
+                        </span>
+                        <span class="badge bg-info fs-6">{{ proyecto.Monto }}</span>
+                    </div>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    {% if proyecto.get('Enlace Postulación') %}
+                    <a href="{{ proyecto['Enlace Postulación'] }}" target="_blank" class="btn btn-iica btn-lg">
+                        <i class="bi bi-box-arrow-up-right me-2"></i>Postular Ahora
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Details -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Información Principal -->
+                    <div class="card project-detail-card mb-4">
+                        <div class="card-header">
+                            <h4 class="mb-0">
+                                <i class="bi bi-info-circle me-2"></i>Información del Proyecto
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="bi bi-tag"></i>
+                                </div>
+                                <div>
+                                    <strong>Área de Interés:</strong>
+                                    <p class="mb-0 text-muted">{{ proyecto['Área de interés'] }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="bi bi-building"></i>
+                                </div>
+                                <div>
+                                    <strong>Fuente de Financiamiento:</strong>
+                                    <p class="mb-0 text-muted">{{ proyecto.Fuente }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="bi bi-currency-dollar"></i>
+                                </div>
+                                <div>
+                                    <strong>Monto Disponible:</strong>
+                                    <p class="mb-0 text-muted">{{ proyecto.Monto }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="bi bi-calendar-check"></i>
+                                </div>
+                                <div>
+                                    <strong>Fecha de Cierre:</strong>
+                                    <p class="mb-0 text-muted">{{ proyecto['Fecha cierre'] }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="bi bi-check-circle"></i>
+                                </div>
+                                <div>
+                                    <strong>Estado:</strong>
+                                    <p class="mb-0">
+                                        <span class="badge bg-{% if proyecto.Estado == 'Abierto' %}success{% else %}secondary{% endif %} fs-6">
+                                            {{ proyecto.Estado }}
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Descripción Detallada -->
+                    {% if proyecto.get('Descripción') %}
+                    <div class="card project-detail-card mb-4">
+                        <div class="card-header">
+                            <h4 class="mb-0">
+                                <i class="bi bi-file-text me-2"></i>Descripción del Proyecto
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-0">{{ proyecto.Descripción }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Requisitos -->
+                    {% if proyecto.get('Requisitos') %}
+                    <div class="card project-detail-card mb-4">
+                        <div class="card-header">
+                            <h4 class="mb-0">
+                                <i class="bi bi-list-check me-2"></i>Requisitos de Postulación
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                {% for requisito in proyecto.Requisitos.split('\n') %}
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    {{ requisito.strip() }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Documentos Necesarios -->
+                    {% if proyecto.get('Documentos Necesarios') %}
+                    <div class="card project-detail-card mb-4">
+                        <div class="card-header">
+                            <h4 class="mb-0">
+                                <i class="bi bi-file-earmark-text me-2"></i>Documentos Necesarios
+                            </h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                {% for documento in proyecto['Documentos Necesarios'].split('\n') %}
+                                <li class="mb-2">
+                                    <i class="bi bi-file-text text-primary me-2"></i>
+                                    {{ documento.strip() }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Sidebar -->
+                <div class="col-lg-4">
+                    <div class="action-buttons">
+                        <!-- Acciones Rápidas -->
+                        <div class="card project-detail-card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="bi bi-lightning me-2"></i>Acciones Rápidas
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-grid gap-2">
+                                    {% if proyecto.get('Enlace Postulación') %}
+                                    <a href="{{ proyecto['Enlace Postulación'] }}" target="_blank" class="btn btn-iica">
+                                        <i class="bi bi-box-arrow-up-right me-2"></i>Postular Ahora
+                                    </a>
+                                    {% endif %}
+                                    
+                                    {% if proyecto.get('Enlace') %}
+                                    <a href="{{ proyecto.Enlace }}" target="_blank" class="btn btn-iica-outline">
+                                        <i class="bi bi-globe me-2"></i>Ver Sitio Oficial
+                                    </a>
+                                    {% endif %}
+                                    
+                                    <button class="btn btn-iica-outline" onclick="window.print()">
+                                        <i class="bi bi-printer me-2"></i>Imprimir
+                                    </button>
+                                    
+                                    <button class="btn btn-iica-outline" onclick="compartirProyecto()">
+                                        <i class="bi bi-share me-2"></i>Compartir
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Información de Contacto -->
+                        {% if proyecto.get('Contacto') %}
+                        <div class="card project-detail-card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="bi bi-person-lines-fill me-2"></i>Contacto
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-0">{{ proyecto.Contacto }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Cronograma -->
+                        <div class="card project-detail-card">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="bi bi-calendar-event me-2"></i>Cronograma
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="timeline">
+                                    <div class="timeline-item">
+                                        <h6>Fecha de Cierre</h6>
+                                        <p class="text-muted mb-0">{{ proyecto['Fecha cierre'] }}</p>
+                                    </div>
+                                    
+                                    {% if proyecto.get('Fecha Inicio') %}
+                                    <div class="timeline-item">
+                                        <h6>Fecha de Inicio</h6>
+                                        <p class="text-muted mb-0">{{ proyecto['Fecha Inicio'] }}</p>
+                                    </div>
+                                    {% endif %}
+                                    
+                                    {% if proyecto.get('Duración Estimada') %}
+                                    <div class="timeline-item">
+                                        <h6>Duración Estimada</h6>
+                                        <p class="text-muted mb-0">{{ proyecto['Duración Estimada'] }}</p>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-institucional">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2024 IICA Chile. Todos los derechos reservados.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="/" class="btn btn-outline-light btn-sm">
+                        <i class="bi bi-arrow-left me-1"></i>Volver a Proyectos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        function compartirProyecto() {
+            if (navigator.share) {
+                navigator.share({
+                    title: '{{ proyecto.Nombre }}',
+                    text: 'Mira este proyecto de financiamiento en IICA Chile',
+                    url: window.location.href
+                });
+            } else {
+                // Fallback para navegadores que no soportan Web Share API
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    alert('Enlace copiado al portapapeles');
+                });
+            }
+        }
+        
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

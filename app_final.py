@@ -115,7 +115,7 @@ def home():
         
         total_pages = (len(proyectos) + per_page - 1) // per_page
         
-        return render_template('home_ordenado.html',
+        return render_template('home_institucional_completo.html',
                              proyectos=proyectos_paginados,
                              stats=stats,
                              current_page=page,
@@ -136,7 +136,7 @@ def ver_proyecto(proyecto_id):
         proyectos = cargar_excel()
         if 0 <= proyecto_id < len(proyectos):
             proyecto = proyectos[proyecto_id]
-            return render_template('proyecto_detalle_fortalecido.html', proyecto=proyecto)
+            return render_template('proyecto_detalle_institucional.html', proyecto=proyecto)
         else:
             return render_template('error.html', error="Proyecto no encontrado")
     except Exception as e:
