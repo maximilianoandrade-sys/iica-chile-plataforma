@@ -12,6 +12,7 @@ from functools import lru_cache
 import pandas as pd
 from datetime import datetime
 from utils import parsear_monto
+from link_manager import link_manager
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
 DATA_PATH = "data/proyectos_fortalecidos.xlsx"
@@ -208,6 +209,48 @@ def dashboard_avanzado():
 def health():
     """Health check"""
     return jsonify({'status': 'healthy', 'timestamp': datetime.now().isoformat()})
+
+@app.route('/api/verificar-enlaces')
+def verificar_enlaces():
+    """Verifica todos los enlaces de la plataforma"""
+    try:
+        proyectos = cargar_excel()
+        resultados = link_manager.verificar_todos_enlaces(proyectos)
+        reporte = link_manager.generar_reporte_enlaces(resultados)
+        
+        return jsonify({
+            'success': True,
+            'resultados': resultados,
+            'reporte': reporte
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        })
+
+@app.route('/api/enlaces-proyecto/<int:proyecto_id>')
+def enlaces_proyecto(proyecto_id):
+    """Obtiene enlaces para un proyecto específico"""
+    try:
+        proyectos = cargar_excel()
+        if 0 <= proyecto_id < len(proyectos):
+            proyecto = proyectos[proyecto_id]
+            enlaces = link_manager.obtener_enlaces_proyecto(proyecto)
+            return jsonify({
+                'success': True,
+                'enlaces': enlaces
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'error': 'Proyecto no encontrado'
+            })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        })
 
 @app.route('/favicon.ico')
 def favicon():
