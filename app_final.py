@@ -13,6 +13,7 @@ import pandas as pd
 from datetime import datetime
 from utils import parsear_monto
 from link_manager import link_manager
+from busqueda_avanzada import BuscadorAvanzado
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
 DATA_PATH = "data/proyectos_fortalecidos.xlsx"
@@ -251,6 +252,75 @@ def enlaces_proyecto(proyecto_id):
             'success': False,
             'error': str(e)
         })
+
+@app.route('/api/busqueda-avanzada')
+def busqueda_avanzada():
+    """Búsqueda avanzada de proyectos"""
+    try:
+        proyectos = cargar_excel()
+        buscador = BuscadorAvanzado(proyectos)
+        
+        # Obtener parámetros de búsqueda
+        texto = request.args.get('texto', '')
+        area = request.args.get('area', '')
+        fuente = request.args.get('fuente', '')
+        estado = request.args.get('estado', '')
+        monto_minimo = float(request.args.get('monto_minimo', 0))
+        monto_maximo = float(request.args.get('monto_maximo', float('inf')))
+        dias_hasta_cierre = int(request.args.get('dias_hasta_cierre', 0)) if request.args.get('dias_hasta_cierre') else None
+        palabras_clave = request.args.get('palabras_clave', '').split(',') if request.args.get('palabras_clave') else None
+        
+        # Realizar búsqueda
+        resultados = buscador.buscar_combinada(
+            texto=texto,
+            area=area,
+            fuente=fuente,
+            estado=estado,
+            monto_minimo=monto_minimo,
+            monto_maximo=monto_maximo,
+            dias_hasta_cierre=dias_hasta_cierre,
+            palabras_clave=palabras_clave
+        )
+        
+        # Obtener estadísticas
+        estadisticas = buscador.obtener_estadisticas_busqueda(resultados)
+        
+        return jsonify({
+            'success': True,
+            'resultados': [r['proyecto'].to_dict() for r in resultados],
+            'estadisticas': estadisticas,
+            'total': len(resultados)
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        })
+
+@app.route('/api/sugerencias')
+def sugerencias():
+    """Obtiene sugerencias de búsqueda"""
+    try:
+        proyectos = cargar_excel()
+        buscador = BuscadorAvanzado(proyectos)
+        
+        texto = request.args.get('texto', '')
+        sugerencias = buscador.obtener_sugerencias(texto)
+        
+        return jsonify({
+            'success': True,
+            'sugerencias': sugerencias
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        })
+
+@app.route('/busqueda-avanzada')
+def pagina_busqueda_avanzada():
+    """Página de búsqueda avanzada"""
+    return render_template('busqueda_avanzada.html')
 
 @app.route('/favicon.ico')
 def favicon():

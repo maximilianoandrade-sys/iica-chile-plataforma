@@ -4,528 +4,418 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Búsqueda Avanzada - IICA Chile</title>
+    
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Estilos Institucionales -->
+    <link href="{{ url_for('static', filename='css/institucional.css') }}" rel="stylesheet">
+    
     <style>
-        :root {
-            --iica-primary: #2E7D32;
-            --iica-secondary: #1976D2;
-            --iica-accent: #FF6F00;
-            --iica-success: #4CAF50;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            font-family: 'Inter', sans-serif;
-        }
-        
-        .search-container {
+        .search-form {
             background: white;
-            border-radius: 20px;
+            border-radius: 15px;
             padding: 2rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .result-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+        
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .result-card .card-header {
+            background: linear-gradient(135deg, #0B6F39 0%, #28a745 100%);
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #0066CC 0%, #0B6F39 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
             margin-bottom: 2rem;
         }
         
         .filter-section {
             background: #f8f9fa;
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .filter-section h5 {
-            color: var(--iica-primary);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .btn-search {
-            background: linear-gradient(135deg, var(--iica-primary) 0%, var(--iica-secondary) 100%);
-            border: none;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-search:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
-            color: white;
-        }
-        
-        .result-card {
-            background: white;
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            border-left: 4px solid var(--iica-primary);
-            transition: all 0.3s ease;
-        }
-        
-        .result-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-        
-        .result-meta {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: #6c757d;
-            font-size: 0.9rem;
-        }
-        
-        .meta-item i {
-            color: var(--iica-primary);
-        }
-        
-        .search-stats {
-            background: linear-gradient(135deg, var(--iica-primary) 0%, var(--iica-secondary) 100%);
-            color: white;
-            border-radius: 15px;
+            border-radius: 10px;
             padding: 1.5rem;
             margin-bottom: 2rem;
         }
         
-        .ai-suggestion {
-            background: #e3f2fd;
-            border: 1px solid #2196f3;
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-        
-        .ai-suggestion h6 {
-            color: #1976d2;
-            margin-bottom: 0.5rem;
-        }
-        
-        .tag {
+        .suggestion-tag {
             display: inline-block;
-            background: var(--iica-primary);
-            color: white;
+            background: #e9ecef;
+            color: #495057;
             padding: 0.25rem 0.75rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
             margin: 0.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
         
-        .tag:hover {
-            background: var(--iica-secondary);
-            cursor: pointer;
+        .suggestion-tag:hover {
+            background: #0B6F39;
+            color: white;
         }
     </style>
 </head>
 <body>
-    <div class="container py-4">
-        <!-- Header -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h2><i class="bi bi-search"></i> Búsqueda Avanzada</h2>
-                        <p class="text-muted">Encuentra proyectos específicos con filtros detallados</p>
-                    </div>
-                    <div>
-                        <button class="btn btn-outline-primary me-2" onclick="guardarBusqueda()">
-                            <i class="bi bi-bookmark"></i> Guardar Búsqueda
-                        </button>
-                        <button class="btn btn-primary" onclick="nuevaBusqueda()">
-                            <i class="bi bi-plus"></i> Nueva Búsqueda
-                        </button>
-                    </div>
-                </div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-institucional">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="https://iica.int/sites/default/files/iica_logo_0.png" 
+                     alt="Logo IICA Chile" 
+                     class="logo-institucional me-2">
+                IICA Chile
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/">
+                    <i class="bi bi-arrow-left me-1"></i>Volver a Inicio
+                </a>
             </div>
         </div>
-        
-        <!-- Estadísticas de Búsqueda -->
-        <div class="search-stats">
+    </nav>
+
+    <!-- Header -->
+    <section class="py-5 bg-light">
+        <div class="container">
             <div class="row">
-                <div class="col-md-3">
-                    <h4>57</h4>
-                    <p class="mb-0">Proyectos Disponibles</p>
-                </div>
-                <div class="col-md-3">
-                    <h4>15</h4>
-                    <p class="mb-0">Fuentes de Financiamiento</p>
-                </div>
-                <div class="col-md-3">
-                    <h4>6</h4>
-                    <p class="mb-0">Áreas de Interés</p>
-                </div>
-                <div class="col-md-3">
-                    <h4>USD 2.5M</h4>
-                    <p class="mb-0">Monto Total Disponible</p>
+                <div class="col-12 text-center">
+                    <h1 class="display-4 fw-bold text-dark mb-3">
+                        <i class="bi bi-search me-2"></i>Búsqueda Avanzada
+                    </h1>
+                    <p class="lead text-muted">
+                        Encuentra proyectos de financiamiento con criterios específicos
+                    </p>
                 </div>
             </div>
         </div>
-        
-        <!-- Formulario de Búsqueda Avanzada -->
-        <div class="search-container">
-            <form id="formularioBusqueda">
-                <div class="row">
-                    <!-- Búsqueda por Texto -->
-                    <div class="col-md-12 mb-4">
-                        <div class="filter-section">
-                            <h5><i class="bi bi-search"></i> Búsqueda por Texto</h5>
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <input type="text" class="form-control form-control-lg" id="textoBusqueda" 
-                                           placeholder="Ingrese palabras clave, nombre del proyecto, descripción...">
-                                </div>
-                                <div class="col-md-4">
-                                    <select class="form-select form-select-lg" id="tipoBusqueda">
-                                        <option value="todos">Buscar en todo</option>
-                                        <option value="nombre">Solo en nombres</option>
-                                        <option value="descripcion">Solo en descripciones</option>
-                                        <option value="fuente">Solo en fuentes</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <!-- Sugerencias de IA -->
-                            <div class="ai-suggestion">
-                                <h6><i class="bi bi-robot"></i> Sugerencias de Búsqueda Inteligente</h6>
-                                <div class="d-flex flex-wrap">
-                                    <span class="tag" onclick="aplicarSugerencia('agricultura sostenible')">Agricultura Sostenible</span>
-                                    <span class="tag" onclick="aplicarSugerencia('juventudes rurales')">Juventudes Rurales</span>
-                                    <span class="tag" onclick="aplicarSugerencia('innovación tecnológica')">Innovación Tecnológica</span>
-                                    <span class="tag" onclick="aplicarSugerencia('gestión hídrica')">Gestión Hídrica</span>
-                                    <span class="tag" onclick="aplicarSugerencia('desarrollo rural')">Desarrollo Rural</span>
-                                </div>
-                            </div>
+    </section>
+
+    <!-- Formulario de Búsqueda -->
+    <section class="py-5">
+        <div class="container">
+            <div class="search-form">
+                <form id="searchForm">
+                    <div class="row">
+                        <!-- Búsqueda por texto -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-search me-1"></i>Texto de búsqueda
+                            </label>
+                            <input type="text" class="form-control" id="texto" 
+                                   placeholder="Ej: agricultura sostenible, innovación, exportación">
+                            <div id="sugerencias" class="mt-2"></div>
+                        </div>
+                        
+                        <!-- Área de interés -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-tag me-1"></i>Área de interés
+                            </label>
+                            <select class="form-select" id="area">
+                                <option value="">Todas las áreas</option>
+                                <option value="Agricultura Sostenible">Agricultura Sostenible</option>
+                                <option value="Desarrollo Rural">Desarrollo Rural</option>
+                                <option value="Innovación Tecnológica">Innovación Tecnológica</option>
+                                <option value="Seguridad Alimentaria">Seguridad Alimentaria</option>
+                                <option value="Juventudes Rurales">Juventudes Rurales</option>
+                            </select>
                         </div>
                     </div>
                     
-                    <!-- Filtros por Categoría -->
-                    <div class="col-md-6">
-                        <div class="filter-section">
-                            <h5><i class="bi bi-funnel"></i> Filtros por Categoría</h5>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Área de Interés</label>
-                                    <select class="form-select" id="areaInteres" multiple>
-                                        <option value="Agricultura Sostenible">Agricultura Sostenible</option>
-                                        <option value="Desarrollo Rural">Desarrollo Rural</option>
-                                        <option value="Innovación Tecnológica">Innovación Tecnológica</option>
-                                        <option value="Juventudes Rurales">Juventudes Rurales</option>
-                                        <option value="Seguridad Alimentaria">Seguridad Alimentaria</option>
-                                        <option value="Gestión Hídrica">Gestión Hídrica</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Fuente de Financiamiento</label>
-                                    <select class="form-select" id="fuenteFinanciamiento" multiple>
-                                        <option value="IICA">IICA</option>
-                                        <option value="CORFO">CORFO</option>
-                                        <option value="MINAGRI">MINAGRI</option>
-                                        <option value="INDAP">INDAP</option>
-                                        <option value="FIA">FIA</option>
-                                        <option value="Banco Mundial">Banco Mundial</option>
-                                        <option value="FAO">FAO</option>
-                                        <option value="BID">BID</option>
-                                    </select>
-                                </div>
-                            </div>
+                    <div class="row">
+                        <!-- Fuente -->
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-building me-1"></i>Fuente
+                            </label>
+                            <select class="form-select" id="fuente">
+                                <option value="">Todas las fuentes</option>
+                                <option value="CORFO">CORFO</option>
+                                <option value="FIA">FIA</option>
+                                <option value="SAG">SAG</option>
+                                <option value="INDAP">INDAP</option>
+                                <option value="IICA">IICA</option>
+                                <option value="Green Climate Fund">Green Climate Fund</option>
+                                <option value="IFAD">IFAD</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Estado -->
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-check-circle me-1"></i>Estado
+                            </label>
+                            <select class="form-select" id="estado">
+                                <option value="">Todos los estados</option>
+                                <option value="Abierto">Abierto</option>
+                                <option value="Cerrado">Cerrado</option>
+                                <option value="En evaluación">En evaluación</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Días hasta cierre -->
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-calendar me-1"></i>Días hasta cierre
+                            </label>
+                            <select class="form-select" id="dias_hasta_cierre">
+                                <option value="">Sin límite</option>
+                                <option value="7">7 días</option>
+                                <option value="15">15 días</option>
+                                <option value="30">30 días</option>
+                                <option value="60">60 días</option>
+                            </select>
                         </div>
                     </div>
                     
-                    <!-- Filtros por Monto y Fecha -->
-                    <div class="col-md-6">
-                        <div class="filter-section">
-                            <h5><i class="bi bi-currency-dollar"></i> Filtros por Monto y Fecha</h5>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Monto Mínimo</label>
-                                    <input type="number" class="form-control" id="montoMinimo" placeholder="Ej: 10000">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Monto Máximo</label>
-                                    <input type="number" class="form-control" id="montoMaximo" placeholder="Ej: 1000000">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Fecha de Cierre Desde</label>
-                                    <input type="date" class="form-control" id="fechaDesde">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Fecha de Cierre Hasta</label>
-                                    <input type="date" class="form-control" id="fechaHasta">
-                                </div>
-                            </div>
+                    <div class="row">
+                        <!-- Monto mínimo -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-currency-dollar me-1"></i>Monto mínimo (CLP)
+                            </label>
+                            <input type="number" class="form-control" id="monto_minimo" 
+                                   placeholder="0" min="0">
+                        </div>
+                        
+                        <!-- Monto máximo -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-currency-dollar me-1"></i>Monto máximo (CLP)
+                            </label>
+                            <input type="number" class="form-control" id="monto_maximo" 
+                                   placeholder="Sin límite" min="0">
                         </div>
                     </div>
                     
-                    <!-- Filtros Adicionales -->
-                    <div class="col-md-12">
-                        <div class="filter-section">
-                            <h5><i class="bi bi-sliders"></i> Filtros Adicionales</h5>
-                            <div class="row">
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label">Estado del Proyecto</label>
-                                    <select class="form-select" id="estadoProyecto">
-                                        <option value="">Todos los estados</option>
-                                        <option value="Abierto">Abierto</option>
-                                        <option value="Cerrado">Cerrado</option>
-                                        <option value="Próximo a cerrar">Próximo a cerrar</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label">Tipo de Organización</label>
-                                    <select class="form-select" id="tipoOrganizacion">
-                                        <option value="">Todos los tipos</option>
-                                        <option value="ONG">ONG</option>
-                                        <option value="Cooperativa">Cooperativa</option>
-                                        <option value="Asociación">Asociación</option>
-                                        <option value="Empresa">Empresa</option>
-                                        <option value="Universidad">Universidad</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label">Duración del Proyecto</label>
-                                    <select class="form-select" id="duracionProyecto">
-                                        <option value="">Cualquier duración</option>
-                                        <option value="corta">Corta (1-6 meses)</option>
-                                        <option value="media">Media (6-18 meses)</option>
-                                        <option value="larga">Larga (18+ meses)</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label">Nivel de Experiencia</label>
-                                    <select class="form-select" id="nivelExperiencia">
-                                        <option value="">Todos los niveles</option>
-                                        <option value="principiante">Principiante</option>
-                                        <option value="intermedio">Intermedio</option>
-                                        <option value="avanzado">Avanzado</option>
-                                    </select>
-                                </div>
-                            </div>
+                    <div class="row">
+                        <!-- Palabras clave -->
+                        <div class="col-12 mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-key me-1"></i>Palabras clave (separadas por comas)
+                            </label>
+                            <input type="text" class="form-control" id="palabras_clave" 
+                                   placeholder="Ej: innovación, tecnología, sostenible, rural">
                         </div>
                     </div>
                     
-                    <!-- Botones de Acción -->
-                    <div class="col-md-12 text-center">
-                        <button type="button" class="btn btn-search me-3" onclick="ejecutarBusqueda()">
-                            <i class="bi bi-search"></i> Buscar Proyectos
-                        </button>
-                        <button type="button" class="btn btn-outline-secondary me-3" onclick="limpiarFiltros()">
-                            <i class="bi bi-arrow-clockwise"></i> Limpiar Filtros
-                        </button>
-                        <button type="button" class="btn btn-outline-primary" onclick="busquedaIA()">
-                            <i class="bi bi-robot"></i> Búsqueda con IA
-                        </button>
+                    <!-- Botones -->
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-iica btn-lg me-3">
+                                <i class="bi bi-search me-2"></i>Buscar
+                            </button>
+                            <button type="button" class="btn btn-iica-outline btn-lg" onclick="limpiarFormulario()">
+                                <i class="bi bi-arrow-clockwise me-2"></i>Limpiar
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-        
-        <!-- Resultados de Búsqueda -->
-        <div id="resultadosBusqueda" style="display: none;">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4>Resultados de Búsqueda</h4>
-                <div>
-                    <button class="btn btn-outline-primary me-2" onclick="exportarResultados()">
-                        <i class="bi bi-download"></i> Exportar
-                    </button>
-                    <button class="btn btn-outline-success" onclick="guardarResultados()">
-                        <i class="bi bi-bookmark"></i> Guardar
-                    </button>
-                </div>
+    </section>
+
+    <!-- Resultados -->
+    <section class="py-5" id="resultados" style="display: none;">
+        <div class="container">
+            <!-- Estadísticas -->
+            <div class="stats-card" id="estadisticas">
+                <h3 id="total-resultados">0 resultados encontrados</h3>
+                <p id="estadisticas-detalle">Cargando estadísticas...</p>
             </div>
             
-            <!-- Resultados -->
-            <div id="listaResultados">
+            <!-- Lista de resultados -->
+            <div id="lista-resultados">
                 <!-- Los resultados se cargarán aquí dinámicamente -->
             </div>
         </div>
-        
-        <!-- Búsquedas Guardadas -->
-        <div class="search-container">
-            <h5><i class="bi bi-bookmark"></i> Búsquedas Guardadas</h5>
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="card-title">Agricultura Sostenible</h6>
-                            <p class="card-text text-muted">12 proyectos encontrados</p>
-                            <button class="btn btn-sm btn-outline-primary" onclick="cargarBusquedaGuardada(1)">
-                                <i class="bi bi-play"></i> Ejecutar
-                            </button>
-                        </div>
-                    </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-institucional">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2024 IICA Chile. Todos los derechos reservados.</p>
                 </div>
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="card-title">Proyectos IICA</h6>
-                            <p class="card-text text-muted">8 proyectos encontrados</p>
-                            <button class="btn btn-sm btn-outline-primary" onclick="cargarBusquedaGuardada(2)">
-                                <i class="bi bi-play"></i> Ejecutar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="card-title">Juventudes Rurales</h6>
-                            <p class="card-text text-muted">5 proyectos encontrados</p>
-                            <button class="btn btn-sm btn-outline-primary" onclick="cargarBusquedaGuardada(3)">
-                                <i class="bi bi-play"></i> Ejecutar
-                            </button>
-                        </div>
-                    </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="/" class="btn btn-outline-light btn-sm">
+                        <i class="bi bi-arrow-left me-1"></i>Volver a Inicio
+                    </a>
                 </div>
             </div>
         </div>
-    </div>
+    </footer>
 
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
-        function ejecutarBusqueda() {
-            const texto = document.getElementById('textoBusqueda').value;
-            const area = document.getElementById('areaInteres').value;
-            const fuente = document.getElementById('fuenteFinanciamiento').value;
-            const montoMin = document.getElementById('montoMinimo').value;
-            const montoMax = document.getElementById('montoMaximo').value;
-            const fechaDesde = document.getElementById('fechaDesde').value;
-            const fechaHasta = document.getElementById('fechaHasta').value;
-            const estado = document.getElementById('estadoProyecto').value;
+        // Función para realizar búsqueda
+        async function realizarBusqueda() {
+            const formData = new FormData(document.getElementById('searchForm'));
+            const params = new URLSearchParams();
             
-            console.log('Búsqueda ejecutada:', {
-                texto, area, fuente, montoMin, montoMax, fechaDesde, fechaHasta, estado
-            });
+            // Agregar parámetros
+            for (const [key, value] of formData.entries()) {
+                if (value.trim()) {
+                    params.append(key, value);
+                }
+            }
+            
+            try {
+                const response = await fetch(`/api/busqueda-avanzada?${params.toString()}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    mostrarResultados(data.resultados, data.estadisticas);
+                } else {
+                    alert('Error en la búsqueda: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al realizar la búsqueda');
+            }
+        }
+        
+        // Función para mostrar resultados
+        function mostrarResultados(resultados, estadisticas) {
+            const seccionResultados = document.getElementById('resultados');
+            const totalResultados = document.getElementById('total-resultados');
+            const estadisticasDetalle = document.getElementById('estadisticas-detalle');
+            const listaResultados = document.getElementById('lista-resultados');
+            
+            // Mostrar estadísticas
+            totalResultados.textContent = `${resultados.length} resultados encontrados`;
+            
+            let estadisticasTexto = '';
+            if (estadisticas.por_fuente) {
+                estadisticasTexto += 'Por fuente: ';
+                for (const [fuente, count] of Object.entries(estadisticas.por_fuente)) {
+                    estadisticasTexto += `${fuente} (${count}), `;
+                }
+                estadisticasTexto = estadisticasTexto.slice(0, -2);
+            }
+            estadisticasDetalle.textContent = estadisticasTexto;
             
             // Mostrar resultados
-            document.getElementById('resultadosBusqueda').style.display = 'block';
-            document.getElementById('listaResultados').innerHTML = `
-                <div class="result-card">
-                    <h5>Programa de Desarrollo Rural Sostenible FAO</h5>
-                    <p class="text-muted">Proyecto de desarrollo rural integral con enfoque en sostenibilidad y participación comunitaria.</p>
-                    <div class="result-meta">
-                        <div class="meta-item">
-                            <i class="bi bi-building"></i>
-                            <span>FAO</span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="bi bi-tag"></i>
-                            <span>Desarrollo Rural</span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="bi bi-currency-dollar"></i>
-                            <span>USD 1,000,000</span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="bi bi-calendar"></i>
-                            <span>Cierra: 31/12/2024</span>
-                        </div>
+            listaResultados.innerHTML = '';
+            resultados.forEach(proyecto => {
+                const card = crearCardProyecto(proyecto);
+                listaResultados.appendChild(card);
+            });
+            
+            seccionResultados.style.display = 'block';
+        }
+        
+        // Función para crear card de proyecto
+        function crearCardProyecto(proyecto) {
+            const div = document.createElement('div');
+            div.className = 'col-lg-6 col-xl-4 mb-4';
+            div.innerHTML = `
+                <div class="card result-card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">${proyecto.Nombre}</h5>
+                        <span class="badge badge-custom">${proyecto.Fuente}</span>
                     </div>
-                    <div class="mt-3">
-                        <button class="btn btn-primary btn-sm me-2" onclick="verProyecto(1)">
-                            <i class="bi bi-eye"></i> Ver Detalles
-                        </button>
-                        <button class="btn btn-success btn-sm me-2" onclick="postularProyecto(1)">
-                            <i class="bi bi-file-earmark-text"></i> Postular
-                        </button>
-                        <button class="btn btn-outline-secondary btn-sm" onclick="agregarFavoritos(1)">
-                            <i class="bi bi-heart"></i> Favorito
-                        </button>
+                    <div class="card-body">
+                        <p class="card-text text-muted mb-3">
+                            <i class="bi bi-tag me-1"></i>${proyecto['Área de interés']}
+                        </p>
+                        <p class="card-text">
+                            <strong>Monto:</strong> ${proyecto.Monto}<br>
+                            <strong>Estado:</strong> 
+                            <span class="badge bg-${proyecto.Estado === 'Abierto' ? 'success' : 'secondary'}">
+                                ${proyecto.Estado}
+                            </span><br>
+                            <strong>Cierre:</strong> ${proyecto['Fecha cierre']}
+                        </p>
                     </div>
-                </div>
-                
-                <div class="result-card">
-                    <h5>Fondo de Adaptación al Cambio Climático</h5>
-                    <p class="text-muted">Financiamiento para proyectos de adaptación al cambio climático en el sector agrícola.</p>
-                    <div class="result-meta">
-                        <div class="meta-item">
-                            <i class="bi bi-building"></i>
-                            <span>Banco Mundial</span>
+                    <div class="card-footer bg-transparent">
+                        <div class="d-flex gap-2">
+                            <a href="/proyecto/${proyecto.ID - 1}" class="btn btn-iica btn-sm flex-fill">
+                                <i class="bi bi-eye me-1"></i>Ver Detalles
+                            </a>
+                            ${proyecto['Enlace Postulación'] ? 
+                                `<a href="${proyecto['Enlace Postulación']}" target="_blank" class="btn btn-iica-outline btn-sm">
+                                    <i class="bi bi-box-arrow-up-right me-1"></i>Postular
+                                </a>` : ''
+                            }
                         </div>
-                        <div class="meta-item">
-                            <i class="bi bi-tag"></i>
-                            <span>Agricultura Sostenible</span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="bi bi-currency-dollar"></i>
-                            <span>USD 2,000,000</span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="bi bi-calendar"></i>
-                            <span>Cierra: 30/11/2024</span>
-                        </div>
-                    </div>
-                    <div class="mt-3">
-                        <button class="btn btn-primary btn-sm me-2" onclick="verProyecto(2)">
-                            <i class="bi bi-eye"></i> Ver Detalles
-                        </button>
-                        <button class="btn btn-success btn-sm me-2" onclick="postularProyecto(2)">
-                            <i class="bi bi-file-earmark-text"></i> Postular
-                        </button>
-                        <button class="btn btn-outline-secondary btn-sm" onclick="agregarFavoritos(2)">
-                            <i class="bi bi-heart"></i> Favorito
-                        </button>
                     </div>
                 </div>
             `;
+            return div;
         }
         
-        function aplicarSugerencia(sugerencia) {
-            document.getElementById('textoBusqueda').value = sugerencia;
+        // Función para obtener sugerencias
+        async function obtenerSugerencias(texto) {
+            if (texto.length < 2) return;
+            
+            try {
+                const response = await fetch(`/api/sugerencias?texto=${encodeURIComponent(texto)}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    mostrarSugerencias(data.sugerencias);
+                }
+            } catch (error) {
+                console.error('Error obteniendo sugerencias:', error);
+            }
         }
         
-        function limpiarFiltros() {
-            document.getElementById('formularioBusqueda').reset();
-            document.getElementById('resultadosBusqueda').style.display = 'none';
+        // Función para mostrar sugerencias
+        function mostrarSugerencias(sugerencias) {
+            const contenedor = document.getElementById('sugerencias');
+            contenedor.innerHTML = '';
+            
+            sugerencias.forEach(sugerencia => {
+                const tag = document.createElement('span');
+                tag.className = 'suggestion-tag';
+                tag.textContent = sugerencia;
+                tag.onclick = () => {
+                    document.getElementById('texto').value = sugerencia;
+                    contenedor.innerHTML = '';
+                };
+                contenedor.appendChild(tag);
+            });
         }
         
-        function busquedaIA() {
-            alert('Búsqueda con IA activada:\n\n🤖 Analizando consulta...\n🔍 Buscando proyectos relacionados...\n📊 Aplicando filtros inteligentes...\n✅ Resultados optimizados encontrados');
-            ejecutarBusqueda();
+        // Función para limpiar formulario
+        function limpiarFormulario() {
+            document.getElementById('searchForm').reset();
+            document.getElementById('resultados').style.display = 'none';
+            document.getElementById('sugerencias').innerHTML = '';
         }
         
-        function exportarResultados() {
-            alert('Exportando resultados de búsqueda...\n\nFormato: Excel\nArchivo: busqueda_avanzada_resultados.xlsx');
-        }
+        // Event listeners
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            realizarBusqueda();
+        });
         
-        function guardarResultados() {
-            alert('Guardando resultados de búsqueda...\n\n✅ Búsqueda guardada como "Búsqueda Avanzada 1"\n📅 Fecha: 13/10/2025\n🔍 Filtros aplicados: 8 criterios');
-        }
-        
-        function guardarBusqueda() {
-            alert('Guardando búsqueda actual...\n\n✅ Búsqueda guardada exitosamente\n📋 Filtros: 8 criterios aplicados\n📅 Fecha: 13/10/2025');
-        }
-        
-        function nuevaBusqueda() {
-            limpiarFiltros();
-        }
-        
-        function cargarBusquedaGuardada(id) {
-            alert(`Cargando búsqueda guardada ${id}...\n\n✅ Filtros aplicados\n🔍 Ejecutando búsqueda...`);
-            ejecutarBusqueda();
-        }
-        
-        function verProyecto(id) {
-            window.location.href = `/proyecto/${id}`;
-        }
-        
-        function postularProyecto(id) {
-            window.location.href = `/postular/${id}`;
-        }
-        
-        function agregarFavoritos(id) {
-            alert(`Proyecto ${id} agregado a favoritos`);
-        }
+        document.getElementById('texto').addEventListener('input', function(e) {
+            obtenerSugerencias(e.target.value);
+        });
     </script>
 </body>
 </html>
