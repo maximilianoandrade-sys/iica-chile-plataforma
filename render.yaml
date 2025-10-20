@@ -4,7 +4,7 @@ services:
     env: python
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app_final:app --bind 0.0.0.0:$PORT
+    startCommand: python render_deploy.py
     envVars:
       - key: FLASK_ENV
         value: production

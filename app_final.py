@@ -274,4 +274,7 @@ if __name__ == '__main__':
     
     # Reducir verbosidad del servidor
     logging.getLogger('werkzeug').setLevel(logging.WARNING)
-    app.run(debug=False, host='0.0.0.0', port=5004)
+    
+    # Configuración para Render
+    port = int(os.environ.get('PORT', 5004))
+    app.run(debug=False, host='0.0.0.0', port=port)
