@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Error - IICA Chile</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow-sm">
+          <div class="card-body p-4">
+            <h3 class="mb-3 text-danger">Ha ocurrido un error</h3>
+            <p class="mb-3">Intenta nuevamente en unos momentos. Si el problema persiste, contacta al administrador.</p>
+            {% if error %}
+            <div class="alert alert-secondary"><small>{{ error }}</small></div>
+            {% endif %}
+            <a href="/" class="btn btn-primary">Volver al inicio</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

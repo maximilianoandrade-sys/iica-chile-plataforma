@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postulación a Fondo - IICA Chile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --iica-primary: #2E7D32;
+            --iica-secondary: #1976D2;
+            --iica-accent: #FF6F00;
+            --iica-success: #4CAF50;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .header-postulacion {
+            background: linear-gradient(135deg, var(--iica-primary) 0%, var(--iica-secondary) 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .form-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border: 2px solid #f0f0f0;
+            border-radius: 15px;
+            background: #fafafa;
+        }
+        
+        .form-section h4 {
+            color: var(--iica-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-iica {
+            background: linear-gradient(135deg, var(--iica-primary) 0%, var(--iica-secondary) 100%);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-iica:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
+            color: white;
+        }
+        
+        .required {
+            color: #dc3545;
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+            font-weight: bold;
+            color: #6c757d;
+        }
+        
+        .step.active {
+            background: var(--iica-primary);
+            color: white;
+        }
+        
+        .step.completed {
+            background: var(--iica-success);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header-postulacion">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1><i class="bi bi-file-earmark-text"></i> Postulación a Fondo</h1>
+                    <p class="mb-0">Complete el formulario para postular al fondo de financiamiento</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="/" class="btn btn-outline-light">
+                        <i class="bi bi-arrow-left"></i> Volver a la Plataforma
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Indicador de Pasos -->
+        <div class="step-indicator">
+            <div class="step active">1</div>
+            <div class="step">2</div>
+            <div class="step">3</div>
+            <div class="step">4</div>
+        </div>
+
+        <!-- Información del Proyecto -->
+        <div class="form-container">
+            <h3><i class="bi bi-info-circle"></i> Información del Proyecto</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Nombre del Proyecto:</strong> {{ proyecto.Nombre }}<br>
+                    <strong>Fuente:</strong> {{ proyecto.Fuente }}<br>
+                    <strong>Monto:</strong> {{ proyecto.Monto }}
+                </div>
+                <div class="col-md-6">
+                    <strong>Fecha de Cierre:</strong> {{ proyecto['Fecha cierre'] }}<br>
+                    <strong>Área de Interés:</strong> {{ proyecto['Área de interés'] }}<br>
+                    <strong>Estado:</strong> <span class="badge bg-success">{{ proyecto.Estado }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario de Postulación -->
+        <form id="formularioPostulacion" class="form-container">
+            <!-- Paso 1: Información Personal -->
+            <div class="form-section" id="paso1">
+                <h4><i class="bi bi-person"></i> Información Personal</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nombre Completo <span class="required">*</span></label>
+                        <input type="text" class="form-control" name="nombre_completo" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">RUT <span class="required">*</span></label>
+                        <input type="text" class="form-control" name="rut" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Email <span class="required">*</span></label>
+                        <input type="email" class="form-control" name="email" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Teléfono <span class="required">*</span></label>
+                        <input type="tel" class="form-control" name="telefono" required>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Dirección <span class="required">*</span></label>
+                        <input type="text" class="form-control" name="direccion" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paso 2: Información de la Organización -->
+            <div class="form-section" id="paso2">
+                <h4><i class="bi bi-building"></i> Información de la Organización</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nombre de la Organización <span class="required">*</span></label>
+                        <input type="text" class="form-control" name="nombre_organizacion" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">RUT de la Organización <span class="required">*</span></label>
+                        <input type="text" class="form-control" name="rut_organizacion" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Tipo de Organización <span class="required">*</span></label>
+                        <select class="form-select" name="tipo_organizacion" required>
+                            <option value="">Seleccione...</option>
+                            <option value="ONG">ONG</option>
+                            <option value="Cooperativa">Cooperativa</option>
+                            <option value="Asociación">Asociación</option>
+                            <option value="Empresa">Empresa</option>
+                            <option value="Universidad">Universidad</option>
+                            <option value="Municipalidad">Municipalidad</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Años de Experiencia <span class="required">*</span></label>
+                        <input type="number" class="form-control" name="anos_experiencia" required>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Descripción de la Organización <span class="required">*</span></label>
+                        <textarea class="form-control" name="descripcion_organizacion" rows="3" required></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paso 3: Información del Proyecto -->
+            <div class="form-section" id="paso3">
+                <h4><i class="bi bi-lightbulb"></i> Detalles del Proyecto</h4>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Título del Proyecto <span class="required">*</span></label>
+                        <input type="text" class="form-control" name="titulo_proyecto" required>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label">Descripción del Proyecto <span class="required">*</span></label>
+                        <textarea class="form-control" name="descripcion_proyecto" rows="4" required></textarea>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Objetivos del Proyecto <span class="required">*</span></label>
+                        <textarea class="form-control" name="objetivos_proyecto" rows="3" required></textarea>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Resultados Esperados <span class="required">*</span></label>
+                        <textarea class="form-control" name="resultados_esperados" rows="3" required></textarea>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Duración del Proyecto (meses) <span class="required">*</span></label>
+                        <input type="number" class="form-control" name="duracion_proyecto" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Monto Solicitado <span class="required">*</span></label>
+                        <input type="text" class="form-control" name="monto_solicitado" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paso 4: Documentos Requeridos -->
+            <div class="form-section" id="paso4">
+                <h4><i class="bi bi-file-earmark"></i> Documentos Requeridos</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Cédula de Identidad <span class="required">*</span></label>
+                        <input type="file" class="form-control" name="cedula" accept=".pdf,.jpg,.png" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">RUT de la Organización <span class="required">*</span></label>
+                        <input type="file" class="form-control" name="rut_org" accept=".pdf,.jpg,.png" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Estados Financieros (últimos 2 años) <span class="required">*</span></label>
+                        <input type="file" class="form-control" name="estados_financieros" accept=".pdf" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Presupuesto Detallado <span class="required">*</span></label>
+                        <input type="file" class="form-control" name="presupuesto" accept=".pdf,.xlsx" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Cronograma de Actividades <span class="required">*</span></label>
+                        <input type="file" class="form-control" name="cronograma" accept=".pdf,.xlsx" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Certificado de Antecedentes</label>
+                        <input type="file" class="form-control" name="antecedentes" accept=".pdf">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="text-center">
+                <button type="button" class="btn btn-outline-secondary me-3" onclick="anteriorPaso()">
+                    <i class="bi bi-arrow-left"></i> Anterior
+                </button>
+                <button type="button" class="btn btn-iica" onclick="siguientePaso()">
+                    Siguiente <i class="bi bi-arrow-right"></i>
+                </button>
+                <button type="submit" class="btn btn-iica ms-3" id="btnEnviar" style="display: none;">
+                    <i class="bi bi-send"></i> Enviar Postulación
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let pasoActual = 1;
+        const totalPasos = 4;
+
+        function actualizarIndicador() {
+            const steps = document.querySelectorAll('.step');
+            steps.forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index + 1 < pasoActual) {
+                    step.classList.add('completed');
+                } else if (index + 1 === pasoActual) {
+                    step.classList.add('active');
+                }
+            });
+        }
+
+        function siguientePaso() {
+            if (pasoActual < totalPasos) {
+                document.getElementById(`paso${pasoActual}`).style.display = 'none';
+                pasoActual++;
+                document.getElementById(`paso${pasoActual}`).style.display = 'block';
+                actualizarIndicador();
+                
+                if (pasoActual === totalPasos) {
+                    document.getElementById('btnEnviar').style.display = 'inline-block';
+                }
+            }
+        }
+
+        function anteriorPaso() {
+            if (pasoActual > 1) {
+                document.getElementById(`paso${pasoActual}`).style.display = 'none';
+                pasoActual--;
+                document.getElementById(`paso${pasoActual}`).style.display = 'block';
+                actualizarIndicador();
+                document.getElementById('btnEnviar').style.display = 'none';
+            }
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            for (let i = 2; i <= totalPasos; i++) {
+                document.getElementById(`paso${i}`).style.display = 'none';
+            }
+            actualizarIndicador();
+        });
+
+        // Manejar envío del formulario
+        document.getElementById('formularioPostulacion').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Mostrar mensaje de éxito
+            alert('¡Postulación enviada exitosamente! Recibirá una confirmación por email.');
+            
+            // Redirigir a la plataforma
+            window.location.href = '/';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ proyecto.Nombre }} - IICA Chile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --iica-green: #0b6f39;
+            --iica-green-light: #2e8b57;
+            --iica-blue: #1e3a8a;
+            --iica-orange: #f97316;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .header-section {
+            background: linear-gradient(135deg, var(--iica-green) 0%, var(--iica-green-light) 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .project-header {
+            background: linear-gradient(135deg, var(--iica-blue) 0%, var(--iica-green) 100%);
+            color: white;
+            padding: 2rem;
+        }
+        
+        .info-section {
+            padding: 2rem;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid var(--iica-green);
+        }
+        
+        .info-item i {
+            color: var(--iica-green);
+            margin-right: 0.75rem;
+            font-size: 1.2rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--iica-green) 0%, var(--iica-green-light) 100%);
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(11, 111, 57, 0.3);
+        }
+        
+        .btn-outline-primary {
+            border: 2px solid var(--iica-green);
+            color: var(--iica-green);
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-primary:hover {
+            background: var(--iica-green);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .status-abierto {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-cerrado {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .requirements-list {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .requirements-list ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        
+        .requirements-list li {
+            margin-bottom: 0.5rem;
+            color: #495057;
+        }
+        
+        .contact-info {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .contact-info h6 {
+            color: var(--iica-green);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .contact-info p {
+            margin: 0;
+            color: #495057;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="mb-3">
+                        <i class="bi bi-file-earmark-text me-3"></i>
+                        {{ proyecto.Nombre }}
+                    </h1>
+                    <p class="lead mb-0">
+                        <i class="bi bi-building me-2"></i>
+                        {{ proyecto.Fuente }}
+                    </p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <span class="status-badge status-{{ proyecto.Estado.lower() }}">
+                        <i class="bi bi-circle-fill me-1"></i>
+                        {{ proyecto.Estado }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="project-card fade-in">
+            <div class="project-header">
+                <h2 class="mb-3">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Información del Proyecto
+                </h2>
+                <p class="lead mb-0">{{ proyecto.Descripción or proyecto['Área de interés'] }}</p>
+            </div>
+            
+            <div class="info-section">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="info-item">
+                            <i class="bi bi-currency-dollar"></i>
+                            <div>
+                                <strong>Monto:</strong><br>
+                                {{ proyecto.Monto }}
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <i class="bi bi-calendar-event"></i>
+                            <div>
+                                <strong>Fecha de Cierre:</strong><br>
+                                {{ proyecto['Fecha cierre'] }}
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <i class="bi bi-tag"></i>
+                            <div>
+                                <strong>Área de Interés:</strong><br>
+                                {{ proyecto['Área de interés'] }}
+                            </div>
+                        </div>
+                        
+                        {% if proyecto.get('Tipo Financiamiento') %}
+                        <div class="info-item">
+                            <i class="bi bi-bank"></i>
+                            <div>
+                                <strong>Tipo de Financiamiento:</strong><br>
+                                {{ proyecto['Tipo Financiamiento'] }}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-6">
+                        {% if proyecto.get('Duración Estimada') %}
+                        <div class="info-item">
+                            <i class="bi bi-clock"></i>
+                            <div>
+                                <strong>Duración Estimada:</strong><br>
+                                {{ proyecto['Duración Estimada'] }}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if proyecto.get('Nivel Complejidad') %}
+                        <div class="info-item">
+                            <i class="bi bi-graph-up"></i>
+                            <div>
+                                <strong>Nivel de Complejidad:</strong><br>
+                                {{ proyecto['Nivel Complejidad'] }}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if proyecto.get('Cofinanciamiento Requerido') %}
+                        <div class="info-item">
+                            <i class="bi bi-percent"></i>
+                            <div>
+                                <strong>Cofinanciamiento Requerido:</strong><br>
+                                {{ proyecto['Cofinanciamiento Requerido'] }}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if proyecto.get('Estado Postulación') %}
+                        <div class="info-item">
+                            <i class="bi bi-check-circle"></i>
+                            <div>
+                                <strong>Estado de Postulación:</strong><br>
+                                {{ proyecto['Estado Postulación'] }}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                {% if proyecto.get('Requisitos') %}
+                <div class="requirements-list">
+                    <h5 class="mb-3">
+                        <i class="bi bi-list-check me-2"></i>
+                        Requisitos para Postular
+                    </h5>
+                    <ul>
+                        {% for requisito in proyecto.Requisitos.split(', ') %}
+                        <li>{{ requisito }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                
+                {% if proyecto.get('Palabras Clave') %}
+                <div class="mt-3">
+                    <h6 class="mb-2">
+                        <i class="bi bi-tags me-2"></i>
+                        Palabras Clave:
+                    </h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for palabra in proyecto['Palabras Clave'].split(', ') %}
+                        <span class="badge bg-light text-dark border">{{ palabra }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if proyecto.get('Email Contacto') or proyecto.get('Teléfono') %}
+                <div class="contact-info">
+                    <h5 class="mb-3">
+                        <i class="bi bi-telephone me-2"></i>
+                        Información de Contacto
+                    </h5>
+                    {% if proyecto.get('Email Contacto') %}
+                    <h6>Email:</h6>
+                    <p><i class="bi bi-envelope me-2"></i>{{ proyecto['Email Contacto'] }}</p>
+                    {% endif %}
+                    {% if proyecto.get('Teléfono') %}
+                    <h6>Teléfono:</h6>
+                    <p><i class="bi bi-phone me-2"></i>{{ proyecto['Teléfono'] }}</p>
+                    {% endif %}
+                </div>
+                {% endif %}
+                
+                <div class="action-buttons">
+                    {% if proyecto.get('Enlace Postulación') %}
+                    <a href="{{ proyecto['Enlace Postulación'] }}" target="_blank" class="btn btn-primary">
+                        <i class="bi bi-send me-2"></i>
+                        Postular Ahora
+                    </a>
+                    {% endif %}
+                    
+                    {% if proyecto.get('Formulario') %}
+                    <a href="{{ proyecto['Formulario'] }}" target="_blank" class="btn btn-outline-primary">
+                        <i class="bi bi-file-earmark-text me-2"></i>
+                        Descargar Formulario
+                    </a>
+                    {% endif %}
+                    
+                    {% if proyecto.Enlace %}
+                    <a href="{{ proyecto.Enlace }}" target="_blank" class="btn btn-outline-primary">
+                        <i class="bi bi-link-45deg me-2"></i>
+                        Ver Fuente Oficial
+                    </a>
+                    {% endif %}
+                    
+                    <a href="/" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>
+                        Volver al Inicio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Animaciones suaves
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+        
+        // Confirmar antes de abrir enlaces externos
+        document.querySelectorAll('a[target="_blank"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (this.href.includes('postular') || this.href.includes('formulario')) {
+                    if (!confirm('¿Estás seguro de que quieres ir a la página de postulación? Esto te llevará a un sitio externo.')) {
+                        e.preventDefault();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+

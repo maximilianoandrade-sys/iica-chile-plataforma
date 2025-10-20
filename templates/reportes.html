@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes - IICA Chile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .report-card {
+            transition: all 0.3s ease;
+        }
+        .report-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+        }
+        .chart-container {
+            position: relative;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-graph-up me-2"></i>Reportes IICA Chile
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/">
+                    <i class="bi bi-house me-1"></i>Inicio
+                </a>
+                <a class="nav-link" href="/dashboard-avanzado">
+                    <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2><i class="bi bi-graph-up me-2"></i>Reportes Avanzados</h2>
+                <p class="text-muted">Análisis detallado de la plataforma y proyectos</p>
+            </div>
+        </div>
+
+        <!-- Métricas Principales -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-folder display-4"></i>
+                        <h3>{{ report.metadata.total_projects if report.metadata else 0 }}</h3>
+                        <p class="mb-0">Total Proyectos</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-currency-dollar display-4"></i>
+                        <h3>${{ "{:,.0f}".format(report.metadata.total_amount) if report.metadata and report.metadata.total_amount else 0 }}</h3>
+                        <p class="mb-0">Monto Total</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-building display-4"></i>
+                        <h3>{{ report.metadata.unique_sources if report.metadata else 0 }}</h3>
+                        <p class="mb-0">Fuentes Únicas</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-calendar display-4"></i>
+                        <h3>{{ report.temporal_analysis.closing_soon_count if report.temporal_analysis else 0 }}</h3>
+                        <p class="mb-0">Cierran Pronto</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Análisis por Área -->
+            <div class="col-md-6">
+                <div class="card report-card">
+                    <div class="card-header">
+                        <h5><i class="bi bi-pie-chart me-2"></i>Proyectos por Área</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="areaChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Análisis por Fuente -->
+            <div class="col-md-6">
+                <div class="card report-card">
+                    <div class="card-header">
+                        <h5><i class="bi bi-bar-chart me-2"></i>Distribución por Fuente</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="sourceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <!-- Top Áreas -->
+            <div class="col-md-6">
+                <div class="card report-card">
+                    <div class="card-header">
+                        <h5><i class="bi bi-trophy me-2"></i>Top Áreas de Interés</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if report.area_analysis and report.area_analysis.top_areas %}
+                            {% for area, count in report.area_analysis.top_areas.items() %}
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span>{{ area }}</span>
+                                <span class="badge bg-primary">{{ count }}</span>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-muted">No hay datos disponibles</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Fuentes -->
+            <div class="col-md-6">
+                <div class="card report-card">
+                    <div class="card-header">
+                        <h5><i class="bi bi-building me-2"></i>Top Fuentes de Financiamiento</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if report.source_analysis and report.source_analysis.top_sources %}
+                            {% for source, count in report.source_analysis.top_sources.items() %}
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span>{{ source }}</span>
+                                <span class="badge bg-success">{{ count }}</span>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-muted">No hay datos disponibles</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recomendaciones -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card report-card">
+                    <div class="card-header">
+                        <h5><i class="bi bi-lightbulb me-2"></i>Recomendaciones</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if report.recommendations %}
+                            {% for recommendation in report.recommendations %}
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle me-2"></i>{{ recommendation }}
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-muted">No hay recomendaciones disponibles</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Proyectos que Cierran Pronto -->
+        {% if report.temporal_analysis and report.temporal_analysis.closing_soon_projects %}
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card report-card">
+                    <div class="card-header">
+                        <h5><i class="bi bi-clock me-2"></i>Proyectos que Cierran Pronto</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Proyecto</th>
+                                        <th>Fecha de Cierre</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for project in report.temporal_analysis.closing_soon_projects %}
+                                    <tr>
+                                        <td>{{ project.Nombre }}</td>
+                                        <td>{{ project['Fecha cierre'] }}</td>
+                                        <td>
+                                            <a href="/proyecto/{{ loop.index0 }}" class="btn btn-sm btn-primary">
+                                                <i class="bi bi-eye me-1"></i>Ver
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Gráfico de áreas
+        const areaData = {{ report.area_analysis.top_areas | tojson if report.area_analysis and report.area_analysis.top_areas else '{}' }};
+        const areaCtx = document.getElementById('areaChart').getContext('2d');
+        new Chart(areaCtx, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(areaData),
+                datasets: [{
+                    data: Object.values(areaData),
+                    backgroundColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+                        '#FF9F40', '#FF6384', '#C9CBCF', '#4BC0C0', '#FF6384'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // Gráfico de fuentes
+        const sourceData = {{ report.source_analysis.top_sources | tojson if report.source_analysis and report.source_analysis.top_sources else '{}' }};
+        const sourceCtx = document.getElementById('sourceChart').getContext('2d');
+        new Chart(sourceCtx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(sourceData),
+                datasets: [{
+                    label: 'Proyectos',
+                    data: Object.values(sourceData),
+                    backgroundColor: '#36A2EB'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

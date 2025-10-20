@@ -1,0 +1,21 @@
+<svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo circular -->
+  <circle cx="40" cy="40" r="38" fill="white" stroke="#2E7D32" stroke-width="2"/>
+  
+  <!-- Texto IICA -->
+  <text x="40" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#2E7D32">IICA</text>
+  
+  <!-- Símbolo agrícola -->
+  <path d="M25 45 Q40 35 55 45" stroke="#2E7D32" stroke-width="2" fill="none"/>
+  
+  <!-- Puntos representando cultivos -->
+  <circle cx="30" cy="50" r="2" fill="#2E7D32"/>
+  <circle cx="40" cy="48" r="2" fill="#2E7D32"/>
+  <circle cx="50" cy="50" r="2" fill="#2E7D32"/>
+  
+  <!-- Hojas decorativas -->
+  <path d="M20 40 Q25 35 30 40" stroke="#4CAF50" stroke-width="1.5" fill="none"/>
+  <path d="M50 40 Q55 35 60 40" stroke="#4CAF50" stroke-width="1.5" fill="none"/>
+</svg>
+
+

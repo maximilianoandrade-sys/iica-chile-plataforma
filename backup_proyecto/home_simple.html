@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma IICA Chile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar {
+            background-color: #2c3e50 !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            color: white !important;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .navbar-nav .nav-link {
+            color: white !important;
+            font-weight: 500;
+            margin: 0 10px;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            color: #3498db !important;
+        }
+        
+        .dropdown-menu {
+            background-color: white;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .dropdown-item {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #e9ecef;
+            color: #2c3e50;
+        }
+        
+        .card {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .btn {
+            border-radius: 6px;
+            font-weight: 500;
+            padding: 8px 16px;
+        }
+        
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        
+        .form-control {
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            padding: 10px 12px;
+        }
+        
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+        }
+        
+        .stats-card .card-body {
+            background: transparent;
+        }
+        
+        .display-6 {
+            font-weight: bold;
+            color: white;
+        }
+        
+        .badge {
+            font-size: 0.9em;
+            padding: 6px 12px;
+            border-radius: 6px;
+        }
+        
+        .table {
+            background-color: white;
+        }
+        
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .table td {
+            vertical-align: middle;
+        }
+        
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 0.8em;
+        }
+        
+        .project-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .project-description {
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+        
+        /* Estilos para instituciones */
+        .institution-card {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+        }
+        
+        .institution-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .institution-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+        }
+        
+        .btn-outline-success:hover {
+            background-color: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+        
+        .btn-outline-warning:hover {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-outline-danger:hover {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            color: white;
+        }
+        
+        .pagination {
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .page-link {
+            color: #007bff;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            margin: 0 2px;
+            padding: 8px 12px;
+        }
+        
+        .page-link:hover {
+            color: #0056b3;
+            background-color: #e9ecef;
+        }
+        
+        .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        
+        .alert {
+            border-radius: 8px;
+            border: none;
+        }
+        
+        .text-primary {
+            color: #007bff !important;
+        }
+        
+        .text-success {
+            color: #28a745 !important;
+        }
+        
+        .text-warning {
+            color: #ffc107 !important;
+        }
+        
+        .text-info {
+            color: #17a2b8 !important;
+        }
+        
+        .bg-light {
+            background-color: #f8f9fa !important;
+        }
+        
+        .shadow-sm {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar-nav {
+                text-align: center;
+                margin-top: 10px;
+            }
+            
+            .navbar-nav .nav-link {
+                margin: 5px 0;
+            }
+            
+            .card-body {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-globe-americas me-2"></i>
+                Plataforma IICA Chile
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="bi bi-house me-1"></i>Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/quienes-somos">
+                            <i class="bi bi-info-circle me-1"></i>Quiénes Somos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/adjudicados">
+                            <i class="bi bi-trophy me-1"></i>Proyectos Adjudicados
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-translate me-1"></i>Idioma
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="?lang=es">🇪🇸 Español</a></li>
+                            <li><a class="dropdown-item" href="?lang=en">🇺🇸 English</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <div class="container mt-4">
+        <!-- Estadísticas -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <h4 class="mb-3">
+                            <i class="bi bi-graph-up me-2"></i>Estadísticas de Proyectos
+                        </h4>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="display-6">{{ stats.total if stats else 0 }}</div>
+                                <div class="small">Total Proyectos</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="display-6">{{ adjudicados|length if adjudicados else 0 }}</div>
+                                <div class="small">Adjudicados</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="display-6">{{ stats.por_area|length if stats and stats.por_area else 0 }}</div>
+                                <div class="small">Áreas</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="display-6">{{ stats.por_estado|length if stats and stats.por_estado else 0 }}</div>
+                                <div class="small">Estados</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Búsqueda y Filtros -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="bi bi-search me-2"></i>Búsqueda y Filtros
+            </div>
+            <div class="card-body">
+                <form method="GET" class="row g-3">
+                    <input type="hidden" name="lang" value="{{ current_language }}">
+                    <div class="col-md-4">
+                        <label class="form-label">🔍 Búsqueda</label>
+                        <input type="text" class="form-control" name="query" 
+                               value="{{ current_filters.query }}" 
+                               placeholder="Buscar proyectos...">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Área</label>
+                        <select class="form-select" name="area">
+                            <option value="">Todas las áreas</option>
+                            {% if stats and stats.por_area %}
+                                {% for area, count in stats.por_area.items() %}
+                                    <option value="{{ area }}" 
+                                            {% if current_filters.area == area %}selected{% endif %}>
+                                        {{ area }} ({{ count }})
+                                    </option>
+                                {% endfor %}
+                            {% endif %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Estado</label>
+                        <select class="form-select" name="estado">
+                            <option value="">Todos los estados</option>
+                            {% if stats and stats.por_estado %}
+                                {% for estado, count in stats.por_estado.items() %}
+                                    <option value="{{ estado }}" 
+                                            {% if current_filters.estado == estado %}selected{% endif %}>
+                                        {{ estado }} ({{ count }})
+                                    </option>
+                                {% endfor %}
+                            {% endif %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">&nbsp;</label>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-search me-1"></i>Buscar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Ordenar por</label>
+                        <select class="form-select" name="ordenar_por">
+                            <option value="fecha" {% if current_filters.ordenar_por == 'fecha' %}selected{% endif %}>Fecha</option>
+                            <option value="monto" {% if current_filters.ordenar_por == 'monto' %}selected{% endif %}>Monto</option>
+                            <option value="nombre" {% if current_filters.ordenar_por == 'nombre' %}selected{% endif %}>Nombre</option>
+                            <option value="fuente" {% if current_filters.ordenar_por == 'fuente' %}selected{% endif %}>Fuente</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Orden</label>
+                        <select class="form-select" name="orden">
+                            <option value="asc" {% if current_filters.orden == 'asc' %}selected{% endif %}>Ascendente</option>
+                            <option value="desc" {% if current_filters.orden == 'desc' %}selected{% endif %}>Descendente</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instituciones IICA -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="bi bi-building me-2"></i>Instituciones con las que trabaja IICA Chile
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <div class="card h-100 border-0 shadow-sm institution-card">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-globe text-primary institution-icon"></i>
+                                        <h6 class="card-title">Organizaciones Internacionales</h6>
+                                        <div class="d-grid gap-2">
+                                            <a href="https://www.fao.org" target="_blank" class="btn btn-outline-primary btn-sm">
+                                                <i class="bi bi-external-link me-1"></i>FAO
+                                            </a>
+                                            <a href="https://www.undp.org" target="_blank" class="btn btn-outline-primary btn-sm">
+                                                <i class="bi bi-external-link me-1"></i>UNDP
+                                            </a>
+                                            <a href="https://www.worldbank.org" target="_blank" class="btn btn-outline-primary btn-sm">
+                                                <i class="bi bi-external-link me-1"></i>Banco Mundial
+                                            </a>
+                                            <a href="https://beo-procurement.iadb.org/" target="_blank" class="btn btn-outline-primary btn-sm">
+                                                <i class="bi bi-external-link me-1"></i>BID
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3 mb-3">
+                                <div class="card h-100 border-0 shadow-sm institution-card">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-flag text-success institution-icon"></i>
+                                        <h6 class="card-title">Gobierno de Chile</h6>
+                                        <div class="d-grid gap-2">
+                                            <a href="https://www.minagri.gob.cl" target="_blank" class="btn btn-outline-success btn-sm">
+                                                <i class="bi bi-external-link me-1"></i>Minagri
+                                            </a>
+                                            <a href="https://www.indap.gob.cl" target="_blank" class="btn btn-outline-success btn-sm">
+                                                <i class="bi bi-external-link me-1"></i>INDAP
+                                            </a>
+                                            <a href="https://www.fia.cl" target="_blank" class="btn btn-outline-success btn-sm">
+                                                <i class="bi bi-external-link me-1"></i>FIA
+                                            </a>
+                                            <a href="https://www.cnr.gob.cl" target="_blank" class="btn btn-outline-success btn-sm">
+                                                <i class="bi bi-external-link me-1"></i>CNR
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3 mb-3">
+                                <div class="card h-100 border-0 shadow-sm institution-card">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-people text-warning institution-icon"></i>
+                                        <h6 class="card-title">Sector Privado</h6>
+                                        <div class="d-grid gap-2">
+                                            <a href="https://www.sag.gob.cl" target="_blank" class="btn btn-outline-warning btn-sm">
+                                                <i class="bi bi-external-link me-1"></i>SAG
+                                            </a>
+                                            <a href="https://www.corfo.cl" target="_blank" class="btn btn-outline-warning btn-sm">
+                                                <i class="bi bi-external-link me-1"></i>CORFO
+                                            </a>
+                                            <a href="https://www.fondos.gob.cl" target="_blank" class="btn btn-outline-warning btn-sm">
+                                                <i class="bi bi-external-link me-1"></i>Fondos.gob.cl
+                                            </a>
+                                            <a href="https://www.agci.cl" target="_blank" class="btn btn-outline-warning btn-sm">
+                                                <i class="bi bi-external-link me-1"></i>AGCID
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3 mb-3">
+                                <div class="card h-100 border-0 shadow-sm institution-card">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-heart text-danger institution-icon"></i>
+                                        <h6 class="card-title">Organizaciones Sociales</h6>
+                                        <div class="d-grid gap-2">
+                                            <a href="https://www.conadi.gob.cl" target="_blank" class="btn btn-outline-danger btn-sm">
+                                                <i class="bi bi-external-link me-1"></i>CONADI
+                                            </a>
+                                            <a href="https://www.fundacionchile.cl" target="_blank" class="btn btn-outline-danger btn-sm">
+                                                <i class="bi bi-external-link me-1"></i>Fundación Chile
+                                            </a>
+                                            <a href="https://www.gef.org" target="_blank" class="btn btn-outline-danger btn-sm">
+                                                <i class="bi bi-external-link me-1"></i>GEF
+                                            </a>
+                                            <a href="https://www.ifad.org" target="_blank" class="btn btn-outline-danger btn-sm">
+                                                <i class="bi bi-external-link me-1"></i>FIDA
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Proyectos -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="bi bi-list-ul me-2"></i>Proyectos Disponibles
+                </h5>
+                <span class="badge bg-primary">{{ proyectos|length }} proyectos</span>
+            </div>
+            <div class="card-body">
+                {% if proyectos %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Proyecto</th>
+                                    <th>Área</th>
+                                    <th>Monto</th>
+                                    <th>Estado</th>
+                                    <th>Fecha Cierre</th>
+                                    <th>Fuente</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for proyecto in proyectos %}
+                                <tr>
+                                    <td>
+                                        <div class="project-name">{{ proyecto.get('Nombre', 'N/A') }}</div>
+                                        {% if proyecto.get('Descripción') %}
+                                            <div class="project-description">{{ proyecto.get('Descripción', '')[:80] }}...</div>
+                                        {% endif %}
+                                        <div class="mt-2">
+                                            <a href="/proyecto/{{ loop.index }}" class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-eye me-1"></i>Ver Detalles
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-info">{{ proyecto.get('Área de interés', 'General') }}</span>
+                                    </td>
+                                    <td>
+                                        {% if proyecto.get('Monto') %}
+                                            <span class="badge bg-success">{{ proyecto.get('Monto', 'N/A') }}</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">N/A</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% set estado = proyecto.get('Estado', 'N/A') %}
+                                        {% if estado == 'Abierto' %}
+                                            <span class="badge bg-success">{{ estado }}</span>
+                                        {% elif estado == 'Cerrado' %}
+                                            <span class="badge bg-danger">{{ estado }}</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">{{ estado }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <small>{{ proyecto.get('Fecha cierre', 'N/A') }}</small>
+                                    </td>
+                                    <td>
+                                        <small>{{ proyecto.get('Fuente', 'N/A') }}</small>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Paginación -->
+                    {% if pagination and pagination.total_pages > 1 %}
+                    <nav aria-label="Paginación">
+                        <ul class="pagination">
+                            {% if pagination.has_prev %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ pagination.prev_page }}{% if current_filters.query %}&query={{ current_filters.query }}{% endif %}{% if current_filters.area %}&area={{ current_filters.area }}{% endif %}{% if current_filters.estado %}&estado={{ current_filters.estado }}{% endif %}{% if current_filters.ordenar_por %}&ordenar_por={{ current_filters.ordenar_por }}{% endif %}{% if current_filters.orden %}&orden={{ current_filters.orden }}{% endif %}{% if current_language %}&lang={{ current_language }}{% endif %}">
+                                        <i class="bi bi-chevron-left"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
+                            
+                            {% for page_num in range(1, pagination.total_pages + 1) %}
+                                {% if page_num == pagination.current_page %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ page_num }}</span>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_num }}{% if current_filters.query %}&query={{ current_filters.query }}{% endif %}{% if current_filters.area %}&area={{ current_filters.area }}{% endif %}{% if current_filters.estado %}&estado={{ current_filters.estado }}{% endif %}{% if current_filters.ordenar_por %}&ordenar_por={{ current_filters.ordenar_por }}{% endif %}{% if current_filters.orden %}&orden={{ current_filters.orden }}{% endif %}{% if current_language %}&lang={{ current_language }}{% endif %}">
+                                            {{ page_num }}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% if pagination.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ pagination.next_page }}{% if current_filters.query %}&query={{ current_filters.query }}{% endif %}{% if current_filters.area %}&area={{ current_filters.area }}{% endif %}{% if current_filters.estado %}&estado={{ current_filters.estado }}{% endif %}{% if current_filters.ordenar_por %}&ordenar_por={{ current_filters.ordenar_por }}{% endif %}{% if current_filters.orden %}&orden={{ current_filters.orden }}{% endif %}{% if current_language %}&lang={{ current_language }}{% endif %}">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                    {% endif %}
+                {% else %}
+                    <div class="alert alert-info text-center">
+                        <i class="bi bi-info-circle me-2"></i>
+                        No se encontraron proyectos con los filtros aplicados.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

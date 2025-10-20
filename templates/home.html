@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ translations.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/v/bs5/dt-2.0.7/datatables.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body { background: #f5f7fb; }
+        
+        /* Estilos para montos */
+        .badge.bg-success {
+            background-color: #28a745 !important;
+            font-weight: 600;
+            font-size: 0.85em;
+            padding: 0.5em 0.75em;
+        }
+        
+        .badge.bg-info {
+            background-color: #17a2b8 !important;
+            font-weight: 600;
+            font-size: 0.85em;
+            padding: 0.5em 0.75em;
+        }
+        
+        .badge.bg-warning {
+            background-color: #ffc107 !important;
+            color: #212529 !important;
+            font-weight: 600;
+            font-size: 0.85em;
+            padding: 0.5em 0.75em;
+        }
+        
+        .badge.bg-secondary {
+            background-color: #6c757d !important;
+            font-weight: 500;
+            font-size: 0.85em;
+            padding: 0.5em 0.75em;
+        }
+        
+        /* Mejorar legibilidad de números */
+        .badge {
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.5px;
+        }
+        .body-bg-soft { background: #f5f7fb; }
+        .body-bg-gradient-blue { background: linear-gradient(180deg, #eef6ff 0%, #f8fbff 100%); }
+        .body-bg-gradient-green { background: linear-gradient(180deg, #e9f8f1 0%, #f7fffb 100%); }
+        
+        /* Mejoras de interfaz de usuario */
+        .card {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+        }
+        
+        .btn {
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        .navbar {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95) !important;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            color: #2c3e50 !important;
+            font-weight: 700;
+        }
+        
+        .navbar-nav .nav-link {
+            color: #2c3e50 !important;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            color: #007bff !important;
+        }
+        
+        .navbar-toggler {
+            border-color: #2c3e50;
+        }
+        
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2844, 62, 80, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+        
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        .dropdown-item {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: #007bff;
+        }
+        
+        /* Mejorar visibilidad de controles */
+        .form-select {
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 0.9em;
+            padding: 0.375rem 0.75rem;
+        }
+        
+        .form-select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+            border-radius: 6px;
+        }
+        
+        /* Mejorar contraste en navbar */
+        .navbar .d-flex {
+            gap: 0.5rem;
+        }
+        
+        .navbar .form-select {
+            background-color: white;
+            border: 1px solid #ced4da;
+        }
+        
+        .navbar .btn {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+        }
+        
+        .navbar .btn:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        
+        /* Mejorar formularios de búsqueda */
+        .form-control {
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 0.9em;
+            padding: 0.5rem 0.75rem;
+        }
+        
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-label.small {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        /* Mejorar cards de búsqueda */
+        .card {
+            border: 1px solid #e9ecef;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        /* Mejorar botones */
+        .btn {
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            transform: translateY(-1px);
+        }
+        
+        .btn-outline-primary {
+            color: #007bff;
+            border-color: #007bff;
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        
+        /* Mejorar visibilidad de estadísticas */
+        .display-6 {
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
+        .text-primary {
+            color: #007bff !important;
+        }
+        
+        .text-success {
+            color: #28a745 !important;
+        }
+        
+        .text-warning {
+            color: #ffc107 !important;
+        }
+        
+        .text-info {
+            color: #17a2b8 !important;
+        }
+        
+        /* Mejorar badges */
+        .badge {
+            font-size: 0.8em;
+            padding: 0.5em 0.75em;
+            border-radius: 6px;
+        }
+        
+        /* Mejorar paginación */
+        .pagination {
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .page-link {
+            color: #007bff;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            margin: 0 2px;
+        }
+        
+        .page-link:hover {
+            color: #0056b3;
+            background-color: #e9ecef;
+            border-color: #adb5bd;
+        }
+        
+        .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        
+        /* Mejorar responsividad */
+        @media (max-width: 768px) {
+            .navbar .d-flex {
+                flex-direction: column;
+                gap: 0.5rem;
+                width: 100%;
+            }
+            
+            .navbar .form-select {
+                width: 100%;
+            }
+            
+            .card-body {
+                padding: 1rem;
+            }
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .stats-card .card-body {
+            background: transparent;
+        }
+        
+        .project-card {
+            border-left: 4px solid #007bff;
+        }
+        
+        .project-card:hover {
+            border-left-color: #0056b3;
+        }
+        
+        .social-btn {
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 0.9em;
+        }
+        
+        .contact-info {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        
+        .contact-info .card-body {
+            background: transparent;
+        }
+        
+        .body-bg-dots {
+            background-image: radial-gradient(#d9e6f5 1px, transparent 1px);
+            background-size: 16px 16px;
+            background-color: #f9fbff;
+        }
+        .body-bg-grid {
+            background-image: linear-gradient(#e8eef7 1px, transparent 1px), linear-gradient(90deg, #e8eef7 1px, transparent 1px);
+            background-size: 24px 24px;
+            background-color: #ffffff;
+        }
+        .body-bg-diag {
+            background-image: repeating-linear-gradient(45deg, #f3f7fc 0, #f3f7fc 10px, #e9f1fb 10px, #e9f1fb 20px);
+        }
+        .body-bg-ocean {
+            background: radial-gradient(circle at 20% 20%, #cfe8ff, transparent 40%),
+                        radial-gradient(circle at 80% 0%, #d9f1ff, transparent 35%),
+                        linear-gradient(180deg, #e8f4ff 0%, #cfe6ff 100%);
+        }
+        .body-bg-sand {
+            background: linear-gradient(180deg, #fff7e6 0%, #fff1cc 100%);
+        }
+        .body-bg-geo {
+            background-image: linear-gradient(135deg, rgba(18,97,165,0.06) 25%, transparent 25%),
+                              linear-gradient(225deg, rgba(18,97,165,0.06) 25%, transparent 25%),
+                              linear-gradient(45deg, rgba(18,97,165,0.06) 25%, transparent 25%),
+                              linear-gradient(315deg, rgba(18,97,165,0.06) 25%, #ffffff 25%);
+            background-position: 8px 0, 8px 0, 0 0, 0 0;
+            background-size: 16px 16px;
+            background-repeat: repeat;
+        }
+        .body-bg-stripes {
+            background-image: repeating-linear-gradient(90deg, #f2f6fb 0, #f2f6fb 12px, #e9f1f9 12px, #e9f1f9 24px);
+        }
+        .body-bg-custom {
+            /* la imagen se inyecta por inline-style desde JS */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed;
+        }
+        .brand-gradient { background: linear-gradient(90deg, #1261a5 0%, #2396f3 100%); }
+        .content { margin-top: 32px; margin-bottom: 32px; }
+        .table thead th { background: #2396f3; color: white; border-color: #1f7fd1; }
+        .table-hover tbody tr:hover { background: #eef6ff; }
+        .card-empty { border: 1px dashed #c7d8ec; background: #f9fbff; }
+        footer { color: #6b7a90; }
+    </style>
+    <link rel="icon" href="/static/favicon.png">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script defer src="https://cdn.datatables.net/v/bs5/dt-2.0.7/datatables.min.js"></script>
+    <script defer>
+      // Funciones de exportación
+      function exportarCSV() {
+        window.location.href = '/export/csv';
+      }
+      
+      function exportarExcel() {
+        window.location.href = '/export/xlsx';
+      }
+      
+      // Auto-submit para filtros de ordenamiento
+      document.addEventListener('DOMContentLoaded', function() {
+        const ordenarSelects = document.querySelectorAll('select[name="ordenar_por"], select[name="orden"]');
+        ordenarSelects.forEach(select => {
+          select.addEventListener('change', function() {
+            this.form.submit();
+          });
+        });
+      });
+    </script>
+    <script defer>
+      document.addEventListener('DOMContentLoaded', function () {
+        // Preferencias guardadas (tema y fondo)
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        const savedBg = localStorage.getItem('bgClass') || 'body-bg-soft';
+        const savedBgUrl = localStorage.getItem('bgUrl') || '';
+        document.body.classList.add(savedBg);
+        if (savedBg === 'body-bg-custom' && savedBgUrl) {
+          document.body.style.backgroundImage = `url('${savedBgUrl}')`;
+        }
+
+        const yearSpan = document.getElementById('year');
+        if (yearSpan) { yearSpan.textContent = new Date().getFullYear(); }
+        const table = document.getElementById('tabla-proyectos');
+        if (table && window.DataTable) {
+          new DataTable(table, {
+            paging: true,
+            pageLength: 10,
+            lengthChange: true,
+            ordering: true,
+            order: [],
+            language: {
+              url: 'https://cdn.datatables.net/plug-ins/2.0.7/i18n/es-ES.json'
+            }
+          });
+        }
+
+        const tableAdj = document.getElementById('tabla-adjudicados');
+        if (tableAdj && window.DataTable) {
+          new DataTable(tableAdj, {
+            paging: true,
+            pageLength: 10,
+            language: { url: 'https://cdn.datatables.net/plug-ins/2.0.7/i18n/es-ES.json' }
+          });
+        }
+
+        const chartMonCanvas = document.getElementById('chartMonedas');
+        if (chartMonCanvas && window.Chart) {
+          // Asegurarse que el objeto esté correctamente serializado como JSON
+          const dataMon = JSON.parse('{{ stats.total_monto | tojson | safe if stats else "{}" }}');
+  
+          const labelsM = Object.keys(dataMon || {});
+          const valuesM = Object.values(dataMon || {});
+          new Chart(chartMonCanvas, {
+            type: 'doughnut',
+            data: { 
+              labels: labelsM, 
+              datasets: [{ 
+                data: valuesM, 
+                backgroundColor: ['#2396f3','#2ecc71','#f1c40f','#9b59b6','#e67e22'] 
+              }] 
+            },
+            options: { plugins: { legend: { position: 'bottom' } }, cutout: '60%' }
+          });
+        }
+
+        // Toggle de tema claro/oscuro
+        const themeBtn = document.getElementById('btn-theme');
+        if (themeBtn) {
+          themeBtn.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'dark' : 'light';
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-bs-theme', next);
+            localStorage.setItem('theme', next);
+            themeBtn.innerText = next === 'dark' ? 'Tema: oscuro' : 'Tema: claro';
+          });
+          themeBtn.innerText = (savedTheme === 'dark') ? 'Tema: oscuro' : 'Tema: claro';
+        }
+
+        // Selector de fondo
+        const bgSelect = document.getElementById('select-bg');
+        const bgUrlInput = document.getElementById('input-bg-url');
+        const bgApplyBtn = document.getElementById('btn-bg-apply');
+        if (bgSelect) {
+          bgSelect.value = savedBg;
+          bgSelect.addEventListener('change', (e) => {
+            const classes = ['body-bg-soft','body-bg-gradient-blue','body-bg-gradient-green','body-bg-dots','body-bg-grid','body-bg-diag','body-bg-ocean','body-bg-sand','body-bg-geo','body-bg-stripes','body-bg-custom'];
+            classes.forEach(c => document.body.classList.remove(c));
+            const cls = e.target.value;
+            document.body.classList.add(cls);
+            localStorage.setItem('bgClass', cls);
+            // Mostrar/ocultar controles de URL personalizada
+            const customControls = document.getElementById('bg-custom-controls');
+            if (customControls) customControls.style.display = (cls === 'body-bg-custom' ? 'flex' : 'none');
+            if (cls !== 'body-bg-custom') {
+              document.body.style.backgroundImage = '';
+            } else if (bgUrlInput && bgUrlInput.value) {
+              document.body.style.backgroundImage = `url('${bgUrlInput.value}')`;
+              localStorage.setItem('bgUrl', bgUrlInput.value);
+            }
+          });
+          // Inicializar visibilidad de controles custom
+          const customControls = document.getElementById('bg-custom-controls');
+          if (customControls) customControls.style.display = (savedBg === 'body-bg-custom' ? 'flex' : 'none');
+          if (bgUrlInput && savedBg === 'body-bg-custom') bgUrlInput.value = savedBgUrl;
+        }
+        if (bgApplyBtn && bgUrlInput) {
+          bgApplyBtn.addEventListener('click', () => {
+            const url = bgUrlInput.value.trim();
+            if (!url) return;
+            document.body.style.backgroundImage = `url('${url}')`;
+            localStorage.setItem('bgUrl', url);
+          });
+        }
+      });
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+          <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" style="max-height:32px" onerror="this.style.display='none'">
+          <span class="fw-semibold">Proyecto IICA</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor" aria-controls="navbarColor" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor">
+          <ul class="navbar-nav ms-auto me-3">
+            <li class="nav-item"><a class="nav-link" href="/">{{ translations.nav_home }}</a></li>
+            <li class="nav-item"><a class="nav-link" href="/quienes-somos">{{ translations.nav_about }}</a></li>
+            <li class="nav-item"><a class="nav-link" href="/adjudicados">{{ translations.nav_awarded }}</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                <i class="bi bi-globe me-1"></i> {{ translations.language }}
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="?lang=es">🇪🇸 {{ translations.language_spanish }}</a></li>
+                <li><a class="dropdown-item" href="?lang=en">🇺🇸 {{ translations.language_english }}</a></li>
+              </ul>
+            </li>
+          </ul>
+          <div class="d-flex gap-2 align-items-center flex-wrap">
+            <select id="select-bg" class="form-select form-select-sm" style="width: 200px; font-size: 0.9em;">
+              <option value="body-bg-soft">Fondo claro suave</option>
+              <option value="body-bg-gradient-blue">Degradado azul</option>
+              <option value="body-bg-gradient-green">Degradado verde</option>
+              <option value="body-bg-dots">Patrón de puntos</option>
+              <option value="body-bg-grid">Cuadrícula suave</option>
+              <option value="body-bg-diag">Diagonales suaves</option>
+              <option value="body-bg-ocean">Océano (azules internacionales)</option>
+              <option value="body-bg-sand">Arena (tono cálido)</option>
+              <option value="body-bg-geo">Geométrico sutil</option>
+              <option value="body-bg-stripes">Franjas sutiles</option>
+              <option value="body-bg-custom">Imagen personalizada (URL)</option>
+            </select>
+            <div id="bg-custom-controls" class="d-flex align-items-center gap-2" style="display:none">
+              <input id="input-bg-url" type="url" class="form-control form-control-sm" placeholder="https://.../fondo.jpg" style="width: 280px">
+              <button id="btn-bg-apply" type="button" class="btn btn-outline-light btn-sm">Aplicar</button>
+            </div>
+            <button id="btn-theme" type="button" class="btn btn-outline-light btn-sm">Tema</button>
+            <form class="m-0" method="post" action="/buscar">
+              <button class="btn btn-light btn-sm text-primary fw-semibold">Actualizar proyectos</button>
+            </form>
+            <a class="btn btn-outline-light btn-sm" href="/export/csv">Exportar CSV</a>
+            <a class="btn btn-outline-light btn-sm" href="/export/xlsx">Exportar XLSX</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container content">
+      {% if stats %}
+      <div class="row g-3 mb-4">
+        <div class="col-12 col-lg-3">
+          <div class="card border-0 shadow-sm h-100 text-center">
+            <div class="card-body">
+              <div class="text-primary mb-2">
+                <i class="bi bi-folder2-open display-4"></i>
+              </div>
+              <div class="text-muted small">Total proyectos</div>
+              <div class="display-6 fw-semibold text-primary">{{ stats.total }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-4">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-3">
+                <i class="bi bi-currency-dollar text-warning me-2"></i>
+                <div class="text-muted small">Financiamiento disponible</div>
+              </div>
+              {% if stats.total_monto %}
+                {% for mon, val in stats.total_monto.items() %}
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="badge bg-light text-dark">{{ mon }}</span>
+                    <span class="fw-semibold text-success">{{ '%.0f'|format(val) }}</span>
+                  </div>
+                {% endfor %}
+              {% else %}
+                <div class="text-muted text-center py-3">
+                  <i class="bi bi-info-circle"></i> Sin datos de financiamiento
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      <div class="card shadow-sm border-0 mb-3">
+        <div class="card-body">
+          <form class="row g-3 align-items-end" method="get" action="/">
+        <div class="col-md-4">
+              <label class="form-label">🔍 Búsqueda</label>
+              <input type="text" class="form-control" name="query" placeholder="Buscar proyectos..." value="{{ request.args.get('query', '') }}">
+        </div>
+        <div class="col-md-3">
+              <label class="form-label">Área</label>
+              <select class="form-select" name="area">
+                <option value="">Todas las áreas</option>
+                <option value="Agricultura" {{ 'selected' if request.args.get('area') == 'Agricultura' else '' }}>Agricultura</option>
+                <option value="Ganadería" {{ 'selected' if request.args.get('area') == 'Ganadería' else '' }}>Ganadería</option>
+                <option value="Suelos" {{ 'selected' if request.args.get('area') == 'Suelos' else '' }}>Suelos</option>
+                <option value="Seguridad alimentaria" {{ 'selected' if request.args.get('area') == 'Seguridad alimentaria' else '' }}>Seguridad alimentaria</option>
+                <option value="Innovación" {{ 'selected' if request.args.get('area') == 'Innovación' else '' }}>Innovación</option>
+                <option value="Cambio climático" {{ 'selected' if request.args.get('area') == 'Cambio climático' else '' }}>Cambio climático</option>
+                <option value="Riego" {{ 'selected' if request.args.get('area') == 'Riego' else '' }}>Riego</option>
+                <option value="Forestal" {{ 'selected' if request.args.get('area') == 'Forestal' else '' }}>Forestal</option>
+                <option value="Desarrollo rural" {{ 'selected' if request.args.get('area') == 'Desarrollo rural' else '' }}>Desarrollo rural</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+              <label class="form-label">Estado</label>
+              <select class="form-select" name="estado">
+                <option value="">Todos</option>
+                <option value="Abierto" {{ 'selected' if request.args.get('estado') == 'Abierto' else '' }}>Abierto</option>
+                <option value="Cerrado" {{ 'selected' if request.args.get('estado') == 'Cerrado' else '' }}>Cerrado</option>
+            </select>
+        </div>
+            <div class="col-md-2 d-grid">
+              <button class="btn btn-primary" type="submit">🔍 Buscar</button>
+        </div>
+        <div class="col-12 mt-2">
+          <a href="/" class="btn btn-outline-secondary btn-sm">Limpiar filtros</a>
+          {% if request.args.get('query') or request.args.get('area') or request.args.get('estado') %}
+          <span class="badge bg-info ms-2">
+            {{ proyectos|length }} resultado(s) encontrado(s)
+          </span>
+          {% endif %}
+        </div>
+    </form>
+        </div>
+      </div>
+
+      <ul class="nav nav-tabs" id="tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="tab-convocatorias" data-bs-toggle="tab" data-bs-target="#pane-convocatorias" type="button" role="tab">{{ translations.nav_projects }}</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab-adjudicados" data-bs-toggle="tab" data-bs-target="#pane-adjudicados" type="button" role="tab">{{ translations.nav_awarded }}</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab-documentos" data-bs-toggle="tab" data-bs-target="#pane-documentos" type="button" role="tab">{{ translations.nav_documents }}</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab-postulaciones" data-bs-toggle="tab" data-bs-target="#pane-postulaciones" type="button" role="tab">{{ translations.nav_apply }}</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab-instituciones" data-bs-toggle="tab" data-bs-target="#pane-instituciones" type="button" role="tab">{{ translations.nav_institutions }}</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="tab-about" data-bs-toggle="tab" data-bs-target="#pane-about" type="button" role="tab">{{ translations.nav_about }}</button>
+        </li>
+      </ul>
+      <div class="tab-content pt-3">
+        <div class="tab-pane fade show active" id="pane-convocatorias" role="tabpanel">
+          <!-- Filtros de ordenamiento -->
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                  <h6 class="card-title mb-3">
+                    <i class="bi bi-funnel me-2"></i>{{ translations.filter_area }}
+                  </h6>
+                  <form method="GET" class="row g-3">
+                    <input type="hidden" name="lang" value="{{ current_language }}">
+                    <div class="col-md-6">
+                      <label class="form-label small">{{ translations.search_placeholder }}</label>
+                      <input type="text" class="form-control form-control-sm" name="query" 
+                             value="{{ current_filters.query }}" placeholder="{{ translations.search_placeholder }}">
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label small">{{ translations.filter_area }}</label>
+                      <select class="form-select form-select-sm" name="area">
+                        <option value="">{{ translations.filter_area }}</option>
+                        <option value="Agricultura" {% if current_filters.area == 'Agricultura' %}selected{% endif %}>Agricultura</option>
+                        <option value="Medio Ambiente" {% if current_filters.area == 'Medio Ambiente' %}selected{% endif %}>Medio Ambiente</option>
+                        <option value="Innovación" {% if current_filters.area == 'Innovación' %}selected{% endif %}>Innovación</option>
+                        <option value="Desarrollo" {% if current_filters.area == 'Desarrollo' %}selected{% endif %}>Desarrollo</option>
+                        <option value="Tecnología" {% if current_filters.area == 'Tecnología' %}selected{% endif %}>Tecnología</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+                      <label class="form-label small">{{ translations.filter_status }}</label>
+                      <select class="form-select form-select-sm" name="estado">
+                        <option value="">{{ translations.filter_status }}</option>
+                        <option value="Abierto" {% if current_filters.estado == 'Abierto' %}selected{% endif %}>Abierto</option>
+                        <option value="Cerrado" {% if current_filters.estado == 'Cerrado' %}selected{% endif %}>Cerrado</option>
+                        <option value="Adjudicado" {% if current_filters.estado == 'Adjudicado' %}selected{% endif %}>Adjudicado</option>
+            </select>
+        </div>
+                    <div class="col-12">
+                      <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="bi bi-search me-1"></i>{{ translations.search_button }}
+                      </button>
+                      <a href="/?lang={{ current_language }}" class="btn btn-outline-secondary btn-sm ms-2">
+                        <i class="bi bi-x-circle me-1"></i>Limpiar
+                      </a>
+        </div>
+    </form>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                  <h6 class="card-title mb-3">
+                    <i class="bi bi-sort-down me-2"></i>{{ translations.sort_by }}
+                  </h6>
+                  <form method="GET" class="row g-3">
+                    <input type="hidden" name="lang" value="{{ current_language }}">
+                    <input type="hidden" name="query" value="{{ current_filters.query }}">
+                    <input type="hidden" name="area" value="{{ current_filters.area }}">
+                    <input type="hidden" name="estado" value="{{ current_filters.estado }}">
+                    <div class="col-md-6">
+                      <label class="form-label small">{{ translations.sort_criteria }}</label>
+                      <select class="form-select form-select-sm" name="ordenar_por" onchange="this.form.submit()">
+                        <option value="fecha" {% if current_filters.ordenar_por == 'fecha' %}selected{% endif %}>{{ translations.sort_date }}</option>
+                        <option value="monto" {% if current_filters.ordenar_por == 'monto' %}selected{% endif %}>{{ translations.sort_amount }}</option>
+                        <option value="nombre" {% if current_filters.ordenar_por == 'nombre' %}selected{% endif %}>{{ translations.sort_name }}</option>
+                        <option value="fuente" {% if current_filters.ordenar_por == 'fuente' %}selected{% endif %}>{{ translations.sort_source }}</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label small">{{ translations.sort_order }}</label>
+                      <select class="form-select form-select-sm" name="orden" onchange="this.form.submit()">
+                        <option value="asc" {% if current_filters.orden == 'asc' %}selected{% endif %}>{{ translations.sort_ascending }}</option>
+                        <option value="desc" {% if current_filters.orden == 'desc' %}selected{% endif %}>{{ translations.sort_descending }}</option>
+                      </select>
+                    </div>
+    </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Información de resultados -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="alert alert-info py-2">
+                <i class="bi bi-info-circle me-2"></i>
+                Mostrando {{ proyectos|length }} de {{ pagination.total_proyectos }} proyectos
+                (Página {{ pagination.current_page }} de {{ pagination.total_pages }})
+              </div>
+            </div>
+            <div class="col-md-6 text-end">
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="exportarCSV()">
+                  <i class="bi bi-file-earmark-spreadsheet me-1"></i>CSV
+                </button>
+                <button type="button" class="btn btn-outline-success btn-sm" onclick="exportarExcel()">
+                  <i class="bi bi-file-earmark-excel me-1"></i>Excel
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {% if proyectos and proyectos|length > 0 %}
+          <div class="card shadow-sm border-0">
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table id="tabla-proyectos" class="table table-hover align-middle mb-0">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Fuente</th>
+                <th>Fecha cierre</th>
+                <th>Enlace</th>
+                <th>Estado</th>
+                <th>Monto</th>
+                <th>Área de interés</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for p in proyectos %}
+            <tr>
+                      <td class="fw-semibold">{{ p["Nombre"] }}</td>
+                      <td>{{ p["Fuente"] }}</td>
+                      <td><span class="text-nowrap">{{ p["Fecha cierre"] }}</span></td>
+                      <td><a class="link-primary" href="{{ p["Enlace"] }}" target="_blank">Ver proyecto</a></td>
+                      <td>
+                        {% set estado = (p["Estado"] or "").lower() %}
+                        {% if estado == 'abierto' %}
+                          <span class="badge bg-success">Abierto</span>
+                        {% elif estado == 'cerrado' %}
+                          <span class="badge bg-secondary">Cerrado</span>
+                        {% else %}
+                          <span class="badge bg-info text-dark">N/D</span>
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% if p["Monto"] and p["Monto"] != 'Consultar' and p["Monto"] != 'Variable' %}
+                          {% set monto_str = p["Monto"]|string %}
+                          {% if 'USD' in monto_str.upper() %}
+                            {% set valor = monto_str.replace('USD', '').replace('$', '').strip() %}
+                            {% if valor.replace('.', '').replace(',', '').isdigit() %}
+                              <span class="badge bg-success">${{ "{:,.2f}".format(valor|float) }} USD</span>
+                            {% else %}
+                              <span class="badge bg-success">{{ p["Monto"] }}</span>
+                            {% endif %}
+                          {% elif 'EUR' in monto_str.upper() %}
+                            {% set valor = monto_str.replace('EUR', '').replace('€', '').strip() %}
+                            {% if valor.replace('.', '').replace(',', '').isdigit() %}
+                              <span class="badge bg-info">€{{ "{:,.2f}".format(valor|float) }} EUR</span>
+                            {% else %}
+                              <span class="badge bg-info">{{ p["Monto"] }}</span>
+                            {% endif %}
+                          {% elif 'CLP' in monto_str.upper() %}
+                            {% set valor = monto_str.replace('CLP', '').replace('$', '').strip() %}
+                            {% if valor.replace('.', '').replace(',', '').isdigit() %}
+                              <span class="badge bg-warning text-dark">${{ "{:,.0f}".format(valor|float) }} CLP</span>
+                            {% else %}
+                              <span class="badge bg-warning text-dark">{{ p["Monto"] }}</span>
+                            {% endif %}
+                          {% else %}
+                            <span class="badge bg-success">{{ p["Monto"] }}</span>
+                          {% endif %}
+                        {% else %}
+                          <span class="badge bg-secondary">{{ p["Monto"] or 'Consultar' }}</span>
+                        {% endif %}
+                      </td>
+                      <td>
+                        {% set area = p["Área de interés"] or 'General' %}
+                        <span class="badge bg-primary">{{ area }}</span>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Paginación -->
+          {% if pagination.total_pages > 1 %}
+          <div class="row mt-4">
+            <div class="col-12">
+              <nav aria-label="Paginación de proyectos">
+                <ul class="pagination justify-content-center">
+                  <!-- Botón Anterior -->
+                  {% if pagination.has_prev %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ pagination.prev_page }}&lang={{ current_language }}&query={{ current_filters.query }}&area={{ current_filters.area }}&estado={{ current_filters.estado }}&ordenar_por={{ current_filters.ordenar_por }}&orden={{ current_filters.orden }}">
+                      <i class="bi bi-chevron-left"></i> Anterior
+                    </a>
+                  </li>
+                  {% else %}
+                  <li class="page-item disabled">
+                    <span class="page-link"><i class="bi bi-chevron-left"></i> Anterior</span>
+                  </li>
+                  {% endif %}
+                  
+                  <!-- Números de página -->
+                  {% set start_page = [1, pagination.current_page - 2]|max %}
+                  {% set end_page = [pagination.total_pages, pagination.current_page + 2]|min %}
+                  
+                  {% if start_page > 1 %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page=1&lang={{ current_language }}&query={{ current_filters.query }}&area={{ current_filters.area }}&estado={{ current_filters.estado }}&ordenar_por={{ current_filters.ordenar_por }}&orden={{ current_filters.orden }}">{{ 1 }}</a>
+                  </li>
+                  {% if start_page > 2 %}
+                  <li class="page-item disabled"><span class="page-link">...</span></li>
+                  {% endif %}
+                  {% endif %}
+                  
+                  {% for page_num in range(start_page, end_page + 1) %}
+                  <li class="page-item {% if page_num == pagination.current_page %}active{% endif %}">
+                    <a class="page-link" href="?page={{ page_num }}&lang={{ current_language }}&query={{ current_filters.query }}&area={{ current_filters.area }}&estado={{ current_filters.estado }}&ordenar_por={{ current_filters.ordenar_por }}&orden={{ current_filters.orden }}">{{ page_num }}</a>
+                  </li>
+                  {% endfor %}
+                  
+                  {% if end_page < pagination.total_pages %}
+                  {% if end_page < pagination.total_pages - 1 %}
+                  <li class="page-item disabled"><span class="page-link">...</span></li>
+                  {% endif %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ pagination.total_pages }}&lang={{ current_language }}&query={{ current_filters.query }}&area={{ current_filters.area }}&estado={{ current_filters.estado }}&ordenar_por={{ current_filters.ordenar_por }}&orden={{ current_filters.orden }}">{{ pagination.total_pages }}</a>
+                  </li>
+                  {% endif %}
+                  
+                  <!-- Botón Siguiente -->
+                  {% if pagination.has_next %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ pagination.next_page }}&lang={{ current_language }}&query={{ current_filters.query }}&area={{ current_filters.area }}&estado={{ current_filters.estado }}&ordenar_por={{ current_filters.ordenar_por }}&orden={{ current_filters.orden }}">
+                      Siguiente <i class="bi bi-chevron-right"></i>
+                    </a>
+                  </li>
+                  {% else %}
+                  <li class="page-item disabled">
+                    <span class="page-link">Siguiente <i class="bi bi-chevron-right"></i></span>
+                  </li>
+                  {% endif %}
+                </ul>
+              </nav>
+            </div>
+          </div>
+          {% endif %}
+          
+          {% else %}
+          <div class="card card-empty shadow-sm border-0">
+            <div class="card-body py-5 text-center">
+              <h5 class="fw-semibold text-secondary mb-2">Aún no hay proyectos para mostrar</h5>
+              <p class="text-muted mb-4">Pulsa en "Actualizar proyectos" para recolectar nuevas convocatorias.</p>
+              <form method="post" action="/buscar">
+                <button class="btn btn-primary">Actualizar proyectos</button>
+              </form>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+        <div class="tab-pane fade" id="pane-adjudicados" role="tabpanel">
+          <div class="card shadow-sm border-0">
+            <div class="card-body p-0">
+              <div class="table-responsive p-3">
+                <table id="tabla-adjudicados" class="table table-hover align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Fuente</th>
+                      <th>Monto</th>
+                      <th>Año</th>
+                      <th>País</th>
+                      <th>Contraparte</th>
+                      <th>Duración</th>
+                      <th>Enlace</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for p in adjudicados %}
+                    <tr>
+                      <td class="fw-semibold">{{ p["Nombre"] }}</td>
+                <td>{{ p["Fuente"] }}</td>
+                <td>
+                  {% if p["Monto"] and p["Monto"] != 'Consultar' and p["Monto"] != 'Variable' %}
+                    {% set monto_str = p["Monto"]|string %}
+                    {% if 'USD' in monto_str.upper() %}
+                      {% set valor = monto_str.replace('USD', '').replace('$', '').strip() %}
+                      {% if valor.replace('.', '').replace(',', '').isdigit() %}
+                        <span class="badge bg-success">${{ "{:,.2f}".format(valor|float) }} USD</span>
+                      {% else %}
+                        <span class="badge bg-success">{{ p["Monto"] }}</span>
+                      {% endif %}
+                    {% elif 'EUR' in monto_str.upper() %}
+                      {% set valor = monto_str.replace('EUR', '').replace('€', '').strip() %}
+                      {% if valor.replace('.', '').replace(',', '').isdigit() %}
+                        <span class="badge bg-info">€{{ "{:,.2f}".format(valor|float) }} EUR</span>
+                      {% else %}
+                        <span class="badge bg-info">{{ p["Monto"] }}</span>
+                      {% endif %}
+                    {% elif 'CLP' in monto_str.upper() %}
+                      {% set valor = monto_str.replace('CLP', '').replace('$', '').strip() %}
+                      {% if valor.replace('.', '').replace(',', '').isdigit() %}
+                        <span class="badge bg-warning text-dark">${{ "{:,.0f}".format(valor|float) }} CLP</span>
+                      {% else %}
+                        <span class="badge bg-warning text-dark">{{ p["Monto"] }}</span>
+                      {% endif %}
+                    {% else %}
+                      <span class="badge bg-success">{{ p["Monto"] }}</span>
+                    {% endif %}
+                  {% else %}
+                    <span class="badge bg-secondary">{{ p["Monto"] or 'Consultar' }}</span>
+                  {% endif %}
+                </td>
+                      <td>{{ p["Año"] }}</td>
+                      <td>{{ p["País"] }}</td>
+                      <td>{{ p["Contraparte"] }}</td>
+                      <td>{{ p["Duración"] }}</td>
+                      <td><a class="link-primary" href="{{ p["Enlace"] }}" target="_blank">Ver</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+              <div class="p-3">
+                <a class="btn btn-outline-primary btn-sm" href="/export/adjudicados/csv">Exportar CSV</a>
+                <a class="btn btn-outline-primary btn-sm" href="/export/adjudicados/xlsx">Exportar XLSX</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="pane-about" role="tabpanel">
+          <div class="row g-4">
+            <div class="col-12 col-lg-8">
+              <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                  <h3 class="mb-3">{{ info.titulo }}</h3>
+                  <p class="text-secondary">{{ info.descripcion }}</p>
+                  <h5 class="mt-4">Líneas de trabajo</h5>
+                  <ul>
+                    <li>Innovación y digitalización agropecuaria.</li>
+                    <li>Gestión sostenible del agua y adaptación al cambio climático.</li>
+                    <li>Desarrollo rural y fortalecimiento de capacidades.</li>
+                    <li>Articulación público-privada y cooperación internacional.</li>
+                  </ul>
+                  <h5 class="mt-3">Resultados destacados</h5>
+                  <ul>
+                    <li>Proyectos de riego eficiente implementados en territorios prioritarios.</li>
+                    <li>Programas de innovación con enfoque de género y juventud rural.</li>
+                    <li>Asistencia técnica y transferencia tecnológica al ecosistema agrícola.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-lg-6">
+              <div class="card border-0 shadow-sm contact-info">
+                <div class="card-body">
+                  <h5 class="mb-3">
+                    <i class="bi bi-building me-2"></i>Información de Contacto
+                  </h5>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="small text-secondary mb-1">Representante</div>
+                      <div class="mb-3 fw-bold">{{ info.contacto.representante }}</div>
+                      
+                      <div class="small text-secondary mb-1">Email</div>
+                      <div class="mb-3">
+                        <a href="mailto:{{ info.contacto.email }}" class="text-decoration-none">
+                          <i class="bi bi-envelope me-1"></i>{{ info.contacto.email }}
+                        </a>
+                      </div>
+                      
+                      <div class="small text-secondary mb-1">Teléfono</div>
+                      <div class="mb-3">
+                        <i class="bi bi-telephone me-1"></i>{{ info.contacto.telefono }}
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="small text-secondary mb-1">Fax</div>
+                      <div class="mb-3">
+                        <i class="bi bi-printer me-1"></i>{{ info.contacto.fax }}
+                      </div>
+                      
+                      <div class="small text-secondary mb-1">Dirección</div>
+                      <div class="mb-2">
+                        <i class="bi bi-geo-alt me-1"></i>{{ info.contacto.direccion }}
+                      </div>
+                      
+                      <div class="small text-secondary mb-1">Correo Postal</div>
+                      <div>
+                        <i class="bi bi-mailbox me-1"></i>{{ info.contacto.correo_postal }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-12 col-lg-6">
+              <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                  <h5 class="mb-3">
+                    <i class="bi bi-share me-2"></i>Redes Sociales
+                  </h5>
+                  <div class="d-flex flex-wrap gap-3">
+                    <a href="{{ info.redes_sociales.twitter }}" target="_blank" class="btn btn-outline-primary btn-sm social-btn">
+                      <i class="bi bi-twitter-x me-1"></i>Twitter
+                    </a>
+                    <a href="{{ info.redes_sociales.instagram }}" target="_blank" class="btn btn-outline-danger btn-sm social-btn">
+                      <i class="bi bi-instagram me-1"></i>Instagram
+                    </a>
+                    <a href="{{ info.redes_sociales.facebook }}" target="_blank" class="btn btn-outline-primary btn-sm social-btn">
+                      <i class="bi bi-facebook me-1"></i>Facebook
+                    </a>
+                  </div>
+                  <div class="mt-3">
+                    <small class="text-muted">
+                      <i class="bi bi-info-circle me-1"></i>
+                      Síguenos para estar al día con las últimas noticias y oportunidades
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="pane-documentos" role="tabpanel">
+          <div class="row g-4">
+            {% for doc in documentos %}
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                  <div class="d-flex align-items-start mb-3">
+                    <div class="bg-primary bg-opacity-10 rounded p-2 me-3">
+                      <i class="bi bi-file-earmark-pdf text-primary"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                      <h6 class="card-title mb-1">{{ doc.titulo }}</h6>
+                      <span class="badge bg-secondary">{{ doc.tipo }}</span>
+                    </div>
+                  </div>
+                  <p class="card-text text-muted small">{{ doc.descripcion }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">{{ doc.fecha }} • {{ doc.tamaño }}</small>
+                                {% if doc.url %}
+                                <a href="{{ doc.url }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-download"></i> Descargar
+                                </a>
+                                {% else %}
+                                <button class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-download"></i> Descargar
+                                </button>
+                                {% endif %}
+                            </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="tab-pane fade" id="pane-postulaciones" role="tabpanel">
+          <div class="row g-4">
+            {% for post in postulaciones %}
+            <div class="col-12 col-md-6">
+              <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                  <div class="d-flex align-items-start mb-3">
+                    <div class="bg-success bg-opacity-10 rounded p-2 me-3">
+                      <i class="bi bi-link-45deg text-success"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                      <h6 class="card-title mb-1">{{ post.titulo }}</h6>
+                      <span class="badge bg-{{ 'success' if post.estado == 'Activo' else 'secondary' }}">{{ post.estado }}</span>
+                      <span class="badge bg-info ms-1">{{ post.categoria }}</span>
+                    </div>
+                  </div>
+                  <p class="card-text text-muted small">{{ post.descripcion }}</p>
+                  <div class="mb-2">
+                    <small class="text-muted"><strong>Requisitos:</strong> {{ post.requisitos }}</small>
+                  </div>
+                  <a href="{{ post.url }}" target="_blank" class="btn btn-success btn-sm w-100">
+                    <i class="bi bi-box-arrow-up-right"></i> Ir a Postular
+                  </a>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="tab-pane fade" id="pane-instituciones" role="tabpanel">
+          <div class="row g-4">
+            {% for inst in instituciones %}
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                  <div class="d-flex align-items-start mb-3">
+                    <div class="bg-primary bg-opacity-10 rounded p-2 me-3">
+                      <i class="bi bi-building text-primary"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                      <h6 class="card-title mb-1">{{ inst.nombre }}</h6>
+                      <span class="badge bg-primary">{{ inst.tipo }}</span>
+                      <span class="badge bg-info ms-1">{{ inst.sector }}</span>
+                    </div>
+                  </div>
+                  <p class="card-text text-muted small">{{ inst.descripcion }}</p>
+                  <div class="mb-2">
+                    <small class="text-muted">
+                      <i class="bi bi-geo-alt"></i> {{ inst.sede }}, {{ inst.pais }}
+                    </small>
+                  </div>
+                  <a href="{{ inst.url }}" target="_blank" class="btn btn-primary btn-sm w-100">
+                    <i class="bi bi-box-arrow-up-right"></i> Visitar Sitio Web
+                  </a>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="border-top py-3">
+      <div class="container d-flex justify-content-between small">
+        <span>© <span id="year"></span> Plataforma de Proyectos</span>
+        <span class="text-muted">Hecho con Flask y Bootstrap</span>
+      </div>
+    </footer>
+</body>
+</html>
