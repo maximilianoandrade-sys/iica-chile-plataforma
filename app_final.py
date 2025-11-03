@@ -239,43 +239,7 @@ def reportes():
     except:
         return render_template('reportes.html', report={})
 
-# ===== SECCIÓN INSTITUCIONAL =====
-
-@app.route('/quienes-somos')
-def quienes_somos():
-    """Página institucional: Quiénes Somos (IICA Chile)"""
-    info = {
-        'titulo': 'IICA Chile',
-        'mision': (
-            'Contribuir al desarrollo agrícola y al bienestar rural en Chile, '
-            'mediante la cooperación técnica, la innovación y el fortalecimiento '
-            'de capacidades para una agricultura más productiva, inclusiva y sostenible.'
-        ),
-        'vision': (
-            'Ser un socio estratégico para transformar los sistemas agroalimentarios en Chile, '
-            'impulsando la sostenibilidad, la digitalización, la resiliencia climática y la '
-            'competitividad de los territorios rurales.'
-        ),
-        'valores': [
-            'Colaboración y alianzas',
-            'Innovación y transferencia de conocimiento',
-            'Sostenibilidad e inclusión',
-            'Transparencia y servicio público'
-        ],
-        'contacto': {
-            'email': 'chile@iica.int',
-            'telefono': '+56 2 2341 1100',
-            'direccion': 'Santiago, Chile',
-            'web': 'https://www.iica.int'
-        },
-        'lineas': [
-            'Sistemas agroalimentarios sostenibles y resilientes',
-            'Innovación tecnológica y transformación digital',
-            'Desarrollo territorial y juventudes rurales',
-            'Gestión hídrica y adaptación al cambio climático'
-        ]
-    }
-    return render_template('quienes_somos.html', info=info)
+# (El endpoint /quienes-somos ya está definido arriba)
 
 # ====== ENDPOINTS DE ACTUALIZACIÓN PARA PRODUCCIÓN (Render) ======
 
