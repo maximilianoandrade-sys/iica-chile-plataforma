@@ -3,8 +3,6 @@ name: Deploy to Production
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   test:
@@ -20,12 +18,12 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements_new.txt
-        pip install pytest pytest-flask
+        pip install -r requirements.txt
+        pip install pytest
     
     - name: Run tests
       run: |
-        python -m pytest tests/ -v
+        python -m pytest tests/ -v --tb=short
 
   deploy:
     needs: test
@@ -36,13 +34,6 @@ jobs:
     - uses: actions/checkout@v3
     
     - name: Deploy to Render
-      uses: johnbeynon/render-deploy-action@v0.0.8
-      with:
-        service-id: ${{ secrets.RENDER_SERVICE_ID }}
-        api-key: ${{ secrets.RENDER_API_KEY }}
-    
-    - name: Deploy to Railway
-      uses: railwayapp/railway-deploy@v1
-      with:
-        railway-token: ${{ secrets.RAILWAY_TOKEN }}
-        service: ${{ secrets.RAILWAY_SERVICE }}
+      run: |
+        echo "Deploying to Render..."
+        echo "Render deployment is handled automatically via GitHub integration"

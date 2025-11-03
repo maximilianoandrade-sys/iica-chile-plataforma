@@ -12,8 +12,10 @@ from functools import lru_cache
 import pandas as pd
 from datetime import datetime
 from utils import parsear_monto
+from project_updater import ProjectUpdater
 from link_manager import link_manager
 from busqueda_avanzada import BuscadorAvanzado
+from auto_search_system import AutoSearchSystem
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
 DATA_PATH = "data/proyectos_fortalecidos.xlsx"
@@ -39,7 +41,28 @@ def _cargar_excel_cached():
 
 def cargar_excel():
     """Cargar datos de Excel con cache de 5 minutos"""
-    return _cargar_excel_cached()
+    proyectos = _cargar_excel_cached()
+    if not proyectos:
+        # Autopoblar si no hay datos en producción
+        try:
+            updater = ProjectUpdater()
+            nuevos = updater.update_all_projects()
+            try:
+                if os.path.exists('data/proyectos_completos.xlsx'):
+                    df = pd.read_excel('data/proyectos_completos.xlsx')
+                    os.makedirs(os.path.dirname(DATA_PATH), exist_ok=True)
+                    df.to_excel(DATA_PATH, index=False)
+            except Exception as e:
+                print(f"⚠️ No se pudo sincronizar {DATA_PATH} tras autopoblado: {e}")
+            try:
+                _cargar_excel_cached.cache_clear()
+            except Exception:
+                pass
+            proyectos = _cargar_excel_cached()
+            print(f"✅ Auto-poblado en producción con {len(nuevos)} proyectos nuevos")
+        except Exception as e:
+            print(f"⚠️ Auto-poblado falló: {e}")
+    return proyectos
 
 def calcular_estadisticas(proyectos):
     """Calcular estadísticas de proyectos"""
@@ -144,6 +167,48 @@ def ver_proyecto(proyecto_id):
     except Exception as e:
         return render_template('error.html', error=str(e))
 
+# ===== SECCIÓN QUIÉNES SOMOS =====
+
+@app.route('/quienes-somos')
+def quienes_somos():
+    """Página institucional: Quiénes Somos (IICA Chile)"""
+    info = {
+        'titulo': 'IICA Chile - Quiénes Somos',
+        'mision': (
+            'Contribuir al desarrollo agrícola y al bienestar rural en Chile, '
+            'impulsando la innovación, la sostenibilidad y la resiliencia del sector agroalimentario '
+            'mediante asistencia técnica, cooperación técnica, gestión del conocimiento y articulación de alianzas.'
+        ),
+        'vision': (
+            'Ser un referente técnico de excelencia para el fortalecimiento de capacidades, '
+            'la transformación digital y la competitividad sostenible del agro chileno, '
+            'promoviendo la seguridad alimentaria, la inclusión y la adaptación al cambio climático.'
+        ),
+        'valores': [
+            'Excelencia técnica', 'Transparencia y ética', 'Innovación y aprendizaje continuo',
+            'Sostenibilidad e inclusión', 'Cooperación y alianzas estratégicas'
+        ],
+        'lineas_trabajo': [
+            'Innovación y digitalización agroalimentaria',
+            'Gestión hídrica y adaptación al cambio climático',
+            'Desarrollo rural e inclusión (mujeres y juventudes rurales)',
+            'Fortalecimiento de capacidades y extensionismo',
+            'Comercio, agregación de valor y sostenibilidad'
+        ],
+        'contacto': {
+            'email': 'chile@iica.int',
+            'telefono': '+56 2 2341 1100',
+            'direccion': 'Santiago, Chile',
+            'sitio': 'https://www.iica.int'
+        },
+        'redes': {
+            'twitter': 'https://x.com/iicanoticias',
+            'instagram': 'https://www.instagram.com/iicachile/',
+            'facebook': 'https://www.facebook.com/IICAChile/'
+        }
+    }
+    return render_template('quienes_somos.html', info=info)
+
 # ===== RUTAS DE NOTIFICACIONES =====
 
 @app.route('/notificaciones')
@@ -173,6 +238,130 @@ def reportes():
         return render_template('reportes.html', report={})
     except:
         return render_template('reportes.html', report={})
+
+# ===== SECCIÓN INSTITUCIONAL =====
+
+@app.route('/quienes-somos')
+def quienes_somos():
+    """Página institucional: Quiénes Somos (IICA Chile)"""
+    info = {
+        'titulo': 'IICA Chile',
+        'mision': (
+            'Contribuir al desarrollo agrícola y al bienestar rural en Chile, '
+            'mediante la cooperación técnica, la innovación y el fortalecimiento '
+            'de capacidades para una agricultura más productiva, inclusiva y sostenible.'
+        ),
+        'vision': (
+            'Ser un socio estratégico para transformar los sistemas agroalimentarios en Chile, '
+            'impulsando la sostenibilidad, la digitalización, la resiliencia climática y la '
+            'competitividad de los territorios rurales.'
+        ),
+        'valores': [
+            'Colaboración y alianzas',
+            'Innovación y transferencia de conocimiento',
+            'Sostenibilidad e inclusión',
+            'Transparencia y servicio público'
+        ],
+        'contacto': {
+            'email': 'chile@iica.int',
+            'telefono': '+56 2 2341 1100',
+            'direccion': 'Santiago, Chile',
+            'web': 'https://www.iica.int'
+        },
+        'lineas': [
+            'Sistemas agroalimentarios sostenibles y resilientes',
+            'Innovación tecnológica y transformación digital',
+            'Desarrollo territorial y juventudes rurales',
+            'Gestión hídrica y adaptación al cambio climático'
+        ]
+    }
+    return render_template('quienes_somos.html', info=info)
+
+# ====== ENDPOINTS DE ACTUALIZACIÓN PARA PRODUCCIÓN (Render) ======
+
+# Inicializar actualizador de proyectos
+project_updater = ProjectUpdater()
+
+@app.route('/api/update-projects', methods=['POST'])
+def api_update_projects():
+    """Actualiza proyectos desde fuentes y sincroniza el Excel usado por producción."""
+    try:
+        new_projects = project_updater.update_all_projects()
+        # Tras actualizar, si existe base completa, copiar a DATA_PATH para el front
+        try:
+            if os.path.exists('data/proyectos_completos.xlsx'):
+                df = pd.read_excel('data/proyectos_completos.xlsx')
+                os.makedirs(os.path.dirname(DATA_PATH), exist_ok=True)
+                df.to_excel(DATA_PATH, index=False)
+        except Exception as e:
+            print(f"⚠️ No se pudo sincronizar con {DATA_PATH}: {e}")
+        # Limpiar caché para reflejar cambios inmediatamente
+        try:
+            _cargar_excel_cached.cache_clear()
+        except Exception:
+            pass
+        return jsonify({
+            'success': True,
+            'new_projects_count': len(new_projects)
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/update-stats', methods=['GET'])
+def api_update_stats():
+    """Devuelve estadísticas de actualizaciones"""
+    try:
+        stats = project_updater.get_update_stats()
+        return jsonify({'success': True, 'stats': stats})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+# ====== BÚSQUEDA AUTOMÁTICA (Web crawling) PARA PRODUCCIÓN ======
+
+auto_search_system = AutoSearchSystem()
+
+def _sync_after_external_update():
+    """Sincroniza data/proyectos_completos.xlsx -> DATA_PATH y limpia caché."""
+    try:
+        if os.path.exists('data/proyectos_completos.xlsx'):
+            df = pd.read_excel('data/proyectos_completos.xlsx')
+            os.makedirs(os.path.dirname(DATA_PATH), exist_ok=True)
+            df.to_excel(DATA_PATH, index=False)
+        try:
+            _cargar_excel_cached.cache_clear()
+        except Exception:
+            pass
+    except Exception as e:
+        print(f"⚠️ Error sincronizando tras actualización externa: {e}")
+
+@app.route('/api/auto-search/start', methods=['POST'])
+def api_auto_search_start():
+    """Inicia búsqueda automática en background y sincroniza base al finalizar (no bloqueante)."""
+    try:
+        auto_search_system.run_background_search()
+        # No sabemos cuándo termina; sugerimos consultar status.
+        return jsonify({'success': True, 'message': 'Búsqueda automática iniciada en background'}), 202
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/auto-search/trigger', methods=['POST'])
+def api_auto_search_trigger():
+    """Ejecuta una búsqueda completa ahora (bloqueante) y sincroniza base."""
+    try:
+        auto_search_system.daily_search()
+        _sync_after_external_update()
+        return jsonify({'success': True, 'message': 'Búsqueda automática ejecutada y sincronizada'})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/auto-search/status', methods=['GET'])
+def api_auto_search_status():
+    """Devuelve estadísticas/resumen de búsquedas automáticas."""
+    try:
+        stats = auto_search_system.get_search_stats()
+        return jsonify({'success': True, 'stats': stats})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 # ===== RUTAS DE BACKUP =====
 

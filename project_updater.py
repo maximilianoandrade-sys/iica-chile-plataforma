@@ -361,6 +361,13 @@ class ProjectUpdater:
         # Guardar en Excel
         df = pd.DataFrame(all_projects)
         df.to_excel('data/proyectos_completos.xlsx', index=False, engine='openpyxl')
+        # Mantener sincronizado el archivo usado en producción (app_final)
+        try:
+            os.makedirs('data', exist_ok=True)
+            df.to_excel('data/proyectos_fortalecidos.xlsx', index=False, engine='openpyxl')
+            print("💾 Sincronizado: proyectos_completos.xlsx -> proyectos_fortalecidos.xlsx")
+        except Exception as e:
+            print(f"⚠️ No se pudo escribir proyectos_fortalecidos.xlsx: {e}")
         
         # Guardar log de actualización
         self._save_update_log(new_projects)

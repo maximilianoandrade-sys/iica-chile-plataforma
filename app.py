@@ -539,6 +539,91 @@ def export_adjudicados_xlsx():
     return send_file(output, as_attachment=True, download_name='adjudicados.xlsx', mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
 
+# ==========================
+# Fondos disponibles (UI + API)
+# ==========================
+
+def _mapear_proyectos_a_fondos(proyectos):
+    """Convierte los registros de 'proyectos' al formato de 'fondos' usado por las vistas genéricas.
+    Los campos no disponibles se completan con valores por defecto.
+    """
+    fondos = []
+    for idx, p in enumerate(proyectos or []):
+        nombre = p.get('Nombre', '').strip()
+        fuente = p.get('Fuente', '').strip()
+        monto = str(p.get('Monto', '')).strip()
+        fecha_cierre = str(p.get('Fecha cierre', '')).strip()
+        estado = (p.get('Estado', '') or '').strip() or 'Abierto'
+        area = p.get('Área de interés', '').strip() or 'General'
+        enlace = p.get('Enlace', '').strip()
+
+        # Heurística simple para tipo
+        tipo = 'Nacional'
+        fuente_lower = fuente.lower()
+        if any(k in fuente_lower for k in ['bank', 'fund', 'global', 'fida', 'ifad', 'gef', 'undp', 'un ', 'world', 'bid', 'iadb', 'usaid', 'eu', 'ue', 'fao', 'oecd', 'gcf']):
+            tipo = 'Internacional'
+
+        fondos.append({
+            'id': f"FND-{idx+1:05d}",
+            'nombre': nombre or 'Fondo sin nombre',
+            'organizacion': fuente or 'N/D',
+            'pais': 'Internacional' if tipo == 'Internacional' else 'Chile',
+            'monto': monto or 'Consultar',
+            'fecha_cierre': fecha_cierre or 'N/D',
+            'estado': estado,
+            'area': area,
+            'descripcion': p.get('Descripción', '') or 'Sin descripción disponible.',
+            'requisitos': p.get('Requisitos', '') or 'Revisar bases de postulación',
+            'enlace': enlace,
+            'contacto': p.get('Contacto', '') or '',
+            'tipo': tipo,
+            'duracion': p.get('Duración', '') or '',
+            'beneficiarios': p.get('Beneficiarios', '') or ''
+        })
+    return fondos
+
+
+@app.route('/fondos', methods=['GET'])
+@app.route('/fondos-disponibles', methods=['GET'])
+def fondos_disponibles_view():
+    """Vista de catálogo de fondos disponibles con filtros básicos (cliente usa /api/fondos)."""
+    query = request.args.get('q', '').strip()
+    area = request.args.get('area', '').strip()
+    organizacion = request.args.get('organizacion', '').strip()
+    return render_template('fondos.html', query=query, area=area, organizacion=organizacion, total=0, fondos=[])
+
+
+@app.route('/api/fondos', methods=['GET'])
+def api_fondos_list():
+    """Entrega listado de fondos mapeados desde el Excel consolidado, con filtros opcionales."""
+    fondos = _mapear_proyectos_a_fondos(cargar_excel())
+
+    # Filtros simples
+    q = request.args.get('q', '').strip().lower()
+    area = request.args.get('area', '').strip()
+    organizacion = request.args.get('organizacion', '').strip().lower()
+    estado = request.args.get('estado', '').strip()
+    tipo = request.args.get('tipo', '').strip()  # Nacional / Internacional
+
+    if q:
+        fondos = [f for f in fondos if (q in f['nombre'].lower() or q in f['descripcion'].lower() or q in f['organizacion'].lower())]
+    if area:
+        fondos = [f for f in fondos if f['area'] == area]
+    if organizacion:
+        fondos = [f for f in fondos if organizacion in f['organizacion'].lower()]
+    if estado:
+        fondos = [f for f in fondos if f['estado'] == estado]
+    if tipo:
+        fondos = [f for f in fondos if f['tipo'] == tipo]
+
+    return jsonify({'total': len(fondos), 'fondos': fondos})
+
+
+@app.route('/fondos-internacionales', methods=['GET'])
+def fondos_internacionales_view():
+    """Sección dedicada a Fondos Internacionales (consume /api/fondos?tipo=Internacional)."""
+    return render_template('fondos_internacionales.html')
+
 @app.route('/crear-plantilla', methods=['GET'])
 def crear_plantilla():
     from scrapers.excel_importer import crear_plantilla_excel
