@@ -106,6 +106,24 @@ def home():
     """Página principal"""
     try:
         proyectos = cargar_excel()
+        # Si no hay datos, autopoblar y recargar inmediatamente
+        if not proyectos:
+            try:
+                updater = ProjectUpdater()
+                nuevos = updater.update_all_projects()
+                # Sincronizar archivo de producción y limpiar caché
+                try:
+                    if os.path.exists('data/proyectos_completos.xlsx'):
+                        df = pd.read_excel('data/proyectos_completos.xlsx')
+                        os.makedirs(os.path.dirname(DATA_PATH), exist_ok=True)
+                        df.to_excel(DATA_PATH, index=False)
+                    _cargar_excel_cached.cache_clear()
+                except Exception:
+                    pass
+                proyectos = cargar_excel()
+                print(f"✅ Auto-poblado en home con {len(nuevos)} proyectos")
+            except Exception as e:
+                print(f"⚠️ Auto-poblado en home falló: {e}")
         stats = calcular_estadisticas(proyectos)
         
         # Paginación
