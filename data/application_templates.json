@@ -1,0 +1,223 @@
+{
+  "agricultura_sostenible": {
+    "name": "Postulación Agricultura Sostenible",
+    "description": "Formulario para proyectos de agricultura sostenible",
+    "sections": [
+      {
+        "title": "Información del Proyecto",
+        "fields": [
+          {
+            "name": "nombre_proyecto",
+            "label": "Nombre del Proyecto",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "descripcion",
+            "label": "Descripción del Proyecto",
+            "type": "textarea",
+            "required": true
+          },
+          {
+            "name": "objetivos",
+            "label": "Objetivos Específicos",
+            "type": "textarea",
+            "required": true
+          },
+          {
+            "name": "metodologia",
+            "label": "Metodología",
+            "type": "textarea",
+            "required": true
+          }
+        ]
+      },
+      {
+        "title": "Información Financiera",
+        "fields": [
+          {
+            "name": "presupuesto_total",
+            "label": "Presupuesto Total (USD)",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "financiamiento_solicitado",
+            "label": "Financiamiento Solicitado (USD)",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "contraparte",
+            "label": "Contraparte (USD)",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "fuentes_adicionales",
+            "label": "Otras Fuentes de Financiamiento",
+            "type": "textarea",
+            "required": false
+          }
+        ]
+      },
+      {
+        "title": "Información del Postulante",
+        "fields": [
+          {
+            "name": "nombre_organizacion",
+            "label": "Nombre de la Organización",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "rut",
+            "label": "RUT",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "direccion",
+            "label": "Dirección",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "telefono",
+            "label": "Teléfono",
+            "type": "tel",
+            "required": true
+          },
+          {
+            "name": "email",
+            "label": "Email",
+            "type": "email",
+            "required": true
+          },
+          {
+            "name": "representante_legal",
+            "label": "Representante Legal",
+            "type": "text",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "juventudes_rurales": {
+    "name": "Postulación Juventudes Rurales",
+    "description": "Formulario para proyectos de juventudes rurales",
+    "sections": [
+      {
+        "title": "Información del Proyecto",
+        "fields": [
+          {
+            "name": "nombre_proyecto",
+            "label": "Nombre del Proyecto",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "descripcion",
+            "label": "Descripción del Proyecto",
+            "type": "textarea",
+            "required": true
+          },
+          {
+            "name": "beneficiarios",
+            "label": "Número de Jóvenes Beneficiarios",
+            "type": "number",
+            "required": true
+          },
+          {
+            "name": "edad_promedio",
+            "label": "Edad Promedio de Beneficiarios",
+            "type": "number",
+            "required": true
+          }
+        ]
+      },
+      {
+        "title": "Impacto Social",
+        "fields": [
+          {
+            "name": "impacto_comunidad",
+            "label": "Impacto en la Comunidad",
+            "type": "textarea",
+            "required": true
+          },
+          {
+            "name": "sostenibilidad",
+            "label": "Sostenibilidad del Proyecto",
+            "type": "textarea",
+            "required": true
+          },
+          {
+            "name": "innovacion",
+            "label": "Elementos de Innovación",
+            "type": "textarea",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "innovacion_tecnologica": {
+    "name": "Postulación Innovación Tecnológica",
+    "description": "Formulario para proyectos de innovación tecnológica",
+    "sections": [
+      {
+        "title": "Información Técnica",
+        "fields": [
+          {
+            "name": "nombre_proyecto",
+            "label": "Nombre del Proyecto",
+            "type": "text",
+            "required": true
+          },
+          {
+            "name": "tecnologia",
+            "label": "Tecnología a Implementar",
+            "type": "textarea",
+            "required": true
+          },
+          {
+            "name": "innovacion",
+            "label": "Elementos de Innovación",
+            "type": "textarea",
+            "required": true
+          },
+          {
+            "name": "viabilidad_tecnica",
+            "label": "Viabilidad Técnica",
+            "type": "textarea",
+            "required": true
+          }
+        ]
+      },
+      {
+        "title": "Recursos Humanos",
+        "fields": [
+          {
+            "name": "equipo_tecnico",
+            "label": "Equipo Técnico",
+            "type": "textarea",
+            "required": true
+          },
+          {
+            "name": "experiencia",
+            "label": "Experiencia del Equipo",
+            "type": "textarea",
+            "required": true
+          },
+          {
+            "name": "capacitacion",
+            "label": "Plan de Capacitación",
+            "type": "textarea",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}

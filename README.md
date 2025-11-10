@@ -1,203 +1,228 @@
-# 🚀 Plataforma IICA Chile - Proyectos de Financiamiento
+# Plataforma IICA Chile - Fondos y Convocatorias
 
-## 📋 Descripción
+Plataforma web modular en Flask para recolección, clasificación y visualización automática de proyectos y convocatorias de financiamiento agrícola y desarrollo rural.
 
-Plataforma web desarrollada para IICA Chile que centraliza y facilita el acceso a proyectos de financiamiento agrícola. La plataforma incluye funcionalidades avanzadas de búsqueda, notificaciones, seguimiento de aplicaciones y reportes detallados.
+## 🚀 Características
 
-## ✨ Características Principales
+- **Scraping en Tiempo Real**: Recolección automática desde múltiples fuentes internacionales y nacionales
+- **Clasificación Inteligente**: Clasificación automática por áreas temáticas IICA
+- **Búsqueda Avanzada**: Filtros por palabra clave, fuente, estado, área temática
+- **Interfaz Moderna**: Diseño responsivo con Bootstrap 5
+- **Histórico**: Guardado automático en Excel con detección de proyectos nuevos
+- **API REST**: Endpoints para integración con otros sistemas
 
-- **🔍 Búsqueda Avanzada**: Filtros por área, fuente, monto y fecha
-- **📊 136 Proyectos**: Base de datos completa con proyectos actualizados
-- **💰 $90M+ USD**: En financiamiento total disponible
-- **🔔 Notificaciones**: Sistema de alertas en tiempo real
-- **📋 Seguimiento**: Gestión completa de aplicaciones
-- **📈 Reportes**: Análisis detallados con gráficos interactivos
-- **💾 Backup**: Sistema automático de respaldo
-- **🌐 Responsive**: Diseño adaptable a todos los dispositivos
+## 📋 Fuentes de Datos
 
-## 🛠️ Tecnologías Utilizadas
+La plataforma recolecta información de:
 
-- **Backend**: Flask, Python 3.13
-- **Frontend**: Bootstrap 5, Chart.js, JavaScript
-- **Base de Datos**: Excel (proyectos_fortalecidos.xlsx)
-- **Despliegue**: Render, Heroku, Railway
-- **Cache**: LRU Cache para optimización
+### Fuentes Especializadas IICA (Prioritarias)
 
-## 🚀 Instalación Local
+1. **IICA Chile** - https://www.iica.int/es/paises/chile
+2. **Agro América Emprende** - https://agroemprende.iica.int/
+3. **INNOVA AF** - https://innova-af.iica.int/
+4. **Agua y Agricultura IICA** - https://aguayagricultura.iica.int/
+5. **Repositorio Institucional IICA** - https://apps.iica.int/
 
-### Prerrequisitos
-- Python 3.13+
+### Otras Fuentes
+
+6. **Devex** - https://www.devex.com/
+7. **DevelopmentAid** - https://www.developmentaid.org/
+8. **UNGM** - https://www.ungm.org/Public/Notice
+9. **MercadoPúblico** - https://www.mercadopublico.cl/Home
+10. **FIA** - https://www.fia.cl/
+11. **GlobalTenders** - https://www.globaltenders.com/
+12. **Fondos.gob.cl** - https://fondos.gob.cl/
+13. **INIA** - https://www.inia.cl/licitaciones/
+14. **FAO** - https://www.fao.org/
+15. **Banco Mundial** - https://www.worldbank.org/
+16. **Perplexity** - Búsqueda inteligente (limitado)
+
+## 🛠️ Instalación Local
+
+### Requisitos
+
+- Python 3.11 o superior
 - pip (gestor de paquetes de Python)
 
-### Pasos de Instalación
+### Pasos
 
-1. **Clonar el repositorio**
+1. **Clonar o descargar el proyecto**
+
 ```bash
-git clone https://github.com/tu-usuario/iica-chile-plataforma.git
-cd iica-chile-plataforma
+cd mi-plataforma2
 ```
 
 2. **Crear entorno virtual**
+
 ```bash
 python -m venv venv
-# Windows
+```
+
+3. **Activar entorno virtual**
+
+**Windows:**
+```bash
 venv\Scripts\activate
-# Linux/Mac
+```
+
+**Linux/Mac:**
+```bash
 source venv/bin/activate
 ```
 
-3. **Instalar dependencias**
+4. **Instalar dependencias**
+
 ```bash
 pip install -r requirements.txt
 ```
 
-4. **Ejecutar la aplicación**
+5. **Ejecutar la aplicación**
+
 ```bash
-python app_final.py
+python app.py
 ```
 
-5. **Abrir en el navegador**
-```
-http://127.0.0.1:5004/
-```
+6. **Acceder a la plataforma**
 
-## 🌐 Despliegue en la Nube
+Abrir navegador en: `http://localhost:5000`
 
-### Render (Recomendado)
-
-1. **Conectar repositorio**
-   - Ir a [Render](https://render.com)
-   - Crear nueva cuenta o iniciar sesión
-   - Conectar con GitHub
-
-2. **Crear nuevo servicio Web**
-   - Seleccionar "New Web Service"
-   - Conectar el repositorio
-   - Usar configuración automática
-
-3. **Configuración**
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `gunicorn app_final:app --bind 0.0.0.0:$PORT`
-   - **Python Version**: 3.13.0
-
-### Heroku
-
-1. **Instalar Heroku CLI**
-```bash
-# Windows
-winget install Heroku.HerokuCLI
-# Linux/Mac
-curl https://cli.heroku.com/install.sh | sh
-```
-
-2. **Desplegar**
-```bash
-heroku login
-heroku create iica-chile-plataforma
-git push heroku main
-heroku open
-```
-
-### Railway
-
-1. **Conectar con GitHub**
-   - Ir a [Railway](https://railway.app)
-   - Conectar repositorio
-   - Desplegar automáticamente
-
-## 📁 Estructura del Proyecto
+## 📦 Estructura del Proyecto
 
 ```
-iica-chile-plataforma/
-├── app_final.py              # Aplicación principal
-├── requirements.txt          # Dependencias Python
-├── Procfile                  # Configuración Heroku
-├── runtime.txt              # Versión Python
-├── render.yaml              # Configuración Render
-├── .gitignore               # Archivos a ignorar
-├── README.md                # Documentación
-├── templates/               # Plantillas HTML
-│   ├── home_ordenado.html
-│   ├── dashboard_avanzado.html
-│   ├── notificaciones.html
-│   ├── mis_aplicaciones.html
-│   ├── reportes.html
-│   ├── backup.html
+mi-plataforma2/
+├── app.py                 # Aplicación Flask principal
+├── utils.py               # Utilidades (clasificación, parsing)
+├── update_proyectos.py    # Script de actualización automática
+├── requirements.txt        # Dependencias Python
+├── render.yaml            # Configuración para Render.com
+├── scrapers/              # Módulos de scraping
+│   ├── __init__.py
+│   ├── devex.py
+│   ├── developmentaid.py
+│   ├── ungm.py
+│   ├── mercadopublico.py
+│   ├── fia.py
+│   ├── globaltenders.py
+│   ├── fondosgob.py
+│   ├── inia.py
+│   ├── fao.py
+│   ├── worldbank.py
+│   ├── perplexity.py
+│   └── common.py
+├── templates/             # Plantillas HTML
+│   ├── home.html
 │   └── error.html
-├── static/                  # Archivos estáticos
-│   ├── documentos/
-│   └── plantillas/
-├── data/                    # Base de datos
-│   └── proyectos_fortalecidos.xlsx
-└── backups/                 # Backups automáticos
+├── data/                  # Datos (Excel, histórico)
+└── logs/                  # Archivos de log
 ```
 
-## 🔧 Configuración
+## 🌐 Despliegue en Render.com
 
-### Variables de Entorno
+### Configuración
 
-Crear archivo `.env`:
+1. **Crear cuenta en Render.com**
+
+2. **Conectar repositorio Git**
+
+3. **Crear nuevo Web Service**
+
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `gunicorn app:app --bind 0.0.0.0:$PORT`
+   - **Environment**: Python 3
+
+4. **Configurar variables de entorno** (opcional)
+
+   - `PORT`: 10000
+   - `DEBUG`: False
+
+5. **Desplegar**
+
+   Render usará automáticamente el archivo `render.yaml` si está presente.
+
+### Actualización Automática
+
+Para configurar actualizaciones periódicas en Render:
+
+1. **Crear Cron Job** en Render Dashboard
+2. **Configurar comando**: `python update_proyectos.py`
+3. **Programar frecuencia**: Diaria (ej: `0 2 * * *` para las 2 AM)
+
+## 📊 Uso de la Plataforma
+
+### Búsqueda y Filtros
+
+1. **Búsqueda por palabra clave**: Escribe términos relacionados con el proyecto
+2. **Filtro por área temática**: Selecciona entre las áreas IICA
+3. **Filtro por estado**: Abierto/Cerrado
+4. **Filtro por fuente**: Selecciona la fuente de financiamiento
+5. **Ordenamiento**: Por fecha, monto o nombre
+
+### Actualización Manual
+
+Haz clic en el botón **"Actualizar Proyectos"** para recolectar información fresca de todas las fuentes.
+
+### API REST
+
+#### Obtener todos los proyectos
 ```
-FLASK_ENV=production
-SECRET_KEY=tu-clave-secreta-aqui
-DATABASE_URL=sqlite:///app.db
+GET /api/proyectos
 ```
 
-### Base de Datos
+#### Buscar proyectos
+```
+GET /api/proyectos?query=agricultura&area=Innovación tecnológica&estado=Abierto
+```
 
-La plataforma utiliza un archivo Excel como base de datos. Para actualizar los proyectos:
+#### Health Check
+```
+GET /health
+```
 
-1. Modificar `data/proyectos_fortalecidos.xlsx`
-2. Reiniciar la aplicación
-3. Los cambios se reflejarán automáticamente
+## 🔧 Áreas Temáticas IICA
 
-## 📊 API Endpoints
+La plataforma clasifica automáticamente los proyectos en:
 
-- `GET /` - Página principal
-- `GET /proyecto/<id>` - Detalles de proyecto
-- `GET /notificaciones` - Sistema de notificaciones
-- `GET /mis-aplicaciones` - Seguimiento de aplicaciones
-- `GET /reportes` - Reportes avanzados
-- `GET /backup` - Gestión de backups
-- `GET /dashboard-avanzado` - Dashboard completo
-- `GET /health` - Health check
+1. **Agricultura familiar campesina**
+2. **Innovación tecnológica**
+3. **Gestión hídrica**
+4. **Seguridad alimentaria**
+5. **Juventud rural**
+6. **Medio ambiente**
 
-## 🤝 Contribución
+## 📝 Logs
 
-1. Fork el proyecto
-2. Crear rama para nueva funcionalidad (`git checkout -b feature/nueva-funcionalidad`)
-3. Commit cambios (`git commit -m 'Agregar nueva funcionalidad'`)
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Abrir Pull Request
+Los logs se guardan en:
+- `logs/app.log` - Logs de la aplicación
+- `logs/update.log` - Logs de actualizaciones automáticas
 
-## 📝 Licencia
+## ⚠️ Notas Importantes
 
-Este proyecto está bajo la Licencia MIT. Ver `LICENSE` para más detalles.
+- **Scraping**: Algunos sitios pueden cambiar su estructura HTML, requiriendo actualización de selectores
+- **Rate Limiting**: Los scrapers incluyen delays para evitar sobrecarga en los servidores
+- **Datos**: La primera ejecución puede tomar varios minutos mientras recolecta de todas las fuentes
+- **Perplexity**: Esta fuente tiene limitaciones ya que es un motor de búsqueda, no un portal de proyectos
 
-## 👥 Equipo
+## 🐛 Solución de Problemas
 
-- **Desarrollador Principal**: [Tu Nombre]
-- **Organización**: IICA Chile
-- **Contacto**: [tu-email@ejemplo.com]
+### Error: "No module named 'scrapers'"
+- Asegúrate de ejecutar desde el directorio raíz del proyecto
+- Verifica que `scrapers/__init__.py` existe
 
-## 📞 Soporte
+### Error: "Connection timeout"
+- Algunas fuentes pueden estar temporalmente no disponibles
+- Los scrapers manejan errores y continúan con otras fuentes
 
-Para soporte técnico o preguntas:
-- **Email**: soporte@iica-chile.com
-- **Issues**: [GitHub Issues](https://github.com/tu-usuario/iica-chile-plataforma/issues)
-- **Documentación**: [Wiki del Proyecto](https://github.com/tu-usuario/iica-chile-plataforma/wiki)
+### Error al guardar Excel
+- Verifica permisos de escritura en el directorio `data/`
+- Asegúrate de que `openpyxl` está instalado
 
-## 🎯 Roadmap
+## 📄 Licencia
 
-- [ ] Integración con APIs externas
-- [ ] Sistema de usuarios con autenticación
-- [ ] Notificaciones por email reales
-- [ ] Dashboard móvil optimizado
-- [ ] Integración con base de datos SQL
-- [ ] Sistema de métricas avanzado
-- [ ] API REST completa
-- [ ] Despliegue automático con CI/CD
+Este proyecto es desarrollado para IICA Chile.
 
----
+## 👥 Contacto
 
-**🚀 ¡La plataforma está lista para uso en producción!**
+Para más información sobre IICA Chile:
+- Email: hernan.chiriboga@iica.int
+- Teléfono: (56-2) 2225-2511
+- Dirección: Calle Rancagua No.0320, Providencia, Santiago, Chile

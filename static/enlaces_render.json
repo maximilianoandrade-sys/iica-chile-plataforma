@@ -1,0 +1,69 @@
+{
+  "corfo": {
+    "base": "https://www.corfo.cl/sites/cpp/convocatorias",
+    "busqueda": "https://www.corfo.cl/sites/cpp/convocatorias?search=",
+    "contacto": "https://www.corfo.cl/contacto",
+    "ayuda": "https://www.corfo.cl/ayuda",
+    "proyectos_especificos": [
+      "https://www.corfo.cl/sites/cpp/convocatorias/programa-apoyo-innovacion-rural",
+      "https://www.corfo.cl/sites/cpp/convocatorias/programa-desarrollo-productivo",
+      "https://www.corfo.cl/sites/cpp/convocatorias/programa-capital-semilla",
+      "https://www.corfo.cl/sites/cpp/convocatorias/programa-apoyo-exportacion"
+    ]
+  },
+  "fia": {
+    "base": "https://www.fia.cl/convocatorias/",
+    "busqueda": "https://www.fia.cl/convocatorias/?search=",
+    "contacto": "https://www.fia.cl/contacto",
+    "ayuda": "https://www.fia.cl/ayuda",
+    "proyectos_especificos": [
+      "https://www.fia.cl/convocatorias/fondo-innovacion-agricola",
+      "https://www.fia.cl/convocatorias/programa-agricultura-sostenible",
+      "https://www.fia.cl/convocatorias/programa-tecnologia-agricola"
+    ]
+  },
+  "sag": {
+    "base": "https://www.sag.gob.cl/noticias/convocatorias",
+    "busqueda": "https://www.sag.gob.cl/noticias/convocatorias?search=",
+    "contacto": "https://www.sag.gob.cl/contacto",
+    "ayuda": "https://www.sag.gob.cl/ayuda",
+    "proyectos_especificos": [
+      "https://www.sag.gob.cl/noticias/convocatorias/programa-sanidad-vegetal",
+      "https://www.sag.gob.cl/noticias/convocatorias/programa-control-plagas",
+      "https://www.sag.gob.cl/noticias/convocatorias/programa-seguridad-alimentaria"
+    ]
+  },
+  "indap": {
+    "base": "https://www.indap.gob.cl/convocatorias",
+    "busqueda": "https://www.indap.gob.cl/convocatorias?search=",
+    "contacto": "https://www.indap.gob.cl/contacto",
+    "ayuda": "https://www.indap.gob.cl/ayuda",
+    "proyectos_especificos": [
+      "https://www.indap.gob.cl/convocatorias/programa-desarrollo-rural",
+      "https://www.indap.gob.cl/convocatorias/programa-apoyo-productivo",
+      "https://www.indap.gob.cl/convocatorias/programa-fortalecimiento-comunitario"
+    ]
+  },
+  "iica": {
+    "base": "https://www.iica.int/es/paises/chile",
+    "busqueda": "https://www.iica.int/es/paises/chile/proyectos",
+    "contacto": "https://www.iica.int/es/paises/chile/contacto",
+    "ayuda": "https://www.iica.int/es/paises/chile/ayuda",
+    "proyectos_especificos": [
+      "https://www.iica.int/es/paises/chile/proyectos/juventudes-rurales",
+      "https://www.iica.int/es/paises/chile/proyectos/desarrollo-rural",
+      "https://www.iica.int/es/paises/chile/proyectos/innovacion-agricola"
+    ]
+  },
+  "minagri": {
+    "base": "https://www.minagri.gob.cl/",
+    "busqueda": "https://www.minagri.gob.cl/buscar?q=",
+    "contacto": "https://www.minagri.gob.cl/contacto",
+    "ayuda": "https://www.minagri.gob.cl/ayuda",
+    "proyectos_especificos": [
+      "https://www.minagri.gob.cl/proyectos/desarrollo-rural",
+      "https://www.minagri.gob.cl/proyectos/agricultura-sostenible",
+      "https://www.minagri.gob.cl/proyectos/seguridad-alimentaria"
+    ]
+  }
+}

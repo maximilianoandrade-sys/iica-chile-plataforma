@@ -1,0 +1,17 @@
+{
+  "nombre_plataforma": "IICA Chile - Portal de Fondos",
+  "version": "4.0 Mejorado",
+  "institucion": "Instituto Interamericano de Cooperación para la Agricultura - Chile",
+  "ultima_actualizacion": "2025-10-15 15:21:16",
+  "mision": "Facilitar el acceso a oportunidades de financiamiento para el desarrollo agrícola y rural sostenible en Chile y América Latina",
+  "vision": "Ser la plataforma líder en detección automatizada de fondos para el sector agrícola y rural en la región",
+  "datos_institucionales": {
+    "nombre": "Instituto Interamericano de Cooperación para la Agricultura",
+    "sigla": "IICA",
+    "pais": "Chile",
+    "direccion": "Av. Libertador Bernardo O'Higgins 1234, Santiago, Chile",
+    "telefono": "+56 2 2345 6789",
+    "email": "info@iica.cl",
+    "sitio_web": "https://iica.int/es/countries/chile-es/"
+  }
+}

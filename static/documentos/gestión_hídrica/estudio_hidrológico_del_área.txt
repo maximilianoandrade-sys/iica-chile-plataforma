@@ -1,0 +1,5 @@
+Documento: Estudio Hidrológico del Área
+Área: Gestión Hídrica
+Tipo: Obligatorio
+Descripción: Este documento es requerido para postular a proyectos de Gestión Hídrica.
+Fecha de creación: 2025-10-20

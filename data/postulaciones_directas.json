@@ -1,0 +1,306 @@
+[
+  {
+    "titulo": "Portal de Postulaciones IICA",
+    "descripcion": "Sistema oficial de postulaciones del IICA",
+    "url": "https://apps.iica.int/postulaciones/",
+    "categoria": "Oficial",
+    "estado": "Activo",
+    "requisitos": "Registro previo requerido"
+  },
+  {
+    "titulo": "Sistema de Licitaciones Públicas",
+    "descripcion": "Portal gubernamental de licitaciones",
+    "url": "https://www.mercadopublico.cl/",
+    "categoria": "Gobierno",
+    "estado": "Activo",
+    "requisitos": "RUT y certificados digitales"
+  },
+  {
+    "titulo": "Fondos Concursables SAG",
+    "descripcion": "Fondos del Servicio Agrícola y Ganadero",
+    "url": "https://www.sag.gob.cl/fondos-concursables",
+    "categoria": "Gobierno",
+    "estado": "Activo",
+    "requisitos": "Persona jurídica"
+  },
+  {
+    "titulo": "Programa de Innovación FIA",
+    "descripcion": "Fondo de Innovación Agraria - Chile",
+    "url": "https://www.fia.cl/programas/",
+    "categoria": "Innovación",
+    "estado": "Activo",
+    "requisitos": "Proyecto de innovación"
+  },
+  {
+    "titulo": "Cooperación Internacional FAO",
+    "descripcion": "Oportunidades de la FAO",
+    "url": "https://www.fao.org/partnerships/procurement/en/",
+    "categoria": "Internacional",
+    "estado": "Activo",
+    "requisitos": "Organización registrada"
+  },
+  {
+    "titulo": "Banco Mundial - Proyectos",
+    "descripcion": "Oportunidades del Banco Mundial",
+    "url": "https://www.worldbank.org/projects",
+    "categoria": "Internacional",
+    "estado": "Activo",
+    "requisitos": "Cumplir criterios del BM"
+  },
+  {
+    "titulo": "CORFO - Programas y Convocatorias",
+    "descripcion": "Corporación de Fomento de la Producción - Chile",
+    "url": "https://corfo.cl/sites/cpp/programasyconvocatorias/",
+    "categoria": "Gobierno",
+    "estado": "Activo",
+    "requisitos": "Empresa registrada en Chile"
+  },
+  {
+    "titulo": "CORFO - Innova Chile",
+    "descripcion": "Programa de Innovación Empresarial",
+    "url": "https://www.innovachile.cl/",
+    "categoria": "Innovación",
+    "estado": "Activo",
+    "requisitos": "Proyecto de innovación tecnológica"
+  },
+  {
+    "titulo": "ChileCompra / Mercado Público",
+    "descripcion": "Licitaciones y compras públicas",
+    "url": "https://www.mercadopublico.cl",
+    "categoria": "Gobierno",
+    "estado": "Activo",
+    "requisitos": "Empresa registrada"
+  },
+  {
+    "titulo": "Fondos.gob.cl",
+    "descripcion": "Portal único de fondos concursables estatales",
+    "url": "https://www.fondos.gob.cl",
+    "categoria": "Gobierno",
+    "estado": "Activo",
+    "requisitos": "Cumplir criterios específicos"
+  },
+  {
+    "titulo": "MMA - Fondos Concursables",
+    "descripcion": "Fondos para medio ambiente y sostenibilidad",
+    "url": "https://fondos.mma.gob.cl",
+    "categoria": "Medio Ambiente",
+    "estado": "Activo",
+    "requisitos": "Proyecto ambiental"
+  },
+  {
+    "titulo": "SAG - Fondos Concursables",
+    "descripcion": "Proyectos agrícolas y ganaderos",
+    "url": "https://www.sag.gob.cl/tramites/fondos-concursables-yo-postulables",
+    "categoria": "Agricultura",
+    "estado": "Activo",
+    "requisitos": "Proyecto agrícola/ganadero"
+  },
+  {
+    "titulo": "CONADI",
+    "descripcion": "Fondos para desarrollo indígena",
+    "url": "https://www.conadi.gob.cl",
+    "categoria": "Desarrollo Social",
+    "estado": "Activo",
+    "requisitos": "Comunidad indígena"
+  },
+  {
+    "titulo": "AGCID",
+    "descripcion": "Fondos de cooperación internacional",
+    "url": "https://www.agci.cl",
+    "categoria": "Cooperación",
+    "estado": "Activo",
+    "requisitos": "Organización sin fines de lucro"
+  },
+  {
+    "titulo": "Programa DPS",
+    "descripcion": "Proyectos sostenibles",
+    "url": "https://programadps.gob.cl/Convocatorias/",
+    "categoria": "Sostenibilidad",
+    "estado": "Activo",
+    "requisitos": "Proyecto sostenible"
+  },
+  {
+    "titulo": "INDAP",
+    "descripcion": "Programas para pequeños agricultores",
+    "url": "https://www.indap.gob.cl",
+    "categoria": "Agricultura",
+    "estado": "Activo",
+    "requisitos": "Pequeño agricultor"
+  },
+  {
+    "titulo": "FIA - Fundación para la Innovación Agraria",
+    "descripcion": "Innovación en agricultura",
+    "url": "https://www.fia.cl",
+    "categoria": "Innovación",
+    "estado": "Activo",
+    "requisitos": "Proyecto de innovación agraria"
+  },
+  {
+    "titulo": "Fundación Chile",
+    "descripcion": "Innovación y emprendimiento",
+    "url": "https://www.fch.cl",
+    "categoria": "Innovación",
+    "estado": "Activo",
+    "requisitos": "Proyecto innovador"
+  },
+  {
+    "titulo": "BancoEstado - Crédito Agrícola",
+    "descripcion": "Financiamiento agrícola",
+    "url": "https://www.bancoestado.cl/content/bancoestado-public/cl/es/home/home-microempresa/productos/creditos/creditos-para-tu-negocio/credito-agricola---bancoestado-microempresas.html",
+    "categoria": "Financiamiento",
+    "estado": "Activo",
+    "requisitos": "Empresa agrícola"
+  },
+  {
+    "titulo": "BID Invest - Línea Verde",
+    "descripcion": "Proyectos verdes y sostenibles",
+    "url": "https://banagro.cl/bid-invest-apoya-el-financiamiento-verde-a-pequenas-y-medianas-empresas-agricolas-en-chile-con-banagro/",
+    "categoria": "Financiamiento",
+    "estado": "Activo",
+    "requisitos": "Proyecto verde"
+  },
+  {
+    "titulo": "BID - Oficina Chile",
+    "descripcion": "Financiamiento de desarrollo",
+    "url": "https://www.iadb.org/es/offices/chile",
+    "categoria": "Internacional",
+    "estado": "Activo",
+    "requisitos": "Proyecto de desarrollo"
+  },
+  {
+    "titulo": "CAF - Banco de Desarrollo",
+    "descripcion": "Proyectos de desarrollo regional",
+    "url": "https://www.caf.com/es",
+    "categoria": "Internacional",
+    "estado": "Activo",
+    "requisitos": "Proyecto regional"
+  },
+  {
+    "titulo": "FIDA",
+    "descripcion": "Proyectos de desarrollo rural",
+    "url": "https://www.ifad.org/es/convocatorias-de-propuestas",
+    "categoria": "Internacional",
+    "estado": "Activo",
+    "requisitos": "Proyecto rural"
+  },
+  {
+    "titulo": "GEF - Global Environment Facility",
+    "descripcion": "Fondos ambientales",
+    "url": "https://www.thegef.org",
+    "categoria": "Medio Ambiente",
+    "estado": "Activo",
+    "requisitos": "Proyecto ambiental global"
+  },
+  {
+    "titulo": "CNR - Comisión Nacional de Riego",
+    "descripcion": "Programa de Pequeña Agricultura - Bonificaciones para riego",
+    "url": "https://www.cnr.gob.cl/pequena-agricultura/",
+    "categoria": "Agricultura",
+    "estado": "Activo",
+    "requisitos": "Pequeño agricultor con proyecto de riego"
+  },
+  {
+    "titulo": "GEF Chile - Fondo Medio Ambiente",
+    "descripcion": "Fondo para el Medio Ambiente Mundial en Chile",
+    "url": "https://mma.gob.cl/asuntos-internacionales/el-fondo-para-el-medio-ambiente-mundial-gef/",
+    "categoria": "Medio Ambiente",
+    "estado": "Activo",
+    "requisitos": "Proyecto ambiental con impacto global"
+  },
+  {
+    "titulo": "FIA - Programas de Innovación",
+    "descripcion": "Fundación para la Innovación Agraria - Programas específicos",
+    "url": "https://www.fia.cl/programas/",
+    "categoria": "Innovación",
+    "estado": "Activo",
+    "requisitos": "Proyecto de innovación agraria"
+  },
+  {
+    "titulo": "INDAP - Programas de Desarrollo",
+    "descripcion": "Instituto de Desarrollo Agropecuario - Programas y servicios",
+    "url": "https://www.indap.gob.cl/programas-y-servicios/",
+    "categoria": "Desarrollo Rural",
+    "estado": "Activo",
+    "requisitos": "Pequeño agricultor o emprendedor rural"
+  },
+  {
+    "titulo": "Fondos.gob.cl - Portal Único",
+    "descripcion": "Portal único de fondos concursables del Estado",
+    "url": "https://www.fondos.gob.cl/",
+    "categoria": "Gobierno",
+    "estado": "Activo",
+    "requisitos": "Cumplir criterios específicos del fondo"
+  },
+  {
+    "titulo": "CORFO - Buscar Financiamiento",
+    "descripcion": "Portal oficial de CORFO para buscar financiamiento",
+    "url": "https://www.corfo.cl/sites/cpp/movil/buscasfinanciamiento",
+    "categoria": "Gobierno",
+    "estado": "Activo",
+    "requisitos": "Empresa registrada en Chile"
+  },
+  {
+    "titulo": "SERCOTEC - Programas y Fondos",
+    "descripcion": "Servicio de Cooperación Técnica - Apoyo a micro y pequeñas empresas",
+    "url": "https://www.sercotec.cl/",
+    "categoria": "Gobierno",
+    "estado": "Activo",
+    "requisitos": "Micro o pequeña empresa"
+  },
+  {
+    "titulo": "FOSIS - Programas Sociales",
+    "descripcion": "Fondo de Solidaridad e Inversión Social",
+    "url": "https://www.fosis.gob.cl/",
+    "categoria": "Social",
+    "estado": "Activo",
+    "requisitos": "Personas en situación de vulnerabilidad"
+  },
+  {
+    "titulo": "ANID - Investigación y Desarrollo",
+    "descripcion": "Agencia Nacional de Investigación y Desarrollo",
+    "url": "https://www.anid.cl/",
+    "categoria": "Investigación",
+    "estado": "Activo",
+    "requisitos": "Proyecto de investigación"
+  },
+  {
+    "titulo": "Portal Alfondo.cl",
+    "descripcion": "Plataforma para encontrar y postular a fondos de financiamiento",
+    "url": "https://alfondo.cl/",
+    "categoria": "Plataforma",
+    "estado": "Activo",
+    "requisitos": "Registro en la plataforma"
+  },
+  {
+    "titulo": "Fondos de Cultura",
+    "descripcion": "Ministerio de las Culturas, las Artes y el Patrimonio",
+    "url": "https://www.fondosdecultura.cl/",
+    "categoria": "Cultura",
+    "estado": "Activo",
+    "requisitos": "Proyecto cultural o artístico"
+  },
+  {
+    "titulo": "SENCE - Capacitación y Empleo",
+    "descripcion": "Servicio Nacional de Capacitación y Empleo",
+    "url": "https://www.sence.cl/",
+    "categoria": "Capacitación",
+    "estado": "Activo",
+    "requisitos": "Programa de capacitación"
+  },
+  {
+    "titulo": "ProChile - Internacionalización",
+    "descripcion": "Apoyo para la internacionalización de empresas chilenas",
+    "url": "https://www.prochile.gob.cl/",
+    "categoria": "Internacional",
+    "estado": "Activo",
+    "requisitos": "Empresa con potencial exportador"
+  },
+  {
+    "titulo": "INDESPA - Pesca Artesanal",
+    "descripcion": "Instituto Nacional de Desarrollo Sustentable de la Pesca Artesanal",
+    "url": "https://www.indespa.cl/",
+    "categoria": "Pesca",
+    "estado": "Activo",
+    "requisitos": "Sector pesquero artesanal"
+  }
+]

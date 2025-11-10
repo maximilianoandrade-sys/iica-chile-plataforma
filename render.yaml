@@ -1,12 +1,17 @@
 services:
   - type: web
-    name: iica-chile-plataforma
+    name: plataforma-iica-proyectos
     env: python
-    plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: python render_deploy.py
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
     envVars:
-      - key: FLASK_ENV
-        value: production
       - key: PYTHON_VERSION
-        value: 3.11.9
+        value: 3.11.0
+      - key: PORT
+        value: 10000
+      - key: DEBUG
+        value: "False"
+      - key: GOOGLE_API_KEY
+        fromSecret: GOOGLE_API_KEY
+      - key: GOOGLE_CX
+        fromSecret: GOOGLE_CX
