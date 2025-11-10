@@ -167,7 +167,7 @@ def guardar_excel(proyectos, path=None):
     path = path or DATA_PATH
     
     try:
-        # Asegurar que el directorio existe
+# Asegurar que el directorio existe        # Asegurar que el directorio existe
         os.makedirs(os.path.dirname(path) if os.path.dirname(path) else 'data', exist_ok=True)
         
         # Preparar DataFrame
