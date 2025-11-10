@@ -2,33 +2,80 @@ import re
 from datetime import datetime
 
 
-def clasificar_area(nombre: str) -> str:
-    """Clasifica un proyecto en un área de interés simple usando palabras clave.
-
-    La clasificación es heurística y extensible. Si no encuentra coincidencias,
-    devuelve "General".
+def clasificar_area(texto: str) -> str:
     """
-    if not nombre:
+    Clasifica un proyecto según áreas temáticas institucionales del IICA Chile.
+    
+    Áreas temáticas IICA:
+    - Agricultura familiar campesina
+    - Innovación tecnológica
+    - Gestión hídrica
+    - Seguridad alimentaria
+    - Juventud rural
+    - Medio ambiente
+    """
+    if not texto:
         return "General"
-
-    texto = nombre.lower()
-
-    keywords_to_area = [
-        ("agric", "Agricultura"),
-        ("ganad", "Ganadería"),
-        ("suelo", "Suelos"),
+    
+    texto_lower = texto.lower()
+    
+    # Áreas temáticas IICA con palabras clave
+    areas_iica = {
+        "Agricultura familiar campesina": [
+            "agricultura familiar", "campesino", "campesina", "pequeño productor",
+            "pequeña agricultura", "agricultura familiar campesina", "afc",
+            "agricultor familiar", "comunidad rural", "asociación campesina"
+        ],
+        "Innovación tecnológica": [
+            "innovación", "tecnología", "digital", "agtech", "agrotecnología",
+            "tecnología agrícola", "agricultura digital", "precisión", "drones",
+            "iot", "sensores", "automatización", "big data", "inteligencia artificial"
+        ],
+        "Gestión hídrica": [
+            "agua", "hídrico", "hídrica", "riego", "irrigación", "gestión del agua",
+            "recursos hídricos", "eficiencia hídrica", "conservación agua",
+            "sistemas de riego", "déficit hídrico", "sequía"
+        ],
+        "Seguridad alimentaria": [
+            "seguridad alimentaria", "nutrición", "alimentos", "producción alimentaria",
+            "cadena alimentaria", "sistemas alimentarios", "soberanía alimentaria",
+            "inocuidad alimentaria", "desnutrición", "hambre"
+        ],
+        "Juventud rural": [
+            "juventud", "joven", "rural", "juventud rural", "jóvenes rurales",
+            "emprendimiento joven", "capacitación jóvenes", "líderes jóvenes",
+            "nuevas generaciones", "sucesión generacional"
+        ],
+        "Medio ambiente": [
+            "medio ambiente", "ambiental", "sostenibilidad", "sustentabilidad",
+            "biodiversidad", "conservación", "ecología", "cambio climático",
+            "adaptación climática", "mitigación", "emisiones", "carbono",
+            "reforestación", "recursos naturales", "protección ambiental"
+        ]
+    }
+    
+    # Buscar coincidencias por área (orden de prioridad)
+    for area, keywords in areas_iica.items():
+        for keyword in keywords:
+            if keyword in texto_lower:
+                return area
+    
+    # Clasificación secundaria
+    keywords_secundarios = [
+        ("agric", "Agricultura familiar campesina"),
+        ("ganad", "Agricultura familiar campesina"),
+        ("forest", "Medio ambiente"),
+        ("clima", "Medio ambiente"),
+        ("riego", "Gestión hídrica"),
         ("aliment", "Seguridad alimentaria"),
-        ("innov", "Innovación"),
-        ("desarrollo", "Desarrollo rural"),
-        ("clima", "Cambio climático"),
-        ("riego", "Riego"),
-        ("forest", "Forestal"),
+        ("innov", "Innovación tecnológica"),
+        ("desarrollo rural", "Agricultura familiar campesina"),
     ]
-
-    for kw, area in keywords_to_area:
-        if kw in texto:
+    
+    for kw, area in keywords_secundarios:
+        if kw in texto_lower:
             return area
-
+    
     return "General"
 
 

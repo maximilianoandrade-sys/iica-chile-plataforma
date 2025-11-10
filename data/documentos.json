@@ -1,0 +1,110 @@
+[
+  {
+    "titulo": "Formulario Único de Postulación (FUP)",
+    "descripcion": "Documento estándar que recopila información esencial sobre el proyecto y el postulante",
+    "archivo": "formulario-unico-postulacion.pdf",
+    "tipo": "Formulario",
+    "fecha": "2024-12-15",
+    "tamaño": "850 KB",
+    "url": "https://www.fondos.gob.cl/formulario-unico"
+  },
+  {
+    "titulo": "Guía de Documentación Requerida",
+    "descripcion": "Lista completa de documentos necesarios: cédula, certificados, presupuesto, plan de trabajo",
+    "archivo": "guia-documentacion-requerida.pdf",
+    "tipo": "Guía",
+    "fecha": "2024-12-10",
+    "tamaño": "1.8 MB",
+    "url": "https://www.fondos.gob.cl/documentacion"
+  },
+  {
+    "titulo": "Manual de Postulación CORFO",
+    "descripcion": "Guía completa para postular a programas de CORFO",
+    "archivo": "manual-postulacion-corfo.pdf",
+    "tipo": "Manual",
+    "fecha": "2024-12-20",
+    "tamaño": "3.2 MB",
+    "url": "https://www.corfo.cl/sites/cpp/movil/buscasfinanciamiento"
+  },
+  {
+    "titulo": "Bases Técnicas SERCOTEC",
+    "descripcion": "Documento oficial con requisitos y criterios de evaluación para fondos SERCOTEC",
+    "archivo": "bases-tecnicas-sercotec.pdf",
+    "tipo": "Bases Técnicas",
+    "fecha": "2024-12-05",
+    "tamaño": "2.5 MB",
+    "url": "https://www.sercotec.cl/bases-tecnicas"
+  },
+  {
+    "titulo": "Guía de Presupuesto Detallado",
+    "descripcion": "Cómo elaborar un presupuesto detallado con desglose de costos",
+    "archivo": "guia-presupuesto-detallado.pdf",
+    "tipo": "Guía",
+    "fecha": "2024-12-12",
+    "tamaño": "1.5 MB",
+    "url": "https://www.fondos.gob.cl/presupuesto"
+  },
+  {
+    "titulo": "Plantilla de Plan de Trabajo",
+    "descripcion": "Modelo para describir objetivos, actividades, cronograma y metodología",
+    "archivo": "plantilla-plan-trabajo.docx",
+    "tipo": "Plantilla",
+    "fecha": "2024-12-08",
+    "tamaño": "1.2 MB",
+    "url": "https://www.fondos.gob.cl/plan-trabajo"
+  },
+  {
+    "titulo": "Certificados y Documentos Legales",
+    "descripcion": "Guía para obtener certificados de personalidad jurídica, vigencia de directiva, etc.",
+    "archivo": "guia-certificados-legales.pdf",
+    "tipo": "Requisitos",
+    "fecha": "2024-12-18",
+    "tamaño": "980 KB",
+    "url": "https://www.fondos.gob.cl/certificados"
+  },
+  {
+    "titulo": "Declaraciones Juradas - Modelos",
+    "descripcion": "Modelos de declaraciones juradas para diferentes tipos de fondos",
+    "archivo": "modelos-declaraciones-juradas.pdf",
+    "tipo": "Plantilla",
+    "fecha": "2024-12-14",
+    "tamaño": "750 KB",
+    "url": "https://www.fondos.gob.cl/declaraciones"
+  },
+  {
+    "titulo": "Guía FOSIS - Programas Sociales",
+    "descripcion": "Manual para postular a programas de FOSIS para personas en situación de vulnerabilidad",
+    "archivo": "guia-fosis-programas-sociales.pdf",
+    "tipo": "Guía",
+    "fecha": "2024-12-22",
+    "tamaño": "2.8 MB",
+    "url": "https://www.fosis.gob.cl/guia-postulacion"
+  },
+  {
+    "titulo": "Manual ANID - Investigación",
+    "descripcion": "Guía para postular a fondos de investigación y desarrollo de ANID",
+    "archivo": "manual-anid-investigacion.pdf",
+    "tipo": "Manual",
+    "fecha": "2024-12-16",
+    "tamaño": "3.5 MB",
+    "url": "https://www.anid.cl/manual-postulacion"
+  },
+  {
+    "titulo": "Bases Técnicas FIA",
+    "descripcion": "Requisitos y criterios para proyectos de innovación agraria",
+    "archivo": "bases-tecnicas-fia.pdf",
+    "tipo": "Bases Técnicas",
+    "fecha": "2024-12-11",
+    "tamaño": "2.1 MB",
+    "url": "https://www.fia.cl/bases-tecnicas"
+  },
+  {
+    "titulo": "Portal Alfondo.cl - Guía de Uso",
+    "descripcion": "Cómo usar la plataforma Alfondo.cl para encontrar y postular a fondos",
+    "archivo": "guia-alfondo.pdf",
+    "tipo": "Manual",
+    "fecha": "2024-12-19",
+    "tamaño": "1.9 MB",
+    "url": "https://alfondo.cl/guia-usuario"
+  }
+]

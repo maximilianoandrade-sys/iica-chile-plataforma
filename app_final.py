@@ -16,6 +16,7 @@ from project_updater import ProjectUpdater
 from link_manager import link_manager
 from busqueda_avanzada import BuscadorAvanzado
 from auto_search_system import AutoSearchSystem
+import json
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
 DATA_PATH = "data/proyectos_fortalecidos.xlsx"
@@ -179,6 +180,9 @@ def ver_proyecto(proyecto_id):
         proyectos = cargar_excel()
         if 0 <= proyecto_id < len(proyectos):
             proyecto = proyectos[proyecto_id]
+            proyecto['id'] = proyecto_id
+            # Asegurar que haya clave 'Enlace' para ir al proyecto original
+            proyecto.setdefault('Enlace', proyecto.get('URL', ''))
             return render_template('proyecto_detalle_institucional.html', proyecto=proyecto)
         else:
             return render_template('error.html', error="Proyecto no encontrado")
@@ -344,6 +348,66 @@ def api_auto_search_status():
         return jsonify({'success': True, 'stats': stats})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
+
+# ===== POSTULACIONES =====
+
+POSTULACIONES_FILE = os.path.join('data', 'postulaciones.json')
+
+def _load_postulaciones():
+    try:
+        if os.path.exists(POSTULACIONES_FILE):
+            with open(POSTULACIONES_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+    except Exception:
+        pass
+    return []
+
+def _save_postulaciones(postulaciones):
+    os.makedirs('data', exist_ok=True)
+    with open(POSTULACIONES_FILE, 'w', encoding='utf-8') as f:
+        json.dump(postulaciones, f, ensure_ascii=False, indent=2)
+
+@app.route('/postular/<int:proyecto_id>', methods=['GET'])
+def postular_proyecto(proyecto_id):
+    proyectos = cargar_excel()
+    if 0 <= proyecto_id < len(proyectos):
+        proyecto = proyectos[proyecto_id]
+        proyecto['id'] = proyecto_id
+        proyecto.setdefault('Enlace', proyecto.get('URL', ''))
+        return render_template('postulacion_fondo.html', proyecto=proyecto)
+    return render_template('error.html', error="Proyecto no encontrado")
+
+@app.route('/api/postulacion', methods=['POST'])
+def api_postulacion():
+    try:
+        data = request.get_json() or {}
+        required = ['proyecto_id', 'nombre_organizacion', 'nombre_contacto', 'email_contacto']
+        if not all(k in data and str(data[k]).strip() for k in required):
+            return jsonify({'success': False, 'message': 'Datos incompletos'}), 400
+
+        postulaciones = _load_postulaciones()
+        new_entry = {
+            'id': f"POST-{int(time.time())}",
+            'proyecto_id': data['proyecto_id'],
+            'fecha': datetime.now().isoformat(),
+            'nombre_organizacion': data.get('nombre_organizacion', ''),
+            'tipo_organizacion': data.get('tipo_organizacion', ''),
+            'pais': data.get('pais', ''),
+            'ciudad': data.get('ciudad', ''),
+            'descripcion_organizacion': data.get('descripcion_organizacion', ''),
+            'nombre_contacto': data.get('nombre_contacto', ''),
+            'email_contacto': data.get('email_contacto', ''),
+            'telefono_contacto': data.get('telefono_contacto', ''),
+            'nombre_proyecto': data.get('nombre_proyecto', ''),
+            'descripcion_proyecto': data.get('descripcion_proyecto', ''),
+            'monto_solicitado': data.get('monto_solicitado', ''),
+            'objetivos_proyecto': data.get('objetivos_proyecto', ''),
+        }
+        postulaciones.append(new_entry)
+        _save_postulaciones(postulaciones)
+        return jsonify({'success': True, 'message': 'Postulación enviada', 'id': new_entry['id']})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
 
 # ===== RUTAS DE BACKUP =====
 

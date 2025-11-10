@@ -1,0 +1,530 @@
+[
+  {
+    "id": "CORFO-001",
+    "nombre": "Programa de Innovación Agraria CORFO",
+    "organizacion": "CORFO Chile",
+    "tipo": "Nacional",
+    "pais": "Chile",
+    "monto": "CLP 500,000,000",
+    "fecha_cierre": "2025-03-31",
+    "estado": "Abierto",
+    "area": "Innovación Tecnológica",
+    "categoria": "Agricultura",
+    "descripcion": "Programa de apoyo a la innovación en el sector agrario chileno con enfoque en tecnología y sostenibilidad",
+    "requisitos": "Empresas agrícolas, cooperativas, centros de investigación, universidades",
+    "enlace": "https://www.corfo.cl/sites/cpp/innovacion/innovacion-agraria",
+    "contacto": "innovacion@corfo.cl",
+    "tipo_financiamiento": "Subsidio",
+    "duracion": "24 meses",
+    "beneficiarios": "Sector agrícola chileno",
+    "prioridad": "Alta",
+    "documentos_requeridos": [
+      "Formulario de postulación CORFO",
+      "Plan de negocio detallado",
+      "Presupuesto desglosado",
+      "Cronograma de actividades",
+      "Estudio de mercado"
+    ],
+    "formularios": [
+      "https://www.corfo.cl/formularios/innovacion-agraria",
+      "https://www.corfo.cl/documentos/guia-postulacion"
+    ],
+    "fuente": "CORFO Chile",
+    "fecha_actualizacion": "2025-10-15 16:37:56"
+  },
+  {
+    "id": "CORFO-002",
+    "nombre": "Programa de Emprendimiento Rural CORFO",
+    "organizacion": "CORFO Chile",
+    "tipo": "Nacional",
+    "pais": "Chile",
+    "monto": "CLP 300,000,000",
+    "fecha_cierre": "2025-02-28",
+    "estado": "Abierto",
+    "area": "Emprendimiento Rural",
+    "categoria": "Desarrollo Rural",
+    "descripcion": "Apoyo a emprendimientos rurales innovadores con potencial de crecimiento",
+    "requisitos": "Emprendedores rurales, cooperativas, asociaciones",
+    "enlace": "https://www.corfo.cl/emprendimiento-rural",
+    "contacto": "rural@corfo.cl",
+    "tipo_financiamiento": "Subsidio + Crédito",
+    "duracion": "18 meses",
+    "beneficiarios": "Emprendedores rurales",
+    "prioridad": "Media",
+    "documentos_requeridos": [
+      "Formulario de postulación",
+      "Plan de negocio",
+      "Presupuesto",
+      "Cronograma"
+    ],
+    "formularios": [
+      "https://www.corfo.cl/formularios/emprendimiento-rural"
+    ],
+    "fuente": "CORFO Chile",
+    "fecha_actualizacion": "2025-10-15 16:37:56"
+  },
+  {
+    "id": "INDAP-001",
+    "nombre": "Programa de Desarrollo de Inversiones (PDI) INDAP",
+    "organizacion": "INDAP Chile",
+    "tipo": "Nacional",
+    "pais": "Chile",
+    "monto": "CLP 15,000,000",
+    "fecha_cierre": "2025-04-30",
+    "estado": "Abierto",
+    "area": "Desarrollo Rural",
+    "categoria": "Agricultura Familiar",
+    "descripcion": "Financiamiento para inversiones en infraestructura y equipamiento agrícola",
+    "requisitos": "Usuarios INDAP, agricultores familiares",
+    "enlace": "https://www.indap.gob.cl/pdi",
+    "contacto": "pdi@indap.gob.cl",
+    "tipo_financiamiento": "Crédito",
+    "duracion": "10 años",
+    "beneficiarios": "Agricultores familiares",
+    "prioridad": "Alta",
+    "documentos_requeridos": [
+      "Formulario PDI",
+      "Proyecto técnico",
+      "Presupuesto detallado",
+      "Certificados de propiedad"
+    ],
+    "formularios": [
+      "https://www.indap.gob.cl/formularios/pdi"
+    ],
+    "fuente": "INDAP Chile",
+    "fecha_actualizacion": "2025-10-15 16:37:56"
+  },
+  {
+    "id": "INDAP-002",
+    "nombre": "Programa de Asesoría Técnica (SAT) INDAP",
+    "organizacion": "INDAP Chile",
+    "tipo": "Nacional",
+    "pais": "Chile",
+    "monto": "CLP 2,000,000",
+    "fecha_cierre": "2025-03-15",
+    "estado": "Abierto",
+    "area": "Asesoría Técnica",
+    "categoria": "Capacitación",
+    "descripcion": "Asesoría técnica especializada para agricultores familiares",
+    "requisitos": "Usuarios INDAP",
+    "enlace": "https://www.indap.gob.cl/sat",
+    "contacto": "sat@indap.gob.cl",
+    "tipo_financiamiento": "Subsidio",
+    "duracion": "12 meses",
+    "beneficiarios": "Agricultores familiares",
+    "prioridad": "Media",
+    "documentos_requeridos": [
+      "Formulario SAT",
+      "Plan de asesoría"
+    ],
+    "formularios": [
+      "https://www.indap.gob.cl/formularios/sat"
+    ],
+    "fuente": "INDAP Chile",
+    "fecha_actualizacion": "2025-10-15 16:37:56"
+  },
+  {
+    "id": "FIA-001",
+    "nombre": "Programa de Innovación en Agricultura FIA",
+    "organizacion": "FIA Chile",
+    "tipo": "Nacional",
+    "pais": "Chile",
+    "monto": "CLP 200,000,000",
+    "fecha_cierre": "2025-05-31",
+    "estado": "Abierto",
+    "area": "Innovación Agrícola",
+    "categoria": "I+D",
+    "descripcion": "Fomento a la innovación en el sector agrícola nacional",
+    "requisitos": "Empresas agrícolas, centros de investigación",
+    "enlace": "https://www.fia.cl/innovacion",
+    "contacto": "innovacion@fia.cl",
+    "tipo_financiamiento": "Subsidio",
+    "duracion": "36 meses",
+    "beneficiarios": "Sector agrícola",
+    "prioridad": "Alta",
+    "documentos_requeridos": [
+      "Proyecto de innovación",
+      "Presupuesto",
+      "Cronograma",
+      "Equipo técnico"
+    ],
+    "formularios": [
+      "https://www.fia.cl/formularios/innovacion"
+    ],
+    "fuente": "FIA Chile",
+    "fecha_actualizacion": "2025-10-15 16:37:56"
+  },
+  {
+    "id": "SAG-001",
+    "nombre": "Programa de Sanidad Vegetal SAG",
+    "organizacion": "SAG Chile",
+    "tipo": "Nacional",
+    "pais": "Chile",
+    "monto": "CLP 50,000,000",
+    "fecha_cierre": "2025-06-30",
+    "estado": "Abierto",
+    "area": "Sanidad Vegetal",
+    "categoria": "Salud Animal y Vegetal",
+    "descripcion": "Programa de prevención y control de plagas y enfermedades vegetales",
+    "requisitos": "Productores agrícolas, organizaciones",
+    "enlace": "https://www.sag.gob.cl/sanidad-vegetal",
+    "contacto": "sanidad@sag.gob.cl",
+    "tipo_financiamiento": "Subsidio",
+    "duracion": "24 meses",
+    "beneficiarios": "Productores agrícolas",
+    "prioridad": "Media",
+    "documentos_requeridos": [
+      "Formulario SAG",
+      "Plan sanitario",
+      "Presupuesto"
+    ],
+    "formularios": [
+      "https://www.sag.gob.cl/formularios/sanidad"
+    ],
+    "fuente": "SAG Chile",
+    "fecha_actualizacion": "2025-10-15 16:37:56"
+  },
+  {
+    "id": "CNR-001",
+    "nombre": "Programa de Riego Tecnificado CNR",
+    "organizacion": "CNR Chile",
+    "tipo": "Nacional",
+    "pais": "Chile",
+    "monto": "CLP 100,000,000",
+    "fecha_cierre": "2025-07-31",
+    "estado": "Abierto",
+    "area": "Riego Tecnificado",
+    "categoria": "Infraestructura",
+    "descripcion": "Fomento a la tecnificación del riego agrícola",
+    "requisitos": "Productores agrícolas",
+    "enlace": "https://www.cnr.gob.cl/riego-tecnificado",
+    "contacto": "riego@cnr.gob.cl",
+    "tipo_financiamiento": "Subsidio",
+    "duracion": "18 meses",
+    "beneficiarios": "Productores agrícolas",
+    "prioridad": "Alta",
+    "documentos_requeridos": [
+      "Proyecto de riego",
+      "Presupuesto",
+      "Planos técnicos"
+    ],
+    "formularios": [
+      "https://www.cnr.gob.cl/formularios/riego"
+    ],
+    "fuente": "CNR Chile",
+    "fecha_actualizacion": "2025-10-15 16:37:56"
+  },
+  {
+    "id": "BID-001",
+    "nombre": "Fondo de Innovación Agrícola BID",
+    "organizacion": "BID",
+    "tipo": "Internacional",
+    "pais": "Regional",
+    "monto": "USD 5,000,000",
+    "fecha_cierre": "2025-08-31",
+    "estado": "Abierto",
+    "area": "Innovación Agrícola",
+    "categoria": "Desarrollo Rural",
+    "descripcion": "Fondo para proyectos de innovación agrícola en América Latina y el Caribe",
+    "requisitos": "Organizaciones de la región, gobiernos, ONGs",
+    "enlace": "https://www.iadb.org/innovacion-agricola",
+    "contacto": "innovacion@iadb.org",
+    "tipo_financiamiento": "Subsidio",
+    "duracion": "36 meses",
+    "beneficiarios": "América Latina y Caribe",
+    "prioridad": "Alta",
+    "documentos_requeridos": [
+      "Propuesta técnica",
+      "Presupuesto detallado",
+      "Cronograma",
+      "Equipo técnico"
+    ],
+    "formularios": [
+      "https://www.iadb.org/formularios/innovacion"
+    ],
+    "fuente": "BID",
+    "fecha_actualizacion": "2025-10-15 16:37:56"
+  },
+  {
+    "id": "BID-002",
+    "nombre": "Programa de Sostenibilidad Ambiental BID",
+    "organizacion": "BID",
+    "tipo": "Internacional",
+    "pais": "Regional",
+    "monto": "USD 10,000,000",
+    "fecha_cierre": "2025-09-30",
+    "estado": "Abierto",
+    "area": "Sostenibilidad Ambiental",
+    "categoria": "Medio Ambiente",
+    "descripcion": "Proyectos de sostenibilidad ambiental y cambio climático",
+    "requisitos": "Organizaciones ambientales, gobiernos",
+    "enlace": "https://www.iadb.org/sostenibilidad",
+    "contacto": "sostenibilidad@iadb.org",
+    "tipo_financiamiento": "Subsidio",
+    "duracion": "48 meses",
+    "beneficiarios": "América Latina y Caribe",
+    "prioridad": "Alta",
+    "documentos_requeridos": [
+      "Propuesta ambiental",
+      "Estudio de impacto",
+      "Presupuesto",
+      "Cronograma"
+    ],
+    "formularios": [
+      "https://www.iadb.org/formularios/sostenibilidad"
+    ],
+    "fuente": "BID",
+    "fecha_actualizacion": "2025-10-15 16:37:56"
+  },
+  {
+    "id": "FAO-001",
+    "nombre": "Programa de Seguridad Alimentaria FAO",
+    "organizacion": "FAO",
+    "tipo": "Internacional",
+    "pais": "Global",
+    "monto": "USD 2,000,000",
+    "fecha_cierre": "2025-10-31",
+    "estado": "Abierto",
+    "area": "Seguridad Alimentaria",
+    "categoria": "Alimentación",
+    "descripcion": "Proyectos para mejorar la seguridad alimentaria y nutrición",
+    "requisitos": "Gobiernos, ONGs, organizaciones",
+    "enlace": "https://www.fao.org/seguridad-alimentaria",
+    "contacto": "seguridad@fao.org",
+    "tipo_financiamiento": "Subsidio",
+    "duracion": "24 meses",
+    "beneficiarios": "Países en desarrollo",
+    "prioridad": "Alta",
+    "documentos_requeridos": [
+      "Propuesta técnica",
+      "Presupuesto",
+      "Cronograma",
+      "Indicadores"
+    ],
+    "formularios": [
+      "https://www.fao.org/formularios/seguridad"
+    ],
+    "fuente": "FAO",
+    "fecha_actualizacion": "2025-10-15 16:37:56"
+  },
+  {
+    "id": "FAO-002",
+    "nombre": "Programa de Agricultura Sostenible FAO",
+    "organizacion": "FAO",
+    "tipo": "Internacional",
+    "pais": "Global",
+    "monto": "USD 3,000,000",
+    "fecha_cierre": "2025-11-30",
+    "estado": "Abierto",
+    "area": "Agricultura Sostenible",
+    "categoria": "Sostenibilidad",
+    "descripcion": "Fomento a prácticas agrícolas sostenibles y resilientes",
+    "requisitos": "Organizaciones agrícolas, gobiernos",
+    "enlace": "https://www.fao.org/agricultura-sostenible",
+    "contacto": "agricultura@fao.org",
+    "tipo_financiamiento": "Subsidio",
+    "duracion": "30 meses",
+    "beneficiarios": "Países en desarrollo",
+    "prioridad": "Media",
+    "documentos_requeridos": [
+      "Propuesta técnica",
+      "Presupuesto",
+      "Cronograma",
+      "Metodología"
+    ],
+    "formularios": [
+      "https://www.fao.org/formularios/agricultura"
+    ],
+    "fuente": "FAO",
+    "fecha_actualizacion": "2025-10-15 16:37:56"
+  },
+  {
+    "id": "GEF-001",
+    "nombre": "Fondo Mundial para el Medio Ambiente - Biodiversidad",
+    "organizacion": "GEF",
+    "tipo": "Internacional",
+    "pais": "Global",
+    "monto": "USD 8,000,000",
+    "fecha_cierre": "2025-12-31",
+    "estado": "Abierto",
+    "area": "Biodiversidad",
+    "categoria": "Conservación",
+    "descripcion": "Proyectos de conservación de biodiversidad y ecosistemas",
+    "requisitos": "Gobiernos, ONGs ambientales",
+    "enlace": "https://www.thegef.org/biodiversidad",
+    "contacto": "biodiversidad@gef.org",
+    "tipo_financiamiento": "Subsidio",
+    "duracion": "60 meses",
+    "beneficiarios": "Países en desarrollo",
+    "prioridad": "Alta",
+    "documentos_requeridos": [
+      "Propuesta técnica",
+      "Estudio de biodiversidad",
+      "Presupuesto",
+      "Cronograma",
+      "Indicadores ambientales"
+    ],
+    "formularios": [
+      "https://www.thegef.org/formularios/biodiversidad"
+    ],
+    "fuente": "GEF",
+    "fecha_actualizacion": "2025-10-15 16:37:56"
+  },
+  {
+    "id": "GCF-001",
+    "nombre": "Fondo Verde del Clima - Adaptación",
+    "organizacion": "Fondo Verde del Clima",
+    "tipo": "Internacional",
+    "pais": "Global",
+    "monto": "USD 15,000,000",
+    "fecha_cierre": "2025-12-15",
+    "estado": "Abierto",
+    "area": "Adaptación al Cambio Climático",
+    "categoria": "Cambio Climático",
+    "descripcion": "Proyectos de adaptación al cambio climático en sectores vulnerables",
+    "requisitos": "Gobiernos, entidades acreditadas",
+    "enlace": "https://www.greenclimate.fund/adaptacion",
+    "contacto": "adaptacion@gcf.org",
+    "tipo_financiamiento": "Subsidio",
+    "duracion": "72 meses",
+    "beneficiarios": "Países en desarrollo",
+    "prioridad": "Alta",
+    "documentos_requeridos": [
+      "Propuesta de adaptación",
+      "Análisis de vulnerabilidad",
+      "Presupuesto detallado",
+      "Cronograma",
+      "Indicadores de adaptación"
+    ],
+    "formularios": [
+      "https://www.greenclimate.fund/formularios/adaptacion"
+    ],
+    "fuente": "Fondo Verde del Clima",
+    "fecha_actualizacion": "2025-10-15 16:37:56"
+  },
+  {
+    "id": "INNOV-001",
+    "nombre": "Programa de Innovación Tecnológica Agrícola",
+    "organizacion": "Ministerio de Agricultura Chile",
+    "tipo": "Nacional",
+    "pais": "Chile",
+    "monto": "CLP 800,000,000",
+    "fecha_cierre": "2025-06-30",
+    "estado": "Abierto",
+    "area": "Tecnología Agrícola",
+    "categoria": "Innovación",
+    "descripcion": "Fomento a la adopción de tecnologías agrícolas avanzadas",
+    "requisitos": "Empresas agrícolas, startups, centros de investigación",
+    "enlace": "https://www.minagri.gob.cl/innovacion-tecnologica",
+    "contacto": "innovacion@minagri.gob.cl",
+    "tipo_financiamiento": "Subsidio + Crédito",
+    "duracion": "36 meses",
+    "beneficiarios": "Sector agrícola chileno",
+    "prioridad": "Alta",
+    "documentos_requeridos": [
+      "Propuesta técnica",
+      "Presupuesto detallado",
+      "Cronograma",
+      "Equipo técnico",
+      "Plan de comercialización"
+    ],
+    "formularios": [
+      "https://www.minagri.gob.cl/formularios/innovacion"
+    ],
+    "fuente": "Ministerio de Agricultura Chile",
+    "fecha_actualizacion": "2025-10-15 16:37:56"
+  },
+  {
+    "id": "INNOV-002",
+    "nombre": "Fondo de Innovación Digital Rural",
+    "organizacion": "Subsecretaría de Telecomunicaciones Chile",
+    "tipo": "Nacional",
+    "pais": "Chile",
+    "monto": "CLP 400,000,000",
+    "fecha_cierre": "2025-08-31",
+    "estado": "Abierto",
+    "area": "Digitalización Rural",
+    "categoria": "Tecnología",
+    "descripcion": "Proyectos de digitalización y conectividad rural",
+    "requisitos": "Municipios rurales, organizaciones rurales",
+    "enlace": "https://www.subtel.gob.cl/digitalizacion-rural",
+    "contacto": "digitalizacion@subtel.gob.cl",
+    "tipo_financiamiento": "Subsidio",
+    "duracion": "24 meses",
+    "beneficiarios": "Comunidades rurales",
+    "prioridad": "Media",
+    "documentos_requeridos": [
+      "Proyecto de digitalización",
+      "Presupuesto",
+      "Cronograma",
+      "Plan de sostenibilidad"
+    ],
+    "formularios": [
+      "https://www.subtel.gob.cl/formularios/digitalizacion"
+    ],
+    "fuente": "Subsecretaría de Telecomunicaciones Chile",
+    "fecha_actualizacion": "2025-10-15 16:37:56"
+  },
+  {
+    "id": "SUST-001",
+    "nombre": "Programa de Agricultura Regenerativa",
+    "organizacion": "Ministerio del Medio Ambiente Chile",
+    "tipo": "Nacional",
+    "pais": "Chile",
+    "monto": "CLP 600,000,000",
+    "fecha_cierre": "2025-09-30",
+    "estado": "Abierto",
+    "area": "Agricultura Regenerativa",
+    "categoria": "Sostenibilidad",
+    "descripcion": "Fomento a prácticas agrícolas regenerativas y sostenibles",
+    "requisitos": "Productores agrícolas, organizaciones",
+    "enlace": "https://www.mma.gob.cl/agricultura-regenerativa",
+    "contacto": "regenerativa@mma.gob.cl",
+    "tipo_financiamiento": "Subsidio",
+    "duracion": "30 meses",
+    "beneficiarios": "Productores agrícolas",
+    "prioridad": "Alta",
+    "documentos_requeridos": [
+      "Plan de agricultura regenerativa",
+      "Presupuesto",
+      "Cronograma",
+      "Indicadores ambientales"
+    ],
+    "formularios": [
+      "https://www.mma.gob.cl/formularios/regenerativa"
+    ],
+    "fuente": "Ministerio del Medio Ambiente Chile",
+    "fecha_actualizacion": "2025-10-15 16:37:56"
+  },
+  {
+    "id": "SUST-002",
+    "nombre": "Fondo de Conservación de Suelos",
+    "organizacion": "SAG Chile",
+    "tipo": "Nacional",
+    "pais": "Chile",
+    "monto": "CLP 300,000,000",
+    "fecha_cierre": "2025-10-31",
+    "estado": "Abierto",
+    "area": "Conservación de Suelos",
+    "categoria": "Conservación",
+    "descripcion": "Proyectos de conservación y recuperación de suelos agrícolas",
+    "requisitos": "Productores agrícolas",
+    "enlace": "https://www.sag.gob.cl/conservacion-suelos",
+    "contacto": "suelos@sag.gob.cl",
+    "tipo_financiamiento": "Subsidio",
+    "duracion": "24 meses",
+    "beneficiarios": "Productores agrícolas",
+    "prioridad": "Media",
+    "documentos_requeridos": [
+      "Plan de conservación",
+      "Presupuesto",
+      "Cronograma",
+      "Estudio de suelos"
+    ],
+    "formularios": [
+      "https://www.sag.gob.cl/formularios/suelos"
+    ],
+    "fuente": "SAG Chile",
+    "fecha_actualizacion": "2025-10-15 16:37:56"
+  }
+]
