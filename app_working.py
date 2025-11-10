@@ -660,6 +660,108 @@ def api_buscar():
         'resultados': resultados
     })
 
+@app.route('/busqueda-semantica', methods=['GET'])
+def busqueda_semantica():
+    """Página de búsqueda semántica de proyectos"""
+    if not SEMANTIC_SEARCH_AVAILABLE:
+        return render_template('error.html', error='Búsqueda semántica no disponible. Instale sentence-transformers.'), 503
+    
+    query = request.args.get('query', '')
+    from semantic_search import buscar_proyectos_db
+    proyectos = buscar_proyectos_db(query) if query else buscar_proyectos_db()
+    
+    return render_template_string('''
+    <!doctype html>
+    <html>
+    <head>
+        <title>Buscador Semántico de Proyectos</title>
+        <meta charset="utf-8">
+        <style>
+            body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
+            h1 { color: #2c3e50; }
+            form { margin: 20px 0; }
+            input[type="text"] { padding: 10px; width: 400px; font-size: 16px; }
+            input[type="submit"] { padding: 10px 20px; font-size: 16px; background: #3498db; color: white; border: none; cursor: pointer; }
+            input[type="submit"]:hover { background: #2980b9; }
+            ul { list-style: none; padding: 0; }
+            li { margin: 20px 0; padding: 15px; background: #f8f9fa; border-left: 4px solid #3498db; }
+            .fuente { color: #7f8c8d; font-size: 14px; }
+            .similitud { color: #27ae60; font-weight: bold; }
+        </style>
+    </head>
+    <body>
+        <h1>🔍 Buscador Semántico de Proyectos</h1>
+        <p>Busque proyectos financiados relevantes usando inteligencia artificial</p>
+        <form method="get" action="/busqueda-semantica">
+            <input type="text" name="query" placeholder="Buscar por palabra clave" value="{{query}}">
+            <input type="submit" value="Buscar">
+        </form>
+        <hr>
+        {% if proyectos %}
+            <h2>Resultados ({{proyectos|length}})</h2>
+            <ul>
+            {% for fuente, titulo, resumen, similitud in proyectos %}
+                <li>
+                    <h3>{{titulo}}</h3>
+                    <p class="fuente">Fuente: {{fuente}} | Similitud: <span class="similitud">{{'%.2f' % similitud}}</span></p>
+                    <p>{{resumen}}</p>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No hay proyectos que coincidan. <a href="/api/semantic/update">Actualizar base de datos</a></p>
+        {% endif %}
+    </body>
+    </html>
+    ''', proyectos=proyectos, query=query)
+
+@app.route('/api/semantic/search', methods=['GET'])
+def api_semantic_search():
+    """API para búsqueda semántica de proyectos"""
+    if not SEMANTIC_SEARCH_AVAILABLE:
+        return jsonify({'error': 'Búsqueda semántica no disponible'}), 503
+    
+    from semantic_search import buscar_proyectos_db
+    query = request.args.get('q', '')
+    limite = int(request.args.get('limit', 100))
+    
+    proyectos = buscar_proyectos_db(query, limite)
+    
+    resultados = [
+        {
+            'fuente': p[0],
+            'titulo': p[1],
+            'resumen': p[2],
+            'similitud': p[3]
+        }
+        for p in proyectos
+    ]
+    
+    return jsonify({
+        'total': len(resultados),
+        'resultados': resultados,
+        'query': query
+    })
+
+@app.route('/api/semantic/update', methods=['POST'])
+def api_semantic_update():
+    """API para actualizar proyectos semánticos"""
+    if not SEMANTIC_SEARCH_AVAILABLE:
+        return jsonify({'error': 'Búsqueda semántica no disponible'}), 503
+    
+    try:
+        from semantic_search import actualizar_y_guardar_proyectos
+        actualizar_y_guardar_proyectos()
+        return jsonify({
+            'success': True,
+            'message': 'Proyectos semánticos actualizados correctamente'
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
 @app.route('/api/ai-search', methods=['POST'])
 def api_ai_search():
     """API para búsqueda inteligente con IA"""
