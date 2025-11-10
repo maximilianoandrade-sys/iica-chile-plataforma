@@ -7,6 +7,7 @@ from functools import lru_cache
 import pandas as pd
 import time
 import uuid
+import io
 from datetime import datetime
 from utils import parsear_monto
 from ai_search_engine import AISearchEngine
@@ -559,7 +560,14 @@ def exportar_excel():
     proyectos = cargar_excel()
     if not proyectos:
         proyectos = recolectar_todos()
-    
+    # Asegura unicidad de columnas y las ordena si existen diferencias entre proyectos
+    # (arreglar: pandas requiere columnas consistentes para no perder datos)
+    if proyectos:
+        all_keys = set()
+        for p in proyectos:
+            all_keys.update(p.keys())
+        all_keys = list(all_keys)
+        proyectos = [{k: p.get(k, "") for k in all_keys} for p in proyectos]
     # Crear DataFrame y exportar
     df = pd.DataFrame(proyectos)
     
@@ -571,6 +579,7 @@ def exportar_excel():
     output.seek(0)
     
     return send_file(
+
         output,
         as_attachment=True,
         download_name=f'proyectos_iica_{datetime.now().strftime("%Y%m%d")}.xlsx',
