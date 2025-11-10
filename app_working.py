@@ -4,12 +4,11 @@ import os
 import time
 import logging
 from functools import lru_cache
-import pandas as pd
-import time
 import uuid
 import io
 from datetime import datetime
 from utils import parsear_monto
+from utils_excel import leer_excel, guardar_excel
 from ai_search_engine import AISearchEngine
 from project_updater import ProjectUpdater
 from advanced_analytics import AdvancedAnalytics
@@ -40,51 +39,48 @@ DATA_PATH = "data/proyectos.xlsx"
 # Crear directorio de datos si no existe
 os.makedirs("data", exist_ok=True)
 
-def guardar_excel(proyectos):
-    """Guarda los proyectos en un archivo Excel"""
+def guardar_excel_proyectos(proyectos):
+    """Guarda los proyectos en un archivo Excel usando openpyxl"""
     if not proyectos:
         return
-    
-    df = pd.DataFrame(proyectos)
-    df.to_excel(DATA_PATH, index=False)
-    print(f"💾 Guardados {len(proyectos)} proyectos en Excel")
+    guardar_excel(proyectos, DATA_PATH)
 
 def _leer_excel_concreto():
     """Lee la base de datos desde el Excel disponible sin caché."""
     # Priorizar base de datos fortalecida
     if os.path.exists('data/proyectos_fortalecidos.xlsx'):
         try:
-            df = pd.read_excel('data/proyectos_fortalecidos.xlsx')
-            proyectos = df.to_dict('records')
-            print(f"📂 Cargados {len(proyectos)} proyectos fortalecidos desde Excel")
-            return proyectos
+            proyectos = leer_excel('data/proyectos_fortalecidos.xlsx')
+            if proyectos:
+                print(f"📂 Cargados {len(proyectos)} proyectos fortalecidos desde Excel")
+                return proyectos
         except Exception as e:
             print(f"❌ Error cargando proyectos fortalecidos: {e}")
     # Intentar cargar proyectos completos
     if os.path.exists('data/proyectos_completos.xlsx'):
         try:
-            df = pd.read_excel('data/proyectos_completos.xlsx')
-            proyectos = df.to_dict('records')
-            print(f"📂 Cargados {len(proyectos)} proyectos completos desde Excel")
-            return proyectos
+            proyectos = leer_excel('data/proyectos_completos.xlsx')
+            if proyectos:
+                print(f"📂 Cargados {len(proyectos)} proyectos completos desde Excel")
+                return proyectos
         except Exception as e:
             print(f"❌ Error cargando proyectos completos: {e}")
     # Intentar cargar proyectos actualizados
     if os.path.exists('data/proyectos_actualizados.xlsx'):
         try:
-            df = pd.read_excel('data/proyectos_actualizados.xlsx')
-            proyectos = df.to_dict('records')
-            print(f"📂 Cargados {len(proyectos)} proyectos actualizados desde Excel")
-            return proyectos
+            proyectos = leer_excel('data/proyectos_actualizados.xlsx')
+            if proyectos:
+                print(f"📂 Cargados {len(proyectos)} proyectos actualizados desde Excel")
+                return proyectos
         except Exception as e:
             print(f"❌ Error cargando proyectos actualizados: {e}")
     # Si no existe, cargar el archivo original
     if os.path.exists(DATA_PATH):
         try:
-            df = pd.read_excel(DATA_PATH)
-            proyectos = df.to_dict('records')
-            print(f"📂 Cargados {len(proyectos)} proyectos desde Excel")
-            return proyectos
+            proyectos = leer_excel(DATA_PATH)
+            if proyectos:
+                print(f"📂 Cargados {len(proyectos)} proyectos desde Excel")
+                return proyectos
         except Exception as e:
             print(f"❌ Error cargando Excel: {e}")
             return []
@@ -258,7 +254,7 @@ def home():
     proyectos = cargar_excel()
     if not proyectos:
         proyectos = recolectar_todos()
-        guardar_excel(proyectos)
+        guardar_excel_proyectos(proyectos)
     
     # Aplicar filtros
     query = request.args.get('query', '').strip()
@@ -449,7 +445,7 @@ def dashboard_old():
     proyectos = cargar_excel()
     if not proyectos:
         proyectos = recolectar_todos()
-        guardar_excel(proyectos)
+        guardar_excel_proyectos(proyectos)
     
     # Estadísticas
     total_proyectos = len(proyectos)
@@ -504,7 +500,7 @@ def todos_los_proyectos():
     proyectos = cargar_excel()
     if not proyectos:
         proyectos = recolectar_todos()
-        guardar_excel(proyectos)
+        guardar_excel_proyectos(proyectos)
     
     # Filtros de búsqueda
     query = request.args.get('query', '').lower()
@@ -565,30 +561,43 @@ def todos_los_proyectos():
 
 @app.route('/exportar-excel', methods=['GET'])
 def exportar_excel():
-    """Exporta todos los proyectos a Excel"""
+    """Exporta todos los proyectos a Excel usando openpyxl"""
     proyectos = cargar_excel()
     if not proyectos:
         proyectos = recolectar_todos()
-    # Asegura unicidad de columnas y las ordena si existen diferencias entre proyectos
-    # (arreglar: pandas requiere columnas consistentes para no perder datos)
+    
+    # Asegurar unicidad de columnas
+    all_keys = []
     if proyectos:
-        all_keys = set()
+        all_keys_set = set()
         for p in proyectos:
-            all_keys.update(p.keys())
-        all_keys = list(all_keys)
+            all_keys_set.update(p.keys())
+        all_keys = sorted(list(all_keys_set))
         proyectos = [{k: p.get(k, "") for k in all_keys} for p in proyectos]
-    # Crear DataFrame y exportar
-    df = pd.DataFrame(proyectos)
     
-    # Crear respuesta con archivo Excel
+    # Crear archivo Excel en memoria usando openpyxl
+    from openpyxl import Workbook
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Proyectos"
+    
+    # Escribir encabezados
+    if proyectos and all_keys:
+        for idx, key in enumerate(all_keys, start=1):
+            ws.cell(row=1, column=idx, value=key)
+        
+        # Escribir datos
+        for row_idx, proyecto in enumerate(proyectos, start=2):
+            for col_idx, key in enumerate(all_keys, start=1):
+                valor = proyecto.get(key, "")
+                ws.cell(row=row_idx, column=col_idx, value=valor)
+    
+    # Guardar en BytesIO
     output = io.BytesIO()
-    with pd.ExcelWriter(output, engine='openpyxl') as writer:
-        df.to_excel(writer, sheet_name='Proyectos', index=False)
-    
+    wb.save(output)
     output.seek(0)
     
     return send_file(
-
         output,
         as_attachment=True,
         download_name=f'proyectos_{datetime.now().strftime("%Y%m%d")}.xlsx',
@@ -597,17 +606,25 @@ def exportar_excel():
 
 @app.route('/exportar-csv', methods=['GET'])
 def exportar_csv():
-    """Exporta todos los proyectos a CSV"""
+    """Exporta todos los proyectos a CSV sin pandas"""
+    import csv
     proyectos = cargar_excel()
     if not proyectos:
         proyectos = recolectar_todos()
     
-    # Crear DataFrame y exportar
-    df = pd.DataFrame(proyectos)
+    # Obtener todas las claves únicas
+    all_keys = set()
+    for p in proyectos:
+        all_keys.update(p.keys())
+    all_keys = sorted(list(all_keys))
     
-    # Crear respuesta con archivo CSV
+    # Crear CSV en memoria
     output = io.StringIO()
-    df.to_csv(output, index=False, encoding='utf-8')
+    writer = csv.DictWriter(output, fieldnames=all_keys, extrasaction='ignore')
+    writer.writeheader()
+    for proyecto in proyectos:
+        writer.writerow({k: proyecto.get(k, "") for k in all_keys})
+    
     output.seek(0)
     
     return send_file(
