@@ -108,7 +108,7 @@ def recolectar_todos():
             "Área de interés": "Agricultura",
             "Estado": "Abierto",
             "Fecha cierre": "2024-12-31",
-            "Fuente": "IICA Chile"
+            "Fuente": "Plataforma"
         },
         {
             "Nombre": "Innovación Tecnológica Rural",
@@ -366,26 +366,25 @@ def home():
         'next_page': page + 1 if page < total_pages else None
     }
     
-    # Información de contacto IICA
+    # Información de contacto
     info = {
-        "titulo": "IICA Chile",
+        "titulo": "Plataforma de Fondos",
         "descripcion": (
-            "El IICA (Instituto Interamericano de Cooperación para la Agricultura) en Chile "
-            "promueve la innovación, la sostenibilidad y el desarrollo rural a través de proyectos, "
-            "alianzas y asistencia técnica que fortalecen capacidades y mejoran la productividad del sector agrícola."
+            "Plataforma de fondos y convocatorias para proyectos "
+            "de financiamiento agrícola y desarrollo rural."
         ),
         "contacto": {
-            "email": "hernan.chiriboga@iica.int",
-            "telefono": "(56-2) 2225-2511",
-            "fax": "(56-2) 2269-1371 / 2269-6858",
-            "direccion": "Calle Rancagua No.0320, Providencia, Santiago, Chile",
-            "correo_postal": "Casilla No.16107, Correo 9, Providencia, Santiago, Chile",
-            "representante": "Hernán Chiriboga"
+            "email": "contacto@plataforma.cl",
+            "telefono": "",
+            "fax": "",
+            "direccion": "",
+            "correo_postal": "",
+            "representante": ""
         },
         "redes_sociales": {
-            "twitter": "https://x.com/iicanoticias",
-            "instagram": "https://www.instagram.com/iicachile/",
-            "facebook": "https://www.facebook.com/IICAChile/"
+            "twitter": "",
+            "instagram": "",
+            "facebook": ""
         }
     }
     
@@ -473,7 +472,7 @@ def dashboard_old():
         'monto_total_formateado': monto_total_formateado
     }
     
-    return render_template('dashboard_iica_completo.html',
+    return render_template('dashboard.html',
                          proyectos=proyectos,
                          proyectos_paginados=proyectos_paginados,
                          total_proyectos=total_proyectos,
@@ -524,7 +523,6 @@ def todos_los_proyectos():
     # Organizar proyectos por categorías
     proyectos_nacionales = [p for p in proyectos_filtrados if p.get('Fuente') in ['Corfo', 'Minagri', 'INDAP', 'FIA', 'CONICYT', 'Gobierno Chile', 'Ministerio Ambiente', 'SAG', 'INIA', 'ProChile', 'SERNATUR', 'SUBPESCA']]
     proyectos_internacionales = [p for p in proyectos_filtrados if p.get('Fuente') in ['FAO', 'Banco Mundial', 'BID', 'FIDA', 'UNDP', 'GEF', 'UE', 'Canadá', 'Australia', 'Japón', 'USAID', 'DFID Reino Unido', 'GIZ Alemania', 'AFD Francia', 'JICA Japón']]
-    proyectos_iica = [p for p in proyectos_filtrados if p.get('Fuente') == 'IICA']
     proyectos_regionales = [p for p in proyectos_filtrados if p.get('Fuente') in ['CEPAL', 'OEA', 'SICA', 'CARICOM', 'MERCOSUR']]
     proyectos_privados = [p for p in proyectos_filtrados if 'Fundación' in p.get('Fuente', '') or p.get('Fuente') in ['Nestlé', 'Unilever', 'Coca-Cola', 'PepsiCo', 'Walmart']]
     proyectos_academicos = [p for p in proyectos_filtrados if 'Universidad' in p.get('Fuente', '') or p.get('Fuente') in ['MIT', 'Harvard', 'Stanford', 'UC Berkeley', 'Cornell']]
@@ -539,7 +537,6 @@ def todos_los_proyectos():
     return render_template('todos_los_proyectos_mejorado.html',
                          proyectos_nacionales=proyectos_nacionales,
                          proyectos_internacionales=proyectos_internacionales,
-                         proyectos_iica=proyectos_iica,
                          proyectos_regionales=proyectos_regionales,
                          proyectos_privados=proyectos_privados,
                          proyectos_academicos=proyectos_academicos,
@@ -574,7 +571,7 @@ def exportar_excel():
     # Crear respuesta con archivo Excel
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine='openpyxl') as writer:
-        df.to_excel(writer, sheet_name='Proyectos IICA', index=False)
+        df.to_excel(writer, sheet_name='Proyectos', index=False)
     
     output.seek(0)
     
@@ -582,7 +579,7 @@ def exportar_excel():
 
         output,
         as_attachment=True,
-        download_name=f'proyectos_iica_{datetime.now().strftime("%Y%m%d")}.xlsx',
+        download_name=f'proyectos_{datetime.now().strftime("%Y%m%d")}.xlsx',
         mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     )
 
@@ -604,7 +601,7 @@ def exportar_csv():
     return send_file(
         io.BytesIO(output.getvalue().encode('utf-8')),
         as_attachment=True,
-        download_name=f'proyectos_iica_{datetime.now().strftime("%Y%m%d")}.csv',
+        download_name=f'proyectos_{datetime.now().strftime("%Y%m%d")}.csv',
         mimetype='text/csv'
     )
 
@@ -1079,23 +1076,6 @@ def ver_instrumento(tipo):
                          instrumento=instrumentos[tipo], 
                          tipo=tipo)
 
-@app.route('/test-logo')
-def test_logo():
-    """Ruta de prueba para verificar logos"""
-    return '''
-    <html>
-    <head><title>Test Logos</title></head>
-    <body>
-        <h1>Test de Logos IICA</h1>
-        <h2>Logo Oficial:</h2>
-        <img src="/static/logo_iica_oficial.svg" alt="Logo Oficial" style="width: 200px; height: 200px; border: 1px solid #ccc;">
-        <h2>Logo Institucional:</h2>
-        <img src="/static/logo_iica_institucional.svg" alt="Logo Institucional" style="width: 200px; height: 80px; border: 1px solid #ccc;">
-        <h2>Logo Original:</h2>
-        <img src="/static/logo_iica.svg" alt="Logo Original" style="width: 200px; height: 200px; border: 1px solid #ccc;">
-    </body>
-    </html>
-    '''
 
 # ---------- Estabilización: healthcheck, favicon, error handler, logging ----------
 
@@ -1119,7 +1099,7 @@ def handle_unexpected_error(e):
         return ("Ha ocurrido un error inesperado.", 500)
 
 if __name__ == '__main__':
-    print("🚀 Iniciando Plataforma IICA Chile...")
+    print("🚀 Iniciando Plataforma de Fondos y Convocatorias...")
     print("✅ Sistema básico inicializado")
     print("✅ Funcionalidades principales disponibles")
     print("🎉 Plataforma lista para usar")
@@ -1133,7 +1113,7 @@ auto_search_system = AutoSearchSystem()
 
 @app.route('/dinamico', methods=['GET'])
 def home_dinamico():
-    """Página principal con diseño dinámico estilo IICA"""
+    """Página principal con diseño dinámico"""
     proyectos = cargar_excel()
     if not proyectos:
         proyectos = recolectar_todos()
