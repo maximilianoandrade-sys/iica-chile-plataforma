@@ -4,9 +4,10 @@ services:
     env: python
     buildCommand: pip install --upgrade pip setuptools wheel && pip install --only-binary :all: -r requirements.txt || pip install -r requirements.txt
     startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    pythonVersion: 3.11.9
     envVars:
       - key: PYTHON_VERSION
-        value: 3.11.0
+        value: 3.11.9
       - key: PORT
         value: 10000
       - key: DEBUG
