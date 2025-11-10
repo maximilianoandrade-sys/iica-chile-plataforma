@@ -193,7 +193,7 @@ def recolectar_todos():
     print("🔄 Iniciando recolección de proyectos...")
     proyectos = []
     
-    # Proyectos de ejemplo para demostración
+    # Proyectos de ejemplo para demostración - Basados en fuentes reales
     proyectos_ejemplo = [
         {
             "Nombre": "Desarrollo Agrícola Sostenible",
@@ -203,6 +203,87 @@ def recolectar_todos():
             "Estado": "Abierto",
             "Fecha cierre": "2024-12-31",
             "Fuente": "Plataforma"
+        },
+        {
+            "Nombre": "Premio Nacional Mujer AgroInnovadora - Categoría Agricultora/Emprendedora",
+            "Descripción": "Reconocimiento a mujeres que han destacado en innovación agrícola como agricultoras o emprendedoras",
+            "Monto": "CLP 5,000,000",
+            "Área de interés": "Agricultura",
+            "Estado": "Cerrado",
+            "Fecha cierre": "2025-10-07",
+            "Fuente": "FIA"
+        },
+        {
+            "Nombre": "Premio Nacional Mujer AgroInnovadora - Categoría Académica/Investigadora/Profesional",
+            "Descripción": "Reconocimiento a mujeres académicas, investigadoras o profesionales que han contribuido a la innovación en el agro",
+            "Monto": "CLP 5,000,000",
+            "Área de interés": "Investigación",
+            "Estado": "Cerrado",
+            "Fecha cierre": "2025-10-07",
+            "Fuente": "FIA"
+        },
+        {
+            "Nombre": "Giras Nacionales de Innovación para Mujeres Agroinnovadoras 2025",
+            "Descripción": "Programa de giras técnicas para mujeres del sector agroalimentario para conocer experiencias de innovación",
+            "Monto": "CLP 2,000,000",
+            "Área de interés": "Capacitación",
+            "Estado": "Cerrado",
+            "Fecha cierre": "2025-10-07",
+            "Fuente": "FIA"
+        },
+        {
+            "Nombre": "Hacia Sistemas Alimentarios Sostenibles - Eventos de Innovación",
+            "Descripción": "Eventos de innovación con soluciones para el agro chileno considerando el rol de la mujer agroinnovadora",
+            "Monto": "CLP 10,000,000",
+            "Área de interés": "Innovación",
+            "Estado": "Cerrado",
+            "Fecha cierre": "2025-10-07",
+            "Fuente": "FIA"
+        },
+        {
+            "Nombre": "Consultorías Regionales para la Innovación 2025",
+            "Descripción": "Consultorías para apoyar procesos de innovación en el sector agroalimentario a nivel regional",
+            "Monto": "CLP 15,000,000",
+            "Área de interés": "Consultoría",
+            "Estado": "Cerrado",
+            "Fecha cierre": "2025-10-07",
+            "Fuente": "FIA"
+        },
+        {
+            "Nombre": "Convocatoria Nacional de Proyectos de Innovación de Interés Privado 2025-2026",
+            "Descripción": "Convocatoria para proyectos de innovación privados en el agro con énfasis regional",
+            "Monto": "CLP 50,000,000",
+            "Área de interés": "Innovación",
+            "Estado": "Cerrado",
+            "Fecha cierre": "2025-07-22",
+            "Fuente": "FIA"
+        },
+        {
+            "Nombre": "Programa de Innovación Cooperativas - AgroCoopInnova (Regiones Norte)",
+            "Descripción": "Programa de innovación para cooperativas agroalimentarias en regiones de Atacama, Coquimbo, Valparaíso y Metropolitana",
+            "Monto": "CLP 30,000,000",
+            "Área de interés": "Cooperativas",
+            "Estado": "Cerrado",
+            "Fecha cierre": "2024-09-12",
+            "Fuente": "FIA"
+        },
+        {
+            "Nombre": "Programa de Innovación Cooperativas - AgroCoopInnova (Regiones Centro)",
+            "Descripción": "Programa de innovación para cooperativas agroalimentarias en regiones de Maule, Ñuble y Biobío",
+            "Monto": "CLP 30,000,000",
+            "Área de interés": "Cooperativas",
+            "Estado": "Cerrado",
+            "Fecha cierre": "2024-09-12",
+            "Fuente": "FIA"
+        },
+        {
+            "Nombre": "Programa de Innovación Cooperativas - AgroCoopInnova (Regiones Sur)",
+            "Descripción": "Programa de innovación para cooperativas agroalimentarias en regiones de La Araucanía y Los Ríos",
+            "Monto": "CLP 30,000,000",
+            "Área de interés": "Cooperativas",
+            "Estado": "Cerrado",
+            "Fecha cierre": "2024-09-12",
+            "Fuente": "FIA"
         },
         {
             "Nombre": "Innovación Tecnológica Rural",
@@ -215,7 +296,7 @@ def recolectar_todos():
         },
         {
             "Nombre": "Conservación de Recursos Hídricos",
-            "Descripción": "Proyecto de conservación y gestión del agua",
+            "Descripción": "Proyecto de conservación y gestión del agua para uso agrícola",
             "Monto": "USD 100,000",
             "Área de interés": "Medio Ambiente",
             "Estado": "Abierto",
@@ -224,7 +305,7 @@ def recolectar_todos():
         },
         {
             "Nombre": "Desarrollo Rural Integral",
-            "Descripción": "Programa integral de desarrollo rural",
+            "Descripción": "Programa integral de desarrollo rural para pequeños agricultores",
             "Monto": "USD 200,000",
             "Área de interés": "Desarrollo Rural",
             "Estado": "Abierto",
@@ -233,12 +314,138 @@ def recolectar_todos():
         },
         {
             "Nombre": "Capacitación Agrícola",
-            "Descripción": "Programa de capacitación para agricultores",
+            "Descripción": "Programa de capacitación para agricultores en técnicas modernas",
             "Monto": "USD 30,000",
             "Área de interés": "Educación",
             "Estado": "Cerrado",
             "Fecha cierre": "2024-09-15",
             "Fuente": "Fondos.gob.cl"
+        },
+        {
+            "Nombre": "Programa Juventud Rural Innovadora - SaviaLab",
+            "Descripción": "Programa estratégico para jóvenes rurales que buscan innovar en el sector agroalimentario",
+            "Monto": "CLP 8,000,000",
+            "Área de interés": "Juventud",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-12-31",
+            "Fuente": "FIA"
+        },
+        {
+            "Nombre": "Programa Mujer AgroInnovadora - MAI",
+            "Descripción": "Programa estratégico para fomentar la innovación liderada por mujeres en el sector agroalimentario",
+            "Monto": "CLP 12,000,000",
+            "Área de interés": "Mujer Rural",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-12-31",
+            "Fuente": "FIA"
+        },
+        {
+            "Nombre": "Programa de Adopción de Innovaciones",
+            "Descripción": "Programa para facilitar la adopción de innovaciones tecnológicas en la agricultura familiar campesina",
+            "Monto": "CLP 20,000,000",
+            "Área de interés": "Tecnología",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-12-31",
+            "Fuente": "FIA"
+        },
+        {
+            "Nombre": "Fondo de Riego - CNR",
+            "Descripción": "Fondo para proyectos de riego y tecnificación del riego en la agricultura",
+            "Monto": "CLP 50,000,000",
+            "Área de interés": "Riego",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-06-30",
+            "Fuente": "CNR"
+        },
+        {
+            "Nombre": "Fondo de Desarrollo de Inversiones - INDAP",
+            "Descripción": "Fondo para inversiones en infraestructura y equipamiento para pequeños agricultores",
+            "Monto": "CLP 15,000,000",
+            "Área de interés": "Inversión",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-12-31",
+            "Fuente": "INDAP"
+        },
+        {
+            "Nombre": "Programa de Asociatividad - INDAP",
+            "Descripción": "Apoyo para la formación y fortalecimiento de organizaciones de pequeños agricultores",
+            "Monto": "CLP 10,000,000",
+            "Área de interés": "Asociatividad",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-12-31",
+            "Fuente": "INDAP"
+        },
+        {
+            "Nombre": "Fondo de Fomento al Desarrollo Ganadero",
+            "Descripción": "Fondo para proyectos de desarrollo y mejoramiento ganadero",
+            "Monto": "CLP 25,000,000",
+            "Área de interés": "Ganadería",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-08-31",
+            "Fuente": "INDAP"
+        },
+        {
+            "Nombre": "Programa de Desarrollo de Proveedores - CORFO",
+            "Descripción": "Programa para fortalecer proveedores del sector agroalimentario",
+            "Monto": "CLP 40,000,000",
+            "Área de interés": "Desarrollo Empresarial",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-11-30",
+            "Fuente": "CORFO"
+        },
+        {
+            "Nombre": "Fondo de Innovación Agraria - FIA",
+            "Descripción": "Fondo para proyectos de innovación en el sector agroalimentario",
+            "Monto": "CLP 60,000,000",
+            "Área de interés": "Innovación",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-12-15",
+            "Fuente": "FIA"
+        },
+        {
+            "Nombre": "Programa de Mejoramiento de la Competitividad - CORFO",
+            "Descripción": "Programa para mejorar la competitividad de empresas del sector agroalimentario",
+            "Monto": "CLP 35,000,000",
+            "Área de interés": "Competitividad",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-10-31",
+            "Fuente": "CORFO"
+        },
+        {
+            "Nombre": "Fondo de Protección de Cultivos",
+            "Descripción": "Fondo para proyectos de protección y mejoramiento de cultivos agrícolas",
+            "Monto": "CLP 18,000,000",
+            "Área de interés": "Protección Vegetal",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-09-30",
+            "Fuente": "SAG"
+        },
+        {
+            "Nombre": "Programa de Desarrollo de Mercados - ProChile",
+            "Descripción": "Programa para apoyar la exportación de productos agroalimentarios",
+            "Monto": "CLP 30,000,000",
+            "Área de interés": "Exportación",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-12-31",
+            "Fuente": "ProChile"
+        },
+        {
+            "Nombre": "Fondo de Desarrollo Sustentable",
+            "Descripción": "Fondo para proyectos de agricultura sustentable y orgánica",
+            "Monto": "CLP 22,000,000",
+            "Área de interés": "Sustentabilidad",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-11-15",
+            "Fuente": "Fondos.gob.cl"
+        },
+        {
+            "Nombre": "Programa de Apoyo a la Agricultura Familiar",
+            "Descripción": "Programa integral de apoyo a la agricultura familiar campesina",
+            "Monto": "CLP 28,000,000",
+            "Área de interés": "Agricultura Familiar",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-12-31",
+            "Fuente": "INDAP"
         }
     ]
     
