@@ -282,7 +282,7 @@
                 <img src="{{ url_for('static', filename='iica-logo.png') }}" 
                      alt="Logo IICA" 
                      style="height:70px; max-width:200px; object-fit:contain; background:white; padding:0.5rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1);" 
-                     onerror="this.src='{{ url_for('static', filename='logo_iica_oficial.svg') }}'; this.style.height='70px';" />
+                     onerror="this.onerror=null; this.src='{{ url_for('static', filename='logo_iica_oficial.svg') }}'; this.style.height='70px';" />
                 <div>
                     <h1 style="margin:0; color:white; font-size:2rem; font-weight:700; text-shadow:0 2px 4px rgba(0,0,0,0.2);">
                         Plataforma de Proyectos IICA
