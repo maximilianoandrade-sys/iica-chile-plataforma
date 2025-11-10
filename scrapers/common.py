@@ -24,11 +24,8 @@ def fetch_html(url: str, timeout: int = 20, retries: int = 2, headers: Optional[
 def parse_with_bs4(html: str) -> BeautifulSoup:
     """
     Parsea HTML usando BeautifulSoup.
-    Intenta usar lxml, si no está disponible usa html.parser.
+    Usa html.parser por defecto (compatible con Render y otros servicios).
     """
-    try:
-        return BeautifulSoup(html, "lxml")
-    except:
-        return BeautifulSoup(html, "html.parser")
+    return BeautifulSoup(html, "html.parser")
 
 

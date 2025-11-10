@@ -28,7 +28,7 @@ def obtener_proyectos_cnr():
         if not html:
             return proyectos
             
-        soup = BeautifulSoup(html, 'lxml')
+        soup = BeautifulSoup(html, 'html.parser')
         
         # Buscar programas y convocatorias
         programas = soup.find_all(['div', 'section'], class_=lambda x: x and any(keyword in x.lower() for keyword in ['programa', 'convocatoria', 'fondo', 'bonificacion']))
@@ -89,7 +89,7 @@ def obtener_proyectos_gef():
         if not html:
             return proyectos
             
-        soup = BeautifulSoup(html, 'lxml')
+        soup = BeautifulSoup(html, 'html.parser')
         
         # Buscar información sobre proyectos GEF
         contenido = soup.find(['div', 'section'], class_=lambda x: x and 'content' in x.lower() if x else False)
@@ -137,7 +137,7 @@ def obtener_proyectos_fia():
         if not html:
             return proyectos
             
-        soup = BeautifulSoup(html, 'lxml')
+        soup = BeautifulSoup(html, 'html.parser')
         
         # Buscar programas y convocatorias
         programas = soup.find_all(['div', 'article'], class_=lambda x: x and any(keyword in x.lower() for keyword in ['programa', 'convocatoria', 'proyecto', 'fondo']) if x else False)
@@ -196,7 +196,7 @@ def obtener_proyectos_indap():
         if not html:
             return proyectos
             
-        soup = BeautifulSoup(html, 'lxml')
+        soup = BeautifulSoup(html, 'html.parser')
         
         # Buscar programas
         programas = soup.find_all(['div', 'section'], class_=lambda x: x and any(keyword in x.lower() for keyword in ['programa', 'servicio', 'fondo', 'apoyo']) if x else False)
@@ -255,7 +255,7 @@ def obtener_proyectos_fondos_gob():
         if not html:
             return proyectos
             
-        soup = BeautifulSoup(html, 'lxml')
+        soup = BeautifulSoup(html, 'html.parser')
         
         # Buscar fondos y programas
         fondos = soup.find_all(['div', 'article'], class_=lambda x: x and any(keyword in x.lower() for keyword in ['fondo', 'programa', 'concurso', 'convocatoria']) if x else False)
