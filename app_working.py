@@ -32,7 +32,7 @@ try:
     SEMANTIC_SEARCH_AVAILABLE = True
 except ImportError:
     SEMANTIC_SEARCH_AVAILABLE = False
-    logger.warning("⚠️ Módulo de búsqueda semántica no disponible")
+    print("⚠️ Módulo de búsqueda semántica no disponible")
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
 DATA_PATH = "data/proyectos.xlsx"
