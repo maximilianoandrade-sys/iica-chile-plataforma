@@ -7,6 +7,3 @@ openpyxl==3.1.2
 # lxml puede causar problemas en Render, usar html.parser de BeautifulSoup como alternativa
 # lxml==4.9.3
 gunicorn==21.2.0
-pytest==7.4.0
-setuptools>=65.5.0
-wheel>=0.38.0
