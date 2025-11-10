@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, send_file, Response, jsonify, make_response  # pyright: ignore[reportUnusedImport]
+from flask import Flask, render_template, render_template_string, redirect, url_for, request, send_file, Response, jsonify, make_response  # pyright: ignore[reportUnusedImport]
 import json
 import os
 import time
