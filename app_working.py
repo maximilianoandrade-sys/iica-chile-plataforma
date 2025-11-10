@@ -22,6 +22,18 @@ from scrapers.fuentes_internacionales import obtener_todos_proyectos_internacion
 from scrapers.fundaciones_ongs import obtener_todos_proyectos_fundaciones
 from scrapers.corfo_real import obtener_proyectos_corfo_real, obtener_proyectos_corfo_por_filtros
 
+# Importar búsqueda semántica (opcional)
+try:
+    from semantic_search import (
+        buscar_proyectos_db, 
+        actualizar_y_guardar_proyectos,
+        SEMANTIC_AVAILABLE
+    )
+    SEMANTIC_SEARCH_AVAILABLE = True
+except ImportError:
+    SEMANTIC_SEARCH_AVAILABLE = False
+    logger.warning("⚠️ Módulo de búsqueda semántica no disponible")
+
 app = Flask(__name__, static_folder='static', static_url_path='/static')
 DATA_PATH = "data/proyectos.xlsx"
 
