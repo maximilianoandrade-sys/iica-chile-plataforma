@@ -7,19 +7,98 @@ from functools import lru_cache
 import uuid
 import io
 from datetime import datetime
-from utils import parsear_monto
-from utils_excel import leer_excel, guardar_excel
-from ai_search_engine import AISearchEngine
-from project_updater import ProjectUpdater
-from advanced_analytics import AdvancedAnalytics
-from application_system import ApplicationSystem
-from auto_search_system import AutoSearchSystem
-from scrapers.bidprime import obtener_proyectos_bidprime, obtener_proyectos_bidprime_avanzado
-from scrapers.todolicitaciones import obtener_proyectos_todolicitaciones
-from scrapers.fuentes_gubernamentales import obtener_todos_proyectos_gubernamentales
-from scrapers.fuentes_internacionales import obtener_todos_proyectos_internacionales
-from scrapers.fundaciones_ongs import obtener_todos_proyectos_fundaciones
-from scrapers.corfo_real import obtener_proyectos_corfo_real, obtener_proyectos_corfo_por_filtros
+# Imports básicos (requeridos)
+try:
+    from utils import parsear_monto
+except ImportError:
+    def parsear_monto(monto_str):
+        """Función fallback si utils no está disponible"""
+        try:
+            return float(str(monto_str).replace('USD ', '').replace(',', '').replace('$', ''))
+        except:
+            return 0.0
+
+try:
+    from utils_excel import leer_excel, guardar_excel
+except ImportError:
+    print("⚠️ utils_excel no disponible, algunas funciones pueden no funcionar")
+    leer_excel = None
+    guardar_excel = None
+
+# Imports opcionales (sistemas avanzados)
+try:
+    from ai_search_engine import AISearchEngine
+    ai_search = AISearchEngine()
+except ImportError:
+    ai_search = None
+    print("⚠️ AISearchEngine no disponible")
+
+try:
+    from project_updater import ProjectUpdater
+    project_updater = ProjectUpdater()
+except ImportError:
+    project_updater = None
+    print("⚠️ ProjectUpdater no disponible")
+
+try:
+    from advanced_analytics import AdvancedAnalytics
+    analytics = AdvancedAnalytics()
+except ImportError:
+    analytics = None
+    print("⚠️ AdvancedAnalytics no disponible")
+
+try:
+    from application_system import ApplicationSystem
+    application_system = ApplicationSystem()
+except ImportError:
+    application_system = None
+    print("⚠️ ApplicationSystem no disponible")
+
+try:
+    from auto_search_system import AutoSearchSystem
+    auto_search_system = AutoSearchSystem()
+except ImportError:
+    auto_search_system = None
+    print("⚠️ AutoSearchSystem no disponible")
+
+# Imports de scrapers (opcionales)
+try:
+    from scrapers.bidprime import obtener_proyectos_bidprime, obtener_proyectos_bidprime_avanzado
+except ImportError:
+    obtener_proyectos_bidprime = None
+    obtener_proyectos_bidprime_avanzado = None
+    print("⚠️ Scraper bidprime no disponible")
+
+try:
+    from scrapers.todolicitaciones import obtener_proyectos_todolicitaciones
+except ImportError:
+    obtener_proyectos_todolicitaciones = None
+    print("⚠️ Scraper todolicitaciones no disponible")
+
+try:
+    from scrapers.fuentes_gubernamentales import obtener_todos_proyectos_gubernamentales
+except ImportError:
+    obtener_todos_proyectos_gubernamentales = None
+    print("⚠️ Scraper fuentes_gubernamentales no disponible")
+
+try:
+    from scrapers.fuentes_internacionales import obtener_todos_proyectos_internacionales
+except ImportError:
+    obtener_todos_proyectos_internacionales = None
+    print("⚠️ Scraper fuentes_internacionales no disponible")
+
+try:
+    from scrapers.fundaciones_ongs import obtener_todos_proyectos_fundaciones
+except ImportError:
+    obtener_todos_proyectos_fundaciones = None
+    print("⚠️ Scraper fundaciones_ongs no disponible")
+
+try:
+    from scrapers.corfo_real import obtener_proyectos_corfo_real, obtener_proyectos_corfo_por_filtros
+except ImportError:
+    obtener_proyectos_corfo_real = None
+    obtener_proyectos_corfo_por_filtros = None
+    print("⚠️ Scraper corfo_real no disponible")
 
 # Importar búsqueda semántica (opcional)
 try:
@@ -43,10 +122,17 @@ def guardar_excel_proyectos(proyectos):
     """Guarda los proyectos en un archivo Excel usando openpyxl"""
     if not proyectos:
         return
+    if guardar_excel is None:
+        print("⚠️ guardar_excel no disponible, no se pueden guardar proyectos")
+        return
     guardar_excel(proyectos, DATA_PATH)
 
 def _leer_excel_concreto():
     """Lee la base de datos desde el Excel disponible sin caché."""
+    if leer_excel is None:
+        print("⚠️ leer_excel no disponible, retornando lista vacía")
+        return []
+    
     # Priorizar base de datos fortalecida
     if os.path.exists('data/proyectos_fortalecidos.xlsx'):
         try:
