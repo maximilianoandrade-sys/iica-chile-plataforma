@@ -7,6 +7,7 @@ from functools import lru_cache
 import uuid
 import io
 from datetime import datetime
+from werkzeug.exceptions import HTTPException
 # Imports básicos (requeridos)
 try:
     from utils import parsear_monto
@@ -1516,7 +1517,10 @@ def favicon():
 
 @app.errorhandler(Exception)
 def handle_unexpected_error(e):
-    # Respuesta segura en caso de error inesperado
+    """Maneja errores inesperados sin interferir con respuestas HTTP válidas."""
+    if isinstance(e, HTTPException):
+        return e
+    logging.exception("Error no controlado en la aplicación")
     try:
         return render_template('error.html', error=str(e)), 500
     except Exception:
@@ -1527,13 +1531,6 @@ if __name__ == '__main__':
     print("✅ Sistema básico inicializado")
     print("✅ Funcionalidades principales disponibles")
     print("🎉 Plataforma lista para usar")
-
-# Inicializar sistemas avanzados
-ai_search = AISearchEngine()
-project_updater = ProjectUpdater()
-analytics = AdvancedAnalytics()
-application_system = ApplicationSystem()
-auto_search_system = AutoSearchSystem()
 
 @app.route('/dinamico', methods=['GET'])
 def home_dinamico():
