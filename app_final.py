@@ -9,9 +9,9 @@ import os
 import time
 import logging
 from functools import lru_cache
-import pandas as pd
 from datetime import datetime
 from utils import parsear_monto
+from utils_excel import leer_excel, guardar_excel
 from project_updater import ProjectUpdater
 from link_manager import link_manager
 from busqueda_avanzada import BuscadorAvanzado
@@ -29,8 +29,7 @@ def _cargar_excel_cached():
     """Función cacheada para cargar Excel"""
     try:
         if os.path.exists(DATA_PATH):
-            df = pd.read_excel(DATA_PATH)
-            proyectos = df.to_dict('records')
+            proyectos = leer_excel(DATA_PATH)
             print(f"📂 Cargados {len(proyectos)} proyectos fortalecidos desde Excel")
             return proyectos
         else:
@@ -50,9 +49,9 @@ def cargar_excel():
             nuevos = updater.update_all_projects()
             try:
                 if os.path.exists('data/proyectos_completos.xlsx'):
-                    df = pd.read_excel('data/proyectos_completos.xlsx')
+                    proyectos_completos = leer_excel('data/proyectos_completos.xlsx')
                     os.makedirs(os.path.dirname(DATA_PATH), exist_ok=True)
-                    df.to_excel(DATA_PATH, index=False)
+                    guardar_excel(proyectos_completos, DATA_PATH)
             except Exception as e:
                 print(f"⚠️ No se pudo sincronizar {DATA_PATH} tras autopoblado: {e}")
             try:
@@ -115,9 +114,9 @@ def home():
                 # Sincronizar archivo de producción y limpiar caché
                 try:
                     if os.path.exists('data/proyectos_completos.xlsx'):
-                        df = pd.read_excel('data/proyectos_completos.xlsx')
+                        proyectos_completos = leer_excel('data/proyectos_completos.xlsx')
                         os.makedirs(os.path.dirname(DATA_PATH), exist_ok=True)
-                        df.to_excel(DATA_PATH, index=False)
+                        guardar_excel(proyectos_completos, DATA_PATH)
                     _cargar_excel_cached.cache_clear()
                 except Exception:
                     pass
@@ -276,9 +275,9 @@ def api_update_projects():
         # Tras actualizar, si existe base completa, copiar a DATA_PATH para el front
         try:
             if os.path.exists('data/proyectos_completos.xlsx'):
-                df = pd.read_excel('data/proyectos_completos.xlsx')
+                proyectos_completos = leer_excel('data/proyectos_completos.xlsx')
                 os.makedirs(os.path.dirname(DATA_PATH), exist_ok=True)
-                df.to_excel(DATA_PATH, index=False)
+                guardar_excel(proyectos_completos, DATA_PATH)
         except Exception as e:
             print(f"⚠️ No se pudo sincronizar con {DATA_PATH}: {e}")
         # Limpiar caché para reflejar cambios inmediatamente
@@ -310,9 +309,9 @@ def _sync_after_external_update():
     """Sincroniza data/proyectos_completos.xlsx -> DATA_PATH y limpia caché."""
     try:
         if os.path.exists('data/proyectos_completos.xlsx'):
-            df = pd.read_excel('data/proyectos_completos.xlsx')
+            proyectos_completos = leer_excel('data/proyectos_completos.xlsx')
             os.makedirs(os.path.dirname(DATA_PATH), exist_ok=True)
-            df.to_excel(DATA_PATH, index=False)
+            guardar_excel(proyectos_completos, DATA_PATH)
         try:
             _cargar_excel_cached.cache_clear()
         except Exception:

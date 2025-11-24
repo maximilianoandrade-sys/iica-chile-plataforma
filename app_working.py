@@ -446,72 +446,465 @@ def recolectar_todos():
             "Estado": "Abierto",
             "Fecha cierre": "2025-12-31",
             "Fuente": "INDAP"
+        },
+        # Fondos adicionales de CNR (Comisión Nacional de Riego)
+        {
+            "Nombre": "Fondo Concursable para Organizaciones de Usuarios de Aguas (FOUA)",
+            "Descripción": "Fondo para proyectos de mejoramiento de infraestructura de riego en organizaciones de usuarios de aguas",
+            "Monto": "CLP 6,000,000",
+            "Área de interés": "Riego",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-05-31",
+            "Fuente": "CNR",
+            "Enlace": "https://www.cnr.gob.cl/fondos-concursables"
+        },
+        {
+            "Nombre": "Programa de Tecnificación del Riego",
+            "Descripción": "Programa para tecnificar sistemas de riego en la agricultura",
+            "Monto": "CLP 80,000,000",
+            "Área de interés": "Riego",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-08-31",
+            "Fuente": "CNR",
+            "Enlace": "https://www.cnr.gob.cl/programas"
+        },
+        # Fondos adicionales de SAG (Servicio Agrícola y Ganadero)
+        {
+            "Nombre": "Sistema de Incentivos para la Sustentabilidad Agroambiental de los Suelos Agropecuarios (SIRSD-S)",
+            "Descripción": "Incentivos para prácticas de conservación y mejoramiento de suelos agropecuarios",
+            "Monto": "Hasta 160 UTM",
+            "Área de interés": "Sustentabilidad",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-04-30",
+            "Fuente": "SAG",
+            "Enlace": "https://www.sag.gob.cl/sirsd-s"
+        },
+        {
+            "Nombre": "Programa de Conservación de Suelos y Aseguramiento Alimentario",
+            "Descripción": "Programa para conservación de suelos y seguridad alimentaria en regiones",
+            "Monto": "Hasta 160 UTM",
+            "Área de interés": "Conservación",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-06-30",
+            "Fuente": "SAG",
+            "Enlace": "https://www.sag.gob.cl/programas"
+        },
+        # Fondos adicionales de ANID (Agencia Nacional de Investigación y Desarrollo)
+        {
+            "Nombre": "FONDAP - Centros de Excelencia en Investigación en Áreas Prioritarias",
+            "Descripción": "Fondo para centros de excelencia en investigación en áreas prioritarias del país",
+            "Monto": "CLP 1,027,000,000",
+            "Área de interés": "Investigación",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-05-31",
+            "Fuente": "ANID",
+            "Enlace": "https://www.anid.cl/fondap"
+        },
+        {
+            "Nombre": "FONDECYT Regular - Proyectos de Investigación",
+            "Descripción": "Fondo para proyectos de investigación científica y tecnológica",
+            "Monto": "CLP 150,000,000",
+            "Área de interés": "Investigación",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-07-15",
+            "Fuente": "ANID",
+            "Enlace": "https://www.anid.cl/fondecyt"
+        },
+        # Fondos adicionales de CORFO
+        {
+            "Nombre": "Programa de Apoyo al Emprendimiento e Innovación - Start-Up Chile",
+            "Descripción": "Programa para emprendimientos innovadores con potencial de crecimiento global",
+            "Monto": "USD 80,000",
+            "Área de interés": "Emprendimiento",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-12-31",
+            "Fuente": "CORFO",
+            "Enlace": "https://www.startupchile.org"
+        },
+        {
+            "Nombre": "Programa de Innovación en Alimentos - Transforma Alimentos",
+            "Descripción": "Programa para proyectos de innovación en la industria alimentaria",
+            "Monto": "CLP 100,000,000",
+            "Área de interés": "Innovación",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-09-30",
+            "Fuente": "CORFO",
+            "Enlace": "https://www.corfo.cl/programas"
+        },
+        {
+            "Nombre": "Programa de Desarrollo de Proveedores - PDP",
+            "Descripción": "Programa para fortalecer proveedores de grandes empresas",
+            "Monto": "CLP 50,000,000",
+            "Área de interés": "Desarrollo Empresarial",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-11-30",
+            "Fuente": "CORFO",
+            "Enlace": "https://www.corfo.cl/pdp"
+        },
+        # Fondos adicionales de INDAP
+        {
+            "Nombre": "Programa de Desarrollo Local - PRODESAL",
+            "Descripción": "Programa de desarrollo local para pequeños productores agrícolas",
+            "Monto": "CLP 20,000,000",
+            "Área de interés": "Desarrollo Local",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-12-31",
+            "Fuente": "INDAP",
+            "Enlace": "https://www.indap.gob.cl/prodesal"
+        },
+        {
+            "Nombre": "Programa de Desarrollo de Inversiones - PDI",
+            "Descripción": "Programa para inversiones en infraestructura productiva",
+            "Monto": "CLP 25,000,000",
+            "Área de interés": "Inversión",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-12-31",
+            "Fuente": "INDAP",
+            "Enlace": "https://www.indap.gob.cl/pdi"
+        },
+        {
+            "Nombre": "Programa de Asesoría Técnica - SAT",
+            "Descripción": "Programa de asesoría técnica especializada para pequeños agricultores",
+            "Monto": "CLP 12,000,000",
+            "Área de interés": "Asesoría",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-12-31",
+            "Fuente": "INDAP",
+            "Enlace": "https://www.indap.gob.cl/sat"
+        },
+        # Fondos adicionales de ProChile
+        {
+            "Nombre": "Programa de Apoyo a la Exportación - PAE",
+            "Descripción": "Programa para apoyar la exportación de productos chilenos",
+            "Monto": "CLP 40,000,000",
+            "Área de interés": "Exportación",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-12-31",
+            "Fuente": "ProChile",
+            "Enlace": "https://www.prochile.gob.cl/pae"
+        },
+        {
+            "Nombre": "Programa de Promoción de Exportaciones",
+            "Descripción": "Programa para promoción de productos chilenos en mercados internacionales",
+            "Monto": "CLP 35,000,000",
+            "Área de interés": "Exportación",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-12-31",
+            "Fuente": "ProChile",
+            "Enlace": "https://www.prochile.gob.cl/programas"
+        },
+        # Fondos internacionales - FAO
+        {
+            "Nombre": "FAO - Programa de Cooperación Técnica",
+            "Descripción": "Programa de cooperación técnica de la FAO para proyectos agrícolas",
+            "Monto": "USD 500,000",
+            "Área de interés": "Cooperación Internacional",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-12-31",
+            "Fuente": "FAO",
+            "Enlace": "https://www.fao.org/calls-for-proposals"
+        },
+        {
+            "Nombre": "FAO - Fondo Verde para el Clima",
+            "Descripción": "Fondo para proyectos de adaptación al cambio climático en agricultura",
+            "Monto": "USD 1,000,000",
+            "Área de interés": "Cambio Climático",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-10-31",
+            "Fuente": "FAO",
+            "Enlace": "https://www.fao.org/green-climate-fund"
+        },
+        # Fondos internacionales - Banco Mundial
+        {
+            "Nombre": "Banco Mundial - Proyecto de Desarrollo Rural",
+            "Descripción": "Proyecto del Banco Mundial para desarrollo rural y agrícola",
+            "Monto": "USD 5,000,000",
+            "Área de interés": "Desarrollo Rural",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-09-30",
+            "Fuente": "Banco Mundial",
+            "Enlace": "https://www.worldbank.org/projects"
+        },
+        {
+            "Nombre": "Banco Mundial - Fondo de Innovación Agrícola",
+            "Descripción": "Fondo para innovación en agricultura y seguridad alimentaria",
+            "Monto": "USD 2,500,000",
+            "Área de interés": "Innovación",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-08-31",
+            "Fuente": "Banco Mundial",
+            "Enlace": "https://www.worldbank.org/agriculture"
+        },
+        # Fondos internacionales - BID
+        {
+            "Nombre": "BID - Programa de Desarrollo Agrícola",
+            "Descripción": "Programa del BID para desarrollo agrícola en América Latina",
+            "Monto": "USD 3,000,000",
+            "Área de interés": "Desarrollo Agrícola",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-11-30",
+            "Fuente": "BID",
+            "Enlace": "https://www.iadb.org/agriculture"
+        },
+        {
+            "Nombre": "BID - Fondo de Innovación Rural",
+            "Descripción": "Fondo para innovación en zonas rurales de América Latina",
+            "Monto": "USD 1,500,000",
+            "Área de interés": "Innovación Rural",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-10-15",
+            "Fuente": "BID",
+            "Enlace": "https://www.iadb.org/rural-innovation"
+        },
+        # Fondos internacionales - IFAD
+        {
+            "Nombre": "IFAD - Fondo Internacional de Desarrollo Agrícola",
+            "Descripción": "Fondo para proyectos de desarrollo agrícola en países en desarrollo",
+            "Monto": "USD 2,000,000",
+            "Área de interés": "Desarrollo Agrícola",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-12-31",
+            "Fuente": "IFAD",
+            "Enlace": "https://www.ifad.org/grants"
+        },
+        {
+            "Nombre": "IFAD - Programa de Agricultura Familiar",
+            "Descripción": "Programa para fortalecer la agricultura familiar campesina",
+            "Monto": "USD 1,800,000",
+            "Área de interés": "Agricultura Familiar",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-11-30",
+            "Fuente": "IFAD",
+            "Enlace": "https://www.ifad.org/family-farming"
+        },
+        # Fondos internacionales - USAID
+        {
+            "Nombre": "USAID - Programa de Seguridad Alimentaria",
+            "Descripción": "Programa de USAID para mejorar la seguridad alimentaria",
+            "Monto": "USD 4,000,000",
+            "Área de interés": "Seguridad Alimentaria",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-09-30",
+            "Fuente": "USAID",
+            "Enlace": "https://www.usaid.gov/food-security"
+        },
+        {
+            "Nombre": "USAID - Fondo de Innovación Agrícola",
+            "Descripción": "Fondo para innovación en agricultura y tecnología",
+            "Monto": "USD 2,200,000",
+            "Área de interés": "Innovación",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-08-31",
+            "Fuente": "USAID",
+            "Enlace": "https://www.usaid.gov/agriculture"
+        },
+        # Fondos internacionales - Unión Europea
+        {
+            "Nombre": "UE - Programa Horizon Europe - Agricultura",
+            "Descripción": "Programa de investigación e innovación de la UE en agricultura",
+            "Monto": "EUR 3,500,000",
+            "Área de interés": "Investigación",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-10-31",
+            "Fuente": "Unión Europea",
+            "Enlace": "https://ec.europa.eu/horizon-europe"
+        },
+        {
+            "Nombre": "UE - Programa de Desarrollo Rural",
+            "Descripción": "Programa de la UE para desarrollo rural sostenible",
+            "Monto": "EUR 2,800,000",
+            "Área de interés": "Desarrollo Rural",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-12-31",
+            "Fuente": "Unión Europea",
+            "Enlace": "https://ec.europa.eu/rural-development"
+        },
+        # Fondos de FOSIS
+        {
+            "Nombre": "FOSIS - Programa de Emprendimiento Local",
+            "Descripción": "Programa para emprendimientos locales en zonas vulnerables",
+            "Monto": "CLP 8,000,000",
+            "Área de interés": "Emprendimiento",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-12-31",
+            "Fuente": "FOSIS",
+            "Enlace": "https://www.fosis.gob.cl/emprendimiento"
+        },
+        {
+            "Nombre": "FOSIS - Programa de Desarrollo de Capacidades",
+            "Descripción": "Programa para desarrollo de capacidades en comunidades vulnerables",
+            "Monto": "CLP 6,000,000",
+            "Área de interés": "Capacitación",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-12-31",
+            "Fuente": "FOSIS",
+            "Enlace": "https://www.fosis.gob.cl/capacidades"
+        },
+        # Fondos de SERCOTEC
+        {
+            "Nombre": "SERCOTEC - Programa de Apoyo al Emprendimiento",
+            "Descripción": "Programa para apoyar emprendimientos de micro y pequeñas empresas",
+            "Monto": "CLP 5,000,000",
+            "Área de interés": "Emprendimiento",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-12-31",
+            "Fuente": "SERCOTEC",
+            "Enlace": "https://www.sercotec.cl/emprendimiento"
+        },
+        {
+            "Nombre": "SERCOTEC - Programa de Fortalecimiento Empresarial",
+            "Descripción": "Programa para fortalecer empresas existentes",
+            "Monto": "CLP 7,000,000",
+            "Área de interés": "Desarrollo Empresarial",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-12-31",
+            "Fuente": "SERCOTEC",
+            "Enlace": "https://www.sercotec.cl/fortalecimiento"
+        },
+        # Fondos de GEF (Global Environment Facility)
+        {
+            "Nombre": "GEF - Fondo para el Medio Ambiente Mundial",
+            "Descripción": "Fondo para proyectos ambientales y de desarrollo sostenible",
+            "Monto": "USD 1,200,000",
+            "Área de interés": "Medio Ambiente",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-09-30",
+            "Fuente": "GEF",
+            "Enlace": "https://www.thegef.org/grants"
+        },
+        {
+            "Nombre": "GEF - Programa de Adaptación al Cambio Climático",
+            "Descripción": "Programa para adaptación al cambio climático en agricultura",
+            "Monto": "USD 1,500,000",
+            "Área de interés": "Cambio Climático",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-10-31",
+            "Fuente": "GEF",
+            "Enlace": "https://www.thegef.org/climate-adaptation"
+        },
+        # Fondos de UNDP
+        {
+            "Nombre": "UNDP - Programa de Desarrollo Sostenible",
+            "Descripción": "Programa del PNUD para desarrollo sostenible",
+            "Monto": "USD 2,000,000",
+            "Área de interés": "Desarrollo Sostenible",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-11-30",
+            "Fuente": "UNDP",
+            "Enlace": "https://www.undp.org/grants"
+        },
+        {
+            "Nombre": "UNDP - Fondo de Innovación Social",
+            "Descripción": "Fondo para innovación social y desarrollo comunitario",
+            "Monto": "USD 800,000",
+            "Área de interés": "Innovación Social",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-08-31",
+            "Fuente": "UNDP",
+            "Enlace": "https://www.undp.org/social-innovation"
+        },
+        # Fondos de Fundación Gates
+        {
+            "Nombre": "Fundación Gates - Programa de Desarrollo Agrícola",
+            "Descripción": "Programa de la Fundación Gates para desarrollo agrícola",
+            "Monto": "USD 3,500,000",
+            "Área de interés": "Desarrollo Agrícola",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-10-15",
+            "Fuente": "Fundación Gates",
+            "Enlace": "https://www.gatesfoundation.org/agriculture"
+        },
+        {
+            "Nombre": "Fundación Gates - Fondo de Innovación en Nutrición",
+            "Descripción": "Fondo para innovación en nutrición y seguridad alimentaria",
+            "Monto": "USD 2,500,000",
+            "Área de interés": "Nutrición",
+            "Estado": "Abierto",
+            "Fecha cierre": "2025-09-30",
+            "Fuente": "Fundación Gates",
+            "Enlace": "https://www.gatesfoundation.org/nutrition"
         }
     ]
     
     proyectos.extend(proyectos_ejemplo)
     
     # BIDPrime - Nueva fuente de financiamiento
-    try:
-        proyectos_bidprime = obtener_proyectos_bidprime()
-        proyectos.extend(proyectos_bidprime)
-        print(f"✅ BIDPrime: {len(proyectos_bidprime)} proyectos agregados")
-    except Exception as e:
-        print(f"❌ Error con BIDPrime: {e}")
+    if obtener_proyectos_bidprime is not None:
+        try:
+            proyectos_bidprime = obtener_proyectos_bidprime()
+            if proyectos_bidprime:
+                proyectos.extend(proyectos_bidprime)
+                print(f"✅ BIDPrime: {len(proyectos_bidprime)} proyectos agregados")
+        except Exception as e:
+            print(f"❌ Error con BIDPrime: {e}")
     
-    try:
-        proyectos_bidprime_avanzado = obtener_proyectos_bidprime_avanzado()
-        proyectos.extend(proyectos_bidprime_avanzado)
-        print(f"✅ BIDPrime Avanzado: {len(proyectos_bidprime_avanzado)} proyectos adicionales")
-    except Exception as e:
-        print(f"❌ Error con BIDPrime Avanzado: {e}")
+    if obtener_proyectos_bidprime_avanzado is not None:
+        try:
+            proyectos_bidprime_avanzado = obtener_proyectos_bidprime_avanzado()
+            if proyectos_bidprime_avanzado:
+                proyectos.extend(proyectos_bidprime_avanzado)
+                print(f"✅ BIDPrime Avanzado: {len(proyectos_bidprime_avanzado)} proyectos adicionales")
+        except Exception as e:
+            print(f"❌ Error con BIDPrime Avanzado: {e}")
     
     # TodoLicitaciones.cl - Portal de licitaciones públicas
-    try:
-        proyectos_todolicitaciones = obtener_proyectos_todolicitaciones()
-        proyectos.extend(proyectos_todolicitaciones)
-        print(f"✅ TodoLicitaciones.cl: {len(proyectos_todolicitaciones)} proyectos agregados")
-    except Exception as e:
-        print(f"❌ Error con TodoLicitaciones.cl: {e}")
+    if obtener_proyectos_todolicitaciones is not None:
+        try:
+            proyectos_todolicitaciones = obtener_proyectos_todolicitaciones()
+            if proyectos_todolicitaciones:
+                proyectos.extend(proyectos_todolicitaciones)
+                print(f"✅ TodoLicitaciones.cl: {len(proyectos_todolicitaciones)} proyectos agregados")
+        except Exception as e:
+            print(f"❌ Error con TodoLicitaciones.cl: {e}")
     
     # Fuentes Gubernamentales Chilenas
-    try:
-        proyectos_gubernamentales = obtener_todos_proyectos_gubernamentales()
-        proyectos.extend(proyectos_gubernamentales)
-        print(f"✅ Fuentes Gubernamentales: {len(proyectos_gubernamentales)} proyectos agregados")
-    except Exception as e:
-        print(f"❌ Error con fuentes gubernamentales: {e}")
+    if obtener_todos_proyectos_gubernamentales is not None:
+        try:
+            proyectos_gubernamentales = obtener_todos_proyectos_gubernamentales()
+            if proyectos_gubernamentales:
+                proyectos.extend(proyectos_gubernamentales)
+                print(f"✅ Fuentes Gubernamentales: {len(proyectos_gubernamentales)} proyectos agregados")
+        except Exception as e:
+            print(f"❌ Error con fuentes gubernamentales: {e}")
     
     # Fuentes Internacionales
-    try:
-        proyectos_internacionales = obtener_todos_proyectos_internacionales()
-        proyectos.extend(proyectos_internacionales)
-        print(f"✅ Fuentes Internacionales: {len(proyectos_internacionales)} proyectos agregados")
-    except Exception as e:
-        print(f"❌ Error con fuentes internacionales: {e}")
+    if obtener_todos_proyectos_internacionales is not None:
+        try:
+            proyectos_internacionales = obtener_todos_proyectos_internacionales()
+            if proyectos_internacionales:
+                proyectos.extend(proyectos_internacionales)
+                print(f"✅ Fuentes Internacionales: {len(proyectos_internacionales)} proyectos agregados")
+        except Exception as e:
+            print(f"❌ Error con fuentes internacionales: {e}")
     
     # Fundaciones y ONGs
-    try:
-        proyectos_fundaciones = obtener_todos_proyectos_fundaciones()
-        proyectos.extend(proyectos_fundaciones)
-        print(f"✅ Fundaciones y ONGs: {len(proyectos_fundaciones)} proyectos agregados")
-    except Exception as e:
-        print(f"❌ Error con fundaciones y ONGs: {e}")
+    if obtener_todos_proyectos_fundaciones is not None:
+        try:
+            proyectos_fundaciones = obtener_todos_proyectos_fundaciones()
+            if proyectos_fundaciones:
+                proyectos.extend(proyectos_fundaciones)
+                print(f"✅ Fundaciones y ONGs: {len(proyectos_fundaciones)} proyectos agregados")
+        except Exception as e:
+            print(f"❌ Error con fundaciones y ONGs: {e}")
     
     # CORFO - Fuente oficial de programas y convocatorias
-    try:
-        proyectos_corfo = obtener_proyectos_corfo_real()
-        proyectos.extend(proyectos_corfo)
-        print(f"✅ CORFO Real: {len(proyectos_corfo)} proyectos agregados")
-    except Exception as e:
-        print(f"❌ Error con CORFO Real: {e}")
+    if obtener_proyectos_corfo_real is not None:
+        try:
+            proyectos_corfo = obtener_proyectos_corfo_real()
+            if proyectos_corfo:
+                proyectos.extend(proyectos_corfo)
+                print(f"✅ CORFO Real: {len(proyectos_corfo)} proyectos agregados")
+        except Exception as e:
+            print(f"❌ Error con CORFO Real: {e}")
     
-    try:
-        proyectos_corfo_filtrados = obtener_proyectos_corfo_por_filtros()
-        proyectos.extend(proyectos_corfo_filtrados)
-        print(f"✅ CORFO Filtrados: {len(proyectos_corfo_filtrados)} proyectos adicionales")
-    except Exception as e:
-        print(f"❌ Error con CORFO Filtrados: {e}")
+    if obtener_proyectos_corfo_por_filtros is not None:
+        try:
+            proyectos_corfo_filtrados = obtener_proyectos_corfo_por_filtros()
+            if proyectos_corfo_filtrados:
+                proyectos.extend(proyectos_corfo_filtrados)
+                print(f"✅ CORFO Filtrados: {len(proyectos_corfo_filtrados)} proyectos adicionales")
+        except Exception as e:
+            print(f"❌ Error con CORFO Filtrados: {e}")
     
     print(f"🎉 Recolección completada: {len(proyectos)} proyectos totales")
     return proyectos
@@ -721,7 +1114,7 @@ def home():
 @app.route('/buscar', methods=['POST'])
 def buscar():
     proyectos = recolectar_todos()
-    guardar_excel(proyectos)
+    guardar_excel_proyectos(proyectos)
     return redirect(url_for('home'))
 
 @app.route('/quienes-somos', methods=['GET'])
@@ -1075,6 +1468,9 @@ def api_semantic_update():
 @app.route('/api/ai-search', methods=['POST'])
 def api_ai_search():
     """API para búsqueda inteligente con IA"""
+    if ai_search is None:
+        return jsonify({'error': 'Búsqueda con IA no disponible'}), 503
+    
     data = request.get_json()
     query = data.get('query', '')
     
@@ -1085,29 +1481,34 @@ def api_ai_search():
     if not proyectos:
         proyectos = recolectar_todos()
     
-    # Parsear consulta con IA
-    parsed_query = ai_search.parse_query(query)
-    
-    # Buscar proyectos
-    resultados = ai_search.search_projects(proyectos, parsed_query)
-    
-    # Generar sugerencias
-    sugerencias = ai_search.generate_suggestions(parsed_query)
-    
-    # Generar insights
-    insights = ai_search.generate_insights(resultados, parsed_query)
-    
-    return jsonify({
-        'query_analysis': parsed_query,
-        'results': resultados[:20],  # Limitar a 20 resultados
-        'total': len(resultados),
-        'suggestions': sugerencias,
-        'insights': insights
-    })
+    try:
+        # Parsear consulta con IA
+        parsed_query = ai_search.parse_query(query)
+        
+        # Buscar proyectos
+        resultados = ai_search.search_projects(proyectos, parsed_query)
+        
+        # Generar sugerencias
+        sugerencias = ai_search.generate_suggestions(parsed_query)
+        
+        # Generar insights
+        insights = ai_search.generate_insights(resultados, parsed_query)
+        
+        return jsonify({
+            'query_analysis': parsed_query,
+            'results': resultados[:20],  # Limitar a 20 resultados
+            'total': len(resultados),
+            'suggestions': sugerencias,
+            'insights': insights
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/update-projects', methods=['POST'])
 def api_update_projects():
     """API para actualizar proyectos automáticamente"""
+    if project_updater is None:
+        return jsonify({'success': False, 'error': 'Sistema de actualización no disponible'}), 503
     try:
         new_projects = project_updater.update_all_projects()
         return jsonify({
@@ -1152,6 +1553,9 @@ def api_analytics():
 @app.route('/api/insights-report', methods=['GET'])
 def api_insights_report():
     """API para reporte de insights"""
+    if analytics is None:
+        return jsonify({'error': 'Sistema de analytics no disponible'}), 503
+    
     proyectos = cargar_excel()
     if not proyectos:
         proyectos = recolectar_todos()
@@ -1165,6 +1569,8 @@ def api_insights_report():
 @app.route('/api/update-stats', methods=['GET'])
 def api_update_stats():
     """API para estadísticas de actualizaciones"""
+    if project_updater is None:
+        return jsonify({'error': 'Sistema de actualización no disponible'}), 503
     try:
         stats = project_updater.get_update_stats()
         return jsonify(stats)
@@ -1174,6 +1580,8 @@ def api_update_stats():
 @app.route('/api/submit-application', methods=['POST'])
 def api_submit_application():
     """API para enviar postulaciones"""
+    if application_system is None:
+        return jsonify({'success': False, 'error': 'Sistema de postulaciones no disponible'}), 503
     try:
         data = request.get_json()
         project_id = data.get('project_id')
@@ -1190,6 +1598,8 @@ def api_submit_application():
 @app.route('/api/application-template/<project_type>', methods=['GET'])
 def api_application_template(project_type):
     """API para obtener plantilla de postulación"""
+    if application_system is None:
+        return jsonify({'error': 'Sistema de postulaciones no disponible'}), 503
     try:
         template = application_system.get_application_template(project_type)
         return jsonify(template)
@@ -1199,6 +1609,8 @@ def api_application_template(project_type):
 @app.route('/api/project-requirements/<project_type>', methods=['GET'])
 def api_project_requirements(project_type):
     """API para obtener requisitos de proyecto"""
+    if application_system is None:
+        return jsonify({'error': 'Sistema de postulaciones no disponible'}), 503
     try:
         requirements = application_system.get_project_requirements(project_type)
         return jsonify(requirements)
@@ -1208,6 +1620,8 @@ def api_project_requirements(project_type):
 @app.route('/api/application-stats', methods=['GET'])
 def api_application_stats():
     """API para estadísticas de postulaciones"""
+    if application_system is None:
+        return jsonify({'error': 'Sistema de postulaciones no disponible'}), 503
     try:
         stats = application_system.get_application_stats()
         return jsonify(stats)
@@ -1217,6 +1631,8 @@ def api_application_stats():
 @app.route('/api/auto-search/start', methods=['POST'])
 def api_start_auto_search():
     """API para iniciar búsqueda automática"""
+    if auto_search_system is None:
+        return jsonify({'success': False, 'error': 'Sistema de búsqueda automática no disponible'}), 503
     try:
         auto_search_system.run_background_search()
         return jsonify({
@@ -1229,6 +1645,8 @@ def api_start_auto_search():
 @app.route('/api/auto-search/status', methods=['GET'])
 def api_auto_search_status():
     """API para estado de búsqueda automática"""
+    if auto_search_system is None:
+        return jsonify({'error': 'Sistema de búsqueda automática no disponible'}), 503
     try:
         stats = auto_search_system.get_search_stats()
         return jsonify(stats)
@@ -1238,6 +1656,8 @@ def api_auto_search_status():
 @app.route('/api/auto-search/trigger', methods=['POST'])
 def api_trigger_auto_search():
     """API para activar búsqueda manual"""
+    if auto_search_system is None:
+        return jsonify({'success': False, 'error': 'Sistema de búsqueda automática no disponible'}), 503
     try:
         auto_search_system.daily_search()
         return jsonify({
@@ -1522,18 +1942,8 @@ def handle_unexpected_error(e):
     except Exception:
         return ("Ha ocurrido un error inesperado.", 500)
 
-if __name__ == '__main__':
-    print("🚀 Iniciando Plataforma de Fondos y Convocatorias...")
-    print("✅ Sistema básico inicializado")
-    print("✅ Funcionalidades principales disponibles")
-    print("🎉 Plataforma lista para usar")
-
-# Inicializar sistemas avanzados
-ai_search = AISearchEngine()
-project_updater = ProjectUpdater()
-analytics = AdvancedAnalytics()
-application_system = ApplicationSystem()
-auto_search_system = AutoSearchSystem()
+# Nota: Los sistemas avanzados (ai_search, project_updater, etc.) 
+# se inicializan opcionalmente al inicio del archivo si están disponibles
 
 @app.route('/dinamico', methods=['GET'])
 def home_dinamico():
