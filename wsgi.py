@@ -9,7 +9,13 @@ Este archivo se mantiene por compatibilidad pero render.yaml tiene prioridad
 
 import os
 import sys
-from app_enhanced import app  # ACTUALIZADO: usar app_enhanced en lugar de app_final
+# Importar desde app.py que a su vez importa app_enhanced
+try:
+    from app import app
+    print("✅ WSGI: Importando desde app.py")
+except ImportError:
+    from app_enhanced import app
+    print("✅ WSGI: Importando directamente desde app_enhanced.py")
 
 # Configuración para Render
 if __name__ == "__main__":
