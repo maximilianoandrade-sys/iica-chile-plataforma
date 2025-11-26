@@ -21,14 +21,16 @@ def setup_render():
     print("✅ Configuración de Render aplicada")
 
 def start_app():
-    """Inicia la aplicación para Render"""
-    from app_final import app
+    """Inicia la aplicación para Render - ACTUALIZADO para usar app_enhanced"""
+    from app_enhanced import app  # CORREGIDO: usar app_enhanced en lugar de app_final
     
     # Obtener puerto de Render
     port = int(os.environ.get('PORT', 5000))
     
-    print(f"🌐 Iniciando en puerto {port}")
-    print("✅ Aplicación lista para Render")
+    print(f"🌐 Iniciando app_enhanced en puerto {port}")
+    print("✅ Aplicación mejorada lista para Render")
+    print("✅ Template: home_ordenado_mejorado.html")
+    print("✅ Sin límites de proyectos")
     
     # Ejecutar aplicación
     app.run(host='0.0.0.0', port=port, debug=False)

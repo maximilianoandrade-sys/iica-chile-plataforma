@@ -1,5 +1,0 @@
-Documento: Plan de Transferencia Tecnológica
-Área: Innovación Tecnológica
-Tipo: Obligatorio
-Descripción: Este documento es requerido para postular a proyectos de Innovación Tecnológica.
-Fecha de creación: 2025-10-20

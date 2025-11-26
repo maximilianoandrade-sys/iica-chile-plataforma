@@ -1,5 +1,0 @@
-Documento: Certificado de Manipulación de Alimentos
-Área: Seguridad Alimentaria
-Tipo: Obligatorio
-Descripción: Este documento es requerido para postular a proyectos de Seguridad Alimentaria.
-Fecha de creación: 2025-10-20
