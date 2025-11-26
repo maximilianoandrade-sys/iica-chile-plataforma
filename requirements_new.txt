@@ -1,43 +1,9 @@
-# Flask y extensiones
 Flask==2.3.3
-Flask-SQLAlchemy==3.0.5
-Flask-Login==0.6.3
-Flask-Caching==2.1.0
-Flask-Mail==0.9.1
-
-# Base de datos
-SQLAlchemy==2.0.21
-
-# Procesamiento de datos
-pandas==2.0.3
-openpyxl==3.1.2
-xlsxwriter==3.1.2
-
-# Web scraping
+gunicorn==21.2.0
 requests==2.31.0
 beautifulsoup4==4.12.2
-lxml==4.9.3
-selenium==4.15.0
-
-# Utilidades
-python-dateutil==2.8.2
-pytz==2023.3
-APScheduler==3.10.4
-
-# Seguridad
-Werkzeug==2.3.7
-bcrypt==4.0.1
-
-# Email
-smtplib2==0.2.1
-
-# Logging
-colorlog==6.7.0
-
-# Testing (opcional)
-pytest==7.4.2
-pytest-flask==1.2.0
-
-# Producción
-gunicorn==21.2.0
-waitress==2.1.2
+openpyxl==3.1.2
+pandas>=2.0.0
+pytest==7.4.0
+Jinja2==3.1.6
+Werkzeug==3.1.3

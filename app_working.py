@@ -9,7 +9,7 @@ import io
 from datetime import datetime
 # Imports básicos (requeridos)
 try:
-    from utils import parsear_monto
+from utils import parsear_monto
 except ImportError:
     def parsear_monto(monto_str):
         """Función fallback si utils no está disponible"""
@@ -27,35 +27,35 @@ except ImportError:
 
 # Imports opcionales (sistemas avanzados)
 try:
-    from ai_search_engine import AISearchEngine
+from ai_search_engine import AISearchEngine
     ai_search = AISearchEngine()
 except ImportError:
     ai_search = None
     print("⚠️ AISearchEngine no disponible")
 
 try:
-    from project_updater import ProjectUpdater
+from project_updater import ProjectUpdater
     project_updater = ProjectUpdater()
 except ImportError:
     project_updater = None
     print("⚠️ ProjectUpdater no disponible")
 
 try:
-    from advanced_analytics import AdvancedAnalytics
+from advanced_analytics import AdvancedAnalytics
     analytics = AdvancedAnalytics()
 except ImportError:
     analytics = None
     print("⚠️ AdvancedAnalytics no disponible")
 
 try:
-    from application_system import ApplicationSystem
+from application_system import ApplicationSystem
     application_system = ApplicationSystem()
 except ImportError:
     application_system = None
     print("⚠️ ApplicationSystem no disponible")
 
 try:
-    from auto_search_system import AutoSearchSystem
+from auto_search_system import AutoSearchSystem
     auto_search_system = AutoSearchSystem()
 except ImportError:
     auto_search_system = None
@@ -63,38 +63,38 @@ except ImportError:
 
 # Imports de scrapers (opcionales)
 try:
-    from scrapers.bidprime import obtener_proyectos_bidprime, obtener_proyectos_bidprime_avanzado
+from scrapers.bidprime import obtener_proyectos_bidprime, obtener_proyectos_bidprime_avanzado
 except ImportError:
     obtener_proyectos_bidprime = None
     obtener_proyectos_bidprime_avanzado = None
     print("⚠️ Scraper bidprime no disponible")
 
 try:
-    from scrapers.todolicitaciones import obtener_proyectos_todolicitaciones
+from scrapers.todolicitaciones import obtener_proyectos_todolicitaciones
 except ImportError:
     obtener_proyectos_todolicitaciones = None
     print("⚠️ Scraper todolicitaciones no disponible")
 
 try:
-    from scrapers.fuentes_gubernamentales import obtener_todos_proyectos_gubernamentales
+from scrapers.fuentes_gubernamentales import obtener_todos_proyectos_gubernamentales
 except ImportError:
     obtener_todos_proyectos_gubernamentales = None
     print("⚠️ Scraper fuentes_gubernamentales no disponible")
 
 try:
-    from scrapers.fuentes_internacionales import obtener_todos_proyectos_internacionales
+from scrapers.fuentes_internacionales import obtener_todos_proyectos_internacionales
 except ImportError:
     obtener_todos_proyectos_internacionales = None
     print("⚠️ Scraper fuentes_internacionales no disponible")
 
 try:
-    from scrapers.fundaciones_ongs import obtener_todos_proyectos_fundaciones
+from scrapers.fundaciones_ongs import obtener_todos_proyectos_fundaciones
 except ImportError:
     obtener_todos_proyectos_fundaciones = None
     print("⚠️ Scraper fundaciones_ongs no disponible")
 
 try:
-    from scrapers.corfo_real import obtener_proyectos_corfo_real, obtener_proyectos_corfo_por_filtros
+from scrapers.corfo_real import obtener_proyectos_corfo_real, obtener_proyectos_corfo_por_filtros
 except ImportError:
     obtener_proyectos_corfo_real = None
     obtener_proyectos_corfo_por_filtros = None
@@ -138,8 +138,8 @@ def _leer_excel_concreto():
         try:
             proyectos = leer_excel('data/proyectos_fortalecidos.xlsx')
             if proyectos:
-                print(f"📂 Cargados {len(proyectos)} proyectos fortalecidos desde Excel")
-                return proyectos
+            print(f"📂 Cargados {len(proyectos)} proyectos fortalecidos desde Excel")
+            return proyectos
         except Exception as e:
             print(f"❌ Error cargando proyectos fortalecidos: {e}")
     # Intentar cargar proyectos completos
@@ -147,8 +147,8 @@ def _leer_excel_concreto():
         try:
             proyectos = leer_excel('data/proyectos_completos.xlsx')
             if proyectos:
-                print(f"📂 Cargados {len(proyectos)} proyectos completos desde Excel")
-                return proyectos
+            print(f"📂 Cargados {len(proyectos)} proyectos completos desde Excel")
+            return proyectos
         except Exception as e:
             print(f"❌ Error cargando proyectos completos: {e}")
     # Intentar cargar proyectos actualizados
@@ -156,8 +156,8 @@ def _leer_excel_concreto():
         try:
             proyectos = leer_excel('data/proyectos_actualizados.xlsx')
             if proyectos:
-                print(f"📂 Cargados {len(proyectos)} proyectos actualizados desde Excel")
-                return proyectos
+            print(f"📂 Cargados {len(proyectos)} proyectos actualizados desde Excel")
+            return proyectos
         except Exception as e:
             print(f"❌ Error cargando proyectos actualizados: {e}")
     # Si no existe, cargar el archivo original
@@ -165,8 +165,8 @@ def _leer_excel_concreto():
         try:
             proyectos = leer_excel(DATA_PATH)
             if proyectos:
-                print(f"📂 Cargados {len(proyectos)} proyectos desde Excel")
-                return proyectos
+            print(f"📂 Cargados {len(proyectos)} proyectos desde Excel")
+            return proyectos
         except Exception as e:
             print(f"❌ Error cargando Excel: {e}")
             return []
@@ -830,81 +830,81 @@ def recolectar_todos():
     
     # BIDPrime - Nueva fuente de financiamiento
     if obtener_proyectos_bidprime is not None:
-        try:
-            proyectos_bidprime = obtener_proyectos_bidprime()
+    try:
+        proyectos_bidprime = obtener_proyectos_bidprime()
             if proyectos_bidprime:
-                proyectos.extend(proyectos_bidprime)
-                print(f"✅ BIDPrime: {len(proyectos_bidprime)} proyectos agregados")
-        except Exception as e:
-            print(f"❌ Error con BIDPrime: {e}")
+        proyectos.extend(proyectos_bidprime)
+        print(f"✅ BIDPrime: {len(proyectos_bidprime)} proyectos agregados")
+    except Exception as e:
+        print(f"❌ Error con BIDPrime: {e}")
     
     if obtener_proyectos_bidprime_avanzado is not None:
-        try:
-            proyectos_bidprime_avanzado = obtener_proyectos_bidprime_avanzado()
+    try:
+        proyectos_bidprime_avanzado = obtener_proyectos_bidprime_avanzado()
             if proyectos_bidprime_avanzado:
-                proyectos.extend(proyectos_bidprime_avanzado)
-                print(f"✅ BIDPrime Avanzado: {len(proyectos_bidprime_avanzado)} proyectos adicionales")
-        except Exception as e:
-            print(f"❌ Error con BIDPrime Avanzado: {e}")
+        proyectos.extend(proyectos_bidprime_avanzado)
+        print(f"✅ BIDPrime Avanzado: {len(proyectos_bidprime_avanzado)} proyectos adicionales")
+    except Exception as e:
+        print(f"❌ Error con BIDPrime Avanzado: {e}")
     
     # TodoLicitaciones.cl - Portal de licitaciones públicas
     if obtener_proyectos_todolicitaciones is not None:
-        try:
-            proyectos_todolicitaciones = obtener_proyectos_todolicitaciones()
+    try:
+        proyectos_todolicitaciones = obtener_proyectos_todolicitaciones()
             if proyectos_todolicitaciones:
-                proyectos.extend(proyectos_todolicitaciones)
-                print(f"✅ TodoLicitaciones.cl: {len(proyectos_todolicitaciones)} proyectos agregados")
-        except Exception as e:
-            print(f"❌ Error con TodoLicitaciones.cl: {e}")
+        proyectos.extend(proyectos_todolicitaciones)
+        print(f"✅ TodoLicitaciones.cl: {len(proyectos_todolicitaciones)} proyectos agregados")
+    except Exception as e:
+        print(f"❌ Error con TodoLicitaciones.cl: {e}")
     
     # Fuentes Gubernamentales Chilenas
     if obtener_todos_proyectos_gubernamentales is not None:
-        try:
-            proyectos_gubernamentales = obtener_todos_proyectos_gubernamentales()
+    try:
+        proyectos_gubernamentales = obtener_todos_proyectos_gubernamentales()
             if proyectos_gubernamentales:
-                proyectos.extend(proyectos_gubernamentales)
-                print(f"✅ Fuentes Gubernamentales: {len(proyectos_gubernamentales)} proyectos agregados")
-        except Exception as e:
-            print(f"❌ Error con fuentes gubernamentales: {e}")
+        proyectos.extend(proyectos_gubernamentales)
+        print(f"✅ Fuentes Gubernamentales: {len(proyectos_gubernamentales)} proyectos agregados")
+    except Exception as e:
+        print(f"❌ Error con fuentes gubernamentales: {e}")
     
     # Fuentes Internacionales
     if obtener_todos_proyectos_internacionales is not None:
-        try:
-            proyectos_internacionales = obtener_todos_proyectos_internacionales()
+    try:
+        proyectos_internacionales = obtener_todos_proyectos_internacionales()
             if proyectos_internacionales:
-                proyectos.extend(proyectos_internacionales)
-                print(f"✅ Fuentes Internacionales: {len(proyectos_internacionales)} proyectos agregados")
-        except Exception as e:
-            print(f"❌ Error con fuentes internacionales: {e}")
+        proyectos.extend(proyectos_internacionales)
+        print(f"✅ Fuentes Internacionales: {len(proyectos_internacionales)} proyectos agregados")
+    except Exception as e:
+        print(f"❌ Error con fuentes internacionales: {e}")
     
     # Fundaciones y ONGs
     if obtener_todos_proyectos_fundaciones is not None:
-        try:
-            proyectos_fundaciones = obtener_todos_proyectos_fundaciones()
+    try:
+        proyectos_fundaciones = obtener_todos_proyectos_fundaciones()
             if proyectos_fundaciones:
-                proyectos.extend(proyectos_fundaciones)
-                print(f"✅ Fundaciones y ONGs: {len(proyectos_fundaciones)} proyectos agregados")
-        except Exception as e:
-            print(f"❌ Error con fundaciones y ONGs: {e}")
+        proyectos.extend(proyectos_fundaciones)
+        print(f"✅ Fundaciones y ONGs: {len(proyectos_fundaciones)} proyectos agregados")
+    except Exception as e:
+        print(f"❌ Error con fundaciones y ONGs: {e}")
     
     # CORFO - Fuente oficial de programas y convocatorias
     if obtener_proyectos_corfo_real is not None:
-        try:
-            proyectos_corfo = obtener_proyectos_corfo_real()
+    try:
+        proyectos_corfo = obtener_proyectos_corfo_real()
             if proyectos_corfo:
-                proyectos.extend(proyectos_corfo)
-                print(f"✅ CORFO Real: {len(proyectos_corfo)} proyectos agregados")
-        except Exception as e:
-            print(f"❌ Error con CORFO Real: {e}")
+        proyectos.extend(proyectos_corfo)
+        print(f"✅ CORFO Real: {len(proyectos_corfo)} proyectos agregados")
+    except Exception as e:
+        print(f"❌ Error con CORFO Real: {e}")
     
     if obtener_proyectos_corfo_por_filtros is not None:
-        try:
-            proyectos_corfo_filtrados = obtener_proyectos_corfo_por_filtros()
+    try:
+        proyectos_corfo_filtrados = obtener_proyectos_corfo_por_filtros()
             if proyectos_corfo_filtrados:
-                proyectos.extend(proyectos_corfo_filtrados)
-                print(f"✅ CORFO Filtrados: {len(proyectos_corfo_filtrados)} proyectos adicionales")
-        except Exception as e:
-            print(f"❌ Error con CORFO Filtrados: {e}")
+        proyectos.extend(proyectos_corfo_filtrados)
+        print(f"✅ CORFO Filtrados: {len(proyectos_corfo_filtrados)} proyectos adicionales")
+    except Exception as e:
+        print(f"❌ Error con CORFO Filtrados: {e}")
     
     print(f"🎉 Recolección completada: {len(proyectos)} proyectos totales")
     return proyectos
@@ -1482,25 +1482,25 @@ def api_ai_search():
         proyectos = recolectar_todos()
     
     try:
-        # Parsear consulta con IA
-        parsed_query = ai_search.parse_query(query)
-        
-        # Buscar proyectos
-        resultados = ai_search.search_projects(proyectos, parsed_query)
-        
-        # Generar sugerencias
-        sugerencias = ai_search.generate_suggestions(parsed_query)
-        
-        # Generar insights
-        insights = ai_search.generate_insights(resultados, parsed_query)
-        
-        return jsonify({
-            'query_analysis': parsed_query,
-            'results': resultados[:20],  # Limitar a 20 resultados
-            'total': len(resultados),
-            'suggestions': sugerencias,
-            'insights': insights
-        })
+    # Parsear consulta con IA
+    parsed_query = ai_search.parse_query(query)
+    
+    # Buscar proyectos
+    resultados = ai_search.search_projects(proyectos, parsed_query)
+    
+    # Generar sugerencias
+    sugerencias = ai_search.generate_suggestions(parsed_query)
+    
+    # Generar insights
+    insights = ai_search.generate_insights(resultados, parsed_query)
+    
+    return jsonify({
+        'query_analysis': parsed_query,
+        'results': resultados[:20],  # Limitar a 20 resultados
+        'total': len(resultados),
+        'suggestions': sugerencias,
+        'insights': insights
+    })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

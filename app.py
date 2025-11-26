@@ -449,11 +449,11 @@ def home():
                     elif len(fecha) == 10 and fecha.count('/') == 2:
                         # Intentar primero DD/MM/YYYY (formato más común en Chile)
                         try:
-                            return datetime.strptime(fecha, '%d/%m/%Y').strftime('%Y-%m-%d')
+                        return datetime.strptime(fecha, '%d/%m/%Y').strftime('%Y-%m-%d')
                         except ValueError:
                             # Si falla, intentar MM/DD/YYYY
-                            try:
-                                return datetime.strptime(fecha, '%m/%d/%Y').strftime('%Y-%m-%d')
+                        try:
+                            return datetime.strptime(fecha, '%m/%d/%Y').strftime('%Y-%m-%d')
                             except ValueError:
                                 # Si ambos fallan, retornar fecha original
                                 return str(fecha)
