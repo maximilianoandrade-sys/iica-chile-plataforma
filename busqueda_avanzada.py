@@ -3,14 +3,32 @@
 Sistema de búsqueda avanzada para la plataforma
 """
 
-import pandas as pd
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List, Dict, Any
+from utils_excel import leer_excel
 
 class BuscadorAvanzado:
-    def __init__(self, df_proyectos):
-        self.df = df_proyectos
+    def __init__(self, proyectos):
+        # Acepta lista de diccionarios en lugar de DataFrame
+        if isinstance(proyectos, list):
+            self.proyectos = proyectos
+        else:
+            # Si no es lista, intentar convertir para compatibilidad con código antiguo
+            # que podría pasar DataFrames u otros tipos iterables
+            try:
+                # Intentar convertir a lista si tiene método to_dict (pandas DataFrame)
+                if hasattr(proyectos, 'to_dict'):
+                    self.proyectos = proyectos.to_dict('records')
+                # Si es iterable pero no lista, convertir a lista
+                elif hasattr(proyectos, '__iter__') and not isinstance(proyectos, (str, bytes)):
+                    self.proyectos = list(proyectos)
+                else:
+                    # Si no es iterable o es string/bytes, usar lista vacía
+                    self.proyectos = []
+            except Exception:
+                # Si falla cualquier conversión, usar lista vacía
+                self.proyectos = []
         self.palabras_clave_areas = {
             'agricultura': ['agricultura', 'cultivo', 'siembra', 'cosecha', 'rural'],
             'innovacion': ['innovación', 'tecnología', 'digital', 'agtech', 'precisión'],
@@ -29,9 +47,9 @@ class BuscadorAvanzado:
         texto_busqueda = texto_busqueda.lower()
         resultados = []
         
-        for idx, proyecto in self.df.iterrows():
+        for proyecto in self.proyectos:
             # Buscar en nombre
-            if texto_busqueda in proyecto['Nombre'].lower():
+            if 'Nombre' in proyecto and proyecto.get('Nombre') and texto_busqueda in str(proyecto['Nombre']).lower():
                 resultados.append({
                     'proyecto': proyecto,
                     'relevancia': 10,
@@ -39,8 +57,9 @@ class BuscadorAvanzado:
                 })
             
             # Buscar en descripción
-            if 'Descripción' in proyecto and pd.notna(proyecto['Descripción']):
-                if texto_busqueda in proyecto['Descripción'].lower():
+            descripcion = proyecto.get('Descripción', '')
+            if descripcion and (not isinstance(descripcion, float) or str(descripcion) != 'nan'):
+                if texto_busqueda in str(descripcion).lower():
                     resultados.append({
                         'proyecto': proyecto,
                         'relevancia': 8,
@@ -48,8 +67,9 @@ class BuscadorAvanzado:
                     })
             
             # Buscar en palabras clave
-            if 'Palabras Clave' in proyecto and pd.notna(proyecto['Palabras Clave']):
-                if texto_busqueda in proyecto['Palabras Clave'].lower():
+            palabras_clave = proyecto.get('Palabras Clave', '')
+            if palabras_clave and (not isinstance(palabras_clave, float) or str(palabras_clave) != 'nan'):
+                if texto_busqueda in str(palabras_clave).lower():
                     resultados.append({
                         'proyecto': proyecto,
                         'relevancia': 9,
@@ -66,8 +86,8 @@ class BuscadorAvanzado:
             return []
         
         resultados = []
-        for idx, proyecto in self.df.iterrows():
-            if proyecto['Área de interés'] == area:
+        for proyecto in self.proyectos:
+            if proyecto.get('Área de interés') == area:
                 resultados.append({
                     'proyecto': proyecto,
                     'relevancia': 10,
@@ -82,8 +102,9 @@ class BuscadorAvanzado:
             return []
         
         resultados = []
-        for idx, proyecto in self.df.iterrows():
-            if fuente.lower() in proyecto['Fuente'].lower():
+        for proyecto in self.proyectos:
+            fuente_proyecto = proyecto.get('Fuente', '')
+            if fuente.lower() in str(fuente_proyecto).lower():
                 resultados.append({
                     'proyecto': proyecto,
                     'relevancia': 10,
@@ -96,10 +117,10 @@ class BuscadorAvanzado:
         """Búsqueda por rango de monto"""
         resultados = []
         
-        for idx, proyecto in self.df.iterrows():
+        for proyecto in self.proyectos:
             try:
                 # Extraer monto numérico
-                monto_str = str(proyecto['Monto']).replace('$', '').replace(',', '').replace(' CLP', '').replace(' USD', '')
+                monto_str = str(proyecto.get('Monto', '0')).replace('$', '').replace(',', '').replace(' CLP', '').replace(' USD', '')
                 monto_num = float(re.findall(r'\d+', monto_str)[0]) if re.findall(r'\d+', monto_str) else 0
                 
                 if monto_minimo <= monto_num <= monto_maximo:
@@ -119,8 +140,8 @@ class BuscadorAvanzado:
             return []
         
         resultados = []
-        for idx, proyecto in self.df.iterrows():
-            if proyecto['Estado'] == estado:
+        for proyecto in self.proyectos:
+            if proyecto.get('Estado') == estado:
                 resultados.append({
                     'proyecto': proyecto,
                     'relevancia': 10,
@@ -132,11 +153,21 @@ class BuscadorAvanzado:
     def buscar_por_fecha_cierre(self, dias_hasta_cierre: int = 30) -> List[Dict]:
         """Búsqueda por proyectos que cierran pronto"""
         resultados = []
-        fecha_limite = datetime.now() + pd.Timedelta(days=dias_hasta_cierre)
+        fecha_limite = datetime.now() + timedelta(days=dias_hasta_cierre)
         
-        for idx, proyecto in self.df.iterrows():
+        for proyecto in self.proyectos:
             try:
-                fecha_cierre = pd.to_datetime(proyecto['Fecha cierre'])
+                fecha_cierre_str = proyecto.get('Fecha cierre', '')
+                if not fecha_cierre_str:
+                    continue
+                # Intentar parsear fecha
+                try:
+                    fecha_cierre = datetime.strptime(str(fecha_cierre_str), '%Y-%m-%d')
+                except:
+                    try:
+                        fecha_cierre = datetime.strptime(str(fecha_cierre_str), '%d/%m/%Y')
+                    except:
+                        continue
                 if fecha_cierre <= fecha_limite:
                     resultados.append({
                         'proyecto': proyecto,
@@ -154,27 +185,31 @@ class BuscadorAvanzado:
             return []
         
         resultados = []
-        for idx, proyecto in self.df.iterrows():
+        for proyecto in self.proyectos:
             relevancia = 0
             criterios = []
             
             # Buscar en nombre
-            for palabra in palabras:
-                if palabra.lower() in proyecto['Nombre'].lower():
-                    relevancia += 3
-                    criterios.append('nombre')
+            nombre = proyecto.get('Nombre', '')
+            if nombre:
+                for palabra in palabras:
+                    if palabra.lower() in str(nombre).lower():
+                        relevancia += 3
+                        criterios.append('nombre')
             
             # Buscar en descripción
-            if 'Descripción' in proyecto and pd.notna(proyecto['Descripción']):
+            descripcion = proyecto.get('Descripción', '')
+            if descripcion and (not isinstance(descripcion, float) or str(descripcion) != 'nan'):
                 for palabra in palabras:
-                    if palabra.lower() in proyecto['Descripción'].lower():
+                    if palabra.lower() in str(descripcion).lower():
                         relevancia += 2
                         criterios.append('descripción')
             
             # Buscar en palabras clave
-            if 'Palabras Clave' in proyecto and pd.notna(proyecto['Palabras Clave']):
+            palabras_clave = proyecto.get('Palabras Clave', '')
+            if palabras_clave and (not isinstance(palabras_clave, float) or str(palabras_clave) != 'nan'):
                 for palabra in palabras:
-                    if palabra.lower() in proyecto['Palabras Clave'].lower():
+                    if palabra.lower() in str(palabras_clave).lower():
                         relevancia += 4
                         criterios.append('palabras clave')
             
@@ -260,16 +295,17 @@ class BuscadorAvanzado:
                     sugerencias.extend(palabras)
         
         # Sugerencias basadas en fuentes
-        fuentes = self.df['Fuente'].unique()
+        fuentes = list(set([p.get('Fuente', '') for p in self.proyectos if p.get('Fuente')]))
         for fuente in fuentes:
             if fuente.lower() in texto_busqueda:
                 sugerencias.append(fuente)
         
         # Sugerencias basadas en palabras clave existentes
         palabras_existentes = []
-        for idx, proyecto in self.df.iterrows():
-            if 'Palabras Clave' in proyecto and pd.notna(proyecto['Palabras Clave']):
-                palabras_existentes.extend(proyecto['Palabras Clave'].split(', '))
+        for proyecto in self.proyectos:
+            palabras_clave = proyecto.get('Palabras Clave', '')
+            if palabras_clave and (not isinstance(palabras_clave, float) or str(palabras_clave) != 'nan'):
+                palabras_existentes.extend(str(palabras_clave).split(', '))
         
         for palabra in palabras_existentes:
             if palabra.lower() in texto_busqueda:
@@ -284,15 +320,43 @@ class BuscadorAvanzado:
         if not resultados:
             return {}
         
-        df_resultados = pd.DataFrame([r['proyecto'] for r in resultados])
+        proyectos_resultados = [r['proyecto'] for r in resultados]
+        
+        # Calcular estadísticas manualmente
+        por_fuente = {}
+        por_area = {}
+        por_estado = {}
+        por_region = {}
+        por_prioridad = {}
+        
+        for proyecto in proyectos_resultados:
+            fuente = proyecto.get('Fuente', '')
+            if fuente:
+                por_fuente[fuente] = por_fuente.get(fuente, 0) + 1
+            
+            area = proyecto.get('Área de interés', '')
+            if area:
+                por_area[area] = por_area.get(area, 0) + 1
+            
+            estado = proyecto.get('Estado', '')
+            if estado:
+                por_estado[estado] = por_estado.get(estado, 0) + 1
+            
+            region = proyecto.get('Región', '')
+            if region:
+                por_region[region] = por_region.get(region, 0) + 1
+            
+            prioridad = proyecto.get('Prioridad', '')
+            if prioridad:
+                por_prioridad[prioridad] = por_prioridad.get(prioridad, 0) + 1
         
         estadisticas = {
             'total_resultados': len(resultados),
-            'por_fuente': df_resultados['Fuente'].value_counts().to_dict(),
-            'por_area': df_resultados['Área de interés'].value_counts().to_dict(),
-            'por_estado': df_resultados['Estado'].value_counts().to_dict(),
-            'por_region': df_resultados['Región'].value_counts().to_dict() if 'Región' in df_resultados.columns else {},
-            'por_prioridad': df_resultados['Prioridad'].value_counts().to_dict() if 'Prioridad' in df_resultados.columns else {}
+            'por_fuente': por_fuente,
+            'por_area': por_area,
+            'por_estado': por_estado,
+            'por_region': por_region,
+            'por_prioridad': por_prioridad
         }
         
         return estadisticas
@@ -303,11 +367,11 @@ def main():
     print("=" * 60)
     
     # Cargar datos
-    df = pd.read_excel('data/proyectos_fortalecidos.xlsx')
-    print(f"📊 Cargados {len(df)} proyectos")
+    proyectos = leer_excel('data/proyectos_fortalecidos.xlsx')
+    print(f"📊 Cargados {len(proyectos)} proyectos")
     
     # Crear buscador
-    buscador = BuscadorAvanzado(df)
+    buscador = BuscadorAvanzado(proyectos)
     
     # Pruebas de búsqueda
     print("\n🔍 Pruebas de búsqueda:")

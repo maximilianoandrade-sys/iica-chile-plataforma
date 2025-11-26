@@ -9,7 +9,6 @@ import requests
 from urllib.parse import urlparse, quote
 import time
 from datetime import datetime, timedelta
-import pandas as pd
 
 class LinkManager:
     def __init__(self):
@@ -47,7 +46,7 @@ class LinkManager:
     
     def verificar_enlace(self, url, usar_cache=True):
         """Verifica si un enlace es funcional"""
-        if not url or pd.isna(url) or url.strip() == '':
+        if not url or (isinstance(url, float) and str(url) == 'nan') or (isinstance(url, str) and url.strip() == ''):
             return False, "URL vacía"
         
         # Verificar cache
@@ -81,7 +80,7 @@ class LinkManager:
     
     def limpiar_url(self, url):
         """Limpia y normaliza una URL"""
-        if not url or pd.isna(url) or url.strip() == '':
+        if not url or (isinstance(url, float) and str(url) == 'nan') or (isinstance(url, str) and url.strip() == ''):
             return url
         
         url = url.strip()
@@ -139,19 +138,19 @@ class LinkManager:
         }
         
         # Enlace principal
-        if 'Enlace' in proyecto and pd.notna(proyecto['Enlace']):
+        if 'Enlace' in proyecto and proyecto.get('Enlace') and (not isinstance(proyecto['Enlace'], float) or str(proyecto['Enlace']) != 'nan'):
             enlaces['principal'] = self.limpiar_url(proyecto['Enlace'])
         
         # Enlace de postulación
-        if 'Enlace Postulación' in proyecto and pd.notna(proyecto['Enlace Postulación']):
+        if 'Enlace Postulación' in proyecto and proyecto.get('Enlace Postulación') and (not isinstance(proyecto['Enlace Postulación'], float) or str(proyecto['Enlace Postulación']) != 'nan'):
             enlaces['postulacion'] = self.limpiar_url(proyecto['Enlace Postulación'])
         
         # Enlace de documentos
-        if 'Enlace Documentos' in proyecto and pd.notna(proyecto['Enlace Documentos']):
+        if 'Enlace Documentos' in proyecto and proyecto.get('Enlace Documentos') and (not isinstance(proyecto['Enlace Documentos'], float) or str(proyecto['Enlace Documentos']) != 'nan'):
             enlaces['documentos'] = self.limpiar_url(proyecto['Enlace Documentos'])
         
         # Enlace de contacto
-        if 'Contacto' in proyecto and pd.notna(proyecto['Contacto']):
+        if 'Contacto' in proyecto and proyecto.get('Contacto') and (not isinstance(proyecto['Contacto'], float) or str(proyecto['Contacto']) != 'nan'):
             enlaces['contacto'] = proyecto['Contacto']
         
         # Generar enlaces alternativos

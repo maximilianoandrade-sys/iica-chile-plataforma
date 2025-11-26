@@ -1,11 +1,11 @@
 import requests
-import pandas as pd
 import json
 from datetime import datetime, timedelta
 import time
 import random
 from bs4 import BeautifulSoup
 import os
+from utils_excel import leer_excel, guardar_excel
 
 class ProjectUpdater:
     """Sistema de actualización automática de proyectos"""
@@ -350,8 +350,7 @@ class ProjectUpdater:
         existing_projects = []
         if os.path.exists('data/proyectos_completos.xlsx'):
             try:
-                df_existing = pd.read_excel('data/proyectos_completos.xlsx')
-                existing_projects = df_existing.to_dict('records')
+                existing_projects = leer_excel('data/proyectos_completos.xlsx')
             except Exception as e:
                 print(f"❌ Error cargando proyectos existentes: {e}")
         
@@ -359,12 +358,11 @@ class ProjectUpdater:
         all_projects = existing_projects + new_projects
         
         # Guardar en Excel
-        df = pd.DataFrame(all_projects)
-        df.to_excel('data/proyectos_completos.xlsx', index=False, engine='openpyxl')
+        os.makedirs('data', exist_ok=True)
+        guardar_excel(all_projects, 'data/proyectos_completos.xlsx')
         # Mantener sincronizado el archivo usado en producción (app_final)
         try:
-            os.makedirs('data', exist_ok=True)
-            df.to_excel('data/proyectos_fortalecidos.xlsx', index=False, engine='openpyxl')
+            guardar_excel(all_projects, 'data/proyectos_fortalecidos.xlsx')
             print("💾 Sincronizado: proyectos_completos.xlsx -> proyectos_fortalecidos.xlsx")
         except Exception as e:
             print(f"⚠️ No se pudo escribir proyectos_fortalecidos.xlsx: {e}")

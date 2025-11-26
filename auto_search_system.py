@@ -1,5 +1,4 @@
 import requests
-import pandas as pd
 import json
 import os
 from datetime import datetime, timedelta
@@ -9,6 +8,7 @@ from bs4 import BeautifulSoup
 import re
 from urllib.parse import urljoin, urlparse
 import random
+from utils_excel import leer_excel, guardar_excel
 
 class AutoSearchSystem:
     """Sistema de búsqueda automática diaria en páginas web"""
@@ -368,15 +368,14 @@ class AutoSearchSystem:
             # Cargar proyectos existentes
             existing_projects = []
             if os.path.exists('data/proyectos_completos.xlsx'):
-                df_existing = pd.read_excel('data/proyectos_completos.xlsx')
-                existing_projects = df_existing.to_dict('records')
+                existing_projects = leer_excel('data/proyectos_completos.xlsx')
             
             # Agregar nuevos proyectos
             all_projects = existing_projects + new_projects
             
             # Guardar en Excel
-            df = pd.DataFrame(all_projects)
-            df.to_excel('data/proyectos_completos.xlsx', index=False, engine='openpyxl')
+            os.makedirs('data', exist_ok=True)
+            guardar_excel(all_projects, 'data/proyectos_completos.xlsx')
             
             print(f"✅ Agregados {len(new_projects)} nuevos proyectos a la base de datos")
             
