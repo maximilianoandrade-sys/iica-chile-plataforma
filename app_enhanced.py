@@ -306,6 +306,15 @@ def home():
         print(f"📊 Total sin filtros: {len(proyectos)}")
         print(f"🎨 USANDO TEMPLATE: home_didactico.html (INTERFAZ DIDÁCTICA)")
         
+        # FORZAR VERIFICACIÓN DEL TEMPLATE
+        import os
+        template_file = os.path.join('templates', 'home_didactico.html')
+        if os.path.exists(template_file):
+            print(f"✅ Template existe: {template_file}")
+        else:
+            print(f"❌ ERROR: Template NO existe: {template_file}")
+            print(f"📂 Archivos disponibles: {os.listdir('templates') if os.path.exists('templates') else 'No existe templates/'}")
+        
         return render_template('home_didactico.html',  # TEMPLATE DIDÁCTICO Y AMIGABLE
                              proyectos=proyectos_paginados,  # Proyectos paginados para mostrar
                              stats=stats,
