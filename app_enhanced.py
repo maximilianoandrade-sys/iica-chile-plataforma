@@ -346,11 +346,22 @@ def home():
             return render_template('error.html', error=f"Error principal: {str(e)}\nError fallback: {str(e2)}")
 
 @app.route('/proyecto/<int:proyecto_id>')
+@app.route('/proyecto/<proyecto_id>')  # También aceptar string por si acaso
 def ver_proyecto(proyecto_id):
     """Ver detalles de un proyecto específico - MEJORADO CON DOCUMENTOS"""
     try:
+        # Convertir a int si es string
+        if isinstance(proyecto_id, str):
+            try:
+                proyecto_id = int(proyecto_id)
+            except ValueError:
+                return render_template('error.html', 
+                                     error=f"ID de proyecto inválido: {proyecto_id}",
+                                     error_code=400), 400
+        
         proyectos = cargar_excel()
         print(f"🔍 Buscando proyecto con ID: {proyecto_id} de {len(proyectos)} proyectos totales")
+        print(f"🔍 Tipo de ID: {type(proyecto_id)}")
         
         if 0 <= proyecto_id < len(proyectos):
             proyecto = proyectos[proyecto_id]
@@ -361,7 +372,7 @@ def ver_proyecto(proyecto_id):
             
             # Asegurar que el proyecto tenga enlaces
             if 'Enlace' not in proyecto or not proyecto.get('Enlace'):
-                proyecto['Enlace'] = proyecto.get('Enlace Postulación', '#')
+                proyecto['Enlace'] = proyecto.get('Enlace Postulación', proyecto.get('Enlace', '#'))
             if 'Enlace Postulación' not in proyecto or not proyecto.get('Enlace Postulación'):
                 proyecto['Enlace Postulación'] = proyecto.get('Enlace', '#')
             
@@ -372,14 +383,24 @@ def ver_proyecto(proyecto_id):
                                  documentos=documentos_necesarios)
         else:
             print(f"❌ Proyecto ID {proyecto_id} fuera de rango (0-{len(proyectos)-1})")
+            # Intentar buscar por nombre si el ID no funciona
+            nombre_buscado = request.args.get('nombre', '')
+            if nombre_buscado:
+                for i, p in enumerate(proyectos):
+                    if nombre_buscado.lower() in str(p.get('Nombre', '')).lower():
+                        return redirect(url_for('ver_proyecto', proyecto_id=i))
+            
             return render_template('error.html', 
                                  error=f"Proyecto no encontrado. ID {proyecto_id} fuera de rango (0-{len(proyectos)-1})",
-                                 total_proyectos=len(proyectos))
+                                 total_proyectos=len(proyectos),
+                                 error_code=404), 404
     except Exception as e:
         print(f"❌ Error en ver_proyecto: {e}")
         import traceback
         traceback.print_exc()
-        return render_template('error.html', error=str(e))
+        return render_template('error.html', 
+                             error=f"Error al cargar proyecto: {str(e)}",
+                             error_code=500), 500
 
 def generar_documentos_postulacion(proyecto):
     """Generar lista de documentos necesarios para postular"""
