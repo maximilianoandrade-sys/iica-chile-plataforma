@@ -297,6 +297,7 @@ def home():
         print(f"📊 Proyectos en esta página: {len(proyectos_paginados)}")
         print(f"📊 Total filtrados: {len(proyectos_filtrados)}")
         print(f"📊 Total sin filtros: {len(proyectos)}")
+        print(f"🎨 USANDO TEMPLATE: home_didactico.html (INTERFAZ DIDÁCTICA)")
         
         return render_template('home_didactico.html',  # TEMPLATE DIDÁCTICO Y AMIGABLE
                              proyectos=proyectos_paginados,  # Proyectos paginados para mostrar
@@ -326,7 +327,7 @@ def home():
             for idx, p in enumerate(proyectos_mostrar):
                 p['_indice_global'] = idx
                 p['_indice_pagina'] = idx
-            return render_template('home_ordenado_mejorado.html',
+            return render_template('home_didactico.html',  # TEMPLATE DIDÁCTICO Y AMIGABLE
                                  proyectos=proyectos_mostrar,
                                  stats=stats_basicos,
                                  current_page=1,
