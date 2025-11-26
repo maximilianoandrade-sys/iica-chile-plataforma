@@ -1,13 +1,6 @@
-# Si tu proyecto depende de Flask 2.x (backup usa 2.3.3), mantener 2.3.3
-flask==2.3.3
-requests==2.31.0
-beautifulsoup4==4.12.2
-# pandas eliminado - usar openpyxl directamente
-openpyxl==3.1.2
-# lxml puede causar problemas en Render, usar html.parser de BeautifulSoup como alternativa
-# lxml==4.9.3
+flask==3.0.0
 gunicorn==21.2.0
-pytest==7.4.0
-# Búsqueda semántica (opcional - requiere torch)
-# sentence-transformers>=2.2.0
-# torch>=2.0.0
+numpy==1.26.2
+requests==2.31.0
+python-dotenv==1.0.0
+anthropic==0.8.1
