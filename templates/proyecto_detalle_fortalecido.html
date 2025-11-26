@@ -290,6 +290,42 @@
                 </div>
                 {% endif %}
                 
+                <!-- Sección de Documentos Necesarios para Postular -->
+                {% if documentos %}
+                <div class="requirements-list mt-4">
+                    <h5 class="mb-3">
+                        <i class="bi bi-file-earmark-text me-2"></i>
+                        Documentos Necesarios para Postular
+                    </h5>
+                    <div class="row">
+                        {% for doc in documentos %}
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-left-primary" style="border-left: 4px solid var(--iica-green);">
+                                <div class="card-body">
+                                    <h6 class="card-title">
+                                        <i class="bi bi-file-pdf me-2"></i>
+                                        {{ doc.nombre }}
+                                        {% if doc.requerido %}
+                                        <span class="badge bg-danger ms-2">Requerido</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary ms-2">Opcional</span>
+                                        {% endif %}
+                                    </h6>
+                                    <p class="card-text text-muted small mb-2">{{ doc.descripcion }}</p>
+                                    <span class="badge bg-info">{{ doc.tipo }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="alert alert-info mt-3">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>Nota:</strong> Asegúrate de tener todos los documentos requeridos antes de postular. 
+                        Algunos documentos pueden requerir tiempo adicional para su preparación.
+                    </div>
+                </div>
+                {% endif %}
+                
                 {% if proyecto.get('Palabras Clave') %}
                 <div class="mt-3">
                     <h6 class="mb-2">

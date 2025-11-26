@@ -650,7 +650,7 @@
                         {% endif %}
                     </div>
                     <div class="project-actions">
-                        <a href="/proyecto/{{ proyecto.get('_indice_global', loop.index0) }}" class="btn-primary">
+                        <a href="/proyecto/{{ proyecto.get('_indice_global', (current_page - 1) * per_page + loop.index0) }}" class="btn-primary">
                             <i class="bi bi-eye"></i>Ver Detalles
                         </a>
                         {% if proyecto.get('Enlace Postulación') %}

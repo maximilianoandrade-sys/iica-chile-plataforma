@@ -260,20 +260,14 @@ def home():
         proyectos_paginados = proyectos_filtrados[start:end]
         
         # Agregar índice global a cada proyecto para enlaces correctos
+        # IMPORTANTE: Usar el índice en la lista completa de proyectos filtrados
         for idx, proyecto in enumerate(proyectos_paginados):
-            # Buscar el índice real en la lista completa de proyectos (sin filtros)
-            # Necesitamos encontrar el proyecto en la lista original
-            nombre_proyecto = str(proyecto.get('Nombre', '')).strip()
-            indice_global = None
-            for i, p_orig in enumerate(proyectos):
-                if str(p_orig.get('Nombre', '')).strip() == nombre_proyecto:
-                    indice_global = i
-                    break
-            # Si no se encuentra, usar el índice de la página filtrada
-            if indice_global is None:
-                indice_global = start + idx
+            # El índice global es la posición en la lista completa de proyectos filtrados
+            # Esto asegura que el link funcione correctamente
+            indice_global = start + idx
             proyecto['_indice_global'] = indice_global
-            proyecto['_indice_pagina'] = start + idx
+            proyecto['_indice_pagina'] = idx
+            proyecto['_indice_en_filtrados'] = indice_global  # Índice en proyectos_filtrados
         
         total_pages = (len(proyectos_filtrados) + per_page - 1) // per_page if proyectos_filtrados else 1
         
@@ -331,7 +325,7 @@ def home():
 
 @app.route('/proyecto/<int:proyecto_id>')
 def ver_proyecto(proyecto_id):
-    """Ver detalles de un proyecto específico - MEJORADO"""
+    """Ver detalles de un proyecto específico - MEJORADO CON DOCUMENTOS"""
     try:
         proyectos = cargar_excel()
         print(f"🔍 Buscando proyecto con ID: {proyecto_id} de {len(proyectos)} proyectos totales")
@@ -339,10 +333,21 @@ def ver_proyecto(proyecto_id):
         if 0 <= proyecto_id < len(proyectos):
             proyecto = proyectos[proyecto_id]
             print(f"✅ Proyecto encontrado: {proyecto.get('Nombre', 'Sin nombre')}")
+            
+            # Generar lista de documentos necesarios para postular
+            documentos_necesarios = generar_documentos_postulacion(proyecto)
+            
+            # Asegurar que el proyecto tenga enlaces
+            if 'Enlace' not in proyecto or not proyecto.get('Enlace'):
+                proyecto['Enlace'] = proyecto.get('Enlace Postulación', '#')
+            if 'Enlace Postulación' not in proyecto or not proyecto.get('Enlace Postulación'):
+                proyecto['Enlace Postulación'] = proyecto.get('Enlace', '#')
+            
             return render_template('proyecto_detalle_fortalecido.html', 
                                  proyecto=proyecto,
                                  proyecto_id=proyecto_id,
-                                 total_proyectos=len(proyectos))
+                                 total_proyectos=len(proyectos),
+                                 documentos=documentos_necesarios)
         else:
             print(f"❌ Proyecto ID {proyecto_id} fuera de rango (0-{len(proyectos)-1})")
             return render_template('error.html', 
@@ -353,6 +358,126 @@ def ver_proyecto(proyecto_id):
         import traceback
         traceback.print_exc()
         return render_template('error.html', error=str(e))
+
+def generar_documentos_postulacion(proyecto):
+    """Generar lista de documentos necesarios para postular"""
+    documentos = []
+    
+    # Documentos básicos siempre requeridos
+    documentos_basicos = [
+        {
+            'nombre': 'Carta de Presentación',
+            'descripcion': 'Carta formal presentando la organización y el proyecto',
+            'requerido': True,
+            'tipo': 'documento'
+        },
+        {
+            'nombre': 'Formulario de Postulación',
+            'descripcion': 'Formulario oficial del fondo o programa',
+            'requerido': True,
+            'tipo': 'formulario'
+        },
+        {
+            'nombre': 'Presupuesto Detallado',
+            'descripcion': 'Desglose completo de costos del proyecto',
+            'requerido': True,
+            'tipo': 'financiero'
+        },
+        {
+            'nombre': 'Cronograma de Actividades',
+            'descripcion': 'Plan de trabajo con fechas y actividades',
+            'requerido': True,
+            'tipo': 'planificacion'
+        }
+    ]
+    
+    # Documentos según área de interés
+    area = str(proyecto.get('Área de interés', '')).lower()
+    
+    if 'desarrollo rural' in area or 'rural' in area:
+        documentos.extend([
+            {
+                'nombre': 'Estudio Socioeconómico del Área',
+                'descripcion': 'Análisis de la situación socioeconómica de la zona',
+                'requerido': True,
+                'tipo': 'estudio'
+            },
+            {
+                'nombre': 'Plan de Desarrollo Comunitario',
+                'descripcion': 'Estrategia de desarrollo para la comunidad',
+                'requerido': True,
+                'tipo': 'planificacion'
+            }
+        ])
+    
+    if 'tecnología' in area or 'innovación' in area:
+        documentos.extend([
+            {
+                'nombre': 'Propuesta Técnica de Innovación',
+                'descripcion': 'Detalle técnico de la innovación propuesta',
+                'requerido': True,
+                'tipo': 'tecnico'
+            },
+            {
+                'nombre': 'Plan de Transferencia Tecnológica',
+                'descripcion': 'Estrategia para transferir la tecnología',
+                'requerido': False,
+                'tipo': 'planificacion'
+            }
+        ])
+    
+    if 'sostenibilidad' in area or 'ambiental' in area:
+        documentos.extend([
+            {
+                'nombre': 'Estudio de Impacto Ambiental',
+                'descripcion': 'Evaluación del impacto ambiental del proyecto',
+                'requerido': True,
+                'tipo': 'ambiental'
+            },
+            {
+                'nombre': 'Plan de Sostenibilidad',
+                'descripcion': 'Estrategia de sostenibilidad a largo plazo',
+                'requerido': True,
+                'tipo': 'planificacion'
+            }
+        ])
+    
+    # Documentos financieros adicionales
+    monto = proyecto.get('Monto', 0)
+    if isinstance(monto, str):
+        try:
+            monto = float(str(monto).replace('USD', '').replace('$', '').replace(',', '').strip())
+        except:
+            monto = 0
+    
+    if monto > 100000:  # Proyectos grandes requieren más documentación
+        documentos.extend([
+            {
+                'nombre': 'Estados Financieros Auditados',
+                'descripcion': 'Estados financieros de los últimos 2 años',
+                'requerido': True,
+                'tipo': 'financiero'
+            },
+            {
+                'nombre': 'Garantías Bancarias',
+                'descripcion': 'Documentación de garantías si aplica',
+                'requerido': False,
+                'tipo': 'financiero'
+            }
+        ])
+    
+    # Combinar documentos básicos con específicos
+    todos_documentos = documentos_basicos + documentos
+    
+    # Eliminar duplicados
+    documentos_unicos = []
+    nombres_vistos = set()
+    for doc in todos_documentos:
+        if doc['nombre'] not in nombres_vistos:
+            nombres_vistos.add(doc['nombre'])
+            documentos_unicos.append(doc)
+    
+    return documentos_unicos
 
 # ===== RUTAS DE NOTIFICACIONES =====
 
