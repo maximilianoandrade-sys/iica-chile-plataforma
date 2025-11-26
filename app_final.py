@@ -12,7 +12,6 @@ from functools import lru_cache
 from datetime import datetime
 from utils import parsear_monto
 from utils_excel import leer_excel, guardar_excel
-from project_updater import ProjectUpdater
 from link_manager import link_manager
 from busqueda_avanzada import BuscadorAvanzado
 from auto_search_system import AutoSearchSystem
