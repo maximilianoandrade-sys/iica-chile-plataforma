@@ -4,6 +4,7 @@ Consolidada en puerto 5004 con funcionalidades avanzadas
 """
 
 from flask import Flask, render_template, redirect, url_for, request, send_file, Response, jsonify, make_response
+from werkzeug.exceptions import NotFound
 import json
 import os
 import logging
@@ -536,6 +537,21 @@ def health():
     """Health check"""
     return jsonify({'status': 'healthy', 'timestamp': datetime.now().isoformat()})
 
+@app.route('/test-routes')
+def test_routes():
+    """Ruta de prueba para verificar que todas las rutas funcionan"""
+    routes = []
+    for rule in app.url_map.iter_rules():
+        routes.append({
+            'endpoint': rule.endpoint,
+            'methods': list(rule.methods),
+            'path': str(rule)
+        })
+    return jsonify({
+        'total_routes': len(routes),
+        'routes': routes
+    })
+
 @app.route('/favicon.ico')
 def favicon():
     """Favicon"""
@@ -543,11 +559,55 @@ def favicon():
 
 # ===== MANEJO DE ERRORES =====
 
+from werkzeug.exceptions import NotFound
+
+@app.errorhandler(404)
+def not_found(error):
+    """Manejo de errores 404 - Página no encontrada"""
+    print(f"❌ 404 - Página no encontrada: {request.url}")
+    print(f"🔍 Path solicitado: {request.path}")
+    print(f"🔍 Método: {request.method}")
+    
+    # Intentar redirigir a home si es una ruta común mal escrita
+    if request.path in ['/home', '/index', '/index.html']:
+        return redirect(url_for('home'))
+    
+    # Mostrar página de error con información útil
+    try:
+        return render_template('error.html', 
+                             error=f"Página no encontrada: {request.path}",
+                             error_code=404,
+                             suggestion="Verifica la URL o regresa a la página principal."), 404
+    except Exception as e:
+        # Si el template de error falla, retornar respuesta básica
+        return f"""
+        <html>
+        <head><title>404 - Página no encontrada</title></head>
+        <body>
+            <h1>404 - Página no encontrada</h1>
+            <p>La página que buscas no existe: {request.path}</p>
+            <p><a href="/">Volver a la página principal</a></p>
+        </body>
+        </html>
+        """, 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    """Manejo de errores 500 - Error interno"""
+    print(f"❌ 500 - Error interno: {error}")
+    return render_template('error.html', 
+                         error="Error interno del servidor. Por favor, intenta nuevamente en unos momentos.",
+                         error_code=500), 500
+
 @app.errorhandler(Exception)
 def handle_exception(e):
     """Manejo global de errores"""
     print(f"❌ Error no manejado: {e}")
-    return render_template('error.html', error=str(e)), 500
+    import traceback
+    traceback.print_exc()
+    return render_template('error.html', 
+                         error=f"Error: {str(e)}",
+                         error_code=500), 500
 
 if __name__ == '__main__':
     print("🚀 Iniciando Plataforma IICA Chile Mejorada...")
