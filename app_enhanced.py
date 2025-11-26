@@ -298,7 +298,7 @@ def home():
         print(f"📊 Total filtrados: {len(proyectos_filtrados)}")
         print(f"📊 Total sin filtros: {len(proyectos)}")
         
-        return render_template('home_ordenado_mejorado.html',  # TEMPLATE MEJORADO
+        return render_template('home_didactico.html',  # TEMPLATE DIDÁCTICO Y AMIGABLE
                              proyectos=proyectos_paginados,  # Proyectos paginados para mostrar
                              stats=stats,
                              current_page=page,

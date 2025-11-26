@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IICA Chile - Encuentra Financiamiento para tu Proyecto Agrícola</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --iica-primary: #2E7D32;
+            --iica-secondary: #1976D2;
+            --iica-accent: #FF6F00;
+            --iica-success: #4CAF50;
+            --iica-light: #F8F9FA;
+            --iica-warm: #FFF3E0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #333;
+            line-height: 1.7;
+        }
+        
+        /* Header Amigable */
+        .welcome-header {
+            background: linear-gradient(135deg, var(--iica-primary) 0%, var(--iica-secondary) 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .welcome-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .welcome-header .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            margin-bottom: 1.5rem;
+        }
+        
+        .welcome-header .description {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        /* Sección de Guía Rápida */
+        .quick-guide {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .guide-step {
+            display: flex;
+            align-items: start;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            background: var(--iica-warm);
+            border-radius: 15px;
+            border-left: 5px solid var(--iica-accent);
+            transition: all 0.3s ease;
+        }
+        
+        .guide-step:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .guide-step-number {
+            background: var(--iica-accent);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .guide-step-content h4 {
+            color: var(--iica-primary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .guide-step-content p {
+            color: #666;
+            margin: 0;
+        }
+        
+        /* Estadísticas Amigables */
+        .stats-friendly {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stats-friendly h3 {
+            color: var(--iica-primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .stat-card-friendly {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card-friendly:hover {
+            border-color: var(--iica-primary);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .stat-number-friendly {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--iica-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label-friendly {
+            font-size: 1rem;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .stat-description {
+            font-size: 0.85rem;
+            color: #999;
+            margin-top: 0.5rem;
+        }
+        
+        /* Filtros Didácticos */
+        .filters-friendly {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .filters-friendly h3 {
+            color: var(--iica-primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        .filter-help-text {
+            background: #E3F2FD;
+            border-left: 4px solid var(--iica-secondary);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            color: #1976D2;
+        }
+        
+        .filter-group-friendly {
+            margin-bottom: 1.5rem;
+        }
+        
+        .filter-label-friendly {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--iica-primary);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .filter-label-friendly i {
+            color: var(--iica-secondary);
+        }
+        
+        .filter-input-friendly {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-input-friendly:focus {
+            border-color: var(--iica-primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+        }
+        
+        .filter-tooltip {
+            display: inline-block;
+            margin-left: 0.5rem;
+            cursor: help;
+            color: var(--iica-secondary);
+        }
+        
+        /* Proyectos Amigables */
+        .projects-friendly {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .project-card-friendly {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .project-card-friendly:hover {
+            border-color: var(--iica-primary);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transform: translateY(-3px);
+        }
+        
+        .project-title-friendly {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--iica-primary);
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+        
+        .project-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .project-info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .project-info-item i {
+            color: var(--iica-secondary);
+            font-size: 1.2rem;
+        }
+        
+        .project-info-item strong {
+            color: var(--iica-primary);
+            margin-right: 0.5rem;
+        }
+        
+        .project-actions-friendly {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .btn-friendly {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary-friendly {
+            background: linear-gradient(135deg, var(--iica-primary) 0%, var(--iica-secondary) 100%);
+            color: white;
+        }
+        
+        .btn-primary-friendly:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+            color: white;
+        }
+        
+        .btn-success-friendly {
+            background: var(--iica-success);
+            color: white;
+        }
+        
+        .btn-success-friendly:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            color: white;
+        }
+        
+        .btn-outline-friendly {
+            background: white;
+            color: var(--iica-primary);
+            border: 2px solid var(--iica-primary);
+        }
+        
+        .btn-outline-friendly:hover {
+            background: var(--iica-primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Ayuda Flotante */
+        .help-button {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--iica-accent);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .help-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        /* Modal de Ayuda */
+        .help-modal-content {
+            border-radius: 20px;
+            border: none;
+        }
+        
+        .help-modal-header {
+            background: linear-gradient(135deg, var(--iica-primary) 0%, var(--iica-secondary) 100%);
+            color: white;
+            border-radius: 20px 20px 0 0;
+            padding: 1.5rem;
+        }
+        
+        /* Mensajes Amigables */
+        .friendly-message {
+            background: #E8F5E9;
+            border-left: 4px solid var(--iica-success);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .friendly-message i {
+            font-size: 1.5rem;
+            color: var(--iica-success);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .welcome-header h1 {
+                font-size: 2rem;
+            }
+            
+            .guide-step {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .guide-step-number {
+                margin: 0 auto 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header de Bienvenida -->
+    <div class="welcome-header">
+        <div class="container">
+            <h1>
+                <i class="bi bi-heart-fill me-2"></i>
+                Bienvenido a IICA Chile
+            </h1>
+            <p class="subtitle">Tu plataforma para encontrar financiamiento agrícola</p>
+            <p class="description">
+                Encuentra oportunidades de financiamiento para tu proyecto agrícola. 
+                Busca, filtra y postula a los fondos que mejor se adapten a tus necesidades.
+            </p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Guía Rápida - Cómo Usar -->
+        <div class="quick-guide">
+            <h3 style="color: var(--iica-primary); margin-bottom: 1.5rem;">
+                <i class="bi bi-lightbulb-fill me-2"></i>
+                ¿Cómo funciona? Es muy fácil
+            </h3>
+            
+            <div class="guide-step">
+                <div class="guide-step-number">1</div>
+                <div class="guide-step-content">
+                    <h4>Busca Proyectos</h4>
+                    <p>Usa los filtros de abajo para encontrar proyectos que te interesen. Puedes buscar por nombre, área de interés, fuente de financiamiento o estado.</p>
+                </div>
+            </div>
+            
+            <div class="guide-step">
+                <div class="guide-step-number">2</div>
+                <div class="guide-step-content">
+                    <h4>Revisa los Detalles</h4>
+                    <p>Haz clic en "Ver Detalles" para ver toda la información del proyecto, incluyendo los documentos que necesitas para postular.</p>
+                </div>
+            </div>
+            
+            <div class="guide-step">
+                <div class="guide-step-number">3</div>
+                <div class="guide-step-content">
+                    <h4>Prepara tu Postulación</h4>
+                    <p>Revisa la lista de documentos necesarios y prepáralos con tiempo. Cada proyecto tiene requisitos específicos.</p>
+                </div>
+            </div>
+            
+            <div class="guide-step">
+                <div class="guide-step-number">4</div>
+                <div class="guide-step-content">
+                    <h4>Postula</h4>
+                    <p>Cuando tengas todo listo, haz clic en "Postular" para ir directamente a la página oficial del fondo y enviar tu solicitud.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estadísticas Amigables -->
+        <div class="stats-friendly">
+            <h3>
+                <i class="bi bi-bar-chart-fill"></i>
+                Oportunidades Disponibles
+            </h3>
+            <div class="row g-4">
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-card-friendly">
+                        <div class="stat-number-friendly">{{ stats.total_proyectos or 0 }}</div>
+                        <div class="stat-label-friendly">Proyectos Disponibles</div>
+                        <div class="stat-description">Total de oportunidades de financiamiento</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-card-friendly">
+                        <div class="stat-number-friendly">{{ stats.proyectos_abiertos or 0 }}</div>
+                        <div class="stat-label-friendly">Abiertos Ahora</div>
+                        <div class="stat-description">Puedes postular ahora mismo</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-card-friendly">
+                        <div class="stat-number-friendly">{{ stats.fuentes_unicas or 0 }}</div>
+                        <div class="stat-label-friendly">Fuentes Diferentes</div>
+                        <div class="stat-description">Organizaciones que ofrecen fondos</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-card-friendly">
+                        <div class="stat-number-friendly">${{ "{:,.0f}".format(stats.monto_total / 1000000) if stats.monto_total else 0 }}M</div>
+                        <div class="stat-label-friendly">Monto Total</div>
+                        <div class="stat-description">En dólares disponibles</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros Didácticos -->
+        <div class="filters-friendly">
+            <h3>
+                <i class="bi bi-search me-2"></i>
+                Busca el Proyecto Perfecto para Ti
+            </h3>
+            
+            <div class="filter-help-text">
+                <i class="bi bi-info-circle me-2"></i>
+                <strong>Tip:</strong> Puedes usar uno o varios filtros a la vez. Por ejemplo, busca "Agricultura" en el área de interés y selecciona "Abierto" en estado para ver solo proyectos abiertos relacionados con agricultura.
+            </div>
+            
+            <form method="GET" action="/" id="filterForm">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="filter-group-friendly">
+                            <label class="filter-label-friendly">
+                                <i class="bi bi-search"></i>
+                                Buscar por Palabras Clave
+                                <span class="filter-tooltip" data-bs-toggle="tooltip" title="Escribe palabras relacionadas con tu proyecto, como 'sostenible', 'tecnología', 'rural', etc.">
+                                    <i class="bi bi-question-circle"></i>
+                                </span>
+                            </label>
+                            <input type="text" name="busqueda" class="filter-input-friendly" 
+                                   placeholder="Ej: agricultura sostenible, tecnología agrícola..." 
+                                   value="{{ busqueda or '' }}">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="filter-group-friendly">
+                            <label class="filter-label-friendly">
+                                <i class="bi bi-tag"></i>
+                                Área de Interés
+                                <span class="filter-tooltip" data-bs-toggle="tooltip" title="El tipo de proyecto que buscas financiar">
+                                    <i class="bi bi-question-circle"></i>
+                                </span>
+                            </label>
+                            <input type="text" name="area" class="filter-input-friendly" 
+                                   placeholder="Ej: Desarrollo Rural, Tecnología Agrícola, Sostenibilidad..." 
+                                   value="{{ area or '' }}">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="filter-group-friendly">
+                            <label class="filter-label-friendly">
+                                <i class="bi bi-building"></i>
+                                Fuente de Financiamiento
+                                <span class="filter-tooltip" data-bs-toggle="tooltip" title="La organización que ofrece el fondo">
+                                    <i class="bi bi-question-circle"></i>
+                                </span>
+                            </label>
+                            <input type="text" name="fuente" class="filter-input-friendly" 
+                                   placeholder="Ej: CORFO, INDAP, FIA, IICA..." 
+                                   value="{{ fuente or '' }}">
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="filter-group-friendly">
+                            <label class="filter-label-friendly">
+                                <i class="bi bi-circle-fill"></i>
+                                Estado del Proyecto
+                                <span class="filter-tooltip" data-bs-toggle="tooltip" title="Si el proyecto está abierto para postular o ya cerró">
+                                    <i class="bi bi-question-circle"></i>
+                                </span>
+                            </label>
+                            <select name="estado" class="filter-input-friendly">
+                                <option value="">Todos los Estados</option>
+                                <option value="abierto" {% if estado == 'abierto' %}selected{% endif %}>🟢 Abierto - Puedes Postular</option>
+                                <option value="activo" {% if estado == 'activo' %}selected{% endif %}>🟡 Activo - Disponible</option>
+                                <option value="cerrado" {% if estado == 'cerrado' %}selected{% endif %}>🔴 Cerrado - Ya no acepta postulaciones</option>
+                                <option value="disponible" {% if estado == 'disponible' %}selected{% endif %}>✅ Disponible</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="filter-group-friendly">
+                            <label class="filter-label-friendly">
+                                <i class="bi bi-sort-down"></i>
+                                Ordenar Por
+                            </label>
+                            <select name="ordenar_por" class="filter-input-friendly">
+                                <option value="fecha" {% if ordenar_por == 'fecha' %}selected{% endif %}>📅 Fecha de Cierre</option>
+                                <option value="monto" {% if ordenar_por == 'monto' %}selected{% endif %}>💰 Monto</option>
+                                <option value="nombre" {% if ordenar_por == 'nombre' %}selected{% endif %}>🔤 Nombre</option>
+                                <option value="fuente" {% if ordenar_por == 'fuente' %}selected{% endif %}>🏢 Fuente</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-flex gap-2 mt-4 flex-wrap">
+                    <button type="submit" class="btn-friendly btn-primary-friendly">
+                        <i class="bi bi-search"></i>
+                        Buscar Proyectos
+                    </button>
+                    <a href="/" class="btn-friendly btn-outline-friendly">
+                        <i class="bi bi-arrow-clockwise"></i>
+                        Limpiar Búsqueda
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Mensaje de Resultados -->
+        {% if total_proyectos is defined %}
+        <div class="friendly-message">
+            <i class="bi bi-check-circle-fill"></i>
+            <div>
+                <strong>Encontraste {{ total_proyectos }} proyecto{{ 's' if total_proyectos != 1 else '' }}</strong>
+                {% if total_todos and total_todos != total_proyectos %}
+                <span style="opacity: 0.8;">(de {{ total_todos }} disponibles en total)</span>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Proyectos Amigables -->
+        <div class="projects-friendly">
+            <h3 style="color: var(--iica-primary); margin-bottom: 1.5rem;">
+                <i class="bi bi-folder-fill me-2"></i>
+                Proyectos que Pueden Interesarte
+            </h3>
+            
+            {% if proyectos %}
+                {% for proyecto in proyectos %}
+                <div class="project-card-friendly">
+                    <div class="project-title-friendly">
+                        <i class="bi bi-file-earmark-text me-2"></i>
+                        {{ proyecto.get('Nombre', 'Sin nombre') }}
+                    </div>
+                    
+                    <div class="project-info-grid">
+                        <div class="project-info-item">
+                            <i class="bi bi-building"></i>
+                            <div>
+                                <strong>Fuente:</strong>
+                                <span>{{ proyecto.get('Fuente', 'No especificada') }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="project-info-item">
+                            <i class="bi bi-tag"></i>
+                            <div>
+                                <strong>Área:</strong>
+                                <span>{{ proyecto.get('Área de interés', 'General') }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="project-info-item">
+                            <i class="bi bi-currency-dollar"></i>
+                            <div>
+                                <strong>Monto:</strong>
+                                <span>{{ proyecto.get('Monto', 'Consultar') }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="project-info-item">
+                            <i class="bi bi-calendar-event"></i>
+                            <div>
+                                <strong>Cierra:</strong>
+                                <span>{{ proyecto.get('Fecha cierre', 'No especificada') }}</span>
+                            </div>
+                        </div>
+                        
+                        {% if proyecto.get('Estado') %}
+                        <div class="project-info-item">
+                            <i class="bi bi-circle-fill" style="color: {% if 'abierto' in proyecto.get('Estado', '').lower() or 'activo' in proyecto.get('Estado', '').lower() %}#28a745{% else %}#dc3545{% endif %};"></i>
+                            <div>
+                                <strong>Estado:</strong>
+                                <span>{{ proyecto.get('Estado') }}</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    {% if proyecto.get('Descripción') %}
+                    <div style="margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 8px; color: #666;">
+                        <i class="bi bi-info-circle me-2"></i>
+                        {{ proyecto.get('Descripción', '')[:200] }}{% if proyecto.get('Descripción', '')|length > 200 %}...{% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    <div class="project-actions-friendly">
+                        <a href="{{ url_for('ver_proyecto', proyecto_id=proyecto.get('_indice_global', (current_page - 1) * per_page + loop.index0)) }}" 
+                           class="btn-friendly btn-primary-friendly">
+                            <i class="bi bi-eye"></i>
+                            Ver Detalles y Documentos
+                        </a>
+                        
+                        {% if proyecto.get('Enlace Postulación') %}
+                        <a href="{{ proyecto['Enlace Postulación'] }}" target="_blank" 
+                           class="btn-friendly btn-success-friendly">
+                            <i class="bi bi-send"></i>
+                            Postular Ahora
+                        </a>
+                        {% endif %}
+                        
+                        {% if proyecto.get('Enlace') %}
+                        <a href="{{ proyecto.Enlace }}" target="_blank" 
+                           class="btn-friendly btn-outline-friendly">
+                            <i class="bi bi-box-arrow-up-right"></i>
+                            Ver Página Oficial
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                
+                <!-- Paginación Amigable -->
+                {% if total_pages > 1 %}
+                <div class="d-flex justify-content-between align-items-center mt-4 pt-4 border-top">
+                    <div>
+                        <small class="text-muted">
+                            Mostrando página {{ current_page }} de {{ total_pages }}
+                            ({{ proyectos|length }} proyecto{{ 's' if proyectos|length != 1 else '' }} en esta página)
+                        </small>
+                    </div>
+                    <nav>
+                        <ul class="pagination mb-0">
+                            {% if current_page > 1 %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ current_page - 1 }}&busqueda={{ busqueda }}&area={{ area }}&fuente={{ fuente }}&estado={{ estado }}&ordenar_por={{ ordenar_por }}&orden={{ orden }}&per_page={{ per_page }}">
+                                    <i class="bi bi-chevron-left"></i> Anterior
+                                </a>
+                            </li>
+                            {% endif %}
+                            
+                            {% for page_num in range(1, total_pages + 1) %}
+                                {% if page_num == current_page %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ page_num }}</span>
+                                </li>
+                                {% elif page_num <= 3 or page_num > total_pages - 3 or (page_num >= current_page - 1 and page_num <= current_page + 1) %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_num }}&busqueda={{ busqueda }}&area={{ area }}&fuente={{ fuente }}&estado={{ estado }}&ordenar_por={{ ordenar_por }}&orden={{ orden }}&per_page={{ per_page }}">{{ page_num }}</a>
+                                </li>
+                                {% elif page_num == 4 or page_num == total_pages - 3 %}
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% if current_page < total_pages %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ current_page + 1 }}&busqueda={{ busqueda }}&area={{ area }}&fuente={{ fuente }}&estado={{ estado }}&ordenar_por={{ ordenar_por }}&orden={{ orden }}&per_page={{ per_page }}">
+                                    Siguiente <i class="bi bi-chevron-right"></i>
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+                {% endif %}
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-inbox" style="font-size: 4rem; color: #ccc; margin-bottom: 1rem;"></i>
+                    <h4 style="color: #666; margin-bottom: 1rem;">No se encontraron proyectos</h4>
+                    <p style="color: #999;">Intenta ajustar los filtros de búsqueda o <a href="/">ver todos los proyectos</a></p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Botón de Ayuda Flotante -->
+    <div class="help-button" data-bs-toggle="modal" data-bs-target="#helpModal">
+        <i class="bi bi-question-circle-fill"></i>
+    </div>
+
+    <!-- Modal de Ayuda -->
+    <div class="modal fade" id="helpModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content help-modal-content">
+                <div class="help-modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-question-circle-fill me-2"></i>
+                        ¿Necesitas Ayuda?
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <h6 class="mb-3"><i class="bi bi-1-circle-fill me-2"></i>¿Cómo busco proyectos?</h6>
+                    <p class="mb-4">Usa los filtros de búsqueda. Puedes escribir palabras clave, seleccionar un área de interés, o filtrar por fuente de financiamiento. Los filtros funcionan en conjunto, así que puedes usar varios a la vez.</p>
+                    
+                    <h6 class="mb-3"><i class="bi bi-2-circle-fill me-2"></i>¿Qué información veo en cada proyecto?</h6>
+                    <p class="mb-4">Cada proyecto muestra: el nombre, la fuente que lo ofrece, el área de interés, el monto disponible, la fecha de cierre y el estado. Haz clic en "Ver Detalles" para ver toda la información y los documentos necesarios.</p>
+                    
+                    <h6 class="mb-3"><i class="bi bi-3-circle-fill me-2"></i>¿Cómo postulo a un proyecto?</h6>
+                    <p class="mb-4">Primero, revisa los detalles del proyecto y la lista de documentos necesarios. Prepara todos los documentos requeridos. Luego, haz clic en "Postular Ahora" para ir a la página oficial del fondo y enviar tu solicitud.</p>
+                    
+                    <h6 class="mb-3"><i class="bi bi-4-circle-fill me-2"></i>¿Qué documentos necesito?</h6>
+                    <p class="mb-4">Cada proyecto tiene requisitos diferentes. En la página de detalles verás una lista completa de documentos necesarios, marcados como "Requerido" u "Opcional". Los documentos básicos suelen incluir: carta de presentación, formulario de postulación, presupuesto y cronograma.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background: var(--iica-primary); color: white; padding: 2rem 0; margin-top: 3rem; text-align: center;">
+        <div class="container">
+            <p>&copy; 2024 IICA Chile. Instituto Interamericano de Cooperación para la Agricultura</p>
+            <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                <a href="/notificaciones" style="color: white; text-decoration: none;">
+                    <i class="bi bi-bell me-1"></i>Notificaciones
+                </a>
+                <a href="/mis-aplicaciones" style="color: white; text-decoration: none;">
+                    <i class="bi bi-file-check me-1"></i>Mis Aplicaciones
+                </a>
+                <a href="/reportes" style="color: white; text-decoration: none;">
+                    <i class="bi bi-graph-up me-1"></i>Reportes
+                </a>
+                <a href="/dashboard-avanzado" style="color: white; text-decoration: none;">
+                    <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Inicializar tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+        
+        // Animaciones suaves
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.project-card-friendly, .stat-card-friendly, .guide-step');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    card.style.transition = 'all 0.5s ease';
+                    
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 50);
+            });
+        });
+    </script>
+</body>
+</html>
+
