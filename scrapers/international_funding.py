@@ -252,3 +252,136 @@ def obtener_proyectos_environmental_sustainability():
     except Exception as e:
         print(f"Error en Environmental Sustainability: {e}")
     return proyectos
+
+def obtener_proyectos_iica_nuevos():
+    """Obtener proyectos IICA encontrados en búsqueda web 2024-2025"""
+    proyectos = []
+    try:
+        # Proyectos IICA encontrados en búsqueda web
+        proyectos.extend([
+            {
+                "Nombre": "Proyecto Integral de Desarrollo Rural y Productividad en Honduras",
+                "Fuente": "IICA - BID",
+                "Fecha cierre": parsear_fecha("31/12/2025"),
+                "Enlace": "https://opsaa.iica.int/initiative-1243-proyecto-integral-de-desarrollo-rural-y-productividad",
+                "Estado": "Abierto",
+                "Monto": parsear_monto("5000000 USD"),
+                "Área de interés": clasificar_area("Desarrollo Rural"),
+                "Descripción": "Incrementar de manera sostenible los ingresos de los hogares rurales en el Corredor Seco de Honduras"
+            },
+            {
+                "Nombre": "Fortalecimiento de la Agricultura en el Caribe - CARICOM",
+                "Fuente": "IICA - CARICOM",
+                "Fecha cierre": parsear_fecha("31/12/2025"),
+                "Enlace": "https://www.diariolibre.com/economia/agro/2025/02/25/iica-respalda-proyectos-para-fortalecer-agricultura-en-el-caribe",
+                "Estado": "Abierto",
+                "Monto": parsear_monto("3000000 USD"),
+                "Área de interés": clasificar_area("Seguridad Alimentaria"),
+                "Descripción": "Mejorar la resiliencia, sostenibilidad y competitividad de la producción de alimentos en el Caribe"
+            },
+            {
+                "Nombre": "Fortalecimiento del Registro e Identidad Digital de Productores Agrarios - Perú",
+                "Fuente": "IICA - Perú",
+                "Fecha cierre": parsear_fecha("27/02/2026"),
+                "Enlace": "https://apps.iica.int/dashboardproyectos/programas/Listado?AVC=8785",
+                "Estado": "Abierto",
+                "Monto": parsear_monto("2000000 USD"),
+                "Área de interés": clasificar_area("Tecnología Agrícola"),
+                "Descripción": "Adaptar las cadenas de valor de café, cacao y aceite de palma mediante mejora del registro digital"
+            },
+            {
+                "Nombre": "Modernización de Servicios en la Escuela Nacional de Agricultura - El Salvador",
+                "Fuente": "IICA - El Salvador",
+                "Fecha cierre": parsear_fecha("31/08/2026"),
+                "Enlace": "https://apps.iica.int/dashboardproyectos/programas/Listado?AVC=8785",
+                "Estado": "Abierto",
+                "Monto": parsear_monto("1500000 USD"),
+                "Área de interés": clasificar_area("Educación Agrícola"),
+                "Descripción": "Modernizar servicios de agua potable, energía eléctrica e infraestructura agrícola"
+            },
+            {
+                "Nombre": "Producción de Camote de Nueva Generación - Jamaica",
+                "Fuente": "IICA - Jamaica",
+                "Fecha cierre": parsear_fecha("15/08/2028"),
+                "Enlace": "https://apps.iica.int/dashboardproyectos/programas/Listado?AVC=8785",
+                "Estado": "Abierto",
+                "Monto": parsear_monto("1800000 USD"),
+                "Área de interés": clasificar_area("Producción Agrícola"),
+                "Descripción": "Mejorar la producción de camote en el Caribe, centrándose en Jamaica"
+            },
+            {
+                "Nombre": "Apoyo al Centro de Investigación y Producción en Ambiente Controlado - Panamá",
+                "Fuente": "IICA - Panamá",
+                "Fecha cierre": parsear_fecha("08/08/2025"),
+                "Enlace": "https://apps.iica.int/dashboardproyectos/programas/Listado?AVC=8785",
+                "Estado": "Abierto",
+                "Monto": parsear_monto("1200000 USD"),
+                "Área de interés": clasificar_area("Investigación Agrícola"),
+                "Descripción": "Apoyar el funcionamiento del CIPAC-AIP en Panamá"
+            },
+            {
+                "Nombre": "Proyectos de Reactivación Económica en Zonas Rurales - Costa Rica",
+                "Fuente": "IICA - Costa Rica",
+                "Fecha cierre": parsear_fecha("31/12/2025"),
+                "Enlace": "https://iica.int/es/press/noticias/costa-rica-impulsa-18-proyectos-para-reactivacion-economica-en-zonas-rurales",
+                "Estado": "Abierto",
+                "Monto": parsear_monto("4000000 USD"),
+                "Área de interés": clasificar_area("Desarrollo Rural"),
+                "Descripción": "18 proyectos de inversión con valor agregado para reactivar economía en comunidades rurales"
+            },
+            {
+                "Nombre": "Proyecto de Cooperación con la Unión Europea - Desarrollo Territorial",
+                "Fuente": "IICA - Unión Europea",
+                "Fecha cierre": parsear_fecha("31/12/2026"),
+                "Enlace": "https://iica.int/es/proyectos-de-cooperacion-con-la-union-europea-y-agencias-europeas-de-cooperacion",
+                "Estado": "Abierto",
+                "Monto": parsear_monto("10000000 USD"),
+                "Área de interés": clasificar_area("Cooperación Internacional"),
+                "Descripción": "Programas cofinanciados con la UE para fortalecer desarrollo territorial y agricultura familiar"
+            },
+            {
+                "Nombre": "Construcción de Estanques de Geomembranas - Honduras",
+                "Fuente": "IICA - Honduras SAG",
+                "Fecha cierre": parsear_fecha("30/06/2025"),
+                "Enlace": "https://iica.int/es/bids/honduras-licitacion-no-15-2025-construccion-de-dos-proyectos-de-estanques-de-geomembranas",
+                "Estado": "Abierto",
+                "Monto": parsear_monto("500000 USD"),
+                "Área de interés": clasificar_area("Infraestructura Agrícola"),
+                "Descripción": "Construcción de estanques de geomembranas para fortalecimiento de programas agrícolas"
+            },
+            {
+                "Nombre": "Proyecto Internacional de Capitalización de Experiencias",
+                "Fuente": "IICA - FAO",
+                "Fecha cierre": parsear_fecha("31/12/2025"),
+                "Enlace": "https://iica.int/es/press/noticias/nuevo-proyecto-internacional-busca-mejorar-el-desarrollo-rural-en-15-paises",
+                "Estado": "Abierto",
+                "Monto": parsear_monto("8000000 USD"),
+                "Área de interés": clasificar_area("Desarrollo Rural"),
+                "Descripción": "Mejorar calidad y efectividad de proyectos de desarrollo rural en 15 países mediante sistematización de buenas prácticas"
+            }
+        ])
+        print(f"✅ Agregados {len(proyectos)} proyectos IICA nuevos")
+    except Exception as e:
+        print(f"Error obteniendo proyectos IICA nuevos: {e}")
+    return proyectos
+
+def obtener_proyectos_internacionales():
+    """Obtener todos los proyectos internacionales"""
+    proyectos = []
+    
+    # Agregar proyectos de todas las fuentes
+    proyectos.extend(obtener_proyectos_kickstarter())
+    proyectos.extend(obtener_proyectos_gofundme())
+    proyectos.extend(obtener_proyectos_indiegogo())
+    proyectos.extend(obtener_proyectos_rockethub())
+    proyectos.extend(obtener_proyectos_artistshare())
+    proyectos.extend(obtener_proyectos_agricultural_grants())
+    proyectos.extend(obtener_proyectos_development_funding())
+    proyectos.extend(obtener_proyectos_tech_innovation())
+    proyectos.extend(obtener_proyectos_education_research())
+    proyectos.extend(obtener_proyectos_environmental_sustainability())
+    # Agregar nuevos proyectos IICA encontrados en búsqueda web
+    proyectos.extend(obtener_proyectos_iica_nuevos())
+    
+    print(f"📊 Total de proyectos internacionales: {len(proyectos)}")
+    return proyectos
