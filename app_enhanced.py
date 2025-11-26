@@ -72,6 +72,13 @@ except ImportError as e:
     backup_system = MockBackupSystem()
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
+
+# FORZAR USO DE TEMPLATE DIDÁCTICO
+print("=" * 80)
+print("🎨 INTERFAZ DIDÁCTICA - FORZANDO CARGA")
+print("📄 Template: home_didactico.html")
+print("✅ Versión: DIDACTICA_V1.0")
+print("=" * 80)
 DATA_PATH = "data/proyectos_fortalecidos.xlsx"
 
 # Crear directorio de datos si no existe
