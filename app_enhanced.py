@@ -260,14 +260,36 @@ def home():
         proyectos_paginados = proyectos_filtrados[start:end]
         
         # Agregar índice global a cada proyecto para enlaces correctos
-        # IMPORTANTE: Usar el índice en la lista completa de proyectos filtrados
+        # IMPORTANTE: El índice debe ser en la lista COMPLETA de proyectos (sin filtros)
+        # para que funcione correctamente con la ruta /proyecto/<id>
         for idx, proyecto in enumerate(proyectos_paginados):
-            # El índice global es la posición en la lista completa de proyectos filtrados
-            # Esto asegura que el link funcione correctamente
-            indice_global = start + idx
+            # Buscar el proyecto en la lista completa original
+            nombre_proyecto = str(proyecto.get('Nombre', '')).strip()
+            indice_global = None
+            
+            # Buscar por nombre en la lista completa
+            for i, p_orig in enumerate(proyectos):
+                if str(p_orig.get('Nombre', '')).strip() == nombre_proyecto:
+                    indice_global = i
+                    break
+            
+            # Si no se encuentra por nombre, usar el índice calculado
+            # Esto puede pasar si hay proyectos duplicados o nombres similares
+            if indice_global is None:
+                # Intentar encontrar por otros campos únicos
+                for i, p_orig in enumerate(proyectos):
+                    if (p_orig.get('Fuente') == proyecto.get('Fuente') and 
+                        p_orig.get('Fecha cierre') == proyecto.get('Fecha cierre')):
+                        indice_global = i
+                        break
+                
+                # Si aún no se encuentra, usar posición estimada
+                if indice_global is None:
+                    indice_global = min(start + idx, len(proyectos) - 1)
+            
             proyecto['_indice_global'] = indice_global
             proyecto['_indice_pagina'] = idx
-            proyecto['_indice_en_filtrados'] = indice_global  # Índice en proyectos_filtrados
+            proyecto['_indice_en_filtrados'] = start + idx
         
         total_pages = (len(proyectos_filtrados) + per_page - 1) // per_page if proyectos_filtrados else 1
         
