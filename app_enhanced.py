@@ -559,8 +559,6 @@ def favicon():
 
 # ===== MANEJO DE ERRORES =====
 
-from werkzeug.exceptions import NotFound
-
 @app.errorhandler(404)
 def not_found(error):
     """Manejo de errores 404 - Página no encontrada"""
