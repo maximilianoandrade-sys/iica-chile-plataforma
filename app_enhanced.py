@@ -10,6 +10,7 @@ import os
 import logging
 from functools import lru_cache
 import pandas as pd
+import csv
 import uuid
 from datetime import datetime
 from utils import parsear_monto
@@ -73,20 +74,32 @@ except ImportError as e:
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
 
+# FORZAR: Deshabilitar TODOS los cachés de Jinja2 desde el inicio
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.jinja_env.auto_reload = True
+app.jinja_env.cache = None  # Deshabilitar caché de templates completamente
+
+# Obtener versión de deploy desde variable de entorno (establecida en app.py)
+APP_VERSION = os.environ.get('APP_VERSION', datetime.now().strftime('%Y%m%d_%H%M%S'))
+BUILD_TIMESTAMP = os.environ.get('BUILD_TIMESTAMP', datetime.now().isoformat())
+
 # FORZAR USO DE TEMPLATE DIDÁCTICO
 print("=" * 80)
 print("🎨 INTERFAZ DIDÁCTICA - FORZANDO CARGA")
 print("📄 Template: home_didactico.html")
-print("✅ Versión: DIDACTICA_V1.0")
+print(f"✅ Versión: DIDACTICA_V3.0 - Build: {APP_VERSION}")
+print(f"✅ Timestamp: {BUILD_TIMESTAMP}")
 print("=" * 80)
 DATA_PATH = "data/proyectos_fortalecidos.xlsx"
 
-# Crear directorio de datos si no existe
+# Crear directorios necesarios si no existen
 os.makedirs("data", exist_ok=True)
+os.makedirs("exports", exist_ok=True)
 
-@lru_cache(maxsize=1)
+# CACHÉ DESHABILITADO TEMPORALMENTE PARA FORZAR ACTUALIZACIONES
+# @lru_cache(maxsize=1)
 def _cargar_excel_cached():
-    """Función cacheada para cargar Excel - SIN límites, con múltiples fuentes"""
+    """Función para cargar Excel - SIN límites, con múltiples fuentes - CACHÉ DESHABILITADO"""
     proyectos_totales = []
     
     try:
@@ -127,15 +140,41 @@ def _cargar_excel_cached():
                     print(f"⚠️ Error cargando {archivo_alt}: {e}")
                     continue
         
+        # Si aún no hay proyectos, intentar desde proyectos_raw
+        if len(proyectos_totales) == 0:
+            print("🔄 No se encontraron archivos Excel, intentando cargar desde proyectos_raw...")
+            try:
+                from proyectos_base import proyectos_raw, convertir_proyectos_raw_a_formato
+                proyectos_desde_raw = convertir_proyectos_raw_a_formato()
+                if proyectos_desde_raw:
+                    print(f"📊 Cargados {len(proyectos_desde_raw)} proyectos desde proyectos_raw")
+                    proyectos_totales.extend(proyectos_desde_raw)
+            except Exception as e:
+                print(f"⚠️ Error cargando desde proyectos_raw: {e}")
+        
         # Si aún no hay proyectos, intentar desde scrapers
         if len(proyectos_totales) == 0:
-            print("🔄 No se encontraron archivos Excel, intentando cargar desde scrapers...")
+            print("🔄 Intentando cargar desde scrapers...")
             try:
-                from scrapers.international_funding import obtener_proyectos_internacionales
-                proyectos_scrapers = obtener_proyectos_internacionales()
-                if proyectos_scrapers:
-                    print(f"📊 Cargados {len(proyectos_scrapers)} proyectos desde scrapers")
-                    proyectos_totales.extend(proyectos_scrapers)
+                # Intentar múltiples scrapers
+                scrapers_a_intentar = [
+                    ("International Funding", "scrapers.international_funding", "obtener_proyectos_internacionales"),
+                    ("CORFO Real", "scrapers.corfo_real", "obtener_proyectos_corfo_real"),
+                    ("Fuentes Agrícolas", "scrapers.fuentes_agricolas", "obtener_proyectos_fia"),
+                ]
+                
+                for nombre, modulo, funcion in scrapers_a_intentar:
+                    try:
+                        modulo_obj = __import__(modulo, fromlist=[funcion])
+                        scraper_func = getattr(modulo_obj, funcion)
+                        proyectos_scrapers = scraper_func()
+                        if proyectos_scrapers:
+                            print(f"📊 Cargados {len(proyectos_scrapers)} proyectos desde {nombre}")
+                            proyectos_totales.extend(proyectos_scrapers)
+                            break  # Si encontramos proyectos, no intentar más
+                    except Exception as e:
+                        print(f"⚠️ Error con {nombre}: {e}")
+                        continue
             except Exception as e:
                 print(f"⚠️ Error cargando desde scrapers: {e}")
         
@@ -152,24 +191,87 @@ def _cargar_excel_cached():
 
 def cargar_excel():
     """Cargar datos de Excel - SIN límites, con fallbacks y sin duplicados"""
-    proyectos = _cargar_excel_cached()
-    
-    # Limpiar duplicados por nombre
-    if proyectos:
-        proyectos_unicos = []
-        nombres_vistos = set()
-        for p in proyectos:
-            nombre = str(p.get('Nombre', '')).strip()
-            if nombre and nombre not in nombres_vistos:
-                nombres_vistos.add(nombre)
-                proyectos_unicos.append(p)
+    try:
+        proyectos = _cargar_excel_cached()
         
-        if len(proyectos_unicos) != len(proyectos):
-            print(f"🧹 Eliminados {len(proyectos) - len(proyectos_unicos)} duplicados")
-            proyectos = proyectos_unicos
+        # Si no hay proyectos, crear datos de ejemplo
+        if not proyectos:
+            print("⚠️ No se encontraron proyectos, creando datos de ejemplo")
+            proyectos = crear_datos_ejemplo()
+        
+        # Limpiar duplicados por nombre
+        if proyectos:
+            proyectos_unicos = []
+            nombres_vistos = set()
+            for p in proyectos:
+                nombre = str(p.get('Nombre', '')).strip()
+                if nombre and nombre not in nombres_vistos:
+                    nombres_vistos.add(nombre)
+                    proyectos_unicos.append(p)
+            
+            if len(proyectos_unicos) != len(proyectos):
+                print(f"🧹 Eliminados {len(proyectos) - len(proyectos_unicos)} duplicados")
+                proyectos = proyectos_unicos
+        
+        print(f"✅ Retornando {len(proyectos)} proyectos únicos (SIN límites)")
+        return proyectos
+    except Exception as e:
+        print(f"❌ Error cargando Excel: {e}")
+        import traceback
+        traceback.print_exc()
+        # Retornar datos de ejemplo en caso de error
+        return crear_datos_ejemplo()
+
+def crear_datos_ejemplo():
+    """Crear datos de ejemplo si no hay proyectos disponibles - Usa proyectos_raw reales"""
+    print("📝 Creando datos desde proyectos_raw...")
     
-    print(f"✅ Retornando {len(proyectos)} proyectos únicos (SIN límites)")
-    return proyectos
+    try:
+        # Intentar importar proyectos_raw
+        from proyectos_base import proyectos_raw, convertir_proyectos_raw_a_formato
+        proyectos_ejemplo = convertir_proyectos_raw_a_formato()
+        print(f"✅ Cargados {len(proyectos_ejemplo)} proyectos desde proyectos_raw")
+        return proyectos_ejemplo
+    except ImportError:
+        print("⚠️ No se pudo importar proyectos_base, usando datos básicos...")
+        # Fallback a datos básicos
+        proyectos_ejemplo = [
+            {
+                'Nombre': 'Programa de Desarrollo Rural Sostenible',
+                'Fuente': 'IICA Chile',
+                'Área de interés': 'Desarrollo Rural',
+                'Monto': 'USD 500,000',
+                'Fecha cierre': '2024-12-31',
+                'Estado': 'Abierto',
+                'Descripción': 'Programa para apoyar el desarrollo rural sostenible en comunidades agrícolas.',
+                'Enlace': '#',
+                'Enlace Postulación': '#'
+            },
+            {
+                'Nombre': 'Fondo de Innovación Agrícola',
+                'Fuente': 'CORFO',
+                'Área de interés': 'Innovación Tecnológica',
+                'Monto': 'USD 1,000,000',
+                'Fecha cierre': '2024-12-15',
+                'Estado': 'Abierto',
+                'Descripción': 'Fondo para proyectos de innovación en el sector agrícola.',
+                'Enlace': '#',
+                'Enlace Postulación': '#'
+            },
+            {
+                'Nombre': 'Programa Juventud Rural',
+                'Fuente': 'INDAP',
+                'Área de interés': 'Juventudes Rurales',
+                'Monto': 'USD 300,000',
+                'Fecha cierre': '2024-12-20',
+                'Estado': 'Abierto',
+                'Descripción': 'Programa dirigido a jóvenes emprendedores del sector rural.',
+                'Enlace': '#',
+                'Enlace Postulación': '#'
+            }
+        ]
+        print(f"✅ Creados {len(proyectos_ejemplo)} proyectos básicos")
+        return proyectos_ejemplo
 
 def calcular_estadisticas(proyectos):
     """Calcular estadísticas de proyectos"""
@@ -206,37 +308,194 @@ def calcular_estadisticas(proyectos):
         'monto_total': monto_total
     }
 
+def filtrar_proyectos(proyectos, query='', area='', fuente='', estado='', monto_min=None, monto_max=None):
+    """
+    Función mejorada para filtrar proyectos con múltiples criterios
+    
+    Args:
+        proyectos: Lista de proyectos a filtrar
+        query: Búsqueda general por palabras clave
+        area: Filtro por área de interés
+        fuente: Filtro por fuente de financiamiento
+        estado: Filtro por estado del proyecto
+        monto_min: Monto mínimo (opcional)
+        monto_max: Monto máximo (opcional)
+    
+    Returns:
+        Lista de proyectos filtrados
+    """
+    if not proyectos:
+        return []
+    
+    proyectos_filtrados = proyectos.copy()
+    
+    # Búsqueda general por palabras clave
+    if query:
+        query_lower = query.lower().strip()
+        proyectos_filtrados = [p for p in proyectos_filtrados if 
+                             query_lower in str(p.get('Nombre', '')).lower() or
+                             query_lower in str(p.get('Descripción', '')).lower() or
+                             query_lower in str(p.get('Fuente', '')).lower() or
+                             query_lower in str(p.get('Área de interés', '')).lower() or
+                             query_lower in str(p.get('Palabras Clave', '')).lower()]
+    
+    # Filtro por área de interés
+    if area:
+        area_lower = area.lower().strip()
+        proyectos_filtrados = [p for p in proyectos_filtrados 
+                             if area_lower in str(p.get('Área de interés', '')).lower()]
+    
+    # Filtro por fuente
+    if fuente:
+        fuente_lower = fuente.lower().strip()
+        proyectos_filtrados = [p for p in proyectos_filtrados 
+                             if fuente_lower in str(p.get('Fuente', '')).lower()]
+    
+    # Filtro por estado
+    if estado:
+        estado_lower = estado.lower().strip()
+        proyectos_filtrados = [p for p in proyectos_filtrados 
+                             if estado_lower in str(p.get('Estado', '')).lower()]
+    
+    # Filtro por monto (si se proporciona)
+    if monto_min is not None or monto_max is not None:
+        proyectos_con_monto = []
+        for p in proyectos_filtrados:
+            monto = p.get('Monto', 0)
+            monto_num = 0
+            
+            if isinstance(monto, (int, float)) and monto > 0:
+                monto_num = float(monto)
+            elif isinstance(monto, str):
+                try:
+                    monto_num = float(monto.replace('$', '').replace(',', '').replace('USD', '').strip())
+                except:
+                    monto_num = 0
+            
+            # Aplicar filtros de monto
+            if monto_min is not None and monto_num < monto_min:
+                continue
+            if monto_max is not None and monto_num > monto_max:
+                continue
+            
+            proyectos_con_monto.append(p)
+        
+        proyectos_filtrados = proyectos_con_monto
+    
+    return proyectos_filtrados
+
+def exportar_csv(proyectos, filename='proyectos_iica.csv'):
+    """
+    Exportar proyectos a CSV sin usar pandas
+    
+    Args:
+        proyectos: Lista de diccionarios con los proyectos
+        filename: Nombre del archivo CSV a crear
+    
+    Returns:
+        Ruta del archivo creado
+    """
+    if not proyectos:
+        raise ValueError("No hay proyectos para exportar")
+    
+    # Obtener todas las claves únicas de todos los proyectos
+    fieldnames = set()
+    for proyecto in proyectos:
+        fieldnames.update(proyecto.keys())
+    
+    # Ordenar las columnas para consistencia
+    fieldnames = sorted(list(fieldnames))
+    
+    # Crear directorio de exports si no existe
+    export_dir = 'exports'
+    os.makedirs(export_dir, exist_ok=True)
+    
+    filepath = os.path.join(export_dir, filename)
+    
+    # Escribir CSV
+    with open(filepath, 'w', newline='', encoding='utf-8-sig') as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction='ignore')
+        writer.writeheader()
+        
+        for proyecto in proyectos:
+            # Limpiar valores None y convertirlos a strings vacíos
+            row = {}
+            for key in fieldnames:
+                value = proyecto.get(key, '')
+                if value is None:
+                    value = ''
+                elif not isinstance(value, str):
+                    value = str(value)
+                row[key] = value
+            writer.writerow(row)
+    
+    print(f"✅ CSV exportado exitosamente: {filepath}")
+    return filepath
+
 # ===== RUTAS PRINCIPALES =====
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def home():
-    """Página principal - VERSIÓN MEJORADA CON TODOS LOS PROYECTOS"""
+    """Página principal - VERSIÓN MEJORADA CON TODOS LOS PROYECTOS Y FILTROS MEJORADOS"""
+    # FORZAR: Logging detallado para verificar que se está usando la versión correcta
+    print("=" * 80)
+    print("🏠 RUTA HOME LLAMADA - FORZANDO ACTUALIZACIÓN")
+    print(f"✅ Versión App: {APP_VERSION}")
+    print(f"✅ Timestamp Build: {BUILD_TIMESTAMP}")
+    print(f"✅ Template objetivo: home_didactico.html")
+    print("=" * 80)
+    
     try:
-        proyectos = cargar_excel()
+        # Cargar proyectos con manejo robusto de errores
+        try:
+            proyectos = cargar_excel()
+            if not proyectos:
+                print("⚠️ No hay proyectos, usando datos de ejemplo")
+                proyectos = crear_datos_ejemplo()
+        except Exception as e:
+            print(f"❌ Error cargando proyectos: {e}")
+            proyectos = crear_datos_ejemplo()
+        
         print(f"📊 Total de proyectos cargados: {len(proyectos)}")
         
-        # Filtros PRIMERO (antes de paginación) - CORREGIDO
-        area = request.args.get('area', '')
-        fuente = request.args.get('fuente', '')
-        busqueda = request.args.get('busqueda', '')
-        estado = request.args.get('estado', '')
+        # Obtener parámetros de filtro (soporta GET y POST)
+        if request.method == 'POST':
+            query = request.form.get('query', '').strip()
+            busqueda = request.form.get('busqueda', query).strip()  # Compatibilidad con nombre anterior
+            area = request.form.get('area', '').strip()
+            fuente = request.form.get('fuente', '').strip()
+            estado = request.form.get('estado', '').strip()
+            monto_min = request.form.get('monto_min', '')
+            monto_max = request.form.get('monto_max', '')
+            
+            # Convertir montos a float si están presentes
+            monto_min = float(monto_min) if monto_min and monto_min.replace('.', '').isdigit() else None
+            monto_max = float(monto_max) if monto_max and monto_max.replace('.', '').isdigit() else None
+        else:
+            # Método GET
+            query = request.args.get('query', '').strip()
+            busqueda = request.args.get('busqueda', query).strip()  # Compatibilidad
+            area = request.args.get('area', '').strip()
+            fuente = request.args.get('fuente', '').strip()
+            estado = request.args.get('estado', '').strip()
+            monto_min = request.args.get('monto_min', '')
+            monto_max = request.args.get('monto_max', '')
+            
+            # Convertir montos a float si están presentes
+            monto_min = float(monto_min) if monto_min and monto_min.replace('.', '').isdigit() else None
+            monto_max = float(monto_max) if monto_max and monto_max.replace('.', '').isdigit() else None
         
-        # Aplicar filtros a TODOS los proyectos
-        proyectos_filtrados = proyectos.copy()
-        
-        if area:
-            proyectos_filtrados = [p for p in proyectos_filtrados if area.lower() in str(p.get('Área de interés', '')).lower()]
-        if fuente:
-            proyectos_filtrados = [p for p in proyectos_filtrados if fuente.lower() in str(p.get('Fuente', '')).lower()]
-        if estado:
-            proyectos_filtrados = [p for p in proyectos_filtrados if estado.lower() in str(p.get('Estado', '')).lower()]
-        if busqueda:
-            busqueda_lower = busqueda.lower()
-            proyectos_filtrados = [p for p in proyectos_filtrados if 
-                                 busqueda_lower in str(p.get('Nombre', '')).lower() or
-                                 busqueda_lower in str(p.get('Descripción', '')).lower() or
-                                 busqueda_lower in str(p.get('Fuente', '')).lower() or
-                                 busqueda_lower in str(p.get('Área de interés', '')).lower()]
+        # Usar función mejorada de filtrado
+        query_final = busqueda if busqueda else query
+        proyectos_filtrados = filtrar_proyectos(
+            proyectos, 
+            query=query_final,
+            area=area,
+            fuente=fuente,
+            estado=estado,
+            monto_min=monto_min,
+            monto_max=monto_max
+        )
         
         print(f"📊 Proyectos después de filtros: {len(proyectos_filtrados)}")
         
@@ -306,30 +565,75 @@ def home():
         print(f"📊 Total sin filtros: {len(proyectos)}")
         print(f"🎨 USANDO TEMPLATE: home_didactico.html (INTERFAZ DIDÁCTICA)")
         
-        # FORZAR VERIFICACIÓN DEL TEMPLATE
+        # FORZAR: SIEMPRE usar home_didactico.html - SIN FALLBACKS
         import os
-        template_file = os.path.join('templates', 'home_didactico.html')
-        if os.path.exists(template_file):
-            print(f"✅ Template existe: {template_file}")
-        else:
-            print(f"❌ ERROR: Template NO existe: {template_file}")
-            print(f"📂 Archivos disponibles: {os.listdir('templates') if os.path.exists('templates') else 'No existe templates/'}")
+        template_a_usar = 'home_didactico.html'
+        template_path = os.path.join('templates', template_a_usar)
         
-        return render_template('home_didactico.html',  # TEMPLATE DIDÁCTICO Y AMIGABLE
-                             proyectos=proyectos_paginados,  # Proyectos paginados para mostrar
-                             stats=stats,
-                             current_page=page,
-                             total_pages=total_pages,
-                             total_proyectos=len(proyectos_filtrados),  # Total después de filtros
-                             total_todos=len(proyectos),  # Total sin filtros
-                             per_page=per_page,
-                             area=area,
-                             fuente=fuente,
-                             busqueda=busqueda,
-                             estado=estado,
-                             ordenar_por=ordenar_por,
-                             orden=orden,
-                             todos_los_proyectos_filtrados=proyectos_filtrados)  # Para referencia
+        if os.path.exists(template_path):
+            print(f"✅ Template FORZADO encontrado: {template_path}")
+        else:
+            print(f"❌ ERROR CRÍTICO: Template {template_path} NO existe")
+            print(f"📂 Archivos en templates: {os.listdir('templates') if os.path.exists('templates') else 'No existe templates/'}")
+            # Aún así forzar el uso para que falle claramente si no existe
+            print(f"⚠️ FORZANDO uso de {template_a_usar} - si falla, el template no existe")
+        
+        # FORZAR: Invalidar caché de Jinja2 para asegurar template fresco
+        app.jinja_env.cache = None
+        print(f"🔄 Caché de Jinja2 invalidado - usando template fresco")
+        print(f"📄 Template seleccionado: {template_a_usar}")
+        
+        # Preparar datos para el template (asegurar que todos los campos existan)
+        datos_template = {
+            'proyectos': proyectos_paginados,
+            'stats': stats,
+            'current_page': page,
+            'total_pages': total_pages,
+            'total_proyectos': len(proyectos_filtrados),
+            'total_todos': len(proyectos),
+            'per_page': per_page,
+            'area': area or '',
+            'fuente': fuente or '',
+            'busqueda': busqueda or query_final or '',
+            'query': query_final or '',
+            'estado': estado or '',
+            'ordenar_por': ordenar_por or 'fecha',
+            'orden': orden or 'asc',
+            'monto_min': monto_min,
+            'monto_max': monto_max,
+            'app_version': APP_VERSION,  # Para cache busting en el template
+            'build_timestamp': BUILD_TIMESTAMP
+        }
+        
+        # FORZAR: Renderizar SIEMPRE home_didactico.html - SIN FALLBACKS
+        print(f"🎯 RENDERIZANDO TEMPLATE: {template_a_usar}")
+        print(f"📊 Datos enviados al template: {len(datos_template)} campos")
+        
+        try:
+            # Invalidar caché ANTES de renderizar
+            app.jinja_env.cache = None
+            resultado = render_template(template_a_usar, **datos_template)
+            print(f"✅ Template {template_a_usar} renderizado exitosamente")
+            return resultado
+        except Exception as template_error:
+            print(f"❌ ERROR CRÍTICO renderizando template {template_a_usar}: {template_error}")
+            import traceback
+            traceback.print_exc()
+            # NO usar fallback - mostrar error claro
+            return f"""
+            <html>
+            <head><title>Error de Template</title></head>
+            <body style="font-family: Arial; padding: 40px; background: #f5f5f5;">
+                <h1 style="color: #d32f2f;">❌ Error Crítico</h1>
+                <p><strong>Template requerido no encontrado:</strong> {template_a_usar}</p>
+                <p><strong>Error:</strong> {str(template_error)}</p>
+                <p><strong>Versión:</strong> {APP_VERSION}</p>
+                <p><strong>Timestamp:</strong> {BUILD_TIMESTAMP}</p>
+                <hr>
+                <p>Por favor, verifica que el archivo <code>templates/home_didactico.html</code> exista en el servidor.</p>
+            </body>
+            </html>
+            """, 500
     except Exception as e:
         print(f"❌ Error en home: {e}")
         import traceback
@@ -343,7 +647,12 @@ def home():
             for idx, p in enumerate(proyectos_mostrar):
                 p['_indice_global'] = idx
                 p['_indice_pagina'] = idx
-            return render_template('home_didactico.html',  # TEMPLATE DIDÁCTICO Y AMIGABLE
+            # Intentar usar template didáctico, sino usar alternativo
+            import os
+            template_file = os.path.join('templates', 'home_didactico.html')
+            template_a_usar = 'home_didactico.html' if os.path.exists(template_file) else 'home.html'
+            
+            return render_template(template_a_usar,  # TEMPLATE DIDÁCTICO Y AMIGABLE
                                  proyectos=proyectos_mostrar,
                                  stats=stats_basicos,
                                  current_page=1,
@@ -360,7 +669,97 @@ def home():
                                  error_message=f"Error: {str(e)}")
         except Exception as e2:
             print(f"❌ Error incluso en fallback: {e2}")
-            return render_template('error.html', error=f"Error principal: {str(e)}\nError fallback: {str(e2)}")
+            import traceback
+            traceback.print_exc()
+            # Crear respuesta HTML básica como último recurso
+            return crear_respuesta_html_basica({
+                'proyectos': [],
+                'stats': {'total_proyectos': 0, 'proyectos_abiertos': 0, 'fuentes_unicas': 0, 'monto_total': 0},
+                'error': f"Error: {str(e)}"
+            })
+
+def crear_respuesta_html_basica(datos):
+    """Crear respuesta HTML básica cuando los templates fallan"""
+    proyectos = datos.get('proyectos', [])
+    stats = datos.get('stats', {})
+    
+    html = f"""
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>IICA Chile - Plataforma de Financiamiento</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            body {{ font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }}
+            .container {{ max-width: 1200px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }}
+            h1 {{ color: #2E7D32; margin-bottom: 30px; }}
+            .stat-card {{ background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 10px 0; }}
+            .project-card {{ border: 1px solid #ddd; padding: 15px; margin: 15px 0; border-radius: 8px; }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🌱 IICA Chile - Plataforma de Financiamiento Agrícola</h1>
+            
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <h3>{stats.get('total_proyectos', 0)}</h3>
+                        <p>Proyectos Totales</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <h3>{stats.get('proyectos_abiertos', 0)}</h3>
+                        <p>Proyectos Abiertos</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <h3>{stats.get('fuentes_unicas', 0)}</h3>
+                        <p>Fuentes</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <h3>${stats.get('monto_total', 0):,.0f}</h3>
+                        <p>Monto Total</p>
+                    </div>
+                </div>
+            </div>
+            
+            <h2>Proyectos Disponibles</h2>
+    """
+    
+    if proyectos:
+        for proyecto in proyectos:
+            nombre = proyecto.get('Nombre', 'Sin nombre')
+            fuente = proyecto.get('Fuente', 'No especificada')
+            monto = proyecto.get('Monto', 'Consultar')
+            estado = proyecto.get('Estado', 'No especificado')
+            
+            html += f"""
+            <div class="project-card">
+                <h4>{nombre}</h4>
+                <p><strong>Fuente:</strong> {fuente}</p>
+                <p><strong>Monto:</strong> {monto}</p>
+                <p><strong>Estado:</strong> {estado}</p>
+            </div>
+            """
+    else:
+        html += "<p>No hay proyectos disponibles en este momento.</p>"
+    
+    html += """
+            <hr>
+            <p class="text-muted">© 2024 IICA Chile. Instituto Interamericano de Cooperación para la Agricultura</p>
+        </div>
+    </body>
+    </html>
+    """
+    
+    return html, 200
 
 @app.route('/proyecto/<int:proyecto_id>')
 @app.route('/proyecto/<proyecto_id>')  # También aceptar string por si acaso
@@ -648,6 +1047,139 @@ def backup_page():
         print(f"❌ Error en backup: {e}")
         return render_template('backup.html', backups=[], stats={})
 
+# ===== RUTAS ADICIONALES =====
+
+@app.route('/dashboard')
+def dashboard():
+    """Dashboard principal - redirige a dashboard avanzado o muestra dashboard simple"""
+    try:
+        proyectos = cargar_excel()
+        stats = calcular_estadisticas(proyectos)
+        
+        # Intentar usar dashboard avanzado si existe, sino usar simple
+        try:
+            return render_template('dashboard.html',
+                                 proyectos=proyectos[:20],
+                                 stats=stats)
+        except:
+            return render_template('dashboard_simple.html',
+                                 proyectos=proyectos[:20],
+                                 stats=stats)
+    except Exception as e:
+        print(f"❌ Error en dashboard: {e}")
+        return redirect(url_for('home'))
+
+@app.route('/ai-search', methods=['GET', 'POST'])
+def ai_search():
+    """Página de búsqueda con IA"""
+    try:
+        import os
+        template_path = os.path.join('templates', 'ai_search.html')
+        if os.path.exists(template_path):
+            query = request.args.get('query', '') or request.form.get('query', '')
+            return render_template('ai_search.html', query=query)
+        else:
+            print(f"⚠️ Template ai_search.html no encontrado, redirigiendo a home")
+            return redirect(url_for('home'))
+    except Exception as e:
+        print(f"❌ Error en ai-search: {e}")
+        import traceback
+        traceback.print_exc()
+        # Redirigir a home en lugar de mostrar error
+        return redirect(url_for('home'))
+
+@app.route('/todos-los-proyectos', methods=['GET', 'POST'])
+def todos_los_proyectos():
+    """Muestra todos los proyectos disponibles con filtros"""
+    try:
+        proyectos = cargar_excel()
+        
+        if not proyectos:
+            print("⚠️ No hay proyectos cargados")
+            return render_template('error.html',
+                                 error="No hay proyectos disponibles en este momento",
+                                 error_code=404), 404
+        
+        # Filtros de búsqueda
+        query = request.args.get('query', '') or request.form.get('query', '')
+        busqueda = request.args.get('busqueda', '') or request.form.get('busqueda', query)
+        area = request.args.get('area', '') or request.form.get('area', '')
+        fuente = request.args.get('fuente', '') or request.form.get('fuente', '')
+        estado = request.args.get('estado', '') or request.form.get('estado', '')
+        
+        # Limpiar espacios
+        query = query.strip() if query else ''
+        busqueda = busqueda.strip() if busqueda else ''
+        area = area.strip() if area else ''
+        fuente = fuente.strip() if fuente else ''
+        estado = estado.strip() if estado else ''
+        
+        # Usar función de filtrado mejorada
+        query_final = busqueda if busqueda else query
+        proyectos_filtrados = filtrar_proyectos(
+            proyectos,
+            query=query_final,
+            area=area,
+            fuente=fuente,
+            estado=estado
+        )
+        
+        # Obtener listas únicas para filtros
+        areas_unicas = sorted(list(set(p.get('Área de interés', '') for p in proyectos if p.get('Área de interés'))))
+        fuentes_unicas = sorted(list(set(p.get('Fuente', '') for p in proyectos if p.get('Fuente'))))
+        estados_unicos = sorted(list(set(p.get('Estado', '') for p in proyectos if p.get('Estado'))))
+        
+        # Intentar usar template mejorado, sino usar el básico
+        import os
+        template_mejorado = os.path.join('templates', 'todos_los_proyectos_mejorado.html')
+        template_basico = os.path.join('templates', 'todos_los_proyectos.html')
+        
+        if os.path.exists(template_mejorado):
+            return render_template('todos_los_proyectos_mejorado.html',
+                                 proyectos=proyectos_filtrados,
+                                 total_proyectos=len(proyectos_filtrados),
+                                 total_todos=len(proyectos),
+                                 areas_unicas=areas_unicas,
+                                 fuentes_unicas=fuentes_unicas,
+                                 estados_unicos=estados_unicos,
+                                 query=query_final,
+                                 area=area,
+                                 fuente=fuente,
+                                 estado=estado)
+        elif os.path.exists(template_basico):
+            return render_template('todos_los_proyectos.html',
+                                 proyectos=proyectos_filtrados,
+                                 total_proyectos=len(proyectos_filtrados),
+                                 total_todos=len(proyectos),
+                                 areas_unicas=areas_unicas,
+                                 fuentes_unicas=fuentes_unicas,
+                                 estados_unicos=estados_unicos,
+                                 query=query_final,
+                                 area=area,
+                                 fuente=fuente,
+                                 estado=estado)
+        else:
+            # Si no hay template, redirigir a home
+            print("⚠️ Templates de todos los proyectos no encontrados, redirigiendo a home")
+            return redirect(url_for('home'))
+    except Exception as e:
+        print(f"❌ Error en todos-los-proyectos: {e}")
+        import traceback
+        traceback.print_exc()
+        # Redirigir a home en lugar de mostrar error
+        return redirect(url_for('home'))
+
+@app.route('/quienes-somos')
+def quienes_somos():
+    """Página sobre IICA Chile"""
+    try:
+        return render_template('quienes_somos.html')
+    except Exception as e:
+        print(f"❌ Error en quienes-somos: {e}")
+        return render_template('error.html',
+                             error="Página no disponible",
+                             error_code=500), 500
+
 # ===== RUTAS DE DASHBOARD AVANZADO =====
 
 @app.route('/dashboard-avanzado')
@@ -717,10 +1249,159 @@ def marcar_notificacion_leida(notification_id):
 
 # ===== RUTAS DE UTILIDAD =====
 
+@app.route('/exportar-csv')
+def exportar_csv_route():
+    """Ruta para exportar proyectos a CSV"""
+    try:
+        # Obtener filtros opcionales
+        query = request.args.get('query', '').strip()
+        busqueda = request.args.get('busqueda', query).strip()
+        area = request.args.get('area', '').strip()
+        fuente = request.args.get('fuente', '').strip()
+        estado = request.args.get('estado', '').strip()
+        
+        # Cargar proyectos
+        proyectos = cargar_excel()
+        
+        # Aplicar filtros si existen
+        if query or busqueda or area or fuente or estado:
+            query_final = busqueda if busqueda else query
+            proyectos = filtrar_proyectos(
+                proyectos,
+                query=query_final,
+                area=area,
+                fuente=fuente,
+                estado=estado
+            )
+        
+        # Generar nombre de archivo con timestamp
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        filename = f'proyectos_iica_{timestamp}.csv'
+        
+        # Exportar a CSV
+        filepath = exportar_csv(proyectos, filename)
+        
+        # Enviar archivo
+        return send_file(
+            filepath,
+            mimetype='text/csv',
+            as_attachment=True,
+            download_name=filename
+        )
+    except Exception as e:
+        print(f"❌ Error exportando CSV: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/api/exportar-csv', methods=['POST'])
+def api_exportar_csv():
+    """API para exportar proyectos a CSV con filtros"""
+    try:
+        data = request.get_json() if request.is_json else {}
+        
+        # Obtener filtros del JSON
+        query = data.get('query', '').strip()
+        area = data.get('area', '').strip()
+        fuente = data.get('fuente', '').strip()
+        estado = data.get('estado', '').strip()
+        monto_min = data.get('monto_min')
+        monto_max = data.get('monto_max')
+        
+        # Cargar proyectos
+        proyectos = cargar_excel()
+        
+        # Aplicar filtros
+        proyectos = filtrar_proyectos(
+            proyectos,
+            query=query,
+            area=area,
+            fuente=fuente,
+            estado=estado,
+            monto_min=monto_min,
+            monto_max=monto_max
+        )
+        
+        # Generar nombre de archivo
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        filename = f'proyectos_iica_{timestamp}.csv'
+        
+        # Exportar
+        filepath = exportar_csv(proyectos, filename)
+        
+        return jsonify({
+            'success': True,
+            'filename': filename,
+            'filepath': filepath,
+            'total_proyectos': len(proyectos),
+            'download_url': f'/download-csv/{filename}'
+        })
+    except Exception as e:
+        print(f"❌ Error en API exportar CSV: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/download-csv/<filename>')
+def download_csv(filename):
+    """Descargar archivo CSV exportado"""
+    try:
+        filepath = os.path.join('exports', filename)
+        if os.path.exists(filepath):
+            return send_file(
+                filepath,
+                mimetype='text/csv',
+                as_attachment=True,
+                download_name=filename
+            )
+        else:
+            return jsonify({'error': 'Archivo no encontrado'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/health')
 def health():
     """Health check"""
-    return jsonify({'status': 'healthy', 'timestamp': datetime.now().isoformat()})
+    return jsonify({
+        'status': 'healthy', 
+        'timestamp': datetime.now().isoformat(),
+        'version': APP_VERSION,
+        'build_timestamp': BUILD_TIMESTAMP
+    })
+
+@app.route('/version')
+def version():
+    """Endpoint para verificar la versión actual del deploy"""
+    return jsonify({
+        'version': APP_VERSION,
+        'build_timestamp': BUILD_TIMESTAMP,
+        'template': 'home_didactico.html',
+        'app_name': app.name,
+        'status': 'active',
+        'cache_disabled': True,
+        'gunicorn_preload': False
+    })
+
+@app.route('/force-refresh')
+def force_refresh():
+    """Endpoint para forzar actualización - invalida todos los cachés"""
+    # Invalidar caché de Jinja2
+    app.jinja_env.cache = None
+    
+    # El caché de proyectos ya está deshabilitado, pero forzamos recarga
+    print("🔄 Force refresh llamado - invalidando todos los cachés")
+    
+    return jsonify({
+        'status': 'success',
+        'message': 'Cachés invalidados - la próxima carga será fresca',
+        'version': APP_VERSION,
+        'timestamp': datetime.now().isoformat(),
+        'cache_disabled': True
+    })
 
 @app.route('/test-routes')
 def test_routes():
@@ -755,32 +1436,54 @@ def not_found(error):
     if request.path in ['/home', '/index', '/index.html']:
         return redirect(url_for('home'))
     
+    # Para rutas conocidas que pueden no estar disponibles, redirigir a home
+    rutas_redirigir = ['/ai-search', '/dashboard', '/todos-los-proyectos', '/quienes-somos']
+    if any(request.path.startswith(ruta) for ruta in rutas_redirigir):
+        print(f"⚠️ Ruta {request.path} no disponible, redirigiendo a home")
+        return redirect(url_for('home'))
+    
+    # Para rutas de proyecto inválidas, redirigir a home
+    if request.path.startswith('/proyecto/'):
+        print(f"⚠️ Proyecto no encontrado, redirigiendo a home")
+        return redirect(url_for('home'))
+    
     # Mostrar página de error con información útil
     try:
-        return render_template('error.html', 
-                             error=f"Página no encontrada: {request.path}",
-                             error_code=404,
-                             suggestion="Verifica la URL o regresa a la página principal."), 404
+        import os
+        error_template = os.path.join('templates', 'error.html')
+        if os.path.exists(error_template):
+            return render_template('error.html', 
+                                 error=f"Página no encontrada: {request.path}",
+                                 error_code=404,
+                                 suggestion="Verifica la URL o regresa a la página principal."), 404
+        else:
+            # Si no hay template de error, redirigir a home
+            return redirect(url_for('home'))
     except Exception as e:
-        # Si el template de error falla, retornar respuesta básica
-        return f"""
-        <html>
-        <head><title>404 - Página no encontrada</title></head>
-        <body>
-            <h1>404 - Página no encontrada</h1>
-            <p>La página que buscas no existe: {request.path}</p>
-            <p><a href="/">Volver a la página principal</a></p>
-        </body>
-        </html>
-        """, 404
+        # Si todo falla, redirigir a home
+        print(f"❌ Error en handler 404: {e}")
+        return redirect(url_for('home'))
 
 @app.errorhandler(500)
 def internal_error(error):
     """Manejo de errores 500 - Error interno"""
     print(f"❌ 500 - Error interno: {error}")
-    return render_template('error.html', 
-                         error="Error interno del servidor. Por favor, intenta nuevamente en unos momentos.",
-                         error_code=500), 500
+    import traceback
+    traceback.print_exc()
+    
+    try:
+        import os
+        error_template = os.path.join('templates', 'error.html')
+        if os.path.exists(error_template):
+            return render_template('error.html', 
+                                 error="Error interno del servidor. Por favor, intenta nuevamente en unos momentos.",
+                                 error_code=500), 500
+        else:
+            # Si no hay template, redirigir a home
+            return redirect(url_for('home'))
+    except:
+        # Si todo falla, redirigir a home
+        return redirect(url_for('home'))
 
 @app.errorhandler(Exception)
 def handle_exception(e):
@@ -788,9 +1491,31 @@ def handle_exception(e):
     print(f"❌ Error no manejado: {e}")
     import traceback
     traceback.print_exc()
-    return render_template('error.html', 
-                         error=f"Error: {str(e)}",
-                         error_code=500), 500
+    
+    # Si es un error 404 de Flask, manejarlo específicamente
+    if hasattr(e, 'code') and e.code == 404:
+        print(f"🔍 Error 404 detectado: {request.path}")
+        # Intentar redirigir rutas conocidas a home
+        rutas_redirigir = ['/ai-search', '/dashboard', '/todos-los-proyectos', '/quienes-somos']
+        if any(request.path.startswith(ruta) for ruta in rutas_redirigir):
+            return redirect(url_for('home'))
+    
+    try:
+        return render_template('error.html', 
+                             error=f"Error: {str(e)}",
+                             error_code=500), 500
+    except:
+        # Si el template de error falla, retornar respuesta básica
+        return f"""
+        <html>
+        <head><title>Error</title></head>
+        <body>
+            <h1>Error</h1>
+            <p>{str(e)}</p>
+            <p><a href="/">Volver a la página principal</a></p>
+        </body>
+        </html>
+        """, 500
 
 if __name__ == '__main__':
     print("🚀 Iniciando Plataforma IICA Chile Mejorada...")
