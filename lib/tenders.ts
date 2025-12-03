@@ -8,6 +8,9 @@ interface Tender {
   status: string;
   budget: number;
   deadline: string;
+  description?: string;
+  link?: string;
+  applicationLink?: string;
 }
 
 interface Filters {
@@ -17,6 +20,19 @@ interface Filters {
   status?: string;
   page?: number;
 }
+
+// URL de la API Flask - usar variable de entorno o fallback
+// En Next.js, las variables NEXT_PUBLIC_* están disponibles en el cliente
+const getApiUrl = () => {
+  if (typeof window !== 'undefined') {
+    // Cliente: usar variable de entorno pública
+    return (process.env as any).NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+  }
+  // Servidor: usar variable de entorno
+  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+};
+
+const API_URL = getApiUrl();
 
 const mockTenders: Tender[] = [
   {
@@ -220,6 +236,61 @@ const mockTenders: Tender[] = [
 ];
 
 export async function fetchTenders(filters: Filters): Promise<{ data: Tender[]; count: number }> {
+  try {
+    // Construir parámetros de búsqueda
+    const params = new URLSearchParams();
+    
+    if (filters.query) {
+      params.set('q', filters.query);
+    }
+    
+    if (filters.locations && filters.locations.length > 0) {
+      params.set('locations', filters.locations.join(','));
+    }
+    
+    if (filters.sectors && filters.sectors.length > 0) {
+      params.set('sectors', filters.sectors.join(','));
+    }
+    
+    if (filters.status) {
+      params.set('status', filters.status);
+    }
+    
+    params.set('page', String(filters.page || 1));
+    params.set('per_page', '9');
+    
+    // Intentar obtener datos de la API Flask
+    const response = await fetch(`${API_URL}/api/proyectos?${params.toString()}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // En producción, esto debería ser configurado según CORS
+      cache: 'no-store',
+    });
+    
+    if (response.ok) {
+      const result = await response.json();
+      if (result.success && result.data) {
+        return {
+          data: result.data,
+          count: result.count || 0,
+        };
+      }
+    }
+    
+    // Si falla la API, usar datos mock como fallback
+    console.warn('API no disponible, usando datos mock');
+    return fetchTendersMock(filters);
+    
+  } catch (error) {
+    console.error('Error fetching tenders from API:', error);
+    // Fallback a datos mock en caso de error
+    return fetchTendersMock(filters);
+  }
+}
+
+function fetchTendersMock(filters: Filters): { data: Tender[]; count: number } {
   let results = mockTenders.filter(t => {
     const matchesQuery = !filters.query ||
       t.title.toLowerCase().includes(filters.query.toLowerCase()) ||

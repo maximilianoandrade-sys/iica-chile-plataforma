@@ -1,6 +1,6 @@
 # Plataforma de Licitaciones - Next.js 15
 
-Plataforma web moderna para búsqueda y filtrado de licitaciones internacionales, desarrollada con Next.js 15, React 18 y Tailwind CSS.
+Plataforma web moderna para búsqueda y filtrado de licitaciones internacionales, desarrollada con Next.js 15, React 18 y Tailwind CSS, integrada con la API Flask existente.
 
 ## 🚀 Características
 
@@ -9,12 +9,14 @@ Plataforma web moderna para búsqueda y filtrado de licitaciones internacionales
 - **Sincronización de URL**: Los filtros se sincronizan con la URL para compartir y guardar búsquedas
 - **Paginación**: Navegación eficiente entre resultados
 - **Diseño Responsivo**: Interfaz moderna y adaptable a todos los dispositivos
-- **UI Moderna**: Diseño limpio con Tailwind CSS
+- **Integración con Flask**: Consume datos reales de la plataforma Flask existente
+- **Fallback Inteligente**: Si la API no está disponible, usa datos mock
 
 ## 📋 Requisitos Previos
 
 - Node.js 18.17 o superior
 - npm, yarn o pnpm
+- Flask backend ejecutándose (opcional, tiene fallback a datos mock)
 
 ## 🛠️ Instalación Local
 
@@ -24,7 +26,18 @@ Plataforma web moderna para búsqueda y filtrado de licitaciones internacionales
 npm install
 ```
 
-### 2. Ejecutar en modo desarrollo
+### 2. Configurar variables de entorno
+
+Crea un archivo `.env.local` en la raíz del proyecto:
+
+```bash
+# URL de la API Flask backend
+NEXT_PUBLIC_API_URL=http://localhost:5000
+```
+
+**Nota**: Si no configuras esta variable, la aplicación usará datos mock como fallback.
+
+### 3. Ejecutar en modo desarrollo
 
 ```bash
 npm run dev
@@ -32,13 +45,13 @@ npm run dev
 
 La aplicación estará disponible en `http://localhost:3000`
 
-### 3. Construir para producción
+### 4. Construir para producción
 
 ```bash
 npm run build
 ```
 
-### 4. Ejecutar versión de producción localmente
+### 5. Ejecutar versión de producción localmente
 
 ```bash
 npm start
@@ -55,174 +68,165 @@ tenders-platform/
 │   │   └── page.tsx        # Página principal de búsqueda
 │   └── globals.css         # Estilos globales con Tailwind
 ├── components/
+│   ├── SearchBar.tsx       # Componente de barra de búsqueda
 │   ├── FiltersPanel.tsx    # Panel de filtros lateral
 │   └── TenderCard.tsx      # Tarjeta de licitación
 ├── lib/
-│   └── tenders.ts          # Lógica de búsqueda y datos mock
+│   └── tenders.ts          # Lógica de búsqueda y conexión con API Flask
 ├── package.json
 ├── next.config.js          # Configuración de Next.js
 ├── tailwind.config.js      # Configuración de Tailwind CSS
-├── tsconfig.json           # Configuración de TypeScript
-└── postcss.config.js       # Configuración de PostCSS
+├── postcss.config.js       # Configuración de PostCSS
+└── tsconfig.json           # Configuración de TypeScript
 ```
+
+## 🔌 Integración con Flask Backend
+
+La plataforma Next.js está configurada para consumir la API Flask existente en `/api/proyectos`. 
+
+### Endpoint de API Flask
+
+El endpoint `/api/proyectos` en Flask acepta los siguientes parámetros:
+
+- `q`: Búsqueda por palabras clave
+- `locations`: IDs de ubicaciones separados por comas (ej: "84,75")
+- `sectors`: IDs de sectores separados por comas (ej: "10,16")
+- `status`: Estado del proyecto ("open", "closed", "draft")
+- `page`: Número de página (por defecto: 1)
+- `per_page`: Resultados por página (por defecto: 9)
+
+### Mapeo de Datos
+
+La plataforma mapea automáticamente los datos de Flask al formato esperado:
+
+- **Ubicaciones**: IDs numéricos (84=Chile, 75=Argentina, etc.)
+- **Sectores**: IDs numéricos (70=ICT, 25=Energía, 16=Infraestructura, etc.)
+- **Estados**: "open" (Abierto), "closed" (Cerrado), "draft" (Borrador)
+
+### Fallback
+
+Si la API Flask no está disponible o hay un error, la aplicación automáticamente usa datos mock para que siempre funcione.
 
 ## 🌐 Despliegue en Render.com
 
-### Paso 1: Preparar el Repositorio
+### Opción 1: Desplegar Next.js y Flask por separado
 
-1. Asegúrate de que tu código esté en un repositorio Git (GitHub, GitLab, etc.)
-2. Verifica que todos los archivos necesarios estén incluidos
+1. **Desplegar Flask** (si aún no está desplegado):
+   - Usa el `render.yaml` existente para Flask
+   - Anota la URL pública (ej: `https://tu-app-flask.onrender.com`)
 
-### Paso 2: Crear Servicio en Render
-
-1. **Inicia sesión en Render.com** y crea una cuenta si no tienes una
-
-2. **Crea un nuevo Web Service**:
-   - Haz clic en "New +" → "Web Service"
+2. **Desplegar Next.js**:
+   - Crea un nuevo Web Service en Render
    - Conecta tu repositorio Git
+   - Configura:
+     - **Build Command**: `npm install && npm run build`
+     - **Start Command**: `npm start`
+     - **Environment**: Node.js
+   - Agrega variable de entorno:
+     - `NEXT_PUBLIC_API_URL`: URL de tu Flask backend (ej: `https://tu-app-flask.onrender.com`)
 
-3. **Configura el servicio**:
-   - **Name**: `tenders-platform` (o el nombre que prefieras)
-   - **Environment**: `Node`
-   - **Build Command**: `npm install && npm run build`
-   - **Start Command**: `npm start`
-   - **Node Version**: `18` o superior (se detecta automáticamente)
+### Opción 2: Usar el mismo servicio (Next.js como frontend, Flask como API)
 
-4. **Variables de Entorno** (opcionales):
-   - `NODE_ENV`: `production`
-   - `PORT`: Render lo asigna automáticamente, pero Next.js lo detecta
+Si Flask y Next.js están en el mismo repositorio, puedes configurar Render para servir ambos:
 
-5. **Plan**: Selecciona el plan gratuito o el que prefieras
+1. **Configurar Render para Next.js**:
+   - Build Command: `npm install && npm run build`
+   - Start Command: `npm start`
+   - Agrega variable: `NEXT_PUBLIC_API_URL=http://localhost:5000` (o la URL interna)
 
-### Paso 3: Desplegar
+2. **Ejecutar Flask en segundo plano** (opcional):
+   - Puedes usar un script que inicie ambos servicios
+   - O desplegar Flask como un servicio separado
 
-1. Haz clic en "Create Web Service"
-2. Render comenzará a construir y desplegar tu aplicación
-3. El proceso puede tardar 5-10 minutos la primera vez
-4. Una vez completado, recibirás una URL pública (ej: `https://tenders-platform.onrender.com`)
+### Configuración Recomendada
 
-### Paso 4: Auto-Deploy
+Para producción, se recomienda:
 
-- Render configurará automáticamente el auto-deploy en cada push a la rama principal
-- Cada vez que hagas push, Render reconstruirá y redesplegará automáticamente
+1. **Flask como servicio separado** en Render (puerto 5000)
+2. **Next.js como servicio separado** en Render (puerto 3000)
+3. **Configurar CORS** en Flask para permitir requests desde Next.js
 
-## 🔧 Configuración Adicional
+En `app_enhanced.py`, agrega:
 
-### Variables de Entorno
+```python
+from flask_cors import CORS
 
-Si necesitas agregar variables de entorno en Render:
+app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": ["https://tu-nextjs-app.onrender.com"]}})
+```
 
-1. Ve a tu servicio en Render Dashboard
-2. Navega a "Environment"
-3. Agrega las variables necesarias
-4. Guarda los cambios (esto reiniciará el servicio)
+## 📝 Variables de Entorno
 
-### Dominio Personalizado
+### Desarrollo Local
 
-1. En Render Dashboard, ve a tu servicio
-2. Navega a "Settings" → "Custom Domains"
-3. Agrega tu dominio personalizado
-4. Sigue las instrucciones para configurar DNS
+Crea `.env.local`:
 
-## 📝 Uso de la Plataforma
+```bash
+NEXT_PUBLIC_API_URL=http://localhost:5000
+```
 
-### Búsqueda
+### Producción (Render)
 
-1. Escribe palabras clave en el campo de búsqueda
-2. Presiona Enter o haz clic en "Buscar"
-3. Los resultados se filtrarán automáticamente
+En Render Dashboard, agrega:
 
-### Filtros
-
-- **Ubicación**: Selecciona uno o más países
-- **Sector**: Selecciona uno o más sectores (ICT, Energía, Infraestructura, etc.)
-- **Estado**: Selecciona entre Abierto, Cerrado o Borrador
-
-### Paginación
-
-- Navega entre páginas usando los botones "Anterior" y "Siguiente"
-- Cada página muestra hasta 9 resultados
+- `NEXT_PUBLIC_API_URL`: URL completa de tu Flask backend
+  - Ejemplo: `https://tu-app-flask.onrender.com`
 
 ## 🎨 Personalización
 
-### Agregar Más Licitaciones
+### Agregar Más Ubicaciones
 
-Edita el archivo `lib/tenders.ts` y agrega más objetos al array `mockTenders`:
-
-```typescript
-{
-  id: 16,
-  title: 'Nuevo Proyecto',
-  organization: 'Organización',
-  location: 'País',
-  locationId: '84',
-  sectors: ['10'],
-  status: 'open',
-  budget: 1000000,
-  deadline: '2025-12-31',
-  description: 'Descripción del proyecto',
-}
-```
-
-### Modificar Filtros
-
-Edita los arrays `locations` y `sectors` en `components/FiltersPanel.tsx`:
+Edita `components/FiltersPanel.tsx`:
 
 ```typescript
 const locations = [
   { id: '84', name: 'Chile' },
-  // Agrega más ubicaciones...
+  { id: '75', name: 'Argentina' },
+  // Agrega más...
 ]
 ```
 
-### Cambiar Estilos
+Y actualiza el mapeo en `app_enhanced.py` en el endpoint `/api/proyectos`.
 
-Modifica `tailwind.config.js` o edita directamente los componentes para personalizar el diseño.
+### Agregar Más Sectores
 
-## 🔌 Integración con Backend Real
-
-Para conectar con un backend real:
-
-1. Crea un archivo `.env.local` con tu URL de API:
-   ```
-   NEXT_PUBLIC_API_URL=https://tu-api.com
-   ```
-
-2. Modifica `lib/tenders.ts` para hacer llamadas reales:
+Edita `components/FiltersPanel.tsx`:
 
 ```typescript
-export async function fetchTenders(filters: Filters) {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/tenders?${new URLSearchParams({
-      q: filters.query || '',
-      locations: filters.locations?.join(',') || '',
-      sectors: filters.sectors?.join(',') || '',
-      status: filters.status || 'open',
-      page: String(filters.page || 1),
-    })}`
-  )
-  return response.json()
-}
+const sectors = [
+  { id: '70', name: 'ICT & Telecom' },
+  { id: '25', name: 'Energía' },
+  // Agrega más...
+]
 ```
+
+Y actualiza el mapeo en `app_enhanced.py`.
 
 ## 🐛 Solución de Problemas
 
+### Error: "Failed to fetch"
+
+- Verifica que Flask esté ejecutándose
+- Verifica la URL en `NEXT_PUBLIC_API_URL`
+- Revisa la consola del navegador para errores CORS
+- La aplicación usará datos mock como fallback
+
 ### Error: "Module not found"
 
-- Asegúrate de haber ejecutado `npm install`
+- Ejecuta `npm install` nuevamente
 - Verifica que todas las dependencias estén en `package.json`
+
+### La API no responde
+
+- La aplicación automáticamente usa datos mock
+- Verifica los logs de Flask
+- Verifica que el endpoint `/api/proyectos` esté funcionando
 
 ### Error en Build de Render
 
 - Verifica que `package.json` tenga los scripts correctos
 - Revisa los logs de build en Render Dashboard
 - Asegúrate de que Node.js 18+ esté configurado
-
-### La aplicación no carga
-
-- Verifica que el puerto esté configurado correctamente
-- Revisa los logs del servicio en Render
-- Asegúrate de que `next.config.js` esté presente
 
 ## 📄 Licencia
 
@@ -238,14 +242,6 @@ Las contribuciones son bienvenidas. Por favor:
 4. Push a la rama (`git push origin feature/AmazingFeature`)
 5. Abre un Pull Request
 
-## 📞 Soporte
-
-Para preguntas o problemas:
-- Abre un issue en el repositorio
-- Revisa la documentación de Next.js: https://nextjs.org/docs
-- Revisa la documentación de Render: https://render.com/docs
-
 ---
 
-**Desarrollado con ❤️ usando Next.js 15 y Tailwind CSS**
-
+**Desarrollado con ❤️ usando Next.js 15, React 18, Tailwind CSS e integrado con Flask**

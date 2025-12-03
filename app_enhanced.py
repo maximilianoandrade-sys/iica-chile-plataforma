@@ -15,6 +15,14 @@ import uuid
 from datetime import datetime
 from utils import parsear_monto
 
+# CORS para permitir requests desde Next.js
+try:
+    from flask_cors import CORS
+    CORS_AVAILABLE = True
+except ImportError:
+    CORS_AVAILABLE = False
+    print("⚠️ flask-cors no disponible, usando headers manuales")
+
 # Importar sistemas avanzados con fallbacks seguros
 notification_system = None
 application_tracker = None
@@ -73,6 +81,21 @@ except ImportError as e:
     backup_system = MockBackupSystem()
 
 app = Flask(__name__, static_folder='static', static_url_path='/static')
+
+# Configurar CORS para permitir requests desde Next.js
+if CORS_AVAILABLE:
+    CORS(app, resources={r"/api/*": {"origins": "*"}})
+    print("✅ CORS configurado para /api/*")
+else:
+    # Headers CORS manuales si flask-cors no está disponible
+    @app.after_request
+    def add_cors_headers(response):
+        if request.path.startswith('/api/'):
+            response.headers['Access-Control-Allow-Origin'] = '*'
+            response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+            response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+        return response
+    print("✅ Headers CORS manuales configurados para /api/*")
 
 # FORZAR: Deshabilitar TODOS los cachés de Jinja2 desde el inicio
 app.config['TEMPLATES_AUTO_RELOAD'] = True
@@ -1362,6 +1385,178 @@ def download_csv(filename):
             return jsonify({'error': 'Archivo no encontrado'}), 404
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@app.route('/api/proyectos', methods=['GET', 'OPTIONS'])
+def api_proyectos():
+    """API para obtener proyectos en formato JSON - Compatible con Next.js"""
+    # Manejar preflight CORS
+    if request.method == 'OPTIONS':
+        response = make_response()
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+        return response
+    
+    try:
+        # Obtener parámetros de filtro
+        query = request.args.get('q', '').strip()
+        locations = request.args.get('locations', '').strip()
+        sectors = request.args.get('sectors', '').strip()
+        status = request.args.get('status', '').strip()
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 9, type=int)
+        
+        # Cargar proyectos
+        proyectos = cargar_excel()
+        
+        # Convertir locations y sectors a listas si vienen como strings separados por comas
+        locations_list = [loc.strip() for loc in locations.split(',')] if locations else []
+        sectors_list = [sec.strip() for sec in sectors.split(',')] if sectors else []
+        
+        # Mapear filtros de Next.js a filtros de Flask
+        # Mapear IDs de sectores a nombres de áreas
+        sector_id_to_area = {
+            '70': 'ICT & Telecom',
+            '25': 'Energía',
+            '16': 'Infraestructura',
+            '10': 'Agricultura',
+            '15': 'Educación',
+            '20': 'Salud',
+            '30': 'Medio Ambiente'
+        }
+        
+        area_filter = None
+        if sectors_list:
+            # Convertir IDs de sectores a nombres de áreas
+            areas = [sector_id_to_area.get(sid, '') for sid in sectors_list if sid in sector_id_to_area]
+            area_filter = areas[0] if areas else None
+        
+        # Mapear ubicaciones (IDs a nombres)
+        location_id_to_name = {
+            '84': 'Chile',
+            '75': 'Argentina',
+            '85': 'Colombia',
+            '86': 'Perú',
+            '87': 'Ecuador',
+            '88': 'Bolivia'
+        }
+        
+        fuente_filter = None
+        if locations_list:
+            # Convertir IDs de ubicaciones a nombres de fuentes
+            fuentes = [location_id_to_name.get(lid, '') for lid in locations_list if lid in location_id_to_name]
+            fuente_filter = fuentes[0] if fuentes else None
+        
+        # Estado
+        estado_filter = None
+        if status:
+            if status == 'open':
+                estado_filter = 'Abierto'
+            elif status == 'closed':
+                estado_filter = 'Cerrado'
+            elif status == 'draft':
+                estado_filter = 'Borrador'
+        
+        # Aplicar filtros
+        proyectos_filtrados = filtrar_proyectos(
+            proyectos,
+            query=query,
+            area=area_filter if area_filter else '',
+            fuente=fuente_filter if fuente_filter else '',
+            estado=estado_filter if estado_filter else ''
+        )
+        
+        # Paginación
+        total = len(proyectos_filtrados)
+        start = (page - 1) * per_page
+        end = start + per_page
+        proyectos_paginados = proyectos_filtrados[start:end]
+        
+        # Transformar proyectos al formato esperado por Next.js
+        tenders = []
+        for idx, proyecto in enumerate(proyectos_paginados):
+            # Mapear ubicación (usar Fuente como ubicación temporalmente)
+            location_map = {
+                'Chile': '84',
+                'Argentina': '75',
+                'Colombia': '85',
+                'Perú': '86',
+                'Ecuador': '87',
+                'Bolivia': '88'
+            }
+            location = proyecto.get('Fuente', 'Chile')
+            location_id = location_map.get(location, '84')
+            
+            # Mapear sectores desde Área de interés
+            sector_map = {
+                'ICT & Telecom': '70',
+                'Energía': '25',
+                'Infraestructura': '16',
+                'Agricultura': '10',
+                'Educación': '15',
+                'Salud': '20',
+                'Medio Ambiente': '30'
+            }
+            area = proyecto.get('Área de interés', '')
+            sectors_mapped = [sector_map.get(area, '10')] if area in sector_map else ['10']
+            
+            # Mapear estado
+            estado = proyecto.get('Estado', 'Abierto').lower()
+            status_mapped = 'open' if 'abierto' in estado or 'activo' in estado else 'closed' if 'cerrado' in estado else 'draft'
+            
+            # Parsear monto
+            monto_str = str(proyecto.get('Monto', '0'))
+            try:
+                budget = float(monto_str.replace('USD', '').replace('$', '').replace(',', '').strip())
+            except:
+                budget = 0
+            
+            # Parsear fecha
+            fecha_cierre = proyecto.get('Fecha cierre', '')
+            deadline = fecha_cierre if fecha_cierre else '2025-12-31'
+            
+            tender = {
+                'id': start + idx + 1,
+                'title': proyecto.get('Nombre', 'Sin título'),
+                'organization': proyecto.get('Fuente', 'Desconocida'),
+                'location': location,
+                'locationId': location_id,
+                'sectors': sectors_mapped,
+                'status': status_mapped,
+                'budget': int(budget),
+                'deadline': deadline,
+                'description': proyecto.get('Descripción', ''),
+                'link': proyecto.get('Enlace', '#'),
+                'applicationLink': proyecto.get('Enlace Postulación', proyecto.get('Enlace', '#'))
+            }
+            tenders.append(tender)
+        
+        response = jsonify({
+            'success': True,
+            'data': tenders,
+            'count': total,
+            'page': page,
+            'per_page': per_page,
+            'total_pages': (total + per_page - 1) // per_page
+        })
+        # Asegurar headers CORS si no se usa flask-cors
+        if not CORS_AVAILABLE:
+            response.headers['Access-Control-Allow-Origin'] = '*'
+        return response
+    except Exception as e:
+        print(f"❌ Error en API proyectos: {e}")
+        import traceback
+        traceback.print_exc()
+        response = jsonify({
+            'success': False,
+            'error': str(e),
+            'data': [],
+            'count': 0
+        })
+        # Asegurar headers CORS si no se usa flask-cors
+        if not CORS_AVAILABLE:
+            response.headers['Access-Control-Allow-Origin'] = '*'
+        return response, 500
 
 @app.route('/health')
 def health():

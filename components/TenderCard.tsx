@@ -8,6 +8,9 @@ interface Tender {
   status: string;
   budget: number;
   deadline: string;
+  description?: string;
+  link?: string;
+  applicationLink?: string;
 }
 
 interface TenderCardProps {
@@ -52,6 +55,10 @@ export default function TenderCard({ tender }: TenderCardProps) {
       
       <h3 className="font-semibold text-lg mb-3 text-gray-900 line-clamp-2">{tender.title}</h3>
       
+      {tender.description && (
+        <p className="text-sm text-gray-600 mb-3 line-clamp-2">{tender.description}</p>
+      )}
+      
       <div className="text-sm text-gray-700 space-y-2 flex-grow">
         <p>
           <strong className="text-gray-900">Organización:</strong> {tender.organization}
@@ -67,6 +74,31 @@ export default function TenderCard({ tender }: TenderCardProps) {
           })}
         </p>
       </div>
+      
+      {(tender.link || tender.applicationLink) && (
+        <div className="mt-4 pt-4 border-t border-gray-200">
+          {tender.applicationLink && tender.applicationLink !== '#' && (
+            <a
+              href={tender.applicationLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full text-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-semibold"
+            >
+              Ver Detalles y Postular
+            </a>
+          )}
+          {(!tender.applicationLink || tender.applicationLink === '#') && tender.link && tender.link !== '#' && (
+            <a
+              href={tender.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full text-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-semibold"
+            >
+              Ver Más Información
+            </a>
+          )}
+        </div>
+      )}
     </article>
   );
 }

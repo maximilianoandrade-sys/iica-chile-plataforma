@@ -14,6 +14,7 @@ export default function TenderSearch() {
   const [tenders, setTenders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [total, setTotal] = useState(0);
+  const [error, setError] = useState<string | null>(null);
 
   const filters = {
     query: searchParams.get('q') || '',
@@ -25,11 +26,21 @@ export default function TenderSearch() {
 
   useEffect(() => {
     setLoading(true);
-    fetchTenders(filters).then(({data, count}) => {
-      setTenders(data);
-      setTotal(count);
-      setLoading(false);
-    });
+    setError(null); // Limpiar errores previos
+    fetchTenders(filters)
+      .then(({data, count}) => {
+        setTenders(data);
+        setTotal(count);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching tenders:', error);
+        // En caso de error, usar datos vacíos y detener el loading
+        setTenders([]);
+        setTotal(0);
+        setLoading(false);
+        setError('Error al cargar las licitaciones. Por favor, intenta nuevamente.');
+      });
   }, [filters.query, filters.locations.join(','), filters.sectors.join(','), filters.status, filters.page]);
 
   const updateFilters = (newFilters: any) => {
@@ -72,6 +83,32 @@ export default function TenderSearch() {
             {loading ? (
               <div className="flex justify-center items-center py-12">
                 <p className="text-gray-500">Cargando...</p>
+              </div>
+            ) : error ? (
+              <div className="flex flex-col justify-center items-center py-12">
+                <p className="text-red-600 mb-4">{error}</p>
+                <button
+                  onClick={() => {
+                    setError(null);
+                    setLoading(true);
+                    fetchTenders(filters)
+                      .then(({data, count}) => {
+                        setTenders(data);
+                        setTotal(count);
+                        setLoading(false);
+                      })
+                      .catch((err) => {
+                        console.error('Error fetching tenders:', err);
+                        setTenders([]);
+                        setTotal(0);
+                        setLoading(false);
+                        setError('Error al cargar las licitaciones. Por favor, intenta nuevamente.');
+                      });
+                  }}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  Reintentar
+                </button>
               </div>
             ) : tenders.length === 0 ? (
               <div className="flex justify-center items-center py-12">
