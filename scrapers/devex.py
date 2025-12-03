@@ -65,7 +65,7 @@ def obtener_proyectos_devex():
                 if fecha:
                     # Verificar si la fecha ya pasó
                     fecha_parsed = parsear_fecha(fecha)
-                    if fecha_parsed and fecha_parsed < "2024-01-01":  # Ajustar según necesidad
+                    if fecha_parsed and fecha_parsed < "2025-01-01":  # Solo proyectos 2025 en adelante
                         estado = "Cerrado"
                 
                 proyecto = {

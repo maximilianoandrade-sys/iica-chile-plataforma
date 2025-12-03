@@ -1,5 +1,5 @@
 """
-Scraper para DevelopmentAid - Plataforma de oportunidades de desarrollo
+Scraper para DevelopmentAid - Plataforma de oportunidades de desarrollo internacional
 https://www.developmentaid.org/
 """
 
@@ -8,75 +8,133 @@ from bs4 import BeautifulSoup
 import logging
 from utils import clasificar_area, parsear_fecha, parsear_monto
 from scrapers.common import fetch_html, parse_with_bs4
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
 
 def obtener_proyectos_developmentaid():
     """
-    Extrae proyectos y oportunidades de DevelopmentAid relacionados con agricultura.
+    Extrae proyectos y oportunidades de financiamiento de DevelopmentAid.
     """
     proyectos = []
     
     try:
-        # URL de búsqueda con filtro para Chile y agricultura
-        url = "https://www.developmentaid.org/tenders/search?hiddenAdvancedFilters=0&locations=84"
+        # URLs principales de DevelopmentAid
+        urls = [
+            "https://www.developmentaid.org/tenders/search",
+            "https://www.developmentaid.org/grants/search",
+            "https://www.developmentaid.org/funding/search",
+        ]
         
-        html = fetch_html(url)
-        if not html:
-            logger.warning("⚠️ No se pudo obtener contenido de DevelopmentAid")
-            return proyectos
-        
-        soup = parse_with_bs4(html)
-        
-        # Buscar tenders/proyectos
-        tenders = soup.find_all(['div', 'article', 'tr'], class_=lambda x: x and ('tender' in x.lower() or 'opportunity' in x.lower() or 'project' in x.lower()))
-        
-        if not tenders:
-            tenders = soup.find_all('div', class_=lambda x: x and ('item' in x.lower() or 'card' in x.lower() or 'listing' in x.lower()))
-        
-        for tender in tenders[:20]:
+        for url in urls:
             try:
-                # Extraer nombre
-                nombre_tag = tender.find(['h2', 'h3', 'h4', 'a'], class_=lambda x: x and ('title' in x.lower() or 'name' in x.lower()))
-                if not nombre_tag:
-                    nombre_tag = tender.find(['h2', 'h3', 'h4', 'a'])
-                
-                nombre = nombre_tag.get_text(strip=True) if nombre_tag else "Oportunidad DevelopmentAid"
-                
-                # Filtrar por agricultura
-                texto_busqueda = nombre.lower()
-                if not any(keyword in texto_busqueda for keyword in ['agric', 'rural', 'food', 'agro', 'livestock', 'crop', 'irrigation']):
+                html = fetch_html(url)
+                if not html:
+                    logger.warning(f"⚠️ No se pudo obtener contenido de DevelopmentAid: {url}")
                     continue
                 
-                # Extraer enlace
-                enlace_tag = tender.find('a', href=True)
-                enlace = enlace_tag['href'] if enlace_tag else url
-                if enlace.startswith('/'):
-                    enlace = f"https://www.developmentaid.org{enlace}"
+                soup = parse_with_bs4(html)
                 
-                # Extraer fecha de cierre
-                fecha_tag = tender.find(string=lambda x: x and ('deadline' in x.lower() or 'closing' in x.lower() or 'fecha' in x.lower()))
-                fecha = fecha_tag.strip() if fecha_tag else ""
+                # Buscar tarjetas de oportunidades (estructura puede variar)
+                cards = soup.find_all(['article', 'div', 'li'], class_=lambda x: x and (
+                    'tender' in x.lower() or 
+                    'grant' in x.lower() or 
+                    'opportunity' in x.lower() or 
+                    'funding' in x.lower() or
+                    'card' in x.lower() or
+                    'item' in x.lower()
+                ))
                 
-                # Extraer monto
-                monto_tag = tender.find(string=lambda x: x and ('budget' in x.lower() or 'amount' in x.lower() or 'usd' in x.lower() or '$' in x))
-                monto = monto_tag.strip() if monto_tag else "0"
+                if not cards:
+                    # Intentar búsqueda más genérica
+                    cards = soup.find_all('div', class_=lambda x: x and ('listing' in x.lower() or 'result' in x.lower()))
                 
-                proyecto = {
-                    "Nombre": nombre,
-                    "Fuente": "DevelopmentAid",
-                    "Fecha cierre": parsear_fecha(fecha) if fecha else "",
-                    "Enlace": enlace,
-                    "Estado": "Abierto",
-                    "Monto": parsear_monto(monto) if monto else "0",
-                    "Área de interés": clasificar_area(nombre)
-                }
-                
-                proyectos.append(proyecto)
+                for card in cards[:15]:  # Limitar a 15 proyectos por URL
+                    try:
+                        # Extraer nombre/título
+                        nombre_tag = card.find(['h2', 'h3', 'h4', 'h5', 'a'], class_=lambda x: x and (
+                            'title' in x.lower() or 
+                            'name' in x.lower() or
+                            'heading' in x.lower()
+                        ))
+                        if not nombre_tag:
+                            nombre_tag = card.find(['h2', 'h3', 'h4', 'h5', 'a'])
+                        
+                        nombre = nombre_tag.get_text(strip=True) if nombre_tag else "Oportunidad DevelopmentAid"
+                        
+                        # Extraer enlace
+                        enlace_tag = card.find('a', href=True)
+                        enlace = enlace_tag['href'] if enlace_tag else url
+                        if enlace.startswith('/'):
+                            enlace = f"https://www.developmentaid.org{enlace}"
+                        elif not enlace.startswith('http'):
+                            enlace = f"https://www.developmentaid.org/{enlace}"
+                        
+                        # Extraer fecha de cierre
+                        fecha = ""
+                        fecha_tags = card.find_all(string=lambda x: x and (
+                            'deadline' in x.lower() or 
+                            'fecha' in x.lower() or 
+                            'cierre' in x.lower() or
+                            'closing' in x.lower() or
+                            'due' in x.lower()
+                        ))
+                        if fecha_tags:
+                            fecha = fecha_tags[0].strip()
+                        
+                        # Extraer monto/presupuesto
+                        monto = "0"
+                        monto_tags = card.find_all(string=lambda x: x and (
+                            'budget' in x.lower() or 
+                            'monto' in x.lower() or 
+                            'usd' in x.lower() or 
+                            '$' in x or
+                            'amount' in x.lower() or
+                            'funding' in x.lower()
+                        ))
+                        if monto_tags:
+                            monto = monto_tags[0].strip()
+                        
+                        # Extraer organización
+                        organizacion = "DevelopmentAid"
+                        org_tags = card.find_all(string=lambda x: x and (
+                            'organization' in x.lower() or
+                            'donor' in x.lower() or
+                            'funder' in x.lower()
+                        ))
+                        if org_tags:
+                            organizacion = org_tags[0].strip()
+                        
+                        # Determinar estado - solo proyectos 2025 en adelante
+                        estado = "Abierto"
+                        fecha_parsed = parsear_fecha(fecha) if fecha else None
+                        if fecha_parsed:
+                            if fecha_parsed < "2025-01-01":
+                                estado = "Cerrado"
+                        else:
+                            # Si no hay fecha, asumir que está abierto si es reciente
+                            estado = "Abierto"
+                        
+                        proyecto = {
+                            "Nombre": nombre,
+                            "Fuente": "DevelopmentAid",
+                            "Fecha cierre": fecha_parsed if fecha_parsed else "",
+                            "Enlace": enlace,
+                            "Estado": estado,
+                            "Monto": parsear_monto(monto) if monto else "0",
+                            "Área de interés": clasificar_area(nombre),
+                            "Organización": organizacion
+                        }
+                        
+                        proyectos.append(proyecto)
+                        
+                    except Exception as e:
+                        logger.error(f"Error procesando card DevelopmentAid: {str(e)}")
+                        continue
                 
             except Exception as e:
-                logger.error(f"Error procesando tender DevelopmentAid: {str(e)}")
+                logger.error(f"Error procesando URL DevelopmentAid {url}: {str(e)}")
                 continue
         
         logger.info(f"✅ DevelopmentAid: {len(proyectos)} proyectos extraídos")
@@ -84,17 +142,28 @@ def obtener_proyectos_developmentaid():
     except Exception as e:
         logger.error(f"❌ Error en scraper DevelopmentAid: {str(e)}", exc_info=True)
     
-    # Si no se encontraron proyectos, retornar ejemplos
+    # Si no se encontraron proyectos, retornar ejemplos con enlaces oficiales
     if not proyectos:
         proyectos = [
             {
-                "Nombre": "Erosión y recuperación de suelos",
+                "Nombre": "Oportunidades de financiamiento para desarrollo agrícola",
                 "Fuente": "DevelopmentAid",
                 "Fecha cierre": "",
-                "Enlace": "https://www.developmentaid.org/tenders/search?hiddenAdvancedFilters=0&locations=84",
+                "Enlace": "https://www.developmentaid.org/tenders/search",
                 "Estado": "Abierto",
-                "Monto": "120000 USD",
-                "Área de interés": clasificar_area("Erosión y recuperación de suelos")
+                "Monto": "0",
+                "Área de interés": "Agricultura",
+                "Organización": "DevelopmentAid"
+            },
+            {
+                "Nombre": "Grants para proyectos de desarrollo sostenible",
+                "Fuente": "DevelopmentAid",
+                "Fecha cierre": "",
+                "Enlace": "https://www.developmentaid.org/grants/search",
+                "Estado": "Abierto",
+                "Monto": "0",
+                "Área de interés": "Desarrollo Sostenible",
+                "Organización": "DevelopmentAid"
             }
         ]
     

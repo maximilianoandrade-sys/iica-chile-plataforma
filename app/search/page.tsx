@@ -60,10 +60,15 @@ export default function TenderSearch() {
   const pageSize = 9;
   const totalPages = Math.ceil(total / pageSize);
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container max-w-7xl mx-auto px-4 py-8">
-        <h1 className="mb-8 text-center text-4xl font-bold text-gray-900">Plataforma de Licitaciones</h1>
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-iica-light to-white">
+          <div className="container max-w-7xl mx-auto px-4 py-8">
+            <div className="text-center mb-8">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-iica-primary to-iica-blue bg-clip-text text-transparent mb-2">
+                Plataforma de Licitaciones IICA
+              </h1>
+              <p className="text-gray-600">Oportunidades de financiamiento 2025</p>
+            </div>
         
         <div className="max-w-2xl mx-auto mb-12">
           <SearchBar 
@@ -80,69 +85,72 @@ export default function TenderSearch() {
               <strong>{total}</strong> {total === 1 ? 'resultado' : 'resultados'} encontrados
             </div>
             
-            {loading ? (
-              <div className="flex justify-center items-center py-12">
-                <p className="text-gray-500">Cargando...</p>
-              </div>
-            ) : error ? (
-              <div className="flex flex-col justify-center items-center py-12">
-                <p className="text-red-600 mb-4">{error}</p>
-                <button
-                  onClick={() => {
-                    setError(null);
-                    setLoading(true);
-                    fetchTenders(filters)
-                      .then(({data, count}) => {
-                        setTenders(data);
-                        setTotal(count);
-                        setLoading(false);
-                      })
-                      .catch((err) => {
-                        console.error('Error fetching tenders:', err);
-                        setTenders([]);
-                        setTotal(0);
-                        setLoading(false);
-                        setError('Error al cargar las licitaciones. Por favor, intenta nuevamente.');
-                      });
-                  }}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  Reintentar
-                </button>
-              </div>
-            ) : tenders.length === 0 ? (
-              <div className="flex justify-center items-center py-12">
-                <p className="text-gray-500">No se encontraron licitaciones con los filtros seleccionados.</p>
-              </div>
-            ) : (
-              <>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                  {tenders.map(t => <TenderCard key={t.id} tender={t} />)}
-                </div>
-                
-                {totalPages > 1 && (
-                  <div className="flex justify-center items-center gap-2 mt-8">
+                {loading ? (
+                  <div className="flex justify-center items-center py-12">
+                    <div className="text-center">
+                      <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-iica-primary mb-4"></div>
+                      <p className="text-gray-600">Cargando oportunidades...</p>
+                    </div>
+                  </div>
+                ) : error ? (
+                  <div className="flex flex-col justify-center items-center py-12">
+                    <p className="text-red-600 mb-4">{error}</p>
                     <button
-                      onClick={() => handlePageChange(filters.page - 1)}
-                      disabled={filters.page === 1}
-                      className="px-4 py-2 border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
+                      onClick={() => {
+                        setError(null);
+                        setLoading(true);
+                        fetchTenders(filters)
+                          .then(({data, count}) => {
+                            setTenders(data);
+                            setTotal(count);
+                            setLoading(false);
+                          })
+                          .catch((err) => {
+                            console.error('Error fetching tenders:', err);
+                            setTenders([]);
+                            setTotal(0);
+                            setLoading(false);
+                            setError('Error al cargar las licitaciones. Por favor, intenta nuevamente.');
+                          });
+                      }}
+                      className="px-6 py-2 bg-iica-primary text-white rounded-lg hover:bg-iica-blue transition-colors shadow-sm"
                     >
-                      Anterior
-                    </button>
-                    <span className="px-4 py-2 text-gray-700">
-                      Página {filters.page} de {totalPages}
-                    </span>
-                    <button
-                      onClick={() => handlePageChange(filters.page + 1)}
-                      disabled={filters.page === totalPages}
-                      className="px-4 py-2 border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100"
-                    >
-                      Siguiente
+                      Reintentar
                     </button>
                   </div>
+                ) : tenders.length === 0 ? (
+                  <div className="flex justify-center items-center py-12">
+                    <p className="text-gray-500">No se encontraron licitaciones con los filtros seleccionados.</p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                      {tenders.map(t => <TenderCard key={t.id} tender={t} />)}
+                    </div>
+
+                    {totalPages > 1 && (
+                      <div className="flex justify-center items-center gap-2 mt-8">
+                        <button
+                          onClick={() => handlePageChange(filters.page - 1)}
+                          disabled={filters.page === 1}
+                          className="px-4 py-2 border border-iica-primary rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-iica-primary hover:text-white transition-colors"
+                        >
+                          Anterior
+                        </button>
+                        <span className="px-4 py-2 text-iica-dark font-medium">
+                          Página {filters.page} de {totalPages}
+                        </span>
+                        <button
+                          onClick={() => handlePageChange(filters.page + 1)}
+                          disabled={filters.page === totalPages}
+                          className="px-4 py-2 border border-iica-primary rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-iica-primary hover:text-white transition-colors"
+                        >
+                          Siguiente
+                        </button>
+                      </div>
+                    )}
+                  </>
                 )}
-              </>
-            )}
           </main>
         </div>
       </div>

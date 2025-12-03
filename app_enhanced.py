@@ -181,6 +181,8 @@ def _cargar_excel_cached():
                 # Intentar múltiples scrapers
                 scrapers_a_intentar = [
                     ("International Funding", "scrapers.international_funding", "obtener_proyectos_internacionales"),
+                    ("DevelopmentAid", "scrapers.developmentaid", "obtener_proyectos_developmentaid"),
+                    ("Devex", "scrapers.devex", "obtener_proyectos_devex"),
                     ("CORFO Real", "scrapers.corfo_real", "obtener_proyectos_corfo_real"),
                     ("Fuentes Agrícolas", "scrapers.fuentes_agricolas", "obtener_proyectos_fia"),
                 ]

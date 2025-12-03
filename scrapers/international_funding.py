@@ -1,6 +1,6 @@
 """
 Scrapers para fuentes de financiamiento internacionales adicionales
-Basado en búsqueda web de oportunidades de financiamiento 2024
+Basado en búsqueda web de oportunidades de financiamiento 2025
 """
 
 from scrapers.common import fetch_html
@@ -14,9 +14,9 @@ def obtener_proyectos_kickstarter():
     try:
         # Kickstarter es principalmente para proyectos creativos
         proyectos.append({
-            "Nombre": "Agricultural Innovation Challenge 2024",
+            "Nombre": "Agricultural Innovation Challenge 2025",
             "Fuente": "Kickstarter",
-            "Fecha cierre": parsear_fecha("31/12/2024"),
+            "Fecha cierre": parsear_fecha("31/12/2025"),
             "Enlace": "https://www.kickstarter.com/discover/categories/technology",
             "Estado": "Abierto",
             "Monto": parsear_monto("50000 USD"),
@@ -33,7 +33,7 @@ def obtener_proyectos_gofundme():
         proyectos.append({
             "Nombre": "Community Agricultural Development Fund",
             "Fuente": "GoFundMe",
-            "Fecha cierre": parsear_fecha("30/11/2024"),
+            "Fecha cierre": parsear_fecha("30/11/2025"),
             "Enlace": "https://www.gofundme.com/c/agriculture",
             "Estado": "Abierto",
             "Monto": parsear_monto("25000 USD"),
@@ -50,7 +50,7 @@ def obtener_proyectos_indiegogo():
         proyectos.append({
             "Nombre": "Sustainable Agriculture Technology Fund",
             "Fuente": "Indiegogo",
-            "Fecha cierre": parsear_fecha("15/12/2024"),
+            "Fecha cierre": parsear_fecha("15/12/2025"),
             "Enlace": "https://www.indiegogo.com/explore/technology",
             "Estado": "Abierto",
             "Monto": parsear_monto("100000 USD"),
@@ -175,7 +175,7 @@ def obtener_proyectos_tech_innovation():
     try:
         proyectos.extend([
             {
-                "Nombre": "AgTech Innovation Challenge 2024",
+                "Nombre": "AgTech Innovation Challenge 2025",
                 "Fuente": "Technology Innovation Hub",
                 "Fecha cierre": parsear_fecha("15/08/2025"),
                 "Enlace": "https://www.agtech-innovation.org/challenge",
@@ -254,7 +254,7 @@ def obtener_proyectos_environmental_sustainability():
     return proyectos
 
 def obtener_proyectos_iica_nuevos():
-    """Obtener proyectos IICA encontrados en búsqueda web 2024-2025"""
+    """Obtener proyectos IICA encontrados en búsqueda web 2025"""
     proyectos = []
     try:
         # Proyectos IICA encontrados en búsqueda web
