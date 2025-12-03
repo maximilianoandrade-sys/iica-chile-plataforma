@@ -265,7 +265,7 @@ def crear_datos_ejemplo():
                 'Fuente': 'IICA Chile',
                 'Área de interés': 'Desarrollo Rural',
                 'Monto': 'USD 500,000',
-                'Fecha cierre': '2024-12-31',
+                'Fecha cierre': '2025-12-31',
                 'Estado': 'Abierto',
                 'Descripción': 'Programa para apoyar el desarrollo rural sostenible en comunidades agrícolas.',
                 'Enlace': '#',
@@ -276,7 +276,7 @@ def crear_datos_ejemplo():
                 'Fuente': 'CORFO',
                 'Área de interés': 'Innovación Tecnológica',
                 'Monto': 'USD 1,000,000',
-                'Fecha cierre': '2024-12-15',
+                'Fecha cierre': '2025-12-15',
                 'Estado': 'Abierto',
                 'Descripción': 'Fondo para proyectos de innovación en el sector agrícola.',
                 'Enlace': '#',
@@ -287,7 +287,7 @@ def crear_datos_ejemplo():
                 'Fuente': 'INDAP',
                 'Área de interés': 'Juventudes Rurales',
                 'Monto': 'USD 300,000',
-                'Fecha cierre': '2024-12-20',
+                'Fecha cierre': '2025-12-20',
                 'Estado': 'Abierto',
                 'Descripción': 'Programa dirigido a jóvenes emprendedores del sector rural.',
                 'Enlace': '#',
@@ -791,7 +791,7 @@ def crear_respuesta_html_basica(datos):
     
     html += """
             <hr>
-            <p class="text-muted">© 2024 IICA Chile. Instituto Interamericano de Cooperación para la Agricultura</p>
+            <p class="text-muted">© 2025 IICA Chile. Instituto Interamericano de Cooperación para la Agricultura</p>
         </div>
     </body>
     </html>
