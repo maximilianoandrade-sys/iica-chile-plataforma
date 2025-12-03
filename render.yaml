@@ -1,4 +1,5 @@
 services:
+  # Servicio Flask (API Backend)
   - type: web
     name: iica-chile-plataforma
     env: python
@@ -10,3 +11,16 @@ services:
         value: production
       - key: PYTHON_VERSION
         value: 3.11.9
+  
+  # Servicio Next.js (Frontend)
+  - type: web
+    name: iica-licitaciones-frontend
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        value: https://iica-chile-plataforma.onrender.com
