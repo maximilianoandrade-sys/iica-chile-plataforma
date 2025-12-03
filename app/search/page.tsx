@@ -78,8 +78,8 @@ export default function TenderSearch() {
           <FiltersPanel filters={filters} onChange={updateFilters} />
           
           <main className="lg:col-span-3">
-            <div className="mb-4 text-gray-600">
-              <strong>{total}</strong> {total === 1 ? 'resultado' : 'resultados'} encontrados
+            <div className="mb-4 text-iica-dark">
+              <strong className="text-iica-primary">{total}</strong> {total === 1 ? 'resultado' : 'resultados'} encontrados
             </div>
             
                 {loading ? (

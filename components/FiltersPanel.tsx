@@ -57,17 +57,17 @@ export default function FiltersPanel({ filters, onChange }: FiltersPanelProps) {
   }, [loc.join(','), sec.join(','), status]);
 
   return (
-    <aside className="bg-white rounded-xl p-6 shadow-sm border w-full h-fit">
-      <h2 className="text-xl font-bold mb-6 text-gray-900">Filtros</h2>
+    <aside className="bg-white rounded-xl p-6 shadow-md border border-gray-200 w-full h-fit">
+      <h2 className="text-xl font-bold mb-6 text-iica-primary border-b border-iica-primary/20 pb-3">Filtros</h2>
       
       <fieldset className="mb-6">
         <legend className="mb-3 font-semibold text-gray-700">Ubicación</legend>
         <div className="space-y-2">
           {locations.map(l => (
-            <label key={l.id} className="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded">
+            <label key={l.id} className="flex items-center cursor-pointer hover:bg-iica-light p-2 rounded transition-colors">
               <input
                 type="checkbox"
-                className="mr-2 w-4 h-4 text-blue-600"
+                className="mr-2 w-4 h-4 text-iica-primary focus:ring-iica-primary"
                 checked={loc.includes(l.id)}
                 onChange={() => toggleSelection(loc, setLoc, l.id)}
               />
@@ -81,10 +81,10 @@ export default function FiltersPanel({ filters, onChange }: FiltersPanelProps) {
         <legend className="mb-3 font-semibold text-gray-700">Sector</legend>
         <div className="space-y-2">
           {sectors.map(s => (
-            <label key={s.id} className="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded">
+            <label key={s.id} className="flex items-center cursor-pointer hover:bg-iica-light p-2 rounded transition-colors">
               <input
                 type="checkbox"
-                className="mr-2 w-4 h-4 text-blue-600"
+                className="mr-2 w-4 h-4 text-iica-primary focus:ring-iica-primary"
                 checked={sec.includes(s.id)}
                 onChange={() => toggleSelection(sec, setSec, s.id)}
               />
@@ -99,7 +99,7 @@ export default function FiltersPanel({ filters, onChange }: FiltersPanelProps) {
         <select 
           value={status} 
           onChange={e => setStatus(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-iica-primary focus:border-iica-primary"
         >
           <option value="open">Abierto</option>
           <option value="closed">Cerrado</option>
