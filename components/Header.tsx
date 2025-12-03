@@ -2,7 +2,7 @@
 
 export default function Header() {
   return (
-    <header className="w-full bg-gradient-to-r from-[#0066cc] to-[#00a651] text-white shadow-xl">
+    <header className="w-full bg-gradient-to-r from-iica-primary to-iica-secondary text-white shadow-xl">
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-4">
           <div className="flex items-center space-x-4">
