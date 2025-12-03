@@ -1,228 +1,198 @@
-# Plataforma IICA Chile - Fondos y Convocatorias
+# Plataforma de Búsqueda y Filtro de Licitaciones
 
-Plataforma web modular en Flask para recolección, clasificación y visualización automática de proyectos y convocatorias de financiamiento agrícola y desarrollo rural.
+Una plataforma web moderna para buscar y filtrar licitaciones, desarrollada con Next.js 15, React 18 y Tailwind CSS, inspirada en DevelopmentAid.
 
 ## 🚀 Características
 
-- **Scraping en Tiempo Real**: Recolección automática desde múltiples fuentes internacionales y nacionales
-- **Clasificación Inteligente**: Clasificación automática por áreas temáticas IICA
-- **Búsqueda Avanzada**: Filtros por palabra clave, fuente, estado, área temática
-- **Interfaz Moderna**: Diseño responsivo con Bootstrap 5
-- **Histórico**: Guardado automático en Excel con detección de proyectos nuevos
-- **API REST**: Endpoints para integración con otros sistemas
+- **Búsqueda avanzada**: Busca licitaciones por palabras clave
+- **Filtros múltiples**: Filtra por Ubicación, Sector y Estado
+- **Paginación**: Navega fácilmente entre los resultados
+- **Sincronización de URL**: Los filtros se sincronizan con la URL para compartir y guardar búsquedas
+- **Diseño responsivo**: Funciona perfectamente en dispositivos móviles y desktop
+- **UI moderna**: Interfaz limpia y profesional con Tailwind CSS
 
-## 📋 Fuentes de Datos
+## 📋 Requisitos Previos
 
-La plataforma recolecta información de:
-
-### Fuentes Especializadas IICA (Prioritarias)
-
-1. **IICA Chile** - https://www.iica.int/es/paises/chile
-2. **Agro América Emprende** - https://agroemprende.iica.int/
-3. **INNOVA AF** - https://innova-af.iica.int/
-4. **Agua y Agricultura IICA** - https://aguayagricultura.iica.int/
-5. **Repositorio Institucional IICA** - https://apps.iica.int/
-
-### Otras Fuentes
-
-6. **Devex** - https://www.devex.com/
-7. **DevelopmentAid** - https://www.developmentaid.org/
-8. **UNGM** - https://www.ungm.org/Public/Notice
-9. **MercadoPúblico** - https://www.mercadopublico.cl/Home
-10. **FIA** - https://www.fia.cl/
-11. **GlobalTenders** - https://www.globaltenders.com/
-12. **Fondos.gob.cl** - https://fondos.gob.cl/
-13. **INIA** - https://www.inia.cl/licitaciones/
-14. **FAO** - https://www.fao.org/
-15. **Banco Mundial** - https://www.worldbank.org/
-16. **Perplexity** - Búsqueda inteligente (limitado)
+- Node.js 18.0 o superior
+- npm o yarn
 
 ## 🛠️ Instalación Local
 
-### Requisitos
-
-- Python 3.11 o superior
-- pip (gestor de paquetes de Python)
-
-### Pasos
-
-1. **Clonar o descargar el proyecto**
+1. **Clona o descarga el repositorio**
 
 ```bash
+git clone <tu-repositorio>
 cd mi-plataforma2
 ```
 
-2. **Crear entorno virtual**
+2. **Instala las dependencias**
 
 ```bash
-python -m venv venv
+npm install
 ```
 
-3. **Activar entorno virtual**
-
-**Windows:**
-```bash
-venv\Scripts\activate
-```
-
-**Linux/Mac:**
-```bash
-source venv/bin/activate
-```
-
-4. **Instalar dependencias**
+3. **Ejecuta el servidor de desarrollo**
 
 ```bash
-pip install -r requirements.txt
+npm run dev
 ```
 
-5. **Ejecutar la aplicación**
+4. **Abre tu navegador**
+
+Navega a [http://localhost:3000](http://localhost:3000)
+
+La aplicación redirigirá automáticamente a `/search` donde podrás comenzar a buscar licitaciones.
+
+## 🏗️ Construcción para Producción
+
+1. **Construye la aplicación**
 
 ```bash
-python app.py
+npm run build
 ```
 
-6. **Acceder a la plataforma**
+2. **Ejecuta la versión de producción localmente**
 
-Abrir navegador en: `http://localhost:5000`
+```bash
+npm start
+```
 
 ## 📦 Estructura del Proyecto
 
 ```
 mi-plataforma2/
-├── app.py                 # Aplicación Flask principal
-├── utils.py               # Utilidades (clasificación, parsing)
-├── update_proyectos.py    # Script de actualización automática
-├── requirements.txt        # Dependencias Python
-├── render.yaml            # Configuración para Render.com
-├── scrapers/              # Módulos de scraping
-│   ├── __init__.py
-│   ├── devex.py
-│   ├── developmentaid.py
-│   ├── ungm.py
-│   ├── mercadopublico.py
-│   ├── fia.py
-│   ├── globaltenders.py
-│   ├── fondosgob.py
-│   ├── inia.py
-│   ├── fao.py
-│   ├── worldbank.py
-│   ├── perplexity.py
-│   └── common.py
-├── templates/             # Plantillas HTML
-│   ├── home.html
-│   └── error.html
-├── data/                  # Datos (Excel, histórico)
-└── logs/                  # Archivos de log
+├── app/
+│   ├── layout.tsx          # Layout principal de la aplicación
+│   ├── page.tsx             # Página de inicio (redirige a /search)
+│   ├── search/
+│   │   └── page.tsx         # Página principal de búsqueda
+│   └── globals.css          # Estilos globales con Tailwind
+├── components/
+│   ├── SearchBar.tsx        # Componente de barra de búsqueda
+│   ├── FiltersPanel.tsx     # Panel de filtros lateral
+│   └── TenderCard.tsx       # Tarjeta de licitación
+├── lib/
+│   └── tenders.ts           # Mock data y lógica de filtrado
+├── package.json
+├── tailwind.config.js       # Configuración de Tailwind CSS
+├── postcss.config.js        # Configuración de PostCSS
+├── next.config.js           # Configuración de Next.js
+└── tsconfig.json            # Configuración de TypeScript
 ```
 
 ## 🌐 Despliegue en Render.com
 
-### Configuración
+### Paso 1: Preparar el Repositorio
 
-1. **Crear cuenta en Render.com**
+1. Asegúrate de que todos los archivos estén en tu repositorio Git
+2. Haz commit y push de todos los cambios:
 
-2. **Conectar repositorio Git**
-
-3. **Crear nuevo Web Service**
-
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `gunicorn app:app --bind 0.0.0.0:$PORT`
-   - **Environment**: Python 3
-
-4. **Configurar variables de entorno** (opcional)
-
-   - `PORT`: 10000
-   - `DEBUG`: False
-
-5. **Desplegar**
-
-   Render usará automáticamente el archivo `render.yaml` si está presente.
-
-### Actualización Automática
-
-Para configurar actualizaciones periódicas en Render:
-
-1. **Crear Cron Job** en Render Dashboard
-2. **Configurar comando**: `python update_proyectos.py`
-3. **Programar frecuencia**: Diaria (ej: `0 2 * * *` para las 2 AM)
-
-## 📊 Uso de la Plataforma
-
-### Búsqueda y Filtros
-
-1. **Búsqueda por palabra clave**: Escribe términos relacionados con el proyecto
-2. **Filtro por área temática**: Selecciona entre las áreas IICA
-3. **Filtro por estado**: Abierto/Cerrado
-4. **Filtro por fuente**: Selecciona la fuente de financiamiento
-5. **Ordenamiento**: Por fecha, monto o nombre
-
-### Actualización Manual
-
-Haz clic en el botón **"Actualizar Proyectos"** para recolectar información fresca de todas las fuentes.
-
-### API REST
-
-#### Obtener todos los proyectos
-```
-GET /api/proyectos
+```bash
+git add .
+git commit -m "Plataforma de licitaciones lista para producción"
+git push origin main
 ```
 
-#### Buscar proyectos
+### Paso 2: Crear el Servicio en Render
+
+1. **Inicia sesión en Render.com**
+   - Ve a [https://render.com](https://render.com)
+   - Inicia sesión con tu cuenta (puedes usar GitHub)
+
+2. **Crea un nuevo Web Service**
+   - Haz clic en "New +" en el dashboard
+   - Selecciona "Web Service"
+   - Conecta tu repositorio de GitHub/GitLab/Bitbucket
+
+3. **Configura el Servicio**
+
+   - **Name**: `tenders-platform` (o el nombre que prefieras)
+   - **Environment**: `Node`
+   - **Build Command**: `npm run build`
+   - **Start Command**: `npm start`
+   - **Plan**: Elige el plan gratuito o el que prefieras
+
+4. **Variables de Entorno** (si las necesitas en el futuro)
+   - Por ahora no se requieren variables de entorno
+   - Si en el futuro necesitas conectar a una base de datos o API, puedes agregarlas aquí
+
+5. **Despliegue Automático**
+   - Render desplegará automáticamente en cada push a la rama principal
+   - Puedes activar/desactivar esta opción en la configuración
+
+### Paso 3: Verificar el Despliegue
+
+1. Render te proporcionará una URL pública (ej: `https://tenders-platform.onrender.com`)
+2. Espera a que el build termine (puede tomar 2-5 minutos la primera vez)
+3. Accede a la URL y verifica que la aplicación funcione correctamente
+
+### Configuración Adicional en Render
+
+Si necesitas configuraciones adicionales, puedes crear un archivo `render.yaml`:
+
+```yaml
+services:
+  - type: web
+    name: tenders-platform
+    env: node
+    buildCommand: npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
 ```
-GET /api/proyectos?query=agricultura&area=Innovación tecnológica&estado=Abierto
+
+## 🔧 Scripts Disponibles
+
+- `npm run dev` - Inicia el servidor de desarrollo
+- `npm run build` - Construye la aplicación para producción
+- `npm start` - Inicia el servidor de producción
+- `npm run lint` - Ejecuta el linter (si está configurado)
+
+## 📝 Personalización
+
+### Agregar Más Licitaciones Mock
+
+Edita el archivo `lib/tenders.ts` y agrega más objetos al array `mockTenders`.
+
+### Modificar Filtros
+
+- **Ubicaciones**: Edita el array `locations` en `components/FiltersPanel.tsx`
+- **Sectores**: Edita el array `sectors` en `components/FiltersPanel.tsx`
+
+### Conectar a una API Real
+
+Reemplaza la función `fetchTenders` en `lib/tenders.ts` con una llamada real a tu API:
+
+```typescript
+export async function fetchTenders(filters: Filters) {
+  const response = await fetch(`${API_URL}/tenders?${buildQueryString(filters)}`);
+  const data = await response.json();
+  return data;
+}
 ```
-
-#### Health Check
-```
-GET /health
-```
-
-## 🔧 Áreas Temáticas IICA
-
-La plataforma clasifica automáticamente los proyectos en:
-
-1. **Agricultura familiar campesina**
-2. **Innovación tecnológica**
-3. **Gestión hídrica**
-4. **Seguridad alimentaria**
-5. **Juventud rural**
-6. **Medio ambiente**
-
-## 📝 Logs
-
-Los logs se guardan en:
-- `logs/app.log` - Logs de la aplicación
-- `logs/update.log` - Logs de actualizaciones automáticas
-
-## ⚠️ Notas Importantes
-
-- **Scraping**: Algunos sitios pueden cambiar su estructura HTML, requiriendo actualización de selectores
-- **Rate Limiting**: Los scrapers incluyen delays para evitar sobrecarga en los servidores
-- **Datos**: La primera ejecución puede tomar varios minutos mientras recolecta de todas las fuentes
-- **Perplexity**: Esta fuente tiene limitaciones ya que es un motor de búsqueda, no un portal de proyectos
 
 ## 🐛 Solución de Problemas
 
-### Error: "No module named 'scrapers'"
-- Asegúrate de ejecutar desde el directorio raíz del proyecto
-- Verifica que `scrapers/__init__.py` existe
+### Error: "Module not found"
+- Ejecuta `npm install` para instalar todas las dependencias
 
-### Error: "Connection timeout"
-- Algunas fuentes pueden estar temporalmente no disponibles
-- Los scrapers manejan errores y continúan con otras fuentes
+### Error en el build
+- Verifica que estés usando Node.js 18 o superior
+- Limpia la caché: `rm -rf .next node_modules` y luego `npm install`
 
-### Error al guardar Excel
-- Verifica permisos de escritura en el directorio `data/`
-- Asegúrate de que `openpyxl` está instalado
+### La aplicación no carga en Render
+- Verifica que el build command y start command estén correctos
+- Revisa los logs en el dashboard de Render para ver errores específicos
 
 ## 📄 Licencia
 
-Este proyecto es desarrollado para IICA Chile.
+Este proyecto es de código abierto y está disponible bajo la licencia MIT.
 
-## 👥 Contacto
+## 🤝 Contribuciones
 
-Para más información sobre IICA Chile:
-- Email: hernan.chiriboga@iica.int
-- Teléfono: (56-2) 2225-2511
-- Dirección: Calle Rancagua No.0320, Providencia, Santiago, Chile
+Las contribuciones son bienvenidas. Por favor, abre un issue o un pull request.
+
+---
+
+**Desarrollado con ❤️ usando Next.js, React y Tailwind CSS**
