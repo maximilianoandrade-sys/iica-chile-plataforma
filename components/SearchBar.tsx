@@ -28,11 +28,11 @@ export default function SearchBar({ defaultValue = '', onSearch }: SearchBarProp
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="Buscar licitaciones por palabras clave..."
-        className="w-full p-4 pr-12 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        className="w-full p-4 pr-12 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-iica-primary focus:border-transparent"
       />
       <button
         onClick={handleSearch}
-        className="absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        className="absolute right-2 top-1/2 transform -translate-y-1/2 px-4 py-2 bg-iica-primary text-white rounded-lg hover:bg-[#0066cc] transition-colors shadow-sm"
       >
         Buscar
       </button>

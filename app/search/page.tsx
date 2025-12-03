@@ -64,10 +64,7 @@ export default function TenderSearch() {
         <div className="min-h-screen bg-gradient-to-br from-iica-light to-white">
           <div className="container max-w-7xl mx-auto px-4 py-8">
             <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-iica-primary to-iica-blue bg-clip-text text-transparent mb-2">
-                Plataforma de Licitaciones IICA
-              </h1>
-              <p className="text-gray-600">Oportunidades de financiamiento 2025</p>
+              <p className="text-gray-600 text-lg mb-2">Oportunidades de financiamiento 2025</p>
             </div>
         
         <div className="max-w-2xl mx-auto mb-12">

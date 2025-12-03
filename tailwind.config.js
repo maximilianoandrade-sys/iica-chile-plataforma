@@ -9,13 +9,13 @@ module.exports = {
       colors: {
         // Colores institucionales IICA basados en https://iica.int/es/
         'iica': {
-          'primary': '#336699',      // Azul IICA principal (rgb(51, 102, 153))
-          'secondary': '#FF9900',     // Naranja IICA (rgb(255, 153, 0))
-          'green': '#2E7D32',         // Verde institucional
-          'blue': '#1976D2',          // Azul complementario
+          'primary': '#0066cc',       // Azul IICA oficial (del gradiente header)
+          'secondary': '#00a651',     // Verde IICA oficial (del gradiente header)
+          'green': '#00a651',         // Verde institucional
+          'blue': '#0066cc',          // Azul complementario
           'dark': '#212121',          // Gris oscuro
           'light': '#F5F5F5',         // Gris claro
-          'accent': '#FF6F00',        // Naranja oscuro
+          'accent': '#FF9900',        // Naranja IICA
         },
       },
       fontFamily: {

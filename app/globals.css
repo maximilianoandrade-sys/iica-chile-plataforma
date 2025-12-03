@@ -6,10 +6,10 @@
 
 @layer base {
   :root {
-    --iica-primary: #336699;
-    --iica-secondary: #FF9900;
-    --iica-green: #2E7D32;
-    --iica-blue: #1976D2;
+    --iica-primary: #0066cc;
+    --iica-secondary: #00a651;
+    --iica-green: #00a651;
+    --iica-blue: #0066cc;
     --iica-dark: #212121;
     --iica-light: #F5F5F5;
   }

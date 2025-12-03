@@ -103,8 +103,25 @@ app.jinja_env.auto_reload = True
 app.jinja_env.cache = None  # Deshabilitar caché de templates completamente
 
 # Obtener versión de deploy desde variable de entorno (establecida en app.py)
-APP_VERSION = os.environ.get('APP_VERSION', datetime.now().strftime('%Y%m%d_%H%M%S'))
-BUILD_TIMESTAMP = os.environ.get('BUILD_TIMESTAMP', datetime.now().isoformat())
+# IMPORTANTE: app.py establece estas variables ANTES de importar app_enhanced.py
+# Si las variables no existen, significa que app_enhanced.py se está importando
+# directamente (no a través de app.py). En ese caso, generamos valores consistentes
+# UNA SOLA VEZ al cargar el módulo para evitar inconsistencias.
+
+# Verificar si las variables ya están establecidas (por app.py)
+if 'APP_VERSION' in os.environ and 'BUILD_TIMESTAMP' in os.environ:
+    # Usar las variables establecidas por app.py (caso normal)
+    APP_VERSION = os.environ['APP_VERSION']
+    BUILD_TIMESTAMP = os.environ['BUILD_TIMESTAMP']
+else:
+    # Caso excepcional: app_enhanced.py importado directamente
+    # Generar valores UNA VEZ y establecerlos en el entorno para consistencia
+    _INIT_TIMESTAMP = datetime.now()
+    APP_VERSION = _INIT_TIMESTAMP.strftime('%Y%m%d_%H%M%S')
+    BUILD_TIMESTAMP = _INIT_TIMESTAMP.isoformat()
+    # Establecer en entorno para que cualquier importación posterior use los mismos valores
+    os.environ['APP_VERSION'] = APP_VERSION
+    os.environ['BUILD_TIMESTAMP'] = BUILD_TIMESTAMP
 
 # Logging de inicio
 print("=" * 80)
