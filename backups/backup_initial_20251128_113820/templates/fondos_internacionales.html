@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fondos Internacionales - Plataforma IICA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .main-container { background: rgba(255,255,255,0.97); border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); margin: 20px; padding: 30px; }
+        .fondo-card { background: white; border-radius: 15px; padding: 25px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-left: 5px solid #0ea5e9; transition: all 0.3s ease; }
+        .fondo-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+        .badge-custom { padding: 8px 15px; border-radius: 20px; font-weight: 600; }
+        .no-results { text-align: center; padding: 50px; color: #6c757d; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="main-container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1><i class="fas fa-earth-americas text-primary me-3"></i>Fondos Internacionales</h1>
+                <div>
+                    <a href="/" class="btn btn-outline-secondary me-2"><i class="fas fa-home me-1"></i>Inicio</a>
+                    <a href="/fondos" class="btn btn-outline-primary"><i class="fas fa-list me-1"></i>Todos los Fondos</a>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" id="search-input" placeholder="Buscar por nombre, descripción u organización...">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="area-filter">
+                        <option value="">Todas las áreas</option>
+                        <option value="Biodiversidad">Biodiversidad</option>
+                        <option value="Desarrollo Rural">Desarrollo Rural</option>
+                        <option value="Desarrollo Sostenible">Desarrollo Sostenible</option>
+                        <option value="Financiamiento Sostenible">Financiamiento Sostenible</option>
+                        <option value="Medio Ambiente">Medio Ambiente</option>
+                        <option value="Seguridad Alimentaria">Seguridad Alimentaria</option>
+                        <option value="Cambio Climático">Cambio Climático</option>
+                        <option value="Innovación Tecnológica">Innovación Tecnológica</option>
+                        <option value="Adaptación Climática">Adaptación Climática</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input class="form-control" id="organizacion-filter" placeholder="Filtrar por organización (BID, GEF, FAO, ...)">
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 id="results-title">Resultados</h4>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-outline-primary active" onclick="filtrarPorEstado('')">Todos</button>
+                    <button type="button" class="btn btn-outline-success" onclick="filtrarPorEstado('Abierto')">Abiertos</button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="filtrarPorEstado('Cerrado')">Cerrados</button>
+                </div>
+            </div>
+
+            <div id="fondos-container"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let allFondos = [];
+        let filteredFondos = [];
+
+        async function cargarFondos() {
+            try {
+                const response = await fetch('/api/fondos?tipo=Internacional');
+                const data = await response.json();
+                allFondos = data.fondos || [];
+                filteredFondos = [...allFondos];
+                actualizarResultados();
+                mostrarFondos();
+            } catch (e) {
+                console.error('Error cargando fondos internacionales', e);
+            }
+        }
+
+        function actualizarResultados() {
+            document.getElementById('results-title').textContent = `Resultados: ${filteredFondos.length} fondos internacionales`;
+        }
+
+        function filtrarFondos() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const areaFilter = document.getElementById('area-filter').value;
+            const orgFilter = document.getElementById('organizacion-filter').value.toLowerCase();
+
+            filteredFondos = allFondos.filter(f => {
+                const matchesSearch = !searchTerm ||
+                    (f.nombre || '').toLowerCase().includes(searchTerm) ||
+                    (f.descripcion || '').toLowerCase().includes(searchTerm) ||
+                    (f.organizacion || '').toLowerCase().includes(searchTerm);
+                const matchesArea = !areaFilter || f.area === areaFilter;
+                const matchesOrg = !orgFilter || (f.organizacion || '').toLowerCase().includes(orgFilter);
+                return matchesSearch && matchesArea && matchesOrg;
+            });
+
+            actualizarResultados();
+            mostrarFondos();
+        }
+
+        function filtrarPorEstado(estado) {
+            if (!estado) {
+                filteredFondos = [...allFondos];
+            } else {
+                filteredFondos = allFondos.filter(f => f.estado === estado);
+            }
+            actualizarResultados();
+            mostrarFondos();
+        }
+
+        function mostrarFondos() {
+            const container = document.getElementById('fondos-container');
+            if (filteredFondos.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search fa-3x mb-3"></i>
+                        <h4>No se encontraron fondos</h4>
+                        <p>Intenta ajustar los filtros de búsqueda.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            filteredFondos.forEach(fondo => {
+                const estadoClass = fondo.estado === 'Abierto' ? 'success' : 'secondary';
+                html += `
+                    <div class="fondo-card">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h4 class="mb-2">${fondo.nombre}</h4>
+                                <p class="text-muted mb-2"><i class="fas fa-building me-2"></i>${fondo.organizacion}</p>
+                                <p class="mb-3">${fondo.descripcion || ''}</p>
+                                <div class="mb-2">
+                                    <span class="badge badge-custom bg-primary me-2">${fondo.area}</span>
+                                    <span class="badge badge-custom bg-${estadoClass}">${fondo.estado}</span>
+                                    <span class="badge badge-custom bg-info">${fondo.tipo}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="mb-2"><strong class="text-success fs-5">${fondo.monto}</strong></div>
+                                <div class="mb-2"><small class="text-muted"><i class="fas fa-calendar me-1"></i>Cierre: ${fondo.fecha_cierre}</small></div>
+                                <div class="d-grid gap-2">
+                                    <a href="/fondo/${fondo.id}" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye me-1"></i>Ver Detalles</a>
+                                    ${fondo.estado === 'Abierto' ? `<a href="/postular/${fondo.id}" class="btn btn-primary btn-sm"><i class="fas fa-file-alt me-1"></i>Postular</a>` : ''}
+                                    ${fondo.enlace ? `<a href="${fondo.enlace}" target="_blank" class="btn btn-outline-secondary btn-sm"><i class="fas fa-external-link-alt me-1"></i>Sitio Oficial</a>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        document.getElementById('search-input').addEventListener('input', filtrarFondos);
+        document.getElementById('area-filter').addEventListener('change', filtrarFondos);
+        document.getElementById('organizacion-filter').addEventListener('input', filtrarFondos);
+        document.addEventListener('DOMContentLoaded', cargarFondos);
+    </script>
+</body>
+</html>
+
+

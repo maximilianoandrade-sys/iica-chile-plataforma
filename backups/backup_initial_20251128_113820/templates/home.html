@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma IICA Chile - Proyectos y Financiamiento</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --iica-primary: #2E7D32;
+            --iica-secondary: #1976D2;
+            --iica-accent: #FF6F00;
+            --iica-success: #4CAF50;
+            --iica-light: #F8F9FA;
+            --iica-dark: #212121;
+            --iica-text: #424242;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f7fa;
+            color: var(--iica-text);
+        }
+        
+        /* Navbar Simple */
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--iica-primary) !important;
+        }
+        
+        .navbar-brand i {
+            color: var(--iica-primary);
+        }
+        
+        /* Hero Simple - Removido ya que el header ahora incluye esta funcionalidad */
+        .hero-section {
+            display: none;
+        }
+        
+        /* Stats Cards */
+        .stats-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .stats-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--iica-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stats-label {
+            font-size: 0.9rem;
+            color: var(--iica-text);
+            opacity: 0.7;
+        }
+        
+        /* Búsqueda Simple */
+        .search-box {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+        
+        .search-input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .search-input-group input {
+            flex: 1;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+        }
+        
+        .search-input-group input:focus {
+            outline: none;
+            border-color: var(--iica-primary);
+        }
+        
+        /* Project Cards - Simple */
+        .project-card-simple {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.2s;
+            border-left: 4px solid var(--iica-primary);
+        }
+        
+        .project-card-simple:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+            transform: translateX(4px);
+        }
+        
+        .project-title-simple {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--iica-dark);
+            margin-bottom: 0.75rem;
+        }
+        
+        .project-meta-simple {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--iica-text);
+            opacity: 0.8;
+        }
+        
+        .project-meta-simple i {
+            color: var(--iica-primary);
+            margin-right: 0.25rem;
+        }
+        
+        .project-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn-postular {
+            background: var(--iica-success);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn-postular:hover {
+            background: #45a049;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+        }
+        
+        .btn-ver {
+            background: var(--iica-primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn-ver:hover {
+            background: #1b5e20;
+            transform: translateY(-1px);
+        }
+        
+        .btn-link {
+            background: transparent;
+            color: var(--iica-secondary);
+            border: 1px solid var(--iica-secondary);
+            padding: 0.5rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        
+        .btn-link:hover {
+            background: var(--iica-secondary);
+            color: white;
+        }
+        
+        .badge-estado {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .badge-abierto {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-cerrado {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        /* Filtros rápidos */
+        .filtros-rapidos {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+        
+        .filtro-chip {
+            background: white;
+            border: 1px solid #e0e0e0;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .filtro-chip:hover {
+            background: var(--iica-primary);
+            color: white;
+            border-color: var(--iica-primary);
+        }
+        
+        .filtro-chip.active {
+            background: var(--iica-primary);
+            color: white;
+            border-color: var(--iica-primary);
+        }
+        
+        /* Footer Simple */
+        .footer-simple {
+            background: var(--iica-dark);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 4rem;
+            text-align: center;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            
+            .search-input-group {
+                flex-direction: column;
+            }
+            
+            .project-actions {
+                flex-direction: column;
+            }
+            
+            .project-actions .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header con Logo IICA -->
+    <header style="background: linear-gradient(135deg, var(--iica-primary) 0%, var(--iica-secondary) 100%); padding:1.5rem 0; box-shadow:0 4px 6px rgba(0,0,0,0.1); margin-bottom:0;">
+        <div class="container" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap;">
+            <div style="display:flex; align-items:center; gap:1.5rem;">
+                <img src="{{ url_for('static', filename='iica-logo.png') }}" 
+                     alt="Logo IICA" 
+                     style="height:70px; max-width:200px; object-fit:contain; background:white; padding:0.5rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1);" 
+                     onerror="this.onerror=null; this.src='{{ url_for('static', filename='logo_iica_oficial.svg') }}'; this.style.height='70px';" />
+                <div>
+                    <h1 style="margin:0; color:white; font-size:2rem; font-weight:700; text-shadow:0 2px 4px rgba(0,0,0,0.2);">
+                        Plataforma de Proyectos IICA
+                    </h1>
+                    <p style="margin:0.25rem 0 0 0; color:rgba(255,255,255,0.9); font-size:1rem; font-weight:400;">
+                        Conectamos el campo con oportunidades de financiamiento
+                    </p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navbar Simple -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-tree"></i> IICA Chile
+            </a>
+            <div class="d-flex gap-2">
+                <a href="/mis-postulaciones" class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-list-ul"></i> Mis Postulaciones
+                </a>
+                <form method="POST" action="/buscar" class="d-inline">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="bi bi-arrow-clockwise"></i> Actualizar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">Conectamos el Campo con Oportunidades</h1>
+            <p class="hero-subtitle">
+                Accede a proyectos de financiamiento agrícola y desarrollo rural
+            </p>
+        </div>
+    </div>
+
+    <!-- Contenido Principal -->
+    <div class="container">
+        <!-- Estadísticas Rápidas -->
+        {% if stats %}
+        <div class="row mb-4">
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stats-card">
+                    <div class="stats-number">{{ stats.total }}</div>
+                    <div class="stats-label">Proyectos Disponibles</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stats-card">
+                    <div class="stats-number">{{ stats.abiertos }}</div>
+                    <div class="stats-label">Proyectos Abiertos</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stats-card">
+                    <div class="stats-number">{{ fuentes_unicas|length }}</div>
+                    <div class="stats-label">Fuentes</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="stats-card">
+                    <div class="stats-number">{{ stats.filtrados }}</div>
+                    <div class="stats-label">Resultados</div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Búsqueda y Filtros -->
+        <div class="search-box">
+            <form method="GET" action="/" class="row g-3">
+                <div class="col-md-4">
+                    <input type="text" name="query" class="form-control" 
+                           placeholder="Buscar por palabra clave..." 
+                           value="{{ current_filters.query if current_filters else '' }}">
+                </div>
+                <div class="col-md-2">
+                    <select name="area" class="form-select">
+                        <option value="">Todas las áreas</option>
+                        {% if areas_unicas %}
+                            {% for area_item in areas_unicas %}
+                            <option value="{{ area_item }}" {% if current_filters and current_filters.area == area_item %}selected{% endif %}>
+                                {{ area_item }}
+                            </option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select name="estado" class="form-select">
+                        <option value="">Todos los estados</option>
+                        {% if estados_unicos %}
+                            {% for estado_item in estados_unicos %}
+                            <option value="{{ estado_item }}" {% if current_filters and current_filters.estado == estado_item %}selected{% endif %}>
+                                {{ estado_item }}
+                            </option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select name="fuente" class="form-select">
+                        <option value="">Todas las fuentes</option>
+                        {% if fuentes_unicas %}
+                            {% for fuente_item in fuentes_unicas %}
+                            <option value="{{ fuente_item }}" {% if current_filters and current_filters.fuente == fuente_item %}selected{% endif %}>
+                                {{ fuente_item }}
+                            </option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-search"></i> Buscar
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Filtros Rápidos -->
+        {% if areas_unicas or fuentes_unicas or estados_unicos %}
+        <div class="filtros-rapidos">
+            <span class="text-muted me-2">Filtros rápidos:</span>
+            {% if areas_unicas %}
+                {% for area in areas_unicas[:5] %}
+                <a href="?area={{ area }}{% if current_filters and current_filters.query %}&query={{ current_filters.query }}{% endif %}" 
+                   class="filtro-chip {% if current_filters and current_filters.area == area %}active{% endif %}">
+                    {{ area }}
+                </a>
+                {% endfor %}
+            {% endif %}
+            {% if estados_unicos %}
+                {% for estado in estados_unicos[:3] %}
+                <a href="?estado={{ estado }}{% if current_filters and current_filters.query %}&query={{ current_filters.query }}{% endif %}" 
+                   class="filtro-chip {% if current_filters and current_filters.estado == estado %}active{% endif %}">
+                    {{ estado }}
+                </a>
+                {% endfor %}
+            {% endif %}
+            <a href="/" class="filtro-chip">Limpiar filtros</a>
+        </div>
+        {% endif %}
+
+        <!-- Lista de Proyectos -->
+        <div class="projects-list">
+            {% if proyectos %}
+                {% for proyecto in proyectos %}
+                {% set proyecto_index = loop.index + ((pagination.current_page - 1) * pagination.per_page) %}
+                <div class="project-card-simple">
+                    <h5 class="project-title-simple">{{ proyecto.Nombre }}</h5>
+                    
+                    <div class="project-meta-simple">
+                        <span><i class="bi bi-building"></i> {{ proyecto.Fuente }}</span>
+                        <span><i class="bi bi-tag"></i> {{ proyecto.get('Área de interés', 'General') }}</span>
+                        <span><i class="bi bi-calendar"></i> Cierre: {{ proyecto.get('Fecha cierre', 'N/A') }}</span>
+                        <span><i class="bi bi-currency-dollar"></i> {{ proyecto.get('Monto', '0') }}</span>
+                        <span class="badge-estado {% if proyecto.Estado == 'Abierto' %}badge-abierto{% else %}badge-cerrado{% endif %}">
+                            {{ proyecto.Estado }}
+                        </span>
+                    </div>
+                    
+                    {% if proyecto.get('Descripción') %}
+                    <p class="text-muted mb-3" style="font-size: 0.9rem;">{{ proyecto.Descripción[:150] }}...</p>
+                    {% endif %}
+                    
+                    <div class="project-actions">
+                        {% if proyecto.Estado == 'Abierto' %}
+                        <a href="/postular/{{ proyecto_index }}" class="btn-postular">
+                            <i class="bi bi-send"></i> Postular
+                        </a>
+                        {% endif %}
+                        <a href="/proyecto/{{ proyecto_index }}" class="btn-ver">
+                            <i class="bi bi-eye"></i> Ver Detalles
+                        </a>
+                        {% if proyecto.Enlace and proyecto.Enlace.startswith('http') %}
+                        <a href="{{ proyecto.Enlace }}" target="_blank" class="btn-link">
+                            <i class="bi bi-box-arrow-up-right"></i> Enlace Oficial
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-info text-center">
+                    <i class="bi bi-info-circle"></i> No se encontraron proyectos con los filtros seleccionados.
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Paginación Simple -->
+        {% if pagination and pagination.total_pages > 1 %}
+        <nav aria-label="Paginación" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if pagination.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ pagination.prev_page }}{% if current_filters and current_filters.query %}&query={{ current_filters.query }}{% endif %}{% if current_filters and current_filters.area %}&area={{ current_filters.area }}{% endif %}{% if current_filters and current_filters.estado %}&estado={{ current_filters.estado }}{% endif %}{% if current_filters and current_filters.fuente %}&fuente={{ current_filters.fuente }}{% endif %}">Anterior</a>
+                </li>
+                {% endif %}
+                
+                <li class="page-item active">
+                    <span class="page-link">Página {{ pagination.current_page }} de {{ pagination.total_pages }}</span>
+                </li>
+                
+                {% if pagination.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ pagination.next_page }}{% if current_filters and current_filters.query %}&query={{ current_filters.query }}{% endif %}{% if current_filters and current_filters.area %}&area={{ current_filters.area }}{% endif %}{% if current_filters and current_filters.estado %}&estado={{ current_filters.estado }}{% endif %}{% if current_filters and current_filters.fuente %}&fuente={{ current_filters.fuente }}{% endif %}">Siguiente</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+
+    <!-- Footer Simple -->
+    <footer class="footer-simple">
+        <div class="container">
+            <p>&copy; 2024 IICA Chile - Instituto Interamericano de Cooperación para la Agricultura</p>
+            <p class="small mt-2">Plataforma de Fondos y Convocatorias de Financiamiento</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

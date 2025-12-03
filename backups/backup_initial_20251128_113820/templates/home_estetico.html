@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IICA Chile - Plataforma de Financiamiento Agrícola</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Colores oficiales IICA */
+            --iica-primary: #2E7D32;
+            --iica-secondary: #1976D2;
+            --iica-accent: #FF6F00;
+            --iica-success: #4CAF50;
+            --iica-warning: #FF9800;
+            --iica-light: #F5F5F5;
+            --iica-dark: #212121;
+            --iica-text: #424242;
+            --iica-border: #E0E0E0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            color: var(--iica-text);
+            line-height: 1.6;
+        }
+        
+        /* Header Principal */
+        .main-header {
+            background: linear-gradient(135deg, var(--iica-primary) 0%, var(--iica-secondary) 100%);
+            color: white;
+            padding: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .main-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .logo-institucional {
+            width: 200px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 0.5rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .logo-institucional:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+        
+        /* Responsive para logos */
+        @media (max-width: 768px) {
+            .logo-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .logo-iica {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .logo-institucional {
+                width: 180px;
+                height: 70px;
+            }
+        }
+        
+        .logo-iica {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .logo-iica::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(46, 125, 50, 0.1), transparent);
+            animation: logoRotate 10s linear infinite;
+        }
+        
+        @keyframes logoRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .logo-text {
+            position: relative;
+            z-index: 2;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--iica-primary);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header-subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+        
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--iica-success);
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* Navegación Principal */
+        .nav-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: -3rem auto 2rem auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 3;
+            max-width: 1200px;
+        }
+        
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .nav-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: 2px solid var(--iica-border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(46, 125, 50, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .nav-card:hover::before {
+            left: 100%;
+        }
+        
+        .nav-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(46, 125, 50, 0.15);
+            border-color: var(--iica-primary);
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .nav-card-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--iica-primary) 0%, var(--iica-secondary) 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem auto;
+            font-size: 2rem;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-card:hover .nav-card-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .nav-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--iica-dark);
+        }
+        
+        .nav-card p {
+            color: var(--iica-text);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        /* Búsqueda Inteligente */
+        .search-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid var(--iica-border);
+        }
+        
+        .search-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--iica-dark);
+            text-align: center;
+        }
+        
+        .search-form {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--iica-border);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--iica-primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+        }
+        
+        .search-btn {
+            background: linear-gradient(135deg, var(--iica-primary) 0%, var(--iica-secondary) 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.3);
+        }
+        
+        .quick-search {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .quick-btn {
+            background: var(--iica-light);
+            border: 2px solid var(--iica-border);
+            color: var(--iica-text);
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .quick-btn:hover {
+            background: var(--iica-primary);
+            color: white;
+            border-color: var(--iica-primary);
+            transform: translateY(-2px);
+        }
+        
+        /* Estadísticas */
+        .stats-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid var(--iica-border);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, var(--iica-primary) 0%, var(--iica-secondary) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover::before {
+            top: -25%;
+            right: -25%;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(46, 125, 50, 0.3);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Proyectos Destacados */
+        .projects-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid var(--iica-border);
+        }
+        
+        .project-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border: 1px solid var(--iica-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .project-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--iica-primary);
+            transition: width 0.3s ease;
+        }
+        
+        .project-card:hover {
+            transform: translateX(8px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .project-card:hover::before {
+            width: 8px;
+        }
+        
+        .project-title {
+            font-weight: 600;
+            color: var(--iica-dark);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .project-meta {
+            color: var(--iica-text);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .project-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .btn-primary {
+            background: var(--iica-primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: var(--iica-dark);
+            color: white;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--iica-secondary);
+            color: var(--iica-secondary);
+            background: transparent;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline:hover {
+            background: var(--iica-secondary);
+            color: white;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--iica-dark);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2rem;
+            }
+            
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-form {
+                flex-direction: column;
+            }
+            
+            .quick-search {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+        
+        /* Animaciones de entrada */
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-in-left {
+            animation: slideInLeft 0.8s ease-out;
+        }
+        
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .slide-in-right {
+            animation: slideInRight 0.8s ease-out;
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Principal -->
+    <div class="main-header">
+        <div class="container">
+            <div class="header-content text-center">
+                <div class="logo-container">
+                    <div class="logo-iica">
+                        <img src="/static/logo_iica_oficial.svg" alt="Logo IICA Oficial" style="width: 100%; height: 100%; object-fit: contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <div class="logo-text" style="display:none;">IICA</div>
+                    </div>
+                    <div class="logo-institucional">
+                        <img src="/static/logo_iica_institucional.svg" alt="Logo Institucional IICA OAS" style="width: 100%; height: 100%; object-fit: contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <div style="display:none; text-align:center; padding:10px; color:#1976D2; font-weight:bold;">IICA OAS</div>
+                    </div>
+                </div>
+                <h1 class="header-title">IICA Chile</h1>
+                <p class="header-subtitle">Plataforma de Financiamiento Agrícola</p>
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <span>Búsqueda Automática Activa</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Navegación Principal -->
+        <div class="nav-section fade-in">
+            <div class="nav-grid">
+                <a href="/dashboard" class="nav-card slide-in-left">
+                    <div class="nav-card-icon">
+                        <i class="bi bi-speedometer2"></i>
+                    </div>
+                    <h3>Dashboard</h3>
+                    <p>Estadísticas y análisis completos de todos los proyectos disponibles</p>
+                </a>
+                
+                <a href="/ai-search" class="nav-card slide-in-left">
+                    <div class="nav-card-icon">
+                        <i class="bi bi-search"></i>
+                    </div>
+                    <h3>Búsqueda Inteligente</h3>
+                    <p>Encuentra proyectos usando lenguaje natural con inteligencia artificial</p>
+                </a>
+                
+                <a href="/todos-los-proyectos" class="nav-card slide-in-right">
+                    <div class="nav-card-icon">
+                        <i class="bi bi-table"></i>
+                    </div>
+                    <h3>Todos los Proyectos</h3>
+                    <p>Explora todos los proyectos organizados por categorías y fuentes</p>
+                </a>
+                
+                <a href="/busqueda-avanzada" class="nav-card slide-in-right">
+                    <div class="nav-card-icon">
+                        <i class="bi bi-search"></i>
+                    </div>
+                    <h3>Búsqueda Avanzada</h3>
+                    <p>Encuentra proyectos específicos con filtros detallados y búsqueda inteligente</p>
+                </a>
+                
+                <a href="/favoritos" class="nav-card slide-in-right">
+                    <div class="nav-card-icon">
+                        <i class="bi bi-heart"></i>
+                    </div>
+                    <h3>Mis Favoritos</h3>
+                    <p>Gestiona tus proyectos favoritos y recibe alertas personalizadas</p>
+                </a>
+                
+                <a href="/seguimiento" class="nav-card slide-in-right">
+                    <div class="nav-card-icon">
+                        <i class="bi bi-clipboard-check"></i>
+                    </div>
+                    <h3>Seguimiento</h3>
+                    <p>Monitorea el estado de tus postulaciones y recibe actualizaciones</p>
+                </a>
+                
+                <a href="/notificaciones" class="nav-card slide-in-right">
+                    <div class="nav-card-icon">
+                        <i class="bi bi-bell"></i>
+                    </div>
+                    <h3>Notificaciones</h3>
+                    <p>Mantente informado sobre nuevos proyectos y recordatorios importantes</p>
+                </a>
+                
+                <a href="/quienes-somos" class="nav-card slide-in-right">
+                    <div class="nav-card-icon">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <h3>Quiénes Somos</h3>
+                    <p>Conoce más sobre IICA Chile y nuestro trabajo en agricultura</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- Búsqueda Inteligente -->
+        <div class="search-section fade-in">
+            <h3 class="search-title">
+                <i class="bi bi-search me-2"></i>Búsqueda Inteligente
+            </h3>
+            <form class="search-form" onsubmit="performSearch(event)">
+                <input type="text" class="search-input" placeholder="¿Qué tipo de proyecto buscas?" id="searchInput">
+                <button type="submit" class="search-btn">
+                    <i class="bi bi-search"></i>
+                    Buscar
+                </button>
+            </form>
+            
+            <div class="quick-search">
+                <div class="quick-btn" onclick="quickSearch('agricultura sostenible')">
+                    🌱 Agricultura Sostenible
+                </div>
+                <div class="quick-btn" onclick="quickSearch('juventudes rurales')">
+                    👥 Juventudes Rurales
+                </div>
+                <div class="quick-btn" onclick="quickSearch('innovación tecnológica')">
+                    🚀 Innovación Tecnológica
+                </div>
+                <div class="quick-btn" onclick="quickSearch('gestión hídrica')">
+                    💧 Gestión Hídrica
+                </div>
+                <div class="quick-btn" onclick="quickSearch('desarrollo rural')">
+                    🏘️ Desarrollo Rural
+                </div>
+                <div class="quick-btn" onclick="quickSearch('seguridad alimentaria')">
+                    🍽️ Seguridad Alimentaria
+                </div>
+            </div>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="stats-section fade-in">
+            <h3 class="search-title">
+                <i class="bi bi-graph-up me-2"></i>Estadísticas en Tiempo Real
+            </h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalProjects">{{ total_proyectos or '90' }}</div>
+                    <div class="stat-label">Proyectos Totales</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="openProjects">{{ proyectos_abiertos or '75' }}</div>
+                    <div class="stat-label">Proyectos Abiertos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="sources">{{ fuentes_unicas or '25' }}</div>
+                    <div class="stat-label">Fuentes de Financiamiento</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalAmount">${{ monto_total_formateado or '500M' }}</div>
+                    <div class="stat-label">Monto Total Disponible</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Proyectos Destacados -->
+        <div class="projects-section fade-in">
+            <h3 class="search-title">
+                <i class="bi bi-star me-2"></i>Proyectos Destacados
+            </h3>
+            {% if proyectos_paginados %}
+                {% for proyecto in proyectos_paginados[:3] %}
+                <div class="project-card">
+                    <div class="project-title">{{ proyecto.Nombre }}</div>
+                    <div class="project-meta">
+                        <strong>{{ proyecto.Fuente }}</strong> • {{ proyecto['Área de interés'] }} • {{ proyecto.Monto }}
+                    </div>
+                    <div class="project-actions">
+                        <a href="/proyecto/{{ loop.index }}" class="btn-primary">
+                            <i class="bi bi-eye me-1"></i>Ver Detalles
+                        </a>
+                        <a href="/postular/{{ loop.index }}" class="btn-success" style="background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%); border: none; color: white;">
+                            <i class="bi bi-file-earmark-text me-1"></i>Postular
+                        </a>
+                        <a href="{{ proyecto.Enlace }}" target="_blank" class="btn-outline">
+                            <i class="bi bi-external-link me-1"></i>Fuente Oficial
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="project-card">
+                    <div class="project-title">Programa Juventud Rural Innovadora - ReBrota</div>
+                    <div class="project-meta">
+                        <strong>FIA-INJUV</strong> • Juventudes Rurales • USD 8,000,000
+                    </div>
+                    <div class="project-actions">
+                        <a href="/proyecto/1" class="btn-primary">
+                            <i class="bi bi-eye me-1"></i>Ver Detalles
+                        </a>
+                        <a href="#" class="btn-outline">
+                            <i class="bi bi-external-link me-1"></i>Fuente Oficial
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-title">Fondo Verde del Clima</div>
+                    <div class="project-meta">
+                        <strong>Banco Mundial</strong> • Agricultura Sostenible • USD 100,000,000
+                    </div>
+                    <div class="project-actions">
+                        <a href="/proyecto/2" class="btn-primary">
+                            <i class="bi bi-eye me-1"></i>Ver Detalles
+                        </a>
+                        <a href="#" class="btn-outline">
+                            <i class="bi bi-external-link me-1"></i>Fuente Oficial
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+            
+            <div class="text-center mt-4">
+                <a href="/todos-los-proyectos" class="btn-primary" style="padding: 1rem 2rem; font-size: 1rem;">
+                    <i class="bi bi-arrow-right me-2"></i>Ver Todos los Proyectos
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2024 IICA Chile. Instituto Interamericano de Cooperación para la Agricultura</p>
+        <p><i class="bi bi-arrow-clockwise me-2"></i>Búsqueda automática activa - Actualización diaria</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Búsqueda inteligente
+        function performSearch(event) {
+            event.preventDefault();
+            const query = document.getElementById('searchInput').value;
+            if (query.trim()) {
+                showSearchIndicator();
+                window.location.href = `/ai-search?query=${encodeURIComponent(query)}`;
+            }
+        }
+        
+        // Búsqueda rápida
+        function quickSearch(query) {
+            showSearchIndicator();
+            window.location.href = `/todos-los-proyectos?query=${encodeURIComponent(query)}`;
+        }
+        
+        // Indicador de búsqueda
+        function showSearchIndicator() {
+            const indicator = document.createElement('div');
+            indicator.innerHTML = `
+                <div style="position: fixed; top: 20px; right: 20px; background: var(--iica-primary); color: white; padding: 15px 25px; border-radius: 25px; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.3); animation: slideInRight 0.5s ease;">
+                    <i class="bi bi-search me-2"></i>Buscando proyectos...
+                </div>
+            `;
+            document.body.appendChild(indicator);
+            
+            setTimeout(() => {
+                indicator.remove();
+            }, 3000);
+        }
+        
+        // Actualizar estadísticas
+        function updateStats() {
+            fetch('/api/analytics')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.overview) {
+                        document.getElementById('totalProjects').textContent = data.overview.total_projects;
+                        document.getElementById('openProjects').textContent = data.overview.open_projects;
+                        document.getElementById('sources').textContent = data.overview.unique_sources;
+                    }
+                })
+                .catch(error => console.log('Error actualizando estadísticas:', error));
+        }
+        
+        // Animaciones de entrada
+        document.addEventListener('DOMContentLoaded', function() {
+            // Actualizar estadísticas
+            updateStats();
+            
+            // Actualizar cada 30 segundos
+            setInterval(updateStats, 30000);
+            
+            // Efectos de hover en tarjetas
+            const cards = document.querySelectorAll('.nav-card, .stat-card, .project-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

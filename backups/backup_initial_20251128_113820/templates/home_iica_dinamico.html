@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IICA Chile - Plataforma de Proyectos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --iica-green: #2E7D32;
+            --iica-light-green: #4CAF50;
+            --iica-blue: #1976D2;
+            --iica-orange: #FF9800;
+            --iica-gray: #757575;
+            --iica-light-gray: #F5F5F5;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--iica-green) 0%, var(--iica-light-green) 100%);
+            box-shadow: 0 4px 20px rgba(46, 125, 50, 0.3);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: white !important;
+            transform: translateY(-2px);
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--iica-green) 0%, var(--iica-light-green) 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .stats-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--iica-orange);
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .main-sections {
+            padding: 4rem 0;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: none;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .section-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, var(--iica-blue) 0%, var(--iica-light-green) 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .section-content {
+            padding: 2rem;
+        }
+
+        .project-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 5px solid var(--iica-green);
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .project-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--iica-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .project-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .meta-badge {
+            background: var(--iica-light-green);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .project-description {
+            color: var(--iica-gray);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-iica {
+            background: linear-gradient(135deg, var(--iica-green) 0%, var(--iica-light-green) 100%);
+            border: none;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-iica:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.4);
+            color: white;
+        }
+
+        .btn-outline-iica {
+            border: 2px solid var(--iica-green);
+            color: var(--iica-green);
+            background: transparent;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-outline-iica:hover {
+            background: var(--iica-green);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .iica-info {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .iica-logo {
+            width: 80px;
+            height: 80px;
+            background: var(--iica-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .document-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--iica-blue);
+        }
+
+        .document-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .document-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--iica-blue);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-container {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--iica-green);
+            box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
+        }
+
+        .footer {
+            background: var(--iica-green);
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-content {
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-text {
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            background: var(--iica-orange);
+            transform: translateY(-3px);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .stats-container {
+                padding: 1rem;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--iica-green);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-seedling me-2"></i>
+                IICA Chile
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#proyectos">Proyectos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#quienes-somos">Quiénes Somos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#documentos">Documentos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                </ul>
+                </div>
+            </div>
+            </nav>
+            
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Plataforma IICA Chile</h1>
+                <p class="hero-subtitle">Facilitando el acceso a proyectos de financiamiento para el desarrollo agrícola</p>
+                
+                <div class="stats-container">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number" id="total-proyectos">-</div>
+                                <div class="stat-label">Proyectos Disponibles</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number" id="total-fuentes">-</div>
+                                <div class="stat-label">Fuentes de Financiamiento</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number" id="total-monto">-</div>
+                                <div class="stat-label">Monto Total (USD)</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-number" id="proyectos-abiertos">-</div>
+                                <div class="stat-label">Proyectos Abiertos</div>
+                            </div>
+                        </div>
+            </div>
+        </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container main-sections">
+        <!-- Proyectos Disponibles -->
+        <section id="proyectos" class="section-card">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-project-diagram me-3"></i>
+                    Proyectos Disponibles para Postular
+                </h2>
+                <p class="section-subtitle">Oportunidades de financiamiento actualizadas para el desarrollo agrícola</p>
+            </div>
+        <div class="section-content">
+                <!-- Búsqueda -->
+                <div class="search-container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <input type="text" class="form-control search-input" id="search-projects" placeholder="Buscar proyectos por nombre, área o fuente...">
+            </div>
+                        <div class="col-md-4">
+                            <select class="form-control search-input" id="filter-area">
+                                <option value="">Todas las áreas</option>
+                                <option value="Agricultura Sostenible">Agricultura Sostenible</option>
+                                <option value="Desarrollo Rural">Desarrollo Rural</option>
+                                <option value="Innovación Tecnológica">Innovación Tecnológica</option>
+                                <option value="Seguridad Alimentaria">Seguridad Alimentaria</option>
+                            </select>
+                </div>
+                    </div>
+                </div>
+                
+                <!-- Loading -->
+                <div class="loading" id="loading-projects">
+                    <div class="spinner"></div>
+                    <p>Cargando proyectos...</p>
+                </div>
+                
+                <!-- Proyectos List -->
+                <div id="projects-list">
+                    <!-- Los proyectos se cargarán aquí dinámicamente -->
+            </div>
+        </div>
+    </section>
+
+        <!-- Quiénes Somos -->
+        <section id="quienes-somos" class="section-card">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-users me-3"></i>
+                    Quiénes Somos - IICA Chile
+                </h2>
+                <p class="section-subtitle">El Instituto Interamericano de Cooperación para la Agricultura en Chile</p>
+            </div>
+        <div class="section-content">
+                <div class="iica-info">
+                    <div class="iica-logo">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <h3 class="text-center mb-4">Instituto Interamericano de Cooperación para la Agricultura</h3>
+                    <p class="text-center mb-4">
+                        El IICA es el organismo especializado en agricultura del Sistema Interamericano que apoya 
+                        los esfuerzos de los Estados Miembros para lograr el desarrollo agrícola y el bienestar rural.
+                    </p>
+            </div>
+            
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="document-card">
+                            <div class="document-icon">
+                                <i class="fas fa-bullseye"></i>
+                            </div>
+                            <h5>Nuestra Misión</h5>
+                            <p>Estimular, promover y apoyar los esfuerzos de los Estados Miembros para lograr su desarrollo agrícola y el bienestar rural.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="document-card">
+                            <div class="document-icon">
+                                <i class="fas fa-eye"></i>
+                    </div>
+                            <h5>Nuestra Visión</h5>
+                            <p>Ser el organismo de excelencia en cooperación técnica agrícola en las Américas, reconocido por su contribución al desarrollo sostenible.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <div class="document-card">
+                            <div class="document-icon">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <h5>Agricultura Sostenible</h5>
+                            <p>Promovemos prácticas agrícolas que protegen el medio ambiente y mejoran la productividad.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="document-card">
+                            <div class="document-icon">
+                                <i class="fas fa-users"></i>
+                        </div>
+                            <h5>Desarrollo Rural</h5>
+                            <p>Apoyamos el desarrollo integral de las comunidades rurales y su bienestar.</p>
+                    </div>
+                </div>
+                    <div class="col-md-4">
+                        <div class="document-card">
+                            <div class="document-icon">
+                                <i class="fas fa-lightbulb"></i>
+                    </div>
+                            <h5>Innovación</h5>
+                            <p>Fomentamos la innovación tecnológica en el sector agrícola para mayor eficiencia.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        <!-- Documentos y Links -->
+        <section id="documentos" class="section-card">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-file-alt me-3"></i>
+                    Documentos y Links Importantes
+                </h2>
+                <p class="section-subtitle">Recursos esenciales para la postulación a proyectos</p>
+            </div>
+        <div class="section-content">
+                <div class="documents-grid">
+                    <div class="document-card">
+                        <div class="document-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <h5>Guía de Postulación</h5>
+                        <p>Manual completo para postular a proyectos de financiamiento agrícola.</p>
+                        <a href="#" class="btn-iica">
+                            <i class="fas fa-download me-2"></i>
+                            Descargar
+                        </a>
+            </div>
+            
+                    <div class="document-card">
+                        <div class="document-icon">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <h5>Checklist de Documentos</h5>
+                        <p>Lista de verificación de documentos necesarios para postulaciones.</p>
+                        <a href="#" class="btn-iica">
+                            <i class="fas fa-download me-2"></i>
+                            Descargar
+                        </a>
+                    </div>
+
+                    <div class="document-card">
+                        <div class="document-icon">
+                            <i class="fas fa-edit"></i>
+                    </div>
+                        <h5>Plantillas de Propuestas</h5>
+                        <p>Modelos de propuestas para diferentes tipos de proyectos.</p>
+                        <a href="#" class="btn-iica">
+                            <i class="fas fa-download me-2"></i>
+                            Descargar
+                        </a>
+                </div>
+                
+                    <div class="document-card">
+                        <div class="document-icon">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <h5>Enlaces Oficiales</h5>
+                        <p>Acceso directo a portales de financiamiento y organismos internacionales.</p>
+                        <a href="#" class="btn-outline-iica">
+                            <i class="fas fa-external-link-alt me-2"></i>
+                            Visitar
+                        </a>
+                    </div>
+
+                    <div class="document-card">
+                        <div class="document-icon">
+                            <i class="fas fa-calendar"></i>
+                    </div>
+                        <h5>Calendario de Fechas</h5>
+                        <p>Fechas importantes de cierre de convocatorias y eventos.</p>
+                        <a href="#" class="btn-outline-iica">
+                            <i class="fas fa-calendar-alt me-2"></i>
+                            Ver Calendario
+                        </a>
+                </div>
+                
+                    <div class="document-card">
+                        <div class="document-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <h5>Contacto y Soporte</h5>
+                        <p>Información de contacto para asesoría en postulaciones.</p>
+                        <a href="#" class="btn-outline-iica">
+                            <i class="fas fa-envelope me-2"></i>
+                            Contactar
+                        </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+        <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-seedling me-2"></i>
+                    IICA Chile
+                </div>
+                <p class="footer-text">
+                    Facilitando el acceso a proyectos de financiamiento para el desarrollo agrícola sostenible
+                </p>
+                <div class="social-links">
+                    <a href="#" class="social-link">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Cargar estadísticas
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/proyectos');
+                const data = await response.json();
+                
+                document.getElementById('total-proyectos').textContent = data.total || 0;
+                document.getElementById('proyectos-abiertos').textContent = data.total || 0;
+                
+                // Calcular fuentes únicas
+                const fuentes = new Set(data.proyectos.map(p => p.Fuente));
+                document.getElementById('total-fuentes').textContent = fuentes.size;
+                
+                // Calcular monto total (simplificado)
+                const montoTotal = data.proyectos.reduce((sum, p) => {
+                    const monto = p.Monto ? p.Monto.toString().replace(/[^\d]/g, '') : '0';
+                    return sum + parseInt(monto) || 0;
+                }, 0);
+                document.getElementById('total-monto').textContent = (montoTotal / 1000000).toFixed(1) + 'M';
+                
+            } catch (error) {
+                console.error('Error cargando estadísticas:', error);
+            }
+        }
+
+        // Cargar proyectos
+        async function loadProjects() {
+            const loading = document.getElementById('loading-projects');
+            const projectsList = document.getElementById('projects-list');
+            
+            loading.style.display = 'block';
+            projectsList.innerHTML = '';
+            
+            try {
+                const response = await fetch('/api/proyectos');
+                const data = await response.json();
+                
+                loading.style.display = 'none';
+                
+                console.log('Datos recibidos:', data);
+                
+                if (data.proyectos && data.proyectos.length > 0) {
+                    console.log(`Cargando ${data.proyectos.length} proyectos`);
+                    data.proyectos.forEach((proyecto, index) => {
+                        const projectCard = createProjectCard(proyecto);
+                        projectsList.appendChild(projectCard);
+                        if (index < 3) {
+                            console.log(`Proyecto ${index + 1}:`, proyecto);
+                        }
+                    });
+                } else {
+                    projectsList.innerHTML = '<p class="text-center text-muted">No se encontraron proyectos.</p>';
+                }
+                
+            } catch (error) {
+                loading.style.display = 'none';
+                projectsList.innerHTML = '<p class="text-center text-danger">Error cargando proyectos.</p>';
+                console.error('Error cargando proyectos:', error);
+            }
+        }
+
+        // Crear tarjeta de proyecto
+        function createProjectCard(proyecto) {
+            const div = document.createElement('div');
+            div.className = 'project-card';
+            
+            // Manejar datos de manera más robusta
+            const nombre = proyecto.Nombre || proyecto.nombre || 'Sin nombre';
+            const fuente = proyecto.Fuente || proyecto.fuente || 'Sin fuente';
+            const area = proyecto['Área de interés'] || proyecto.area || 'Sin área';
+            const estado = proyecto.Estado || proyecto.estado || 'Sin estado';
+            const descripcion = proyecto.Descripción || proyecto.descripcion || 'Sin descripción disponible.';
+            const enlace = proyecto.Enlace || proyecto.enlace || '#';
+            const monto = proyecto.Monto || proyecto.monto || 'Sin monto';
+            
+            div.innerHTML = `
+                <h5 class="project-title">${nombre}</h5>
+                <div class="project-meta">
+                    <span class="meta-badge">${fuente}</span>
+                    <span class="meta-badge">${area}</span>
+                    <span class="meta-badge">${estado}</span>
+                    <span class="meta-badge">${monto}</span>
+                </div>
+                <p class="project-description">
+                    ${descripcion}
+                </p>
+                <div class="project-actions">
+                    <a href="${enlace}" target="_blank" class="btn-iica">
+                        <i class="fas fa-external-link-alt me-2"></i>
+                        Ver Proyecto
+                    </a>
+                    <a href="/postular/${proyecto.id || '#'}" class="btn-outline-iica">
+                        <i class="fas fa-edit me-2"></i>
+                        Postular
+                    </a>
+                </div>
+            `;
+            return div;
+        }
+
+        // Búsqueda de proyectos
+        function setupSearch() {
+            const searchInput = document.getElementById('search-projects');
+            const filterArea = document.getElementById('filter-area');
+            
+            function filterProjects() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const areaFilter = filterArea.value;
+                const projectCards = document.querySelectorAll('.project-card');
+                
+                projectCards.forEach(card => {
+                    const title = card.querySelector('.project-title').textContent.toLowerCase();
+                    const description = card.querySelector('.project-description').textContent.toLowerCase();
+                    const area = card.querySelector('.meta-badge:nth-child(2)').textContent;
+                    
+                    const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
+                    const matchesArea = !areaFilter || area === areaFilter;
+                    
+                    if (matchesSearch && matchesArea) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+            
+            searchInput.addEventListener('input', filterProjects);
+            filterArea.addEventListener('change', filterProjects);
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStats();
+            loadProjects();
+            setupSearch();
+        });
+    </script>
+</body>
+</html>
+

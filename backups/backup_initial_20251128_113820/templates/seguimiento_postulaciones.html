@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguimiento de Postulaciones - IICA Chile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --iica-primary: #2E7D32;
+            --iica-secondary: #1976D2;
+            --iica-accent: #FF6F00;
+            --iica-success: #4CAF50;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .status-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--iica-primary);
+        }
+        
+        .status-pending { border-left-color: #ffc107; }
+        .status-reviewing { border-left-color: #17a2b8; }
+        .status-approved { border-left-color: var(--iica-success); }
+        .status-rejected { border-left-color: #dc3545; }
+        
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .badge-pending { background: #fff3cd; color: #856404; }
+        .badge-reviewing { background: #d1ecf1; color: #0c5460; }
+        .badge-approved { background: #d4edda; color: #155724; }
+        .badge-rejected { background: #f8d7da; color: #721c24; }
+        
+        .progress-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.5rem;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #e9ecef;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px #e9ecef;
+        }
+        
+        .timeline-item.completed::before {
+            background: var(--iica-success);
+            box-shadow: 0 0 0 2px var(--iica-success);
+        }
+        
+        .timeline-item.current::before {
+            background: var(--iica-primary);
+            box-shadow: 0 0 0 2px var(--iica-primary);
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: -1.4rem;
+            top: 1.2rem;
+            width: 2px;
+            height: calc(100% + 1rem);
+            background: #e9ecef;
+        }
+        
+        .timeline-item:last-child::after {
+            display: none;
+        }
+        
+        .btn-action {
+            background: linear-gradient(135deg, var(--iica-primary) 0%, var(--iica-secondary) 100%);
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-action:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2><i class="bi bi-clipboard-check"></i> Seguimiento de Postulaciones</h2>
+                    <div>
+                        <button class="btn btn-outline-primary me-2" onclick="exportarSeguimiento()">
+                            <i class="bi bi-download"></i> Exportar
+                        </button>
+                        <button class="btn btn-primary" onclick="nuevaPostulacion()">
+                            <i class="bi bi-plus"></i> Nueva Postulación
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Filtros -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <select class="form-select" id="filtroEstado">
+                            <option value="">Todos los estados</option>
+                            <option value="pending">Pendiente</option>
+                            <option value="reviewing">En Revisión</option>
+                            <option value="approved">Aprobada</option>
+                            <option value="rejected">Rechazada</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="filtroFuente">
+                            <option value="">Todas las fuentes</option>
+                            <option value="IICA">IICA</option>
+                            <option value="CORFO">CORFO</option>
+                            <option value="MINAGRI">MINAGRI</option>
+                            <option value="INDAP">INDAP</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="date" class="form-control" id="filtroFecha" placeholder="Filtrar por fecha">
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-outline-secondary w-100" onclick="aplicarFiltros()">
+                            <i class="bi bi-funnel"></i> Aplicar Filtros
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Lista de Postulaciones -->
+                <div id="listaPostulaciones">
+                    <!-- Postulación 1 -->
+                    <div class="status-card status-reviewing">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                        <h5>Programa de Juventudes Rurales IICA</h5>
+                                        <p class="text-muted mb-2">POST-20241013103210</p>
+                                        <span class="status-badge badge-reviewing">
+                                            <i class="bi bi-clock"></i> En Revisión
+                                        </span>
+                                    </div>
+                                    <div class="text-end">
+                                        <small class="text-muted">Enviada: 13/10/2025</small><br>
+                                        <small class="text-muted">Monto: USD 300,000</small>
+                                    </div>
+                                </div>
+                                
+                                <!-- Timeline -->
+                                <div class="progress-timeline">
+                                    <div class="timeline-item completed">
+                                        <strong>Postulación Enviada</strong>
+                                        <p class="text-muted mb-1">Su postulación ha sido recibida y está siendo procesada.</p>
+                                        <small class="text-muted">13/10/2025 10:32 AM</small>
+                                    </div>
+                                    <div class="timeline-item completed">
+                                        <strong>Documentos Verificados</strong>
+                                        <p class="text-muted mb-1">Todos los documentos han sido verificados correctamente.</p>
+                                        <small class="text-muted">13/10/2025 14:15 PM</small>
+                                    </div>
+                                    <div class="timeline-item current">
+                                        <strong>En Evaluación Técnica</strong>
+                                        <p class="text-muted mb-1">Su proyecto está siendo evaluado por el comité técnico.</p>
+                                        <small class="text-muted">En progreso</small>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <strong>Decisión Final</strong>
+                                        <p class="text-muted mb-1">Se notificará la decisión final del comité.</p>
+                                        <small class="text-muted">Pendiente</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-action" onclick="verDetalles('POST-20241013103210')">
+                                        <i class="bi bi-eye"></i> Ver Detalles
+                                    </button>
+                                    <button class="btn btn-outline-secondary" onclick="descargarComprobante('POST-20241013103210')">
+                                        <i class="bi bi-download"></i> Comprobante
+                                    </button>
+                                    <button class="btn btn-outline-info" onclick="contactarSoporte('POST-20241013103210')">
+                                        <i class="bi bi-headset"></i> Soporte
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Postulación 2 -->
+                    <div class="status-card status-pending">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                        <h5>Crédito Especial Cultivos Tradicionales</h5>
+                                        <p class="text-muted mb-2">POST-20241012154530</p>
+                                        <span class="status-badge badge-pending">
+                                            <i class="bi bi-hourglass-split"></i> Pendiente
+                                        </span>
+                                    </div>
+                                    <div class="text-end">
+                                        <small class="text-muted">Enviada: 12/10/2025</small><br>
+                                        <small class="text-muted">Monto: CLP 25,000,000</small>
+                                    </div>
+                                </div>
+                                
+                                <!-- Timeline -->
+                                <div class="progress-timeline">
+                                    <div class="timeline-item completed">
+                                        <strong>Postulación Enviada</strong>
+                                        <p class="text-muted mb-1">Su postulación ha sido recibida y está siendo procesada.</p>
+                                        <small class="text-muted">12/10/2025 15:45 PM</small>
+                                    </div>
+                                    <div class="timeline-item current">
+                                        <strong>Verificación de Documentos</strong>
+                                        <p class="text-muted mb-1">Sus documentos están siendo verificados por el equipo técnico.</p>
+                                        <small class="text-muted">En progreso</small>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <strong>Evaluación Técnica</strong>
+                                        <p class="text-muted mb-1">El proyecto será evaluado por el comité técnico.</p>
+                                        <small class="text-muted">Pendiente</small>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <strong>Decisión Final</strong>
+                                        <p class="text-muted mb-1">Se notificará la decisión final del comité.</p>
+                                        <small class="text-muted">Pendiente</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-action" onclick="verDetalles('POST-20241012154530')">
+                                        <i class="bi bi-eye"></i> Ver Detalles
+                                    </button>
+                                    <button class="btn btn-outline-secondary" onclick="descargarComprobante('POST-20241012154530')">
+                                        <i class="bi bi-download"></i> Comprobante
+                                    </button>
+                                    <button class="btn btn-outline-warning" onclick="editarPostulacion('POST-20241012154530')">
+                                        <i class="bi bi-pencil"></i> Editar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Postulación 3 -->
+                    <div class="status-card status-approved">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                        <h5>Programa de Innovación FIA</h5>
+                                        <p class="text-muted mb-2">POST-20241010112045</p>
+                                        <span class="status-badge badge-approved">
+                                            <i class="bi bi-check-circle"></i> Aprobada
+                                        </span>
+                                    </div>
+                                    <div class="text-end">
+                                        <small class="text-muted">Enviada: 10/10/2025</small><br>
+                                        <small class="text-muted">Monto: CLP 45,000,000</small>
+                                    </div>
+                                </div>
+                                
+                                <!-- Timeline -->
+                                <div class="progress-timeline">
+                                    <div class="timeline-item completed">
+                                        <strong>Postulación Enviada</strong>
+                                        <p class="text-muted mb-1">Su postulación ha sido recibida y está siendo procesada.</p>
+                                        <small class="text-muted">10/10/2025 11:20 AM</small>
+                                    </div>
+                                    <div class="timeline-item completed">
+                                        <strong>Documentos Verificados</strong>
+                                        <p class="text-muted mb-1">Todos los documentos han sido verificados correctamente.</p>
+                                        <small class="text-muted">10/10/2025 16:30 PM</small>
+                                    </div>
+                                    <div class="timeline-item completed">
+                                        <strong>Evaluación Técnica</strong>
+                                        <p class="text-muted mb-1">Su proyecto ha sido evaluado positivamente por el comité técnico.</p>
+                                        <small class="text-muted">11/10/2025 09:15 AM</small>
+                                    </div>
+                                    <div class="timeline-item completed">
+                                        <strong>¡Aprobada!</strong>
+                                        <p class="text-success mb-1">¡Felicitaciones! Su proyecto ha sido aprobado para financiamiento.</p>
+                                        <small class="text-success">12/10/2025 14:20 PM</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-success" onclick="verDetalles('POST-20241010112045')">
+                                        <i class="bi bi-eye"></i> Ver Detalles
+                                    </button>
+                                    <button class="btn btn-outline-success" onclick="descargarAprobacion('POST-20241010112045')">
+                                        <i class="bi bi-download"></i> Certificado
+                                    </button>
+                                    <button class="btn btn-outline-primary" onclick="contactarFinanciador('POST-20241010112045')">
+                                        <i class="bi bi-telephone"></i> Contactar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Estadísticas -->
+                <div class="row mt-4">
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">3</h5>
+                                <p class="card-text">Total Postulaciones</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title text-warning">1</h5>
+                                <p class="card-text">En Revisión</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title text-success">1</h5>
+                                <p class="card-text">Aprobadas</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title text-info">USD 345,000</h5>
+                                <p class="card-text">Monto Total</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function verDetalles(numero) {
+            alert(`Detalles de la postulación ${numero}:\n\n• Estado: En revisión\n• Fecha de envío: 13/10/2025\n• Tiempo estimado: 15 días hábiles\n• Documentos: Todos verificados\n• Evaluador: Comité Técnico IICA`);
+        }
+        
+        function descargarComprobante(numero) {
+            alert(`Descargando comprobante de postulación ${numero}...`);
+        }
+        
+        function descargarAprobacion(numero) {
+            alert(`Descargando certificado de aprobación ${numero}...`);
+        }
+        
+        function contactarSoporte(numero) {
+            alert(`Contactando soporte para la postulación ${numero}:\n\nEmail: soporte@iica.cl\nTeléfono: +56 2 2225-2511\nHorario: Lunes a Viernes 9:00-18:00`);
+        }
+        
+        function contactarFinanciador(numero) {
+            alert(`Contactando financiador para la postulación ${numero}:\n\nEmail: financiamiento@iica.cl\nTeléfono: +56 2 2225-2512\nContacto: Hernán Chiriboga`);
+        }
+        
+        function editarPostulacion(numero) {
+            if (confirm('¿Está seguro de que desea editar esta postulación? Esto puede afectar el tiempo de procesamiento.')) {
+                alert(`Editando postulación ${numero}...`);
+            }
+        }
+        
+        function exportarSeguimiento() {
+            alert('Exportando seguimiento de postulaciones...\n\nFormato: Excel\nArchivo: seguimiento_postulaciones.xlsx');
+        }
+        
+        function nuevaPostulacion() {
+            window.location.href = '/';
+        }
+        
+        function aplicarFiltros() {
+            const estado = document.getElementById('filtroEstado').value;
+            const fuente = document.getElementById('filtroFuente').value;
+            const fecha = document.getElementById('filtroFecha').value;
+            
+            console.log('Filtros aplicados:', { estado, fuente, fecha });
+            alert('Filtros aplicados correctamente');
+        }
+    </script>
+</body>
+</html>

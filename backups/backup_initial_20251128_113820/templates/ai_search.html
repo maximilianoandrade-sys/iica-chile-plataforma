@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscador Inteligente - IICA Chile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #1e3a8a 0%, #059669 100%);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .search-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .search-input {
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            border-color: #1e3a8a;
+            box-shadow: 0 0 0 0.2rem rgba(30, 58, 138, 0.25);
+        }
+        
+        .search-button {
+            background: linear-gradient(135deg, #1e3a8a 0%, #059669 100%);
+            border: none;
+            border-radius: 15px;
+            padding: 1rem 2rem;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .search-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 58, 138, 0.3);
+            color: white;
+        }
+        
+        .result-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            border-left: 4px solid #1e3a8a;
+        }
+        
+        .result-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .relevance-score {
+            background: linear-gradient(135deg, #1e3a8a 0%, #059669 100%);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .suggestion-chip {
+            background: #f8f9fa;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .suggestion-chip:hover {
+            background: #1e3a8a;
+            color: white;
+            border-color: #1e3a8a;
+        }
+        
+        .insights-card {
+            background: linear-gradient(135deg, #1e3a8a 0%, #059669 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .query-analysis {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 4px solid #1e3a8a;
+        }
+        
+        .stats-badge {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="https://iica.int/sites/default/files/iica_logo_0.png" alt="Logo IICA" style="height: 30px; margin-right: 10px;">
+                IICA Chile - Buscador Inteligente
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/">
+                    <i class="bi bi-house me-1"></i>Inicio
+                </a>
+                <a class="nav-link" href="/dashboard">
+                    <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                </a>
+                <a class="nav-link" href="/todos-los-proyectos">
+                    <i class="bi bi-table me-1"></i>Todos los Proyectos
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Buscador Principal -->
+        <div class="search-container">
+            <div class="text-center mb-4">
+                <h2 class="mb-3">
+                    <i class="bi bi-search me-2"></i>Buscador Inteligente
+                </h2>
+                <p class="text-muted">
+                    Busca proyectos usando lenguaje natural. Ejemplo: "Proyectos de agricultura sostenible para jóvenes rurales"
+                </p>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-10">
+                    <input type="text" 
+                           class="form-control search-input" 
+                           id="searchInput" 
+                           placeholder="¿Qué tipo de proyecto buscas? Ej: 'Financiamiento para agricultura sostenible'"
+                           autocomplete="off">
+                </div>
+                <div class="col-md-2">
+                    <button class="btn search-button w-100" onclick="performAISearch()">
+                        <i class="bi bi-search me-1"></i>Buscar
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Sugerencias Rápidas -->
+            <div class="mt-4">
+                <h6 class="mb-3">Sugerencias Rápidas:</h6>
+                <div class="suggestion-chips">
+                    <span class="suggestion-chip" onclick="searchSuggestion('Proyectos de agricultura sostenible')">
+                        🌱 Agricultura Sostenible
+                    </span>
+                    <span class="suggestion-chip" onclick="searchSuggestion('Financiamiento para jóvenes rurales')">
+                        👥 Juventudes Rurales
+                    </span>
+                    <span class="suggestion-chip" onclick="searchSuggestion('Proyectos de innovación tecnológica')">
+                        🚀 Innovación Tecnológica
+                    </span>
+                    <span class="suggestion-chip" onclick="searchSuggestion('Programas de gestión hídrica')">
+                        💧 Gestión Hídrica
+                    </span>
+                    <span class="suggestion-chip" onclick="searchSuggestion('Proyectos de desarrollo rural')">
+                        🏘️ Desarrollo Rural
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div class="loading-spinner" id="loadingSpinner">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Buscando...</span>
+            </div>
+            <p class="mt-2">Analizando tu consulta...</p>
+        </div>
+
+        <!-- Resultados -->
+        <div id="searchResults" style="display: none;">
+            <!-- Análisis de Consulta -->
+            <div class="query-analysis" id="queryAnalysis">
+                <h6><i class="bi bi-brain me-2"></i>Análisis de tu Consulta</h6>
+                <div id="queryAnalysisContent"></div>
+            </div>
+
+            <!-- Insights -->
+            <div class="insights-card" id="insightsCard">
+                <h6><i class="bi bi-lightbulb me-2"></i>Insights Inteligentes</h6>
+                <div id="insightsContent"></div>
+            </div>
+
+            <!-- Resultados -->
+            <div class="row">
+                <div class="col-12">
+                    <h5 class="mb-3">
+                        <i class="bi bi-list-ul me-2"></i>Resultados Encontrados
+                        <span class="badge bg-primary ms-2" id="resultsCount">0</span>
+                    </h5>
+                </div>
+            </div>
+
+            <div id="resultsContainer"></div>
+        </div>
+
+        <!-- Sin Resultados -->
+        <div id="noResults" style="display: none;" class="text-center py-5">
+            <i class="bi bi-search" style="font-size: 4rem; color: #6c757d;"></i>
+            <h4 class="mt-3">No se encontraron resultados</h4>
+            <p class="text-muted">Intenta con una consulta diferente o más específica</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Realizar búsqueda con IA
+        async function performAISearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) {
+                alert('Por favor ingresa una consulta');
+                return;
+            }
+
+            showLoading();
+            
+            try {
+                const response = await fetch('/api/ai-search', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ query: query })
+                });
+
+                const data = await response.json();
+                displayResults(data);
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Error al realizar la búsqueda');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Mostrar loading
+        function showLoading() {
+            document.getElementById('loadingSpinner').style.display = 'block';
+            document.getElementById('searchResults').style.display = 'none';
+            document.getElementById('noResults').style.display = 'none';
+        }
+
+        // Ocultar loading
+        function hideLoading() {
+            document.getElementById('loadingSpinner').style.display = 'none';
+        }
+
+        // Mostrar resultados
+        function displayResults(data) {
+            if (data.results && data.results.length > 0) {
+                displayQueryAnalysis(data.query_analysis);
+                displayInsights(data.insights);
+                displaySearchResults(data.results);
+                document.getElementById('resultsCount').textContent = data.total;
+                document.getElementById('searchResults').style.display = 'block';
+                document.getElementById('noResults').style.display = 'none';
+            } else {
+                document.getElementById('searchResults').style.display = 'none';
+                document.getElementById('noResults').style.display = 'block';
+            }
+        }
+
+        // Mostrar análisis de consulta
+        function displayQueryAnalysis(analysis) {
+            const content = document.getElementById('queryAnalysisContent');
+            content.innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>Intención detectada:</strong> ${analysis.intent}<br>
+                        <strong>Palabras clave:</strong> ${analysis.keywords.join(', ')}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Filtros aplicados:</strong> ${Object.keys(analysis.filters).length > 0 ? JSON.stringify(analysis.filters) : 'Ninguno'}<br>
+                        <strong>Áreas sugeridas:</strong> ${analysis.suggested_areas.join(', ')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Mostrar insights
+        function displayInsights(insights) {
+            const content = document.getElementById('insightsContent');
+            if (insights.message) {
+                content.innerHTML = `<p>${insights.message}</p>`;
+            } else {
+                content.innerHTML = `
+                    <div class="row">
+                        <div class="col-md-4">
+                            <span class="stats-badge">${insights.total_proyectos} Proyectos</span>
+                        </div>
+                        <div class="col-md-4">
+                            <span class="stats-badge">${insights.monto_total ? '$' + (insights.monto_total/1000000).toFixed(1) + 'M' : 'N/A'}</span>
+                        </div>
+                        <div class="col-md-4">
+                            <span class="stats-badge">${insights.fuentes_principales ? insights.fuentes_principales[0][0] : 'N/A'}</span>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Mostrar resultados de búsqueda
+        function displaySearchResults(results) {
+            const container = document.getElementById('resultsContainer');
+            container.innerHTML = '';
+
+            results.forEach(proyecto => {
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h6 class="mb-0">${proyecto.Nombre}</h6>
+                        <span class="relevance-score">${Math.round(proyecto.relevance_score || 0)}% relevancia</span>
+                    </div>
+                    <p class="text-muted mb-2">${proyecto.Descripción || 'Sin descripción disponible'}</p>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <strong>Fuente:</strong> ${proyecto.Fuente}
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Área:</strong> ${proyecto['Área de interés']}
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Monto:</strong> ${proyecto.Monto}
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Estado:</strong> 
+                            <span class="badge ${proyecto.Estado === 'Abierto' ? 'bg-success' : 'bg-warning'}">${proyecto.Estado}</span>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="${proyecto.Enlace}" target="_blank" class="btn btn-outline-primary btn-sm me-2">
+                            <i class="bi bi-external-link me-1"></i>Ver Fuente
+                        </a>
+                        <a href="/proyecto/${proyecto.id || '1'}" class="btn btn-primary btn-sm">
+                            <i class="bi bi-eye me-1"></i>Ver Detalles
+                        </a>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Búsqueda por sugerencia
+        function searchSuggestion(suggestion) {
+            document.getElementById('searchInput').value = suggestion;
+            performAISearch();
+        }
+
+        // Mostrar error
+        function showError(message) {
+            alert(message);
+        }
+
+        // Buscar al presionar Enter
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performAISearch();
+            }
+        });
+    </script>
+</body>
+</html>
+

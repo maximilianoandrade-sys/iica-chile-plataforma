@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Avanzado - IICA Chile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .dashboard-card {
+            transition: all 0.3s ease;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-speedometer2 me-2"></i>Dashboard Avanzado IICA Chile
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/">
+                    <i class="bi bi-house me-1"></i>Inicio
+                </a>
+                <a class="nav-link" href="/notificaciones">
+                    <i class="bi bi-bell me-1"></i>Notificaciones
+                </a>
+                <a class="nav-link" href="/reportes">
+                    <i class="bi bi-graph-up me-1"></i>Reportes
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Métricas Principales -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-folder display-4"></i>
+                        <h3>{{ stats.total_proyectos if stats else 0 }}</h3>
+                        <p class="mb-0">Total Proyectos</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-check-circle display-4"></i>
+                        <h3>{{ stats.proyectos_abiertos if stats else 0 }}</h3>
+                        <p class="mb-0">Proyectos Abiertos</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-building display-4"></i>
+                        <h3>{{ stats.fuentes_unicas if stats else 0 }}</h3>
+                        <p class="mb-0">Fuentes Únicas</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-currency-dollar display-4"></i>
+                        <h3>${{ "{:,.0f}".format(stats.monto_total) if stats and stats.monto_total else 0 }}</h3>
+                        <p class="mb-0">Monto Total</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Proyectos Destacados -->
+            <div class="col-md-8">
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <h5><i class="bi bi-star me-2"></i>Proyectos Destacados</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if proyectos %}
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Proyecto</th>
+                                            <th>Área</th>
+                                            <th>Fuente</th>
+                                            <th>Monto</th>
+                                            <th>Estado</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for proyecto in proyectos %}
+                                        <tr>
+                                            <td>{{ proyecto.Nombre }}</td>
+                                            <td>{{ proyecto['Área de interés'] }}</td>
+                                            <td>{{ proyecto.Fuente }}</td>
+                                            <td>{{ proyecto.Monto }}</td>
+                                            <td>
+                                                <span class="badge bg-{% if proyecto.Estado == 'Abierto' %}success{% else %}secondary{% endif %}">
+                                                    {{ proyecto.Estado }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <a href="/proyecto/{{ loop.index0 }}" class="btn btn-sm btn-primary">
+                                                    <i class="bi bi-eye me-1"></i>Ver
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="text-center py-4">
+                                <i class="bi bi-folder-x display-1 text-muted"></i>
+                                <h4 class="text-muted">No hay proyectos disponibles</h4>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel de Acciones Rápidas -->
+            <div class="col-md-4">
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <h5><i class="bi bi-lightning me-2"></i>Acciones Rápidas</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <a href="/" class="btn btn-primary">
+                                <i class="bi bi-search me-2"></i>Buscar Proyectos
+                            </a>
+                            <a href="/notificaciones" class="btn btn-outline-primary">
+                                <i class="bi bi-bell me-2"></i>Ver Notificaciones
+                            </a>
+                            <a href="/reportes" class="btn btn-outline-success">
+                                <i class="bi bi-graph-up me-2"></i>Generar Reportes
+                            </a>
+                            <a href="/backup" class="btn btn-outline-warning">
+                                <i class="bi bi-shield-check me-2"></i>Gestionar Backups
+                            </a>
+                            <a href="/mis-aplicaciones" class="btn btn-outline-info">
+                                <i class="bi bi-file-earmark-text me-2"></i>Mis Aplicaciones
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estadísticas del Sistema -->
+                <div class="card dashboard-card mt-3">
+                    <div class="card-header">
+                        <h5><i class="bi bi-info-circle me-2"></i>Estado del Sistema</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <h4 class="text-success">🟢</h4>
+                                <small>Plataforma</small>
+                            </div>
+                            <div class="col-6">
+                                <h4 class="text-success">🟢</h4>
+                                <small>Base de Datos</small>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <h4 class="text-success">🟢</h4>
+                                <small>Notificaciones</small>
+                            </div>
+                            <div class="col-6">
+                                <h4 class="text-success">🟢</h4>
+                                <small>Backups</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Información Adicional -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card dashboard-card">
+                    <div class="card-header">
+                        <h5><i class="bi bi-info-circle me-2"></i>Información de la Plataforma</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Funcionalidades Disponibles:</h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="bi bi-check-circle text-success me-2"></i>Búsqueda avanzada de proyectos</li>
+                                    <li><i class="bi bi-check-circle text-success me-2"></i>Sistema de notificaciones</li>
+                                    <li><i class="bi bi-check-circle text-success me-2"></i>Seguimiento de aplicaciones</li>
+                                    <li><i class="bi bi-check-circle text-success me-2"></i>Reportes detallados</li>
+                                    <li><i class="bi bi-check-circle text-success me-2"></i>Sistema de backup automático</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Estadísticas Actuales:</h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="bi bi-folder text-primary me-2"></i>{{ stats.total_proyectos if stats else 0 }} proyectos totales</li>
+                                    <li><i class="bi bi-check-circle text-success me-2"></i>{{ stats.proyectos_abiertos if stats else 0 }} proyectos abiertos</li>
+                                    <li><i class="bi bi-building text-info me-2"></i>{{ stats.fuentes_unicas if stats else 0 }} fuentes de financiamiento</li>
+                                    <li><i class="bi bi-currency-dollar text-warning me-2"></i>${{ "{:,.0f}".format(stats.monto_total) if stats and stats.monto_total else 0 }} en financiamiento total</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
