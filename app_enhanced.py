@@ -106,11 +106,10 @@ app.jinja_env.cache = None  # Deshabilitar caché de templates completamente
 APP_VERSION = os.environ.get('APP_VERSION', datetime.now().strftime('%Y%m%d_%H%M%S'))
 BUILD_TIMESTAMP = os.environ.get('BUILD_TIMESTAMP', datetime.now().isoformat())
 
-# FORZAR USO DE TEMPLATE DIDÁCTICO
+# Logging de inicio
 print("=" * 80)
-print("🎨 INTERFAZ DIDÁCTICA - FORZANDO CARGA")
-print("📄 Template: home_didactico.html")
-print(f"✅ Versión: DIDACTICA_V3.0 - Build: {APP_VERSION}")
+print("🎨 PLATAFORMA IICA CHILE")
+print(f"✅ Versión: {APP_VERSION}")
 print(f"✅ Timestamp: {BUILD_TIMESTAMP}")
 print("=" * 80)
 DATA_PATH = "data/proyectos_fortalecidos.xlsx"
@@ -459,14 +458,8 @@ def exportar_csv(proyectos, filename='proyectos_iica.csv'):
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    """Página principal - VERSIÓN MEJORADA CON TODOS LOS PROYECTOS Y FILTROS MEJORADOS"""
-    # FORZAR: Logging detallado para verificar que se está usando la versión correcta
-    print("=" * 80)
-    print("🏠 RUTA HOME LLAMADA - FORZANDO ACTUALIZACIÓN")
-    print(f"✅ Versión App: {APP_VERSION}")
-    print(f"✅ Timestamp Build: {BUILD_TIMESTAMP}")
-    print(f"✅ Template objetivo: home_didactico.html")
-    print("=" * 80)
+    """Página principal con todos los proyectos y filtros mejorados"""
+    print(f"🏠 RUTA HOME - Versión: {APP_VERSION}")
     
     try:
         # Cargar proyectos con manejo robusto de errores
@@ -586,20 +579,26 @@ def home():
         print(f"📊 Proyectos en esta página: {len(proyectos_paginados)}")
         print(f"📊 Total filtrados: {len(proyectos_filtrados)}")
         print(f"📊 Total sin filtros: {len(proyectos)}")
-        print(f"🎨 USANDO TEMPLATE: home_didactico.html (INTERFAZ DIDÁCTICA)")
-        
-        # FORZAR: SIEMPRE usar home_didactico.html - SIN FALLBACKS
+        # Verificar qué template está disponible (con fallback robusto)
         import os
-        template_a_usar = 'home_didactico.html'
-        template_path = os.path.join('templates', template_a_usar)
+        templates_orden = ['home_didactico.html', 'home_ordenado_mejorado.html', 'home.html', 'home_ordenado.html']
+        template_a_usar = None
+        template_path = None
         
-        if os.path.exists(template_path):
-            print(f"✅ Template FORZADO encontrado: {template_path}")
-        else:
-            print(f"❌ ERROR CRÍTICO: Template {template_path} NO existe")
-            print(f"📂 Archivos en templates: {os.listdir('templates') if os.path.exists('templates') else 'No existe templates/'}")
-            # Aún así forzar el uso para que falle claramente si no existe
-            print(f"⚠️ FORZANDO uso de {template_a_usar} - si falla, el template no existe")
+        for template in templates_orden:
+            template_path = os.path.join('templates', template)
+            if os.path.exists(template_path):
+                template_a_usar = template
+                print(f"✅ Template encontrado: {template}")
+                break
+        
+        if not template_a_usar:
+            # Fallback final - usar home.html que siempre debería existir
+            template_a_usar = 'home.html'
+            template_path = os.path.join('templates', template_a_usar)
+            print(f"⚠️ Usando fallback: {template_a_usar}")
+        
+        print(f"🎨 USANDO TEMPLATE: {template_a_usar}")
         
         # FORZAR: Invalidar caché de Jinja2 para asegurar template fresco
         app.jinja_env.cache = None
@@ -628,35 +627,39 @@ def home():
             'build_timestamp': BUILD_TIMESTAMP
         }
         
-        # FORZAR: Renderizar SIEMPRE home_didactico.html - SIN FALLBACKS
+        # Renderizar template con fallback robusto
         print(f"🎯 RENDERIZANDO TEMPLATE: {template_a_usar}")
         print(f"📊 Datos enviados al template: {len(datos_template)} campos")
         
-        try:
-            # Invalidar caché ANTES de renderizar
-            app.jinja_env.cache = None
-            resultado = render_template(template_a_usar, **datos_template)
-            print(f"✅ Template {template_a_usar} renderizado exitosamente")
-            return resultado
-        except Exception as template_error:
-            print(f"❌ ERROR CRÍTICO renderizando template {template_a_usar}: {template_error}")
-            import traceback
-            traceback.print_exc()
-            # NO usar fallback - mostrar error claro
-            return f"""
-            <html>
-            <head><title>Error de Template</title></head>
-            <body style="font-family: Arial; padding: 40px; background: #f5f5f5;">
-                <h1 style="color: #d32f2f;">❌ Error Crítico</h1>
-                <p><strong>Template requerido no encontrado:</strong> {template_a_usar}</p>
-                <p><strong>Error:</strong> {str(template_error)}</p>
-                <p><strong>Versión:</strong> {APP_VERSION}</p>
-                <p><strong>Timestamp:</strong> {BUILD_TIMESTAMP}</p>
-                <hr>
-                <p>Por favor, verifica que el archivo <code>templates/home_didactico.html</code> exista en el servidor.</p>
-            </body>
-            </html>
-            """, 500
+        templates_fallback = [template_a_usar, 'home_ordenado_mejorado.html', 'home.html']
+        
+        for template_intento in templates_fallback:
+            try:
+                # Invalidar caché ANTES de renderizar
+                app.jinja_env.cache = None
+                resultado = render_template(template_intento, **datos_template)
+                print(f"✅ Template {template_intento} renderizado exitosamente")
+                return resultado
+            except Exception as template_error:
+                print(f"⚠️ Error con template {template_intento}: {template_error}")
+                if template_intento == templates_fallback[-1]:
+                    # Si es el último fallback, mostrar error
+                    import traceback
+                    traceback.print_exc()
+                    return f"""
+                    <html>
+                    <head><title>Error de Template</title></head>
+                    <body style="font-family: Arial; padding: 40px; background: #f5f5f5;">
+                        <h1 style="color: #d32f2f;">⚠️ Error de Template</h1>
+                        <p><strong>Error:</strong> {str(template_error)}</p>
+                        <p><strong>Versión:</strong> {APP_VERSION}</p>
+                        <hr>
+                        <p>La aplicación está funcionando. El endpoint <a href="/api/proyectos">/api/proyectos</a> debería funcionar correctamente.</p>
+                    </body>
+                    </html>
+                    """, 500
+                # Continuar con el siguiente fallback
+                continue
     except Exception as e:
         print(f"❌ Error en home: {e}")
         import traceback
@@ -672,8 +675,18 @@ def home():
                 p['_indice_pagina'] = idx
             # Intentar usar template didáctico, sino usar alternativo
             import os
-            template_file = os.path.join('templates', 'home_didactico.html')
-            template_a_usar = 'home_didactico.html' if os.path.exists(template_file) else 'home.html'
+            # Verificar qué template está disponible
+            templates_disponibles = ['home_didactico.html', 'home_ordenado_mejorado.html', 'home.html']
+            template_a_usar = None
+            
+            for template in templates_disponibles:
+                template_path = os.path.join('templates', template)
+                if os.path.exists(template_path):
+                    template_a_usar = template
+                    break
+            
+            if not template_a_usar:
+                template_a_usar = 'home.html'
             
             return render_template(template_a_usar,  # TEMPLATE DIDÁCTICO Y AMIGABLE
                                  proyectos=proyectos_mostrar,

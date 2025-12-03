@@ -20,7 +20,7 @@ export default function TenderSearch() {
     query: searchParams.get('q') || '',
     locations: searchParams.get('locations') ? searchParams.get('locations')!.split(',') : [],
     sectors: searchParams.get('sectors') ? searchParams.get('sectors')!.split(',') : [],
-    status: searchParams.get('status') || 'open',
+    status: searchParams.get('status') || undefined,
     page: searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1,
   };
 
