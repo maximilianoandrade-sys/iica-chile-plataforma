@@ -22,6 +22,14 @@ def setup_render():
 
 def start_app():
     """Inicia la aplicación para Render - ACTUALIZADO para usar app_enhanced"""
+    # Establecer versiones antes de importar para consistencia
+    import os
+    from datetime import datetime
+    if 'APP_VERSION' not in os.environ:
+        os.environ['APP_VERSION'] = datetime.now().strftime('%Y%m%d_%H%M%S')
+    if 'BUILD_TIMESTAMP' not in os.environ:
+        os.environ['BUILD_TIMESTAMP'] = datetime.now().isoformat()
+    
     from app_enhanced import app  # CORREGIDO: usar app_enhanced en lugar de app_final
     
     # Obtener puerto de Render

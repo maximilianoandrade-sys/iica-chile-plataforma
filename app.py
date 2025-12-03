@@ -7,24 +7,22 @@ import os
 from datetime import datetime
 
 # Generar versión única para cache busting
-# IMPORTANTE: Generar UNA SOLA VEZ y establecer en entorno ANTES de importar app_enhanced
-# Esto garantiza que app_enhanced.py use las mismas versiones
 DEPLOY_VERSION = datetime.now().strftime('%Y%m%d_%H%M%S')
 BUILD_TIMESTAMP = datetime.now().isoformat()
 
-# Guardar versión en variable de entorno ANTES de importar app_enhanced
-# Esto asegura consistencia de versiones en todos los contextos
+# Guardar versión en variable de entorno
 os.environ['APP_VERSION'] = DEPLOY_VERSION
 os.environ['BUILD_TIMESTAMP'] = BUILD_TIMESTAMP
 
-# Importar app desde app_enhanced (después de establecer variables de entorno)
+# Importar app desde app_enhanced
 from app_enhanced import app
 
 # Agregar headers anti-caché a todas las respuestas
 @app.after_request
 def add_no_cache_headers(response):
     """Headers para evitar caché del navegador"""
-    # Usar variables del entorno para garantizar consistencia
+    # Usar variables del entorno para garantizar consistencia con app_enhanced.py
+    # Esto asegura que todos los workers de Gunicorn usen la misma versión
     version = os.environ.get('APP_VERSION', DEPLOY_VERSION)
     timestamp = os.environ.get('BUILD_TIMESTAMP', BUILD_TIMESTAMP)
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate, max-age=0'
