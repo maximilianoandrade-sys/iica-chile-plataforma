@@ -8,7 +8,7 @@ services:
       echo "📦 Instalando dependencias Python..."
       pip install --no-cache-dir -r requirements.txt
       echo "📦 Instalando dependencias Node.js..."
-      npm ci --prefer-offline --no-audit
+      npm install --prefer-offline --no-audit
       echo "🏗️ Construyendo Next.js..."
       npm run build
     startCommand: bash start.sh
