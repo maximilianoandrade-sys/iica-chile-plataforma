@@ -1,0 +1,49 @@
+# Archivos y directorios a ignorar en el build de Render
+# Esto acelera el deploy al no subir archivos innecesarios
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+*.egg-info/
+venv/
+.venv/
+ENV/
+
+# Node.js
+node_modules/
+.next/
+out/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+.nyc_output/
+
+# Data files grandes
+data/*.xlsx
+data/*.csv
+backups/
+exports/
+
+# Cache
+.cache/
+*.cache
+
+# Documentación (opcional - descomentar si quieres excluir)
+# *.md
+# docs/
+

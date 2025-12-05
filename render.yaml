@@ -4,23 +4,29 @@ services:
     name: iica-chile-plataforma
     env: python
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 300 --max-requests 50
+    buildCommand: pip install --no-cache-dir -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 300 --max-requests 50 --preload
     envVars:
       - key: FLASK_ENV
         value: production
       - key: PYTHON_VERSION
         value: 3.11.9
+      - key: PYTHONUNBUFFERED
+        value: "1"
+    healthCheckPath: /api/proyectos?page=1&per_page=1
   
   # Servicio Next.js (Frontend)
   - type: web
     name: iica-licitaciones-frontend
     env: node
     plan: free
-    buildCommand: npm install && npm run build
+    buildCommand: npm ci --prefer-offline --no-audit && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
       - key: NEXT_PUBLIC_API_URL
         value: https://iica-chile-plataforma.onrender.com
+      - key: NODE_OPTIONS
+        value: "--max_old_space_size=1024"
+    healthCheckPath: /

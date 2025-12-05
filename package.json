@@ -2,11 +2,16 @@
   "name": "tenders-platform",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "echo 'Build dependencies installed successfully'"
   },
   "dependencies": {
     "next": "15.0.0",
@@ -21,5 +26,9 @@
     "postcss": "^8.4.32",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.3.0"
-  }
+  },
+  "cacheDirectories": [
+    ".next/cache",
+    "node_modules"
+  ]
 }
