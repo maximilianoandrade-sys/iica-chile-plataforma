@@ -22,13 +22,22 @@ interface Filters {
 }
 
 // URL de la API Flask - usar variable de entorno o fallback
+// En producción (mismo servidor), Flask corre en localhost:5000
+// En desarrollo, usar localhost:5000
 // En Next.js, las variables NEXT_PUBLIC_* están disponibles en el cliente
 const getApiUrl = () => {
+  // En el mismo servidor, Flask corre en localhost:5000
+  // Next.js hace proxy a través de rewrites en next.config.js
   if (typeof window !== 'undefined') {
-    // Cliente: usar variable de entorno pública
-    return (process.env as any).NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+    // Cliente: usar rewrites de Next.js (relativo) o variable de entorno
+    const apiUrl = (process.env as any).NEXT_PUBLIC_API_URL;
+    if (apiUrl && apiUrl.includes('localhost')) {
+      // Mismo servidor: usar rewrites
+      return '/api/proyectos';
+    }
+    return apiUrl || '/api/proyectos';
   }
-  // Servidor: usar variable de entorno
+  // Servidor: usar localhost:5000 directamente
   return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 };
 
@@ -259,8 +268,15 @@ export async function fetchTenders(filters: Filters): Promise<{ data: Tender[]; 
     params.set('page', String(filters.page || 1));
     params.set('per_page', '9');
     
+    // Construir URL de API
+    // Si API_URL ya incluye /api/proyectos, usarlo directamente
+    // Si no, agregar /api/proyectos
+    const apiEndpoint = API_URL.includes('/api/proyectos') 
+      ? `${API_URL}?${params.toString()}`
+      : `${API_URL}/api/proyectos?${params.toString()}`;
+    
     // Intentar obtener datos de la API Flask
-    const response = await fetch(`${API_URL}/api/proyectos?${params.toString()}`, {
+    const response = await fetch(apiEndpoint, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
