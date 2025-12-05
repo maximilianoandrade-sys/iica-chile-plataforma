@@ -5,11 +5,8 @@ services:
     env: node
     plan: free
     buildCommand: |
-      echo "📦 Instalando dependencias Python..."
       pip install --no-cache-dir -r requirements.txt
-      echo "📦 Instalando dependencias Node.js..."
-      npm install --prefer-offline --no-audit
-      echo "🏗️ Construyendo Next.js..."
+      npm install
       npm run build
     startCommand: bash start.sh
     envVars:
