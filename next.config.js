@@ -5,6 +5,15 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   
+  // Configuración de paths
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': __dirname,
+    };
+    return config;
+  },
+  
   // Headers de seguridad
   async headers() {
     return [

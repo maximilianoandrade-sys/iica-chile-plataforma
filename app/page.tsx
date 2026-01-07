@@ -1,7 +1,7 @@
 'use client';
 
 import { Search, Filter, Calendar, MapPin, DollarSign, Building2, Tag, ExternalLink, ChevronDown, X } from 'lucide-react';
-import { realTenders, TenderFilters } from '@/lib/types';
+import { realTenders, TenderFilters } from '../lib/types';
 import { useState, useMemo } from 'react';
 
 type Tender = typeof realTenders[number];
