@@ -606,7 +606,7 @@ def home():
         
         for template in templates_orden:
             template_path = os.path.join('templates', template)
-            if os.path.exists(template_path):
+        if os.path.exists(template_path):
                 template_a_usar = template
                 print(f"✅ Template encontrado: {template}")
                 break
@@ -653,30 +653,30 @@ def home():
         templates_fallback = [template_a_usar, 'home_ordenado_mejorado.html', 'home.html']
         
         for template_intento in templates_fallback:
-            try:
-                # Invalidar caché ANTES de renderizar
-                app.jinja_env.cache = None
+        try:
+            # Invalidar caché ANTES de renderizar
+            app.jinja_env.cache = None
                 resultado = render_template(template_intento, **datos_template)
                 print(f"✅ Template {template_intento} renderizado exitosamente")
-                return resultado
-            except Exception as template_error:
+            return resultado
+        except Exception as template_error:
                 print(f"⚠️ Error con template {template_intento}: {template_error}")
                 if template_intento == templates_fallback[-1]:
                     # Si es el último fallback, mostrar error
-                    import traceback
-                    traceback.print_exc()
-                    return f"""
-                    <html>
-                    <head><title>Error de Template</title></head>
-                    <body style="font-family: Arial; padding: 40px; background: #f5f5f5;">
+            import traceback
+            traceback.print_exc()
+            return f"""
+            <html>
+            <head><title>Error de Template</title></head>
+            <body style="font-family: Arial; padding: 40px; background: #f5f5f5;">
                         <h1 style="color: #d32f2f;">⚠️ Error de Template</h1>
-                        <p><strong>Error:</strong> {str(template_error)}</p>
-                        <p><strong>Versión:</strong> {APP_VERSION}</p>
-                        <hr>
+                <p><strong>Error:</strong> {str(template_error)}</p>
+                <p><strong>Versión:</strong> {APP_VERSION}</p>
+                <hr>
                         <p>La aplicación está funcionando. El endpoint <a href="/api/proyectos">/api/proyectos</a> debería funcionar correctamente.</p>
-                    </body>
-                    </html>
-                    """, 500
+            </body>
+            </html>
+            """, 500
                 # Continuar con el siguiente fallback
                 continue
     except Exception as e:

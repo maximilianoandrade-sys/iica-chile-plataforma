@@ -1,34 +1,32 @@
 {
-  "name": "tenders-platform",
+  "name": "iica-plataforma",
   "version": "1.0.0",
   "private": true,
-  "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
-  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:render": "prisma generate && prisma db push && next build",
     "start": "next start",
-    "lint": "next lint",
-    "postinstall": "echo 'Build dependencies installed successfully'"
+    "postinstall": "prisma generate",
+    "scrape": "tsx lib/scrapers.ts",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev"
   },
   "dependencies": {
-    "next": "15.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
-  "devDependencies": {
-    "@types/node": "^20.10.0",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.32",
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "axios": "^1.7.0",
+    "cheerio": "^1.0.0-rc.12",
+    "lucide-react": "^0.441.0",
+    "prisma": "^5.14.0",
+    "@prisma/client": "^5.14.0",
+    "tsx": "^4.7.0",
     "tailwindcss": "^3.4.0",
-    "typescript": "^5.3.0"
-  },
-  "cacheDirectories": [
-    ".next/cache",
-    "node_modules"
-  ]
+    "@tailwindcss/line-clamp": "^0.4.4",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0"
+  }
 }

@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // Render usa PostgreSQL
+  url      = env("DATABASE_URL")
+}
+
+model Tender {
+  id          Int      @id @default(autoincrement())
+  title       String
+  agency      String
+  category    String
+  postedDate DateTime
+  status      String
+  location    String
+  budget      String?
+  deadline    DateTime?
+  description String?
+  link        String   @unique
+  source      String
+}
+
