@@ -42,7 +42,9 @@ print("=" * 80)
 
 # Si se ejecuta directamente (desarrollo local)
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    debug = os.environ.get('DEBUG', 'False').lower() == 'true'
-    print(f"🚀 Iniciando servidor en puerto {port}, debug={debug}")
-    app.run(debug=debug, host='0.0.0.0', port=port)
+    @app.route('/todos-los-proyectos')
+def todos_proyectos():
+    proyectos = get_proyectos()  # ← tu función
+    return render_template('todos_los_proyectos.html', proyectos=proyectos)
+
+
