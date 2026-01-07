@@ -25,6 +25,14 @@
             margin-bottom: 2rem;
         }
         
+        .filter-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
         .category-card {
             border: none;
             border-radius: 15px;
@@ -109,6 +117,22 @@
             font-size: 1.5rem;
             margin-right: 0.5rem;
         }
+        
+        .btn-iica {
+            background: linear-gradient(135deg, #1e3a8a 0%, #059669 100%);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-iica:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -123,7 +147,10 @@
                 <a class="nav-link" href="/">
                     <i class="bi bi-house me-1"></i>Inicio
                 </a>
-                <a class="nav-link" href="/todos-los-proyectos">
+                <a class="nav-link" href="/dashboard">
+                    <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                </a>
+                <a class="nav-link active" href="/todos-los-proyectos">
                     <i class="bi bi-table me-1"></i>Todos los Proyectos
                 </a>
                 <a class="nav-link" href="/quienes-somos">
@@ -189,6 +216,77 @@
             </div>
         </div>
 
+        <!-- Filtros Avanzados -->
+        <div class="filter-section">
+            <h5 class="mb-3">
+                <i class="bi bi-funnel me-2"></i>Filtros de Búsqueda Avanzada
+            </h5>
+            <form method="GET" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Búsqueda de Texto</label>
+                    <input type="text" class="form-control" name="query" value="{{ query or '' }}" placeholder="Buscar en nombre, descripción...">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Área de Interés</label>
+                    <select class="form-select" name="area">
+                        <option value="">Todas las áreas</option>
+                        {% for area in areas_unicas %}
+                        <option value="{{ area }}" {% if area == area %}selected{% endif %}>{{ area }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Fuente</label>
+                    <select class="form-select" name="fuente">
+                        <option value="">Todas las fuentes</option>
+                        {% for fuente in fuentes_unicas %}
+                        <option value="{{ fuente }}" {% if fuente == fuente %}selected{% endif %}>{{ fuente }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Estado</label>
+                    <select class="form-select" name="estado">
+                        <option value="">Todos los estados</option>
+                        {% for estado in estados_unicos %}
+                        <option value="{{ estado }}" {% if estado == estado %}selected{% endif %}>{{ estado }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">&nbsp;</label>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-iica flex-fill">
+                            <i class="bi bi-search me-1"></i>Buscar
+                        </button>
+                        <a href="/todos-los-proyectos" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-clockwise"></i>
+                        </a>
+                    </div>
+                </div>
+            </form>
+            
+            <!-- Botones de Exportación -->
+            <div class="row mt-3">
+                <div class="col-12">
+                    <div class="d-flex gap-2">
+                        <a href="/exportar-excel" class="btn btn-success">
+                            <i class="bi bi-file-excel me-1"></i>Exportar Excel
+                        </a>
+                        <a href="/exportar-csv" class="btn btn-info">
+                            <i class="bi bi-file-csv me-1"></i>Exportar CSV
+                        </a>
+                        <a href="/api/proyectos" class="btn btn-warning" target="_blank">
+                            <i class="bi bi-code me-1"></i>API JSON
+                        </a>
+                        <a href="/api/buscar?q=agricultura" class="btn btn-secondary" target="_blank">
+                            <i class="bi bi-search me-1"></i>API Búsqueda
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Proyectos Nacionales -->
         {% if proyectos_nacionales %}
         <div class="card category-card">
@@ -216,6 +314,9 @@
                             <tr>
                                 <td>
                                     <strong>{{ proyecto.Nombre }}</strong>
+                                    {% if proyecto.Descripción %}
+                                    <br><small class="text-muted">{{ proyecto.Descripción[:100] }}...</small>
+                                    {% endif %}
                                 </td>
                                 <td>
                                     <span class="badge bg-primary">{{ proyecto.Fuente }}</span>
@@ -276,6 +377,9 @@
                             <tr>
                                 <td>
                                     <strong>{{ proyecto.Nombre }}</strong>
+                                    {% if proyecto.Descripción %}
+                                    <br><small class="text-muted">{{ proyecto.Descripción[:100] }}...</small>
+                                    {% endif %}
                                 </td>
                                 <td>
                                     <span class="badge bg-primary">{{ proyecto.Fuente }}</span>
@@ -336,306 +440,9 @@
                             <tr>
                                 <td>
                                     <strong>{{ proyecto.Nombre }}</strong>
-                                </td>
-                                <td>
-                                    <span class="badge bg-primary">{{ proyecto.Fuente }}</span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-info">{{ proyecto['Área de interés'] }}</span>
-                                </td>
-                                <td>
-                                    <strong>{{ proyecto.Monto }}</strong>
-                                </td>
-                                <td>
-                                    <span class="badge {% if proyecto.Estado == 'Abierto' %}bg-success{% elif proyecto.Estado == 'Cerrado' %}bg-danger{% else %}bg-warning{% endif %}">
-                                        {{ proyecto.Estado }}
-                                    </span>
-                                </td>
-                                <td>{{ proyecto['Fecha cierre'] }}</td>
-                                <td>
-                                    <a href="{{ proyecto.Enlace }}" target="_blank" class="btn btn-outline-primary btn-sm me-1">
-                                        <i class="bi bi-external-link"></i>
-                                    </a>
-                                    <a href="/proyecto/{{ loop.index }}" class="btn btn-primary btn-sm">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        {% endif %}
-
-        <!-- Proyectos Regionales -->
-        {% if proyectos_regionales %}
-        <div class="card category-card">
-            <div class="category-header">
-                <h5 class="mb-0">
-                    <i class="bi bi-geo-alt-fill category-icon"></i>Proyectos Regionales ({{ proyectos_regionales|length }})
-                </h5>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Nombre del Proyecto</th>
-                                <th>Fuente</th>
-                                <th>Área de Interés</th>
-                                <th>Monto</th>
-                                <th>Estado</th>
-                                <th>Fecha Cierre</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for proyecto in proyectos_regionales %}
-                            <tr>
-                                <td>
-                                    <strong>{{ proyecto.Nombre }}</strong>
-                                </td>
-                                <td>
-                                    <span class="badge bg-primary">{{ proyecto.Fuente }}</span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-info">{{ proyecto['Área de interés'] }}</span>
-                                </td>
-                                <td>
-                                    <strong>{{ proyecto.Monto }}</strong>
-                                </td>
-                                <td>
-                                    <span class="badge {% if proyecto.Estado == 'Abierto' %}bg-success{% elif proyecto.Estado == 'Cerrado' %}bg-danger{% else %}bg-warning{% endif %}">
-                                        {{ proyecto.Estado }}
-                                    </span>
-                                </td>
-                                <td>{{ proyecto['Fecha cierre'] }}</td>
-                                <td>
-                                    <a href="{{ proyecto.Enlace }}" target="_blank" class="btn btn-outline-primary btn-sm me-1">
-                                        <i class="bi bi-external-link"></i>
-                                    </a>
-                                    <a href="/proyecto/{{ loop.index }}" class="btn btn-primary btn-sm">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        {% endif %}
-
-        <!-- Proyectos Privados -->
-        {% if proyectos_privados %}
-        <div class="card category-card">
-            <div class="category-header">
-                <h5 class="mb-0">
-                    <i class="bi bi-briefcase-fill category-icon"></i>Proyectos Privados ({{ proyectos_privados|length }})
-                </h5>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Nombre del Proyecto</th>
-                                <th>Fuente</th>
-                                <th>Área de Interés</th>
-                                <th>Monto</th>
-                                <th>Estado</th>
-                                <th>Fecha Cierre</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for proyecto in proyectos_privados %}
-                            <tr>
-                                <td>
-                                    <strong>{{ proyecto.Nombre }}</strong>
-                                </td>
-                                <td>
-                                    <span class="badge bg-primary">{{ proyecto.Fuente }}</span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-info">{{ proyecto['Área de interés'] }}</span>
-                                </td>
-                                <td>
-                                    <strong>{{ proyecto.Monto }}</strong>
-                                </td>
-                                <td>
-                                    <span class="badge {% if proyecto.Estado == 'Abierto' %}bg-success{% elif proyecto.Estado == 'Cerrado' %}bg-danger{% else %}bg-warning{% endif %}">
-                                        {{ proyecto.Estado }}
-                                    </span>
-                                </td>
-                                <td>{{ proyecto['Fecha cierre'] }}</td>
-                                <td>
-                                    <a href="{{ proyecto.Enlace }}" target="_blank" class="btn btn-outline-primary btn-sm me-1">
-                                        <i class="bi bi-external-link"></i>
-                                    </a>
-                                    <a href="/proyecto/{{ loop.index }}" class="btn btn-primary btn-sm">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        {% endif %}
-
-        <!-- Proyectos Académicos -->
-        {% if proyectos_academicos %}
-        <div class="card category-card">
-            <div class="category-header">
-                <h5 class="mb-0">
-                    <i class="bi bi-mortarboard-fill category-icon"></i>Proyectos Académicos ({{ proyectos_academicos|length }})
-                </h5>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Nombre del Proyecto</th>
-                                <th>Fuente</th>
-                                <th>Área de Interés</th>
-                                <th>Monto</th>
-                                <th>Estado</th>
-                                <th>Fecha Cierre</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for proyecto in proyectos_academicos %}
-                            <tr>
-                                <td>
-                                    <strong>{{ proyecto.Nombre }}</strong>
-                                </td>
-                                <td>
-                                    <span class="badge bg-primary">{{ proyecto.Fuente }}</span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-info">{{ proyecto['Área de interés'] }}</span>
-                                </td>
-                                <td>
-                                    <strong>{{ proyecto.Monto }}</strong>
-                                </td>
-                                <td>
-                                    <span class="badge {% if proyecto.Estado == 'Abierto' %}bg-success{% elif proyecto.Estado == 'Cerrado' %}bg-danger{% else %}bg-warning{% endif %}">
-                                        {{ proyecto.Estado }}
-                                    </span>
-                                </td>
-                                <td>{{ proyecto['Fecha cierre'] }}</td>
-                                <td>
-                                    <a href="{{ proyecto.Enlace }}" target="_blank" class="btn btn-outline-primary btn-sm me-1">
-                                        <i class="bi bi-external-link"></i>
-                                    </a>
-                                    <a href="/proyecto/{{ loop.index }}" class="btn btn-primary btn-sm">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        {% endif %}
-
-        <!-- Proyectos Gubernamentales -->
-        {% if proyectos_gubernamentales %}
-        <div class="card category-card">
-            <div class="category-header">
-                <h5 class="mb-0">
-                    <i class="bi bi-building-fill category-icon"></i>Proyectos Gubernamentales ({{ proyectos_gubernamentales|length }})
-                </h5>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Nombre del Proyecto</th>
-                                <th>Fuente</th>
-                                <th>Área de Interés</th>
-                                <th>Monto</th>
-                                <th>Estado</th>
-                                <th>Fecha Cierre</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for proyecto in proyectos_gubernamentales %}
-                            <tr>
-                                <td>
-                                    <strong>{{ proyecto.Nombre }}</strong>
-                                </td>
-                                <td>
-                                    <span class="badge bg-primary">{{ proyecto.Fuente }}</span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-info">{{ proyecto['Área de interés'] }}</span>
-                                </td>
-                                <td>
-                                    <strong>{{ proyecto.Monto }}</strong>
-                                </td>
-                                <td>
-                                    <span class="badge {% if proyecto.Estado == 'Abierto' %}bg-success{% elif proyecto.Estado == 'Cerrado' %}bg-danger{% else %}bg-warning{% endif %}">
-                                        {{ proyecto.Estado }}
-                                    </span>
-                                </td>
-                                <td>{{ proyecto['Fecha cierre'] }}</td>
-                                <td>
-                                    <a href="{{ proyecto.Enlace }}" target="_blank" class="btn btn-outline-primary btn-sm me-1">
-                                        <i class="bi bi-external-link"></i>
-                                    </a>
-                                    <a href="/proyecto/{{ loop.index }}" class="btn btn-primary btn-sm">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        {% endif %}
-
-        <!-- Proyectos Especializados -->
-        {% if proyectos_especializados %}
-        <div class="card category-card">
-            <div class="category-header">
-                <h5 class="mb-0">
-                    <i class="bi bi-gear-fill category-icon"></i>Proyectos Especializados ({{ proyectos_especializados|length }})
-                </h5>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Nombre del Proyecto</th>
-                                <th>Fuente</th>
-                                <th>Área de Interés</th>
-                                <th>Monto</th>
-                                <th>Estado</th>
-                                <th>Fecha Cierre</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for proyecto in proyectos_especializados %}
-                            <tr>
-                                <td>
-                                    <strong>{{ proyecto.Nombre }}</strong>
+                                    {% if proyecto.Descripción %}
+                                    <br><small class="text-muted">{{ proyecto.Descripción[:100] }}...</small>
+                                    {% endif %}
                                 </td>
                                 <td>
                                     <span class="badge bg-primary">{{ proyecto.Fuente }}</span>
@@ -674,6 +481,16 @@
     <script>
         // Mostrar fecha actual
         document.getElementById('current-date').textContent = new Date().toLocaleDateString('es-ES');
+        
+        // Búsqueda en tiempo real
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.querySelector('input[name="query"]');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    // Implementar búsqueda en tiempo real aquí si es necesario
+                });
+            }
+        });
     </script>
 </body>
 </html>
