@@ -488,12 +488,12 @@
         </div>
         {% endif %}
 
-        <!-- Todos los Proyectos (Fallback cuando las categorías están vacías) -->
-        {% if proyectos and not proyectos_nacionales and not proyectos_internacionales and not proyectos_iica %}
+        <!-- Todos los Proyectos (SIEMPRE mostramos todos) -->
+        {% if proyectos %}
         <div class="card category-card">
             <div class="category-header">
                 <h5 class="mb-0">
-                    <i class="bi bi-list category-icon"></i>Todos los Proyectos ({{ proyectos|length }})
+                    <i class="bi bi-list category-icon"></i>Todos los Proyectos Disponibles ({{ proyectos|length }})
                 </h5>
             </div>
             <div class="card-body p-0">
