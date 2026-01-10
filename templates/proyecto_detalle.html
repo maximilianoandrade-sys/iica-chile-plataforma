@@ -1,67 +1,69 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ proyecto.Nombre }} - Plataforma IICA Chile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="/static/css/iica-institucional.css" rel="stylesheet">
     <style>
         body {
             background-color: #f8f9fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         .navbar {
             background-color: #2c3e50 !important;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        
+
         .navbar-brand {
             color: white !important;
             font-weight: bold;
             font-size: 1.2rem;
         }
-        
+
         .navbar-nav .nav-link {
             color: white !important;
             font-weight: 500;
             margin: 0 10px;
         }
-        
+
         .navbar-nav .nav-link:hover {
             color: #3498db !important;
         }
-        
+
         .card {
             border: 1px solid #dee2e6;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             margin-bottom: 20px;
         }
-        
+
         .card-header {
             background-color: #f8f9fa;
             border-bottom: 1px solid #dee2e6;
             font-weight: bold;
             color: #2c3e50;
         }
-        
+
         .project-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
-        
+
         .project-header .card-body {
             background: transparent;
         }
-        
+
         .badge {
             font-size: 0.9em;
             padding: 6px 12px;
             border-radius: 6px;
         }
-        
+
         .info-item {
             display: flex;
             align-items: center;
@@ -70,71 +72,69 @@
             background-color: #f8f9fa;
             border-radius: 6px;
         }
-        
+
         .info-item i {
             margin-right: 10px;
             width: 20px;
             color: #007bff;
         }
-        
+
         .btn {
             border-radius: 6px;
             font-weight: 500;
             padding: 8px 16px;
         }
-        
+
         .btn-primary {
             background-color: #007bff;
             border-color: #007bff;
         }
-        
+
         .btn-primary:hover {
             background-color: #0056b3;
             border-color: #0056b3;
         }
-        
+
         .btn-success {
             background-color: #28a745;
             border-color: #28a745;
         }
-        
+
         .btn-success:hover {
             background-color: #218838;
             border-color: #1e7e34;
         }
     </style>
 </head>
+
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <!-- Navbar IICA Institucional -->
+    <nav class="navbar navbar-expand-lg iica-navbar text-white">
         <div class="container">
-            <a class="navbar-brand" href="/">
-                <i class="bi bi-globe-americas me-2"></i>
-                Plataforma IICA Chile
+            <a class="navbar-brand text-white fw-bold" href="/">
+                <img src="https://iica.int/sites/default/files/iica_logo_0.png" alt="Logo IICA"
+                    style="height: 30px; margin-right: 10px; filter: brightness(0) invert(1);">
+                IICA Chile
             </a>
-            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            <button class="navbar-toggler border-white" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
             </button>
-            
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">
-                            <i class="bi bi-house me-1"></i>Inicio
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/quienes-somos">
-                            <i class="bi bi-info-circle me-1"></i>Quiénes Somos
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/adjudicados">
-                            <i class="bi bi-trophy me-1"></i>Proyectos Adjudicados
-                        </a>
-                    </li>
-                </ul>
+                <div class="navbar-nav ms-auto text-white">
+                    <a class="nav-link text-white" href="/">
+                        <i class="bi bi-house me-1"></i>Inicio
+                    </a>
+                    <a class="nav-link text-white" href="/dashboard">
+                        <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                    </a>
+                    <a class="nav-link text-white" href="/todos-los-proyectos">
+                        <i class="bi bi-table me-1"></i>Todos los Proyectos
+                    </a>
+                    <a class="nav-link text-white" href="/quienes-somos">
+                        <i class="bi bi-people me-1"></i>Quiénes Somos
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
@@ -162,11 +162,11 @@
                                 </div>
                                 <div>
                                     {% if proyecto.Estado == 'Abierto' %}
-                                        <span class="badge bg-success">{{ proyecto.Estado }}</span>
+                                    <span class="badge bg-success">{{ proyecto.Estado }}</span>
                                     {% elif proyecto.Estado == 'Cerrado' %}
-                                        <span class="badge bg-danger">{{ proyecto.Estado }}</span>
+                                    <span class="badge bg-danger">{{ proyecto.Estado }}</span>
                                     {% else %}
-                                        <span class="badge bg-warning">{{ proyecto.Estado }}</span>
+                                    <span class="badge bg-warning">{{ proyecto.Estado }}</span>
                                     {% endif %}
                                 </div>
                             </div>
@@ -192,42 +192,42 @@
                                 <strong>Fuente:</strong> {{ proyecto.Fuente }}
                             </div>
                         </div>
-                        
+
                         <div class="info-item">
                             <i class="bi bi-calendar-event"></i>
                             <div>
                                 <strong>Fecha de Cierre:</strong> {{ proyecto['Fecha cierre'] }}
                             </div>
                         </div>
-                        
+
                         <div class="info-item">
                             <i class="bi bi-tag"></i>
                             <div>
                                 <strong>Área de Interés:</strong> {{ proyecto['Área de interés'] }}
                             </div>
                         </div>
-                        
+
                         <div class="info-item">
                             <i class="bi bi-currency-dollar"></i>
                             <div>
                                 <strong>Monto:</strong> {{ proyecto.Monto }}
                             </div>
                         </div>
-                        
+
                         <div class="info-item">
                             <i class="bi bi-check-circle"></i>
                             <div>
-                                <strong>Estado:</strong> 
+                                <strong>Estado:</strong>
                                 {% if proyecto.Estado == 'Abierto' %}
-                                    <span class="text-success fw-bold">{{ proyecto.Estado }}</span>
+                                <span class="text-success fw-bold">{{ proyecto.Estado }}</span>
                                 {% elif proyecto.Estado == 'Cerrado' %}
-                                    <span class="text-danger fw-bold">{{ proyecto.Estado }}</span>
+                                <span class="text-danger fw-bold">{{ proyecto.Estado }}</span>
                                 {% else %}
-                                    <span class="text-warning fw-bold">{{ proyecto.Estado }}</span>
+                                <span class="text-warning fw-bold">{{ proyecto.Estado }}</span>
                                 {% endif %}
                             </div>
                         </div>
-                        
+
                         {% if proyecto.Descripción %}
                         <div class="info-item">
                             <i class="bi bi-file-text"></i>
@@ -240,7 +240,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-header">
@@ -251,30 +251,30 @@
                     <div class="card-body">
                         <div class="d-grid gap-2">
                             {% if proyecto.Estado == 'Abierto' %}
-                                <a href="#" class="btn btn-success">
-                                    <i class="bi bi-pencil-square me-2"></i>Postular al Proyecto
-                                </a>
+                            <a href="#" class="btn btn-success">
+                                <i class="bi bi-pencil-square me-2"></i>Postular al Proyecto
+                            </a>
                             {% else %}
-                                <button class="btn btn-secondary" disabled>
-                                    <i class="bi bi-lock me-2"></i>Proyecto Cerrado
-                                </button>
+                            <button class="btn btn-secondary" disabled>
+                                <i class="bi bi-lock me-2"></i>Proyecto Cerrado
+                            </button>
                             {% endif %}
-                            
+
                             <a href="#" class="btn btn-outline-primary">
                                 <i class="bi bi-download me-2"></i>Descargar Información
                             </a>
-                            
+
                             <a href="#" class="btn btn-outline-info">
                                 <i class="bi bi-share me-2"></i>Compartir
                             </a>
-                            
+
                             <a href="/" class="btn btn-outline-secondary">
                                 <i class="bi bi-arrow-left me-2"></i>Volver a Proyectos
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="card mt-3">
                     <div class="card-header">
                         <h6 class="mb-0">
@@ -296,13 +296,44 @@
         </div>
     </div>
 
+    <!-- Footer Institucional -->
+    <footer class="iica-footer mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5><i class="bi bi-building me-2"></i>IICA Chile</h5>
+                    <p>Instituto Interamericano de Cooperación para la Agricultura. Trabajando por el desarrollo
+                        agrícola y el bienestar rural de las Américas desde 1942.</p>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5><i class="bi bi-link-45deg me-2"></i>Enlaces Rápidos</h5>
+                    <ul class="iica-footer-links">
+                        <li><a href="/"><i class="bi bi-house"></i> Inicio</a></li>
+                        <li><a href="/todos-los-proyectos"><i class="bi bi-folder"></i> Oportunidades</a></li>
+                        <li><a href="/quienes-somos"><i class="bi bi-people"></i> Quiénes Somos</a></li>
+                        <li><a href="https://iica.int/es/countries/chile-es/" target="_blank"><i
+                                    class="bi bi-globe"></i> IICA Oficial</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5><i class="bi bi-geo-alt me-2"></i>Contacto</h5>
+                    <p>
+                        <i class="bi bi-building me-2"></i>Fidel Oteíza 1956, Piso 10<br>
+                        <i class="bi bi-geo me-2"></i>Providencia, Santiago, Chile<br>
+                        <i class="bi bi-telephone me-2"></i><a href="tel:+56224310600">+56 2 2431 0600</a><br>
+                        <i class="bi bi-envelope me-2"></i><a href="mailto:iica.cl@iica.int">iica.cl@iica.int</a>
+                    </p>
+                </div>
+            </div>
+            <div class="iica-footer-bottom">
+                <p>&copy; 2026 Instituto Interamericano de Cooperación para la Agricultura (IICA) - Sede Chile. Todos
+                    los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Mostrar fecha actual
-        document.getElementById('current-date').textContent = new Date().toLocaleDateString('es-ES');
-    </script>
 </body>
+
 </html>
-
-
