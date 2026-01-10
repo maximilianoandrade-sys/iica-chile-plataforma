@@ -718,7 +718,7 @@ def home():
         print(f"📊 Total filtrados: {len(proyectos_filtrados)}")
         print(f"📊 Total sin filtros: {len(proyectos)}")
         # Try templates in order of preference
-        templates_fallback = ['home_didactico.html', 'home_ordenado_mejorado.html', 'home.html', 'home_ordenado.html']
+        templates_fallback = ['home_institucional.html', 'home_didactico.html', 'home_ordenado_mejorado.html', 'home.html']
         
         print(f"🎯 Intentando renderizar templates en orden: {templates_fallback}")
         
