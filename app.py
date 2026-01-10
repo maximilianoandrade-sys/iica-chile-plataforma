@@ -1274,11 +1274,22 @@ def todos_los_proyectos():
         fuentes_unicas = sorted(list(set(p.get('Fuente', '') for p in proyectos if p.get('Fuente'))))
         estados_unicos = sorted(list(set(p.get('Estado', '') for p in proyectos if p.get('Estado'))))
         
+        # CATEGORIZAR PROYECTOS (requerido por el template)
+        fuentes_nacionales = ['FIA', 'INDAP', 'CORFO', 'ANID', 'SAG', 'ODEPA', 'MINAGRI']
+        fuentes_iica = ['IICA', 'BID', 'FONTAGRO']
+        
+        proyectos_nacionales = [p for p in proyectos_filtrados if p.get('Fuente', '') in fuentes_nacionales]
+        proyectos_iica = [p for p in proyectos_filtrados if p.get('Fuente', '') in fuentes_iica]
+        proyectos_internacionales = [p for p in proyectos_filtrados if p.get('Fuente', '') not in fuentes_nacionales and p.get('Fuente', '') not in fuentes_iica]
+        
         # Intentar usar template mejorado, sino usar el básico
         # Usar template mejorado preferentemente
         try:
              return render_template('todos_los_proyectos_mejorado.html',
                                  proyectos=proyectos_filtrados,
+                                 proyectos_nacionales=proyectos_nacionales,
+                                 proyectos_internacionales=proyectos_internacionales,
+                                 proyectos_iica=proyectos_iica,
                                  total_proyectos=len(proyectos_filtrados),
                                  total_todos=len(proyectos),
                                  areas_unicas=areas_unicas,
