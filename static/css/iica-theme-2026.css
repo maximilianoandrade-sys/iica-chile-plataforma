@@ -1,0 +1,271 @@
+/*
+ * IICA Official Design System (2026)
+ * Based on https://iica.int/es/
+ * Colors: Deep Blue (#003057), Light Blue (#00AEEF), Gold (#FDB913)
+ */
+
+:root {
+    /* --- Official Palette --- */
+    --iica-blue-deep: #003057;
+    /* Primary Corporate Blue */
+    --iica-blue-bright: #00AEEF;
+    /* Accent/Action Blue */
+    --iica-gold: #FDB913;
+    /* IICA Gold */
+    --iica-green: #7AB800;
+    /* Agriculture Green */
+
+    /* --- Neutrals --- */
+    --iica-white: #ffffff;
+    --iica-gray-100: #f8f9fa;
+    --iica-gray-200: #e9ecef;
+    --iica-gray-600: #6c757d;
+    --iica-gray-800: #343a40;
+    --iica-black: #000000;
+
+    /* --- Typography --- */
+    --font-primary: 'Open Sans', 'Segoe UI', sans-serif;
+    /* Similar to IICA's font */
+    --font-heading: 'Montserrat', 'Segoe UI', sans-serif;
+}
+
+body {
+    font-family: var(--font-primary);
+    color: var(--iica-gray-800);
+    background-color: var(--iica-white);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* --- Top Utility Bar --- */
+.iica-top-bar {
+    background-color: var(--iica-blue-deep);
+    color: var(--iica-white);
+    font-size: 0.85rem;
+    padding: 8px 0;
+    border-bottom: 3px solid var(--iica-gold);
+}
+
+.iica-top-bar a {
+    color: var(--iica-white);
+    text-decoration: none;
+    margin-left: 15px;
+    transition: opacity 0.2s;
+}
+
+.iica-top-bar a:hover {
+    opacity: 0.8;
+}
+
+/* --- Main Navbar --- */
+.iica-main-nav {
+    background-color: var(--iica-white);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.iica-logo {
+    max-height: 70px;
+}
+
+.nav-link.iica-nav-link {
+    color: var(--iica-blue-deep) !important;
+    font-weight: 600;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem !important;
+    position: relative;
+    transition: color 0.3s;
+}
+
+.nav-link.iica-nav-link:hover,
+.nav-link.iica-nav-link.active {
+    color: var(--iica-blue-bright) !important;
+}
+
+.nav-link.iica-nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background-color: var(--iica-gold);
+    transition: width 0.3s;
+}
+
+.nav-link.iica-nav-link:hover::after,
+.nav-link.iica-nav-link.active::after {
+    width: 80%;
+}
+
+/* --- Hero Section & Headers --- */
+.iica-section-header {
+    background: linear-gradient(135deg, var(--iica-blue-deep) 0%, #004a80 100%);
+    color: var(--iica-white);
+    padding: 60px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.iica-section-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M0 0h20L0 20z'/%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.3;
+}
+
+.iica-page-title {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 2.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.iica-breadcrumb {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 1;
+}
+
+.iica-breadcrumb a {
+    color: var(--iica-white);
+    text-decoration: underline;
+}
+
+/* --- Cards & Content --- */
+.card {
+    border: 1px solid var(--iica-gray-200);
+    border-radius: 4px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.card-header.iica-card-header {
+    background-color: var(--iica-white);
+    border-bottom: 2px solid var(--iica-gold);
+    color: var(--iica-blue-deep);
+    font-weight: 700;
+    padding: 1rem 1.25rem;
+}
+
+/* --- Buttons --- */
+.btn-iica-primary {
+    background-color: var(--iica-blue-bright);
+    border-color: var(--iica-blue-bright);
+    color: var(--iica-white);
+    text-transform: uppercase;
+    font-weight: 600;
+    border-radius: 4px;
+    padding: 0.6rem 1.5rem;
+    transition: all 0.3s;
+}
+
+.btn-iica-primary:hover {
+    background-color: var(--iica-blue-deep);
+    border-color: var(--iica-blue-deep);
+    color: var(--iica-white);
+}
+
+.btn-iica-outline {
+    background-color: transparent;
+    border: 2px solid var(--iica-blue-deep);
+    color: var(--iica-blue-deep);
+    text-transform: uppercase;
+    font-weight: 600;
+    border-radius: 4px;
+    padding: 0.6rem 1.5rem;
+}
+
+.btn-iica-outline:hover {
+    background-color: var(--iica-blue-deep);
+    color: var(--iica-white);
+}
+
+/* --- Footer --- */
+.iica-footer {
+    background-color: var(--iica-blue-deep);
+    color: var(--iica-white);
+    padding: 60px 0 30px;
+    margin-top: 60px;
+    border-top: 5px solid var(--iica-green);
+}
+
+.iica-footer h5 {
+    color: var(--iica-gold);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+.iica-footer p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+}
+
+.iica-footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.iica-footer-links li {
+    margin-bottom: 10px;
+}
+
+.iica-footer-links a {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.iica-footer-links a:hover {
+    color: var(--iica-gold);
+    padding-left: 5px;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 40px;
+    padding-top: 20px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* --- Vision/Mission Box --- */
+.vision-box {
+    border-left: 5px solid var(--iica-blue-bright);
+    background-color: var(--iica-gray-100);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.vision-box h2 {
+    color: var(--iica-blue-deep);
+    font-family: var(--font-heading);
+    margin-bottom: 1rem;
+}
+
+.vision-box p {
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--iica-gray-600);
+    margin-bottom: 0;
+}

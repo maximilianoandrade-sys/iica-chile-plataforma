@@ -7,351 +7,204 @@
     <title>Todos los Proyectos - IICA Chile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="/static/css/iica-institucional.css" rel="stylesheet">
-    <style>
-        min-height: 100vh;
-        }
-
-        .navbar {
-            background: linear-gradient(135deg, #1e3a8a 0%, #059669 100%);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .hero-section {
-            background: linear-gradient(135deg, #1e3a8a 0%, #059669 100%);
-            color: white;
-            padding: 3rem 0;
-            margin-bottom: 2rem;
-        }
-
-        .filter-section {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-        }
-
-        .category-card {
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            margin-bottom: 2rem;
-        }
-
-        .category-card:hover {
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-            transform: translateY(-2px);
-        }
-
-        .table-responsive {
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .table {
-            margin-bottom: 0;
-        }
-
-        .table thead th {
-            background: linear-gradient(135deg, #1e3a8a 0%, #059669 100%);
-            color: white;
-            border: none;
-            font-weight: 600;
-            padding: 1rem;
-        }
-
-        .table tbody td {
-            padding: 0.75rem 1rem;
-            vertical-align: middle;
-            border-color: #e2e8f0;
-        }
-
-        .table tbody tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .badge {
-            font-size: 0.8rem;
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-        }
-
-        .btn-sm {
-            padding: 0.25rem 0.5rem;
-            font-size: 0.8rem;
-        }
-
-        .stats-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            transition: all 0.3s ease;
-            margin-bottom: 1rem;
-        }
-
-        .stats-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .stats-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #1e3a8a;
-        }
-
-        .category-header {
-            background: linear-gradient(135deg, #1e3a8a 0%, #059669 100%);
-            color: white;
-            padding: 1rem;
-            border-radius: 10px 10px 0 0;
-            margin-bottom: 0;
-        }
-
-        .category-icon {
-            font-size: 1.5rem;
-            margin-right: 0.5rem;
-        }
-
-        .btn-iica {
-            background: linear-gradient(135deg, #1e3a8a 0%, #059669 100%);
-            border: none;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .btn-iica:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
-            color: white;
-        }
-    </style>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Montserrat:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link href="/static/css/iica-theme-2026.css" rel="stylesheet">
 </head>
 
 <body>
-    <!-- Navbar IICA Institucional -->
-    <nav class="navbar navbar-expand-lg iica-navbar text-white">
+    <!-- Top Utility Bar -->
+    <div class="iica-top-bar">
+        <div class="container d-flex justify-content-end">
+            <a href="https://iica.int/es" target="_blank">IICA.int</a>
+            <a href="https://iica.int/en" target="_blank">English</a>
+            <a href="https://iica.int/pt" target="_blank">Português</a>
+        </div>
+    </div>
+
+    <!-- Main Navbar -->
+    <nav class="navbar navbar-expand-lg iica-main-nav">
         <div class="container">
-            <a class="navbar-brand text-white fw-bold" href="/">
-                <img src="https://iica.int/sites/default/files/iica_logo_0.png" alt="Logo IICA"
-                    style="height: 30px; margin-right: 10px; filter: brightness(0) invert(1);">
-                IICA Chile
+            <a class="navbar-brand" href="/">
+                <img src="https://iica.int/sites/default/files/iica_logo_0.png" alt="IICA" class="iica-logo">
             </a>
-            <button class="navbar-toggler border-white" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <div class="navbar-nav ms-auto text-white">
-                    <a class="nav-link text-white" href="/">
-                        <i class="bi bi-house me-1"></i>Inicio
-                    </a>
-                    <a class="nav-link text-white" href="/dashboard">
-                        <i class="bi bi-speedometer2 me-1"></i>Dashboard
-                    </a>
-                    <a class="nav-link active text-white fw-bold" href="/todos-los-proyectos">
-                        <i class="bi bi-table me-1"></i>Todos los Proyectos
-                    </a>
-                    <a class="nav-link text-white" href="/quienes-somos">
-                        <i class="bi bi-people me-1"></i>Quiénes Somos
-                    </a>
-                </div>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link iica-nav-link" href="/">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link iica-nav-link" href="/quienes-somos">Quiénes Somos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link iica-nav-link active" href="/todos-los-proyectos">Proyectos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link iica-nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item ms-lg-3">
+                        <a class="btn btn-iica-primary" href="#filtros">Filtrar</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <div class="hero-section">
+    <!-- Header Section -->
+    <header class="iica-section-header">
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-8">
-                    <h1 class="display-4 fw-bold mb-3">
-                        <i class="bi bi-table me-3"></i>Todos los Proyectos Disponibles
-                    </h1>
-                    <p class="lead mb-4">
-                        Visualiza todos los {{ total_proyectos }} proyectos de financiamiento organizados por categorías
-                    </p>
-                    <div class="d-flex gap-2">
-                        <span class="badge bg-light text-dark">
-                            <i class="bi bi-check-circle me-1"></i>{{ total_proyectos }} Proyectos Totales
-                        </span>
-                        <span class="badge bg-light text-dark">
-                            <i class="bi bi-calendar me-1"></i>Actualizado <span id="current-date"></span>
-                        </span>
-                    </div>
-                </div>
-                <div class="col-lg-4 text-center">
-                    <i class="bi bi-graph-up-arrow" style="font-size: 5rem; opacity: 0.3;"></i>
-                </div>
+            <div class="iica-breadcrumb mb-2">
+                <a href="/">Inicio</a> / Proyectos
+            </div>
+            <h1 class="iica-page-title mb-3">Oportunidades de Financiamiento</h1>
+            <div class="d-flex text-white opacity-75 gap-4">
+                <span><i class="bi bi-folder me-2"></i>{{ total_proyectos }} Proyectos Totales</span>
+                <span id="current-date-span"><i class="bi bi-calendar me-2"></i>Actualizado hoy</span>
             </div>
         </div>
-    </div>
+    </header>
 
-    <div class="container">
-        <!-- Estadísticas Generales -->
-        <div class="row mb-4">
+    <div class="container my-5">
+
+        <!-- Stats Row -->
+        <div class="row mb-5">
             <div class="col-md-3">
-                <div class="stats-card">
-                    <div class="stats-number">{{ total_proyectos }}</div>
-                    <div class="text-muted">Proyectos Totales</div>
+                <div class="card h-100 text-center border-0 shadow-sm p-3">
+                    <h3 class="fw-bold text-primary mb-0">{{ total_proyectos }}</h3>
+                    <small class="text-muted">Total</small>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="stats-card">
-                    <div class="stats-number">{{ proyectos_nacionales|length }}</div>
-                    <div class="text-muted">Proyectos Nacionales</div>
+                <div class="card h-100 text-center border-0 shadow-sm p-3">
+                    <h3 class="fw-bold text-success mb-0">{{ proyectos_nacionales|length }}</h3>
+                    <small class="text-muted">Nacionales</small>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="stats-card">
-                    <div class="stats-number">{{ proyectos_internacionales|length }}</div>
-                    <div class="text-muted">Proyectos Internacionales</div>
+                <div class="card h-100 text-center border-0 shadow-sm p-3">
+                    <h3 class="fw-bold text-info mb-0">{{ proyectos_internacionales|length }}</h3>
+                    <small class="text-muted">Internacionales</small>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="stats-card">
-                    <div class="stats-number">{{ proyectos_iica|length }}</div>
-                    <div class="text-muted">Proyectos IICA</div>
+                <div class="card h-100 text-center border-0 shadow-sm p-3">
+                    <h3 class="fw-bold text-warning mb-0">{{ proyectos_iica|length }}</h3>
+                    <small class="text-muted">IICA</small>
                 </div>
             </div>
         </div>
 
-        <!-- Filtros Avanzados -->
-        <div class="filter-section">
-            <h5 class="mb-3">
-                <i class="bi bi-funnel me-2"></i>Filtros de Búsqueda Avanzada
-            </h5>
-            <form method="GET" class="row g-3">
-                <div class="col-md-3">
-                    <label class="form-label">Búsqueda de Texto</label>
-                    <input type="text" class="form-control" name="query" value="{{ query or '' }}"
-                        placeholder="Buscar en nombre, descripción...">
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label">Área de Interés</label>
-                    <select class="form-select" name="area">
-                        <option value="">Todas las áreas</option>
-                        {% for area in areas_unicas %}
-                        <option value="{{ area }}" {% if area==area %}selected{% endif %}>{{ area }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label">Fuente</label>
-                    <select class="form-select" name="fuente">
-                        <option value="">Todas las fuentes</option>
-                        {% for fuente in fuentes_unicas %}
-                        <option value="{{ fuente }}" {% if fuente==fuente %}selected{% endif %}>{{ fuente }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label">Estado</label>
-                    <select class="form-select" name="estado">
-                        <option value="">Todos los estados</option>
-                        {% for estado in estados_unicos %}
-                        <option value="{{ estado }}" {% if estado==estado %}selected{% endif %}>{{ estado }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">&nbsp;</label>
-                    <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-iica flex-fill">
-                            <i class="bi bi-search me-1"></i>Buscar
-                        </button>
-                        <a href="/todos-los-proyectos" class="btn btn-outline-secondary">
-                            <i class="bi bi-arrow-clockwise"></i>
-                        </a>
+        <!-- Filters Section -->
+        <div class="card mb-5 iica-card" id="filtros">
+            <div class="card-header iica-card-header bg-light">
+                <i class="bi bi-funnel me-2"></i>Filtros Avanzados
+            </div>
+            <div class="card-body">
+                <form method="GET" class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Buscar</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                            <input type="text" class="form-control" name="query" value="{{ query or '' }}"
+                                placeholder="Nombre, descripción...">
+                        </div>
                     </div>
-                </div>
-            </form>
-
-            <!-- Botones de Exportación -->
-            <div class="row mt-3">
-                <div class="col-12">
-                    <div class="d-flex gap-2">
-                        <a href="/exportar-excel" class="btn btn-success">
-                            <i class="bi bi-file-excel me-1"></i>Exportar Excel
-                        </a>
-                        <a href="/exportar-csv" class="btn btn-info">
-                            <i class="bi bi-file-csv me-1"></i>Exportar CSV
-                        </a>
-                        <a href="/api/proyectos" class="btn btn-warning" target="_blank">
-                            <i class="bi bi-code me-1"></i>API JSON
-                        </a>
-                        <a href="/api/buscar?q=agricultura" class="btn btn-secondary" target="_blank">
-                            <i class="bi bi-search me-1"></i>API Búsqueda
-                        </a>
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold">Área</label>
+                        <select class="form-select" name="area">
+                            <option value="">Todas</option>
+                            {% for area_item in areas_unicas %}
+                            <option value="{{ area_item }}" {% if area_item==area %}selected{% endif %}>{{ area_item }}
+                            </option>
+                            {% endfor %}
+                        </select>
                     </div>
-                </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold">Fuente</label>
+                        <select class="form-select" name="fuente">
+                            <option value="">Todas</option>
+                            {% for fuente_item in fuentes_unicas %}
+                            <option value="{{ fuente_item }}" {% if fuente_item==fuente %}selected{% endif %}>{{
+                                fuente_item }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold">Estado</label>
+                        <select class="form-select" name="estado">
+                            <option value="">Todos</option>
+                            {% for estado_item in estados_unicos %}
+                            <option value="{{ estado_item }}" {% if estado_item==estado %}selected{% endif %}>{{
+                                estado_item }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-iica-primary w-100">Filtrar</button>
+                    </div>
+                </form>
             </div>
         </div>
 
-        <!-- Proyectos Nacionales -->
+        <!-- Export Buttons -->
+        <div class="d-flex justify-content-end mb-4 gap-2">
+            <a href="/exportar-excel" class="btn btn-outline-success btn-sm"><i
+                    class="bi bi-file-excel me-1"></i>Excel</a>
+            <a href="/exportar-csv" class="btn btn-outline-info btn-sm"><i class="bi bi-file-csv me-1"></i>CSV</a>
+            <a href="/api/proyectos" target="_blank" class="btn btn-outline-dark btn-sm"><i
+                    class="bi bi-code-slash me-1"></i>API</a>
+        </div>
+
+        <!-- Projects Lists -->
+
+        <!-- Nacionales -->
         {% if proyectos_nacionales %}
-        <div class="card category-card">
-            <div class="category-header">
-                <h5 class="mb-0">
-                    <i class="bi bi-flag-fill category-icon"></i>Proyectos Nacionales ({{ proyectos_nacionales|length
-                    }})
-                </h5>
+        <div class="card iica-card mb-5">
+            <div class="card-header iica-card-header">
+                <i class="bi bi-flag-fill me-2"></i>Proyectos Nacionales ({{ proyectos_nacionales|length }})
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="table-light">
                             <tr>
-                                <th>Nombre del Proyecto</th>
+                                <th class="ps-4">Proyecto</th>
                                 <th>Fuente</th>
-                                <th>Área de Interés</th>
+                                <th>Área</th>
                                 <th>Monto</th>
                                 <th>Estado</th>
-                                <th>Fecha Cierre</th>
-                                <th>Acciones</th>
+                                <th>Cierre</th>
+                                <th class="text-end pe-4">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for proyecto in proyectos_nacionales %}
                             <tr>
+                                <td class="ps-4">
+                                    <span class="fw-bold text-primary">{{ proyecto.Nombre }}</span>
+                                </td>
+                                <td><span class="badge bg-light text-dark border">{{ proyecto.Fuente }}</span></td>
+                                <td><small>{{ proyecto['Área de interés'] }}</small></td>
+                                <td><small class="fw-bold">{{ proyecto.Monto }}</small></td>
                                 <td>
-                                    <strong>{{ proyecto.Nombre }}</strong>
-                                    {% if proyecto.Descripción %}
-                                    <br><small class="text-muted">{{ proyecto.Descripción[:100] }}...</small>
+                                    {% if proyecto.Estado == 'Abierto' %}
+                                    <span
+                                        class="badge bg-success-subtle text-success border border-success">Abierto</span>
+                                    {% elif proyecto.Estado == 'Cerrado' %}
+                                    <span class="badge bg-danger-subtle text-danger border border-danger">Cerrado</span>
+                                    {% else %}
+                                    <span class="badge bg-warning-subtle text-warning border border-warning">{{
+                                        proyecto.Estado }}</span>
                                     {% endif %}
                                 </td>
-                                <td>
-                                    <span class="badge bg-primary">{{ proyecto.Fuente }}</span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-info">{{ proyecto['Área de interés'] }}</span>
-                                </td>
-                                <td>
-                                    <strong>{{ proyecto.Monto }}</strong>
-                                </td>
-                                <td>
-                                    <span
-                                        class="badge {% if proyecto.Estado == 'Abierto' %}bg-success{% elif proyecto.Estado == 'Cerrado' %}bg-danger{% else %}bg-warning{% endif %}">
-                                        {{ proyecto.Estado }}
-                                    </span>
-                                </td>
-                                <td>{{ proyecto['Fecha cierre'] }}</td>
-                                <td>
-                                    <a href="{{ proyecto.Enlace }}" target="_blank"
-                                        class="btn btn-outline-primary btn-sm me-1">
-                                        <i class="bi bi-external-link"></i>
-                                    </a>
-                                    <a href="/proyecto/{{ loop.index }}" class="btn btn-primary btn-sm">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
+                                <td><small>{{ proyecto['Fecha cierre'] }}</small></td>
+                                <td class="text-end pe-4">
+                                    <a href="/proyecto/{{ proyecto._indice_global if proyecto._indice_global is defined else loop.index }}"
+                                        class="btn btn-sm btn-iica-outline">Ver</a>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -362,62 +215,50 @@
         </div>
         {% endif %}
 
-        <!-- Proyectos Internacionales -->
+        <!-- Internacionales -->
         {% if proyectos_internacionales %}
-        <div class="card category-card">
-            <div class="category-header">
-                <h5 class="mb-0">
-                    <i class="bi bi-globe category-icon"></i>Proyectos Internacionales ({{
-                    proyectos_internacionales|length }})
-                </h5>
+        <div class="card iica-card mb-5">
+            <div class="card-header iica-card-header">
+                <i class="bi bi-globe me-2"></i>Proyectos Internacionales ({{ proyectos_internacionales|length }})
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="table-light">
                             <tr>
-                                <th>Nombre del Proyecto</th>
+                                <th class="ps-4">Proyecto</th>
                                 <th>Fuente</th>
-                                <th>Área de Interés</th>
+                                <th>Área</th>
                                 <th>Monto</th>
                                 <th>Estado</th>
-                                <th>Fecha Cierre</th>
-                                <th>Acciones</th>
+                                <th>Cierre</th>
+                                <th class="text-end pe-4">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for proyecto in proyectos_internacionales %}
                             <tr>
+                                <td class="ps-4">
+                                    <span class="fw-bold text-primary">{{ proyecto.Nombre }}</span>
+                                </td>
+                                <td><span class="badge bg-light text-dark border">{{ proyecto.Fuente }}</span></td>
+                                <td><small>{{ proyecto['Área de interés'] }}</small></td>
+                                <td><small class="fw-bold">{{ proyecto.Monto }}</small></td>
                                 <td>
-                                    <strong>{{ proyecto.Nombre }}</strong>
-                                    {% if proyecto.Descripción %}
-                                    <br><small class="text-muted">{{ proyecto.Descripción[:100] }}...</small>
+                                    {% if proyecto.Estado == 'Abierto' %}
+                                    <span
+                                        class="badge bg-success-subtle text-success border border-success">Abierto</span>
+                                    {% elif proyecto.Estado == 'Cerrado' %}
+                                    <span class="badge bg-danger-subtle text-danger border border-danger">Cerrado</span>
+                                    {% else %}
+                                    <span class="badge bg-warning-subtle text-warning border border-warning">{{
+                                        proyecto.Estado }}</span>
                                     {% endif %}
                                 </td>
-                                <td>
-                                    <span class="badge bg-primary">{{ proyecto.Fuente }}</span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-info">{{ proyecto['Área de interés'] }}</span>
-                                </td>
-                                <td>
-                                    <strong>{{ proyecto.Monto }}</strong>
-                                </td>
-                                <td>
-                                    <span
-                                        class="badge {% if proyecto.Estado == 'Abierto' %}bg-success{% elif proyecto.Estado == 'Cerrado' %}bg-danger{% else %}bg-warning{% endif %}">
-                                        {{ proyecto.Estado }}
-                                    </span>
-                                </td>
-                                <td>{{ proyecto['Fecha cierre'] }}</td>
-                                <td>
-                                    <a href="{{ proyecto.Enlace }}" target="_blank"
-                                        class="btn btn-outline-primary btn-sm me-1">
-                                        <i class="bi bi-external-link"></i>
-                                    </a>
-                                    <a href="/proyecto/{{ loop.index }}" class="btn btn-primary btn-sm">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
+                                <td><small>{{ proyecto['Fecha cierre'] }}</small></td>
+                                <td class="text-end pe-4">
+                                    <a href="/proyecto/{{ proyecto._indice_global if proyecto._indice_global is defined else loop.index }}"
+                                        class="btn btn-sm btn-iica-outline">Ver</a>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -428,61 +269,50 @@
         </div>
         {% endif %}
 
-        <!-- Proyectos IICA -->
+        <!-- IICA -->
         {% if proyectos_iica %}
-        <div class="card category-card">
-            <div class="category-header">
-                <h5 class="mb-0">
-                    <i class="bi bi-building category-icon"></i>Proyectos IICA ({{ proyectos_iica|length }})
-                </h5>
+        <div class="card iica-card mb-5">
+            <div class="card-header iica-card-header" style="border-bottom: 2px solid var(--iica-gold);">
+                <i class="bi bi-building-check me-2"></i>Proyectos IICA ({{ proyectos_iica|length }})
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="table-light">
                             <tr>
-                                <th>Nombre del Proyecto</th>
+                                <th class="ps-4">Proyecto</th>
                                 <th>Fuente</th>
-                                <th>Área de Interés</th>
+                                <th>Área</th>
                                 <th>Monto</th>
                                 <th>Estado</th>
-                                <th>Fecha Cierre</th>
-                                <th>Acciones</th>
+                                <th>Cierre</th>
+                                <th class="text-end pe-4">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for proyecto in proyectos_iica %}
                             <tr>
+                                <td class="ps-4">
+                                    <span class="fw-bold text-primary">{{ proyecto.Nombre }}</span>
+                                </td>
+                                <td><span class="badge bg-warning text-dark border">{{ proyecto.Fuente }}</span></td>
+                                <td><small>{{ proyecto['Área de interés'] }}</small></td>
+                                <td><small class="fw-bold">{{ proyecto.Monto }}</small></td>
                                 <td>
-                                    <strong>{{ proyecto.Nombre }}</strong>
-                                    {% if proyecto.Descripción %}
-                                    <br><small class="text-muted">{{ proyecto.Descripción[:100] }}...</small>
+                                    {% if proyecto.Estado == 'Abierto' %}
+                                    <span
+                                        class="badge bg-success-subtle text-success border border-success">Abierto</span>
+                                    {% elif proyecto.Estado == 'Cerrado' %}
+                                    <span class="badge bg-danger-subtle text-danger border border-danger">Cerrado</span>
+                                    {% else %}
+                                    <span class="badge bg-warning-subtle text-warning border border-warning">{{
+                                        proyecto.Estado }}</span>
                                     {% endif %}
                                 </td>
-                                <td>
-                                    <span class="badge bg-primary">{{ proyecto.Fuente }}</span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-info">{{ proyecto['Área de interés'] }}</span>
-                                </td>
-                                <td>
-                                    <strong>{{ proyecto.Monto }}</strong>
-                                </td>
-                                <td>
-                                    <span
-                                        class="badge {% if proyecto.Estado == 'Abierto' %}bg-success{% elif proyecto.Estado == 'Cerrado' %}bg-danger{% else %}bg-warning{% endif %}">
-                                        {{ proyecto.Estado }}
-                                    </span>
-                                </td>
-                                <td>{{ proyecto['Fecha cierre'] }}</td>
-                                <td>
-                                    <a href="{{ proyecto.Enlace }}" target="_blank"
-                                        class="btn btn-outline-primary btn-sm me-1">
-                                        <i class="bi bi-external-link"></i>
-                                    </a>
-                                    <a href="/proyecto/{{ loop.index }}" class="btn btn-primary btn-sm">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
+                                <td><small>{{ proyecto['Fecha cierre'] }}</small></td>
+                                <td class="text-end pe-4">
+                                    <a href="/proyecto/{{ proyecto._indice_global if proyecto._indice_global is defined else loop.index }}"
+                                        class="btn btn-sm btn-iica-outline">Ver</a>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -493,62 +323,31 @@
         </div>
         {% endif %}
 
-        <!-- Todos los Proyectos (SIEMPRE mostramos todos) -->
-        {% if proyectos %}
-        <div class="card category-card">
-            <div class="category-header">
-                <h5 class="mb-0">
-                    <i class="bi bi-list category-icon"></i>Todos los Proyectos Disponibles ({{ proyectos|length }})
-                </h5>
+        <!-- Fallback if specific lists are empty but main query has results -->
+        {% if proyectos and not proyectos_nacionales and not proyectos_internacionales and not proyectos_iica %}
+        <div class="card iica-card mb-5">
+            <div class="card-header iica-card-header">
+                Resultados de Búsqueda
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="table-light">
                             <tr>
-                                <th>Nombre del Proyecto</th>
+                                <th>Proyecto</th>
                                 <th>Fuente</th>
-                                <th>Área de Interés</th>
-                                <th>Monto</th>
                                 <th>Estado</th>
-                                <th>Fecha Cierre</th>
-                                <th>Acciones</th>
+                                <th class="text-end">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for proyecto in proyectos %}
                             <tr>
-                                <td>
-                                    <strong>{{ proyecto.Nombre }}</strong>
-                                    {% if proyecto.Descripción %}
-                                    <br><small class="text-muted">{{ proyecto.Descripción[:100] }}...</small>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    <span class="badge bg-primary">{{ proyecto.Fuente }}</span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-info">{{ proyecto['Área de interés'] }}</span>
-                                </td>
-                                <td>
-                                    <strong>{{ proyecto.Monto }}</strong>
-                                </td>
-                                <td>
-                                    <span
-                                        class="badge {% if proyecto.Estado == 'Abierto' %}bg-success{% elif proyecto.Estado == 'Cerrado' %}bg-danger{% else %}bg-warning{% endif %}">
-                                        {{ proyecto.Estado }}
-                                    </span>
-                                </td>
-                                <td>{{ proyecto['Fecha cierre'] }}</td>
-                                <td>
-                                    <a href="{{ proyecto.Enlace }}" target="_blank"
-                                        class="btn btn-outline-primary btn-sm me-1">
-                                        <i class="bi bi-external-link"></i>
-                                    </a>
-                                    <a href="/proyecto/{{ loop.index }}" class="btn btn-primary btn-sm">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                </td>
+                                <td class="ps-4 fw-bold text-primary">{{ proyecto.Nombre }}</td>
+                                <td>{{ proyecto.Fuente }}</td>
+                                <td>{{ proyecto.Estado }}</td>
+                                <td class="text-end pe-4"><a href="/proyecto/{{ loop.index }}"
+                                        class="btn btn-sm btn-iica-outline">Ver</a></td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -557,59 +356,59 @@
             </div>
         </div>
         {% endif %}
-        {% endif %}
+
     </div>
 
-    <!-- Footer Institucional -->
-    <footer class="iica-footer mt-5">
+    <!-- Footer -->
+    <footer class="iica-footer">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4 mb-4">
-                    <h5><i class="bi bi-building me-2"></i>IICA Chile</h5>
-                    <p>Instituto Interamericano de Cooperación para la Agricultura. Trabajando por el desarrollo
-                        agrícola y el bienestar rural de las Américas desde 1942.</p>
-                </div>
-                <div class="col-lg-4 mb-4">
-                    <h5><i class="bi bi-link-45deg me-2"></i>Enlaces Rápidos</h5>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>IICA</h5>
                     <ul class="iica-footer-links">
-                        <li><a href="/"><i class="bi bi-house"></i> Inicio</a></li>
-                        <li><a href="/todos-los-proyectos"><i class="bi bi-folder"></i> Oportunidades</a></li>
-                        <li><a href="/quienes-somos"><i class="bi bi-people"></i> Quiénes Somos</a></li>
-                        <li><a href="https://iica.int/es/countries/chile-es/" target="_blank"><i
-                                    class="bi bi-globe"></i> IICA Oficial</a></li>
+                        <li><a href="https://iica.int/es/about-us/main/" target="_blank">Sobre el IICA</a></li>
+                        <li><a href="https://iica.int/es/about-us/dg/" target="_blank">Dirección General</a></li>
+                        <li><a href="https://iica.int/es/paises/" target="_blank">Países</a></li>
+                        <li><a href="https://iica.int/es/programas/" target="_blank">Cooperación técnica</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-4 mb-4">
-                    <h5><i class="bi bi-geo-alt me-2"></i>Contacto</h5>
-                    <p>
-                        <i class="bi bi-building me-2"></i>Fidel Oteíza 1956, Piso 10<br>
-                        <i class="bi bi-geo me-2"></i>Providencia, Santiago, Chile<br>
-                        <i class="bi bi-telephone me-2"></i><a href="tel:+56224310600">+56 2 2431 0600</a><br>
-                        <i class="bi bi-envelope me-2"></i><a href="mailto:iica.cl@iica.int">iica.cl@iica.int</a>
-                    </p>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>Enlaces de Interés</h5>
+                    <ul class="iica-footer-links">
+                        <li><a href="/">Plataforma Financiamiento</a></li>
+                        <li><a href="https://www.iica3d.iica.int/" target="_blank">IICA 3D</a></li>
+                        <li><a href="https://www.cimag.iica.int/" target="_blank">CIMAG</a></li>
+                        <li><a href="https://agroart.iica.int/" target="_blank">AgroArt</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>Prensa</h5>
+                    <ul class="iica-footer-links">
+                        <li><a href="https://iica.int/es/noticias/" target="_blank">Noticias</a></li>
+                        <li><a href="https://iica.int/es/press/agro-enlace/" target="_blank">Podcasts</a></li>
+                        <li><a href="https://iica.int/es/press/events/" target="_blank">Eventos</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>Legal</h5>
+                    <ul class="iica-footer-links">
+                        <li><a href="https://apps.iica.int/transparenciaiica/public/Reporte?LG=es"
+                                target="_blank">Denuncias</a></li>
+                        <li><a href="https://hdl.handle.net/11324/18804" target="_blank">Políticas de privacidad</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <div class="iica-footer-bottom">
-                <p>&copy; 2026 Instituto Interamericano de Cooperación para la Agricultura (IICA) - Sede Chile. Todos
-                    los derechos reservados.</p>
+            <div class="footer-bottom">
+                © 2026 Instituto Interamericano de Cooperación para la Agricultura (IICA). Todos los derechos
+                reservados.
             </div>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Mostrar fecha actual
-        document.getElementById('current-date').textContent = new Date().toLocaleDateString('es-ES');
-
-        // Búsqueda en tiempo real
-        document.addEventListener('DOMContentLoaded', function () {
-            const searchInput = document.querySelector('input[name="query"]');
-            if (searchInput) {
-                searchInput.addEventListener('input', function () {
-                    // Implementar búsqueda en tiempo real aquí si es necesario
-                });
-            }
-        });
+        document.getElementById('current-date-span').innerHTML = '<i class="bi bi-calendar me-2"></i>' + new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     </script>
 </body>
 

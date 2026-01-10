@@ -1326,9 +1326,22 @@ def quienes_somos():
         # Intentar usar template institucional nuevo
         return render_template('iica_quienes_somos.html')
     except:
-        # Fallback al template anterior
+        # Fallback al template anterior - AHORA CON DATOS
         try:
-            return render_template('quienes_somos.html')
+            info_data = {
+                'titulo': 'Quiénes Somos',
+                'mision': 'Estimular, promover y apoyar los esfuerzos de los Estados Miembros para lograr su desarrollo agrícola y el bienestar rural por medio de la cooperación técnica internacional de excelencia.',
+                'vision': 'Ser una institución de cooperación agrícola de las Américas, reconocida por su excelencia, innovación y liderazgo en el desarrollo de la agricultura sostenible y el bienestar rural.',
+                'valores': ['Compromiso', 'Innovación', 'Colaboración', 'Integridad', 'Sostenibilidad', 'Excelencia'],
+                'lineas': ['Cambio Climático', 'Sanidad Agropecuaria', 'Agricultura Familiar', 'Comercio', 'Innovación'],
+                'contacto': {
+                    'email': 'iica.cl@iica.int',
+                    'telefono': '+56 2 2431 0600',
+                    'direccion': 'Fidel Oteíza 1956, Piso 10, Providencia, Santiago',
+                    'web': 'https://iica.int/es/countries/chile-es/'
+                }
+            }
+            return render_template('quienes_somos.html', info=info_data)
         except Exception as e:
             print(f"Error en quienes-somos: {e}")
             return render_template('error.html',
