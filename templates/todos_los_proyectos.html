@@ -475,6 +475,69 @@
             </div>
         </div>
         {% endif %}
+
+        <!-- Todos los Proyectos (Fallback cuando las categorías están vacías) -->
+        {% if proyectos and not proyectos_nacionales and not proyectos_internacionales and not proyectos_iica %}
+        <div class="card category-card">
+            <div class="category-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-list category-icon"></i>Todos los Proyectos ({{ proyectos|length }})
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Nombre del Proyecto</th>
+                                <th>Fuente</th>
+                                <th>Área de Interés</th>
+                                <th>Monto</th>
+                                <th>Estado</th>
+                                <th>Fecha Cierre</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for proyecto in proyectos %}
+                            <tr>
+                                <td>
+                                    <strong>{{ proyecto.Nombre }}</strong>
+                                    {% if proyecto.Descripción %}
+                                    <br><small class="text-muted">{{ proyecto.Descripción[:100] }}...</small>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary">{{ proyecto.Fuente }}</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">{{ proyecto['Área de interés'] }}</span>
+                                </td>
+                                <td>
+                                    <strong>{{ proyecto.Monto }}</strong>
+                                </td>
+                                <td>
+                                    <span class="badge {% if proyecto.Estado == 'Abierto' %}bg-success{% elif proyecto.Estado == 'Cerrado' %}bg-danger{% else %}bg-warning{% endif %}">
+                                        {{ proyecto.Estado }}
+                                    </span>
+                                </td>
+                                <td>{{ proyecto['Fecha cierre'] }}</td>
+                                <td>
+                                    <a href="{{ proyecto.Enlace }}" target="_blank" class="btn btn-outline-primary btn-sm me-1">
+                                        <i class="bi bi-external-link"></i>
+                                    </a>
+                                    <a href="/proyecto/{{ loop.index }}" class="btn btn-primary btn-sm">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
