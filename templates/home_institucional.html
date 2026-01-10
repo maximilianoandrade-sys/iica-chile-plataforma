@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plataforma IICA Chile - Financiamiento Agrícola</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="/static/css/iica-institucional.css" rel="stylesheet">
     <style>
         /* Estilos institucionales IICA */
         :root {
@@ -16,49 +19,49 @@
             --iica-dark: #1f2937;
             --iica-text: #374151;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8fafc;
             color: var(--iica-text);
         }
-        
+
         .navbar {
             background: linear-gradient(135deg, var(--iica-primary) 0%, var(--iica-secondary) 100%);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-        
+
         .navbar-brand {
             font-weight: 700;
             font-size: 1.8rem;
             color: white !important;
         }
-        
+
         .navbar-nav .nav-link {
             color: white !important;
             font-weight: 500;
             padding: 0.5rem 1rem;
             transition: all 0.3s ease;
         }
-        
+
         .navbar-nav .nav-link:hover {
-            background-color: rgba(255,255,255,0.1);
+            background-color: rgba(255, 255, 255, 0.1);
             border-radius: 6px;
         }
-        
+
         .card {
             border: none;
             border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
             background: white;
         }
-        
+
         .card:hover {
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
             transform: translateY(-2px);
         }
-        
+
         .card-header {
             background: linear-gradient(135deg, var(--iica-primary) 0%, var(--iica-secondary) 100%);
             color: white;
@@ -66,28 +69,28 @@
             font-weight: 600;
             padding: 1rem 1.5rem;
         }
-        
+
         .stats-card {
             background: linear-gradient(135deg, var(--iica-primary) 0%, var(--iica-secondary) 100%);
             color: white;
             border-radius: 15px;
         }
-        
+
         .stats-card .card-body {
             padding: 2rem;
         }
-        
+
         .stats-number {
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
         }
-        
+
         .stats-label {
             font-size: 1rem;
             opacity: 0.9;
         }
-        
+
         .btn-primary {
             background: linear-gradient(135deg, var(--iica-primary) 0%, var(--iica-secondary) 100%);
             border: none;
@@ -96,12 +99,12 @@
             padding: 0.75rem 1.5rem;
             transition: all 0.3s ease;
         }
-        
+
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(30, 58, 138, 0.3);
         }
-        
+
         .btn-outline-primary {
             border: 2px solid var(--iica-primary);
             color: var(--iica-primary);
@@ -109,31 +112,33 @@
             font-weight: 500;
             transition: all 0.3s ease;
         }
-        
+
         .btn-outline-primary:hover {
             background: var(--iica-primary);
             border-color: var(--iica-primary);
             transform: translateY(-2px);
         }
-        
-        .form-control, .form-select {
+
+        .form-control,
+        .form-select {
             border: 2px solid #e5e7eb;
             border-radius: 8px;
             padding: 0.75rem 1rem;
             transition: all 0.3s ease;
         }
-        
-        .form-control:focus, .form-select:focus {
+
+        .form-control:focus,
+        .form-select:focus {
             border-color: var(--iica-primary);
             box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
         }
-        
+
         .table {
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
-        
+
         .table thead th {
             background: linear-gradient(135deg, var(--iica-primary) 0%, var(--iica-secondary) 100%);
             color: white;
@@ -141,60 +146,60 @@
             font-weight: 600;
             padding: 1rem;
         }
-        
+
         .table tbody tr {
             transition: all 0.3s ease;
         }
-        
+
         .table tbody tr:hover {
             background-color: var(--iica-light);
         }
-        
+
         .project-name {
             font-weight: 600;
             color: var(--iica-dark);
             font-size: 1.1rem;
         }
-        
+
         .project-description {
             color: #6b7280;
             font-size: 0.95rem;
             line-height: 1.5;
         }
-        
+
         .badge {
             border-radius: 20px;
             padding: 0.5rem 1rem;
             font-weight: 500;
         }
-        
+
         .badge.bg-success {
             background: linear-gradient(135deg, var(--iica-secondary) 0%, #10b981 100%) !important;
         }
-        
+
         .badge.bg-warning {
             background: linear-gradient(135deg, var(--iica-accent) 0%, #fbbf24 100%) !important;
         }
-        
+
         .badge.bg-danger {
             background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
         }
-        
+
         .institution-card {
             transition: all 0.3s ease;
             border-radius: 12px;
         }
-        
+
         .institution-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
-        
+
         .institution-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
         }
-        
+
         .section-title {
             background: linear-gradient(135deg, var(--iica-primary) 0%, var(--iica-secondary) 100%);
             -webkit-background-clip: text;
@@ -202,7 +207,7 @@
             background-clip: text;
             font-weight: 700;
         }
-        
+
         .document-icon {
             font-size: 3.5rem;
             margin-bottom: 1rem;
@@ -211,14 +216,14 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         .floating-help {
             position: fixed;
             bottom: 20px;
             right: 20px;
             z-index: 1000;
         }
-        
+
         .help-button {
             width: 60px;
             height: 60px;
@@ -230,30 +235,30 @@
             box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4);
             transition: all 0.3s ease;
         }
-        
+
         .help-button:hover {
             transform: scale(1.1);
             box-shadow: 0 6px 20px rgba(30, 58, 138, 0.6);
         }
-        
+
         .pagination {
             justify-content: center;
             margin-top: 20px;
         }
-        
+
         .hero-section {
             background: linear-gradient(135deg, var(--iica-primary) 0%, var(--iica-secondary) 100%);
             color: white;
             padding: 4rem 0;
             margin-bottom: 3rem;
         }
-        
+
         .hero-title {
             font-size: 3rem;
             font-weight: 700;
             margin-bottom: 1rem;
         }
-        
+
         .hero-subtitle {
             font-size: 1.2rem;
             opacity: 0.9;
@@ -261,6 +266,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Navbar Institucional -->
     <nav class="navbar navbar-expand-lg navbar-dark">
@@ -311,7 +317,7 @@
                 <div class="col-lg-8">
                     <h1 class="hero-title">Plataforma de Financiamiento Agrícola</h1>
                     <p class="hero-subtitle">
-                        Conectamos a productores agrícolas con oportunidades de financiamiento 
+                        Conectamos a productores agrícolas con oportunidades de financiamiento
                         para impulsar el desarrollo del sector agropecuario en Chile
                     </p>
                     <div class="d-flex gap-3">
@@ -384,85 +390,101 @@
                                         <i class="bi bi-globe text-primary institution-icon"></i>
                                         <h6 class="card-title">Organizaciones Internacionales</h6>
                                         <div class="d-grid gap-2">
-                                            <a href="https://www.fao.org" target="_blank" class="btn btn-outline-primary btn-sm">
+                                            <a href="https://www.fao.org" target="_blank"
+                                                class="btn btn-outline-primary btn-sm">
                                                 <i class="bi bi-external-link me-1"></i>FAO
                                             </a>
-                                            <a href="https://www.undp.org" target="_blank" class="btn btn-outline-primary btn-sm">
+                                            <a href="https://www.undp.org" target="_blank"
+                                                class="btn btn-outline-primary btn-sm">
                                                 <i class="bi bi-external-link me-1"></i>UNDP
                                             </a>
-                                            <a href="https://www.worldbank.org" target="_blank" class="btn btn-outline-primary btn-sm">
+                                            <a href="https://www.worldbank.org" target="_blank"
+                                                class="btn btn-outline-primary btn-sm">
                                                 <i class="bi bi-external-link me-1"></i>Banco Mundial
                                             </a>
-                                            <a href="https://beo-procurement.iadb.org/" target="_blank" class="btn btn-outline-primary btn-sm">
+                                            <a href="https://beo-procurement.iadb.org/" target="_blank"
+                                                class="btn btn-outline-primary btn-sm">
                                                 <i class="bi bi-external-link me-1"></i>BID
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-3 mb-3">
                                 <div class="card h-100 border-0 shadow-sm institution-card">
                                     <div class="card-body text-center">
                                         <i class="bi bi-flag text-success institution-icon"></i>
                                         <h6 class="card-title">Gobierno de Chile</h6>
                                         <div class="d-grid gap-2">
-                                            <a href="https://www.minagri.gob.cl" target="_blank" class="btn btn-outline-success btn-sm">
+                                            <a href="https://www.minagri.gob.cl" target="_blank"
+                                                class="btn btn-outline-success btn-sm">
                                                 <i class="bi bi-external-link me-1"></i>Minagri
                                             </a>
-                                            <a href="https://www.indap.gob.cl" target="_blank" class="btn btn-outline-success btn-sm">
+                                            <a href="https://www.indap.gob.cl" target="_blank"
+                                                class="btn btn-outline-success btn-sm">
                                                 <i class="bi bi-external-link me-1"></i>INDAP
                                             </a>
-                                            <a href="https://www.fia.cl" target="_blank" class="btn btn-outline-success btn-sm">
+                                            <a href="https://www.fia.cl" target="_blank"
+                                                class="btn btn-outline-success btn-sm">
                                                 <i class="bi bi-external-link me-1"></i>FIA
                                             </a>
-                                            <a href="https://www.cnr.gob.cl" target="_blank" class="btn btn-outline-success btn-sm">
+                                            <a href="https://www.cnr.gob.cl" target="_blank"
+                                                class="btn btn-outline-success btn-sm">
                                                 <i class="bi bi-external-link me-1"></i>CNR
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-3 mb-3">
                                 <div class="card h-100 border-0 shadow-sm institution-card">
                                     <div class="card-body text-center">
                                         <i class="bi bi-people text-warning institution-icon"></i>
                                         <h6 class="card-title">Sector Privado</h6>
                                         <div class="d-grid gap-2">
-                                            <a href="https://www.sag.gob.cl" target="_blank" class="btn btn-outline-warning btn-sm">
+                                            <a href="https://www.sag.gob.cl" target="_blank"
+                                                class="btn btn-outline-warning btn-sm">
                                                 <i class="bi bi-external-link me-1"></i>SAG
                                             </a>
-                                            <a href="https://www.corfo.cl" target="_blank" class="btn btn-outline-warning btn-sm">
+                                            <a href="https://www.corfo.cl" target="_blank"
+                                                class="btn btn-outline-warning btn-sm">
                                                 <i class="bi bi-external-link me-1"></i>CORFO
                                             </a>
-                                            <a href="https://www.fondos.gob.cl" target="_blank" class="btn btn-outline-warning btn-sm">
+                                            <a href="https://www.fondos.gob.cl" target="_blank"
+                                                class="btn btn-outline-warning btn-sm">
                                                 <i class="bi bi-external-link me-1"></i>Fondos.gob.cl
                                             </a>
-                                            <a href="https://www.agci.cl" target="_blank" class="btn btn-outline-warning btn-sm">
+                                            <a href="https://www.agci.cl" target="_blank"
+                                                class="btn btn-outline-warning btn-sm">
                                                 <i class="bi bi-external-link me-1"></i>AGCID
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-3 mb-3">
                                 <div class="card h-100 border-0 shadow-sm institution-card">
                                     <div class="card-body text-center">
                                         <i class="bi bi-heart text-danger institution-icon"></i>
                                         <h6 class="card-title">Organizaciones Sociales</h6>
                                         <div class="d-grid gap-2">
-                                            <a href="https://www.conadi.gob.cl" target="_blank" class="btn btn-outline-danger btn-sm">
+                                            <a href="https://www.conadi.gob.cl" target="_blank"
+                                                class="btn btn-outline-danger btn-sm">
                                                 <i class="bi bi-external-link me-1"></i>CONADI
                                             </a>
-                                            <a href="https://www.fundacionchile.cl" target="_blank" class="btn btn-outline-danger btn-sm">
+                                            <a href="https://www.fundacionchile.cl" target="_blank"
+                                                class="btn btn-outline-danger btn-sm">
                                                 <i class="bi bi-external-link me-1"></i>Fundación Chile
                                             </a>
-                                            <a href="https://www.gef.org" target="_blank" class="btn btn-outline-danger btn-sm">
+                                            <a href="https://www.gef.org" target="_blank"
+                                                class="btn btn-outline-danger btn-sm">
                                                 <i class="bi bi-external-link me-1"></i>GEF
                                             </a>
-                                            <a href="https://www.ifad.org" target="_blank" class="btn btn-outline-danger btn-sm">
+                                            <a href="https://www.ifad.org" target="_blank"
+                                                class="btn btn-outline-danger btn-sm">
                                                 <i class="bi bi-external-link me-1"></i>FIDA
                                             </a>
                                         </div>
@@ -492,53 +514,62 @@
                                         <i class="bi bi-file-earmark-person document-icon"></i>
                                         <h6 class="card-title">Documentos Personales</h6>
                                         <div class="d-grid gap-2">
-                                            <a href="#" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalCedula">
+                                            <a href="#" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalCedula">
                                                 <i class="bi bi-download me-1"></i>Cédula de Identidad
                                             </a>
-                                            <a href="#" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalRut">
+                                            <a href="#" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalRut">
                                                 <i class="bi bi-download me-1"></i>RUT
                                             </a>
-                                            <a href="#" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalCertificado">
+                                            <a href="#" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalCertificado">
                                                 <i class="bi bi-download me-1"></i>Certificado de Antecedentes
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-4 mb-3">
                                 <div class="card h-100 border-0 shadow-sm">
                                     <div class="card-body text-center">
                                         <i class="bi bi-building text-success document-icon"></i>
                                         <h6 class="card-title">Documentos Empresariales</h6>
                                         <div class="d-grid gap-2">
-                                            <a href="#" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalConstancia">
+                                            <a href="#" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalConstancia">
                                                 <i class="bi bi-download me-1"></i>Constancia de Inscripción
                                             </a>
-                                            <a href="#" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalBalance">
+                                            <a href="#" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalBalance">
                                                 <i class="bi bi-download me-1"></i>Balance Financiero
                                             </a>
-                                            <a href="#" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalEstados">
+                                            <a href="#" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalEstados">
                                                 <i class="bi bi-download me-1"></i>Estados Financieros
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-4 mb-3">
                                 <div class="card h-100 border-0 shadow-sm">
                                     <div class="card-body text-center">
                                         <i class="bi bi-file-earmark-check text-warning document-icon"></i>
                                         <h6 class="card-title">Documentos Técnicos</h6>
                                         <div class="d-grid gap-2">
-                                            <a href="#" class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalProyecto">
+                                            <a href="#" class="btn btn-outline-warning btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalProyecto">
                                                 <i class="bi bi-download me-1"></i>Propuesta de Proyecto
                                             </a>
-                                            <a href="#" class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalPresupuesto">
+                                            <a href="#" class="btn btn-outline-warning btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalPresupuesto">
                                                 <i class="bi bi-download me-1"></i>Presupuesto Detallado
                                             </a>
-                                            <a href="#" class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalCronograma">
+                                            <a href="#" class="btn btn-outline-warning btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalCronograma">
                                                 <i class="bi bi-download me-1"></i>Cronograma de Actividades
                                             </a>
                                         </div>
@@ -568,61 +599,70 @@
                                         <i class="bi bi-calculator text-info fs-1 mb-3"></i>
                                         <h6 class="card-title">Herramientas Financieras</h6>
                                         <div class="d-grid gap-2">
-                                            <a href="#" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalCalculadora">
+                                            <a href="#" class="btn btn-outline-info btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalCalculadora">
                                                 <i class="bi bi-calculator me-1"></i>Calculadora de Costos
                                             </a>
-                                            <a href="#" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalPresupuesto">
+                                            <a href="#" class="btn btn-outline-info btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalPresupuesto">
                                                 <i class="bi bi-graph-up me-1"></i>Generador de Presupuestos
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-3 mb-3">
                                 <div class="card h-100 border-0 shadow-sm">
                                     <div class="card-body text-center">
                                         <i class="bi bi-file-earmark-arrow-up text-primary fs-1 mb-3"></i>
                                         <h6 class="card-title">Plantillas de Postulación</h6>
                                         <div class="d-grid gap-2">
-                                            <a href="#" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalPlantilla">
+                                            <a href="#" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalPlantilla">
                                                 <i class="bi bi-file-earmark-arrow-down me-1"></i>Plantilla de Propuesta
                                             </a>
-                                            <a href="#" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalFormulario">
-                                                <i class="bi bi-file-earmark-arrow-down me-1"></i>Formulario de Postulación
+                                            <a href="#" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalFormulario">
+                                                <i class="bi bi-file-earmark-arrow-down me-1"></i>Formulario de
+                                                Postulación
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-3 mb-3">
                                 <div class="card h-100 border-0 shadow-sm">
                                     <div class="card-body text-center">
                                         <i class="bi bi-check2-square text-success fs-1 mb-3"></i>
                                         <h6 class="card-title">Listas de Verificación</h6>
                                         <div class="d-grid gap-2">
-                                            <a href="#" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalChecklist">
+                                            <a href="#" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalChecklist">
                                                 <i class="bi bi-list-check me-1"></i>Checklist de Documentos
                                             </a>
-                                            <a href="#" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalRequisitos">
+                                            <a href="#" class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalRequisitos">
                                                 <i class="bi bi-clipboard-check me-1"></i>Requisitos por Fuente
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-3 mb-3">
                                 <div class="card h-100 border-0 shadow-sm">
                                     <div class="card-body text-center">
                                         <i class="bi bi-question-circle text-warning fs-1 mb-3"></i>
                                         <h6 class="card-title">Guías y Tutoriales</h6>
                                         <div class="d-grid gap-2">
-                                            <a href="#" class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalGuia">
+                                            <a href="#" class="btn btn-outline-warning btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalGuia">
                                                 <i class="bi bi-book me-1"></i>Guía Paso a Paso
                                             </a>
-                                            <a href="#" class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalTutorial">
+                                            <a href="#" class="btn btn-outline-warning btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#modalTutorial">
                                                 <i class="bi bi-play-circle me-1"></i>Video Tutorial
                                             </a>
                                         </div>
@@ -645,55 +685,55 @@
             </div>
             <div class="card-body">
                 {% if proyectos %}
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Proyecto</th>
-                                    <th>Monto</th>
-                                    <th>Fecha Cierre</th>
-                                    <th>Estado</th>
-                                    <th>Fuente</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for proyecto in proyectos %}
-                                <tr>
-                                    <td>
-                                        <div class="project-name">{{ proyecto.Nombre }}</div>
-                                        <div class="project-description">{{ proyecto['Área de interés'] }}</div>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-light text-dark">{{ proyecto.Monto }}</span>
-                                    </td>
-                                    <td>{{ proyecto['Fecha cierre'] }}</td>
-                                    <td>
-                                        {% if proyecto.Estado == 'Abierto' %}
-                                            <span class="badge bg-success">{{ proyecto.Estado }}</span>
-                                        {% elif proyecto.Estado == 'Cerrado' %}
-                                            <span class="badge bg-danger">{{ proyecto.Estado }}</span>
-                                        {% else %}
-                                            <span class="badge bg-warning">{{ proyecto.Estado }}</span>
-                                        {% endif %}
-                                    </td>
-                                    <td>{{ proyecto.Fuente }}</td>
-                                    <td>
-                                        <a href="/proyecto/{{ loop.index }}" class="btn btn-primary btn-sm">
-                                            <i class="bi bi-eye me-1"></i>Ver Detalles
-                                        </a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Proyecto</th>
+                                <th>Monto</th>
+                                <th>Fecha Cierre</th>
+                                <th>Estado</th>
+                                <th>Fuente</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for proyecto in proyectos %}
+                            <tr>
+                                <td>
+                                    <div class="project-name">{{ proyecto.Nombre }}</div>
+                                    <div class="project-description">{{ proyecto['Área de interés'] }}</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark">{{ proyecto.Monto }}</span>
+                                </td>
+                                <td>{{ proyecto['Fecha cierre'] }}</td>
+                                <td>
+                                    {% if proyecto.Estado == 'Abierto' %}
+                                    <span class="badge bg-success">{{ proyecto.Estado }}</span>
+                                    {% elif proyecto.Estado == 'Cerrado' %}
+                                    <span class="badge bg-danger">{{ proyecto.Estado }}</span>
+                                    {% else %}
+                                    <span class="badge bg-warning">{{ proyecto.Estado }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ proyecto.Fuente }}</td>
+                                <td>
+                                    <a href="/proyecto/{{ loop.index }}" class="btn btn-primary btn-sm">
+                                        <i class="bi bi-eye me-1"></i>Ver Detalles
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
                 {% else %}
-                    <div class="text-center py-5">
-                        <i class="bi bi-search" style="font-size: 3rem; color: #6c757d;"></i>
-                        <h5 class="mt-3">No se encontraron proyectos</h5>
-                        <p class="text-muted">Intenta ajustar los filtros de búsqueda</p>
-                    </div>
+                <div class="text-center py-5">
+                    <i class="bi bi-search" style="font-size: 3rem; color: #6c757d;"></i>
+                    <h5 class="mt-3">No se encontraron proyectos</h5>
+                    <p class="text-muted">Intenta ajustar los filtros de búsqueda</p>
+                </div>
                 {% endif %}
             </div>
         </div>
@@ -721,23 +761,24 @@
                         <div class="col-md-6">
                             <h6><i class="bi bi-1-circle me-2"></i>Paso 1: Explorar Proyectos</h6>
                             <p>Navega por los 178 proyectos disponibles usando los filtros y la búsqueda.</p>
-                            
+
                             <h6><i class="bi bi-2-circle me-2"></i>Paso 2: Documentos Necesarios</h6>
                             <p>Revisa qué documentos necesitas para postular a cada proyecto.</p>
-                            
+
                             <h6><i class="bi bi-3-circle me-2"></i>Paso 3: Instrumentos de Apoyo</h6>
                             <p>Utiliza las herramientas y plantillas para preparar tu postulación.</p>
                         </div>
                         <div class="col-md-6">
                             <h6><i class="bi bi-4-circle me-2"></i>Paso 4: Postular</h6>
                             <p>Completa todos los documentos y envía tu postulación.</p>
-                            
+
                             <h6><i class="bi bi-5-circle me-2"></i>Paso 5: Seguimiento</h6>
                             <p>Monitorea el estado de tu postulación en la sección "Adjudicados".</p>
-                            
+
                             <div class="alert alert-info">
                                 <i class="bi bi-lightbulb me-2"></i>
-                                <strong>Tip:</strong> Usa el checklist de documentos para asegurarte de tener todo listo.
+                                <strong>Tip:</strong> Usa el checklist de documentos para asegurarte de tener todo
+                                listo.
                             </div>
                         </div>
                     </div>
@@ -750,6 +791,45 @@
         </div>
     </div>
 
+    <!-- Footer Institucional -->
+    <footer class="iica-footer mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5><i class="bi bi-building me-2"></i>IICA Chile</h5>
+                    <p>Instituto Interamericano de Cooperación para la Agricultura. Trabajando por el desarrollo
+                        agrícola y el bienestar rural de las Américas desde 1942.</p>
+                    <img src="https://iica.int/sites/default/files/iica_logo_0.png" alt="Logo IICA"
+                        style="height: 50px; margin-top: 1rem; filter: brightness(0) invert(1);">
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5><i class="bi bi-link-45deg me-2"></i>Enlaces Rápidos</h5>
+                    <ul class="iica-footer-links">
+                        <li><a href="/"><i class="bi bi-house"></i> Inicio</a></li>
+                        <li><a href="/todos-los-proyectos"><i class="bi bi-folder"></i> Oportunidades</a></li>
+                        <li><a href="/quienes-somos"><i class="bi bi-people"></i> Quiénes Somos</a></li>
+                        <li><a href="https://iica.int/es/countries/chile-es/" target="_blank"><i
+                                    class="bi bi-globe"></i> IICA Oficial</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5><i class="bi bi-geo-alt me-2"></i>Contacto</h5>
+                    <p>
+                        <i class="bi bi-building me-2"></i>Fidel Oteíza 1956, Piso 10<br>
+                        <i class="bi bi-geo me-2"></i>Providencia, Santiago, Chile<br>
+                        <i class="bi bi-telephone me-2"></i><a href="tel:+56224310600">+56 2 2431 0600</a><br>
+                        <i class="bi bi-envelope me-2"></i><a href="mailto:iica.cl@iica.int">iica.cl@iica.int</a>
+                    </p>
+                </div>
+            </div>
+            <div class="iica-footer-bottom">
+                <p>&copy; 2026 Instituto Interamericano de Cooperación para la Agricultura (IICA) - Sede Chile. Todos
+                    los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

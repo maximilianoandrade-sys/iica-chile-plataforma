@@ -1,0 +1,657 @@
+/*
+ * IICA Chile - Institutional Design System
+ * Based on official IICA branding guidelines
+ * Version: 2026.1
+ */
+
+/* =====================================================
+   CSS Custom Properties (Variables)
+   ===================================================== */
+:root {
+    /* Primary Colors */
+    --iica-blue-primary: #1e3a8a;
+    --iica-blue-secondary: #3b82f6;
+    --iica-blue-light: #60a5fa;
+    
+    /* Agriculture Greens */
+    --iica-green-primary: #059669;
+    --iica-green-secondary: #10b981;
+    --iica-green-light: #34d399;
+    
+    /* Neutrals */
+    --iica-white: #ffffff;
+    --iica-bg-light: #f8fafc;
+    --iica-bg-gray: #e2e8f0;
+    --iica-border: #cbd5e1;
+    
+    /* Text Colors */
+    --iica-text-primary: #1f2937;
+    --iica-text-secondary: #6b7280;
+    --iica-text-light: #9ca3af;
+    
+    /* Accent Colors */
+    --iica-gold: #d97706;
+    --iica-gold-light: #fbbf24;
+    
+    /* Status Colors */
+    --iica-success: #10b981;
+    --iica-warning: #f59e0b;
+    --iica-error: #ef4444;
+    --iica-info: #3b82f6;
+    
+    /* Gradients */
+    --iica-gradient-primary: linear-gradient(135deg, #1e3a8a 0%, #059669 100%);
+    --iica-gradient-hero: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #059669 100%);
+    --iica-gradient-card: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    
+    /* Typography */
+    --font-primary: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-heading: 'Inter', 'Segoe UI', sans-serif;
+    
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    --spacing-3xl: 4rem;
+    
+    /* Border Radius */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-2xl: 1.5rem;
+    --radius-full: 9999px;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    
+    /* Transitions */
+    --transition-fast: 150ms ease;
+    --transition-normal: 250ms ease;
+    --transition-slow: 350ms ease;
+}
+
+/* =====================================================
+   Base Styles
+   ===================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-primary);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--iica-text-primary);
+    background-color: var(--iica-bg-light);
+    min-height: 100vh;
+}
+
+/* =====================================================
+   Typography
+   ===================================================== */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--iica-text-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+h5 { font-size: 1rem; }
+h6 { font-size: 0.875rem; }
+
+p {
+    margin-bottom: var(--spacing-md);
+    color: var(--iica-text-secondary);
+}
+
+a {
+    color: var(--iica-blue-primary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+a:hover {
+    color: var(--iica-green-primary);
+}
+
+/* =====================================================
+   Navbar - Institutional Header
+   ===================================================== */
+.iica-navbar {
+    background: var(--iica-gradient-primary);
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: var(--spacing-sm) 0;
+}
+
+.iica-navbar .navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: var(--iica-white);
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.iica-navbar .navbar-brand img {
+    height: 40px;
+    width: auto;
+}
+
+.iica-navbar .nav-link {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+}
+
+.iica-navbar .nav-link:hover,
+.iica-navbar .nav-link.active {
+    color: var(--iica-white);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* =====================================================
+   Hero Section
+   ===================================================== */
+.iica-hero {
+    background: var(--iica-gradient-hero);
+    color: var(--iica-white);
+    padding: var(--spacing-3xl) 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.iica-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.5;
+}
+
+.iica-hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+.iica-hero h1 {
+    color: var(--iica-white);
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: var(--spacing-lg);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.iica-hero p.lead {
+    font-size: 1.25rem;
+    opacity: 0.95;
+    max-width: 600px;
+    margin-bottom: var(--spacing-xl);
+}
+
+.iica-hero-icon {
+    font-size: 8rem;
+    opacity: 0.2;
+}
+
+/* =====================================================
+   Cards
+   ===================================================== */
+.iica-card {
+    background: var(--iica-white);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    border: none;
+    overflow: hidden;
+    transition: all var(--transition-normal);
+}
+
+.iica-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+}
+
+.iica-card-header {
+    background: var(--iica-gradient-primary);
+    color: var(--iica-white);
+    padding: var(--spacing-lg);
+    border: none;
+}
+
+.iica-card-header h5 {
+    color: var(--iica-white);
+    margin: 0;
+    font-weight: 600;
+}
+
+.iica-card-body {
+    padding: var(--spacing-lg);
+}
+
+/* Stats Cards */
+.iica-stats-card {
+    background: var(--iica-white);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-normal);
+    border: 1px solid var(--iica-border);
+}
+
+.iica-stats-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--iica-blue-primary);
+}
+
+.iica-stats-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--iica-blue-primary);
+    line-height: 1;
+    margin-bottom: var(--spacing-sm);
+}
+
+.iica-stats-label {
+    color: var(--iica-text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Project Cards */
+.iica-project-card {
+    background: var(--iica-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    transition: all var(--transition-normal);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.iica-project-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+}
+
+.iica-project-card .card-header {
+    background: var(--iica-gradient-primary);
+    padding: var(--spacing-md);
+}
+
+.iica-project-card .card-body {
+    padding: var(--spacing-lg);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.iica-project-card .card-footer {
+    background: var(--iica-bg-light);
+    border-top: 1px solid var(--iica-border);
+    padding: var(--spacing-md);
+}
+
+/* =====================================================
+   Buttons
+   ===================================================== */
+.iica-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+}
+
+.iica-btn-primary {
+    background: var(--iica-gradient-primary);
+    color: var(--iica-white);
+}
+
+.iica-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    color: var(--iica-white);
+}
+
+.iica-btn-secondary {
+    background: var(--iica-white);
+    color: var(--iica-blue-primary);
+    border: 2px solid var(--iica-blue-primary);
+}
+
+.iica-btn-secondary:hover {
+    background: var(--iica-blue-primary);
+    color: var(--iica-white);
+}
+
+.iica-btn-success {
+    background: var(--iica-green-primary);
+    color: var(--iica-white);
+}
+
+.iica-btn-success:hover {
+    background: var(--iica-green-secondary);
+    transform: translateY(-2px);
+}
+
+/* =====================================================
+   Badges
+   ===================================================== */
+.iica-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.iica-badge-primary {
+    background: var(--iica-blue-primary);
+    color: var(--iica-white);
+}
+
+.iica-badge-success {
+    background: var(--iica-success);
+    color: var(--iica-white);
+}
+
+.iica-badge-warning {
+    background: var(--iica-warning);
+    color: var(--iica-text-primary);
+}
+
+.iica-badge-info {
+    background: var(--iica-info);
+    color: var(--iica-white);
+}
+
+/* =====================================================
+   Section Styles
+   ===================================================== */
+.iica-section {
+    padding: var(--spacing-3xl) 0;
+}
+
+.iica-section-title {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+}
+
+.iica-section-title h2 {
+    color: var(--iica-blue-primary);
+    font-size: 2rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.iica-section-title p {
+    color: var(--iica-text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* =====================================================
+   Footer
+   ===================================================== */
+.iica-footer {
+    background: var(--iica-blue-primary);
+    color: var(--iica-white);
+    padding: var(--spacing-3xl) 0 var(--spacing-lg);
+}
+
+.iica-footer h5 {
+    color: var(--iica-white);
+    font-weight: 600;
+    margin-bottom: var(--spacing-lg);
+    font-size: 1.1rem;
+}
+
+.iica-footer p,
+.iica-footer a {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+}
+
+.iica-footer a:hover {
+    color: var(--iica-white);
+}
+
+.iica-footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.iica-footer-links li {
+    margin-bottom: var(--spacing-sm);
+}
+
+.iica-footer-links a {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.iica-footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin-top: var(--spacing-2xl);
+    padding-top: var(--spacing-lg);
+    text-align: center;
+}
+
+.iica-footer-bottom p {
+    margin: 0;
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+/* =====================================================
+   Filter Section
+   ===================================================== */
+.iica-filter-section {
+    background: var(--iica-white);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.iica-filter-section .form-label {
+    font-weight: 600;
+    color: var(--iica-text-primary);
+    font-size: 0.9rem;
+}
+
+.iica-filter-section .form-control,
+.iica-filter-section .form-select {
+    border: 1px solid var(--iica-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    transition: all var(--transition-fast);
+}
+
+.iica-filter-section .form-control:focus,
+.iica-filter-section .form-select:focus {
+    border-color: var(--iica-blue-primary);
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+/* =====================================================
+   Tables
+   ===================================================== */
+.iica-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.iica-table thead th {
+    background: var(--iica-gradient-primary);
+    color: var(--iica-white);
+    padding: var(--spacing-md);
+    font-weight: 600;
+    text-align: left;
+}
+
+.iica-table tbody td {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--iica-border);
+    vertical-align: middle;
+}
+
+.iica-table tbody tr:hover {
+    background: var(--iica-bg-light);
+}
+
+/* =====================================================
+   Responsive Design
+   ===================================================== */
+@media (max-width: 992px) {
+    .iica-hero h1 {
+        font-size: 2.25rem;
+    }
+    
+    .iica-hero p.lead {
+        font-size: 1.1rem;
+    }
+    
+    .iica-stats-number {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .iica-hero {
+        padding: var(--spacing-2xl) 0;
+    }
+    
+    .iica-hero h1 {
+        font-size: 1.75rem;
+    }
+    
+    .iica-section {
+        padding: var(--spacing-2xl) 0;
+    }
+    
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.25rem; }
+    
+    .iica-card-body,
+    .iica-filter-section {
+        padding: var(--spacing-md);
+    }
+}
+
+@media (max-width: 576px) {
+    .iica-hero h1 {
+        font-size: 1.5rem;
+    }
+    
+    .iica-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .iica-stats-card {
+        padding: var(--spacing-lg);
+    }
+    
+    .iica-stats-number {
+        font-size: 1.75rem;
+    }
+}
+
+/* =====================================================
+   Animations
+   ===================================================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.iica-animate-in {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.iica-pulse:hover {
+    animation: pulse 0.5s ease;
+}
+
+/* =====================================================
+   Utilities
+   ===================================================== */
+.iica-text-primary { color: var(--iica-blue-primary) !important; }
+.iica-text-success { color: var(--iica-green-primary) !important; }
+.iica-bg-primary { background: var(--iica-blue-primary) !important; }
+.iica-bg-gradient { background: var(--iica-gradient-primary) !important; }
+
+.iica-mb-0 { margin-bottom: 0 !important; }
+.iica-mb-1 { margin-bottom: var(--spacing-sm) !important; }
+.iica-mb-2 { margin-bottom: var(--spacing-md) !important; }
+.iica-mb-3 { margin-bottom: var(--spacing-lg) !important; }
+.iica-mb-4 { margin-bottom: var(--spacing-xl) !important; }
+
+/* Print Styles */
+@media print {
+    .iica-navbar,
+    .iica-footer {
+        display: none;
+    }
+    
+    .iica-hero {
+        background: var(--iica-blue-primary) !important;
+        -webkit-print-color-adjust: exact;
+    }
+}

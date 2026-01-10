@@ -1321,14 +1321,19 @@ def todos_los_proyectos():
 
 @app.route('/quienes-somos')
 def quienes_somos():
-    """Página sobre IICA Chile"""
+    """Pagina sobre IICA Chile - Rediseñada 2026"""
     try:
-        return render_template('quienes_somos.html')
-    except Exception as e:
-        print(f"❌ Error en quienes-somos: {e}")
-        return render_template('error.html',
-                             error="Página no disponible",
-                             error_code=500), 500
+        # Intentar usar template institucional nuevo
+        return render_template('iica_quienes_somos.html')
+    except:
+        # Fallback al template anterior
+        try:
+            return render_template('quienes_somos.html')
+        except Exception as e:
+            print(f"Error en quienes-somos: {e}")
+            return render_template('error.html',
+                                 error="Pagina no disponible",
+                                 error_code=500), 500
 
 # ===== RUTAS DE DASHBOARD AVANZADO =====
 
