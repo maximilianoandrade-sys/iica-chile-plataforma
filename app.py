@@ -1276,7 +1276,7 @@ def todos_los_proyectos():
         
         # CATEGORIZAR PROYECTOS (requerido por el template)
         fuentes_nacionales = ['FIA', 'INDAP', 'CORFO', 'ANID', 'SAG', 'ODEPA', 'MINAGRI']
-        fuentes_iica = ['IICA', 'BID', 'FONTAGRO']
+        fuentes_iica = ['IICA', 'BID', 'FONTAGRO', 'IFAD']
         
         proyectos_nacionales = [p for p in proyectos_filtrados if p.get('Fuente', '') in fuentes_nacionales]
         proyectos_iica = [p for p in proyectos_filtrados if p.get('Fuente', '') in fuentes_iica]
