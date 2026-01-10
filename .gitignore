@@ -39,7 +39,9 @@ Thumbs.db
 *.pem
 
 # Next.js
-/node_modules
+node_modules/
+iica-next/node_modules/
+/.next
 /.next
 /out
 .next
