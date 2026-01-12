@@ -1190,10 +1190,12 @@ def quienes_somos():
             }
             return render_template('quienes_somos.html', info=info_data)
         except Exception as e:
-            print(f"Error en quienes-somos: {e}")
-            return render_template('error.html',
-                                 error="Pagina no disponible",
-                                 error_code=500), 500
+            return f"Error cargando página: {str(e)}"
+
+@app.route('/manual')
+def manual_usuario():
+    """Manual de Usuario Técnico - IICA"""
+    return render_template('manual_usuario.html')
 
 # ===== RUTAS DE DASHBOARD AVANZADO =====
 
