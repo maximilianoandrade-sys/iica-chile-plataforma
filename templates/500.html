@@ -3,14 +3,38 @@
 {% block title %}Error del Servidor - IICA Chile{% endblock %}
 
 {% block content %}
-<div style="text-align: center; padding: 4rem 2rem;">
+<div style="text-align: center; padding: 4rem 2rem; max-width: 800px; margin: 0 auto;">
     <div style="font-size: 5rem; margin-bottom: 1rem;">🚜</div>
     <h1 style="font-size: 2.5rem; color: #e53e3e; margin-bottom: 1rem;">500 - Error Inesperado</h1>
     <p style="font-size: 1.2rem; color: #666; margin-bottom: 2rem;">
         Tuvimos un problema técnico. Nuestro equipo de ingenieros agrónomos digitales ya está trabajando en ello.
     </p>
-    <a href="{{ url_for('home') }}" class="btn btn-primary">
-        Volver al Inicio
-    </a>
+
+    <div style="background: #f8f9fa; padding: 2rem; border-radius: 8px; margin-bottom: 2rem;">
+        <h3 style="color: #003057; margin-bottom: 1rem;">¿Qué puedes hacer?</h3>
+        <ul style="text-align: left; max-width: 500px; margin: 0 auto; color: #666;">
+            <li style="margin-bottom: 0.5rem;">Intenta recargar la página en unos momentos</li>
+            <li style="margin-bottom: 0.5rem;">Regresa a la página principal y navega nuevamente</li>
+            <li style="margin-bottom: 0.5rem;">Si el problema persiste, contacta a soporte: <a
+                    href="mailto:iica.cl@iica.int">iica.cl@iica.int</a></li>
+        </ul>
+    </div>
+
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="{{ url_for('home') }}" class="btn btn-primary"
+            style="background: #003057; border: none; padding: 0.75rem 2rem;">
+            <i class="bi bi-house-door"></i> Volver al Inicio
+        </a>
+        <a href="javascript:location.reload()" class="btn btn-outline-secondary" style="padding: 0.75rem 2rem;">
+            <i class="bi bi-arrow-clockwise"></i> Reintentar
+        </a>
+    </div>
+
+    {% if error_details and config.DEBUG %}
+    <div style="margin-top: 2rem; padding: 1rem; background: #fff3cd; border-radius: 4px; text-align: left;">
+        <strong>Detalles del error (solo visible en modo debug):</strong>
+        <pre style="margin-top: 0.5rem; font-size: 0.85rem;">{{ error_details }}</pre>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

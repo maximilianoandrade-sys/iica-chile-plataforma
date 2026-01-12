@@ -1,15 +1,29 @@
 {
-    "name": "IICA Chile Plataforma 7.0",
+    "name": "IICA Chile - Plataforma de Financiamiento Agrícola",
     "short_name": "IICA Chile",
+    "description": "Plataforma de cooperación técnica y financiamiento para el desarrollo agrícola sostenible en Chile",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
-    "theme_color": "#006633",
+    "theme_color": "#003057",
+    "orientation": "portrait-primary",
     "icons": [
+        {
+            "src": "/static/logo_iica_oficial.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        },
         {
             "src": "https://iica.int/themes/custom/iica_theme/favicon.ico",
             "sizes": "64x64 32x32 24x24 16x16",
             "type": "image/x-icon"
         }
-    ]
+    ],
+    "categories": [
+        "agriculture",
+        "finance",
+        "government"
+    ],
+    "lang": "es-CL"
 }

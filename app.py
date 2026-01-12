@@ -1806,24 +1806,46 @@ def not_found(error):
 
 @app.errorhandler(500)
 def internal_error(error):
-    """Manejo de errores 500 - Error interno"""
-    print(f"❌ 500 - Error interno: {error}")
+    """Manejo de errores 500 - Error interno del servidor"""
+    print(f"❌ 500 - Error interno del servidor: {error}")
     import traceback
     traceback.print_exc()
     
+    # Log detallado del error para debugging
+    import logging
+    logging.error(f"500 Error: {error}", exc_info=True)
+    
     try:
-        import os
-        error_template = os.path.join('templates', 'error.html')
-        if os.path.exists(error_template):
-            return render_template('error.html', 
-                                 error="Error interno del servidor. Por favor, intenta nuevamente en unos momentos.",
-                                 error_code=500), 500
-        else:
-            # Si no hay template, redirigir a home
-            return redirect(url_for('home'))
-    except:
-        # Si todo falla, redirigir a home
-        return redirect(url_for('home'))
+        # Intentar renderizar template de error personalizado
+        return render_template('500.html', 
+                             error="Ocurrió un error inesperado en el servidor. Nuestro equipo ha sido notificado.",
+                             error_details=str(error) if app.debug else None), 500
+    except Exception as e:
+        print(f"❌ Error renderizando template 500.html: {e}")
+        # Fallback a respuesta HTML básica
+        return """
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Error 500 - IICA Chile</title>
+            <style>
+                body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f5f5f5; }
+                .error-box { background: white; padding: 40px; border-radius: 8px; max-width: 600px; margin: 0 auto; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+                h1 { color: #e53e3e; }
+                a { color: #003057; text-decoration: none; font-weight: bold; }
+            </style>
+        </head>
+        <body>
+            <div class="error-box">
+                <h1>🚜 Error 500</h1>
+                <p>Ocurrió un error inesperado en el servidor.</p>
+                <p>Por favor, intenta nuevamente en unos momentos.</p>
+                <p><a href="/">← Volver al Inicio</a></p>
+            </div>
+        </body>
+        </html>
+        """, 500
+
 
 @app.errorhandler(Exception)
 def handle_exception(e):
