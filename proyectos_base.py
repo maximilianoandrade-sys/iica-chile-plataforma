@@ -137,6 +137,24 @@ proyectos_raw = [
         "link": "https://www.fontagro.org"
     },
     {
+        "titulo": "IKI Small Grants 2026 (Climate Initiative)",
+        "descripcion": "Fondos para organizaciones locales en acción climática y biodiversidad. Proyectos de 12-24 meses.",
+        "estado": "Por Abrir",
+        "monto": "Hasta €200,000",
+        "fecha": "2026-01-15",
+        "fuente": "IKI Germany",
+        "link": "https://www.international-climate-initiative.com"
+    },
+    {
+        "titulo": "Fondos APC Japón - Chile 2026",
+        "descripcion": "Asistencia para Proyectos Comunitarios de Seguridad Humana. Incluye riego y agricultura comunitaria.",
+        "estado": "Abierto",
+        "monto": "Hasta USD 67,000",
+        "fecha": "2026-01-30",
+        "fuente": "Embajada Japón",
+        "link": "https://www.cl.emb-japan.go.jp/itpr_es/cooperacion_apc.html"
+    },
+    {
         "titulo": "CFC Call for Proposals 2026",
         "descripcion": "Financiamiento para proyectos de cadenas de valor de commodities inclusivas y restauración de ecosistemas.",
         "estado": "Próximamente",
