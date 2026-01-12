@@ -1166,6 +1166,11 @@ def todos_los_proyectos():
         # Redirigir a home en lugar de mostrar error
         return redirect(url_for('home'))
 
+@app.route('/asistente')
+def asistente_busqueda():
+    """Asistente de Búsqueda de Fondos - Herramienta para técnicos"""
+    return render_template('asistente_busqueda.html')
+
 @app.route('/quienes-somos')
 def quienes_somos():
     """Pagina sobre IICA Chile - Rediseñada 2026"""
