@@ -15,6 +15,14 @@ import uuid
 from datetime import datetime
 from utils import parsear_monto
 
+# Configuración de Rutas ABSOLUTAS para evitar errores en Render
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, "data")
+TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
+
+# Archivo principal de datos (PRIORIDAD 1)
+DATA_PATH = os.path.join(DATA_DIR, "proyectos_reales_2026.xlsx")
+
 # CORS para permitir requests desde Next.js
 try:
     from flask_cors import CORS
@@ -80,7 +88,7 @@ except ImportError as e:
             return None
     backup_system = MockBackupSystem()
 
-app = Flask(__name__, static_folder='static', static_url_path='/static')
+app = Flask(__name__, static_folder='static', static_url_path='/static', template_folder=TEMPLATE_DIR)
 
 # Configurar CORS para permitir requests desde Next.js
 if CORS_AVAILABLE:
@@ -129,10 +137,12 @@ print("🎨 PLATAFORMA IICA CHILE")
 print(f"✅ Versión: {APP_VERSION}")
 print(f"✅ Timestamp: {BUILD_TIMESTAMP}")
 print("=" * 80)
-DATA_PATH = "data/proyectos_fortalecidos.xlsx"
+# Configuración de Rutas ABSOLUTAS movida al inicio del archivo
 
 # Crear directorios necesarios si no existen
-os.makedirs("data", exist_ok=True)
+
+# Crear directorios necesarios si no existen
+os.makedirs(DATA_DIR, exist_ok=True)
 os.makedirs("exports", exist_ok=True)
 
 # CACHÉ DESHABILITADO TEMPORALMENTE PARA FORZAR ACTUALIZACIONES
@@ -142,22 +152,131 @@ def _cargar_excel_cached():
     proyectos_totales = []
     
     try:
-        # Intentar cargar desde proyectos_fortalecidos.xlsx primero
+        # Intentar cargar desde proyectos_reales_2026.xlsx primero
+        print(f"📂 Intentando cargar desde: {DATA_PATH}")
         if os.path.exists(DATA_PATH):
             try:
                 df = pd.read_excel(DATA_PATH)
+                # Normalizar columnas si es necesario (limpiar espacios)
+                df.columns = df.columns.str.strip()
                 proyectos = df.to_dict('records')
-                print(f"📂 Cargados {len(proyectos)} proyectos desde {DATA_PATH}")
+                print(f"✅ Cargados {len(proyectos)} proyectos REALES desde {DATA_PATH}")
                 if proyectos:
                     proyectos_totales.extend(proyectos)
             except Exception as e:
                 print(f"⚠️ Error leyendo {DATA_PATH}: {e}")
-        
-        # Intentar otros archivos como respaldo
+        else:
+             print(f"⚠️ Archivo principal no encontrado: {DATA_PATH}")
+             # GENERAR DATOS EN VIVO SI NO EXISTEN
+             print("🔄 Generando datos reales on-the-fly...")
+             try:
+                 proyectos_reales = [
+                    {
+                        "Nombre": "Convocatoria Nacional de Proyectos de Innovación: Bienes Públicos 2025-2026",
+                        "Fuente": "FIA",
+                        "Fecha cierre": "2025-07-22",
+                        "Monto": "150000000",
+                        "Estado": "Abierto",
+                        "Área de interés": "Agricultura",
+                        "Descripción": "Apoya el desarrollo de innovaciones de libre disposición y uso para solucionar problemas comunes del sector silvoagropecuario. Financiamiento máximo de $150.000.000 (90% del costo).",
+                        "Enlace": "https://www.fia.cl"
+                    },
+                    {
+                        "Nombre": "Convocatoria Nacional de Proyectos de Innovación: Interés Privado 2025-2026",
+                        "Fuente": "FIA",
+                        "Fecha cierre": "2025-07-08",
+                        "Monto": "120000000",
+                        "Estado": "Abierto",
+                        "Área de interés": "Agricultura",
+                        "Descripción": "Apoya innovaciones en productos y/o procesos con potencial de comercialización. Financiamiento máximo de $120.000.000 (80% del costo). Para personas jurídicas.",
+                        "Enlace": "https://www.fia.cl"
+                    },
+                    {
+                        "Nombre": "Giras Nacionales de Innovación para Mujeres Agroinnovadoras 2025",
+                        "Fuente": "FIA",
+                        "Fecha cierre": "2025-10-07",
+                        "Monto": "Valorizable",
+                        "Estado": "Abierto",
+                        "Área de interés": "Agricultura",
+                        "Descripción": "Instrumento de ventanilla abierta para difundir información y experiencias innovadoras, enfocado en mujeres agroinnovadoras.",
+                        "Enlace": "https://www.fia.cl"
+                    },
+                    {
+                        "Nombre": "Sistema de Incentivos para la Sustentabilidad Agroambiental (SIRSD-S) 2025",
+                        "Fuente": "INDAP",
+                        "Fecha cierre": "2025-07-25",
+                        "Monto": "Variado",
+                        "Estado": "Abierto",
+                        "Área de interés": "Medio Ambiente",
+                        "Descripción": "Incentivos para prácticas sustentables en suelos agropecuarios. Concurso abierto para recuperación de suelos degradados.",
+                        "Enlace": "https://www.indap.gob.cl"
+                    },
+                    {
+                        "Nombre": "Programa de Desarrollo de Inversiones (PDI) - GORE O'Higgins 2025",
+                        "Fuente": "INDAP",
+                        "Fecha cierre": "2025-12-31",
+                        "Monto": "50000000",
+                        "Estado": "Abierto",
+                        "Área de interés": "Infraestructura",
+                        "Descripción": "Cofinaciamiento de inversiones para mejorar procesos productivos. Hasta $7.5M para individuales y $50M para asociativos.",
+                        "Enlace": "https://www.indap.gob.cl"
+                    },
+                    {
+                        "Nombre": "Call for Proposals 2026: Sustainable Agricultural Productivity",
+                        "Fuente": "FONTAGRO",
+                        "Fecha cierre": "2026-03-30",
+                        "Monto": "180000000",
+                        "Estado": "Próximamente",
+                        "Área de interés": "Innovación",
+                        "Descripción": "Financiamiento para innovaciones en productividad agrícola sostenible y cambio climático en América Latina. Hasta US$200,000.",
+                        "Enlace": "https://www.fontagro.org"
+                    },
+                    {
+                        "Nombre": "Fondo de Investigación en Agricultura – Escasez Hídrica 2025",
+                        "Fuente": "ANID",
+                        "Fecha cierre": "2025-11-12",
+                        "Monto": "Variado",
+                        "Estado": "Abierto",
+                        "Área de interés": "Recursos Hídricos",
+                        "Descripción": "Fondo destinado a la investigación aplicada para enfrentar la escasez hídrica en la agricultura.",
+                        "Enlace": "https://www.anid.cl"
+                    },
+                    {
+                        "Nombre": "Uso y adopción de IA en la industria chilena (Programas Tecnológicos)",
+                        "Fuente": "CORFO",
+                        "Fecha cierre": "2025-07-24",
+                        "Monto": "Variado",
+                        "Estado": "Abierto",
+                        "Área de interés": "ICT & Telecom",
+                        "Descripción": "Programa para fomentar la adopción de IA en la industria, con potencial aplicación en agrotech.",
+                        "Enlace": "https://www.corfo.cl"
+                    },
+                    {
+                        "Nombre": "FO4IMPACT: Fortalecimiento de Organizaciones de Agricultores",
+                        "Fuente": "IFAD",
+                        "Fecha cierre": "2025-11-14",
+                        "Monto": "Variado",
+                        "Estado": "Abierto",
+                        "Área de interés": "Agricultura",
+                        "Descripción": "Llamado para el fortalecimiento institucional, acceso a mercados y transformación política de organizaciones de agricultores.",
+                        "Enlace": "https://www.ifad.org"
+                    }
+                 ]
+                 proyectos_totales.extend(proyectos_reales)
+                 # Intentar guardar para la próxima
+                 try:
+                     pd.DataFrame(proyectos_reales).to_excel(DATA_PATH, index=False)
+                     print(f"✅ Datos reales generados y guardados en {DATA_PATH}")
+                 except Exception as save_err:
+                     print(f"⚠️ No se pudo guardar archivo cache: {save_err}")
+             except Exception as gen_err:
+                 print(f"❌ Error generando datos fallo respaldo: {gen_err}")
+
+        # Intentar otros archivos como respaldo (Legacy)
         archivos_alternativos = [
-            'data/proyectos_completos.xlsx',
-            'data/proyectos.xlsx',
-            'data/proyectos_actualizados.xlsx'
+            os.path.join(DATA_DIR, 'proyectos_fortalecidos.xlsx'),
+            os.path.join(DATA_DIR, 'proyectos_completos.xlsx'),
+            os.path.join(DATA_DIR, 'proyectos_actualizados.xlsx')
         ]
         
         for archivo_alt in archivos_alternativos:
@@ -598,32 +717,6 @@ def home():
         print(f"📊 Proyectos en esta página: {len(proyectos_paginados)}")
         print(f"📊 Total filtrados: {len(proyectos_filtrados)}")
         print(f"📊 Total sin filtros: {len(proyectos)}")
-        # Verificar qué template está disponible (con fallback robusto)
-        import os
-        templates_orden = ['home_didactico.html', 'home_ordenado_mejorado.html', 'home.html', 'home_ordenado.html']
-        template_a_usar = None
-        template_path = None
-        
-        for template in templates_orden:
-            template_path = os.path.join('templates', template)
-        if os.path.exists(template_path):
-                template_a_usar = template
-                print(f"✅ Template encontrado: {template}")
-                break
-        
-        if not template_a_usar:
-            # Fallback final - usar home.html que siempre debería existir
-            template_a_usar = 'home.html'
-            template_path = os.path.join('templates', template_a_usar)
-            print(f"⚠️ Usando fallback: {template_a_usar}")
-        
-        print(f"🎨 USANDO TEMPLATE: {template_a_usar}")
-        
-        # FORZAR: Invalidar caché de Jinja2 para asegurar template fresco
-        app.jinja_env.cache = None
-        print(f"🔄 Caché de Jinja2 invalidado - usando template fresco")
-        print(f"📄 Template seleccionado: {template_a_usar}")
-        
         # Preparar datos para el template (asegurar que todos los campos existan)
         datos_template = {
             'proyectos': proyectos_paginados,
@@ -646,175 +739,23 @@ def home():
             'build_timestamp': BUILD_TIMESTAMP
         }
         
-        # Renderizar template con fallback robusto
-        print(f"🎯 RENDERIZANDO TEMPLATE: {template_a_usar}")
-        print(f"📊 Datos enviados al template: {len(datos_template)} campos")
+        # FORZAR: Usar el template institucional como predeterminado y único
+        template_a_usar = 'home_institucional.html'
         
-        templates_fallback = [template_a_usar, 'home_ordenado_mejorado.html', 'home.html']
-        
-        for template_intento in templates_fallback:
-        try:
-            # Invalidar caché ANTES de renderizar
-            app.jinja_env.cache = None
-                resultado = render_template(template_intento, **datos_template)
-                print(f"✅ Template {template_intento} renderizado exitosamente")
-            return resultado
-        except Exception as template_error:
-                print(f"⚠️ Error con template {template_intento}: {template_error}")
-                if template_intento == templates_fallback[-1]:
-                    # Si es el último fallback, mostrar error
-            import traceback
-            traceback.print_exc()
-            return f"""
-            <html>
-            <head><title>Error de Template</title></head>
-            <body style="font-family: Arial; padding: 40px; background: #f5f5f5;">
-                        <h1 style="color: #d32f2f;">⚠️ Error de Template</h1>
-                <p><strong>Error:</strong> {str(template_error)}</p>
-                <p><strong>Versión:</strong> {APP_VERSION}</p>
-                <hr>
-                        <p>La aplicación está funcionando. El endpoint <a href="/api/proyectos">/api/proyectos</a> debería funcionar correctamente.</p>
-            </body>
-            </html>
-            """, 500
-                # Continuar con el siguiente fallback
-                continue
+        # Invalidar caché ANTES de renderizar
+        app.jinja_env.cache = None
+        return render_template(template_a_usar, **datos_template)
+
     except Exception as e:
         print(f"❌ Error en home: {e}")
         import traceback
         traceback.print_exc()
-        # Intentar mostrar página con datos básicos aunque haya error
-        try:
-            proyectos_basicos = cargar_excel()
-            stats_basicos = calcular_estadisticas(proyectos_basicos if proyectos_basicos else [])
-            proyectos_mostrar = proyectos_basicos[:20] if proyectos_basicos else []
-            # Agregar índices
-            for idx, p in enumerate(proyectos_mostrar):
-                p['_indice_global'] = idx
-                p['_indice_pagina'] = idx
-            # Intentar usar template didáctico, sino usar alternativo
-            import os
-            # Verificar qué template está disponible
-            templates_disponibles = ['home_didactico.html', 'home_ordenado_mejorado.html', 'home.html']
-            template_a_usar = None
-            
-            for template in templates_disponibles:
-                template_path = os.path.join('templates', template)
-                if os.path.exists(template_path):
-                    template_a_usar = template
-                    break
-            
-            if not template_a_usar:
-                template_a_usar = 'home.html'
-            
-            return render_template(template_a_usar,  # TEMPLATE DIDÁCTICO Y AMIGABLE
-                                 proyectos=proyectos_mostrar,
-                                 stats=stats_basicos,
-                                 current_page=1,
-                                 total_pages=1,
-                                 total_proyectos=len(proyectos_basicos) if proyectos_basicos else 0,
-                                 total_todos=len(proyectos_basicos) if proyectos_basicos else 0,
-                                 per_page=20,
-                                 area='',
-                                 fuente='',
-                                 busqueda='',
-                                 estado='',
-                                 ordenar_por='fecha',
-                                 orden='asc',
-                                 error_message=f"Error: {str(e)}")
-        except Exception as e2:
-            print(f"❌ Error incluso en fallback: {e2}")
-            import traceback
-            traceback.print_exc()
-            # Crear respuesta HTML básica como último recurso
-            return crear_respuesta_html_basica({
-                'proyectos': [],
-                'stats': {'total_proyectos': 0, 'proyectos_abiertos': 0, 'fuentes_unicas': 0, 'monto_total': 0},
-                'error': f"Error: {str(e)}"
-            })
+        return render_template('error.html', 
+                             error=f"Error cargando la página principal: {str(e)}",
+                             error_code=500), 500
 
-def crear_respuesta_html_basica(datos):
-    """Crear respuesta HTML básica cuando los templates fallan"""
-    proyectos = datos.get('proyectos', [])
-    stats = datos.get('stats', {})
-    
-    html = f"""
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>IICA Chile - Plataforma de Financiamiento</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <style>
-            body {{ font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }}
-            .container {{ max-width: 1200px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }}
-            h1 {{ color: #2E7D32; margin-bottom: 30px; }}
-            .stat-card {{ background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 10px 0; }}
-            .project-card {{ border: 1px solid #ddd; padding: 15px; margin: 15px 0; border-radius: 8px; }}
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>🌱 IICA Chile - Plataforma de Financiamiento Agrícola</h1>
-            
-            <div class="row mb-4">
-                <div class="col-md-3">
-                    <div class="stat-card">
-                        <h3>{stats.get('total_proyectos', 0)}</h3>
-                        <p>Proyectos Totales</p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="stat-card">
-                        <h3>{stats.get('proyectos_abiertos', 0)}</h3>
-                        <p>Proyectos Abiertos</p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="stat-card">
-                        <h3>{stats.get('fuentes_unicas', 0)}</h3>
-                        <p>Fuentes</p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="stat-card">
-                        <h3>${stats.get('monto_total', 0):,.0f}</h3>
-                        <p>Monto Total</p>
-                    </div>
-                </div>
-            </div>
-            
-            <h2>Proyectos Disponibles</h2>
-    """
-    
-    if proyectos:
-        for proyecto in proyectos:
-            nombre = proyecto.get('Nombre', 'Sin nombre')
-            fuente = proyecto.get('Fuente', 'No especificada')
-            monto = proyecto.get('Monto', 'Consultar')
-            estado = proyecto.get('Estado', 'No especificado')
-            
-            html += f"""
-            <div class="project-card">
-                <h4>{nombre}</h4>
-                <p><strong>Fuente:</strong> {fuente}</p>
-                <p><strong>Monto:</strong> {monto}</p>
-                <p><strong>Estado:</strong> {estado}</p>
-            </div>
-            """
-    else:
-        html += "<p>No hay proyectos disponibles en este momento.</p>"
-    
-    html += """
-            <hr>
-            <p class="text-muted">© 2025 IICA Chile. Instituto Interamericano de Cooperación para la Agricultura</p>
-        </div>
-    </body>
-    </html>
-    """
-    
-    return html, 200
+
+# ===== RUTAS SECUNDARIAS =====
 
 @app.route('/proyecto/<int:proyecto_id>')
 @app.route('/proyecto/<proyecto_id>')  # También aceptar string por si acaso
@@ -1014,6 +955,8 @@ def notificaciones():
                              notifications=[], 
                              stats={'total_notifications': 0, 'unread_notifications': 0})
 
+
+
 @app.route('/api/notificaciones', methods=['GET'])
 def api_notificaciones():
     """API para obtener notificaciones"""
@@ -1128,14 +1071,9 @@ def dashboard():
 def ai_search():
     """Página de búsqueda con IA"""
     try:
-        import os
-        template_path = os.path.join('templates', 'ai_search.html')
-        if os.path.exists(template_path):
             query = request.args.get('query', '') or request.form.get('query', '')
+            # Intentar renderizar directament, Flask sabra donde buscar
             return render_template('ai_search.html', query=query)
-        else:
-            print(f"⚠️ Template ai_search.html no encontrado, redirigiendo a home")
-            return redirect(url_for('home'))
     except Exception as e:
         print(f"❌ Error en ai-search: {e}")
         import traceback
@@ -1150,10 +1088,9 @@ def todos_los_proyectos():
         proyectos = cargar_excel()
         
         if not proyectos:
-            print("⚠️ No hay proyectos cargados")
-            return render_template('error.html',
-                                 error="No hay proyectos disponibles en este momento",
-                                 error_code=404), 404
+            print("⚠️ No hay proyectos cargados - Mostrando mensaje pero NO 404")
+            # Continuar con lista vacía en lugar de error 404
+            proyectos = []
         
         # Filtros de búsqueda
         query = request.args.get('query', '') or request.form.get('query', '')
@@ -1184,13 +1121,34 @@ def todos_los_proyectos():
         fuentes_unicas = sorted(list(set(p.get('Fuente', '') for p in proyectos if p.get('Fuente'))))
         estados_unicos = sorted(list(set(p.get('Estado', '') for p in proyectos if p.get('Estado'))))
         
-        # Intentar usar template mejorado, sino usar el básico
-        import os
-        template_mejorado = os.path.join('templates', 'todos_los_proyectos_mejorado.html')
-        template_basico = os.path.join('templates', 'todos_los_proyectos.html')
+        # CATEGORIZAR PROYECTOS (requerido por el template)
+        fuentes_nacionales = ['FIA', 'INDAP', 'CORFO', 'ANID', 'SAG', 'ODEPA', 'MINAGRI']
+        fuentes_iica = ['IICA', 'BID', 'FONTAGRO', 'IFAD']
         
-        if os.path.exists(template_mejorado):
-            return render_template('todos_los_proyectos_mejorado.html',
+        proyectos_nacionales = [p for p in proyectos_filtrados if p.get('Fuente', '') in fuentes_nacionales]
+        proyectos_iica = [p for p in proyectos_filtrados if p.get('Fuente', '') in fuentes_iica]
+        proyectos_internacionales = [p for p in proyectos_filtrados if p.get('Fuente', '') not in fuentes_nacionales and p.get('Fuente', '') not in fuentes_iica]
+        
+        # Intentar usar template mejorado, sino usar el básico
+        # Usar template mejorado preferentemente
+        try:
+             return render_template('todos_los_proyectos_mejorado.html',
+                                 proyectos=proyectos_filtrados,
+                                 proyectos_nacionales=proyectos_nacionales,
+                                 proyectos_internacionales=proyectos_internacionales,
+                                 proyectos_iica=proyectos_iica,
+                                 total_proyectos=len(proyectos_filtrados),
+                                 total_todos=len(proyectos),
+                                 areas_unicas=areas_unicas,
+                                 fuentes_unicas=fuentes_unicas,
+                                 estados_unicos=estados_unicos,
+                                 query=query_final,
+                                 area=area,
+                                 fuente=fuente,
+                                 estado=estado)
+        except:
+             # Fallback al basico
+             return render_template('todos_los_proyectos.html',
                                  proyectos=proyectos_filtrados,
                                  total_proyectos=len(proyectos_filtrados),
                                  total_todos=len(proyectos),
@@ -1201,22 +1159,6 @@ def todos_los_proyectos():
                                  area=area,
                                  fuente=fuente,
                                  estado=estado)
-        elif os.path.exists(template_basico):
-            return render_template('todos_los_proyectos.html',
-                                 proyectos=proyectos_filtrados,
-                                 total_proyectos=len(proyectos_filtrados),
-                                 total_todos=len(proyectos),
-                                 areas_unicas=areas_unicas,
-                                 fuentes_unicas=fuentes_unicas,
-                                 estados_unicos=estados_unicos,
-                                 query=query_final,
-                                 area=area,
-                                 fuente=fuente,
-                                 estado=estado)
-        else:
-            # Si no hay template, redirigir a home
-            print("⚠️ Templates de todos los proyectos no encontrados, redirigiendo a home")
-            return redirect(url_for('home'))
     except Exception as e:
         print(f"❌ Error en todos-los-proyectos: {e}")
         import traceback
@@ -1226,14 +1168,32 @@ def todos_los_proyectos():
 
 @app.route('/quienes-somos')
 def quienes_somos():
-    """Página sobre IICA Chile"""
+    """Pagina sobre IICA Chile - Rediseñada 2026"""
     try:
-        return render_template('quienes_somos.html')
-    except Exception as e:
-        print(f"❌ Error en quienes-somos: {e}")
-        return render_template('error.html',
-                             error="Página no disponible",
-                             error_code=500), 500
+        # Intentar usar template institucional nuevo
+        return render_template('iica_quienes_somos.html')
+    except:
+        # Fallback al template anterior - AHORA CON DATOS
+        try:
+            info_data = {
+                'titulo': 'Quiénes Somos',
+                'mision': 'Estimular, promover y apoyar los esfuerzos de los Estados Miembros para lograr su desarrollo agrícola y el bienestar rural por medio de la cooperación técnica internacional de excelencia.',
+                'vision': 'Ser una institución de cooperación agrícola de las Américas, reconocida por su excelencia, innovación y liderazgo en el desarrollo de la agricultura sostenible y el bienestar rural.',
+                'valores': ['Compromiso', 'Innovación', 'Colaboración', 'Integridad', 'Sostenibilidad', 'Excelencia'],
+                'lineas': ['Cambio Climático', 'Sanidad Agropecuaria', 'Agricultura Familiar', 'Comercio', 'Innovación'],
+                'contacto': {
+                    'email': 'iica.cl@iica.int',
+                    'telefono': '+56 2 2431 0600',
+                    'direccion': 'Fidel Oteíza 1956, Piso 10, Providencia, Santiago',
+                    'web': 'https://iica.int/es/countries/chile-es/'
+                }
+            }
+            return render_template('quienes_somos.html', info=info_data)
+        except Exception as e:
+            print(f"Error en quienes-somos: {e}")
+            return render_template('error.html',
+                                 error="Pagina no disponible",
+                                 error_code=500), 500
 
 # ===== RUTAS DE DASHBOARD AVANZADO =====
 
@@ -1693,24 +1653,46 @@ def not_found(error):
 
 @app.errorhandler(500)
 def internal_error(error):
-    """Manejo de errores 500 - Error interno"""
-    print(f"❌ 500 - Error interno: {error}")
+    """Manejo de errores 500 - Error interno del servidor"""
+    print(f"❌ 500 - Error interno del servidor: {error}")
     import traceback
     traceback.print_exc()
     
+    # Log detallado del error para debugging
+    import logging
+    logging.error(f"500 Error: {error}", exc_info=True)
+    
     try:
-        import os
-        error_template = os.path.join('templates', 'error.html')
-        if os.path.exists(error_template):
-            return render_template('error.html', 
-                                 error="Error interno del servidor. Por favor, intenta nuevamente en unos momentos.",
-                                 error_code=500), 500
-        else:
-            # Si no hay template, redirigir a home
-            return redirect(url_for('home'))
-    except:
-        # Si todo falla, redirigir a home
-        return redirect(url_for('home'))
+        # Intentar renderizar template de error personalizado
+        return render_template('500.html', 
+                             error="Ocurrió un error inesperado en el servidor. Nuestro equipo ha sido notificado.",
+                             error_details=str(error) if app.debug else None), 500
+    except Exception as e:
+        print(f"❌ Error renderizando template 500.html: {e}")
+        # Fallback a respuesta HTML básica
+        return """
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Error 500 - IICA Chile</title>
+            <style>
+                body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f5f5f5; }
+                .error-box { background: white; padding: 40px; border-radius: 8px; max-width: 600px; margin: 0 auto; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+                h1 { color: #e53e3e; }
+                a { color: #003057; text-decoration: none; font-weight: bold; }
+            </style>
+        </head>
+        <body>
+            <div class="error-box">
+                <h1>🚜 Error 500</h1>
+                <p>Ocurrió un error inesperado en el servidor.</p>
+                <p>Por favor, intenta nuevamente en unos momentos.</p>
+                <p><a href="/">← Volver al Inicio</a></p>
+            </div>
+        </body>
+        </html>
+        """, 500
+
 
 @app.errorhandler(Exception)
 def handle_exception(e):

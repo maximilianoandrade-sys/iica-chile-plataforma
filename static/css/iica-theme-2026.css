@@ -269,3 +269,78 @@ body {
     color: var(--iica-gray-600);
     margin-bottom: 0;
 }
+
+/* --- Advanced Modules --- */
+.iica-module-card {
+    background: var(--iica-white);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    margin-bottom: 30px;
+    height: 100%;
+}
+
+.iica-module-header {
+    background: linear-gradient(135deg, var(--iica-blue-deep) 0%, var(--iica-blue-bright) 100%);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.iica-module-title {
+    font-weight: 700;
+    font-family: var(--font-heading);
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+#map {
+    height: 300px;
+    width: 100%;
+    z-index: 10;
+}
+
+.carbon-tracker-container {
+    padding: 20px;
+    text-align: center;
+}
+
+.carbon-value {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--iica-green);
+    margin: 10px 0;
+}
+
+.carbon-slider {
+    width: 100%;
+    accent-color: var(--iica-green);
+}
+
+.ar-mock-container {
+    background: #000;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.ar-scanline {
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: var(--iica-blue-bright);
+    top: 0;
+    animation: scan 2s linear infinite;
+    box-shadow: 0 0 10px var(--iica-blue-bright);
+}
+
+@keyframes scan {
+    0% { top: 0; }
+    100% { top: 100%; }
+}

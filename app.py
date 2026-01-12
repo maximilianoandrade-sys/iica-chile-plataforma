@@ -717,13 +717,6 @@ def home():
         print(f"📊 Proyectos en esta página: {len(proyectos_paginados)}")
         print(f"📊 Total filtrados: {len(proyectos_filtrados)}")
         print(f"📊 Total sin filtros: {len(proyectos)}")
-        # Try templates in order of preference
-        templates_fallback = ['home_institucional.html', 'home_didactico.html', 'home_ordenado_mejorado.html', 'home.html']
-        
-        print(f"🎯 Intentando renderizar templates en orden: {templates_fallback}")
-        
-        template_a_usar = templates_fallback[0] # Default for logging
-        
         # Preparar datos para el template (asegurar que todos los campos existan)
         datos_template = {
             'proyectos': proyectos_paginados,
@@ -746,169 +739,23 @@ def home():
             'build_timestamp': BUILD_TIMESTAMP
         }
         
-        for template_intento in templates_fallback:
-            try:
-                # Invalidar caché ANTES de renderizar
-                app.jinja_env.cache = None
-                resultado = render_template(template_intento, **datos_template)
-                print(f"✅ Template {template_intento} renderizado exitosamente")
-                return resultado
-            except Exception as template_error:
-                print(f"⚠️ Error con template {template_intento}: {template_error}")
-                if template_intento == templates_fallback[-1]:
-                    # Si es el último fallback, mostrar error
-                    import traceback
-                    traceback.print_exc()
-                    return f"""
-                    <html>
-                    <head><title>Error de Template</title></head>
-                    <body style="font-family: Arial; padding: 40px; background: #f5f5f5;">
-                        <h1 style="color: #d32f2f;">⚠️ Error de Template</h1>
-                        <p><strong>Error:</strong> {str(template_error)}</p>
-                        <p><strong>Versión:</strong> {APP_VERSION}</p>
-                        <hr>
-                        <p>La aplicación está funcionando. El endpoint <a href="/api/proyectos">/api/proyectos</a> debería funcionar correctamente.</p>
-                    </body>
-                    </html>
-                    """, 500
-                # Continuar con el siguiente fallback
-                continue
+        # FORZAR: Usar el template institucional como predeterminado y único
+        template_a_usar = 'home_institucional.html'
+        
+        # Invalidar caché ANTES de renderizar
+        app.jinja_env.cache = None
+        return render_template(template_a_usar, **datos_template)
+
     except Exception as e:
         print(f"❌ Error en home: {e}")
         import traceback
         traceback.print_exc()
-        # Intentar mostrar página con datos básicos aunque haya error
-        try:
-            proyectos_basicos = cargar_excel()
-            stats_basicos = calcular_estadisticas(proyectos_basicos if proyectos_basicos else [])
-            proyectos_mostrar = proyectos_basicos[:20] if proyectos_basicos else []
-            # Agregar índices
-            for idx, p in enumerate(proyectos_mostrar):
-                p['_indice_global'] = idx
-                p['_indice_pagina'] = idx
-            # Intentar usar template didáctico, sino usar alternativo
-            import os
-            # Verificar qué template está disponible
-            templates_disponibles = ['home_didactico.html', 'home_ordenado_mejorado.html', 'home.html']
-            template_a_usar = None
-            
-            for template in templates_disponibles:
-                template_path = os.path.join('templates', template)
-                if os.path.exists(template_path):
-                    template_a_usar = template
-                    break
-            
-            if not template_a_usar:
-                template_a_usar = 'home.html'
-            
-            return render_template(template_a_usar,  # TEMPLATE DIDÁCTICO Y AMIGABLE
-                                 proyectos=proyectos_mostrar,
-                                 stats=stats_basicos,
-                                 current_page=1,
-                                 total_pages=1,
-                                 total_proyectos=len(proyectos_basicos) if proyectos_basicos else 0,
-                                 total_todos=len(proyectos_basicos) if proyectos_basicos else 0,
-                                 per_page=20,
-                                 area='',
-                                 fuente='',
-                                 busqueda='',
-                                 estado='',
-                                 ordenar_por='fecha',
-                                 orden='asc',
-                                 error_message=f"Error: {str(e)}")
-        except Exception as e2:
-            print(f"❌ Error incluso en fallback: {e2}")
-            import traceback
-            traceback.print_exc()
-            # Crear respuesta HTML básica como último recurso
-            return crear_respuesta_html_basica({
-                'proyectos': [],
-                'stats': {'total_proyectos': 0, 'proyectos_abiertos': 0, 'fuentes_unicas': 0, 'monto_total': 0},
-                'error': f"Error: {str(e)}"
-            })
+        return render_template('error.html', 
+                             error=f"Error cargando la página principal: {str(e)}",
+                             error_code=500), 500
 
-def crear_respuesta_html_basica(datos):
-    """Crear respuesta HTML básica cuando los templates fallan"""
-    proyectos = datos.get('proyectos', [])
-    stats = datos.get('stats', {})
-    
-    html = f"""
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>IICA Chile - Plataforma de Financiamiento</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <style>
-            body {{ font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }}
-            .container {{ max-width: 1200px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }}
-            h1 {{ color: #2E7D32; margin-bottom: 30px; }}
-            .stat-card {{ background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 10px 0; }}
-            .project-card {{ border: 1px solid #ddd; padding: 15px; margin: 15px 0; border-radius: 8px; }}
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>🌱 IICA Chile - Plataforma de Financiamiento Agrícola</h1>
-            
-            <div class="row mb-4">
-                <div class="col-md-3">
-                    <div class="stat-card">
-                        <h3>{stats.get('total_proyectos', 0)}</h3>
-                        <p>Proyectos Totales</p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="stat-card">
-                        <h3>{stats.get('proyectos_abiertos', 0)}</h3>
-                        <p>Proyectos Abiertos</p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="stat-card">
-                        <h3>{stats.get('fuentes_unicas', 0)}</h3>
-                        <p>Fuentes</p>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="stat-card">
-                        <h3>${stats.get('monto_total', 0):,.0f}</h3>
-                        <p>Monto Total</p>
-                    </div>
-                </div>
-            </div>
-            
-            <h2>Proyectos Disponibles</h2>
-    """
-    
-    if proyectos:
-        for proyecto in proyectos:
-            nombre = proyecto.get('Nombre', 'Sin nombre')
-            fuente = proyecto.get('Fuente', 'No especificada')
-            monto = proyecto.get('Monto', 'Consultar')
-            estado = proyecto.get('Estado', 'No especificado')
-            
-            html += f"""
-            <div class="project-card">
-                <h4>{nombre}</h4>
-                <p><strong>Fuente:</strong> {fuente}</p>
-                <p><strong>Monto:</strong> {monto}</p>
-                <p><strong>Estado:</strong> {estado}</p>
-            </div>
-            """
-    else:
-        html += "<p>No hay proyectos disponibles en este momento.</p>"
-    
-    html += """
-            <hr>
-            <p class="text-muted">© 2025 IICA Chile. Instituto Interamericano de Cooperación para la Agricultura</p>
-        </div>
-    </body>
-    </html>
-    """
-    
-    return html, 200
+
+# ===== RUTAS SECUNDARIAS =====
 
 @app.route('/proyecto/<int:proyecto_id>')
 @app.route('/proyecto/<proyecto_id>')  # También aceptar string por si acaso

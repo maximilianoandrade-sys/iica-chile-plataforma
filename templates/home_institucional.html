@@ -10,7 +10,20 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Montserrat:wght@400;600;700&display=swap"
         rel="stylesheet">
-    <link href="/static/css/iica-theme-2026.css" rel="stylesheet">
+    <link href="/static/css/iica-theme-2026.css?v={{ app_version }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#003057">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/static/sw.js')
+                    .then(reg => console.log('Service Worker registrado'))
+                    .catch(err => console.log('Error registro SW', err));
+            });
+        }
+    </script>
 </head>
 
 <body>
@@ -92,13 +105,13 @@
             </div>
             <div class="col-md-3 mb-3">
                 <div class="card text-center h-100 border-0 shadow-sm p-4">
-                    <h2 class="display-4 fw-bold text-success mb-0">{{ proyectos_abiertos }}</h2>
+                    <h2 class="display-4 fw-bold text-success mb-0">{{ stats.proyectos_abiertos }}</h2>
                     <p class="text-muted">Convocatorias Abiertas</p>
                 </div>
             </div>
             <div class="col-md-3 mb-3">
                 <div class="card text-center h-100 border-0 shadow-sm p-4">
-                    <h2 class="display-4 fw-bold text-warning mb-0">{{ fuentes_activas }}</h2>
+                    <h2 class="display-4 fw-bold text-warning mb-0">{{ stats.fuentes_unicas }}</h2>
                     <p class="text-muted">Fuentes de Financiamiento</p>
                 </div>
             </div>
@@ -108,6 +121,57 @@
                     <h4 class="mb-0 pt-2"><i class="bi bi-cash-coin me-2"></i>Monto Total</h4>
                     <p class="lead fw-bold mb-0">CLP/USD</p>
                     <p class="small opacity-75">Disponible para el sector</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Modules Row -->
+        <div class="row mb-5">
+            <div class="col-lg-4 mb-4">
+                <div class="iica-module-card">
+                    <div class="iica-module-header">
+                        <h3 class="iica-module-title"><i class="bi bi-geo-alt me-2"></i>Mapa GIS</h3>
+                        <span class="badge bg-light text-dark">Beta</span>
+                    </div>
+                    <div id="map"></div>
+                    <div class="p-3">
+                        <small class="text-muted">Distribución geográfica de las convocatorias abiertas en
+                            Chile.</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 mb-4">
+                <div class="iica-module-card">
+                    <div class="iica-module-header">
+                        <h3 class="iica-module-title"><i class="bi bi-cloud-sun me-2"></i>Carbon Tracker</h3>
+                        <span class="badge bg-success">Eco</span>
+                    </div>
+                    <div class="carbon-tracker-container">
+                        <p class="mb-0 small text-muted">Ahorro Estimado de CO2 (Ton)</p>
+                        <div class="carbon-value" id="carbonValue">54.0</div>
+                        <input type="range" class="carbon-slider" min="0" max="100" value="45" id="carbonSlider">
+                        <p class="mt-2 mb-0 small">Simula el impacto ambiental de tus proyectos.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 mb-4">
+                <div class="iica-module-card">
+                    <div class="iica-module-header">
+                        <h3 class="iica-module-title"><i class="bi bi-camera me-2"></i>Scanner AR</h3>
+                        <span class="badge bg-warning text-dark">Mock</span>
+                    </div>
+                    <div class="ar-mock-container">
+                        <div class="ar-scanline"></div>
+                        <div style="text-align: center; z-index: 2;">
+                            <i class="bi bi-qr-code-scan fs-1"></i>
+                            <p class="mb-0">[Simulador AR]</p>
+                        </div>
+                    </div>
+                    <div class="p-3 text-center">
+                        <button class="btn btn-sm btn-outline-primary w-100">Activar Scanner</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -341,6 +405,39 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        // PWA Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/static/sw.js')
+                    .then(reg => console.log('SW OK'))
+                    .catch(err => console.log('SW Error', err));
+            });
+        }
+
+        // GIS Map Init
+        document.addEventListener('DOMContentLoaded', function () {
+            var map = L.map('map').setView([-35.6751, -71.5430], 5);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(map);
+
+            // Mock markers
+            L.marker([-33.4489, -70.6693]).addTo(map).bindPopup('Oficina IICA Santiago');
+            L.marker([-36.8201, -73.0443]).addTo(map).bindPopup('Proyecto Biobío');
+        });
+
+        // Carbon Tracker
+        const slider = document.getElementById('carbonSlider');
+        const display = document.getElementById('carbonValue');
+        if (slider && display) {
+            slider.addEventListener('input', (e) => {
+                display.textContent = (e.target.value * 1.2).toFixed(1);
+            });
+        }
+    </script>
 </body>
 
 </html>

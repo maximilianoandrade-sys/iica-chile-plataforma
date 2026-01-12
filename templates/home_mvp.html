@@ -141,17 +141,10 @@
 
 {% block content %}
 
-<!-- 1. HERO CON VOICE SEARCH -->
+<!-- 1. HERO -->
 <div class="hero-iica">
     <h1 class="hero-title">Cooperación Técnica y Financiamiento</h1>
     <p>Conectando el campo chileno con oportunidades de desarrollo sostenible.</p>
-
-    <div
-        style="margin-top: 2rem; background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 8px; display: inline-block;">
-        <p style="margin-bottom: 10px; font-weight: 500;">🎙️ Búsqueda por Voz (Español Chileno)</p>
-        <button id="btn-voice" class="mic-btn" onclick="toggleVoiceSearch()">🎤</button>
-        <p id="voice-status" style="margin-top: 10px; font-size: 0.9rem;">Toca para hablar...</p>
-    </div>
 </div>
 
 <!-- 2. MÓDULOS AVANZADOS (GRID) -->
@@ -261,37 +254,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
-    // 1. VOICE SEARCH LOGIC
-    function toggleVoiceSearch() {
-        const btn = document.getElementById('btn-voice');
-        const status = document.getElementById('voice-status');
-
-        if (!('webkitSpeechRecognition' in window)) {
-            alert('Tu navegador no soporta búsqueda por voz.');
-            return;
-        }
-
-        const recognition = new webkitSpeechRecognition();
-        recognition.lang = 'es-CL';
-        recognition.start();
-
-        btn.classList.add('listening');
-        status.textContent = "Escuchando...";
-
-        recognition.onresult = function (event) {
-            const transcript = event.results[0][0].transcript;
-            status.textContent = `Buscando: "${transcript}"...`;
-            btn.classList.remove('listening');
-
-            // Redirigir a búsqueda real
-            window.location.href = `/?q=${encodeURIComponent(transcript)}`;
-        };
-
-        recognition.onerror = function (event) {
-            btn.classList.remove('listening');
-            status.textContent = "Error al escuchar. Intenta de nuevo.";
-        };
-    }
+    // 1. ELIMINADO: VOICE SEARCH LOGIC
 
     // 2. LEAFLET MAP LOGIC
     document.addEventListener('DOMContentLoaded', function () {
