@@ -3,22 +3,78 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql" // Render usa PostgreSQL
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model Tender {
-  id          Int      @id @default(autoincrement())
-  title       String
-  agency      String
-  category    String
-  postedDate DateTime
-  status      String
-  location    String
-  budget      String?
-  deadline    DateTime?
-  description String?
-  link        String   @unique
-  source      String
+model Usuario {
+  id            Int           @id @default(autoincrement())
+  email         String        @unique
+  nombre        String?
+  region        String?
+  intereses     String[]      // Array de intereses para personalización
+  fechaRegistro DateTime      @default(now())
+  alertas       Alerta[]
+  favoritos     Favorito[]
+  postulaciones Postulacion[]
+}
+
+model Fondo {
+  id              Int       @id @default(autoincrement())
+  nombre          String
+  descripcion     String    @db.Text
+  organismo       String    // Organismo Financiador (BID, BM, UE)
+  
+  // Facetas de Búsqueda
+  montoTotal      Float?    // Para búsquedas por rango numérico
+  montoTexto      String?   // "Hasta $50,000 USD"
+  moneda          String    @default("USD")
+  paisDestino     String[]  // Array de códigos ISO o nombres (CL, PE, CR)
+  ods             Int[]     // IDs de Objetivos de Desarrollo Sostenible (1-17)
+  
+  estado          String    // Abierto, Cerrado, Próximamente
+  fechaApertura   DateTime?
+  fechaCierre     DateTime
+  fechaScraping   DateTime  @default(now())
+  
+  documentoTexto  String?   @db.Text // Para "Smart Search" (contenido indexado)
+  enlaceFuente    String
+  
+  favoritos       Favorito[]
+  postulaciones   Postulacion[]
+
+  @@index([organismo])
+  @@index([estado])
+}
+
+model Alerta {
+  id         Int      @id @default(autoincrement())
+  usuarioId  Int
+  usuario    Usuario  @relation(fields: [usuarioId], references: [id])
+  criterios  Json     // { "organismo": "BID", "monto_min": 10000 }
+  frecuencia String   // DIARIA, SEMANAL, INMEDIATA
+  activo     Boolean  @default(true)
+}
+
+model Favorito {
+  id        Int      @id @default(autoincrement())
+  usuarioId Int
+  fondoId   Int
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
+  fondo     Fondo    @relation(fields: [fondoId], references: [id])
+  notas     String?
+  createdAt DateTime @default(now())
+
+  @@unique([usuarioId, fondoId])
+}
+
+model Postulacion {
+  id        Int      @id @default(autoincrement())
+  usuarioId Int
+  fondoId   Int
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
+  fondo     Fondo    @relation(fields: [fondoId], references: [id])
+  estado    String   // BORRADOR, ENVIADA, APROBADA, RECHAZADA
+  fecha     DateTime @default(now())
 }
 
