@@ -197,17 +197,25 @@ def _cargar_excel_cached():
                     print(f"⚠️ Error cargando {archivo_alt}: {e}")
                     continue
         
-        # Si aún no hay proyectos, intentar desde proyectos_raw
-        if len(proyectos_totales) == 0:
-            print("🔄 No se encontraron archivos Excel, intentando cargar desde proyectos_raw...")
-            try:
-                from proyectos_base import proyectos_raw, convertir_proyectos_raw_a_formato
-                proyectos_desde_raw = convertir_proyectos_raw_a_formato()
-                if proyectos_desde_raw:
-                    print(f"📊 Cargados {len(proyectos_desde_raw)} proyectos desde proyectos_raw")
-                    proyectos_totales.extend(proyectos_desde_raw)
-            except Exception as e:
-                print(f"⚠️ Error cargando desde proyectos_raw: {e}")
+        # 1. SIEMPRE Intentar cargar desde proyectos_base (Fuente de Verdad Actualizada)
+        try:
+            from proyectos_base import proyectos_raw, convertir_proyectos_raw_a_formato
+            proyectos_desde_raw = convertir_proyectos_raw_a_formato()
+            if proyectos_desde_raw:
+                print(f"📊 Cargados {len(proyectos_desde_raw)} proyectos desde proyectos_base (CORE)")
+                proyectos_totales.extend(proyectos_desde_raw)
+        except Exception as e:
+            print(f"⚠️ Error cargando desde proyectos_raw: {e}")
+
+        # 2. Intentar cargar desde scrapers (Complementario)
+        try:
+             # Intentar múltiples scrapers
+             pass # Scrapers deshabilitados por ahora para priorizar base limpia
+        except:
+             pass
+
+        # 3. Intentar cargar desde Excel (Histórico/Respaldo)
+        # Si proyectos_base ya cargó datos, esto sumará más si existen.
         
         # Si aún no hay proyectos, intentar desde scrapers
         if len(proyectos_totales) == 0:
