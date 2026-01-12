@@ -178,4 +178,32 @@
     </div>
     {% endif %}
 </div>
+
+<script>
+    function cargarAnalytics(region) {
+        fetch(`/api/avanzado/analytics/${region}`)
+            .then(r => r.json())
+            .then(data => {
+                const panel = document.getElementById('analytics-panel');
+                panel.style.display = 'block';
+                panel.innerHTML = `
+                <h4 style="margin-bottom:10px; color:#667eea">📈 Tendencias en ${data.region}</h4>
+                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px">
+                    <div style="text-align:center">
+                        <div style="font-size:1.2rem; font-weight:bold">${data.tendencia}</div>
+                        <div style="font-size:0.8rem; color:#666">Crecimiento</div>
+                    </div>
+                    <div style="text-align:center">
+                        <div style="font-size:1.2rem; font-weight:bold">${data.demanda_proyectada}</div>
+                        <div style="font-size:0.8rem; color:#666">Proyectos Proyectados</div>
+                    </div>
+                    <div style="text-align:center">
+                        <div style="font-size:1.2rem; font-weight:bold">${data.fondos_disponibles}</div>
+                        <div style="font-size:0.8rem; color:#666">Fondos Activos</div>
+                    </div>
+                </div>
+            `;
+            });
+    }
+</script>
 {% endblock %}
