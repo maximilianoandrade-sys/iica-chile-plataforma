@@ -133,7 +133,7 @@ else:
 
 # Logging de inicio
 print("=" * 80)
-print("🎨 PLATAFORMA IICA CHILE")
+print("🎨 PLATAFORMA IICA CHILE - DEPLOYMENT CHECK: JAN 12 2026 - FORCE UPDATE")
 print(f"✅ Versión: {APP_VERSION}")
 print(f"✅ Timestamp: {BUILD_TIMESTAMP}")
 print("=" * 80)

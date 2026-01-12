@@ -1,515 +1,443 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plataforma IICA Chile - Proyectos y Financiamiento</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --iica-primary: #2E7D32;
-            --iica-secondary: #1976D2;
-            --iica-accent: #FF6F00;
-            --iica-success: #4CAF50;
-            --iica-light: #F8F9FA;
-            --iica-dark: #212121;
-            --iica-text: #424242;
+    <title>Plataforma IICA Chile - Financiamiento Agrícola</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Montserrat:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link href="/static/css/iica-theme-2026.css?v={{ app_version }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#003057">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/static/sw.js')
+                    .then(reg => console.log('Service Worker registrado'))
+                    .catch(err => console.log('Error registro SW', err));
+            });
         }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f5f7fa;
-            color: var(--iica-text);
-        }
-        
-        /* Navbar Simple */
-        .navbar {
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 1rem 0;
-        }
-        
-        .navbar-brand {
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: var(--iica-primary) !important;
-        }
-        
-        .navbar-brand i {
-            color: var(--iica-primary);
-        }
-        
-        /* Hero Simple - Removido ya que el header ahora incluye esta funcionalidad */
-        .hero-section {
-            display: none;
-        }
-        
-        /* Stats Cards */
-        .stats-card {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            transition: transform 0.2s;
-        }
-        
-        .stats-card:hover {
-            transform: translateY(-2px);
-        }
-        
-        .stats-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--iica-primary);
-            margin-bottom: 0.5rem;
-        }
-        
-        .stats-label {
-            font-size: 0.9rem;
-            color: var(--iica-text);
-            opacity: 0.7;
-        }
-        
-        /* Búsqueda Simple */
-        .search-box {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            margin-bottom: 2rem;
-        }
-        
-        .search-input-group {
-            display: flex;
-            gap: 0.5rem;
-        }
-        
-        .search-input-group input {
-            flex: 1;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            padding: 0.75rem 1rem;
-            font-size: 1rem;
-        }
-        
-        .search-input-group input:focus {
-            outline: none;
-            border-color: var(--iica-primary);
-        }
-        
-        /* Project Cards - Simple */
-        .project-card-simple {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            transition: all 0.2s;
-            border-left: 4px solid var(--iica-primary);
-        }
-        
-        .project-card-simple:hover {
-            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-            transform: translateX(4px);
-        }
-        
-        .project-title-simple {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--iica-dark);
-            margin-bottom: 0.75rem;
-        }
-        
-        .project-meta-simple {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
-            color: var(--iica-text);
-            opacity: 0.8;
-        }
-        
-        .project-meta-simple i {
-            color: var(--iica-primary);
-            margin-right: 0.25rem;
-        }
-        
-        .project-actions {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-        
-        .btn-postular {
-            background: var(--iica-success);
-            color: white;
-            border: none;
-            padding: 0.5rem 1.5rem;
-            border-radius: 6px;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        
-        .btn-postular:hover {
-            background: #45a049;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
-        }
-        
-        .btn-ver {
-            background: var(--iica-primary);
-            color: white;
-            border: none;
-            padding: 0.5rem 1.5rem;
-            border-radius: 6px;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        
-        .btn-ver:hover {
-            background: #1b5e20;
-            transform: translateY(-1px);
-        }
-        
-        .btn-link {
-            background: transparent;
-            color: var(--iica-secondary);
-            border: 1px solid var(--iica-secondary);
-            padding: 0.5rem 1.5rem;
-            border-radius: 6px;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-        
-        .btn-link:hover {
-            background: var(--iica-secondary);
-            color: white;
-        }
-        
-        .badge-estado {
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-        
-        .badge-abierto {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .badge-cerrado {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        
-        /* Filtros rápidos */
-        .filtros-rapidos {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-bottom: 1.5rem;
-        }
-        
-        .filtro-chip {
-            background: white;
-            border: 1px solid #e0e0e0;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .filtro-chip:hover {
-            background: var(--iica-primary);
-            color: white;
-            border-color: var(--iica-primary);
-        }
-        
-        .filtro-chip.active {
-            background: var(--iica-primary);
-            color: white;
-            border-color: var(--iica-primary);
-        }
-        
-        /* Footer Simple */
-        .footer-simple {
-            background: var(--iica-dark);
-            color: white;
-            padding: 2rem 0;
-            margin-top: 4rem;
-            text-align: center;
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 1.8rem;
-            }
-            
-            .search-input-group {
-                flex-direction: column;
-            }
-            
-            .project-actions {
-                flex-direction: column;
-            }
-            
-            .project-actions .btn {
-                width: 100%;
-            }
-        }
-    </style>
+    </script>
 </head>
-<body>
-    <!-- Header con Logo IICA -->
-    <header style="background: linear-gradient(135deg, var(--iica-primary) 0%, var(--iica-secondary) 100%); padding:1.5rem 0; box-shadow:0 4px 6px rgba(0,0,0,0.1); margin-bottom:0;">
-        <div class="container" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap;">
-            <div style="display:flex; align-items:center; gap:1.5rem;">
-                <img src="{{ url_for('static', filename='iica-logo.png') }}" 
-                     alt="Logo IICA" 
-                     style="height:70px; max-width:200px; object-fit:contain; background:white; padding:0.5rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1);" 
-                     onerror="this.onerror=null; this.src='{{ url_for('static', filename='logo_iica_oficial.svg') }}'; this.style.height='70px';" />
-                <div>
-                    <h1 style="margin:0; color:white; font-size:2rem; font-weight:700; text-shadow:0 2px 4px rgba(0,0,0,0.2);">
-                        Plataforma de Proyectos IICA
-                    </h1>
-                    <p style="margin:0.25rem 0 0 0; color:rgba(255,255,255,0.9); font-size:1rem; font-weight:400;">
-                        Conectamos el campo con oportunidades de financiamiento
-                    </p>
-                </div>
-            </div>
-        </div>
-    </header>
 
-    <!-- Navbar Simple -->
-    <nav class="navbar navbar-expand-lg">
+<body>
+    <!-- Top Utility Bar -->
+    <div class="iica-top-bar">
+        <div class="container d-flex justify-content-end">
+            <a href="https://iica.int/es" target="_blank">IICA.int</a>
+            <a href="https://iica.int/en" target="_blank">English</a>
+            <a href="https://iica.int/pt" target="_blank">Português</a>
+        </div>
+    </div>
+
+    <!-- Main Navbar -->
+    <nav class="navbar navbar-expand-lg iica-main-nav">
         <div class="container">
             <a class="navbar-brand" href="/">
-                <i class="bi bi-tree"></i> IICA Chile
+                <img src="https://iica.int/sites/default/files/iica_logo_0.png" alt="IICA" class="iica-logo">
             </a>
-            <div class="d-flex gap-2">
-                <a href="/mis-postulaciones" class="btn btn-outline-primary btn-sm">
-                    <i class="bi bi-list-ul"></i> Mis Postulaciones
-                </a>
-                <form method="POST" action="/buscar" class="d-inline">
-                    <button type="submit" class="btn btn-primary btn-sm">
-                        <i class="bi bi-arrow-clockwise"></i> Actualizar
-                    </button>
-                </form>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link iica-nav-link active" href="/">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link iica-nav-link" href="/quienes-somos">Quiénes Somos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link iica-nav-link" href="/todos-los-proyectos">Proyectos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link iica-nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item ms-lg-3">
+                        <a class="btn btn-iica-primary" href="/todos-los-proyectos">Explorar Fondos</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <div class="hero-section">
+    <header class="iica-section-header">
         <div class="container">
-            <h1 class="hero-title">Conectamos el Campo con Oportunidades</h1>
-            <p class="hero-subtitle">
-                Accede a proyectos de financiamiento agrícola y desarrollo rural
-            </p>
-        </div>
-    </div>
-
-    <!-- Contenido Principal -->
-    <div class="container">
-        <!-- Estadísticas Rápidas -->
-        {% if stats %}
-        <div class="row mb-4">
-            <div class="col-md-3 col-6 mb-3">
-                <div class="stats-card">
-                    <div class="stats-number">{{ stats.total }}</div>
-                    <div class="stats-label">Proyectos Disponibles</div>
-                </div>
-            </div>
-            <div class="col-md-3 col-6 mb-3">
-                <div class="stats-card">
-                    <div class="stats-number">{{ stats.abiertos }}</div>
-                    <div class="stats-label">Proyectos Abiertos</div>
-                </div>
-            </div>
-            <div class="col-md-3 col-6 mb-3">
-                <div class="stats-card">
-                    <div class="stats-number">{{ fuentes_unicas|length }}</div>
-                    <div class="stats-label">Fuentes</div>
-                </div>
-            </div>
-            <div class="col-md-3 col-6 mb-3">
-                <div class="stats-card">
-                    <div class="stats-number">{{ stats.filtrados }}</div>
-                    <div class="stats-label">Resultados</div>
-                </div>
-            </div>
-        </div>
-        {% endif %}
-
-        <!-- Búsqueda y Filtros -->
-        <div class="search-box">
-            <form method="GET" action="/" class="row g-3">
-                <div class="col-md-4">
-                    <input type="text" name="query" class="form-control" 
-                           placeholder="Buscar por palabra clave..." 
-                           value="{{ current_filters.query if current_filters else '' }}">
-                </div>
-                <div class="col-md-2">
-                    <select name="area" class="form-select">
-                        <option value="">Todas las áreas</option>
-                        {% if areas_unicas %}
-                            {% for area_item in areas_unicas %}
-                            <option value="{{ area_item }}" {% if current_filters and current_filters.area == area_item %}selected{% endif %}>
-                                {{ area_item }}
-                            </option>
-                            {% endfor %}
-                        {% endif %}
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <select name="estado" class="form-select">
-                        <option value="">Todos los estados</option>
-                        {% if estados_unicos %}
-                            {% for estado_item in estados_unicos %}
-                            <option value="{{ estado_item }}" {% if current_filters and current_filters.estado == estado_item %}selected{% endif %}>
-                                {{ estado_item }}
-                            </option>
-                            {% endfor %}
-                        {% endif %}
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <select name="fuente" class="form-select">
-                        <option value="">Todas las fuentes</option>
-                        {% if fuentes_unicas %}
-                            {% for fuente_item in fuentes_unicas %}
-                            <option value="{{ fuente_item }}" {% if current_filters and current_filters.fuente == fuente_item %}selected{% endif %}>
-                                {{ fuente_item }}
-                            </option>
-                            {% endfor %}
-                        {% endif %}
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="bi bi-search"></i> Buscar
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Filtros Rápidos -->
-        {% if areas_unicas or fuentes_unicas or estados_unicos %}
-        <div class="filtros-rapidos">
-            <span class="text-muted me-2">Filtros rápidos:</span>
-            {% if areas_unicas %}
-                {% for area in areas_unicas[:5] %}
-                <a href="?area={{ area }}{% if current_filters and current_filters.query %}&query={{ current_filters.query }}{% endif %}" 
-                   class="filtro-chip {% if current_filters and current_filters.area == area %}active{% endif %}">
-                    {{ area }}
-                </a>
-                {% endfor %}
-            {% endif %}
-            {% if estados_unicos %}
-                {% for estado in estados_unicos[:3] %}
-                <a href="?estado={{ estado }}{% if current_filters and current_filters.query %}&query={{ current_filters.query }}{% endif %}" 
-                   class="filtro-chip {% if current_filters and current_filters.estado == estado %}active{% endif %}">
-                    {{ estado }}
-                </a>
-                {% endfor %}
-            {% endif %}
-            <a href="/" class="filtro-chip">Limpiar filtros</a>
-        </div>
-        {% endif %}
-
-        <!-- Lista de Proyectos -->
-        <div class="projects-list">
-            {% if proyectos %}
-                {% for proyecto in proyectos %}
-                {% set proyecto_index = loop.index + ((pagination.current_page - 1) * pagination.per_page) %}
-                <div class="project-card-simple">
-                    <h5 class="project-title-simple">{{ proyecto.Nombre }}</h5>
-                    
-                    <div class="project-meta-simple">
-                        <span><i class="bi bi-building"></i> {{ proyecto.Fuente }}</span>
-                        <span><i class="bi bi-tag"></i> {{ proyecto.get('Área de interés', 'General') }}</span>
-                        <span><i class="bi bi-calendar"></i> Cierre: {{ proyecto.get('Fecha cierre', 'N/A') }}</span>
-                        <span><i class="bi bi-currency-dollar"></i> {{ proyecto.get('Monto', '0') }}</span>
-                        <span class="badge-estado {% if proyecto.Estado == 'Abierto' %}badge-abierto{% else %}badge-cerrado{% endif %}">
-                            {{ proyecto.Estado }}
-                        </span>
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <div class="iica-breadcrumb mb-2">
+                        IICA Chile / Financiamiento
                     </div>
-                    
-                    {% if proyecto.get('Descripción') %}
-                    <p class="text-muted mb-3" style="font-size: 0.9rem;">{{ proyecto.Descripción[:150] }}...</p>
-                    {% endif %}
-                    
-                    <div class="project-actions">
-                        {% if proyecto.Estado == 'Abierto' %}
-                        <a href="/postular/{{ proyecto_index }}" class="btn-postular">
-                            <i class="bi bi-send"></i> Postular
+                    <h1 class="iica-page-title mb-3">Plataforma de Financiamiento Agrícola</h1>
+                    <p class="lead mb-4" style="font-size: 1.2rem; opacity: 0.9;">
+                        Conectamos a productores agrícolas con oportunidades de financiamiento
+                        para impulsar el desarrollo del sector agropecuario en Chile.
+                    </p>
+                    <div class="d-flex gap-3">
+                        <a href="#proyectos" class="btn btn-light text-primary fw-bold px-4 py-2">
+                            <i class="bi bi-search me-2"></i>Ver Fondos
                         </a>
-                        {% endif %}
-                        <a href="/proyecto/{{ proyecto_index }}" class="btn-ver">
-                            <i class="bi bi-eye"></i> Ver Detalles
+                        <a href="#documentos" class="btn btn-outline-light fw-bold px-4 py-2">
+                            <i class="bi bi-file-earmark-text me-2"></i>Documentos
                         </a>
-                        {% if proyecto.Enlace and proyecto.Enlace.startswith('http') %}
-                        <a href="{{ proyecto.Enlace }}" target="_blank" class="btn-link">
-                            <i class="bi bi-box-arrow-up-right"></i> Enlace Oficial
-                        </a>
-                        {% endif %}
                     </div>
                 </div>
-                {% endfor %}
-            {% else %}
-                <div class="alert alert-info text-center">
-                    <i class="bi bi-info-circle"></i> No se encontraron proyectos con los filtros seleccionados.
+                <!-- Optional: Add hero image/icon column here if desired -->
+            </div>
+        </div>
+    </header>
+
+    <div class="container my-5">
+        <!-- Stats Row -->
+        <div class="row mb-5">
+            <div class="col-md-3 mb-3">
+                <div class="card text-center h-100 border-0 shadow-sm p-4">
+                    <h2 class="display-4 fw-bold text-primary mb-0">{{ total_proyectos }}</h2>
+                    <p class="text-muted">Proyectos Disponibles</p>
                 </div>
-            {% endif %}
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-center h-100 border-0 shadow-sm p-4">
+                    <h2 class="display-4 fw-bold text-success mb-0">{{ stats.proyectos_abiertos }}</h2>
+                    <p class="text-muted">Convocatorias Abiertas</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-center h-100 border-0 shadow-sm p-4">
+                    <h2 class="display-4 fw-bold text-warning mb-0">{{ stats.fuentes_unicas }}</h2>
+                    <p class="text-muted">Fuentes de Financiamiento</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card text-center h-100 border-0 shadow-sm p-4"
+                    style="background-color: var(--iica-blue-deep); color: white;">
+                    <h4 class="mb-0 pt-2"><i class="bi bi-cash-coin me-2"></i>Monto Total</h4>
+                    <p class="lead fw-bold mb-0">CLP/USD</p>
+                    <p class="small opacity-75">Disponible para el sector</p>
+                </div>
+            </div>
         </div>
 
-        <!-- Paginación Simple -->
-        {% if pagination and pagination.total_pages > 1 %}
-        <nav aria-label="Paginación" class="mt-4">
-            <ul class="pagination justify-content-center">
-                {% if pagination.has_prev %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ pagination.prev_page }}{% if current_filters and current_filters.query %}&query={{ current_filters.query }}{% endif %}{% if current_filters and current_filters.area %}&area={{ current_filters.area }}{% endif %}{% if current_filters and current_filters.estado %}&estado={{ current_filters.estado }}{% endif %}{% if current_filters and current_filters.fuente %}&fuente={{ current_filters.fuente }}{% endif %}">Anterior</a>
-                </li>
-                {% endif %}
-                
-                <li class="page-item active">
-                    <span class="page-link">Página {{ pagination.current_page }} de {{ pagination.total_pages }}</span>
-                </li>
-                
-                {% if pagination.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ pagination.next_page }}{% if current_filters and current_filters.query %}&query={{ current_filters.query }}{% endif %}{% if current_filters and current_filters.area %}&area={{ current_filters.area }}{% endif %}{% if current_filters and current_filters.estado %}&estado={{ current_filters.estado }}{% endif %}{% if current_filters and current_filters.fuente %}&fuente={{ current_filters.fuente }}{% endif %}">Siguiente</a>
-                </li>
-                {% endif %}
-            </ul>
-        </nav>
-        {% endif %}
+        <!-- Advanced Modules Row -->
+        <div class="row mb-5">
+            <div class="col-lg-4 mb-4">
+                <div class="iica-module-card">
+                    <div class="iica-module-header">
+                        <h3 class="iica-module-title"><i class="bi bi-geo-alt me-2"></i>Mapa GIS</h3>
+                        <span class="badge bg-light text-dark">Beta</span>
+                    </div>
+                    <div id="map"></div>
+                    <div class="p-3">
+                        <small class="text-muted">Distribución geográfica de las convocatorias abiertas en
+                            Chile.</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 mb-4">
+                <div class="iica-module-card">
+                    <div class="iica-module-header">
+                        <h3 class="iica-module-title"><i class="bi bi-cloud-sun me-2"></i>Carbon Tracker</h3>
+                        <span class="badge bg-success">Eco</span>
+                    </div>
+                    <div class="carbon-tracker-container">
+                        <p class="mb-0 small text-muted">Ahorro Estimado de CO2 (Ton)</p>
+                        <div class="carbon-value" id="carbonValue">54.0</div>
+                        <input type="range" class="carbon-slider" min="0" max="100" value="45" id="carbonSlider">
+                        <p class="mt-2 mb-0 small">Simula el impacto ambiental de tus proyectos.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 mb-4">
+                <div class="iica-module-card">
+                    <div class="iica-module-header">
+                        <h3 class="iica-module-title"><i class="bi bi-camera me-2"></i>Scanner AR</h3>
+                        <span class="badge bg-warning text-dark">Mock</span>
+                    </div>
+                    <div class="ar-mock-container">
+                        <div class="ar-scanline"></div>
+                        <div style="text-align: center; z-index: 2;">
+                            <i class="bi bi-qr-code-scan fs-1"></i>
+                            <p class="mb-0">[Simulador AR]</p>
+                        </div>
+                    </div>
+                    <div class="p-3 text-center">
+                        <button class="btn btn-sm btn-outline-primary w-100">Activar Scanner</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured Projects / List -->
+        <div class="row mb-5" id="proyectos">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 style="font-family: var(--font-heading); color: var(--iica-blue-deep); font-weight: 700;">
+                        Oportunidades Destacadas
+                    </h2>
+                    <a href="/todos-los-proyectos" class="btn btn-iica-outline">Ver Todos</a>
+                </div>
+
+                <div class="card iica-card">
+                    <div class="card-header iica-card-header">
+                        <i class="bi bi-list-stars me-2"></i>Últimas Convocatorias
+                    </div>
+                    <div class="card-body p-0">
+                        {% if proyectos %}
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead style="background-color: var(--iica-gray-100);">
+                                    <tr>
+                                        <th class="ps-4">Proyecto</th>
+                                        <th>Monto</th>
+                                        <th>Cierre</th>
+                                        <th>Estado</th>
+                                        <th>Fuente</th>
+                                        <th class="text-end pe-4">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for proyecto in proyectos[:5] %}
+                                    <tr>
+                                        <td class="ps-4">
+                                            <div class="fw-bold text-dark">{{ proyecto.Nombre }}</div>
+                                            <small class="text-muted">{{ proyecto['Área de interés'] }}</small>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-light text-dark border">{{ proyecto.Monto }}</span>
+                                        </td>
+                                        <td>{{ proyecto['Fecha cierre'] }}</td>
+                                        <td>
+                                            {% if proyecto.Estado == 'Abierto' %}
+                                            <span class="badge bg-success">Abierto</span>
+                                            {% elif proyecto.Estado == 'Cerrado' %}
+                                            <span class="badge bg-danger">Cerrado</span>
+                                            {% else %}
+                                            <span class="badge bg-warning text-dark">{{ proyecto.Estado }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td><strong>{{ proyecto.Fuente }}</strong></td>
+                                        <td class="text-end pe-4">
+                                            <!-- Usamos _indice_global si existe para el enlace correcto -->
+                                            <a href="/proyecto/{{ proyecto._indice_global if proyecto._indice_global is defined else loop.index0 }}"
+                                                class="btn btn-sm btn-iica-primary">
+                                                Ver
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% else %}
+                        <div class="text-center py-5">
+                            <p class="text-muted">Cargando proyectos o no hay disponibles...</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resources / Documentos -->
+        <div class="row mb-5" id="documentos">
+            <div class="col-12 mb-4">
+                <h2 style="font-family: var(--font-heading); color: var(--iica-blue-deep); font-weight: 700;">
+                    Centro de Recursos
+                </h2>
+            </div>
+
+            <!-- Documents Card -->
+            <div class="col-lg-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="bi bi-file-earmark-person fs-1 text-primary mb-3"></i>
+                        <h5 class="fw-bold">Documentos Personales</h5>
+                        <p class="text-muted small">Cédula, RUT y antecedentes necesarios para postular.</p>
+                        <button class="btn btn-outline-primary btn-sm w-100" data-bs-toggle="modal"
+                            data-bs-target="#modalCedula">
+                            Ver Requisitos
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business Docs Card -->
+            <div class="col-lg-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="bi bi-building fs-1 text-success mb-3"></i>
+                        <h5 class="fw-bold">Documentos Empresa</h5>
+                        <p class="text-muted small">Constitución, balances y estados financieros.</p>
+                        <button class="btn btn-outline-success btn-sm w-100" data-bs-toggle="modal"
+                            data-bs-target="#modalConstancia">
+                            Ver Requisitos
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Docs Card -->
+            <div class="col-lg-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="bi bi-tools fs-1 text-warning mb-3"></i>
+                        <h5 class="fw-bold">Herramientas Técnicas</h5>
+                        <p class="text-muted small">Plantillas de presupuesto, cartas gantt y formularios.</p>
+                        <button class="btn btn-outline-warning btn-sm w-100" data-bs-toggle="modal"
+                            data-bs-target="#modalProyecto">
+                            Descargar Plantillas
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Institutions Logos (Static for design match) -->
+        <div class="row align-items-center justify-content-center opacity-50 grayscale mt-5">
+            <div class="col-6 col-md-2 text-center mb-3">
+                <h6 class="fw-bold">INDAP</h6>
+            </div>
+            <div class="col-6 col-md-2 text-center mb-3">
+                <h6 class="fw-bold">CORFO</h6>
+            </div>
+            <div class="col-6 col-md-2 text-center mb-3">
+                <h6 class="fw-bold">FIA</h6>
+            </div>
+            <div class="col-6 col-md-2 text-center mb-3">
+                <h6 class="fw-bold">CNR</h6>
+            </div>
+            <div class="col-6 col-md-2 text-center mb-3">
+                <h6 class="fw-bold">ANID</h6>
+            </div>
+        </div>
+
     </div>
 
-    <!-- Footer Simple -->
-    <footer class="footer-simple">
+    <!-- Footer -->
+    <footer class="iica-footer">
         <div class="container">
-            <p>&copy; 2024 IICA Chile - Instituto Interamericano de Cooperación para la Agricultura</p>
-            <p class="small mt-2">Plataforma de Fondos y Convocatorias de Financiamiento</p>
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>IICA</h5>
+                    <ul class="iica-footer-links">
+                        <li><a href="https://iica.int/es/about-us/main/" target="_blank">Sobre el IICA</a></li>
+                        <li><a href="https://iica.int/es/about-us/dg/" target="_blank">Dirección General</a></li>
+                        <li><a href="https://iica.int/es/paises/" target="_blank">Países</a></li>
+                        <li><a href="https://iica.int/es/programas/" target="_blank">Cooperación técnica</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>Enlaces de Interés</h5>
+                    <ul class="iica-footer-links">
+                        <li><a href="/">Plataforma Financiamiento</a></li>
+                        <li><a href="https://www.iica3d.iica.int/" target="_blank">IICA 3D</a></li>
+                        <li><a href="https://www.cimag.iica.int/" target="_blank">CIMAG</a></li>
+                        <li><a href="https://agroart.iica.int/" target="_blank">AgroArt</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>Prensa</h5>
+                    <ul class="iica-footer-links">
+                        <li><a href="https://iica.int/es/noticias/" target="_blank">Noticias</a></li>
+                        <li><a href="https://iica.int/es/press/agro-enlace/" target="_blank">Podcasts</a></li>
+                        <li><a href="https://iica.int/es/press/events/" target="_blank">Eventos</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>Legal</h5>
+                    <ul class="iica-footer-links">
+                        <li><a href="https://apps.iica.int/transparenciaiica/public/Reporte?LG=es"
+                                target="_blank">Denuncias</a></li>
+                        <li><a href="https://hdl.handle.net/11324/18804" target="_blank">Políticas de privacidad</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2026 Instituto Interamericano de Cooperación para la Agricultura (IICA). Todos los derechos
+                reservados.
+            </div>
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Modals (Placeholders for interactivity) -->
+    <div class="modal fade" id="modalCedula" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Requisitos: Cédula</h5><button type="button" class="btn-close"
+                        data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">Información sobre requisitos de identificación...</div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalConstancia" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Requisitos: Empresa</h5><button type="button" class="btn-close"
+                        data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">Información sobre requisitos de empresa...</div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalProyecto" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Plantillas Técnicas</h5><button type="button" class="btn-close"
+                        data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">Descarga de plantillas...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        // PWA Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/static/sw.js')
+                    .then(reg => console.log('SW OK'))
+                    .catch(err => console.log('SW Error', err));
+            });
+        }
+
+        // GIS Map Init
+        document.addEventListener('DOMContentLoaded', function () {
+            var map = L.map('map').setView([-35.6751, -71.5430], 5);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(map);
+
+            // Mock markers
+            L.marker([-33.4489, -70.6693]).addTo(map).bindPopup('Oficina IICA Santiago');
+            L.marker([-36.8201, -73.0443]).addTo(map).bindPopup('Proyecto Biobío');
+        });
+
+        // Carbon Tracker
+        const slider = document.getElementById('carbonSlider');
+        const display = document.getElementById('carbonValue');
+        if (slider && display) {
+            slider.addEventListener('input', (e) => {
+                display.textContent = (e.target.value * 1.2).toFixed(1);
+            });
+        }
+    </script>
 </body>
+
 </html>
