@@ -616,7 +616,7 @@ if __name__ == '__main__':
                         descripcion="Investigación e innovación para sistemas alimentarios sostenibles.",
                         fuente="Comisión Europea",
                         monto_texto="€2.000.000",
-                        fecha_cierre=datetime(2025, 9, 05),
+                        fecha_cierre=datetime(2025, 9, 5),
                         estado="Próximamente",
                         area_interes="Investigación",
                         region="Internacional",
