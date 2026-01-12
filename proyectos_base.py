@@ -101,8 +101,35 @@ proyectos_raw = [
         "link": "https://www.devex.com"
     },
     {
-        "titulo": "FONTAGRO Concurso 2026",
-        "descripcion": "Cooperación técnica para la innovación en agricultura familiar en América Latina. Aumento de productividad sostenible.",
+        "titulo": "Programa de Becas IICA-FUNIBER 2026",
+        "descripcion": "Becas parciales (hasta 75%) para maestrías y licenciaturas en línea en el sector agropecuario.",
+        "estado": "Abierto",
+        "monto": "Beca hasta 75%",
+        "fecha": "Continuo",
+        "fuente": "IICA-FUNIBER",
+        "link": "https://www.funiber.org/becas-maestria"
+    },
+    {
+        "titulo": "Becas Máster Transformación Digital (Digital Agri)",
+        "descripcion": "Becas para estudiantes latinoamericanos en la Universidad de Córdoba, España. Transformación digital agroalimentaria.",
+        "estado": "Próximamente",
+        "monto": "Cobertura Matrícula",
+        "fecha": "2026-05-15",
+        "fuente": "IICA-Córdoba",
+        "link": "https://digitalagri.es/"
+    },
+    {
+        "titulo": "Programa de Pasantías IICA 2026",
+        "descripcion": "Oportunidades de desarrollo profesional y académico en las oficinas del IICA en las Américas.",
+        "estado": "Abierto",
+        "monto": "Estipendio Variable",
+        "fecha": "Continuo",
+        "fuente": "IICA",
+        "link": "https://www.iica.int/es/pasantias"
+    },
+    {
+        "titulo": "Concurso FONTAGRO 2026",
+        "descripcion": "Innovación para sistemas agroalimentarios sostenibles y competitivos en ALC. Enfoque en huella ambiental.",
         "estado": "Próximamente",
         "monto": "Hasta USD 200,000",
         "fecha": "2026-03-30",
