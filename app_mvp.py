@@ -554,18 +554,16 @@ def internal_server_error(e):
     return render_template('500.html'), 500
 
 
-if __name__ == '__main__':
+# Función de inicialización para Render (se llama al importar)
+def init_db():
     with app.app_context():
-        # 1. Asegurar tablas
-        db.create_all()
-        
-        # 2. Auto-Seed Seguro (Solo si tabla vacía)
         try:
+            db.create_all()
             if Fondo.query.first() is None:
                 print("🌱 (Auto-Seed) BD Vacía. Insertando datos base...")
-                # Inserción directa segura
                 from datetime import datetime
                 fondos_base = [
+                    # ... (los mismos fondos de antes) ...
                     Fondo(
                         nombre="Convocatoria Nacional FIA 2025",
                         descripcion="Fondo de Innovación Agraria destinado a la modernización de procesos productivos...",
@@ -588,7 +586,6 @@ if __name__ == '__main__':
                         region="Nacional",
                         activo=True
                     ),
-                    # --- FONDOS INTERNACIONALES (SOLICITUD USUARIO) ---
                     Fondo(
                         nombre="Euroclima+ Proyectos Sectoriales",
                         descripcion="Financiamiento para proyectos de resiliencia climática en agricultura familiar campesina.",
@@ -627,11 +624,13 @@ if __name__ == '__main__':
                 db.session.commit()
                 print("✅ (Auto-Seed) Datos insertados correctamente.")
         except Exception as e:
-            print(f"⚠️ Alerta: Auto-Seed falló o ya existen datos. {e}")
+            print(f"⚠️ Error al inicializar BD: {e}")
             db.session.rollback()
 
-        print(f"✅ App Configurada: {app.config.from_object(get_config()).get_db_info()}")
-    
+# Ejecutar inicialización al cargar
+init_db()
+
+if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
 
