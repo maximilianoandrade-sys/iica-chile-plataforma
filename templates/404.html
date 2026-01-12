@@ -1,0 +1,16 @@
+{% extends "base_mvp.html" %}
+
+{% block title %}Página no encontrada - IICA Chile{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 4rem 2rem;">
+    <div style="font-size: 5rem; margin-bottom: 1rem;">🌾</div>
+    <h1 style="font-size: 2.5rem; color: #667eea; margin-bottom: 1rem;">404 - Página no encontrada</h1>
+    <p style="font-size: 1.2rem; color: #666; margin-bottom: 2rem;">
+        Parece que te has perdido en el campo. La página que buscas no existe.
+    </p>
+    <a href="{{ url_for('home') }}" class="btn btn-primary">
+        Volver al Inicio
+    </a>
+</div>
+{% endblock %}
