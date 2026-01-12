@@ -30,6 +30,78 @@ def load_user(user_id):
     return Usuario.query.get(int(user_id))
 
 # ===== RUTAS AVANZADAS (NUEVO) =====
+from advanced_services import BlockchainService, MockGovernmentAPI, AnalyticsService
+
+@app.route('/api/avanzado/validar-rut/<rut>', methods=['GET'])
+@login_required
+def api_validar_rut(rut):
+    """API Mock SII"""
+    return jsonify(MockGovernmentAPI.validar_rut(rut))
+
+@app.route('/api/avanzado/analytics/<region>', methods=['GET'])
+@login_required
+def api_analytics(region):
+    """Analytics predictivos"""
+    return jsonify(AnalyticsService.obtener_metricas_region(region))
+
+@app.route('/api/avanzado/postular/<int:fondo_id>', methods=['POST'])
+@login_required
+def api_postular_avanzado(fondo_id):
+    """Postulación con trazabilidad Blockchain y Gamificación"""
+    fondo = Fondo.query.get_or_404(fondo_id)
+    
+    # Crear postulación
+    postulacion = Postulacion(
+        usuario_id=current_user.id,
+        fondo_id=fondo.id,
+        estado='Enviada'
+    )
+    db.session.add(postulacion)
+    db.session.flush() # Para tener ID
+    
+    # Generar Hash Blockchain
+    tx_hash = BlockchainService.generar_hash_postulacion(
+        postulacion.id, 
+        current_user.id, 
+        {'fondo': fondo.nombre, 'monto': fondo.monto_texto}
+    )
+    postulacion.hash_tx = tx_hash
+    
+    # Gamificación
+    current_user.agregar_puntos(100) # 100 puntos por postular
+    
+    db.session.commit()
+    
+    return jsonify({
+        'status': 'success',
+        'mensaje': 'Postulación inmutable registrada',
+        'tx_hash': tx_hash,
+        'puntos_ganados': 100,
+        'nuevo_nivel': current_user.nivel
+    })
+
+@app.route('/api/avanzado/voice-search', methods=['POST'])
+def api_voice_search():
+    """Mock de búsqueda por voz (recibe texto transcrito)"""
+    data = request.get_json()
+    query = data.get('query', '')
+    
+    # Usar lógica de búsqueda existente
+    fondos = Fondo.query.filter(
+        db.or_(
+            Fondo.nombre.ilike(f'%{query}%'),
+            Fondo.descripcion.ilike(f'%{query}%')
+        )
+    ).limit(5).all()
+    
+    return jsonify([{
+        'nombre': f.nombre,
+        'monto': f.monto_texto,
+        'id': f.id
+    } for f in fondos])
+
+
+# ===== RUTAS AVANZADAS (NUEVO) =====
 
 @app.route('/api/avanzado/validar-rut/<rut>', methods=['GET'])
 @login_required
