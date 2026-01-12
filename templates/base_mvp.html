@@ -144,8 +144,10 @@
 <body>
     <nav class="navbar">
         <a href="{{ url_for('home') }}" class="navbar-brand">
-            <img src="https://iica.int/sites/default/files/iica_logo_0.png" alt="IICA Chile" style="height: 45px;">
-            <span style="font-size: 1.2rem; font-weight: bold; color: #667eea;">IICA Chile</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/IICA.logo.jpg" alt="IICA Chile"
+                style="height: 50px; border-radius: 5px;"
+                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <span style="font-size: 1.2rem; font-weight: bold; color: #667eea; margin-left: 10px;">IICA Chile</span>
         </a>
         <div class="navbar-menu">
             <a href="{{ url_for('home') }}">Inicio</a>
