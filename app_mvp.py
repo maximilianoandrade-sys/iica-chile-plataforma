@@ -587,6 +587,40 @@ if __name__ == '__main__':
                         area_interes="Riego",
                         region="Nacional",
                         activo=True
+                    ),
+                    # --- FONDOS INTERNACIONALES (SOLICITUD USUARIO) ---
+                    Fondo(
+                        nombre="Euroclima+ Proyectos Sectoriales",
+                        descripcion="Financiamiento para proyectos de resiliencia climática en agricultura familiar campesina.",
+                        fuente="Unión Europea",
+                        monto_texto="€500.000",
+                        fecha_cierre=datetime(2025, 10, 15),
+                        estado="Abierto",
+                        area_interes="Cambio Climático",
+                        region="Latinoamérica",
+                        activo=True
+                    ),
+                    Fondo(
+                        nombre="Green Climate Fund (GCF) - Readiness",
+                        descripcion="Apoyo preparatorio para países en desarrollo para acceder a financiamiento climático.",
+                        fuente="GCF",
+                        monto_texto="$1.000.000 USD",
+                        fecha_cierre=datetime(2025, 8, 20),
+                        estado="Abierto",
+                        area_interes="Sostenibilidad",
+                        region="Internacional",
+                        activo=True
+                    ),
+                    Fondo(
+                        nombre="Horizon Europe - Farm to Fork",
+                        descripcion="Investigación e innovación para sistemas alimentarios sostenibles.",
+                        fuente="Comisión Europea",
+                        monto_texto="€2.000.000",
+                        fecha_cierre=datetime(2025, 9, 05),
+                        estado="Próximamente",
+                        area_interes="Investigación",
+                        region="Internacional",
+                        activo=True
                     )
                 ]
                 db.session.add_all(fondos_base)
