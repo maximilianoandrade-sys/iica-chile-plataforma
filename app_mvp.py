@@ -293,6 +293,36 @@ def migrate_data():
     from migrate_to_postgres import migrar_excel_a_postgres
     migrar_excel_a_postgres()
 
+@app.cli.command()
+def update_projects():
+    """Actualizar proyectos automáticamente desde fuentes IICA"""
+    try:
+        from scrapers.iica_auto_search import IICAProjectScraper
+        scraper = IICAProjectScraper()
+        proyectos = scraper.buscar_todos()
+        resultado = scraper.guardar_en_db(app)
+        print(f"✅ Proyectos actualizados: {resultado}")
+    except Exception as e:
+        print(f"❌ Error actualizando proyectos: {e}")
+
+# Ruta para actualización manual (admin)
+@app.route('/api/actualizar-proyectos', methods=['POST'])
+@login_required
+def actualizar_proyectos():
+    """Endpoint para actualizar proyectos manualmente"""
+    try:
+        from scrapers.iica_auto_search import IICAProjectScraper
+        scraper = IICAProjectScraper()
+        proyectos = scraper.buscar_todos()
+        return jsonify({
+            'success': True,
+            'proyectos_encontrados': len(proyectos),
+            'mensaje': f'Se encontraron {len(proyectos)} proyectos de IICA y fuentes relacionadas'
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()

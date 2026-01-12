@@ -33,6 +33,19 @@
             font-weight: bold;
             color: #667eea;
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: opacity 0.3s;
+        }
+
+        .navbar-brand:hover {
+            opacity: 0.8;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            width: auto;
         }
 
         .navbar-menu {
@@ -130,7 +143,10 @@
 
 <body>
     <nav class="navbar">
-        <a href="{{ url_for('home') }}" class="navbar-brand">🌾 IICA Chile</a>
+        <a href="{{ url_for('home') }}" class="navbar-brand">
+            <img src="https://iica.int/sites/default/files/iica_logo_0.png" alt="IICA Chile" style="height: 45px;">
+            <span style="font-size: 1.2rem; font-weight: bold; color: #667eea;">IICA Chile</span>
+        </a>
         <div class="navbar-menu">
             <a href="{{ url_for('home') }}">Inicio</a>
             {% if current_user.is_authenticated %}
