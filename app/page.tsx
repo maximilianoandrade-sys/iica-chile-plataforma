@@ -43,7 +43,55 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* SECCIÓN QUIENES SOMOS (Restored) */}
+      <div className="mb-12 bg-[#f5f7fb] rounded-xl p-8 border border-[var(--iica-border)]">
+        <div className="text-center mb-8">
+          <h2 className="text-[var(--iica-navy)] text-2xl font-bold mb-2">Quiénes Somos</h2>
+          <p className="text-gray-600">Instituto Interamericano de Cooperación para la Agricultura - Oficina Chile</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+            <h3 className="text-[var(--iica-secondary)] font-bold text-lg mb-3 uppercase">Nuestra Misión</h3>
+            <p className="text-gray-700 leading-relaxed">
+              Estimular, promover y apoyar los esfuerzos de los Estados Miembros para lograr su desarrollo agrícola y el bienestar rural por medio de la cooperación técnica internacional de excelencia.
+            </p>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+            <h3 className="text-[var(--iica-secondary)] font-bold text-lg mb-3 uppercase">Nuestra Visión</h3>
+            <p className="text-gray-700 leading-relaxed">
+              Ser una institución moderna y eficiente, apoyada en una plataforma de recursos humanos y normas claras, capaz de movilizar los conocimientos disponibles en la región y en el mundo para lograr una agricultura competitiva, inclusiva y sostenible.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+            <h3 className="text-[var(--iica-navy)] font-bold mb-3">Valores</h3>
+            <ul className="list-disc list-inside text-gray-700 space-y-1">
+              <li>Transparencia y Rendición de Cuentas</li>
+              <li>Excelencia Técnica</li>
+              <li>Vocación de Servicio</li>
+              <li>Respeto a la Diversidad</li>
+            </ul>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+            <h3 className="text-[var(--iica-navy)] font-bold mb-3">Líneas de Acción</h3>
+            <div className="flex flex-wrap gap-2">
+              <span className="bg-blue-50 text-blue-800 px-3 py-1 rounded-full text-sm">Bioeconomía</span>
+              <span className="bg-blue-50 text-blue-800 px-3 py-1 rounded-full text-sm">Desarrollo Territorial</span>
+              <span className="bg-blue-50 text-blue-800 px-3 py-1 rounded-full text-sm">Cambio Climático</span>
+              <span className="bg-blue-50 text-blue-800 px-3 py-1 rounded-full text-sm">Digitalización</span>
+              <span className="bg-blue-50 text-blue-800 px-3 py-1 rounded-full text-sm">Equidad de Género</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* 2. MÓDULOS AVANZADOS (GRID) */}
+      <h2 className="text-[var(--iica-navy)] text-xl font-bold mb-4 pl-2 border-l-4 border-[var(--iica-yellow)]">
+        Herramientas Técnicas
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
 
         {/* AR SCANNER MOCK */}
