@@ -233,10 +233,18 @@ def home():
     )
     
     # Estadísticas
+    total_fondos = Fondo.query.filter_by(activo=True).count()
+    fondos_abiertos = Fondo.query.filter_by(activo=True, estado='Abierto').count()
+    fuentes_unicas = db.session.query(Fondo.fuente).distinct().count()
+    
+    # Calculo estimado de monto (Mock para MVP ya que monto_texto es string)
+    monto_total = 41325000 
+    
     stats = {
-        'total_fondos': Fondo.query.filter_by(activo=True).count(),
-        'fondos_abiertos': Fondo.query.filter_by(activo=True, estado='Abierto').count(),
-        'fuentes_unicas': db.session.query(Fondo.fuente).distinct().count()
+        'total_fondos': total_fondos,
+        'fondos_abiertos': fondos_abiertos,
+        'fuentes_unicas': fuentes_unicas,
+        'monto_total': f"${monto_total:,.0f}"
     }
     
     return render_template(
@@ -248,6 +256,16 @@ def home():
         area=area,
         estado=estado
     )
+
+@app.route('/api/stats')
+def api_stats():
+    """Endpoint para estadísticas (compatible con React si se requiere)"""
+    return jsonify({
+        'proyectos': Fondo.query.filter_by(activo=True).count(),
+        'convocatorias': Fondo.query.filter_by(activo=True, estado='Abierto').count(),
+        'fuentes': db.session.query(Fondo.fuente).distinct().count(),
+        'monto': 41325000
+    })
 
 @app.route('/dashboard')
 @login_required
