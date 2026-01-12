@@ -1182,9 +1182,9 @@ def quienes_somos():
                 'valores': ['Compromiso', 'Innovación', 'Colaboración', 'Integridad', 'Sostenibilidad', 'Excelencia'],
                 'lineas': ['Cambio Climático', 'Sanidad Agropecuaria', 'Agricultura Familiar', 'Comercio', 'Innovación'],
                 'contacto': {
-                    'email': 'iica.cl@iica.int',
-                    'telefono': '+56 2 2431 0600',
-                    'direccion': 'Fidel Oteíza 1956, Piso 10, Providencia, Santiago',
+                    'email': 'hernan.chiriboga@iica.int',
+                    'telefono': '(56-2) 2225-2511',
+                    'direccion': 'Calle Rancagua No.0320, Providencia, Santiago, Chile',
                     'web': 'https://iica.int/es/countries/chile-es/'
                 }
             }
