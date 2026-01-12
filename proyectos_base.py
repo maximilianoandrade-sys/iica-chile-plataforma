@@ -102,7 +102,7 @@ proyectos_raw = [
     },
     {
         "titulo": "Convocatoria Nacional FIA 2025-2026",
-        "descripcion": "Proyectos de innovación silvoagropecuaria. Énfasis en gestión hídrica, adaptación cambio climático y sistemas alimentarios sostenibles.",
+        "descripcion": "Proyectos de innovación silvoagropecuaria. Énfasis en gestión hídrica y adaptación.",
         "estado": "Próximamente",
         "monto": "Hasta CLP 150.000.000",
         "fecha": "2025-07-08",
@@ -110,8 +110,8 @@ proyectos_raw = [
         "link": "https://www.fia.cl"
     },
     {
-        "titulo": "Fondo Concursable 8% FNDR 2026 (Arica y Parinacota)",
-        "descripcion": "Fondo regional para iniciativas comunitarias y desarrollo local. Apertura estimada: Febrero 2026.",
+        "titulo": "FNA 8% FNDR Arica y Parinacota 2026",
+        "descripcion": "Fondo regional para iniciativas comunitarias y desarrollo local.",
         "estado": "Por Abrir",
         "monto": "Variable Regional",
         "fecha": "2026-03-02",
@@ -119,17 +119,125 @@ proyectos_raw = [
         "link": "https://www.gorearicayparinacota.cl"
     },
     {
-        "titulo": "FIC Regional GORE 2026 (Proyectado)",
-        "descripcion": "Fondo de Innovación para la Competitividad Regional. IICA Chile es ejecutor elegible en diversas regiones.",
+        "titulo": "FIC Regional GORE Biobío 2026",
+        "descripcion": "Innovación para la competitividad en sector agroalimentario regional.",
         "estado": "Próximamente",
         "monto": "Hasta CLP 200.000.000",
         "fecha": "2026-04-01",
-        "fuente": "GORE Regional",
-        "link": "http://www.subdere.gov.cl"
+        "fuente": "GORE Biobío",
+        "link": "http://www.gorebiobio.cl"
+    },
+    {
+        "titulo": "FIC Regional GORE Maule 2026",
+        "descripcion": "Innovación agrícola y sostenibilidad hídrica en el Maule.",
+        "estado": "Próximamente",
+        "monto": "Hasta CLP 180.000.000",
+        "fecha": "2026-04-10",
+        "fuente": "GORE Maule",
+        "link": "http://www.goremaule.cl"
+    },
+    {
+        "titulo": "INDAP - PDE (Desarrollo de Inversiones)",
+        "descripcion": "Cofinanciamiento para inversiones productivas en predios agrícolas.",
+        "estado": "Abierto",
+        "monto": "Hasta CLP 5.000.000",
+        "fecha": "Continuo",
+        "fuente": "INDAP",
+        "link": "https://www.indap.gob.cl"
+    },
+    {
+        "titulo": "INDAP - SAT (Servicio de Asistencia Técnica)",
+        "descripcion": "Asesoría técnica para mejorar la gestión productiva y comercial.",
+        "estado": "Abierto",
+        "monto": "Subsidio Técnico",
+        "fecha": "Continuo",
+        "fuente": "INDAP",
+        "link": "https://www.indap.gob.cl"
+    },
+    {
+        "titulo": "INDAP - Praderas Suplementarias",
+        "descripcion": "Incentivo para establecer praderas y forraje ante déficit hídrico.",
+        "estado": "Abierto",
+        "monto": "Variable por Ha",
+        "fecha": "Continuo",
+        "fuente": "INDAP",
+        "link": "https://www.indap.gob.cl"
+    },
+    {
+        "titulo": "CNR - Concurso 01-2026 Tecnificación Pequeña Agricultura",
+        "descripcion": "Bonificación para obras de tecnificación de riego en pequeña agricultura.",
+        "estado": "Por Abrir",
+        "monto": "Hasta UF 400",
+        "fecha": "2026-02-15",
+        "fuente": "CNR",
+        "link": "https://www.cnr.gob.cl"
+    },
+    {
+        "titulo": "CNR - Concurso 03-2026 Obras Civiles Medianas",
+        "descripcion": "Obras civiles de riego y acumulación a nivel extrapredial.",
+        "estado": "Por Abrir",
+        "monto": "Hasta UF 15.000",
+        "fecha": "2026-03-20",
+        "fuente": "CNR",
+        "link": "https://www.cnr.gob.cl"
+    },
+    {
+        "titulo": "CORFO - Crea y Valida (Innovación)",
+        "descripcion": "Apoyo para crear y validar prototipos innovadores con riesgo tecnológico.",
+        "estado": "Abierto",
+        "monto": "Hasta CLP 30.000.000",
+        "fecha": "Continuo",
+        "fuente": "CORFO",
+        "link": "https://www.corfo.cl"
+    },
+    {
+        "titulo": "CORFO - Activa Inversión (Riego y Eficiencia)",
+        "descripcion": "Cofinanciamiento para activos fijos buscando eficiencia hídrica/energética.",
+        "estado": "Abierto",
+        "monto": "Hasta CLP 20.000.000",
+        "fecha": "Continuo",
+        "fuente": "CORFO",
+        "link": "https://www.corfo.cl"
+    },
+    {
+        "titulo": "SERCOTEC - Crece (Multisectorial)",
+        "descripcion": "Subsidio para el crecimiento de micro y pequeñas empresas. Incluye rubro agro.",
+        "estado": "Próximamente",
+        "monto": "Hasta CLP 6.000.000",
+        "fecha": "2026-04-05",
+        "fuente": "SERCOTEC",
+        "link": "https://www.sercotec.cl"
+    },
+    {
+        "titulo": "SERCOTEC - Digitaliza tu Almacén (Agroalimentos)",
+        "descripcion": "Digitalización de puntos de venta y gestión para pequeños negocios.",
+        "estado": "Próximamente",
+        "monto": "Hasta CLP 2.350.000",
+        "fecha": "2026-03-15",
+        "fuente": "SERCOTEC",
+        "link": "https://www.sercotec.cl"
+    },
+    {
+        "titulo": "FIA - Jóvenes Innovadores 2026",
+        "descripcion": "Apoyo a jóvenes de 18 a 35 años para desarrollar proyectos innovadores en el agro.",
+        "estado": "Próximamente",
+        "monto": "Hasta CLP 20.000.000",
+        "fecha": "2026-06-01",
+        "fuente": "FIA Chile",
+        "link": "https://www.fia.cl"
+    },
+    {
+        "titulo": "GORE Los Lagos - Emprendimiento Rural",
+        "descripcion": "Fondo regional para fomento productivo en zonas rurales aisladas.",
+        "estado": "En Evaluación",
+        "monto": "Hasta CLP 4.000.000",
+        "fecha": "2026-02-28",
+        "fuente": "GORE Los Lagos",
+        "link": "http://www.goreloslagos.cl"
     },
     {
         "titulo": "Concurso FONTAGRO 2026",
-        "descripcion": "Innovación para sistemas agroalimentarios sostenibles y competitivos en ALC. Enfoque en huella ambiental.",
+        "descripcion": "Innovación para sistemas agroalimentarios sostenibles en ALC.",
         "estado": "Próximamente",
         "monto": "Hasta USD 200,000",
         "fecha": "2026-03-30",
@@ -137,8 +245,8 @@ proyectos_raw = [
         "link": "https://www.fontagro.org"
     },
     {
-        "titulo": "IKI Small Grants 2026 (Climate Initiative)",
-        "descripcion": "Fondos para organizaciones locales en acción climática y biodiversidad. Proyectos de 12-24 meses.",
+        "titulo": "IKI Small Grants 2026 (Germany)",
+        "descripcion": "Fondos climáticos y biodiversidad para ONGs locales.",
         "estado": "Por Abrir",
         "monto": "Hasta €200,000",
         "fecha": "2026-01-15",
@@ -147,12 +255,30 @@ proyectos_raw = [
     },
     {
         "titulo": "Fondos APC Japón - Chile 2026",
-        "descripcion": "Asistencia para Proyectos Comunitarios de Seguridad Humana. Incluye riego y agricultura comunitaria.",
+        "descripcion": "Seguridad humana y agricultura comunitaria (Embajada Japón).",
         "estado": "Abierto",
         "monto": "Hasta USD 67,000",
         "fecha": "2026-01-30",
         "fuente": "Embajada Japón",
-        "link": "https://www.cl.emb-japan.go.jp/itpr_es/cooperacion_apc.html"
+        "link": "https://www.cl.emb-japan.go.jp"
+    },
+    {
+        "titulo": "IICA-FUNIBER Becas 2026",
+        "descripcion": "Becas de posgrado en agro.",
+        "estado": "Abierto",
+        "monto": "Beca 75%",
+        "fecha": "Continuo",
+        "fuente": "IICA-FUNIBER",
+        "link": "https://www.funiber.org"
+    },
+    {
+        "titulo": "IICA Pasantías 2026",
+        "descripcion": "Desarrollo profesional en sedes IICA.",
+        "estado": "Abierto",
+        "monto": "Estipendio",
+        "fecha": "Continuo",
+        "fuente": "IICA",
+        "link": "https://www.iica.int"
     },
     {
         "titulo": "CFC Call for Proposals 2026",

@@ -1,0 +1,142 @@
+{% extends "base_mvp.html" %}
+
+{% block title %}Asistente de Búsqueda - Plataforma IICA Chile{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <h1 class="iica-page-title mb-4">
+                <i class="bi bi-robot me-2"></i>Asistente de Búsqueda de Fondos
+            </h1>
+
+            <p class="lead mb-5">
+                Utiliza este asistente para encontrar oportunidades de financiamiento externas que aún no están en
+                nuestra base de datos oficial.
+                Selecciona tu área de interés y el sistema te redirigirá a búsquedas inteligentes pre-configuradas.
+            </p>
+
+            <!-- Internal Smart Filter -->
+            <div class="card iica-card mb-5">
+                <div class="card-header iica-card-header">
+                    <i class="bi bi-funnel me-2"></i>Filtrado Rápido Interno
+                </div>
+                <div class="card-body p-4 bg-light">
+                    <form action="/todos-los-proyectos" method="GET" class="row g-3">
+                        <div class="col-md-5">
+                            <label class="form-label fw-bold">Palabra Clave</label>
+                            <input type="text" name="q" class="form-control"
+                                placeholder="Ej: Riego, Innovación, Mujer...">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Institución</label>
+                            <select name="fuente" class="form-select">
+                                <option value="">Todas</option>
+                                <option value="FIA Chile">FIA</option>
+                                <option value="CORFO">CORFO</option>
+                                <option value="INDAP">INDAP</option>
+                                <option value="CNR">CNR</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-iica-primary w-100">
+                                <i class="bi bi-search me-2"></i>Buscar en BD
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- External Search Assistant -->
+            <h3 class="mb-4 text-primary fw-bold">
+                <i class="bi bi-globe me-2"></i>Búsqueda Externa Automatizada
+            </h3>
+
+            <div class="row g-4">
+                <!-- Riego -->
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0">
+                        <div class="card-body text-center">
+                            <i class="bi bi-droplet-half fs-1 text-info mb-3"></i>
+                            <h5 class="fw-bold">Gestión Hídrica</h5>
+                            <p class="small text-muted">Busca concursos de riego CNR y GORE vigentes.</p>
+                            <a href="https://www.google.com/search?q=concursos+riego+chile+2025+2026+site:cnr.gob.cl+OR+site:gore.cl"
+                                target="_blank" class="btn btn-outline-info w-100 stretched-link">
+                                Buscar Externamente <i class="bi bi-box-arrow-up-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Innovation -->
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0">
+                        <div class="card-body text-center">
+                            <i class="bi bi-lightbulb fs-1 text-warning mb-3"></i>
+                            <h5 class="fw-bold">Innovación Agraria</h5>
+                            <p class="small text-muted">Rastrea convocatorias FIA, Corfo y Universidades.</p>
+                            <a href="https://www.google.com/search?q=fondos+innovacion+agraria+chile+2026+site:fia.cl+OR+site:corfo.cl"
+                                target="_blank" class="btn btn-outline-warning w-100 stretched-link">
+                                Buscar Externamente <i class="bi bi-box-arrow-up-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Climate Change -->
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm border-0">
+                        <div class="card-body text-center">
+                            <i class="bi bi-tree fs-1 text-success mb-3"></i>
+                            <h5 class="fw-bold">Sustentabilidad</h5>
+                            <p class="small text-muted">Fondos verdes, cambio climático y agricultura orgánica.</p>
+                            <a href="https://www.google.com/search?q=fondos+agricultura+sustentable+chile+2026+site:indap.gob.cl+OR+site:mma.gob.cl"
+                                target="_blank" class="btn btn-outline-success w-100 stretched-link">
+                                Buscar Externamente <i class="bi bi-box-arrow-up-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- International -->
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm border-0">
+                        <div class="card-body text-center">
+                            <i class="bi bi-globe-americas fs-1 text-primary mb-3"></i>
+                            <h5 class="fw-bold">Fondos Internacionales (LATAM)</h5>
+                            <p class="small text-muted">BID, FAO, IICA y Cooperación Internacional.</p>
+                            <a href="https://www.google.com/search?q=grants+agriculture+latin+america+2026+call+for+proposals"
+                                target="_blank" class="btn btn-outline-primary w-100 stretched-link">
+                                Rastrear Oportunidades Globales <i class="bi bi-box-arrow-up-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Regional -->
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm border-0">
+                        <div class="card-body text-center">
+                            <i class="bi bi-map fs-1 text-danger mb-3"></i>
+                            <h5 class="fw-bold">Fondos Regionales (GORE/FIC)</h5>
+                            <p class="small text-muted">Bases y concursos de Gobiernos Regionales.</p>
+                            <a href="https://www.google.com/search?q=bases+fic+regional+gore+2026+agricultura+chile"
+                                target="_blank" class="btn btn-outline-danger w-100 stretched-link">
+                                Buscar en Regiones <i class="bi bi-box-arrow-up-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="alert alert-info mt-5">
+                <i class="bi bi-info-circle-fill me-2"></i>
+                <strong>Nota:</strong> Estas búsquedas se realizan en tiempo real en los sitios web oficiales del
+                gobierno de Chile y organismos internacionales. Los resultados se abren en una nueva pestaña.
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
