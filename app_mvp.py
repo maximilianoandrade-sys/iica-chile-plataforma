@@ -556,33 +556,47 @@ def internal_server_error(e):
 
 if __name__ == '__main__':
     with app.app_context():
+        # 1. Asegurar tablas
         db.create_all()
         
-        # --- AUTO-SEED FIX ---
-        # Si no hay fondos, poblamos automáticamente (Fix para Render Free que no corre boot.sh a veces)
-        if Fondo.query.count() == 0:
-            print("⚠️ BD Vacía detectada al inicio. Ejecutando Auto-Seed...")
-            try:
-                # Reutilizar lógica de seed_db (copiada aquí para evitar dependencias circulares complejas)
+        # 2. Auto-Seed Seguro (Solo si tabla vacía)
+        try:
+            if Fondo.query.first() is None:
+                print("🌱 (Auto-Seed) BD Vacía. Insertando datos base...")
+                # Inserción directa segura
                 from datetime import datetime
-                # ... (Llamar a la función seed_db es complejo por el contexto CLI, mejor duplicamos data critica brevemente o llamamos a funcion helper)
-                # Hack rápido: Importar y ejecutar la lógica de la función CLI es posible? 
-                # Sí, pero mejor extraemos la lógica en una función 'popular_datos_reales' fuera del decorador CLI.
-                pass 
-                # (NOTA: He refactorizado la función seed_db para que sea reusable en el paso anterior? No.
-                #  Lo haré ahora: crearé una llamada directa a los datos)
-                
-                # Datos minimos criticos para que no se vea vacío
-                f1 = Fondo(nombre="Convocatoria Nacional FIA 2025", descripcion="Innovación agraria...", fuente="FIA", monto_texto="$150M", estado="Abierto", activo=True)
-                db.session.add(f1)
+                fondos_base = [
+                    Fondo(
+                        nombre="Convocatoria Nacional FIA 2025",
+                        descripcion="Fondo de Innovación Agraria destinado a la modernización de procesos productivos...",
+                        fuente="FIA",
+                        monto_texto="$150.000.000",
+                        fecha_cierre=datetime(2025, 12, 31),
+                        estado="Abierto",
+                        area_interes="Innovación",
+                        region="Nacional",
+                        activo=True
+                    ),
+                    Fondo(
+                        nombre="Programa Riego INDAP 2025",
+                        descripcion="Cofinanciamiento para obras de riego y drenaje intrapredial...",
+                        fuente="INDAP",
+                        monto_texto="$8.000.000",
+                        fecha_cierre=datetime(2025, 6, 30),
+                        estado="Abierto",
+                        area_interes="Riego",
+                        region="Nacional",
+                        activo=True
+                    )
+                ]
+                db.session.add_all(fondos_base)
                 db.session.commit()
-                # Pero mejor invoco el comando via os system o subprocess si es necesario, o confío en el boot.sh
-                # EL USUARIO DIJO "NO PUEDO USAR SHELL". 
-                # Mejor opción: Crear un endpoint /fix-data que el usuario pueda visitar.
-            except Exception as e:
-                print(f"Error Auto-Seed: {e}")
-                
-        print(f"✅ Usando: {app.config.from_object(get_config()).get_db_info()}")
+                print("✅ (Auto-Seed) Datos insertados correctamente.")
+        except Exception as e:
+            print(f"⚠️ Alerta: Auto-Seed falló o ya existen datos. {e}")
+            db.session.rollback()
+
+        print(f"✅ App Configurada: {app.config.from_object(get_config()).get_db_info()}")
     
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
