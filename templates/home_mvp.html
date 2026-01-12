@@ -177,17 +177,44 @@
     </div>
 
     <!-- CARBON TRACKER -->
-    <div class="module-card">
-        <div class="module-header">
-            <span class="module-title">👣 Huella de Carbono</span>
-            <span>🌱</span>
-        </div>
-        <div style="text-align: center;">
-            <div style="font-size: 2.5rem; font-weight: 700; color: #555;">0.0</div>
-            <p>Ton CO2eq/año</p>
-            <input type="range" min="0" max="100" style="width: 100%; margin: 15px 0;">
-            <p style="font-size: 0.8rem; color: #777;">Ajuste según consumo de fertilizantes</p>
-        </div>
+    <div class="search-box">
+        <form method="GET" action="{{ url_for('home') }}">
+            <input type="text" name="q" class="search-input"
+                placeholder="🔍 Buscar por nombre, descripción o palabras clave..." value="{{ query }}"
+                id="searchInput">
+
+            <div class="filters">
+                <select name="fuente" class="filter-select">
+                    <option value="">Todas las fuentes</option>
+                    <option value="INDAP" {% if fuente=='INDAP' %}selected{% endif %}>INDAP</option>
+                    <option value="FIA" {% if fuente=='FIA' %}selected{% endif %}>FIA</option>
+                    <option value="CORFO" {% if fuente=='CORFO' %}selected{% endif %}>CORFO</option>
+                    <option value="FONTAGRO" {% if fuente=='FONTAGRO' %}selected{% endif %}>FONTAGRO</option>
+                </select>
+
+                <select name="area" class="filter-select">
+                    <option value="">Todas las áreas</option>
+                    <option value="Agricultura" {% if area=='Agricultura' %}selected{% endif %}>Agricultura</option>
+                    <option value="Innovación" {% if area=='Innovación' %}selected{% endif %}>Innovación</option>
+                    <option value="Medio Ambiente" {% if area=='Medio Ambiente' %}selected{% endif %}>Medio Ambiente
+                    </option>
+                    <option value="Infraestructura" {% if area=='Infraestructura' %}selected{% endif %}>Infraestructura
+                    </option>
+                </select>
+
+                <select name="estado" class="filter-select">
+                    <option value="">Todos los estados</option>
+                    <option value="Abierto" {% if estado=='Abierto' %}selected{% endif %}>Abierto</option>
+                    <option value="Próximamente" {% if estado=='Próximamente' %}selected{% endif %}>Próximamente
+                    </option>
+                    <option value="Cerrado" {% if estado=='Cerrado' %}selected{% endif %}>Cerrado</option>
+                </select>
+
+                <button type="submit" class="btn-iica" style="padding: 0.8rem 1.5rem; border: none; font-size: 1rem;">
+                    Buscar
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 
