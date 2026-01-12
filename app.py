@@ -148,113 +148,66 @@ os.makedirs("exports", exist_ok=True)
 # CACHÉ DESHABILITADO TEMPORALMENTE PARA FORZAR ACTUALIZACIONES
 # @lru_cache(maxsize=1)
 def _cargar_excel_cached():
-    """Función para cargar Excel - SIN límites, con múltiples fuentes - CACHÉ DESHABILITADO"""
+    """Función para cargar Proyectos - PRIORIDAD: PYTHON BASE > EXCEL > SCRAPERS"""
     proyectos_totales = []
     
+    print("🚀 INICIANDO CARGA DE PROYECTOS (ESTRATEGIA MIXTA)")
+
+    # 1. CARGA PRIMARIA: PROYECTOS_BASE (Python Core)
+    # Esta es la fuente de verdad para los proyectos fijos (FIA, GORE, IKI, etc.)
     try:
-        # Intentar cargar desde proyectos_reales_2026.xlsx primero
-        print(f"📂 Intentando cargar desde: {DATA_PATH}")
-        if os.path.exists(DATA_PATH):
-            try:
-                df = pd.read_excel(DATA_PATH)
-                # Normalizar columnas si es necesario (limpiar espacios)
-                df.columns = df.columns.str.strip()
-                proyectos = df.to_dict('records')
-                print(f"✅ Cargados {len(proyectos)} proyectos REALES desde {DATA_PATH}")
-                if proyectos:
-                    proyectos_totales.extend(proyectos)
-            except Exception as e:
-                print(f"⚠️ Error leyendo {DATA_PATH}: {e}")
+        from proyectos_base import proyectos_raw, convertir_proyectos_raw_a_formato
+        proyectos_desde_raw = convertir_proyectos_raw_a_formato()
+        if proyectos_desde_raw:
+            print(f"✅ CARGA CORE EXITOSA: {len(proyectos_desde_raw)} proyectos desde proyectos_base.py")
+            proyectos_totales.extend(proyectos_desde_raw)
         else:
-             print(f"⚠️ Archivo principal no encontrado: {DATA_PATH}")
-             print(f"⚠️ Archivo principal no encontrado: {DATA_PATH}")
-             # No generar datos falsos, permitir que falback a proyectos_base funcione
-             pass
-
-        # Intentar otros archivos como respaldo (Legacy)
-        archivos_alternativos = [
-            os.path.join(DATA_DIR, 'proyectos_fortalecidos.xlsx'),
-            os.path.join(DATA_DIR, 'proyectos_completos.xlsx'),
-            os.path.join(DATA_DIR, 'proyectos_actualizados.xlsx')
-        ]
-        
-        for archivo_alt in archivos_alternativos:
-            if os.path.exists(archivo_alt) and len(proyectos_totales) == 0:
-                try:
-                    df = pd.read_excel(archivo_alt)
-                    proyectos = df.to_dict('records')
-                    print(f"📂 Cargados {len(proyectos)} proyectos desde {archivo_alt}")
-                    if proyectos:
-                        proyectos_totales.extend(proyectos)
-                        # Guardar en el archivo principal para futuras cargas
-                        try:
-                            df.to_excel(DATA_PATH, index=False)
-                            print(f"💾 Datos sincronizados a {DATA_PATH}")
-                        except:
-                            pass
-                        break
-                except Exception as e:
-                    print(f"⚠️ Error cargando {archivo_alt}: {e}")
-                    continue
-        
-        # 1. SIEMPRE Intentar cargar desde proyectos_base (Fuente de Verdad Actualizada)
-        try:
-            from proyectos_base import proyectos_raw, convertir_proyectos_raw_a_formato
-            proyectos_desde_raw = convertir_proyectos_raw_a_formato()
-            if proyectos_desde_raw:
-                print(f"📊 Cargados {len(proyectos_desde_raw)} proyectos desde proyectos_base (CORE)")
-                proyectos_totales.extend(proyectos_desde_raw)
-        except Exception as e:
-            print(f"⚠️ Error cargando desde proyectos_raw: {e}")
-
-        # 2. Intentar cargar desde scrapers (Complementario)
-        try:
-             # Intentar múltiples scrapers
-             pass # Scrapers deshabilitados por ahora para priorizar base limpia
-        except:
-             pass
-
-        # 3. Intentar cargar desde Excel (Histórico/Respaldo)
-        # Si proyectos_base ya cargó datos, esto sumará más si existen.
-        
-        # Si aún no hay proyectos, intentar desde scrapers
-        if len(proyectos_totales) == 0:
-            print("🔄 Intentando cargar desde scrapers...")
-            try:
-                # Intentar múltiples scrapers
-                scrapers_a_intentar = [
-                    ("International Funding", "scrapers.international_funding", "obtener_proyectos_internacionales"),
-                    ("DevelopmentAid", "scrapers.developmentaid", "obtener_proyectos_developmentaid"),
-                    ("Devex", "scrapers.devex", "obtener_proyectos_devex"),
-                    ("CORFO Real", "scrapers.corfo_real", "obtener_proyectos_corfo_real"),
-                    ("Fuentes Agrícolas", "scrapers.fuentes_agricolas", "obtener_proyectos_fia"),
-                ]
-                
-                for nombre, modulo, funcion in scrapers_a_intentar:
-                    try:
-                        modulo_obj = __import__(modulo, fromlist=[funcion])
-                        scraper_func = getattr(modulo_obj, funcion)
-                        proyectos_scrapers = scraper_func()
-                        if proyectos_scrapers:
-                            print(f"📊 Cargados {len(proyectos_scrapers)} proyectos desde {nombre}")
-                            proyectos_totales.extend(proyectos_scrapers)
-                            break  # Si encontramos proyectos, no intentar más
-                    except Exception as e:
-                        print(f"⚠️ Error con {nombre}: {e}")
-                        continue
-            except Exception as e:
-                print(f"⚠️ Error cargando desde scrapers: {e}")
-        
-        if not proyectos_totales:
-            print("⚠️ No se encontraron proyectos en ninguna fuente")
-        
-        return proyectos_totales
-        
+            print("⚠️ ADVERTENCIA: proyectos_base.py retornó lista vacía")
     except Exception as e:
-        print(f"❌ Error general cargando Excel: {e}")
+        print(f"❌ ERROR CRÍTICO cargando proyectos_base: {e}")
         import traceback
         traceback.print_exc()
-        return []
+
+    # 2. CARGA SECUNDARIA: EXCEL (Datos Dinámicos/Históricos)
+    # Solo suma, no reemplaza.
+    try:
+        if os.path.exists(DATA_PATH):
+            print(f"📂 Intentando fusionar datos desde Excel: {DATA_PATH}")
+            try:
+                df = pd.read_excel(DATA_PATH)
+                df.columns = df.columns.str.strip()
+                proyectos_excel = df.to_dict('records')
+                
+                # Filtrar duplicados simples (por nombre)
+                nombres_existentes = {p.get('Nombre', '').strip().lower() for p in proyectos_totales}
+                nuevos_excel = []
+                
+                for p in proyectos_excel:
+                    nombre = str(p.get('Nombre', '')).strip()
+                    if nombre.lower() not in nombres_existentes:
+                        nuevos_excel.append(p)
+                
+                if nuevos_excel:
+                    print(f"➕ FUSIONADOS: {len(nuevos_excel)} proyectos nuevos desde Excel")
+                    proyectos_totales.extend(nuevos_excel)
+                else:
+                    print("ℹ️ Excel leído pero no aportó proyectos nuevos (todos duplicados)")
+                    
+            except Exception as e:
+                print(f"⚠️ Error leyendo Excel (no crítico): {e}")
+        else:
+             print("ℹ️ No existe archivo Excel auxiliar (Normal para despliegues nuevos)")
+
+    except Exception as e:
+        print(f"⚠️ Error general en bloque Excel: {e}")
+        
+    
+    if not proyectos_totales:
+        print("❌ ERROR FATAL: No hay proyectos de ninguna fuente. Retornando lista vacía.")
+    else:
+        print(f"🏁 CARGA FINALIZADA: Total {len(proyectos_totales)} proyectos listos.")
+
+    return proyectos_totales
 
 def cargar_excel():
     """Cargar datos de Excel - SIN límites, con fallbacks y sin duplicados"""
