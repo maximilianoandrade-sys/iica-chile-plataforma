@@ -1,140 +1,208 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-CL">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}IICA Chile - Fondos Agrícolas{% endblock %}</title>
+    <meta name="theme-color" content="#006633">
+    <title>{% block title %}IICA Chile - Cooperación Agrícola{% endblock %}</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="/static/manifest.json">
+
+    <!-- Fonts Oficiales (Roboto) -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Leaflet CSS (GIS) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
     <style>
+        :root {
+            --iica-green: #006633;
+            --iica-secondary: #00A651;
+            --iica-yellow: #F4D03F;
+            --iica-dark: #333333;
+            --iica-gray: #f4f4f4;
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Roboto', sans-serif;
+            background-color: #ffffff;
+            color: var(--iica-dark);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
             min-height: 100vh;
-            color: #333;
         }
 
-        .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 1rem 2rem;
+        /* HEADER INSTITUCIONAL */
+        header {
+            background-color: white;
+            border-bottom: 4px solid var(--iica-secondary);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .top-bar {
+            background-color: var(--iica-green);
+            color: white;
+            padding: 5px 0;
+            font-size: 0.8rem;
+            text-align: right;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            height: 80px;
         }
 
         .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 15px;
             text-decoration: none;
+        }
+
+        .logo-text {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 900;
+            font-size: 2rem;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .logo-text span {
+            color: var(--iica-green);
+        }
+
+        .logo-sub {
+            color: #666;
+            font-weight: 300;
+            font-size: 2rem;
+        }
+
+        .nav-menu {
             display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: opacity 0.3s;
+            gap: 20px;
         }
 
-        .navbar-brand:hover {
-            opacity: 0.8;
-        }
-
-        .navbar-brand img {
-            height: 40px;
-            width: auto;
-        }
-
-        .navbar-menu {
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        .navbar-menu a {
-            color: #333;
+        .nav-link {
+            color: var(--iica-dark);
             text-decoration: none;
             font-weight: 500;
+            font-size: 1rem;
+            text-transform: uppercase;
+            padding: 10px;
             transition: color 0.3s;
         }
 
-        .navbar-menu a:hover {
-            color: #667eea;
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--iica-secondary);
         }
 
-        .btn {
-            padding: 0.6rem 1.5rem;
-            border-radius: 25px;
+        .btn-iica {
+            background-color: var(--iica-secondary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 700;
             border: none;
             cursor: pointer;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
+            transition: background 0.3s;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+        .btn-iica:hover {
+            background-color: var(--iica-green);
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-secondary {
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-        }
-
-        .container {
+        /* CONTENIDO */
+        .main-container {
+            flex: 1;
+            width: 100%;
             max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
+            margin: 0 auto;
+            padding: 2rem 1rem;
         }
 
-        .flash-messages {
-            margin: 1rem 0;
-        }
-
+        /* UTILS */
         .alert {
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1rem;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
         }
 
         .alert-success {
             background: #d4edda;
             color: #155724;
-            border: 1px solid #c3e6cb;
+            border-left: 5px solid #28a745;
         }
 
         .alert-error {
             background: #f8d7da;
             color: #721c24;
-            border: 1px solid #f5c6cb;
+            border-left: 5px solid #dc3545;
         }
 
-        .alert-info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
+        /* FOOTER INSTITUCIONAL */
+        footer {
+            background-color: var(--iica-green);
+            color: white;
+            padding: 3rem 0;
+            margin-top: auto;
         }
 
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-col h4 {
+            border-bottom: 2px solid var(--iica-yellow);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        /* RESPONSIVE */
         @media (max-width: 768px) {
-            .navbar {
+            .nav-container {
                 flex-direction: column;
-                gap: 1rem;
+                height: auto;
+                padding: 1rem;
             }
 
-            .navbar-menu {
-                flex-direction: column;
-                gap: 0.5rem;
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 10px;
+            }
+
+            .logo-text {
+                font-size: 1.5rem;
+            }
+
+            .logo-sub {
+                font-size: 1.5rem;
             }
         }
     </style>
@@ -142,111 +210,106 @@
 </head>
 
 <body>
-    <nav class="navbar">
-        <a href="{{ url_for('home') }}" class="navbar-brand">
-            <!-- Logo Fix Definitivo: Usando Text-Image Replacement si falla imagen -->
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/IICA.logo.jpg" alt="IICA"
-                    style="height: 50px; object-fit: contain; background: white; padding: 2px; border-radius: 4px;"
-                    onerror="this.style.display='none'; document.getElementById('logo-text-fallback').style.display='flex';">
 
-                <!-- Fallback Visual Robusto -->
-                <div id="logo-text-fallback"
-                    style="display: none; width: 50px; height: 50px; background: #004d40; color: white; border-radius: 5px; align-items: center; justify-content: center; font-weight: bold; font-size: 0.9rem;">
-                    IICA
-                </div>
-
-                <span style="font-size: 1.2rem; font-weight: bold; color: #667eea;">IICA Chile</span>
+    <header>
+        <div class="top-bar">
+            <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
+                Oficina en Chile | Instituto Interamericano de Cooperación para la Agricultura (IICA)
             </div>
-        </a>
-        <div class="navbar-menu">
-            <a href="{{ url_for('home') }}">Inicio</a>
-            <a href="{{ url_for('manual_tecnico') }}" style="color: #667eea; font-weight: 600;">📚 Manual Técnico</a>
-
-            <!-- Sistema de Notificaciones -->
-            <div class="notifications-dropdown" style="position: relative; display: inline-block;">
-                <button onclick="toggleNotifications()"
-                    style="background: none; border: none; font-size: 1.2rem; cursor: pointer; position: relative;">
-                    🔔
-                    <span id="notif-badge"
-                        style="position: absolute; top: -5px; right: -5px; background: #ff4757; color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.7rem;">2</span>
-                </button>
-                <div id="notif-menu"
-                    style="display: none; position: absolute; right: 0; top: 30px; background: white; width: 300px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); border-radius: 10px; z-index: 1000; overflow: hidden;">
-                    <div style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold; color: #333;">
-                        Notificaciones</div>
-                    <div style="max-height: 300px; overflow-y: auto;">
-                        <div style="padding: 10px; border-bottom: 1px solid #f0f0f0; background: #f0f4ff;">
-                            <div style="font-size: 0.9rem;">Nueva convocatoria INDAP disponible</div>
-                            <div style="font-size: 0.7rem; color: #666;">Hace 2 horas</div>
-                        </div>
-                        <div style="padding: 10px; border-bottom: 1px solid #f0f0f0; background: #f0f4ff;">
-                            <div style="font-size: 0.9rem;">El plazo para GAFSP cierra en 5 días</div>
-                            <div style="font-size: 0.7rem; color: #666;">Hace 1 día</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {% if current_user.is_authenticated %}
-            <a href="{{ url_for('dashboard') }}">Mi Dashboard</a>
-            <a href="{{ url_for('chatbot') }}">🤖 Asistente IA</a>
-            <a href="{{ url_for('logout') }}">Cerrar Sesión</a>
-            {% else %}
-            <a href="{{ url_for('login') }}" class="btn btn-secondary">Iniciar Sesión</a>
-            <a href="{{ url_for('registro') }}" class="btn btn-primary">Registrarse</a>
-            {% endif %}
         </div>
-    </nav>
+        <div class="nav-container">
+            <a href="{{ url_for('home') }}" class="navbar-brand">
+                <!-- LOGO PURAMENTE tipográfico e indestructible -->
+                <div class="logo-text">
+                    <span>IICA</span><span class="logo-sub">Chile</span>
+                </div>
+            </a>
 
-    <div class="container">
+            <nav class="nav-menu">
+                <a href="{{ url_for('home') }}" class="nav-link">Inicio</a>
+                <a href="{{ url_for('manual_tecnico') }}" class="nav-link">Manual Técnico</a>
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
+                <a href="{{ url_for('chatbot') }}" class="nav-link">Asistente IA</a>
+                <a href="{{ url_for('logout') }}" class="btn-iica"
+                    style="padding: 5px 15px; font-size: 0.9rem;">Salir</a>
+                {% else %}
+                <a href="{{ url_for('login') }}" class="nav-link">Ingresar</a>
+                <a href="{{ url_for('registro') }}" class="btn-iica">Registrarse</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Flash Messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-        <div class="flash-messages">
-            {% for category, message in messages %}
-            <div class="alert alert-{{ category }}">{{ message }}</div>
-            {% endfor %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+            {{ message }}
         </div>
+        {% endfor %}
         {% endif %}
         {% endwith %}
 
         {% block content %}{% endblock %}
     </div>
 
-    <!-- Footer con Dirección Oficial IICA Chile -->
-    <footer
-        style="background: #f8f9fa; padding: 2rem 0; margin-top: auto; border-top: 1px solid #e0e0e0; font-size: 0.9rem; color: #666; text-align: center;">
-        <div class="container" style="margin: 0 auto; display: flex; flex-direction: column; gap: 8px;">
-            <strong style="color: #333; font-size: 1rem;">IICA Chile - Instituto Interamericano de Cooperación para la
-                Agricultura</strong>
-            <span>📍 Calle Rancagua No.0320, Providencia, Santiago, Chile</span>
-            <span>✉️ hernan.chiriboga@iica.int | 📞 +56 2 2963 9900</span>
-            <span style="font-size: 0.8rem; margin-top: 10px;">© 2024 IICA Chile. Todos los derechos reservados.</span>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <p>📍 Calle Rancagua No.0320, Providencia</p>
+                <p>Santiago, Chile</p>
+                <p>📞 +56 2 2963 9900</p>
+                <p>✉️ iica.chile@iica.int</p>
+            </div>
+            <div class="footer-col">
+                <h4>Enlaces Rápidos</h4>
+                <p><a href="https://www.iica.int" style="color: white;">Sede Central</a></p>
+                <p><a href="https://www.minagri.gob.cl" style="color: white;">Minagri Chile</a></p>
+                <p><a href="https://www.indap.gob.cl" style="color: white;">INDAP</a></p>
+            </div>
+            <div class="footer-col">
+                <h4>Idiomas / Lenguas</h4>
+                <button onclick="toggleMapudungun()"
+                    style="background: transparent; border: 1px solid white; color: white; padding: 5px 10px; cursor: pointer; border-radius: 4px;">Español
+                    / Mapudungun</button>
+            </div>
+        </div>
+        <div
+            style="text-align: center; padding: 20px 0; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 20px;">
+            <p>© 2025 IICA - Todos los derechos reservados.</p>
         </div>
     </footer>
 
-    {% block extra_js %}
+    <!-- Service Worker Registration -->
     <script>
-        function toggleNotifications() {
-            const menu = document.getElementById('notif-menu');
-            if (menu.style.display === 'none') {
-                menu.style.display = 'block';
-            } else {
-                menu.style.display = 'none';
-            }
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/static/sw.js')
+                    .then(reg => console.log('SW registrado', reg))
+                    .catch(err => console.log('SW error', err));
+            });
         }
 
-        // Cerrar al hacer click fuera
-        window.onclick = function (event) {
-            if (!event.target.matches('.notifications-dropdown button') && !event.target.matches('.notifications-dropdown button *')) {
-                const menu = document.getElementById('notif-menu');
-                if (menu && menu.style.display === 'block') {
-                    menu.style.display = 'none';
-                }
+        // Mapudungun Toggle Mock
+        let isMapu = false;
+        function toggleMapudungun() {
+            isMapu = !isMapu;
+            const body = document.body;
+            if (isMapu) {
+                alert('Mari mari! (Modo Mapudungun Activado - Mock)');
+                // Aquí iría la lógica real de reemplazo de textos
+            } else {
+                alert('Modo Español Activado');
             }
         }
     </script>
-    {% endblock %}
+
+    <!-- Renderizado condicional de scripts extras -->
+    {% block extra_js %}{% endblock %}
 </body>
 
 </html>

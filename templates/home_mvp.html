@@ -1,356 +1,286 @@
 {% extends "base_mvp.html" %}
 
-{% block title %}Fondos Agrícolas - IICA Chile{% endblock %}
-
 {% block extra_css %}
 <style>
-    .hero {
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+    /* HERO */
+    .hero-iica {
+        background: linear-gradient(rgba(0, 102, 51, 0.9), rgba(0, 102, 51, 0.8)), url('https://img.freepik.com/foto-gratis/campo-trigo-dia-soleado_1112-1416.jpg');
+        background-size: cover;
+        background-position: center;
         color: white;
-        padding: 3rem 2rem;
-        border-radius: 20px;
-        margin-bottom: 2rem;
+        padding: 4rem 2rem;
         text-align: center;
-    }
-
-    .search-box {
-        background: white;
-        padding: 2rem;
-        border-radius: 15px;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
         margin-bottom: 2rem;
     }
 
-    .search-input {
-        width: 100%;
-        padding: 1rem;
-        border: 2px solid #e0e0e0;
-        border-radius: 10px;
-        font-size: 1.1rem;
+    .hero-title {
+        font-size: 2.5rem;
+        font-weight: 700;
         margin-bottom: 1rem;
     }
 
-    .filters {
+    /* MODULOS GRILLA */
+    .modules-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin-bottom: 40px;
     }
 
-    .filter-select {
-        padding: 0.8rem;
-        border: 2px solid #e0e0e0;
-        border-radius: 10px;
-        font-size: 1rem;
-    }
-
-    .stats {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-    }
-
-    .stat-card {
+    .module-card {
         background: white;
-        padding: 1.5rem;
-        border-radius: 15px;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-        text-align: center;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        border: 1px solid #eee;
     }
 
-    .stat-number {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #667eea;
+    .module-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        border-bottom: 2px solid var(--iica-secondary);
+        padding-bottom: 10px;
     }
 
-    .stat-label {
-        color: #666;
-        margin-top: 0.5rem;
+    .module-title {
+        color: var(--iica-green);
+        font-weight: 700;
+        font-size: 1.1rem;
     }
 
-    .fondos-grid {
-        display: grid;
-        gap: 1.5rem;
+    /* VOICE SEARCH */
+    .mic-btn {
+        background: var(--iica-yellow);
+        border: none;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        font-size: 2rem;
+        cursor: pointer;
+        display: block;
+        margin: 0 auto;
+        transition: transform 0.2s;
     }
 
+    .mic-btn.listening {
+        animation: pulse 1.5s infinite;
+        background: #ff4757;
+        color: white;
+    }
+
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.4);
+        }
+
+        70% {
+            box-shadow: 0 0 0 10px rgba(255, 71, 87, 0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(255, 71, 87, 0);
+        }
+    }
+
+    /* CARD FONDO */
     .fondo-card {
         background: white;
-        padding: 1.5rem;
-        border-radius: 15px;
-        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s, box-shadow 0.3s;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        border-left: 5px solid var(--iica-secondary);
+        transition: transform 0.2s;
     }
 
     .fondo-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 5px 25px rgba(102, 126, 234, 0.3);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
 
-    .fondo-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: start;
-        margin-bottom: 1rem;
-    }
-
-    .fondo-badge {
-        padding: 0.3rem 0.8rem;
-        border-radius: 20px;
-        font-size: 0.85rem;
+    .tag-estado {
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.8rem;
         font-weight: 600;
+        display: inline-block;
     }
 
-    .badge-abierto {
+    .estado-abierto {
         background: #d4edda;
         color: #155724;
     }
 
-    .badge-cerrado {
+    .estado-cerrado {
         background: #f8d7da;
         color: #721c24;
     }
 
-    .fondo-title {
-        font-size: 1.3rem;
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 0.5rem;
-    }
-
-    .fondo-meta {
-        display: flex;
-        gap: 1.5rem;
-        flex-wrap: wrap;
-        margin: 1rem 0;
-        color: #666;
-    }
-
-    .fondo-meta-item {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .pagination {
-        display: flex;
-        justify-content: center;
-        gap: 0.5rem;
-        margin-top: 2rem;
-    }
-
-    .page-link {
-        padding: 0.5rem 1rem;
-        border: 2px solid #667eea;
+    /* MAPA */
+    #map {
+        height: 300px;
+        width: 100%;
         border-radius: 8px;
-        text-decoration: none;
-        color: #667eea;
-        font-weight: 600;
-    }
-
-    .page-link.active {
-        background: #667eea;
-        color: white;
+        z-index: 1;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="hero">
-    <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">🌾 Fondos de Financiamiento Agrícola</h1>
-    <p style="font-size: 1.2rem; opacity: 0.9;">Encuentra oportunidades de financiamiento para tu proyecto agrícola</p>
-</div>
 
-<div class="stats" style="grid-template-columns: repeat(2, 1fr); max-width: 800px; margin: 0 auto 2rem auto;">
-    <div class="stat-card">
-        <div class="stat-number">{{ stats.total_fondos }}</div>
-        <div class="stat-label">Oportunidades Disponibles</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-number" style="color: #28a745;">{{ stats.monto_total }}</div>
-        <div class="stat-label">Monto Total Estimado</div>
+<!-- 1. HERO CON VOICE SEARCH -->
+<div class="hero-iica">
+    <h1 class="hero-title">Cooperación Técnica y Financiamiento</h1>
+    <p>Conectando el campo chileno con oportunidades de desarrollo sostenible.</p>
+
+    <div
+        style="margin-top: 2rem; background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 8px; display: inline-block;">
+        <p style="margin-bottom: 10px; font-weight: 500;">🎙️ Búsqueda por Voz (Español Chileno)</p>
+        <button id="btn-voice" class="mic-btn" onclick="toggleVoiceSearch()">🎤</button>
+        <p id="voice-status" style="margin-top: 10px; font-size: 0.9rem;">Toca para hablar...</p>
     </div>
 </div>
 
-<!-- Sección FAQ -->
-<div style="max-width: 800px; margin: 4rem auto; padding: 0 1rem;">
-    <h2 style="text-align: center; margin-bottom: 2rem; color: #333;">Preguntas Frecuentes</h2>
-    <div style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 3px 15px rgba(0,0,0,0.1);">
-        <details style="border-bottom: 1px solid #eee; padding: 1.5rem;">
-            <summary style="font-weight: 600; cursor: pointer; color: #667eea; outline: none;">¿Cómo puedo postular a un
-                fondo?</summary>
-            <p style="margin-top: 1rem; color: #555;">Selecciona el proyecto, revisa los requisitos y haz clic en
-                'Postular'. Necesitarás tener todos los documentos listos.</p>
-        </details>
-        <details style="border-bottom: 1px solid #eee; padding: 1.5rem;">
-            <summary style="font-weight: 600; cursor: pointer; color: #667eea; outline: none;">¿Qué documentos necesito?
-            </summary>
-            <p style="margin-top: 1rem; color: #555;">Depende del tipo de fondo. Revisa la sección 'Requisitos' de cada
-                proyecto para conocer los documentos específicos.</p>
-        </details>
-        <details style="border-bottom: 1px solid #eee; padding: 1.5rem;">
-            <summary style="font-weight: 600; cursor: pointer; color: #667eea; outline: none;">¿Puedo postular a varios
-                fondos?</summary>
-            <p style="margin-top: 1rem; color: #555;">Sí, puedes postular a todos los fondos para los que cumplas los
-                requisitos.</p>
-        </details>
-        <details style="padding: 1.5rem;">
-            <summary style="font-weight: 600; cursor: pointer; color: #667eea; outline: none;">¿Quanto demora la
-                revisión?</summary>
-            <p style="margin-top: 1rem; color: #555;">El tiempo varía según la institución. Generalmente entre 30 y 90
-                días desde el cierre de la convocatoria.</p>
-        </details>
-    </div>
-</div>
+<!-- 2. MÓDULOS AVANZADOS (GRID) -->
+<div class="modules-grid">
 
-<div class="search-box">
-    <form method="GET" action="{{ url_for('home') }}">
-        <input type="text" name="q" class="search-input"
-            placeholder="🔍 Buscar por nombre, descripción o palabras clave..." value="{{ query }}" id="searchInput">
-
-        <div class="filters">
-            <select name="fuente" class="filter-select">
-                <option value="">Todas las fuentes</option>
-                <option value="INDAP" {% if fuente=='INDAP' %}selected{% endif %}>INDAP</option>
-                <option value="FIA" {% if fuente=='FIA' %}selected{% endif %}>FIA</option>
-                <option value="CORFO" {% if fuente=='CORFO' %}selected{% endif %}>CORFO</option>
-                <option value="FONTAGRO" {% if fuente=='FONTAGRO' %}selected{% endif %}>FONTAGRO</option>
-            </select>
-
-            <select name="area" class="filter-select">
-                <option value="">Todas las áreas</option>
-                <option value="Agricultura" {% if area=='Agricultura' %}selected{% endif %}>Agricultura</option>
-                <option value="Innovación" {% if area=='Innovación' %}selected{% endif %}>Innovación</option>
-                <option value="Medio Ambiente" {% if area=='Medio Ambiente' %}selected{% endif %}>Medio Ambiente
-                </option>
-                <option value="Infraestructura" {% if area=='Infraestructura' %}selected{% endif %}>Infraestructura
-                </option>
-            </select>
-
-            <select name="estado" class="filter-select">
-                <option value="">Todos los estados</option>
-                <option value="Abierto" {% if estado=='Abierto' %}selected{% endif %}>Abierto</option>
-                <option value="Próximamente" {% if estado=='Próximamente' %}selected{% endif %}>Próximamente</option>
-                <option value="Cerrado" {% if estado=='Cerrado' %}selected{% endif %}>Cerrado</option>
-            </select>
-
-            <button type="submit" class="btn btn-primary" style="padding: 0.8rem 1.5rem;">
-                Buscar
-            </button>
+    <!-- AR SCANNER MOCK -->
+    <div class="module-card">
+        <div class="module-header">
+            <span class="module-title">📱 Scanner Predial AR</span>
+            <span>👁️</span>
         </div>
-    </form>
+        <div
+            style="background: #000; height: 150px; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; position: relative; overflow: hidden;">
+            <!-- Three.js Mock Placeholder -->
+            <div
+                style="position: absolute; width: 100%; height: 100%; opacity: 0.5; background: repeating-linear-gradient(45deg, #000 0, #000 10px, #111 10px, #111 20px);">
+            </div>
+            <p style="z-index: 2; text-align: center;">[Cámara Virtual]<br>Escaneando cultivo...</p>
+        </div>
+        <button class="btn-iica" style="width: 100%; margin-top: 10px; font-size: 0.9rem;">Iniciar Análisis AR</button>
+    </div>
+
+    <!-- GIS MAP -->
+    <div class="module-card">
+        <div class="module-header">
+            <span class="module-title">🗺️ Mapa de Oportunidades</span>
+            <span>📍</span>
+        </div>
+        <div id="map"></div>
+    </div>
+
+    <!-- CARBON TRACKER -->
+    <div class="module-card">
+        <div class="module-header">
+            <span class="module-title">👣 Huella de Carbono</span>
+            <span>🌱</span>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-size: 2.5rem; font-weight: 700; color: #555;">0.0</div>
+            <p>Ton CO2eq/año</p>
+            <input type="range" min="0" max="100" style="width: 100%; margin: 15px 0;">
+            <p style="font-size: 0.8rem; color: #777;">Ajuste según consumo de fertilizantes</p>
+        </div>
+    </div>
 </div>
 
-<div class="fondos-grid">
-    {% if fondos.items %}
-    {% for fondo in fondos.items %}
+<!-- 3. LISTADO DE FONDOS -->
+<h2 style="color: var(--iica-green); border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px;">
+    🌾 Convocatorias Vigentes 2025
+</h2>
+
+<div class="fondos-list">
+    {% for fondo in fondos %}
     <div class="fondo-card">
-        <div class="fondo-header">
-            <div style="flex: 1;">
-                <h3 class="fondo-title">{{ fondo.nombre }}</h3>
-                <div style="color: #667eea; font-weight: 600;">{{ fondo.fuente }}</div>
-            </div>
-            <span class="fondo-badge {% if fondo.estado == 'Abierto' %}badge-abierto{% else %}badge-cerrado{% endif %}">
+        <div style="display: flex; justify-content: space-between;">
+            <h3 style="font-size: 1.2rem; color: var(--iica-dark);">{{ fondo.nombre }}</h3>
+            <span
+                class="tag-estado {% if fondo.estado == 'Abierto' %}estado-abierto{% else %}estado-cerrado{% endif %}">
                 {{ fondo.estado }}
             </span>
         </div>
-
-        <p style="color: #666; margin: 1rem 0;">
-            {{ fondo.descripcion[:200] }}{% if fondo.descripcion|length > 200 %}...{% endif %}
+        <div style="font-size: 0.9rem; color: #555;">
+            <strong>Fuente:</strong> {{ fondo.fuente }} | <strong>Monto:</strong> {{ fondo.monto_texto }}
+        </div>
+        <p style="font-size: 0.9rem; color: #666;">
+            {{ fondo.descripcion[:150] }}...
         </p>
-
-        <div class="fondo-meta">
-            <div class="fondo-meta-item">
-                <span>💰</span>
-                <span>{{ fondo.monto_texto or 'Consultar bases' }}</span>
-            </div>
-            {% if fondo.fecha_cierre %}
-            <div class="fondo-meta-item">
-                <span>📅</span>
-                <span>Cierra: {{ fondo.fecha_cierre.strftime('%d/%m/%Y') }}</span>
-            </div>
-            {% endif %}
-            <div class="fondo-meta-item">
-                <span>🏷️</span>
-                <span>{{ fondo.area_interes }}</span>
-            </div>
-        </div>
-
-        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-            <a href="{{ url_for('detalle_fondo', id=fondo.id) }}" class="btn btn-primary"
-                style="flex: 1; text-align: center;">
-                Ver Detalles
-            </a>
-            {% if current_user.is_authenticated %}
-            <button onclick="toggleFavorito({{ fondo.id }})" class="btn btn-secondary">
-                ⭐
-            </button>
-            {% endif %}
+        <div style="display: flex; gap: 10px; margin-top: 5px;">
+            <a href="{{ url_for('detalle_fondo', id=fondo.id) }}" class="btn-iica"
+                style="flex: 1; text-align: center; padding: 8px;">Ver Bases</a>
+            <button style="border: 1px solid #ccc; background: white; border-radius: 4px; width: 40px;">⭐</button>
         </div>
     </div>
     {% endfor %}
-    {% else %}
-    <div style="text-align: center; padding: 3rem; background: white; border-radius: 15px;">
-        <p style="font-size: 1.2rem; color: #666;">No se encontraron fondos con los criterios seleccionados.</p>
-        <a href="{{ url_for('home') }}" class="btn btn-primary" style="margin-top: 1rem;">Ver todos los fondos</a>
-    </div>
-    {% endif %}
 </div>
 
-{% if fondos.pages > 1 %}
-<div class="pagination">
-    {% if fondos.has_prev %}
-    <a href="{{ url_for('home', page=fondos.prev_num, q=query, fuente=fuente, area=area, estado=estado) }}"
-        class="page-link">← Anterior</a>
-    {% endif %}
-
-    {% for page_num in fondos.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-    {% if page_num %}
-    <a href="{{ url_for('home', page=page_num, q=query, fuente=fuente, area=area, estado=estado) }}"
-        class="page-link {% if page_num == fondos.page %}active{% endif %}">
-        {{ page_num }}
-    </a>
-    {% else %}
-    <span class="page-link">...</span>
-    {% endif %}
-    {% endfor %}
-
-    {% if fondos.has_next %}
-    <a href="{{ url_for('home', page=fondos.next_num, q=query, fuente=fuente, area=area, estado=estado) }}"
-        class="page-link">Siguiente →</a>
-    {% endif %}
-</div>
-{% endif %}
 {% endblock %}
 
 {% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
-    // Búsqueda en tiempo real (opcional)
-    const searchInput = document.getElementById('searchInput');
-    let searchTimeout;
+    // 1. VOICE SEARCH LOGIC
+    function toggleVoiceSearch() {
+        const btn = document.getElementById('btn-voice');
+        const status = document.getElementById('voice-status');
 
-    searchInput.addEventListener('input', function () {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => {
-            // Aquí se puede implementar búsqueda AJAX en el futuro
-            console.log('Buscando:', this.value);
-        }, 500);
+        if (!('webkitSpeechRecognition' in window)) {
+            alert('Tu navegador no soporta búsqueda por voz.');
+            return;
+        }
+
+        const recognition = new webkitSpeechRecognition();
+        recognition.lang = 'es-CL';
+        recognition.start();
+
+        btn.classList.add('listening');
+        status.textContent = "Escuchando...";
+
+        recognition.onresult = function (event) {
+            const transcript = event.results[0][0].transcript;
+            status.textContent = `Buscando: "${transcript}"...`;
+            btn.classList.remove('listening');
+
+            // Redirigir a búsqueda real
+            window.location.href = `/?q=${encodeURIComponent(transcript)}`;
+        };
+
+        recognition.onerror = function (event) {
+            btn.classList.remove('listening');
+            status.textContent = "Error al escuchar. Intenta de nuevo.";
+        };
+    }
+
+    // 2. LEAFLET MAP LOGIC
+    document.addEventListener('DOMContentLoaded', function () {
+        if (document.getElementById('map')) {
+            const map = L.map('map').setView([-35.6751, -71.5430], 6); // Centro Chile (Maule)
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Marcadores Mock
+            L.marker([-33.4489, -70.6693]).addTo(map).bindPopup('Oficina IICA Santiago').openPopup();
+            L.marker([-36.8201, -73.0443]).addTo(map).bindPopup('Proyecto Biobío');
+            L.marker([-23.6464, -70.3980]).addTo(map).bindPopup('Proyecto Antofagasta');
+        }
     });
 
-    // Toggle favorito
-    function toggleFavorito(fondoId) {
-        fetch(`/api/favorito/toggle/${fondoId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-                location.reload();
-            })
-            .catch(error => console.error('Error:', error));
-    }
+    // 3. CARBON TRACKER LOGIC
+    // (Simple JS interaction para demo)
+    document.querySelector('input[type="range"]').addEventListener('input', (e) => {
+        const val = e.target.value;
+        const carbon = (val * 0.45).toFixed(1);
+        e.target.previousElementSibling.previousElementSibling.textContent = carbon;
+    });
 </script>
 {% endblock %}
