@@ -76,10 +76,40 @@
 </div>
 
 <div class="section">
-    <h2 class="section-title">
-        <span>🎯</span>
-        Fondos Recomendados para Ti
+    <h2 class="section-title" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <span>🎯</span>
+            Fondos Recomendados para Ti
+        </div>
+        <button onclick="buscarProyectosAuto()" class="btn btn-secondary" style="font-size: 0.9rem; border-width: 1px;">
+            🔄 Buscar Nuevos Proyectos
+        </button>
     </h2>
+
+    <script>
+        function buscarProyectosAuto() {
+            const btn = event.target;
+            btn.innerHTML = '⏳ Buscando...';
+            btn.disabled = true;
+
+            // Llamada al endpoint de scraping automático
+            fetch('/api/actualizar-proyectos', { method: 'POST' })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`✅ Búsqueda completada.\n${data.mensaje}`);
+                        window.location.reload();
+                    } else {
+                        alert('❌ Error: ' + data.error);
+                    }
+                })
+                .catch(err => alert('Error de conexión'))
+                .finally(() => {
+                    btn.innerHTML = '🔄 Buscar Nuevos Proyectos';
+                    btn.disabled = false;
+                });
+        }
+    </script>
 
     {% if fondos_recomendados %}
     <div class="fondos-recomendados">

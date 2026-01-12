@@ -222,8 +222,9 @@ def home():
     if estado:
         fondos_query = fondos_query.filter(Fondo.estado.ilike(f'%{estado}%'))
     
-    # Ordenar por fecha de cierre
-    fondos_query = fondos_query.order_by(Fondo.fecha_cierre.asc())
+    # Ordenar por el más reciente (ID descendente para mostrar lo nuevo primero)
+    # Usuario pidió: "del mas reciente al mas antiguo"
+    fondos_query = fondos_query.order_by(Fondo.id.desc())
     
     # Paginación
     fondos_paginados = fondos_query.paginate(
