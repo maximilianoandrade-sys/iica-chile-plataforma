@@ -1,256 +1,89 @@
 <!DOCTYPE html>
-<html lang="es-CL">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#006633">
     <title>{% block title %}IICA Chile - Cooperación Agrícola{% endblock %}</title>
 
     <!-- PWA -->
     <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#003057">
 
-    <!-- Fonts Oficiales (Roboto) -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Montserrat:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link href="/static/css/iica-theme-2026.css?v=2.0" rel="stylesheet">
 
-    <!-- Leaflet CSS (GIS) -->
+    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
-    <style>
-        :root {
-            --iica-navy: #002D72;
-            --iica-blue: #005CB9;
-            --iica-yellow: #FFD100;
-            --iica-dark: #1a1a1a;
-            --iica-gray: #f8f9fa;
-            --iica-border: #e0e6ed;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #ffffff;
-            color: var(--iica-dark);
-            line-height: 1.6;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        /* HEADER INSTITUCIONAL */
-        header {
-            background-color: white;
-            border-bottom: 3px solid var(--iica-navy);
-            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .top-bar {
-            background-color: var(--iica-navy);
-            color: white;
-            padding: 8px 0;
-            font-size: 0.85rem;
-            text-align: left;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 80px;
-        }
-
-        .navbar-brand {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            text-decoration: none;
-        }
-
-        .logo-text {
-            font-family: 'Roboto', sans-serif;
-            font-weight: 900;
-            font-size: 2rem;
-            letter-spacing: -1px;
-            line-height: 1;
-        }
-
-        .logo-text span {
-            color: var(--iica-navy);
-        }
-
-        .logo-sub {
-            color: #666;
-            font-weight: 300;
-            font-size: 2rem;
-        }
-
-        .nav-menu {
-            display: flex;
-            gap: 20px;
-        }
-
-        .nav-link {
-            color: var(--iica-dark);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1rem;
-            text-transform: uppercase;
-            padding: 10px;
-            transition: color 0.3s;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            color: var(--iica-secondary);
-        }
-
-        .btn-iica {
-            background-color: var(--iica-navy);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-block;
-        }
-
-        .btn-iica:hover {
-            background-color: var(--iica-blue);
-            transform: translateY(-1px);
-        }
-
-        /* CONTENIDO */
-        .main-container {
-            flex: 1;
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-
-        /* UTILS */
-        .alert {
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-        }
-
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border-left: 5px solid #28a745;
-        }
-
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border-left: 5px solid #dc3545;
-        }
-
-        /* FOOTER INSTITUCIONAL */
-        footer {
-            background-color: var(--iica-navy);
-            color: white;
-            padding: 4rem 0 2rem 0;
-            margin-top: auto;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .footer-col h4 {
-            border-bottom: 2px solid var(--iica-yellow);
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-                height: auto;
-                padding: 1rem;
-            }
-
-            .nav-menu {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 10px;
-                margin-top: 10px;
-            }
-
-            .logo-text {
-                font-size: 1.5rem;
-            }
-
-            .logo-sub {
-                font-size: 1.5rem;
-            }
-        }
-    </style>
     {% block extra_css %}{% endblock %}
 </head>
 
 <body>
+    <!-- Top Utility Bar -->
+    <div class="iica-top-bar">
+        <div class="container d-flex justify-content-end">
+            <a href="https://iica.int/es" target="_blank">IICA.int</a>
+            <a href="https://iica.int/en" target="_blank">English</a>
+            <a href="https://iica.int/pt" target="_blank">Português</a>
+        </div>
+    </div>
 
-    <header>
-        <div class="top-bar">
-            <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
-                Oficina en Chile | Instituto Interamericano de Cooperación para la Agricultura (IICA)
+    <!-- Main Navbar -->
+    <nav class="navbar navbar-expand-lg iica-main-nav">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="https://iica.int/sites/default/files/iica_logo_0.png" alt="IICA" class="iica-logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link iica-nav-link" href="/">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link iica-nav-link" href="/quienes-somos">Quiénes Somos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link iica-nav-link" href="/manual">Manual Técnico</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link iica-nav-link" href="/todos-los-proyectos">Proyectos</a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link iica-nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item ms-lg-3">
+                        <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-sm mt-1">Cerrar Sesión</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item ms-lg-3">
+                        <a class="btn btn-iica-primary" href="/login">Ingresar</a>
+                    </li>
+                    {% endif %}
+                </ul>
             </div>
         </div>
-        <div class="nav-container">
-            <a href="{{ url_for('home') }}" class="navbar-brand">
-                <!-- LOGO PURAMENTE tipográfico e indestructible -->
-                <div class="logo-text">
-                    <span>IICA</span><span class="logo-sub">Chile</span>
-                </div>
-            </a>
+    </nav>
 
-            <nav class="nav-menu">
-                <a href="{{ url_for('home') }}" class="nav-link">Inicio</a>
-                <a href="{{ url_for('manual_tecnico') }}" class="nav-link">Manual Técnico</a>
-                {% if current_user.is_authenticated %}
-                <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
-                <a href="{{ url_for('chatbot') }}" class="nav-link">Asistente IA</a>
-                <a href="{{ url_for('logout') }}" class="btn-iica"
-                    style="padding: 5px 15px; font-size: 0.9rem;">Salir</a>
-                {% else %}
-                <a href="{{ url_for('login') }}" class="nav-link">Ingresar</a>
-                <a href="{{ url_for('registro') }}" class="btn-iica">Registrarse</a>
-                {% endif %}
-            </nav>
-        </div>
-    </header>
-
-    <div class="main-container">
+    <!-- Main Content -->
+    <div class="main-container container my-5" style="min-height: 60vh;">
         <!-- Flash Messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
         {% for category, message in messages %}
-        <div class="alert alert-{{ category }}">
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
             {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         {% endfor %}
         {% endif %}
@@ -259,59 +92,56 @@
         {% block content %}{% endblock %}
     </div>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-col">
-                <h4>Contacto</h4>
-                <p>📍 Calle Rancagua No.0320, Providencia</p>
-                <p>Santiago, Chile</p>
-                <p>📞 +56 2 2963 9900</p>
-                <p>✉️ iica.chile@iica.int</p>
+    <!-- Footer -->
+    <footer class="iica-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>IICA</h5>
+                    <ul class="iica-footer-links">
+                        <li><a href="https://iica.int/es/about-us/main/" target="_blank">Sobre el IICA</a></li>
+                        <li><a href="https://iica.int/es/about-us/dg/" target="_blank">Dirección General</a></li>
+                        <li><a href="https://iica.int/es/paises/" target="_blank">Países</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>Enlaces de Interés</h5>
+                    <ul class="iica-footer-links">
+                        <li><a href="/">Plataforma Financiamiento</a></li>
+                        <li><a href="/manual">Manual de Usuario</a></li>
+                        <li><a href="https://www.iica3d.iica.int/" target="_blank">IICA 3D</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>Contacto Chile</h5>
+                    <ul class="iica-footer-links text-white-50">
+                        <li>Calle Rancagua No. 0320</li>
+                        <li>Providencia, Santiago</li>
+                        <li>+56 2 2225 2511</li>
+                        <li>hernan.chiriboga@iica.int</li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>Legal</h5>
+                    <ul class="iica-footer-links">
+                        <li><a href="https://apps.iica.int/transparenciaiica/public/Reporte?LG=es"
+                                target="_blank">Denuncias</a></li>
+                        <li><a href="https://hdl.handle.net/11324/18804" target="_blank">Políticas de privacidad</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div class="footer-col">
-                <h4>Enlaces Rápidos</h4>
-                <p><a href="https://www.iica.int" style="color: white;">Sede Central</a></p>
-                <p><a href="https://www.minagri.gob.cl" style="color: white;">Minagri Chile</a></p>
-                <p><a href="https://www.indap.gob.cl" style="color: white;">INDAP</a></p>
+            <div class="footer-bottom">
+                © 2026 Instituto Interamericano de Cooperación para la Agricultura (IICA). Todos los derechos
+                reservados.
             </div>
-            <div class="footer-col">
-                <h4>Idiomas / Lenguas</h4>
-                <button onclick="toggleMapudungun()"
-                    style="background: transparent; border: 1px solid white; color: white; padding: 5px 10px; cursor: pointer; border-radius: 4px;">Español
-                    / Mapudungun</button>
-            </div>
-        </div>
-        <div
-            style="text-align: center; padding: 20px 0; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 20px;">
-            <p>© 2025 IICA - Todos los derechos reservados.</p>
         </div>
     </footer>
 
-    <!-- Service Worker Registration -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/static/sw.js')
-                    .then(reg => console.log('SW registrado', reg))
-                    .catch(err => console.log('SW error', err));
-            });
-        }
-
-        // Mapudungun Toggle Mock
-        let isMapu = false;
-        function toggleMapudungun() {
-            isMapu = !isMapu;
-            const body = document.body;
-            if (isMapu) {
-                alert('Mari mari! (Modo Mapudungun Activado - Mock)');
-                // Aquí iría la lógica real de reemplazo de textos
-            } else {
-                alert('Modo Español Activado');
-            }
-        }
-    </script>
-
-    <!-- Renderizado condicional de scripts extras -->
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     {% block extra_js %}{% endblock %}
 </body>
 
