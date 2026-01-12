@@ -101,31 +101,31 @@ proyectos_raw = [
         "link": "https://www.devex.com"
     },
     {
-        "titulo": "Programa de Becas IICA-FUNIBER 2026",
-        "descripcion": "Becas parciales (hasta 75%) para maestrías y licenciaturas en línea en el sector agropecuario.",
-        "estado": "Abierto",
-        "monto": "Beca hasta 75%",
-        "fecha": "Continuo",
-        "fuente": "IICA-FUNIBER",
-        "link": "https://www.funiber.org/becas-maestria"
-    },
-    {
-        "titulo": "Becas Máster Transformación Digital (Digital Agri)",
-        "descripcion": "Becas para estudiantes latinoamericanos en la Universidad de Córdoba, España. Transformación digital agroalimentaria.",
+        "titulo": "Convocatoria Nacional FIA 2025-2026",
+        "descripcion": "Proyectos de innovación silvoagropecuaria. Énfasis en gestión hídrica, adaptación cambio climático y sistemas alimentarios sostenibles.",
         "estado": "Próximamente",
-        "monto": "Cobertura Matrícula",
-        "fecha": "2026-05-15",
-        "fuente": "IICA-Córdoba",
-        "link": "https://digitalagri.es/"
+        "monto": "Hasta CLP 150.000.000",
+        "fecha": "2025-07-08",
+        "fuente": "FIA Chile",
+        "link": "https://www.fia.cl"
     },
     {
-        "titulo": "Programa de Pasantías IICA 2026",
-        "descripcion": "Oportunidades de desarrollo profesional y académico en las oficinas del IICA en las Américas.",
-        "estado": "Abierto",
-        "monto": "Estipendio Variable",
-        "fecha": "Continuo",
-        "fuente": "IICA",
-        "link": "https://www.iica.int/es/pasantias"
+        "titulo": "Fondo Concursable 8% FNDR 2026 (Arica y Parinacota)",
+        "descripcion": "Fondo regional para iniciativas comunitarias y desarrollo local. Apertura estimada: Febrero 2026.",
+        "estado": "Por Abrir",
+        "monto": "Variable Regional",
+        "fecha": "2026-03-02",
+        "fuente": "GORE Arica",
+        "link": "https://www.gorearicayparinacota.cl"
+    },
+    {
+        "titulo": "FIC Regional GORE 2026 (Proyectado)",
+        "descripcion": "Fondo de Innovación para la Competitividad Regional. IICA Chile es ejecutor elegible en diversas regiones.",
+        "estado": "Próximamente",
+        "monto": "Hasta CLP 200.000.000",
+        "fecha": "2026-04-01",
+        "fuente": "GORE Regional",
+        "link": "http://www.subdere.gov.cl"
     },
     {
         "titulo": "Concurso FONTAGRO 2026",
