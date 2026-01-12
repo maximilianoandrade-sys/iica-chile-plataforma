@@ -2,121 +2,157 @@
 
 proyectos_raw = [
     {
-        "titulo": "Dashboard Proyectos IICA",
-        "descripcion": "Plataforma oficial de proyectos IICA",
+        "titulo": "Convocatoria Nacional de Innovación FIA 2025-2026",
+        "descripcion": "Proyectos de Bienes Públicos para el agro. Soluciones de libre disposición para problemas comunes del sector.",
         "estado": "Abierto",
-        "monto": "",
-        "fecha": "Continuo",
-        "fuente": "IICA",
-        "link": "https://apps.iica.int/dashboardproyectos/"
-    },
-    {
-        "titulo": "Licitaciones IICA",
-        "descripcion": "Convocatorias y licitaciones abiertas IICA",
-        "estado": "Abierto",
-        "monto": "",
-        "fecha": "2025-12-31",
-        "fuente": "IICA",
-        "link": "https://iica.int/es/licitaciones/"
-    },
-    {
-        "titulo": "Convocatorias FIA Innovar",
-        "descripcion": "Fondos para innovación agrícola Chile",
-        "estado": "Abierto",
-        "monto": "CLP 250M",
-        "fecha": "2025-12-15",
+        "monto": "Hasta CLP 150M",
+        "fecha": "2026-06-30",
         "fuente": "FIA",
-        "link": "https://www.fia.cl/pilares-de-accion/impulso-para-innovar/convocatorias-y-licitaciones/"
+        "link": "https://www.fia.cl"
     },
     {
-        "titulo": "Mi Primer Negocio Rural INDAP",
-        "descripcion": "Apoyo a emprendimientos rurales",
+        "titulo": "Sistema de Suelos Degradados (SIRSD-S) 2026",
+        "descripcion": "Incentivos para la recuperación de suelos agropecuarios. Operación Temprana 2026.",
         "estado": "Abierto",
-        "monto": "Hasta CLP 8M",
+        "monto": "Variado",
+        "fecha": "2026-02-27",
+        "fuente": "INDAP",
+        "link": "https://www.indap.gob.cl"
+    },
+    {
+        "titulo": "Programa de Absorción Tecnológica (PATI) 2026",
+        "descripcion": "Apoyo para la incorporación de tecnología e innovación en PYMES agrícolas. Ventanilla abierta.",
+        "estado": "Abierto",
+        "monto": "Cofinanciamiento",
+        "fecha": "Continuo",
+        "fuente": "CORFO",
+        "link": "https://www.corfo.cl"
+    },
+    {
+        "titulo": "Crece Sostenible Sercotec",
+        "descripcion": "Subsidio para implementar prácticas sostenibles en empresas y cooperativas.",
+        "estado": "Abierto",
+        "monto": "Hasta CLP 9M",
+        "fecha": "2025-12-31",
+        "fuente": "Sercotec",
+        "link": "https://www.sercotec.cl"
+    },
+    {
+        "titulo": "Fortalecimiento de Cooperativas 2026",
+        "descripcion": "Financiamiento para mejorar la gestión y modelo de negocio de cooperativas agrícolas.",
+        "estado": "Abierto",
+        "monto": "Hasta CLP 20M",
+        "fecha": "2026-03-15",
+        "fuente": "Sercotec",
+        "link": "https://www.sercotec.cl"
+    },
+    {
+        "titulo": "Proyectos de Interés Privado FIA",
+        "descripcion": "Innovaciones con potencial comercial para empresas del sector silvoagropecuario.",
+        "estado": "Abierto",
+        "monto": "Hasta CLP 120M",
+        "fecha": "2026-07-30",
+        "fuente": "FIA",
+        "link": "https://www.fia.cl"
+    },
+    {
+        "titulo": "Bono Legal de Aguas (BLA)",
+        "descripcion": "Instrumento para dar certeza jurídica sobre la propiedad de los derechos de aprovechamiento de aguas.",
+        "estado": "Abierto",
+        "monto": "Variable",
         "fecha": "Continuo",
         "fuente": "INDAP",
-        "link": "http://www.indap.gob.cl/plataforma-de-servicios/mi-primer-negocio-rural"
+        "link": "https://www.indap.gob.cl"
     },
     {
-        "titulo": "Licitaciones INIA",
-        "descripcion": "Convocatorias Instituto Investigación Agropecuaria",
+        "titulo": "Crédito Enlace Riego",
+        "descripcion": "Financiamiento de corto plazo para obras de riego y drenaje bonificadas por la CNR.",
         "estado": "Abierto",
-        "monto": "",
-        "fecha": "2025-11-30",
-        "fuente": "INIA",
-        "link": "https://www.inia.cl/licitaciones/"
-    },
-    {
-        "titulo": "Portal Fondos.gob.cl",
-        "descripcion": "Todos los fondos públicos Chile",
-        "estado": "Abierto",
-        "monto": "Varios",
+        "monto": "Hasta 90% Bonificación",
         "fecha": "Continuo",
-        "fuente": "Fondos Públicos",
-        "link": "https://www.fondos.gob.cl/"
+        "fuente": "INDAP",
+        "link": "https://www.indap.gob.cl"
     },
-    {
-        "titulo": "Devex Funding",
-        "descripcion": "Oportunidades financiamiento internacional",
+     {
+        "titulo": "Programa Innova Región",
+        "descripcion": "Apoyo para el desarrollo de nuevos o mejorados productos/servicios desde las regiones.",
         "estado": "Abierto",
-        "monto": "USD 1M+",
-        "fecha": "2026-01-15",
-        "fuente": "Devex",
-        "link": "https://www.devex.com/funding"
+        "monto": "Hasta CLP 60M",
+        "fecha": "Ventanilla Abierta",
+        "fuente": "CORFO",
+        "link": "https://www.corfo.cl"
     },
     {
-        "titulo": "DevelopmentAid Projects",
-        "descripcion": "Proyectos desarrollo internacional",
+        "titulo": "Fondo de Agua y Agricultura (BID)",
+        "descripcion": "Financiamiento internacional para proyectos de seguridad hídrica y agricultura resiliente.",
         "estado": "Abierto",
         "monto": "USD 500K+",
-        "fecha": "2025-12-20",
-        "fuente": "DevelopmentAid",
-        "link": "https://www.developmentaid.org/"
-    },
-    {
-        "titulo": "BID Projects Search",
-        "descripcion": "Proyectos Banco Interamericano Desarrollo",
-        "estado": "Abierto",
-        "monto": "USD 10M+",
         "fecha": "Continuo",
         "fuente": "BID",
-        "link": "https://www.iadb.org/es/project-search"
+        "link": "https://www.iadb.org/es"
     },
     {
-        "titulo": "Banco Mundial Projects",
-        "descripcion": "Proyectos agricultura y desarrollo rural",
+        "titulo": "Call for Proposals: Climate Smart Agriculture",
+        "descripcion": "Oportunidad de financiamiento global para agricultura climáticamente inteligente.",
         "estado": "Abierto",
-        "monto": "USD 50M+",
-        "fecha": "Continuo",
-        "fuente": "Banco Mundial",
-        "link": "https://projects.worldbank.org/en/projects-operations/projects-list"
-    },    
-    {
-        "titulo": "UNGM Tenders",
-        "descripcion": "Licitaciones Naciones Unidas",
-        "estado": "Abierto",
-        "monto": "USD 100K+",
-        "fecha": "Continuo",
-        "fuente": "UNGM",
-        "link": "https://www.ungm.org/Public/Notice"
+        "monto": "USD 100K - 1M",
+        "fecha": "2026-04-15",
+        "fuente": "International Funding",
+        "link": "https://www.devex.com"
     },
     {
-        "titulo": "Global Tenders",
-        "descripcion": "Tenders internacionales agricultura",
-        "estado": "Abierto",
-        "monto": "",
-        "fecha": "Continuo",
-        "fuente": "GlobalTenders",
-        "link": "https://www.globaltenders.com/"
+        "titulo": "FONTAGRO Concurso 2026",
+        "descripcion": "Cooperación técnica para la innovación en agricultura familiar en América Latina. Aumento de productividad sostenible.",
+        "estado": "Próximamente",
+        "monto": "Hasta USD 200,000",
+        "fecha": "2026-03-30",
+        "fuente": "FONTAGRO",
+        "link": "https://www.fontagro.org"
     },
     {
-        "titulo": "Bio-emprender IICA",
-        "descripcion": "Plataforma emprendimiento bioeconomía",
+        "titulo": "CFC Call for Proposals 2026",
+        "descripcion": "Financiamiento para proyectos de cadenas de valor de commodities inclusivas y restauración de ecosistemas.",
+        "estado": "Próximamente",
+        "monto": "Consultar Bases",
+        "fecha": "2026-04-01",
+        "fuente": "Common Fund for Commodities",
+        "link": "https://www.common-fund.org"
+    },
+    {
+        "titulo": "FO4IMPACT: Fortalecimiento Institucional",
+        "descripcion": "Subvención regional para fortalecimiento institucional y acceso a mercados de organizaciones de agricultores.",
         "estado": "Abierto",
-        "monto": "",
-        "fecha": "Continuo",
-        "fuente": "IICA",
-        "link": "https://bio-emprender.iica.int/"
+        "monto": "Regional Grant",
+        "fecha": "2025-11-14",
+        "fuente": "IFAD",
+        "link": "https://www.ifad.org"
+    },
+    {
+        "titulo": "New England Biolabs Foundation Grant",
+        "descripcion": "Apoyo a organizaciones de base para conservación de biodiversidad y seguridad alimentaria en Sudamérica.",
+        "estado": "Abierto",
+        "monto": "Small Grants",
+        "fecha": "2025-10-20",
+        "fuente": "NEBF",
+        "link": "https://www.nebf.org"
+    },
+    {
+        "titulo": "Global Forest Watch Small Grants 2025",
+        "descripcion": "Fondos para ONGs en LatAm enfocados en monitoreo forestal, defensa y desarrollo de capacidades.",
+        "estado": "Abierto",
+        "monto": "Small Grants",
+        "fecha": "2025-05-09",
+        "fuente": "GFW",
+        "link": "https://www.globalforestwatch.org"
+    },
+    {
+        "titulo": "Luena WASH Small Grant LatAm",
+        "descripcion": "Subvenciones para proyectos de Agua, Saneamiento e Higiene (WASH) en Latinoamérica.",
+        "estado": "Abierto",
+        "monto": "USD 5K - 25K",
+        "fecha": "2025-11-30",
+        "fuente": "Luena Foundation",
+        "link": "https://www.luenafoundation.org"
     }
 ]
 

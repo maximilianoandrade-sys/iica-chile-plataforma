@@ -126,51 +126,19 @@
         </div>
 
         <!-- Advanced Modules Row -->
-        <div class="row mb-5">
-            <div class="col-lg-4 mb-4">
+        <div class="row mb-5 justify-content-center">
+            <div class="col-lg-10 mb-4">
                 <div class="iica-module-card">
                     <div class="iica-module-header">
-                        <h3 class="iica-module-title"><i class="bi bi-geo-alt me-2"></i>Mapa GIS</h3>
+                        <h3 class="iica-module-title"><i class="bi bi-geo-alt me-2"></i>Mapa de Oportunidades Agrícolas
+                        </h3>
                         <span class="badge bg-light text-dark">Beta</span>
                     </div>
-                    <div id="map"></div>
-                    <div class="p-3">
+                    <div id="map" style="height: 450px;"></div>
+                    <div class="p-3 d-flex justify-content-between align-items-center">
                         <small class="text-muted">Distribución geográfica de las convocatorias abiertas en
                             Chile.</small>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 mb-4">
-                <div class="iica-module-card">
-                    <div class="iica-module-header">
-                        <h3 class="iica-module-title"><i class="bi bi-cloud-sun me-2"></i>Carbon Tracker</h3>
-                        <span class="badge bg-success">Eco</span>
-                    </div>
-                    <div class="carbon-tracker-container">
-                        <p class="mb-0 small text-muted">Ahorro Estimado de CO2 (Ton)</p>
-                        <div class="carbon-value" id="carbonValue">54.0</div>
-                        <input type="range" class="carbon-slider" min="0" max="100" value="45" id="carbonSlider">
-                        <p class="mt-2 mb-0 small">Simula el impacto ambiental de tus proyectos.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 mb-4">
-                <div class="iica-module-card">
-                    <div class="iica-module-header">
-                        <h3 class="iica-module-title"><i class="bi bi-camera me-2"></i>Scanner AR</h3>
-                        <span class="badge bg-warning text-dark">Mock</span>
-                    </div>
-                    <div class="ar-mock-container">
-                        <div class="ar-scanline"></div>
-                        <div style="text-align: center; z-index: 2;">
-                            <i class="bi bi-qr-code-scan fs-1"></i>
-                            <p class="mb-0">[Simulador AR]</p>
-                        </div>
-                    </div>
-                    <div class="p-3 text-center">
-                        <button class="btn btn-sm btn-outline-primary w-100">Activar Scanner</button>
+                        <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Actualizado 2026</span>
                     </div>
                 </div>
             </div>
@@ -429,14 +397,6 @@
             L.marker([-36.8201, -73.0443]).addTo(map).bindPopup('Proyecto Biobío');
         });
 
-        // Carbon Tracker
-        const slider = document.getElementById('carbonSlider');
-        const display = document.getElementById('carbonValue');
-        if (slider && display) {
-            slider.addEventListener('input', (e) => {
-                display.textContent = (e.target.value * 1.2).toFixed(1);
-            });
-        }
     </script>
 </body>
 
