@@ -1055,6 +1055,7 @@ def quienes_somos():
 @app.route('/manual')
 def manual_usuario():
     """Manual de Usuario Técnico - IICA"""
+    print("📘 RUTA MANUAL SOLICITADA")
     return render_template('manual_usuario.html')
 
 # ===== RUTAS DE DASHBOARD AVANZADO =====
