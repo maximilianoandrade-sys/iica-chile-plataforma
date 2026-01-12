@@ -1,13 +1,16 @@
 services:
   - type: web
     name: iica-plataforma
-    env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.10.0
-    healthCheckPath: /
+      - key: NODE_VERSION
+        value: 20.10.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: iica-plataforma-db
+          property: connectionString
     autoDeploy: true
 
 databases:
