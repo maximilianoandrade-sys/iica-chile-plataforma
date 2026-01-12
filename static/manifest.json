@@ -1,0 +1,15 @@
+{
+    "name": "IICA Chile Plataforma 7.0",
+    "short_name": "IICA Chile",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#006633",
+    "icons": [
+        {
+            "src": "https://iica.int/themes/custom/iica_theme/favicon.ico",
+            "sizes": "64x64 32x32 24x24 16x16",
+            "type": "image/x-icon"
+        }
+    ]
+}
