@@ -457,7 +457,7 @@ def exportar_csv(proyectos, filename='proyectos_iica.csv'):
 @app.route('/', methods=['GET', 'POST'])
 def home():
     """Página principal con todos los proyectos y filtros mejorados"""
-    print(f"🏠 RUTA HOME - Versión: {APP_VERSION}")
+    print(f"🏠 RUTA HOME - Versión: {APP_VERSION} - DEPLOY MANUAL")
     
     try:
         # Cargar proyectos con manejo robusto de errores
