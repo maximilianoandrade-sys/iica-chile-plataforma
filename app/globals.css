@@ -2,20 +2,63 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 
 @layer base {
   :root {
-    --iica-primary: #0066cc;
-    --iica-secondary: #00a651;
-    --iica-green: #00a651;
-    --iica-blue: #0066cc;
-    --iica-dark: #212121;
-    --iica-light: #F5F5F5;
+    --iica-navy: #002D72;
+    --iica-blue: #005CB9;
+    --iica-yellow: #FFD100;
+    --iica-dark: #1a1a1a;
+    --iica-gray: #f8f9fa;
+    --iica-border: #e0e6ed;
+    --iica-secondary: #00a651; /* Keeping this as the green accent */
   }
   
   body {
-    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--iica-dark);
+    background-color: #ffffff;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
   }
 }
 
+@layer components {
+  .btn-iica {
+    @apply bg-[var(--iica-navy)] text-white px-6 py-3 rounded font-semibold transition-transform hover:bg-[var(--iica-blue)] hover:-translate-y-[1px] inline-block cursor-pointer border-none;
+  }
+
+  .mic-btn {
+    background: var(--iica-yellow);
+    border: none;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    font-size: 2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    transition: transform 0.2s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+
+  .mic-btn:hover {
+    transform: scale(1.05);
+  }
+
+  .hero-iica {
+    background: linear-gradient(rgba(0, 45, 114, 0.85), rgba(0, 45, 114, 0.7)), url('https://img.freepik.com/foto-gratis/campo-trigo-dia-soleado_1112-1416.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 5rem 2rem;
+    text-align: center;
+    border-radius: 4px;
+    margin-bottom: 3rem;
+  }
+}
