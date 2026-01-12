@@ -1,0 +1,156 @@
+{% extends "base_mvp.html" %}
+
+{% block title %}Manual Técnico - IICA Chile{% endblock %}
+
+{% block extra_css %}
+<style>
+    .manual-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .manual-header {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        margin-bottom: 2rem;
+        border-left: 5px solid #667eea;
+    }
+
+    .manual-section {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .manual-section h2 {
+        color: #667eea;
+        border-bottom: 2px solid #f0f4ff;
+        padding-bottom: 10px;
+        margin-bottom: 1.5rem;
+    }
+
+    .step-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .step-list li {
+        margin-bottom: 1.5rem;
+        position: relative;
+        padding-left: 50px;
+    }
+
+    .step-number {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 35px;
+        height: 35px;
+        background: #667eea;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+
+    .doc-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 20px;
+        background: #f8f9fa;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        color: #333;
+        text-decoration: none;
+        transition: all 0.3s;
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+
+    .doc-link:hover {
+        background: #e9ecef;
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="manual-container">
+    <div class="manual-header">
+        <h1 style="color: #333; margin-bottom: 0.5rem;">📚 Manual de Usuario para Técnicos IICA</h1>
+        <p style="color: #666; font-size: 1.1rem;">Guía oficial para la gestión y postulación de fondos en la
+            plataforma.</p>
+    </div>
+
+    <div class="manual-section">
+        <h2>1. Gestión de Proyectos</h2>
+        <ul class="step-list">
+            <li>
+                <div class="step-number">1</div>
+                <h3>Actualización Automática</h3>
+                <p>Para buscar nuevos fondos disponibles en la web, dirígete al <strong>Dashboard</strong> y haz clic en
+                    el botón <strong>"🔄 Buscar Nuevos Proyectos"</strong>. El sistema escaneará fuentes oficiales (FIA,
+                    INDAP, IICA) y agregará las novedades automáticamente.</p>
+            </li>
+            <li>
+                <div class="step-number">2</div>
+                <h3>Validación de Requisitos</h3>
+                <p>Antes de difundir un fondo, revisa la sección <strong>"Requisitos"</strong> en el detalle de cada
+                    proyecto para asegurar que el perfil del beneficiario calce con lo solicitado.</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="manual-section">
+        <h2>2. Uso de Herramientas Inteligentes</h2>
+        <ul class="step-list">
+            <li>
+                <div class="step-number">1</div>
+                <h3>Asistente IA (Gemini)</h3>
+                <p>Utiliza el <strong>Chatbot</strong> para redactar borradores de perfiles de proyecto. Ejemplo de
+                    prompt: <em>"Ayúdame a redactar una justificación técnica para un proyecto de riego en Maule para el
+                        fondo INDAP"</em>.</p>
+            </li>
+            <li>
+                <div class="step-number">2</div>
+                <h3>Validación Blockchain</h3>
+                <p>Cada postulación genera un <strong>Hash Único</strong>. Este código sirve como comprobante de
+                    transparencia inmutable frente a los beneficiarios.</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="manual-section">
+        <h2>📂 Documentación y Plantillas Oficiales</h2>
+        <p style="margin-bottom: 1.5rem;">Descargue los formatos oficiales vigentes para la gestión 2025.</p>
+
+        <a href="#" class="doc-link"
+            onclick="alert('Descargando: Formato Perfil Proyecto IICA v2.4...'); return false;">
+            📄 Plantilla Perfil Proyecto (.docx)
+        </a>
+        <a href="#" class="doc-link" onclick="alert('Descargando: Guía de Rendición de Cuentas...'); return false;">
+            📊 Guía de Rendición (.pdf)
+        </a>
+        <a href="#" class="doc-link" onclick="alert('Descargando: Formulario de Consentimiento...'); return false;">
+            📝 Consentimiento Informado (.pdf)
+        </a>
+        <a href="#" class="doc-link" onclick="alert('Descargando: Matriz de Marco Lógico...'); return false;">
+            📐 Matriz Marco Lógico (.xlsx)
+        </a>
+    </div>
+
+    <div class="manual-section" style="background: #e3f2fd; border: 1px solid #bbdefb;">
+        <h3 style="color: #0d47a1; margin-bottom: 10px;">📞 Soporte Técnico</h3>
+        <p>Para incidencias con la plataforma o dudas sobre convocatorias:</p>
+        <p><strong>Mesa de Ayuda IICA Chile:</strong> soporte.chile@iica.int</p>
+        <p><strong>Anexo:</strong> 5544</p>
+    </div>
+</div>
+{% endblock %}

@@ -144,13 +144,24 @@
 <body>
     <nav class="navbar">
         <a href="{{ url_for('home') }}" class="navbar-brand">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/IICA.logo.jpg" alt="IICA Chile"
-                style="height: 50px; border-radius: 5px;"
-                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <span style="font-size: 1.2rem; font-weight: bold; color: #667eea; margin-left: 10px;">IICA Chile</span>
+            <!-- Logo Fix Definitivo: Usando Text-Image Replacement si falla imagen -->
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/IICA.logo.jpg" alt="IICA"
+                    style="height: 50px; object-fit: contain; background: white; padding: 2px; border-radius: 4px;"
+                    onerror="this.style.display='none'; document.getElementById('logo-text-fallback').style.display='flex';">
+
+                <!-- Fallback Visual Robusto -->
+                <div id="logo-text-fallback"
+                    style="display: none; width: 50px; height: 50px; background: #004d40; color: white; border-radius: 5px; align-items: center; justify-content: center; font-weight: bold; font-size: 0.9rem;">
+                    IICA
+                </div>
+
+                <span style="font-size: 1.2rem; font-weight: bold; color: #667eea;">IICA Chile</span>
+            </div>
         </a>
         <div class="navbar-menu">
             <a href="{{ url_for('home') }}">Inicio</a>
+            <a href="{{ url_for('manual_tecnico') }}" style="color: #667eea; font-weight: 600;">📚 Manual Técnico</a>
 
             <!-- Sistema de Notificaciones -->
             <div class="notifications-dropdown" style="position: relative; display: inline-block;">

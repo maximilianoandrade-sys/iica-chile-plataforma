@@ -161,22 +161,14 @@
     <p style="font-size: 1.2rem; opacity: 0.9;">Encuentra oportunidades de financiamiento para tu proyecto agrícola</p>
 </div>
 
-<div class="stats">
+<div class="stats" style="grid-template-columns: repeat(2, 1fr); max-width: 800px; margin: 0 auto 2rem auto;">
     <div class="stat-card">
         <div class="stat-number">{{ stats.total_fondos }}</div>
-        <div class="stat-label">Fondos Disponibles</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-number">{{ stats.fondos_abiertos }}</div>
-        <div class="stat-label">Convocatorias Abiertas</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-number">{{ stats.fuentes_unicas }}</div>
-        <div class="stat-label">Fuentes de Financiamiento</div>
+        <div class="stat-label">Oportunidades Disponibles</div>
     </div>
     <div class="stat-card">
         <div class="stat-number" style="color: #28a745;">{{ stats.monto_total }}</div>
-        <div class="stat-label">Monto Total Disponible</div>
+        <div class="stat-label">Monto Total Estimado</div>
     </div>
 </div>
 
