@@ -1,0 +1,329 @@
+{% extends "base_mvp.html" %}
+
+{% block title %}Fondos Agrícolas - IICA Chile{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+        color: white;
+        padding: 3rem 2rem;
+        border-radius: 20px;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .search-box {
+        background: white;
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 1rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+
+    .filters {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .filter-select {
+        padding: 0.8rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 1rem;
+    }
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #667eea;
+    }
+
+    .stat-label {
+        color: #666;
+        margin-top: 0.5rem;
+    }
+
+    .fondos-grid {
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    .fondo-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .fondo-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .fondo-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: 1rem;
+    }
+
+    .fondo-badge {
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .badge-abierto {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .badge-cerrado {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .fondo-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.5rem;
+    }
+
+    .fondo-meta {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        margin: 1rem 0;
+        color: #666;
+    }
+
+    .fondo-meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+    }
+
+    .page-link {
+        padding: 0.5rem 1rem;
+        border: 2px solid #667eea;
+        border-radius: 8px;
+        text-decoration: none;
+        color: #667eea;
+        font-weight: 600;
+    }
+
+    .page-link.active {
+        background: #667eea;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">🌾 Fondos de Financiamiento Agrícola</h1>
+    <p style="font-size: 1.2rem; opacity: 0.9;">Encuentra oportunidades de financiamiento para tu proyecto agrícola</p>
+</div>
+
+<div class="stats">
+    <div class="stat-card">
+        <div class="stat-number">{{ stats.total_fondos }}</div>
+        <div class="stat-label">Fondos Disponibles</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ stats.fondos_abiertos }}</div>
+        <div class="stat-label">Convocatorias Abiertas</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ stats.fuentes_unicas }}</div>
+        <div class="stat-label">Fuentes de Financiamiento</div>
+    </div>
+</div>
+
+<div class="search-box">
+    <form method="GET" action="{{ url_for('home') }}">
+        <input type="text" name="q" class="search-input"
+            placeholder="🔍 Buscar por nombre, descripción o palabras clave..." value="{{ query }}" id="searchInput">
+
+        <div class="filters">
+            <select name="fuente" class="filter-select">
+                <option value="">Todas las fuentes</option>
+                <option value="INDAP" {% if fuente=='INDAP' %}selected{% endif %}>INDAP</option>
+                <option value="FIA" {% if fuente=='FIA' %}selected{% endif %}>FIA</option>
+                <option value="CORFO" {% if fuente=='CORFO' %}selected{% endif %}>CORFO</option>
+                <option value="FONTAGRO" {% if fuente=='FONTAGRO' %}selected{% endif %}>FONTAGRO</option>
+            </select>
+
+            <select name="area" class="filter-select">
+                <option value="">Todas las áreas</option>
+                <option value="Agricultura" {% if area=='Agricultura' %}selected{% endif %}>Agricultura</option>
+                <option value="Innovación" {% if area=='Innovación' %}selected{% endif %}>Innovación</option>
+                <option value="Medio Ambiente" {% if area=='Medio Ambiente' %}selected{% endif %}>Medio Ambiente
+                </option>
+                <option value="Infraestructura" {% if area=='Infraestructura' %}selected{% endif %}>Infraestructura
+                </option>
+            </select>
+
+            <select name="estado" class="filter-select">
+                <option value="">Todos los estados</option>
+                <option value="Abierto" {% if estado=='Abierto' %}selected{% endif %}>Abierto</option>
+                <option value="Próximamente" {% if estado=='Próximamente' %}selected{% endif %}>Próximamente</option>
+                <option value="Cerrado" {% if estado=='Cerrado' %}selected{% endif %}>Cerrado</option>
+            </select>
+
+            <button type="submit" class="btn btn-primary" style="padding: 0.8rem 1.5rem;">
+                Buscar
+            </button>
+        </div>
+    </form>
+</div>
+
+<div class="fondos-grid">
+    {% if fondos.items %}
+    {% for fondo in fondos.items %}
+    <div class="fondo-card">
+        <div class="fondo-header">
+            <div style="flex: 1;">
+                <h3 class="fondo-title">{{ fondo.nombre }}</h3>
+                <div style="color: #667eea; font-weight: 600;">{{ fondo.fuente }}</div>
+            </div>
+            <span class="fondo-badge {% if fondo.estado == 'Abierto' %}badge-abierto{% else %}badge-cerrado{% endif %}">
+                {{ fondo.estado }}
+            </span>
+        </div>
+
+        <p style="color: #666; margin: 1rem 0;">
+            {{ fondo.descripcion[:200] }}{% if fondo.descripcion|length > 200 %}...{% endif %}
+        </p>
+
+        <div class="fondo-meta">
+            <div class="fondo-meta-item">
+                <span>💰</span>
+                <span>{{ fondo.monto_texto or 'Consultar bases' }}</span>
+            </div>
+            {% if fondo.fecha_cierre %}
+            <div class="fondo-meta-item">
+                <span>📅</span>
+                <span>Cierra: {{ fondo.fecha_cierre.strftime('%d/%m/%Y') }}</span>
+            </div>
+            {% endif %}
+            <div class="fondo-meta-item">
+                <span>🏷️</span>
+                <span>{{ fondo.area_interes }}</span>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+            <a href="{{ url_for('detalle_fondo', id=fondo.id) }}" class="btn btn-primary"
+                style="flex: 1; text-align: center;">
+                Ver Detalles
+            </a>
+            {% if current_user.is_authenticated %}
+            <button onclick="toggleFavorito({{ fondo.id }})" class="btn btn-secondary">
+                ⭐
+            </button>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div style="text-align: center; padding: 3rem; background: white; border-radius: 15px;">
+        <p style="font-size: 1.2rem; color: #666;">No se encontraron fondos con los criterios seleccionados.</p>
+        <a href="{{ url_for('home') }}" class="btn btn-primary" style="margin-top: 1rem;">Ver todos los fondos</a>
+    </div>
+    {% endif %}
+</div>
+
+{% if fondos.pages > 1 %}
+<div class="pagination">
+    {% if fondos.has_prev %}
+    <a href="{{ url_for('home', page=fondos.prev_num, q=query, fuente=fuente, area=area, estado=estado) }}"
+        class="page-link">← Anterior</a>
+    {% endif %}
+
+    {% for page_num in fondos.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+    {% if page_num %}
+    <a href="{{ url_for('home', page=page_num, q=query, fuente=fuente, area=area, estado=estado) }}"
+        class="page-link {% if page_num == fondos.page %}active{% endif %}">
+        {{ page_num }}
+    </a>
+    {% else %}
+    <span class="page-link">...</span>
+    {% endif %}
+    {% endfor %}
+
+    {% if fondos.has_next %}
+    <a href="{{ url_for('home', page=fondos.next_num, q=query, fuente=fuente, area=area, estado=estado) }}"
+        class="page-link">Siguiente →</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Búsqueda en tiempo real (opcional)
+    const searchInput = document.getElementById('searchInput');
+    let searchTimeout;
+
+    searchInput.addEventListener('input', function () {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            // Aquí se puede implementar búsqueda AJAX en el futuro
+            console.log('Buscando:', this.value);
+        }, 500);
+    });
+
+    // Toggle favorito
+    function toggleFavorito(fondoId) {
+        fetch(`/api/favorito/toggle/${fondoId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                location.reload();
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
+{% endblock %}

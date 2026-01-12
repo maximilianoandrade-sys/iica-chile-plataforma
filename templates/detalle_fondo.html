@@ -1,206 +1,215 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ fondo.nombre }} - Plataforma IICA</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        .main-container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            margin: 20px;
-            padding: 30px;
-        }
-        
-        .fondo-header {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            border-radius: 15px;
-            padding: 30px;
-            color: white;
-            margin-bottom: 30px;
-        }
-        
-        .info-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .btn-custom {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border: none;
-            border-radius: 25px;
-            padding: 12px 30px;
-            color: white;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-custom:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            color: white;
-        }
-        
-        .badge-custom {
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: 600;
-        }
-        
-        .requisitos-list {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-        }
-        
-        .requisitos-list li {
-            margin-bottom: 10px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container-fluid">
-        <div class="main-container">
-            <!-- Header -->
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <a href="/fondos" class="btn btn-outline-secondary">
-                    <i class="fas fa-arrow-left me-1"></i>Volver a Fondos
-                </a>
-                <div>
-                    <a href="/" class="btn btn-outline-primary me-2">
-                        <i class="fas fa-home me-1"></i>Inicio
-                    </a>
-                    {% if fondo.estado == 'Abierto' %}
-                    <a href="/postular/{{ fondo.id }}" class="btn btn-custom">
-                        <i class="fas fa-file-alt me-1"></i>Postular
-                    </a>
-                    {% endif %}
-                </div>
-            </div>
-            
-            <!-- Fondo Header -->
-            <div class="fondo-header">
-                <h1 class="mb-3">{{ fondo.nombre }}</h1>
-                <div class="row">
-                    <div class="col-md-6">
-                        <p class="mb-2">
-                            <i class="fas fa-building me-2"></i>{{ fondo.organizacion }}
-                        </p>
-                        <p class="mb-2">
-                            <i class="fas fa-globe me-2"></i>{{ fondo.pais }}
-                        </p>
-                    </div>
-                    <div class="col-md-6 text-end">
-                        <span class="badge badge-custom bg-white text-dark me-2">{{ fondo.area }}</span>
-                        <span class="badge badge-custom bg-{% if fondo.estado == 'Abierto' %}success{% else %}secondary{% endif %}">
-                            {{ fondo.estado }}
-                        </span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Información Principal -->
-            <div class="row">
-                <div class="col-md-8">
-                    <!-- Descripción -->
-                    <div class="info-card">
-                        <h4><i class="fas fa-info-circle text-primary me-2"></i>Descripción</h4>
-                        <p>{{ fondo.descripcion }}</p>
-                    </div>
-                    
-                    <!-- Requisitos -->
-                    <div class="info-card">
-                        <h4><i class="fas fa-list-check text-success me-2"></i>Requisitos</h4>
-                        <div class="requisitos-list">
-                            <ul>
-                                {% for requisito in fondo.requisitos.split(',') %}
-                                <li>{{ requisito.strip() }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <!-- Beneficiarios -->
-                    <div class="info-card">
-                        <h4><i class="fas fa-users text-info me-2"></i>Beneficiarios</h4>
-                        <p>{{ fondo.beneficiarios }}</p>
-                    </div>
-                </div>
-                
-                <div class="col-md-4">
-                    <!-- Información Financiera -->
-                    <div class="info-card">
-                        <h4><i class="fas fa-dollar-sign text-warning me-2"></i>Información Financiera</h4>
-                        <div class="mb-3">
-                            <strong class="text-success fs-4">{{ fondo.monto }}</strong>
-                        </div>
-                        <div class="mb-2">
-                            <small class="text-muted">
-                                <i class="fas fa-calendar me-1"></i>Fecha de cierre: {{ fondo.fecha_cierre }}
-                            </small>
-                        </div>
-                        <div class="mb-2">
-                            <small class="text-muted">
-                                <i class="fas fa-clock me-1"></i>Duración: {{ fondo.duracion }}
-                            </small>
-                        </div>
-                        <div class="mb-2">
-                            <small class="text-muted">
-                                <i class="fas fa-tag me-1"></i>Tipo: {{ fondo.tipo }}
-                            </small>
-                        </div>
-                    </div>
-                    
-                    <!-- Contacto -->
-                    <div class="info-card">
-                        <h4><i class="fas fa-envelope text-primary me-2"></i>Contacto</h4>
-                        <p class="mb-2">
-                            <i class="fas fa-envelope me-2"></i>
-                            <a href="mailto:{{ fondo.contacto }}">{{ fondo.contacto }}</a>
-                        </p>
-                        <p class="mb-2">
-                            <i class="fas fa-external-link-alt me-2"></i>
-                            <a href="{{ fondo.enlace }}" target="_blank" class="btn btn-outline-primary btn-sm">
-                                Visitar Sitio Oficial
-                            </a>
-                        </p>
-                    </div>
-                    
-                    <!-- Acciones -->
-                    <div class="info-card">
-                        <h4><i class="fas fa-tools text-secondary me-2"></i>Acciones</h4>
-                        <div class="d-grid gap-2">
-                            {% if fondo.estado == 'Abierto' %}
-                            <a href="/postular/{{ fondo.id }}" class="btn btn-custom">
-                                <i class="fas fa-file-alt me-1"></i>Postular a este Fondo
-                            </a>
-                            {% else %}
-                            <button class="btn btn-secondary" disabled>
-                                <i class="fas fa-lock me-1"></i>Fondo Cerrado
-                            </button>
-                            {% endif %}
-                            <a href="{{ fondo.enlace }}" target="_blank" class="btn btn-outline-primary">
-                                <i class="fas fa-external-link-alt me-1"></i>Ver en Sitio Oficial
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+{% extends "base_mvp.html" %}
+
+{% block title %}{{ fondo.nombre }} - IICA Chile{% endblock %}
+
+{% block extra_css %}
+<style>
+    .detalle-container {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 20px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .fondo-header {
+        border-bottom: 2px solid #e0e0e0;
+        padding-bottom: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .badge-abierto {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+
+    .info-item {
+        padding: 1.5rem;
+        background: #f8f9fa;
+        border-radius: 10px;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: #667eea;
+        margin-bottom: 0.5rem;
+    }
+
+    .info-value {
+        color: #333;
+        font-size: 1.1rem;
+    }
+
+    .section {
+        margin: 2rem 0;
+    }
+
+    .section-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #667eea;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="detalle-container">
+    <div class="fondo-header">
+        <span class="badge {% if fondo.estado == 'Abierto' %}badge-abierto{% else %}badge-cerrado{% endif %}">
+            {{ fondo.estado }}
+        </span>
+
+        <h1 style="font-size: 2rem; color: #333; margin: 1rem 0;">{{ fondo.nombre }}</h1>
+
+        <div style="color: #667eea; font-size: 1.2rem; font-weight: 600;">
+            {{ fondo.fuente }}
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <div class="info-grid">
+        <div class="info-item">
+            <div class="info-label">💰 Monto Disponible</div>
+            <div class="info-value">{{ fondo.monto_texto or 'Consultar bases' }}</div>
+        </div>
+
+        {% if fondo.fecha_cierre %}
+        <div class="info-item">
+            <div class="info-label">📅 Fecha de Cierre</div>
+            <div class="info-value">{{ fondo.fecha_cierre.strftime('%d de %B, %Y') }}</div>
+            {% if fondo.dias_restantes() %}
+            <div style="color: #d32f2f; font-weight: 600; margin-top: 0.5rem;">
+                ⏰ {{ fondo.dias_restantes() }} días restantes
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="info-item">
+            <div class="info-label">🏷️ Área de Interés</div>
+            <div class="info-value">{{ fondo.area_interes }}</div>
+        </div>
+
+        <div class="info-item">
+            <div class="info-label">📍 Región</div>
+            <div class="info-value">{{ fondo.region or 'Nacional' }}</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">
+            <span>📋</span>
+            Descripción
+        </h2>
+        <p style="line-height: 1.8; color: #555;">
+            {{ fondo.descripcion or 'Información disponible en el sitio web oficial.' }}
+        </p>
+    </div>
+
+    {% if fondo.beneficiarios %}
+    <div class="section">
+        <h2 class="section-title">
+            <span>👥</span>
+            Beneficiarios
+        </h2>
+        <p style="line-height: 1.8; color: #555;">{{ fondo.beneficiarios }}</p>
+    </div>
+    {% endif %}
+
+    {% if fondo.get_documentos_list() %}
+    <div class="section">
+        <h2 class="section-title">
+            <span>📄</span>
+            Documentos Requeridos
+        </h2>
+        <ul style="list-style: none; padding: 0;">
+            {% for doc in fondo.get_documentos_list() %}
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid #e0e0e0;">
+                ✓ {{ doc }}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {% if fondo.criterios_elegibilidad %}
+    <div class="section">
+        <h2 class="section-title">
+            <span>✅</span>
+            Criterios de Elegibilidad
+        </h2>
+        <p style="line-height: 1.8; color: #555;">{{ fondo.criterios_elegibilidad }}</p>
+    </div>
+    {% endif %}
+
+    <div class="action-buttons">
+        {% if fondo.enlace %}
+        <a href="{{ fondo.enlace }}" target="_blank" class="btn btn-primary" style="flex: 1;">
+            🔗 Ver Convocatoria Oficial
+        </a>
+        {% endif %}
+
+        {% if fondo.enlace_postulacion %}
+        <a href="{{ fondo.enlace_postulacion }}" target="_blank" class="btn btn-primary"
+            style="flex: 1; background: #28a745;">
+            📝 Ir a Postulación
+        </a>
+        {% endif %}
+
+        {% if current_user.is_authenticated %}
+        <button onclick="toggleFavorito({{ fondo.id }})" class="btn btn-secondary">
+            {% if es_favorito %}❤️ En Favoritos{% else %}⭐ Agregar a Favoritos{% endif %}
+        </button>
+        {% endif %}
+    </div>
+
+    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #e0e0e0;">
+        <a href="{{ url_for('home') }}" style="color: #667eea; text-decoration: none; font-weight: 600;">
+            ← Volver a la búsqueda
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function toggleFavorito(fondoId) {
+        fetch(`/api/favorito/toggle/${fondoId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                location.reload();
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
+{% endblock %}

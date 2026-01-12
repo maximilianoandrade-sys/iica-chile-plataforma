@@ -1,0 +1,274 @@
+{% extends "base_mvp.html" %}
+
+{% block title %}Asistente IA - IICA Chile{% endblock %}
+
+{% block extra_css %}
+<style>
+    .chat-container {
+        max-width: 900px;
+        margin: 2rem auto;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .chat-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    .chat-messages {
+        height: 500px;
+        overflow-y: auto;
+        padding: 2rem;
+        background: #f8f9fa;
+    }
+
+    .message {
+        margin-bottom: 1.5rem;
+        display: flex;
+        gap: 1rem;
+    }
+
+    .message-user {
+        flex-direction: row-reverse;
+    }
+
+    .message-bubble {
+        max-width: 70%;
+        padding: 1rem 1.5rem;
+        border-radius: 15px;
+        line-height: 1.6;
+    }
+
+    .message-user .message-bubble {
+        background: #667eea;
+        color: white;
+        border-bottom-right-radius: 5px;
+    }
+
+    .message-bot .message-bubble {
+        background: white;
+        color: #333;
+        border-bottom-left-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .message-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+
+    .chat-input-container {
+        padding: 1.5rem;
+        background: white;
+        border-top: 2px solid #e0e0e0;
+    }
+
+    .chat-input-form {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .chat-input {
+        flex: 1;
+        padding: 1rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 25px;
+        font-size: 1rem;
+    }
+
+    .chat-input:focus {
+        outline: none;
+        border-color: #667eea;
+    }
+
+    .send-button {
+        padding: 1rem 2rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: transform 0.2s;
+    }
+
+    .send-button:hover {
+        transform: scale(1.05);
+    }
+
+    .send-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .typing-indicator {
+        display: none;
+        padding: 1rem;
+        color: #666;
+        font-style: italic;
+    }
+
+    .quick-questions {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+    }
+
+    .quick-question {
+        padding: 0.5rem 1rem;
+        background: #f0f4ff;
+        border: 1px solid #667eea;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+    }
+
+    .quick-question:hover {
+        background: #667eea;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="chat-container">
+    <div class="chat-header">
+        <h1 style="margin: 0;">🤖 Asistente IA de Financiamiento Agrícola</h1>
+        <p style="margin: 0.5rem 0 0 0; opacity: 0.9;">Powered by Google Gemini</p>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+        <div class="message message-bot">
+            <div class="message-avatar">🌾</div>
+            <div class="message-bubble">
+                ¡Hola {{ current_user.nombre or 'agricultor' }}! 👋<br><br>
+                Soy tu asistente de IA para encontrar fondos de financiamiento agrícola en Chile.<br><br>
+                Puedo ayudarte con:
+                <ul style="margin: 0.5rem 0;">
+                    <li>Buscar fondos según tu perfil</li>
+                    <li>Explicar requisitos de postulación</li>
+                    <li>Generar cartas de presentación</li>
+                    <li>Validar tu elegibilidad</li>
+                </ul>
+                ¿En qué puedo ayudarte hoy?
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-input-container">
+        <div class="quick-questions">
+            <button class="quick-question" onclick="enviarPregunta('¿Qué fondos hay para riego?')">
+                💧 Fondos para riego
+            </button>
+            <button class="quick-question" onclick="enviarPregunta('¿Cómo postulo a INDAP?')">
+                📋 Postular a INDAP
+            </button>
+            <button class="quick-question" onclick="enviarPregunta('¿Qué documentos necesito?')">
+                📄 Documentos requeridos
+            </button>
+            <button class="quick-question" onclick="enviarPregunta('Fondos para mi región')">
+                📍 Fondos en mi región
+            </button>
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">
+            El asistente está escribiendo...
+        </div>
+
+        <form class="chat-input-form" id="chatForm">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Escribe tu pregunta aquí..."
+                autocomplete="off">
+            <button type="submit" class="send-button" id="sendButton">
+                Enviar
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const chatMessages = document.getElementById('chatMessages');
+    const chatForm = document.getElementById('chatForm');
+    const chatInput = document.getElementById('chatInput');
+    const sendButton = document.getElementById('sendButton');
+    const typingIndicator = document.getElementById('typingIndicator');
+
+    // Enviar mensaje
+    chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const mensaje = chatInput.value.trim();
+        if (!mensaje) return;
+
+        enviarMensaje(mensaje);
+    });
+
+    async function enviarMensaje(mensaje) {
+        // Agregar mensaje del usuario
+        agregarMensaje(mensaje, 'user');
+        chatInput.value = '';
+
+        // Mostrar indicador de escritura
+        typingIndicator.style.display = 'block';
+        sendButton.disabled = true;
+
+        try {
+            const response = await fetch('/api/ai/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ mensaje })
+            });
+
+            const data = await response.json();
+
+            // Agregar respuesta del bot
+            agregarMensaje(data.respuesta, 'bot');
+
+        } catch (error) {
+            console.error('Error:', error);
+            agregarMensaje('Lo siento, hubo un error. Por favor intenta de nuevo.', 'bot');
+        } finally {
+            typingIndicator.style.display = 'none';
+            sendButton.disabled = false;
+            chatInput.focus();
+        }
+    }
+
+    function agregarMensaje(texto, tipo) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message message-${tipo}`;
+
+        const avatar = tipo === 'user' ? '👤' : '🌾';
+
+        messageDiv.innerHTML = `
+        <div class="message-avatar">${avatar}</div>
+        <div class="message-bubble">${texto.replace(/\n/g, '<br>')}</div>
+    `;
+
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function enviarPregunta(pregunta) {
+        enviarMensaje(pregunta);
+    }
+
+    // Auto-focus en input
+    chatInput.focus();
+</script>
+{% endblock %}
