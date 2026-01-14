@@ -75,5 +75,4 @@ app/search/
 components/FiltersPanel.tsx
 components/TenderCard.tsx
 components/SearchBar.tsx
-components/Header.tsx
 lib/tenders.ts
