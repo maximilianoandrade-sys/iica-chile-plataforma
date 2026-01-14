@@ -107,20 +107,14 @@ export function ProjectList() {
                                             <td className="py-4 px-6">
                                                 <UrgencyBadge date={project.fecha_cierre} />
                                             </td>
-                                            <td className="py-4 px-6 text-right space-x-3">
-                                                <button
-                                                    onClick={() => setShowRequirements(true)}
-                                                    className="text-sm font-medium text-gray-500 hover:text-[var(--iica-navy)] transition-colors"
-                                                >
-                                                    Requisitos
-                                                </button>
+                                            <td className="py-4 px-6 text-right">
                                                 <a
                                                     href={project.url_bases}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="inline-flex items-center gap-1.5 text-sm font-bold text-[var(--iica-cyan)] hover:text-[#008ec2] transition-colors"
                                                 >
-                                                    Ver Bases <ExternalLink className="h-4 w-4" />
+                                                    Ver Bases Oficiales <ExternalLink className="h-4 w-4" />
                                                 </a>
                                             </td>
                                         </tr>
@@ -149,18 +143,12 @@ export function ProjectList() {
                                         <span className="font-medium text-gray-900"><MoneyFormatter amount={project.monto} /></span>
                                     </div>
 
-                                    <div className="pt-2 flex justify-between items-center gap-2">
-                                        <button
-                                            onClick={() => setShowRequirements(true)}
-                                            className="flex-1 py-2 text-sm text-gray-600 bg-gray-100 rounded hover:bg-gray-200"
-                                        >
-                                            Requisitos
-                                        </button>
+                                    <div className="pt-2 flex justify-end items-center">
                                         <a
                                             href={project.url_bases}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="flex-1 btn-iica text-xs py-2 px-4 !bg-[var(--iica-navy)] hover:!bg-[var(--iica-blue)] text-center"
+                                            className="w-full btn-iica text-xs py-3 px-4 !bg-[var(--iica-navy)] hover:!bg-[var(--iica-blue)] text-center shadow-sm"
                                         >
                                             Ver Bases Oficiales
                                         </a>
