@@ -6,13 +6,9 @@
     "dev": "next dev",
     "build": "next build --webpack",
     "start": "next start",
-    "postinstall": "prisma generate",
-    "scrape": "tsx lib/scrapers.ts",
-    "db:push": "prisma db push",
-    "db:migrate": "prisma migrate dev"
+    "scrape": "tsx lib/scrapers.ts"
   },
   "dependencies": {
-    "@prisma/client": "^5.22.0",
     "@tailwindcss/line-clamp": "^0.4.4",
     "autoprefixer": "^10.4.0",
     "axios": "^1.7.0",
@@ -23,7 +19,6 @@
     "lucide-react": "^0.441.0",
     "next": "^16.1.1",
     "postcss": "^8.4.0",
-    "prisma": "^5.22.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "tailwind-merge": "^3.4.0",
