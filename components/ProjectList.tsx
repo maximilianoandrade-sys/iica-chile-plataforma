@@ -86,7 +86,6 @@ export function ProjectList() {
                                     <tr className="bg-[#f4f7f9] text-gray-600 text-sm font-semibold border-b border-[var(--iica-border)]">
                                         <th className="py-4 px-6">Proyecto</th>
                                         <th className="py-4 px-6">Institución</th>
-                                        <th className="py-4 px-6">Monto Máximo</th>
                                         <th className="py-4 px-6">Cierre</th>
                                         <th className="py-4 px-6 text-right">Acciones</th>
                                     </tr>
@@ -101,21 +100,11 @@ export function ProjectList() {
                                                 </span>
                                             </td>
                                             <td className="py-4 px-6 font-medium text-gray-700">{project.institucion}</td>
-                                            <td className="py-4 px-6 text-gray-700 font-mono text-sm">
-                                                <MoneyFormatter amount={project.monto} />
-                                            </td>
                                             <td className="py-4 px-6">
                                                 <UrgencyBadge date={project.fecha_cierre} />
                                             </td>
                                             <td className="py-4 px-6 text-right">
-                                                <a
-                                                    href={project.url_bases}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="inline-flex items-center gap-1.5 text-sm font-bold text-[var(--iica-cyan)] hover:text-[#008ec2] transition-colors"
-                                                >
-                                                    Ver Bases Oficiales <ExternalLink className="h-4 w-4" />
-                                                </a>
+                                                <ActionButton url={project.url_bases} date={project.fecha_cierre} />
                                             </td>
                                         </tr>
                                     ))}
@@ -134,24 +123,12 @@ export function ProjectList() {
                                         <UrgencyBadge date={project.fecha_cierre} mobile />
                                     </div>
 
-                                    <h3 className="font-bold text-[var(--iica-navy)] leading-snug">
+                                    <h3 className="font-bold text-lg text-[var(--iica-navy)] leading-snug mb-2">
                                         {project.nombre}
                                     </h3>
 
-                                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                                        <DollarSign className="h-4 w-4 text-gray-400" />
-                                        <span className="font-medium text-gray-900"><MoneyFormatter amount={project.monto} /></span>
-                                    </div>
-
                                     <div className="pt-2 flex justify-end items-center">
-                                        <a
-                                            href={project.url_bases}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="w-full btn-iica text-xs py-3 px-4 !bg-[var(--iica-navy)] hover:!bg-[var(--iica-blue)] text-center shadow-sm"
-                                        >
-                                            Ver Bases Oficiales
-                                        </a>
+                                        <ActionButton url={project.url_bases} date={project.fecha_cierre} />
                                     </div>
                                 </div>
                             ))}
@@ -228,38 +205,67 @@ export function ProjectList() {
 
 // Helper Components
 
-function MoneyFormatter({ amount }: { amount: number }) {
-    if (amount === 0) return <span>Por definir / Variable</span>;
+function ActionButton({ url, date }: { url: string, date: string }) {
+    const today = new Date();
+    const closingDate = new Date(date);
+    // Reset hours to compare only dates properly if needed, but timestamp diff is safer
+    const isClosed = closingDate.getTime() < today.setHours(0, 0, 0, 0);
+
+    if (isClosed) {
+        return (
+            <button disabled className="inline-flex items-center gap-1.5 text-sm font-bold text-gray-400 bg-gray-100 px-3 py-1.5 rounded cursor-not-allowed">
+                Cerrado <X className="h-4 w-4" />
+            </button>
+        );
+    }
+
     return (
-        <span>
-            {new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(amount)}
-        </span>
+        <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-sm font-bold text-white bg-[var(--iica-cyan)] hover:bg-[#008ec2] px-4 py-2 rounded transition-colors shadow-sm"
+        >
+            Ver Bases Oficiales <ExternalLink className="h-4 w-4" />
+        </a>
     );
 }
 
 function UrgencyBadge({ date, mobile = false }: { date: string, mobile?: boolean }) {
     const targetDate = new Date(date);
     const today = new Date();
+    // Normalize today to start of day
+    today.setHours(0, 0, 0, 0);
+
+    // Check if expired (target date is BEFORE today)
+    const isExpired = targetDate.getTime() < today.getTime();
+
+    // Calculate difference
     const diffTime = targetDate.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     const isUrgent = diffDays <= 7 && diffDays >= 0;
-    const isExpired = diffDays < 0;
 
     if (isExpired) {
-        return <span className="text-gray-400 text-sm flex items-center gap-1"><AlertCircle className="h-4 w-4" /> Cerrado</span>;
+        return (
+            <div className="flex flex-col items-start">
+                <span className="text-gray-400 text-sm flex items-center gap-1"><AlertCircle className="h-4 w-4" /> Finalizado</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-red-500 bg-red-50 px-1.5 py-0.5 rounded border border-red-100">🔴 Cerrado</span>
+            </div>
+        );
     }
 
     return (
-        <div className={`flex items-center gap-1.5 ${isUrgent ? 'text-red-600 font-medium' : 'text-gray-600'}`}>
-            {!mobile && <Calendar className="h-4 w-4 text-gray-400" />}
-            <span className="text-sm">
-                {isUrgent ? `Cierra en ${diffDays} días` : new Date(date).toLocaleDateString('es-CL')}
+        <div className="flex flex-col items-start gap-0.5">
+            <div className={`flex items-center gap-1.5 ${isUrgent ? 'text-red-600 font-bold' : 'text-gray-600'}`}>
+                {!mobile && <Calendar className="h-4 w-4 text-gray-400" />}
+                <span className="text-sm">
+                    {isUrgent ? `¡Cierra en ${diffDays} días!` : new Date(date).toLocaleDateString('es-CL')}
+                </span>
+            </div>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-green-600 bg-green-50 px-1.5 py-0.5 rounded border border-green-100">
+                🟢 Abierto
             </span>
-            {isUrgent && <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-            </span>}
         </div>
     );
 }
