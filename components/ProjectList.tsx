@@ -1,20 +1,32 @@
-
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { mockProjects, Project } from '@/lib/mock-data';
-import { Calendar, DollarSign, ExternalLink, Search, Filter, AlertCircle, X } from 'lucide-react';
+import { Project } from "@/lib/data";
+import { trackEvent } from "@/lib/analytics";
+import Toast from "@/components/ui/Toast";
+import { motion, AnimatePresence } from "framer-motion";
+import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check } from "lucide-react";
 
-export function ProjectList() {
+export default function ProjectList({ projects }: { projects: Project[] }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('Todas');
     const [showRequirements, setShowRequirements] = useState(false);
+    const [toastMessage, setToastMessage] = useState<string | null>(null);
 
     // Extract unique categories for the dropdown
     const categories = useMemo(() => {
-        const cats = new Set(mockProjects.map(p => p.categoria));
+        const cats = new Set(projects.map(p => p.categoria));
         return ['Todas', ...Array.from(cats)];
-    }, []);
+    }, [projects]);
+
+    const handleCategoryChange = (cat: string) => {
+        setSelectedCategory(cat);
+        trackEvent({
+            action: 'filter_change',
+            category: 'Projects',
+            label: cat
+        });
+    };
 
     const getLogoUrl = (institution: string) => {
         const domainMap: Record<string, string> = {
@@ -22,7 +34,10 @@ export function ProjectList() {
             'INDAP': 'indap.gob.cl',
             'CORFO': 'corfo.cl',
             'FIA': 'fia.cl',
-            'SAG': 'sag.gob.cl'
+            'SAG': 'sag.gob.cl',
+            'Fondo Chile (PNUD)': 'undp.org',
+            'Unión Europea': 'europa.eu',
+            'FAO': 'fao.org'
         };
         const domain = domainMap[institution] || 'gob.cl';
         return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
@@ -30,7 +45,7 @@ export function ProjectList() {
 
     // Filter projects
     const filteredProjects = useMemo(() => {
-        return mockProjects.filter(project => {
+        return projects.filter(project => {
             const matchesSearch =
                 project.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 project.institucion.toLowerCase().includes(searchTerm.toLowerCase());
@@ -39,10 +54,17 @@ export function ProjectList() {
 
             return matchesSearch && matchesCategory;
         });
-    }, [searchTerm, selectedCategory]);
+    }, [projects, searchTerm, selectedCategory]);
 
     return (
         <div className="bg-white rounded-xl shadow-sm border border-[var(--iica-border)] overflow-hidden">
+
+            {toastMessage && (
+                <Toast
+                    message={toastMessage}
+                    onClose={() => setToastMessage(null)}
+                />
+            )}
 
             {/* 2. SMART DASHBOARD HEADER (Search + Filters) */}
             <div className="p-6 border-b border-[var(--iica-border)] bg-gray-50/50">
@@ -55,6 +77,7 @@ export function ProjectList() {
                         </div>
                         <input
                             type="text"
+                            aria-label="Buscar convocatorias por nombre o institución"
                             placeholder="Buscar por nombre, palabra clave o institución..."
                             className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--iica-blue)] focus:border-transparent outline-none transition-shadow text-gray-700"
                             value={searchTerm}
@@ -63,17 +86,19 @@ export function ProjectList() {
                     </div>
 
                     {/* Filter Chips (UX Improvement: Visible Active State) */}
-                    <div className="flex flex-wrap gap-2 items-center">
+                    <div className="flex flex-wrap gap-2 items-center" role="group" aria-label="Filtros de categoría">
                         <span className="text-sm font-bold text-gray-700 mr-2 flex items-center gap-1">
                             <Filter className="h-4 w-4" /> Filtrar por:
                         </span>
                         {categories.map(cat => (
                             <button
                                 key={cat}
-                                onClick={() => setSelectedCategory(cat)}
-                                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${selectedCategory === cat
-                                        ? 'bg-[var(--iica-navy)] text-white shadow-md ring-2 ring-blue-100'
-                                        : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-[var(--iica-navy)]'
+                                onClick={() => handleCategoryChange(cat)}
+                                aria-pressed={selectedCategory === cat}
+                                aria-label={`Filtrar por categoría ${cat}`}
+                                className={`px-4 py-2 rounded-full text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--iica-blue)] ${selectedCategory === cat
+                                    ? 'bg-[var(--iica-navy)] text-white shadow-md ring-2 ring-blue-100'
+                                    : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-[var(--iica-navy)]'
                                     }`}
                             >
                                 {cat}
@@ -95,7 +120,7 @@ export function ProjectList() {
                         <p className="text-gray-600 mb-6">No hay convocatorias que coincidan con tu búsqueda en este momento.</p>
                         <button
                             onClick={() => { setSearchTerm(''); setSelectedCategory('Todas'); }}
-                            className="text-[var(--iica-cyan)] font-bold hover:underline"
+                            className="text-[var(--iica-cyan)] font-bold hover:underline focus:outline-none focus:ring-2 focus:ring-[var(--iica-blue)] rounded px-2"
                         >
                             Limpiar filtros y ver todo
                         </button>
@@ -114,65 +139,91 @@ export function ProjectList() {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-[var(--iica-border)]">
-                                    {filteredProjects.map((project) => (
-                                        <tr key={project.id} className="hover:bg-blue-50/40 transition-colors group">
-                                            <td className="py-5 px-6">
-                                                <div className="font-bold text-[var(--iica-navy)] text-base mb-1">{project.nombre}</div>
-                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
-                                                    {project.categoria}
-                                                </span>
-                                            </td>
-                                            <td className="py-5 px-6">
-                                                <div className="flex items-center gap-3">
-                                                    <img
-                                                        src={getLogoUrl(project.institucion)}
-                                                        alt={project.institucion}
-                                                        className="w-8 h-8 rounded bg-white shadow-sm p-0.5 object-contain border border-gray-100"
-                                                        onError={(e) => { (e.target as HTMLImageElement).style.visibility = 'hidden' }}
+                                    <AnimatePresence>
+                                        {filteredProjects.map((project) => (
+                                            <motion.tr
+                                                key={project.id}
+                                                className="hover:bg-blue-50/40 transition-colors group"
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, height: 0 }}
+                                                transition={{ duration: 0.2 }}
+                                            >
+                                                <td className="py-5 px-6">
+                                                    <div className="font-bold text-[var(--iica-navy)] text-base mb-1">{project.nombre}</div>
+                                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
+                                                        {project.categoria}
+                                                    </span>
+                                                </td>
+                                                <td className="py-5 px-6">
+                                                    <div className="flex items-center gap-3">
+                                                        <img
+                                                            src={getLogoUrl(project.institucion)}
+                                                            alt={project.institucion}
+                                                            className="w-8 h-8 rounded bg-white shadow-sm p-0.5 object-contain border border-gray-100"
+                                                            onError={(e) => { (e.target as HTMLImageElement).style.visibility = 'hidden' }}
+                                                        />
+                                                        <span className="font-bold text-gray-700">{project.institucion}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="py-5 px-6">
+                                                    <UrgencyBadge date={project.fecha_cierre} />
+                                                </td>
+                                                <td className="py-5 px-6 text-right">
+                                                    <ActionButton
+                                                        url={project.url_bases}
+                                                        date={project.fecha_cierre}
+                                                        projectName={project.nombre}
+                                                        onTrack={() => setToastMessage("Redirigiendo a sitio oficial...")}
                                                     />
-                                                    <span className="font-bold text-gray-700">{project.institucion}</span>
-                                                </div>
-                                            </td>
-                                            <td className="py-5 px-6">
-                                                <UrgencyBadge date={project.fecha_cierre} />
-                                            </td>
-                                            <td className="py-5 px-6 text-right">
-                                                <ActionButton url={project.url_bases} date={project.fecha_cierre} />
-                                            </td>
-                                        </tr>
-                                    ))}
+                                                </td>
+                                            </motion.tr>
+                                        ))}
+                                    </AnimatePresence>
                                 </tbody>
                             </table>
                         </div>
 
                         {/* MOBILE CARD VIEW */}
                         <div className="md:hidden divide-y divide-[var(--iica-border)]">
-                            {filteredProjects.map((project) => (
-                                <div key={project.id} className="p-5 flex flex-col gap-4 active:bg-blue-50/50 transition-colors">
-
-                                    <div className="flex justify-between items-start">
-                                        <div className="flex items-center gap-2">
-                                            <img
-                                                src={getLogoUrl(project.institucion)}
-                                                alt={project.institucion}
-                                                className="w-6 h-6 rounded bg-white object-contain border border-gray-100"
-                                            />
-                                            <span className="text-xs font-bold text-[var(--iica-secondary)] bg-green-50 px-2 py-1 rounded border border-green-100">
-                                                {project.institucion}
-                                            </span>
+                            <AnimatePresence>
+                                {filteredProjects.map((project) => (
+                                    <motion.div
+                                        key={project.id}
+                                        className="p-5 flex flex-col gap-4 active:bg-blue-50/50 transition-colors"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                    >
+                                        <div className="flex justify-between items-start">
+                                            <div className="flex items-center gap-2">
+                                                <img
+                                                    src={getLogoUrl(project.institucion)}
+                                                    alt={project.institucion}
+                                                    className="w-6 h-6 rounded bg-white object-contain border border-gray-100"
+                                                />
+                                                <span className="text-xs font-bold text-[var(--iica-secondary)] bg-green-50 px-2 py-1 rounded border border-green-100">
+                                                    {project.institucion}
+                                                </span>
+                                            </div>
+                                            <UrgencyBadge date={project.fecha_cierre} mobile />
                                         </div>
-                                        <UrgencyBadge date={project.fecha_cierre} mobile />
-                                    </div>
 
-                                    <h3 className="font-bold text-lg text-[var(--iica-navy)] leading-snug">
-                                        {project.nombre}
-                                    </h3>
+                                        <h3 className="font-bold text-lg text-[var(--iica-navy)] leading-snug">
+                                            {project.nombre}
+                                        </h3>
 
-                                    <div className="pt-2">
-                                        <ActionButton url={project.url_bases} date={project.fecha_cierre} />
-                                    </div>
-                                </div>
-                            ))}
+                                        <div className="pt-2">
+                                            <ActionButton
+                                                url={project.url_bases}
+                                                date={project.fecha_cierre}
+                                                projectName={project.nombre}
+                                                onTrack={() => setToastMessage("Redirigiendo a sitio oficial...")}
+                                            />
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </AnimatePresence>
                         </div>
                     </>
                 )}
@@ -181,12 +232,13 @@ export function ProjectList() {
             {/* REQUIREMENTS MODAL */}
             {showRequirements && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-                    <div className="bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95">
+                    <div className="bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95" role="dialog" aria-modal="true" aria-labelledby="modal-title">
                         <div className="bg-[var(--iica-navy)] text-white px-6 py-4 flex justify-between items-center">
-                            <h3 className="font-bold text-lg">Documentación Requerida</h3>
+                            <h3 id="modal-title" className="font-bold text-lg">Documentación Requerida</h3>
                             <button
                                 onClick={() => setShowRequirements(false)}
-                                className="hover:bg-white/10 rounded-full p-1 transition-colors"
+                                className="hover:bg-white/10 rounded-full p-1 transition-colors focus:outline-none focus:ring-2 focus:ring-white"
+                                aria-label="Cerrar modal"
                             >
                                 <X className="h-5 w-5" />
                             </button>
@@ -198,28 +250,28 @@ export function ProjectList() {
                             </p>
                             <ul className="space-y-3">
                                 <li className="flex gap-3 items-start">
-                                    <span className="text-[var(--iica-secondary)] font-bold">✓</span>
+                                    <span className="text-[var(--iica-secondary)] font-bold" aria-hidden="true">✓</span>
                                     <div>
                                         <strong className="text-gray-900 block text-sm">Carpeta Tributaria</strong>
                                         <span className="text-xs text-gray-500">Debe incluir los últimos 12 meses de IVAs (F29).</span>
                                     </div>
                                 </li>
                                 <li className="flex gap-3 items-start">
-                                    <span className="text-[var(--iica-secondary)] font-bold">✓</span>
+                                    <span className="text-[var(--iica-secondary)] font-bold" aria-hidden="true">✓</span>
                                     <div>
                                         <strong className="text-gray-900 block text-sm">Certificado de Vigencia</strong>
                                         <span className="text-xs text-gray-500">Vigencia de la sociedad y de poderes (antigüedad máxima 60 días).</span>
                                     </div>
                                 </li>
                                 <li className="flex gap-3 items-start">
-                                    <span className="text-[var(--iica-secondary)] font-bold">✓</span>
+                                    <span className="text-[var(--iica-secondary)] font-bold" aria-hidden="true">✓</span>
                                     <div>
                                         <strong className="text-gray-900 block text-sm">Rol de Avalúo</strong>
                                         <span className="text-xs text-gray-500">Certificado de avalúo fiscal detallado del predio.</span>
                                     </div>
                                 </li>
                                 <li className="flex gap-3 items-start">
-                                    <span className="text-[var(--iica-secondary)] font-bold">✓</span>
+                                    <span className="text-[var(--iica-secondary)] font-bold" aria-hidden="true">✓</span>
                                     <div>
                                         <strong className="text-gray-900 block text-sm">Derechos de Agua</strong>
                                         <span className="text-xs text-gray-500">Inscripción en el CBR con vigencia.</span>
@@ -231,7 +283,7 @@ export function ProjectList() {
                         <div className="bg-gray-50 px-6 py-4 flex justify-end">
                             <button
                                 onClick={() => setShowRequirements(false)}
-                                className="px-4 py-2 bg-gray-200 text-gray-800 rounded font-medium hover:bg-gray-300 transition-colors text-sm"
+                                className="px-4 py-2 bg-gray-200 text-gray-800 rounded font-medium hover:bg-gray-300 transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
                             >
                                 Entendido
                             </button>
@@ -246,16 +298,25 @@ export function ProjectList() {
 
 // Helper Components
 
-function ActionButton({ url, date }: { url: string, date: string }) {
+function ActionButton({ url, date, projectName, onTrack }: { url: string, date: string, projectName: string, onTrack?: () => void }) {
     const today = new Date();
     const closingDate = new Date(date);
     // Reset hours to compare only dates properly if needed, but timestamp diff is safer
     const isClosed = closingDate.getTime() < today.setHours(0, 0, 0, 0);
 
+    const handleClick = () => {
+        trackEvent({
+            action: 'click_outbound_link',
+            category: 'Outbound',
+            label: `Bases: ${projectName}`
+        });
+        if (onTrack) onTrack();
+    };
+
     if (isClosed) {
         return (
             <button disabled className="inline-flex items-center gap-1.5 text-sm font-bold text-gray-400 bg-gray-100 px-3 py-1.5 rounded cursor-not-allowed">
-                Cerrado <X className="h-4 w-4" />
+                Cerrado <X className="h-4 w-4" aria-hidden="true" />
             </button>
         );
     }
@@ -265,9 +326,11 @@ function ActionButton({ url, date }: { url: string, date: string }) {
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm font-bold text-white bg-[var(--iica-cyan)] hover:bg-[#008ec2] px-4 py-2 rounded transition-colors shadow-sm"
+            onClick={handleClick}
+            aria-label={`Ver bases oficiales para ${projectName}`}
+            className="inline-flex items-center gap-1.5 text-sm font-bold text-white bg-[var(--iica-cyan)] hover:bg-[#008ec2] px-4 py-2 rounded transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--iica-cyan)]"
         >
-            Ver Bases Oficiales <ExternalLink className="h-4 w-4" />
+            Ver Bases Oficiales <ExternalLink className="h-4 w-4" aria-hidden="true" />
         </a>
     );
 }
