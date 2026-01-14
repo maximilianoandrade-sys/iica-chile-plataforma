@@ -52,19 +52,19 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        {/* 5. Additional Resources */}
+        {/* 4. Additional Resources / Institutional Links (Optional, matching 'Herramientas Técnicas' concept but cleaner) */}
         <div id="recursos" className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-          {/* ... existing resources content ... */}
-          <div className="bg-[var(--iica-navy)] text-white p-8 rounded-lg shadow-lg relative overflow-hidden group hover:-translate-y-1 transition-transform cursor-pointer">
+          <a href="https://chile.iica.int/" target="_blank" rel="noopener noreferrer" className="bg-[var(--iica-navy)] text-white p-8 rounded-lg shadow-lg relative overflow-hidden group hover:-translate-y-1 transition-transform cursor-pointer block">
             <div className="relative z-10">
               <h3 className="text-xl font-bold mb-2">Recursos para Postulación</h3>
               <p className="text-blue-100 mb-4 text-sm">Accede a guías, formatos tipo y tips para mejorar tus posibilidades de adjudicación en concursos públicos.</p>
               <span className="inline-block text-sm font-bold underline decoration-2 decoration-[var(--iica-secondary)] underline-offset-4">Ver Recursos</span>
             </div>
+            {/* Decorative circle */}
             <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
-          </div>
+          </a>
 
-          <div className="bg-white border border-[var(--iica-border)] p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow group cursor-pointer">
+          <a href="https://repositorio.iica.int/" target="_blank" rel="noopener noreferrer" className="bg-white border border-[var(--iica-border)] p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow group cursor-pointer block">
             <h3 className="text-xl font-bold text-[var(--iica-navy)] mb-2 flex items-center gap-2">
               <span>🌱</span> Buenas Prácticas Agrícolas
             </h3>
@@ -72,7 +72,7 @@ export default function DashboardPage() {
             <div className="flex items-center text-[var(--iica-cyan)] font-bold text-sm group-hover:gap-2 transition-all">
               Ir a la Biblioteca <span>→</span>
             </div>
-          </div>
+          </a>
         </div>
 
       </main>

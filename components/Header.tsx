@@ -23,11 +23,19 @@ export function Header() {
                 </div>
 
                 <nav className="hidden md:flex gap-6 text-sm font-medium text-gray-600">
-                    <Link href="#" className="hover:text-[var(--iica-navy)] transition-colors">Inicio</Link>
-                    <Link href="#" className="hover:text-[var(--iica-navy)] transition-colors">Proyectos</Link>
-                    <Link href="#" className="hover:text-[var(--iica-navy)] transition-colors">Recursos</Link>
-                    <Link href="#" className="hover:text-[var(--iica-navy)] transition-colors">Contacto</Link>
+                    <Link href="#inicio" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Inicio</Link>
+                    <Link href="#convocatorias" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Convocatorias</Link>
+                    <Link href="#manual" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Ayuda</Link>
+                    <Link href="#recursos" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Recursos</Link>
+                    <Link href="#contacto" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Contacto</Link>
                 </nav>
+
+                <button
+                    onClick={() => alert("🔧 Módulo de Gestión Interna\n\nEsta funcionalidad está en desarrollo para la Fase 2.")}
+                    className="hidden md:block border border-[var(--iica-navy)] text-[var(--iica-navy)] px-4 py-1.5 rounded text-sm font-bold hover:bg-[var(--iica-navy)] hover:text-white transition-colors"
+                >
+                    Ingresar
+                </button>
 
                 <button className="md:hidden text-[var(--iica-navy)]">
                     ☰
@@ -45,9 +53,12 @@ export function Header() {
                         Accede a fondos concursables, subsidios y créditos para modernizar tu producción agrícola. Información actualizada y simplificada.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button className="bg-[var(--iica-secondary)] hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform hover:-translate-y-1">
+                        <Link
+                            href="#convocatorias"
+                            className="bg-[var(--iica-secondary)] hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform hover:-translate-y-1 inline-block"
+                        >
                             Ver Convocatorias Abiertas
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </div>
