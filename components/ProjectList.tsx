@@ -10,6 +10,8 @@ import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Ch
 export default function ProjectList({ projects }: { projects: Project[] }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('Todas');
+    const [selectedRegion, setSelectedRegion] = useState('Todas');
+    const [selectedBeneficiary, setSelectedBeneficiary] = useState('Todos');
     const [showRequirements, setShowRequirements] = useState(false);
     const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -17,6 +19,18 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
     const categories = useMemo(() => {
         const cats = new Set(projects.map(p => p.categoria));
         return ['Todas', ...Array.from(cats)];
+    }, [projects]);
+
+    // Extract unique Regions (Flattening the arrays)
+    const uniqueRegions = useMemo(() => {
+        const allRegions = projects.flatMap(p => p.regiones || []);
+        return Array.from(new Set(allRegions)).sort();
+    }, [projects]);
+
+    // Extract unique Beneficiaries
+    const uniqueBeneficiaries = useMemo(() => {
+        const allBen = projects.flatMap(p => p.beneficiarios || []);
+        return Array.from(new Set(allBen)).sort();
     }, [projects]);
 
     const handleCategoryChange = (cat: string) => {
@@ -52,9 +66,13 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
 
             const matchesCategory = selectedCategory === 'Todas' || project.categoria === selectedCategory;
 
-            return matchesSearch && matchesCategory;
+            // Advanced Filters
+            const matchesRegion = selectedRegion === 'Todas' || (project.regiones && project.regiones.includes(selectedRegion));
+            const matchesBeneficiary = selectedBeneficiary === 'Todos' || (project.beneficiarios && project.beneficiarios.includes(selectedBeneficiary));
+
+            return matchesSearch && matchesCategory && matchesRegion && matchesBeneficiary;
         });
-    }, [projects, searchTerm, selectedCategory]);
+    }, [projects, searchTerm, selectedCategory, selectedRegion, selectedBeneficiary]);
 
     return (
         <div className="bg-white rounded-xl shadow-sm border border-[var(--iica-border)] overflow-hidden">
@@ -85,25 +103,61 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                         />
                     </div>
 
-                    {/* Filter Chips (UX Improvement: Visible Active State) */}
-                    <div className="flex flex-wrap gap-2 items-center" role="group" aria-label="Filtros de categoría">
-                        <span className="text-sm font-bold text-gray-700 mr-2 flex items-center gap-1">
-                            <Filter className="h-4 w-4" /> Filtrar por:
-                        </span>
-                        {categories.map(cat => (
-                            <button
-                                key={cat}
-                                onClick={() => handleCategoryChange(cat)}
-                                aria-pressed={selectedCategory === cat}
-                                aria-label={`Filtrar por categoría ${cat}`}
-                                className={`px-4 py-2 rounded-full text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--iica-blue)] ${selectedCategory === cat
-                                    ? 'bg-[var(--iica-navy)] text-white shadow-md ring-2 ring-blue-100'
-                                    : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-[var(--iica-navy)]'
-                                    }`}
-                            >
-                                {cat}
-                            </button>
-                        ))}
+                    {/* Filter Chips & Advanced Selects */}
+                    <div className="flex flex-col md:flex-row gap-4 items-start md:items-center w-full">
+
+                        {/* 1. Category Chips */}
+                        <div className="flex flex-wrap gap-2 items-center" role="group" aria-label="Filtros de categoría">
+                            <span className="text-sm font-bold text-gray-700 mr-2 flex items-center gap-1">
+                                <Filter className="h-4 w-4" /> Categoría:
+                            </span>
+                            {categories.map(cat => (
+                                <button
+                                    key={cat}
+                                    onClick={() => handleCategoryChange(cat)}
+                                    aria-pressed={selectedCategory === cat}
+                                    className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${selectedCategory === cat
+                                        ? 'bg-[var(--iica-navy)] text-white border-[var(--iica-navy)] shadow-md'
+                                        : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                                        }`}
+                                >
+                                    {cat}
+                                </button>
+                            ))}
+                        </div>
+
+                        <div className="hidden md:block w-px h-8 bg-gray-300 mx-2"></div>
+
+                        {/* 2. Advanced Filters (Region & User) */}
+                        <div className="flex flex-wrap gap-3 w-full md:w-auto">
+
+                            {/* Region Filter */}
+                            <div className="relative group">
+                                <select
+                                    value={selectedRegion}
+                                    onChange={(e) => setSelectedRegion(e.target.value)}
+                                    className="appearance-none bg-white border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-[var(--iica-blue)] focus:border-[var(--iica-blue)] block w-full pl-3 pr-8 py-2 cursor-pointer hover:border-[var(--iica-blue)] transition-colors shadow-sm"
+                                >
+                                    <option value="Todas">Todas las Regiones</option>
+                                    {uniqueRegions.map(r => <option key={r} value={r}>{r}</option>)}
+                                </select>
+                                <ChevronDown className="absolute right-2.5 top-2.5 h-4 w-4 text-gray-500 pointer-events-none group-hover:text-[var(--iica-blue)]" />
+                            </div>
+
+                            {/* Beneficiary Filter */}
+                            <div className="relative group">
+                                <select
+                                    value={selectedBeneficiary}
+                                    onChange={(e) => setSelectedBeneficiary(e.target.value)}
+                                    className="appearance-none bg-white border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-[var(--iica-blue)] focus:border-[var(--iica-blue)] block w-full pl-3 pr-8 py-2 cursor-pointer hover:border-[var(--iica-blue)] transition-colors shadow-sm"
+                                >
+                                    <option value="Todos">Todos los Perfiles</option>
+                                    {uniqueBeneficiaries.map(b => <option key={b} value={b}>{b}</option>)}
+                                </select>
+                                <ChevronDown className="absolute right-2.5 top-2.5 h-4 w-4 text-gray-500 pointer-events-none group-hover:text-[var(--iica-blue)]" />
+                            </div>
+
+                        </div>
                     </div>
 
                 </div>
@@ -119,7 +173,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                         <h3 className="text-lg font-bold text-gray-800 mb-2">No se encontraron resultados</h3>
                         <p className="text-gray-600 mb-6">No hay convocatorias que coincidan con tu búsqueda en este momento.</p>
                         <button
-                            onClick={() => { setSearchTerm(''); setSelectedCategory('Todas'); }}
+                            onClick={() => { setSearchTerm(''); setSelectedCategory('Todas'); setSelectedRegion('Todas'); setSelectedBeneficiary('Todos'); }}
                             className="text-[var(--iica-cyan)] font-bold hover:underline focus:outline-none focus:ring-2 focus:ring-[var(--iica-blue)] rounded px-2"
                         >
                             Limpiar filtros y ver todo

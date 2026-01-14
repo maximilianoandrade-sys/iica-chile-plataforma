@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import ProjectListContainer from "@/components/ProjectListContainer";
 import SkeletonProjectList from "@/components/SkeletonProjectList";
 import AboutSection from "@/components/AboutSection";
+import Newsletter from "@/components/Newsletter";
 
 export default function DashboardPage() {
   return (
@@ -94,10 +95,15 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        {/* 6. About Section (Institutional Identity) */}
+        {/* 6. Newsletter (New Feature) */}
+        <section className="container mx-auto max-w-[1200px] px-4">
+          <Newsletter />
+        </section>
+
+        {/* 7. About Section (Institutional Identity) */}
         <AboutSection />
 
-        {/* 7. Footer */}
+        {/* 8. Footer */}
         <div id="contacto">
           <Footer />
         </div>
