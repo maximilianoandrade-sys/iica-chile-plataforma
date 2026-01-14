@@ -6,22 +6,29 @@
 
 @layer base {
   :root {
-    --iica-navy: #002D72;
+    --iica-navy: #003366;
     --iica-blue: #005CB9;
+    --iica-cyan: #00AEEF;
     --iica-yellow: #FFD100;
     --iica-dark: #1a1a1a;
-    --iica-gray: #f8f9fa;
+    --iica-gray: #f4f7f9;
     --iica-border: #e0e6ed;
-    --iica-secondary: #00a651; /* Keeping this as the green accent */
+    --iica-secondary: #00a651;
+    /* Keeping this as the green accent */
   }
-  
+
   body {
     font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: var(--iica-dark);
     background-color: #ffffff;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-weight: 700;
   }
 }
@@ -44,7 +51,7 @@
     justify-content: center;
     margin: 0 auto;
     transition: transform 0.2s;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
 
   .mic-btn:hover {
