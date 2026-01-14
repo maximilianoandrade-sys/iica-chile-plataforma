@@ -16,6 +16,18 @@ export function ProjectList() {
         return ['Todas', ...Array.from(cats)];
     }, []);
 
+    const getLogoUrl = (institution: string) => {
+        const domainMap: Record<string, string> = {
+            'CNR': 'cnr.gob.cl',
+            'INDAP': 'indap.gob.cl',
+            'CORFO': 'corfo.cl',
+            'FIA': 'fia.cl',
+            'SAG': 'sag.gob.cl'
+        };
+        const domain = domainMap[institution] || 'gob.cl';
+        return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+    };
+
     // Filter projects
     const filteredProjects = useMemo(() => {
         return mockProjects.filter(project => {
@@ -34,32 +46,39 @@ export function ProjectList() {
 
             {/* 2. SMART DASHBOARD HEADER (Search + Filters) */}
             <div className="p-6 border-b border-[var(--iica-border)] bg-gray-50/50">
-                <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
+                <div className="flex flex-col gap-6">
 
-                    <div className="relative w-full md:max-w-md">
+                    {/* Search Bar */}
+                    <div className="relative w-full">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <Search className="h-5 w-5 text-gray-400" />
                         </div>
                         <input
                             type="text"
-                            placeholder="Buscar por nombre o institución..."
-                            className="pl-10 pr-4 py-2.5 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--iica-blue)] focus:border-transparent outline-none transition-shadow"
+                            placeholder="Buscar por nombre, palabra clave o institución..."
+                            className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--iica-blue)] focus:border-transparent outline-none transition-shadow text-gray-700"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
 
-                    <div className="w-full md:w-auto flex items-center gap-3">
-                        <Filter className="h-5 w-5 text-gray-400 hidden md:block" />
-                        <select
-                            className="w-full md:w-48 py-2.5 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--iica-blue)] focus:border-transparent outline-none bg-white cursor-pointer"
-                            value={selectedCategory}
-                            onChange={(e) => setSelectedCategory(e.target.value)}
-                        >
-                            {categories.map(cat => (
-                                <option key={cat} value={cat}>{cat}</option>
-                            ))}
-                        </select>
+                    {/* Filter Chips (UX Improvement: Visible Active State) */}
+                    <div className="flex flex-wrap gap-2 items-center">
+                        <span className="text-sm font-bold text-gray-700 mr-2 flex items-center gap-1">
+                            <Filter className="h-4 w-4" /> Filtrar por:
+                        </span>
+                        {categories.map(cat => (
+                            <button
+                                key={cat}
+                                onClick={() => setSelectedCategory(cat)}
+                                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${selectedCategory === cat
+                                        ? 'bg-[var(--iica-navy)] text-white shadow-md ring-2 ring-blue-100'
+                                        : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-100 hover:text-[var(--iica-navy)]'
+                                    }`}
+                            >
+                                {cat}
+                            </button>
+                        ))}
                     </div>
 
                 </div>
@@ -68,13 +87,17 @@ export function ProjectList() {
             {/* 3. CONTENT AREA */}
             <div>
                 {filteredProjects.length === 0 ? (
-                    <div className="p-12 text-center text-gray-500">
-                        <p>No se encontraron proyectos con estos filtros.</p>
+                    <div className="p-16 text-center">
+                        <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                            <Search className="h-8 w-8 text-gray-400" />
+                        </div>
+                        <h3 className="text-lg font-bold text-gray-800 mb-2">No se encontraron resultados</h3>
+                        <p className="text-gray-600 mb-6">No hay convocatorias que coincidan con tu búsqueda en este momento.</p>
                         <button
                             onClick={() => { setSearchTerm(''); setSelectedCategory('Todas'); }}
-                            className="mt-4 text-[var(--iica-cyan)] hover:underline"
+                            className="text-[var(--iica-cyan)] font-bold hover:underline"
                         >
-                            Limpiar filtros
+                            Limpiar filtros y ver todo
                         </button>
                     </div>
                 ) : (
@@ -83,27 +106,37 @@ export function ProjectList() {
                         <div className="hidden md:block overflow-x-auto">
                             <table className="w-full text-left border-collapse">
                                 <thead>
-                                    <tr className="bg-[#f4f7f9] text-gray-600 text-sm font-semibold border-b border-[var(--iica-border)]">
-                                        <th className="py-4 px-6">Proyecto</th>
-                                        <th className="py-4 px-6">Institución</th>
-                                        <th className="py-4 px-6">Cierre</th>
-                                        <th className="py-4 px-6 text-right">Acciones</th>
+                                    <tr className="bg-[#f4f7f9] text-gray-700 text-sm font-bold border-b border-[var(--iica-border)] uppercase tracking-wider">
+                                        <th className="py-5 px-6">Proyecto</th>
+                                        <th className="py-5 px-6">Institución</th>
+                                        <th className="py-5 px-6">Cierre</th>
+                                        <th className="py-5 px-6 text-right">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-[var(--iica-border)]">
                                     {filteredProjects.map((project) => (
-                                        <tr key={project.id} className="hover:bg-blue-50/30 transition-colors">
-                                            <td className="py-4 px-6">
-                                                <div className="font-medium text-[var(--iica-navy)]">{project.nombre}</div>
-                                                <span className="inline-block mt-1 text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                                        <tr key={project.id} className="hover:bg-blue-50/40 transition-colors group">
+                                            <td className="py-5 px-6">
+                                                <div className="font-bold text-[var(--iica-navy)] text-base mb-1">{project.nombre}</div>
+                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
                                                     {project.categoria}
                                                 </span>
                                             </td>
-                                            <td className="py-4 px-6 font-medium text-gray-700">{project.institucion}</td>
-                                            <td className="py-4 px-6">
+                                            <td className="py-5 px-6">
+                                                <div className="flex items-center gap-3">
+                                                    <img
+                                                        src={getLogoUrl(project.institucion)}
+                                                        alt={project.institucion}
+                                                        className="w-8 h-8 rounded bg-white shadow-sm p-0.5 object-contain border border-gray-100"
+                                                        onError={(e) => { (e.target as HTMLImageElement).style.visibility = 'hidden' }}
+                                                    />
+                                                    <span className="font-bold text-gray-700">{project.institucion}</span>
+                                                </div>
+                                            </td>
+                                            <td className="py-5 px-6">
                                                 <UrgencyBadge date={project.fecha_cierre} />
                                             </td>
-                                            <td className="py-4 px-6 text-right">
+                                            <td className="py-5 px-6 text-right">
                                                 <ActionButton url={project.url_bases} date={project.fecha_cierre} />
                                             </td>
                                         </tr>
@@ -115,19 +148,27 @@ export function ProjectList() {
                         {/* MOBILE CARD VIEW */}
                         <div className="md:hidden divide-y divide-[var(--iica-border)]">
                             {filteredProjects.map((project) => (
-                                <div key={project.id} className="p-5 flex flex-col gap-3">
+                                <div key={project.id} className="p-5 flex flex-col gap-4 active:bg-blue-50/50 transition-colors">
+
                                     <div className="flex justify-between items-start">
-                                        <span className="text-xs font-bold text-[var(--iica-secondary)] bg-green-50 px-2 py-1 rounded">
-                                            {project.institucion}
-                                        </span>
+                                        <div className="flex items-center gap-2">
+                                            <img
+                                                src={getLogoUrl(project.institucion)}
+                                                alt={project.institucion}
+                                                className="w-6 h-6 rounded bg-white object-contain border border-gray-100"
+                                            />
+                                            <span className="text-xs font-bold text-[var(--iica-secondary)] bg-green-50 px-2 py-1 rounded border border-green-100">
+                                                {project.institucion}
+                                            </span>
+                                        </div>
                                         <UrgencyBadge date={project.fecha_cierre} mobile />
                                     </div>
 
-                                    <h3 className="font-bold text-lg text-[var(--iica-navy)] leading-snug mb-2">
+                                    <h3 className="font-bold text-lg text-[var(--iica-navy)] leading-snug">
                                         {project.nombre}
                                     </h3>
 
-                                    <div className="pt-2 flex justify-end items-center">
+                                    <div className="pt-2">
                                         <ActionButton url={project.url_bases} date={project.fecha_cierre} />
                                     </div>
                                 </div>

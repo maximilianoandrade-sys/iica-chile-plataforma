@@ -43,19 +43,25 @@ export function Header() {
             </div>
 
             {/* Hero Section */}
-            <div className="hero-iica relative overflow-hidden bg-[var(--iica-navy)] text-white py-16 md:py-20 text-center">
-                {/* Overlay gradient is handled by CSS class 'hero-iica' in globals.css, but we can enforce style here if needed */}
+            <div
+                className="hero-iica relative overflow-hidden bg-[var(--iica-navy)] text-white py-20 md:py-28 text-center"
+                style={{
+                    backgroundImage: 'linear-gradient(rgba(0, 45, 114, 0.85), rgba(0, 45, 114, 0.7)), url("https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2832&auto=format&fit=crop")',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center'
+                }}
+            >
                 <div className="relative z-10 container mx-auto px-4">
-                    <h1 className="text-3xl md:text-5xl font-extrabold mb-4 leading-tight">
-                        Encuentra Financiamiento para tu Campo 2026
+                    <h1 className="text-3xl md:text-5xl font-extrabold mb-6 leading-tight drop-shadow-lg">
+                        Encuentra Financiamiento para tu Campo <span className="text-[var(--iica-secondary)]">2026</span>
                     </h1>
-                    <p className="text-lg md:text-xl font-light text-blue-100 max-w-2xl mx-auto mb-8">
+                    <p className="text-lg md:text-xl font-medium text-blue-50 max-w-2xl mx-auto mb-10 drop-shadow-md">
                         Accede a fondos concursables, subsidios y créditos para modernizar tu producción agrícola. Información actualizada y simplificada.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Link
                             href="#convocatorias"
-                            className="bg-[var(--iica-secondary)] hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-transform hover:-translate-y-1 inline-block"
+                            className="bg-[var(--iica-secondary)] hover:bg-green-600 text-white font-bold py-4 px-10 rounded-full shadow-xl transition-all hover:-translate-y-1 inline-block cursor-pointer ring-4 ring-white/20"
                         >
                             Ver Convocatorias Abiertas
                         </Link>
