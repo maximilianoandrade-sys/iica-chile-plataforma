@@ -5,8 +5,6 @@ import ProjectListContainer from "@/components/ProjectListContainer";
 import SkeletonProjectList from "@/components/SkeletonProjectList";
 import AboutSection from "@/components/AboutSection";
 
-export const dynamic = 'force-dynamic';
-
 export default function DashboardPage() {
   return (
     <>
