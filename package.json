@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build --webpack",
-    "build:render": "prisma generate && prisma db push && next build --webpack",
+    "build": "next build",
     "start": "next start",
     "postinstall": "prisma generate",
     "scrape": "tsx lib/scrapers.ts",
