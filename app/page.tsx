@@ -11,12 +11,14 @@ export default function DashboardPage() {
     <div className="min-h-screen flex flex-col bg-[#f4f7f9]">
 
       {/* 1. Header & Hero (Institutional) */}
-      <Header />
+      <div id="inicio">
+        <Header />
+      </div>
 
       <main className="flex-grow container mx-auto max-w-[1200px] px-4 py-8 -mt-8 relative z-20">
 
         {/* 2. Main Content Area */}
-        <div className="bg-white rounded-xl shadow-sm border border-[var(--iica-border)] p-6 mb-8">
+        <div id="convocatorias" className="bg-white rounded-xl shadow-sm border border-[var(--iica-border)] p-6 mb-8">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-[var(--iica-navy)] mb-2">
               Convocatorias Vigentes
@@ -31,15 +33,34 @@ export default function DashboardPage() {
 
         </div>
 
-        {/* 4. Additional Resources / Institutional Links (Optional, matching 'Herramientas Técnicas' concept but cleaner) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+        {/* 4. Help Section / Manual */}
+        <section id="manual" className="mb-12">
+          <div className="bg-white rounded-xl shadow-sm border border-[var(--iica-border)] overflow-hidden">
+            <div className="p-8">
+              <h2 className="text-2xl font-bold text-center mb-8 text-[var(--iica-navy)]">Manual de Uso Rápido</h2>
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="bg-gray-50 p-6 rounded-lg border border-gray-100">
+                  <h3 className="font-bold text-lg text-[var(--iica-secondary)] mb-2">🔍 ¿Cómo buscar fondos?</h3>
+                  <p className="text-gray-600 text-sm">Utilice los filtros superiores para ordenar la lista. La columna "Cierre" indica la urgencia.</p>
+                </div>
+                <div className="bg-gray-50 p-6 rounded-lg border border-gray-100">
+                  <h3 className="font-bold text-lg text-[var(--iica-secondary)] mb-2">📄 ¿Cómo postular?</h3>
+                  <p className="text-gray-600 text-sm">Esta plataforma es informativa. Haga clic en <strong>"Ver Bases"</strong> para ir al sitio oficial y postular.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 5. Additional Resources */}
+        <div id="recursos" className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+          {/* ... existing resources content ... */}
           <div className="bg-[var(--iica-navy)] text-white p-8 rounded-lg shadow-lg relative overflow-hidden group hover:-translate-y-1 transition-transform cursor-pointer">
             <div className="relative z-10">
               <h3 className="text-xl font-bold mb-2">Recursos para Postulación</h3>
               <p className="text-blue-100 mb-4 text-sm">Accede a guías, formatos tipo y tips para mejorar tus posibilidades de adjudicación en concursos públicos.</p>
               <span className="inline-block text-sm font-bold underline decoration-2 decoration-[var(--iica-secondary)] underline-offset-4">Ver Recursos</span>
             </div>
-            {/* Decorative circle */}
             <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
           </div>
 
@@ -56,8 +77,10 @@ export default function DashboardPage() {
 
       </main>
 
-      {/* 5. Footer */}
-      <Footer />
+      {/* 6. Footer */}
+      <div id="contacto">
+        <Footer />
+      </div>
 
     </div>
   );
