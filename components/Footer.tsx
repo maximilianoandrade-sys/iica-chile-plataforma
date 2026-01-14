@@ -32,18 +32,9 @@ export function Footer() {
                     <div>
                         <h4 className="text-lg font-semibold mb-4 text-white">Contacto</h4>
                         <ul className="space-y-2 text-sm text-blue-200">
-                            <li className="flex gap-2">
-                                <span>📍</span>
-                                <span>Av. Andrés Bello 2299, Piso 9, Providencia, Santiago.</span>
-                            </li>
-                            <li className="flex gap-2">
-                                <span>✉️</span>
-                                <span>representacion.chile@iica.int</span>
-                            </li>
-                            <li className="flex gap-2">
-                                <span>📞</span>
-                                <span>(+56) 2 2916 9193</span>
-                            </li>
+                            <li>📍 Calle Rancagua No.0320, Providencia, Santiago.</li>
+                            <li>✉️ representacion.chile@iica.int</li>
+                            <li>📞 (+56) 2 2225 2511</li>
                         </ul>
                     </div>
                 </div>
