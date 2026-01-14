@@ -21,7 +21,5 @@ const projectsData: Project[] = [
 ];
 
 export async function getProjects(): Promise<Project[]> {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500));
     return projectsData;
 }
