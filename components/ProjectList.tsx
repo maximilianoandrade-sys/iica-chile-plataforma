@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Project } from "@/lib/data";
-import { trackEvent } from "@/lib/analytics";
+import { trackEvent, trackSearch } from "@/lib/analytics";
+import { smartSearch } from "@/lib/searchEngine";
 import Toast from "@/components/ui/Toast";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check } from "lucide-react";
+import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info } from "lucide-react";
 
 export default function ProjectList({ projects }: { projects: Project[] }) {
     const [searchTerm, setSearchTerm] = useState('');
@@ -14,6 +15,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
     const [selectedBeneficiary, setSelectedBeneficiary] = useState('Todos');
     const [showRequirements, setShowRequirements] = useState(false);
     const [toastMessage, setToastMessage] = useState<string | null>(null);
+    const [expandedProject, setExpandedProject] = useState<number | null>(null);
 
     // Extract unique categories for the dropdown
     const categories = useMemo(() => {
@@ -57,12 +59,12 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
         return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
     };
 
-    // Filter projects
+    // Filter projects with SMART SEARCH
     const filteredProjects = useMemo(() => {
         return projects.filter(project => {
-            const matchesSearch =
-                project.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                project.institucion.toLowerCase().includes(searchTerm.toLowerCase());
+            // Usar búsqueda inteligente con sinónimos y tolerancia a errores
+            const searchableText = `${project.nombre} ${project.institucion} ${project.categoria} ${(project.regiones || []).join(' ')} ${(project.beneficiarios || []).join(' ')}`;
+            const matchesSearch = smartSearch(searchTerm, searchableText);
 
             const matchesCategory = selectedCategory === 'Todas' || project.categoria === selectedCategory;
 
@@ -74,6 +76,17 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
         });
     }, [projects, searchTerm, selectedCategory, selectedRegion, selectedBeneficiary]);
 
+    // Track searches (especialmente las que no tienen resultados)
+    useEffect(() => {
+        if (searchTerm.trim()) {
+            trackSearch(searchTerm, filteredProjects.length, {
+                category: selectedCategory,
+                region: selectedRegion,
+                beneficiary: selectedBeneficiary
+            });
+        }
+    }, [filteredProjects.length, searchTerm, selectedCategory, selectedRegion, selectedBeneficiary]);
+
     return (
         <div className="bg-white rounded-xl shadow-sm border border-[var(--iica-border)] overflow-hidden">
 
@@ -83,6 +96,18 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                     onClose={() => setToastMessage(null)}
                 />
             )}
+
+            {/* DISCLAIMER LEGAL */}
+            <div className="bg-yellow-50 border-b border-yellow-200 px-6 py-3">
+                <div className="flex items-start gap-2 text-sm">
+                    <AlertCircle className="h-4 w-4 text-yellow-600 mt-0.5 flex-shrink-0" />
+                    <p className="text-yellow-800">
+                        <strong>Aviso Legal:</strong> Las fechas y condiciones son referenciales.
+                        <strong className="underline">Siempre verifique en la fuente oficial</strong> antes de postular.
+                        Esta plataforma no se responsabiliza por cambios en las bases o fechas de cierre.
+                    </p>
+                </div>
+            </div>
 
             {/* 2. SMART DASHBOARD HEADER (Search + Filters) */}
             <div className="p-6 border-b border-[var(--iica-border)] bg-gray-50/50">
@@ -101,6 +126,16 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
+                    </div>
+
+                    {/* Contador de Resultados */}
+                    <div className="text-sm text-gray-600">
+                        Mostrando <strong className="text-[var(--iica-navy)]">{filteredProjects.length}</strong> de <strong>{projects.length}</strong> convocatorias
+                        {searchTerm && (
+                            <span className="ml-2 text-[var(--iica-cyan)]">
+                                (búsqueda inteligente activa con sinónimos)
+                            </span>
+                        )}
                     </div>
 
                     {/* Filter Chips & Advanced Selects */}
@@ -195,43 +230,106 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                 <tbody className="divide-y divide-[var(--iica-border)]">
                                     <AnimatePresence>
                                         {filteredProjects.map((project) => (
-                                            <motion.tr
-                                                key={project.id}
-                                                className="hover:bg-blue-50/40 transition-colors group"
-                                                initial={{ opacity: 0, y: 10 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0, height: 0 }}
-                                                transition={{ duration: 0.2 }}
-                                            >
-                                                <td className="py-5 px-6">
-                                                    <div className="font-bold text-[var(--iica-navy)] text-base mb-1">{project.nombre}</div>
-                                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
-                                                        {project.categoria}
-                                                    </span>
-                                                </td>
-                                                <td className="py-5 px-6">
-                                                    <div className="flex items-center gap-3">
-                                                        <img
-                                                            src={getLogoUrl(project.institucion)}
-                                                            alt={project.institucion}
-                                                            className="w-8 h-8 rounded bg-white shadow-sm p-0.5 object-contain border border-gray-100"
-                                                            onError={(e) => { (e.target as HTMLImageElement).style.visibility = 'hidden' }}
+                                            <React.Fragment key={project.id}>
+                                                <motion.tr
+                                                    className="hover:bg-blue-50/40 transition-colors group"
+                                                    initial={{ opacity: 0, y: 10 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    exit={{ opacity: 0, height: 0 }}
+                                                    transition={{ duration: 0.2 }}
+                                                >
+                                                    <td className="py-5 px-6">
+                                                        <div className="flex items-start gap-2">
+                                                            <div className="flex-1">
+                                                                <div className="font-bold text-[var(--iica-navy)] text-base mb-1">{project.nombre}</div>
+                                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
+                                                                    {project.categoria}
+                                                                </span>
+                                                            </div>
+                                                            {project.resumen && (
+                                                                <button
+                                                                    onClick={() => setExpandedProject(expandedProject === project.id ? null : project.id)}
+                                                                    className="text-[var(--iica-cyan)] hover:text-[var(--iica-blue)] transition-colors p-1"
+                                                                    aria-label="Ver resumen ejecutivo"
+                                                                >
+                                                                    <Info className="h-5 w-5" />
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    </td>
+                                                    <td className="py-5 px-6">
+                                                        <div className="flex items-center gap-3">
+                                                            <img
+                                                                src={getLogoUrl(project.institucion)}
+                                                                alt={project.institucion}
+                                                                className="w-8 h-8 rounded bg-white shadow-sm p-0.5 object-contain border border-gray-100"
+                                                                onError={(e) => { (e.target as HTMLImageElement).style.visibility = 'hidden' }}
+                                                            />
+                                                            <span className="font-bold text-gray-700">{project.institucion}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td className="py-5 px-6">
+                                                        <UrgencyBadge date={project.fecha_cierre} />
+                                                    </td>
+                                                    <td className="py-5 px-6 text-right">
+                                                        <ActionButton
+                                                            url={project.url_bases}
+                                                            date={project.fecha_cierre}
+                                                            projectName={project.nombre}
+                                                            onTrack={() => setToastMessage("Redirigiendo a sitio oficial...")}
                                                         />
-                                                        <span className="font-bold text-gray-700">{project.institucion}</span>
-                                                    </div>
-                                                </td>
-                                                <td className="py-5 px-6">
-                                                    <UrgencyBadge date={project.fecha_cierre} />
-                                                </td>
-                                                <td className="py-5 px-6 text-right">
-                                                    <ActionButton
-                                                        url={project.url_bases}
-                                                        date={project.fecha_cierre}
-                                                        projectName={project.nombre}
-                                                        onTrack={() => setToastMessage("Redirigiendo a sitio oficial...")}
-                                                    />
-                                                </td>
-                                            </motion.tr>
+                                                    </td>
+                                                </motion.tr>
+
+                                                {/* Fila expandible con resumen ejecutivo */}
+                                                {expandedProject === project.id && project.resumen && (
+                                                    <motion.tr
+                                                        initial={{ opacity: 0, height: 0 }}
+                                                        animate={{ opacity: 1, height: 'auto' }}
+                                                        exit={{ opacity: 0, height: 0 }}
+                                                        className="bg-blue-50/30"
+                                                    >
+                                                        <td colSpan={4} className="px-6 py-4">
+                                                            <div className="bg-white rounded-lg p-4 border border-blue-200">
+                                                                <h4 className="font-bold text-[var(--iica-navy)] mb-3 flex items-center gap-2">
+                                                                    <Info className="h-4 w-4" />
+                                                                    Resumen Ejecutivo
+                                                                </h4>
+                                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                                                    {project.resumen.cofinanciamiento && (
+                                                                        <div>
+                                                                            <strong className="text-gray-700">💰 Cofinanciamiento:</strong>
+                                                                            <p className="text-gray-600 mt-1">{project.resumen.cofinanciamiento}</p>
+                                                                        </div>
+                                                                    )}
+                                                                    {project.resumen.plazo_ejecucion && (
+                                                                        <div>
+                                                                            <strong className="text-gray-700">⏱️ Plazo de Ejecución:</strong>
+                                                                            <p className="text-gray-600 mt-1">{project.resumen.plazo_ejecucion}</p>
+                                                                        </div>
+                                                                    )}
+                                                                    {project.resumen.requisitos_clave && project.resumen.requisitos_clave.length > 0 && (
+                                                                        <div className="md:col-span-2">
+                                                                            <strong className="text-gray-700">📋 Requisitos Clave:</strong>
+                                                                            <ul className="list-disc list-inside text-gray-600 mt-1 space-y-1">
+                                                                                {project.resumen.requisitos_clave.map((req, idx) => (
+                                                                                    <li key={idx}>{req}</li>
+                                                                                ))}
+                                                                            </ul>
+                                                                        </div>
+                                                                    )}
+                                                                    {project.resumen.observaciones && (
+                                                                        <div className="md:col-span-2">
+                                                                            <strong className="text-gray-700">ℹ️ Observaciones:</strong>
+                                                                            <p className="text-gray-600 mt-1">{project.resumen.observaciones}</p>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </motion.tr>
+                                                )}
+                                            </React.Fragment>
                                         ))}
                                     </AnimatePresence>
                                 </tbody>
@@ -263,9 +361,59 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                             <UrgencyBadge date={project.fecha_cierre} mobile />
                                         </div>
 
-                                        <h3 className="font-bold text-lg text-[var(--iica-navy)] leading-snug">
-                                            {project.nombre}
-                                        </h3>
+                                        <div className="flex items-start gap-2">
+                                            <h3 className="font-bold text-lg text-[var(--iica-navy)] leading-snug flex-1">
+                                                {project.nombre}
+                                            </h3>
+                                            {project.resumen && (
+                                                <button
+                                                    onClick={() => setExpandedProject(expandedProject === project.id ? null : project.id)}
+                                                    className="text-[var(--iica-cyan)] hover:text-[var(--iica-blue)] transition-colors p-1 flex-shrink-0"
+                                                    aria-label="Ver resumen ejecutivo"
+                                                >
+                                                    <Info className="h-5 w-5" />
+                                                </button>
+                                            )}
+                                        </div>
+
+                                        {/* Resumen ejecutivo expandible (móvil) */}
+                                        {expandedProject === project.id && project.resumen && (
+                                            <motion.div
+                                                initial={{ opacity: 0, height: 0 }}
+                                                animate={{ opacity: 1, height: 'auto' }}
+                                                exit={{ opacity: 0, height: 0 }}
+                                                className="bg-blue-50 rounded-lg p-3 border border-blue-200 text-sm"
+                                            >
+                                                <h4 className="font-bold text-[var(--iica-navy)] mb-2 flex items-center gap-1 text-sm">
+                                                    <Info className="h-3 w-3" />
+                                                    Resumen Ejecutivo
+                                                </h4>
+                                                <div className="space-y-2">
+                                                    {project.resumen.cofinanciamiento && (
+                                                        <div>
+                                                            <strong className="text-gray-700 text-xs">💰 Cofinanciamiento:</strong>
+                                                            <p className="text-gray-600 text-xs mt-0.5">{project.resumen.cofinanciamiento}</p>
+                                                        </div>
+                                                    )}
+                                                    {project.resumen.plazo_ejecucion && (
+                                                        <div>
+                                                            <strong className="text-gray-700 text-xs">⏱️ Plazo:</strong>
+                                                            <p className="text-gray-600 text-xs mt-0.5">{project.resumen.plazo_ejecucion}</p>
+                                                        </div>
+                                                    )}
+                                                    {project.resumen.requisitos_clave && project.resumen.requisitos_clave.length > 0 && (
+                                                        <div>
+                                                            <strong className="text-gray-700 text-xs">📋 Requisitos:</strong>
+                                                            <ul className="list-disc list-inside text-gray-600 text-xs mt-0.5 space-y-0.5">
+                                                                {project.resumen.requisitos_clave.slice(0, 3).map((req, idx) => (
+                                                                    <li key={idx}>{req}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </motion.div>
+                                        )}
 
                                         <div className="pt-2">
                                             <ActionButton

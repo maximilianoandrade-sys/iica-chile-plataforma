@@ -4,7 +4,7 @@ const nextConfig = {
   // Optimizaciones para producción
   compress: true,
   poweredByHeader: false,
-  
+
   // Configuración de paths
   webpack: (config) => {
     config.resolve.alias = {
@@ -13,7 +13,10 @@ const nextConfig = {
     };
     return config;
   },
-  
+
+  // Configuración de Turbopack (Next.js 16+)
+  turbopack: {},
+
   // Headers de seguridad
   async headers() {
     return [
