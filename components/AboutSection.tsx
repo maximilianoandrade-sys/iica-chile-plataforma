@@ -49,31 +49,22 @@ export default function AboutSection() {
                         </div>
                     </div>
 
-                    {/* Columna 2: Widget de Últimas Noticias (Estático por ahora) */}
-                    <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
-                        <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
-                            📰 Actualidad IICA
-                        </h3>
-                        <ul className="space-y-4">
-                            <li className="pb-4 border-b border-gray-200 last:border-0">
-                                <a href="https://iica.int/es/countries/chile-es" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 transition block">
-                                    <span className="text-xs font-semibold text-green-600 bg-green-100 px-2 py-0.5 rounded">Sostenibilidad</span>
-                                    <p className="font-medium mt-1">Impulso a mercados de carbono para productores de arroz en Chile.</p>
-                                </a>
-                            </li>
-                            <li className="pb-4 border-b border-gray-200 last:border-0">
-                                <a href="https://iica.int/es/countries/chile-es" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 transition block">
-                                    <span className="text-xs font-semibold text-blue-600 bg-blue-100 px-2 py-0.5 rounded">Gestión 2025</span>
-                                    <p className="font-medium mt-1">Rendición de Cuentas: Transparencia y resultados de la gestión IICA.</p>
-                                </a>
-                            </li>
-                            <li className="last:border-0">
-                                <a href="https://iica.int/es/countries/chile-es" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 transition block">
-                                    <span className="text-xs font-semibold text-purple-600 bg-purple-100 px-2 py-0.5 rounded">Innovación</span>
-                                    <p className="font-medium mt-1">Seminario Internacional de Biofertilizantes y Suelos Vivos.</p>
-                                </a>
-                            </li>
-                        </ul>
+                    {/* Columna 2: Video Institucional */}
+                    <div className="h-full flex flex-col justify-center">
+                        <div className="relative w-full rounded-2xl overflow-hidden shadow-lg border border-gray-200 group">
+                            <iframe
+                                className="w-full aspect-video hover:scale-105 transition-transform duration-700 ease-in-out"
+                                src="https://www.youtube.com/embed/YglymsRvzz4?rel=0"
+                                title="IICA Chile Video Institucional"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowFullScreen
+                            ></iframe>
+                            <div className="absolute inset-0 pointer-events-none rounded-2xl ring-1 ring-inset ring-black/10"></div>
+                        </div>
+                        <p className="mt-3 text-center text-sm text-gray-500 italic">
+                            Conoce más sobre nuestro impacto en Chile y las Américas.
+                        </p>
                     </div>
 
                 </div>
