@@ -4,6 +4,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Project } from "@/lib/data";
 import { trackEvent, trackSearch } from "@/lib/analytics";
 import { smartSearch } from "@/lib/searchEngine";
+import counterparts from '@/lib/counterparts_raw.json';
 import Toast from "@/components/ui/Toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info } from "lucide-react";
@@ -13,6 +14,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
     const [selectedCategory, setSelectedCategory] = useState('Todas');
     const [selectedRegion, setSelectedRegion] = useState('Todas');
     const [selectedBeneficiary, setSelectedBeneficiary] = useState('Todos');
+    const [selectedCounterpart, setSelectedCounterpart] = useState('Todas');
     const [showRequirements, setShowRequirements] = useState(false);
     const [toastMessage, setToastMessage] = useState<string | null>(null);
     const [expandedProject, setExpandedProject] = useState<number | null>(null);
@@ -72,9 +74,12 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
             const matchesRegion = selectedRegion === 'Todas' || (project.regiones && project.regiones.includes(selectedRegion));
             const matchesBeneficiary = selectedBeneficiary === 'Todos' || (project.beneficiarios && project.beneficiarios.includes(selectedBeneficiary));
 
-            return matchesSearch && matchesCategory && matchesRegion && matchesBeneficiary;
+            // Counterpart Filter (Institución) matching against counterpart names
+            const matchesCounterpart = selectedCounterpart === 'Todas' || project.institucion === selectedCounterpart || project.institucion.includes(selectedCounterpart);
+
+            return matchesSearch && matchesCategory && matchesRegion && matchesBeneficiary && matchesCounterpart;
         });
-    }, [projects, searchTerm, selectedCategory, selectedRegion, selectedBeneficiary]);
+    }, [projects, searchTerm, selectedCategory, selectedRegion, selectedBeneficiary, selectedCounterpart]);
 
     // Track searches (especialmente las que no tienen resultados)
     useEffect(() => {
@@ -82,10 +87,11 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
             trackSearch(searchTerm, filteredProjects.length, {
                 category: selectedCategory,
                 region: selectedRegion,
-                beneficiary: selectedBeneficiary
+                beneficiary: selectedBeneficiary,
+                counterpart: selectedCounterpart
             });
         }
-    }, [filteredProjects.length, searchTerm, selectedCategory, selectedRegion, selectedBeneficiary]);
+    }, [filteredProjects.length, searchTerm, selectedCategory, selectedRegion, selectedBeneficiary, selectedCounterpart]);
 
     return (
         <div className="bg-white rounded-xl shadow-sm border border-[var(--iica-border)] overflow-hidden">
@@ -192,6 +198,22 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                 <ChevronDown className="absolute right-2.5 top-2.5 h-4 w-4 text-gray-500 pointer-events-none group-hover:text-[var(--iica-blue)]" />
                             </div>
 
+                            {/* Counterpart Filter */}
+                            <div className="relative group w-full md:w-auto">
+                                <select
+                                    value={selectedCounterpart}
+                                    onChange={(e) => setSelectedCounterpart(e.target.value)}
+                                    className="appearance-none bg-white border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-[var(--iica-blue)] focus:border-[var(--iica-blue)] block w-full pl-3 pr-8 py-2 cursor-pointer hover:border-[var(--iica-blue)] transition-colors shadow-sm"
+                                    style={{ maxWidth: '250px' }}
+                                >
+                                    <option value="Todas">Todas las Instituciones</option>
+                                    {[...new Set([...projects.map(p => p.institucion), ...counterparts.slice(0, 20).map(c => c.name)])].sort().map(inst => (
+                                        <option key={inst} value={inst}>{inst}</option>
+                                    ))}
+                                </select>
+                                <ChevronDown className="absolute right-2.5 top-2.5 h-4 w-4 text-gray-500 pointer-events-none group-hover:text-[var(--iica-blue)]" />
+                            </div>
+
                         </div>
                     </div>
 
@@ -208,9 +230,10 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                         <h3 className="text-lg font-bold text-gray-800 mb-2">No se encontraron resultados</h3>
                         <p className="text-gray-600 mb-6">No hay convocatorias que coincidan con tu búsqueda en este momento.</p>
                         <button
-                            onClick={() => { setSearchTerm(''); setSelectedCategory('Todas'); setSelectedRegion('Todas'); setSelectedBeneficiary('Todos'); }}
+                            onClick={() => { setSearchTerm(''); setSelectedCategory('Todas'); setSelectedRegion('Todas'); setSelectedBeneficiary('Todos'); setSelectedCounterpart('Todas'); }}
                             className="text-[var(--iica-cyan)] font-bold hover:underline focus:outline-none focus:ring-2 focus:ring-[var(--iica-blue)] rounded px-2"
                         >
+
                             Limpiar filtros y ver todo
                         </button>
                     </div>
