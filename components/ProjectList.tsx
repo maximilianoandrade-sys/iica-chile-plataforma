@@ -207,7 +207,10 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                     style={{ maxWidth: '250px' }}
                                 >
                                     <option value="Todas">Todas las Instituciones</option>
-                                    {[...new Set([...projects.map(p => p.institucion), ...counterparts.slice(0, 20).map(c => c.name)])].sort().map(inst => (
+                                    {Array.from(new Set([
+                                        ...projects.map(p => p.institucion),
+                                        ...counterparts.slice(0, 20).map(c => c.name)
+                                    ])).sort().map(inst => (
                                         <option key={inst} value={inst}>{inst}</option>
                                     ))}
                                 </select>
