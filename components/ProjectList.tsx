@@ -43,6 +43,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
         trackEvent({
             action: 'filter_change',
             category: 'Projects',
+            label: cat,
         });
     };
 

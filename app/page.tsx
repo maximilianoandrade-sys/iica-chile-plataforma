@@ -8,7 +8,13 @@ import Newsletter from "@/components/Newsletter";
 import ProgramsSection from "@/components/ProgramsSection";
 import CounterpartLinks from "@/components/CounterpartLinks";
 
-export default function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const resolvedSearchParams = await searchParams;
+
   return (
     <>
       <div className="min-h-screen flex flex-col bg-[#f4f7f9]">
@@ -37,7 +43,7 @@ export default function DashboardPage() {
             {/* 3. Smart Project Dashboard (Streaming) */}
             <section id="convocatorias" className="scroll-mt-28">
               <Suspense fallback={<SkeletonProjectList />}>
-                <ProjectListContainer />
+                <ProjectListContainer searchParams={resolvedSearchParams} />
               </Suspense>
             </section>
 
