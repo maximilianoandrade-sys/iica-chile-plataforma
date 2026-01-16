@@ -5,6 +5,7 @@ import { Project } from "@/lib/data";
 import { trackEvent, trackSearch } from "@/lib/analytics";
 import { smartSearch } from "@/lib/searchEngine";
 import counterparts from '@/lib/counterparts_raw.json';
+import { getInstitutionalLogo } from "@/lib/logos";
 import Toast from "@/components/ui/Toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info } from "lucide-react";
@@ -42,24 +43,13 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
         trackEvent({
             action: 'filter_change',
             category: 'Projects',
-            label: cat
         });
     };
 
     const getLogoUrl = (institution: string) => {
-        const domainMap: Record<string, string> = {
-            'CNR': 'cnr.gob.cl',
-            'INDAP': 'indap.gob.cl',
-            'CORFO': 'corfo.cl',
-            'FIA': 'fia.cl',
-            'SAG': 'sag.gob.cl',
-            'Fondo Chile (PNUD)': 'undp.org',
-            'Unión Europea': 'europa.eu',
-            'FAO': 'fao.org'
-        };
-        const domain = domainMap[institution] || 'gob.cl';
-        return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+        return getInstitutionalLogo(institution);
     };
+
 
     // Filter projects with SMART SEARCH
     const filteredProjects = useMemo(() => {
