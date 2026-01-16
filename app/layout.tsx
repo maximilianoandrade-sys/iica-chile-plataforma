@@ -1,6 +1,6 @@
-// ... imports
 import type { Metadata } from 'next'
 import './globals.css'
+import CookieConsent from '@/components/CookieConsent';
 
 export const metadata: Metadata = {
   title: 'Plataforma de Financiamiento Agrícola | IICA Chile',
@@ -30,6 +30,7 @@ export const metadata: Metadata = {
   },
 }
 
+// Removed duplicate import
 export default function RootLayout({
   children,
 }: {
@@ -39,6 +40,7 @@ export default function RootLayout({
     <html lang="es">
       <body className="flex flex-col min-h-screen bg-[#f4f7f9]">
         {children}
+        <CookieConsent />
       </body>
     </html>
   )

@@ -242,8 +242,8 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                     </div>
                 ) : (
                     <>
-                        {/* DESKTOP TABLE VIEW */}
-                        <div className="hidden md:block overflow-x-auto">
+                        {/* DESKTOP TABLE VIEW (Visible only on Large screens) */}
+                        <div className="hidden lg:block overflow-x-auto">
                             <table className="w-full text-left border-collapse">
                                 <thead>
                                     <tr className="bg-[#f4f7f9] text-gray-700 text-sm font-bold border-b border-[var(--iica-border)] uppercase tracking-wider">
@@ -362,8 +362,8 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                             </table>
                         </div>
 
-                        {/* MOBILE CARD VIEW */}
-                        <div className="md:hidden divide-y divide-[var(--iica-border)]">
+                        {/* MOBILE/TABLET CARD VIEW (Visible on screens smaller than Large) */}
+                        <div className="lg:hidden divide-y divide-[var(--iica-border)]">
                             <AnimatePresence>
                                 {filteredProjects.map((project) => (
                                     <motion.div
@@ -556,7 +556,7 @@ function ActionButton({ url, date, projectName, onTrack }: { url: string, date: 
             rel="noopener noreferrer"
             onClick={handleClick}
             aria-label={`Ver bases oficiales para ${projectName}`}
-            className="inline-flex items-center gap-1.5 text-sm font-bold text-white bg-[var(--iica-cyan)] hover:bg-[#008ec2] px-4 py-2 rounded transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--iica-cyan)]"
+            className="inline-flex items-center gap-1.5 text-sm font-bold text-white bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] px-4 py-2 rounded transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--iica-blue)]"
         >
             Ver Bases Oficiales <ExternalLink className="h-4 w-4" aria-hidden="true" />
         </a>
