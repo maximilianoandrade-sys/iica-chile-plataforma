@@ -5,6 +5,7 @@ import ProjectListContainer from "@/components/ProjectListContainer";
 import SkeletonProjectList from "@/components/SkeletonProjectList";
 import AboutSection from "@/components/AboutSection";
 import Newsletter from "@/components/Newsletter";
+import ProgramsSection from "@/components/ProgramsSection";
 
 export default function DashboardPage() {
   return (
@@ -38,6 +39,9 @@ export default function DashboardPage() {
                 <ProjectListContainer />
               </Suspense>
             </section>
+
+            {/* 3.5. Programs Section (New) */}
+            <ProgramsSection />
 
           </div>
 
