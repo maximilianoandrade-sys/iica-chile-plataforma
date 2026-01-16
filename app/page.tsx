@@ -6,6 +6,7 @@ import SkeletonProjectList from "@/components/SkeletonProjectList";
 import AboutSection from "@/components/AboutSection";
 import Newsletter from "@/components/Newsletter";
 import ProgramsSection from "@/components/ProgramsSection";
+import CounterpartLinks from "@/components/CounterpartLinks";
 
 export default function DashboardPage() {
   return (
@@ -49,7 +50,7 @@ export default function DashboardPage() {
 
         {/* 4. Additional Resources */}
         <div id="recursos" className="container mx-auto max-w-[1200px] px-4 mb-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <a href="https://chile.iica.int/" target="_blank" rel="noopener noreferrer" className="bg-[var(--iica-navy)] text-white p-8 rounded-lg shadow-lg relative overflow-hidden group hover:-translate-y-1 transition-transform cursor-pointer block">
               <div className="relative z-10">
                 <h3 className="text-xl font-bold mb-2">Recursos para Postulación</h3>
@@ -69,6 +70,8 @@ export default function DashboardPage() {
                 Ir a la Biblioteca <span>→</span>
               </div>
             </a>
+
+            <CounterpartLinks />
           </div>
         </div>
 
