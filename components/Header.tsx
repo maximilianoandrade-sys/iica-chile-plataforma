@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export function Header() {
     return (
@@ -68,6 +69,19 @@ export function Header() {
                         </Link>
                     </div>
                 </div>
+            </div>
+
+            {/* Agricultural Field Image Section */}
+            <div className="relative w-full h-64 md:h-80 overflow-hidden">
+                <Image
+                    src="/agricultural-field.png"
+                    alt="Campos agrícolas chilenos con cultivos verdes y montañas al fondo"
+                    fill
+                    className="object-cover object-center"
+                    priority
+                    quality={90}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
             </div>
         </header>
     );
