@@ -216,38 +216,66 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                         </div>
                     </div>
 
-                    {/* Agrovoc Keywords Section - Scrollable List */}
-                    <div className="w-full mt-4">
-                        <label className="text-sm font-bold text-gray-700 mb-2 block flex items-center gap-1">
-                            <Search className="h-4 w-4" /> Palabras Clave (Agrovoc):
-                        </label>
-                        <div className="bg-white border border-gray-300 rounded-lg p-2 h-48 overflow-y-auto shadow-inner grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
-                            <button
-                                onClick={() => setSelectedAgrovoc('Cualquiera')}
-                                className={`text-left px-3 py-1.5 rounded text-sm transition-colors ${selectedAgrovoc === 'Cualquiera'
-                                    ? 'bg-[var(--iica-blue)] text-white font-medium'
-                                    : 'hover:bg-gray-100 text-gray-700'
-                                    }`}
-                            >
-                                -- Cualquiera --
-                            </button>
-                            {AGROVOC_KEYWORDS.map((keyword, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => setSelectedAgrovoc(keyword)}
-                                    className={`text-left px-3 py-1.5 rounded text-sm truncate transition-colors ${selectedAgrovoc === keyword
-                                        ? 'bg-[var(--iica-blue)] text-white font-medium'
-                                        : 'hover:bg-gray-100 text-gray-700'
-                                        }`}
-                                    title={keyword}
+
+                    {/* Agrovoc Keywords Section - Collapsible & Aesthetic */}
+                    <div className="w-full mt-4 border-t border-gray-200 pt-4">
+                        <button
+                            onClick={() => setShowRequirements(!showRequirements)}
+                            className="w-full flex items-center justify-between text-sm font-bold text-gray-700 hover:text-[var(--iica-blue)] transition-colors"
+                        >
+                            <span className="flex items-center gap-2">
+                                <Filter className="h-4 w-4" />
+                                Filtrar por Palabras Clave Temáticas (Agrovoc)
+                                {selectedAgrovoc !== 'Cualquiera' && (
+                                    <span className="ml-2 px-2 py-0.5 bg-[var(--iica-blue)] text-white text-xs rounded-full">
+                                        {selectedAgrovoc}
+                                    </span>
+                                )}
+                            </span>
+                            <ChevronDown className={`h-5 w-5 transition-transform ${showRequirements ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        <AnimatePresence>
+                            {showRequirements && (
+                                <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: 'auto', opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="overflow-hidden"
                                 >
-                                    {keyword}
-                                </button>
-                            ))}
-                        </div>
-                        <p className="text-xs text-gray-500 mt-1">
-                            * Selecciona una palabra clave para filtrar proyectos que la mencionen en su descripción o requisitos.
-                        </p>
+                                    <div className="mt-3 bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                        <div className="bg-white rounded-md p-2 max-h-56 overflow-y-auto shadow-inner grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1.5">
+                                            <button
+                                                onClick={() => setSelectedAgrovoc('Cualquiera')}
+                                                className={`text-left px-2.5 py-1.5 rounded text-xs font-medium transition-all ${selectedAgrovoc === 'Cualquiera'
+                                                    ? 'bg-[var(--iica-blue)] text-white shadow-md scale-105'
+                                                    : 'hover:bg-gray-100 text-gray-700 hover:shadow-sm'
+                                                    }`}
+                                            >
+                                                ✕ Limpiar filtro
+                                            </button>
+                                            {AGROVOC_KEYWORDS.map((keyword, index) => (
+                                                <button
+                                                    key={index}
+                                                    onClick={() => setSelectedAgrovoc(keyword)}
+                                                    className={`text-left px-2.5 py-1.5 rounded text-xs truncate transition-all ${selectedAgrovoc === keyword
+                                                        ? 'bg-[var(--iica-blue)] text-white font-medium shadow-md scale-105'
+                                                        : 'hover:bg-gray-100 text-gray-600 hover:shadow-sm'
+                                                        }`}
+                                                    title={keyword}
+                                                >
+                                                    {keyword}
+                                                </button>
+                                            ))}
+                                        </div>
+                                        <p className="text-xs text-gray-500 mt-2 italic">
+                                            💡 Filtra proyectos por temas específicos del vocabulario controlado Agrovoc
+                                        </p>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
 
                 </div>
