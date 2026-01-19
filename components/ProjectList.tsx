@@ -21,6 +21,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
 
     const [selectedCounterpart, setSelectedCounterpart] = useState('Todas');
     const [selectedAgrovoc, setSelectedAgrovoc] = useState('Cualquiera');
+    const [showAgrovoc, setShowAgrovoc] = useState(false);
     const [showRequirements, setShowRequirements] = useState(false);
     const [toastMessage, setToastMessage] = useState<string | null>(null);
     const [expandedProject, setExpandedProject] = useState<number | null>(null);
@@ -117,167 +118,67 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                 </div>
             </div>
 
-            {/* 2. SMART DASHBOARD HEADER (Search + Filters) */}
+
+            {/* Agrovoc Keywords Section - Collapsible & Aesthetic */}
             <div className="p-6 border-b border-[var(--iica-border)] bg-gray-50/50">
-                <div className="flex flex-col gap-6">
-
-                    {/* Search Bar */}
-                    <div className="relative w-full">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <Search className="h-5 w-5 text-gray-400" />
-                        </div>
-                        <input
-                            type="text"
-                            aria-label="Buscar convocatorias por nombre o institución"
-                            placeholder="Buscar por nombre, palabra clave o institución..."
-                            className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--iica-blue)] focus:border-transparent outline-none transition-shadow text-gray-700"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    </div>
-
-                    {/* Contador de Resultados (Optimizado y Centrado) */}
-                    <div className="flex items-center justify-between">
-                        <div className="text-sm text-gray-600">
-                            Mostrando <strong className="text-[var(--iica-navy)]">{filteredProjects.length}</strong> de <strong>{projects.length}</strong> convocatorias
-                            {searchTerm && (
-                                <span className="ml-2 text-[var(--iica-cyan)]">
-                                    (búsqueda inteligente activa)
+                <div className="w-full">
+                    <button
+                        onClick={() => setShowAgrovoc(!showAgrovoc)}
+                        className="w-full flex items-center justify-between text-sm font-bold text-gray-700 hover:text-[var(--iica-blue)] transition-colors"
+                    >
+                        <span className="flex items-center gap-2">
+                            <Filter className="h-4 w-4" />
+                            Filtrar por Palabras Clave Temáticas (Agrovoc)
+                            {selectedAgrovoc !== 'Cualquiera' && (
+                                <span className="ml-2 px-2 py-0.5 bg-[var(--iica-blue)] text-white text-xs rounded-full">
+                                    {selectedAgrovoc}
                                 </span>
                             )}
-                        </div>
-                    </div>
+                        </span>
+                        <ChevronDown className={`h-5 w-5 transition-transform ${showAgrovoc ? 'rotate-180' : ''}`} />
+                    </button>
 
-                    {/* Filter Chips & Advanced Selects */}
-                    <div className="flex flex-col md:flex-row gap-4 items-start md:items-center w-full">
-
-                        {/* 1. Category Chips */}
-                        <div className="flex flex-wrap gap-2 items-center" role="group" aria-label="Filtros de categoría">
-                            <span className="text-sm font-bold text-gray-700 mr-2 flex items-center gap-1">
-                                <Filter className="h-4 w-4" /> Categoría:
-                            </span>
-                            {categories.map(cat => (
-                                <button
-                                    key={cat}
-                                    onClick={() => handleCategoryChange(cat)}
-                                    aria-pressed={selectedCategory === cat}
-                                    className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${selectedCategory === cat
-                                        ? 'bg-[var(--iica-navy)] text-white border-[var(--iica-navy)] shadow-md'
-                                        : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
-                                        }`}
-                                >
-                                    {cat}
-                                </button>
-                            ))}
-                        </div>
-
-                        <div className="hidden md:block w-px h-8 bg-gray-300 mx-2"></div>
-
-                        {/* 2. Advanced Filters (Region & User) */}
-                        <div className="flex flex-wrap gap-3 w-full md:w-auto">
-
-                            {/* Region Filter */}
-                            <div className="relative group">
-                                <select
-                                    value={selectedRegion}
-                                    onChange={(e) => setSelectedRegion(e.target.value)}
-                                    className="appearance-none bg-white border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-[var(--iica-blue)] focus:border-[var(--iica-blue)] block w-full pl-3 pr-8 py-2 cursor-pointer hover:border-[var(--iica-blue)] transition-colors shadow-sm"
-                                >
-                                    <option value="Todas">Todas las Regiones</option>
-                                    {uniqueRegions.map(r => <option key={r} value={r}>{r}</option>)}
-                                </select>
-                                <ChevronDown className="absolute right-2.5 top-2.5 h-4 w-4 text-gray-500 pointer-events-none group-hover:text-[var(--iica-blue)]" />
-                            </div>
-
-                            {/* Beneficiary Filter */}
-                            <div className="relative group">
-                                <select
-                                    value={selectedBeneficiary}
-                                    onChange={(e) => setSelectedBeneficiary(e.target.value)}
-                                    className="appearance-none bg-white border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-[var(--iica-blue)] focus:border-[var(--iica-blue)] block w-full pl-3 pr-8 py-2 cursor-pointer hover:border-[var(--iica-blue)] transition-colors shadow-sm"
-                                >
-                                    <option value="Todos">Todos los Perfiles</option>
-                                    {uniqueBeneficiaries.map(b => <option key={b} value={b}>{b}</option>)}
-                                </select>
-                                <ChevronDown className="absolute right-2.5 top-2.5 h-4 w-4 text-gray-500 pointer-events-none group-hover:text-[var(--iica-blue)]" />
-                            </div>
-
-                            {/* Counterpart Filter (Searchable) */}
-                            <SearchableSelect
-                                options={['Todas', ...Array.from(new Set([
-                                    ...projects.map(p => p.institucion),
-                                    ...counterparts.slice(0, 50).map(c => c.name)
-                                ])).sort()]}
-                                value={selectedCounterpart === 'Todas' ? 'Todas las Instituciones' : selectedCounterpart}
-                                onChange={(val) => setSelectedCounterpart(val === 'Todas las Instituciones' ? 'Todas' : val)}
-                                placeholder="Filtrar por Institución"
-                            />
-
-                        </div>
-                    </div>
-
-
-                    {/* Agrovoc Keywords Section - Collapsible & Aesthetic */}
-                    <div className="w-full mt-4 border-t border-gray-200 pt-4">
-                        <button
-                            onClick={() => setShowRequirements(!showRequirements)}
-                            className="w-full flex items-center justify-between text-sm font-bold text-gray-700 hover:text-[var(--iica-blue)] transition-colors"
-                        >
-                            <span className="flex items-center gap-2">
-                                <Filter className="h-4 w-4" />
-                                Filtrar por Palabras Clave Temáticas (Agrovoc)
-                                {selectedAgrovoc !== 'Cualquiera' && (
-                                    <span className="ml-2 px-2 py-0.5 bg-[var(--iica-blue)] text-white text-xs rounded-full">
-                                        {selectedAgrovoc}
-                                    </span>
-                                )}
-                            </span>
-                            <ChevronDown className={`h-5 w-5 transition-transform ${showRequirements ? 'rotate-180' : ''}`} />
-                        </button>
-
-                        <AnimatePresence>
-                            {showRequirements && (
-                                <motion.div
-                                    initial={{ height: 0, opacity: 0 }}
-                                    animate={{ height: 'auto', opacity: 1 }}
-                                    exit={{ height: 0, opacity: 0 }}
-                                    transition={{ duration: 0.2 }}
-                                    className="overflow-hidden"
-                                >
-                                    <div className="mt-3 bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-lg p-3 shadow-sm">
-                                        <div className="bg-white rounded-md p-2 max-h-56 overflow-y-auto shadow-inner grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1.5">
+                    <AnimatePresence>
+                        {showAgrovoc && (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="overflow-hidden"
+                            >
+                                <div className="mt-3 bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-lg p-3 shadow-sm">
+                                    <div className="bg-white rounded-md p-2 max-h-56 overflow-y-auto shadow-inner grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1.5">
+                                        <button
+                                            onClick={() => setSelectedAgrovoc('Cualquiera')}
+                                            className={`text-left px-2.5 py-1.5 rounded text-xs font-medium transition-all ${selectedAgrovoc === 'Cualquiera'
+                                                ? 'bg-[var(--iica-blue)] text-white shadow-md scale-105'
+                                                : 'hover:bg-gray-100 text-gray-700 hover:shadow-sm'
+                                                }`}
+                                        >
+                                            ✕ Limpiar filtro
+                                        </button>
+                                        {AGROVOC_KEYWORDS.map((keyword, index) => (
                                             <button
-                                                onClick={() => setSelectedAgrovoc('Cualquiera')}
-                                                className={`text-left px-2.5 py-1.5 rounded text-xs font-medium transition-all ${selectedAgrovoc === 'Cualquiera'
-                                                    ? 'bg-[var(--iica-blue)] text-white shadow-md scale-105'
-                                                    : 'hover:bg-gray-100 text-gray-700 hover:shadow-sm'
+                                                key={index}
+                                                onClick={() => setSelectedAgrovoc(keyword)}
+                                                className={`text-left px-2.5 py-1.5 rounded text-xs truncate transition-all ${selectedAgrovoc === keyword
+                                                    ? 'bg-[var(--iica-blue)] text-white font-medium shadow-md scale-105'
+                                                    : 'hover:bg-gray-100 text-gray-600 hover:shadow-sm'
                                                     }`}
+                                                title={keyword}
                                             >
-                                                ✕ Limpiar filtro
+                                                {keyword}
                                             </button>
-                                            {AGROVOC_KEYWORDS.map((keyword, index) => (
-                                                <button
-                                                    key={index}
-                                                    onClick={() => setSelectedAgrovoc(keyword)}
-                                                    className={`text-left px-2.5 py-1.5 rounded text-xs truncate transition-all ${selectedAgrovoc === keyword
-                                                        ? 'bg-[var(--iica-blue)] text-white font-medium shadow-md scale-105'
-                                                        : 'hover:bg-gray-100 text-gray-600 hover:shadow-sm'
-                                                        }`}
-                                                    title={keyword}
-                                                >
-                                                    {keyword}
-                                                </button>
-                                            ))}
-                                        </div>
-                                        <p className="text-xs text-gray-500 mt-2 italic">
-                                            💡 Filtra proyectos por temas específicos del vocabulario controlado Agrovoc
-                                        </p>
+                                        ))}
                                     </div>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                    </div>
-
+                                    <p className="text-xs text-gray-500 mt-2 italic">
+                                        💡 Filtra proyectos por temas específicos del vocabulario controlado Agrovoc
+                                    </p>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
             </div>
 
