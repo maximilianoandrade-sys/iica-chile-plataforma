@@ -32,12 +32,7 @@ export function Header() {
                     <Link href="#contacto" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Contacto</Link>
                 </nav>
 
-                <button
-                    onClick={() => alert("🔧 Módulo de Gestión Interna\n\nEsta funcionalidad está en desarrollo para la Fase 2.")}
-                    className="hidden md:block border border-[var(--iica-navy)] text-[var(--iica-navy)] px-4 py-1.5 rounded text-sm font-bold hover:bg-[var(--iica-navy)] hover:text-white transition-colors"
-                >
-                    Ingresar
-                </button>
+
 
                 <button className="md:hidden text-[var(--iica-navy)]">
                     ☰
