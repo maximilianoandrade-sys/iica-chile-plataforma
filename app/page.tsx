@@ -48,7 +48,8 @@ export default async function DashboardPage({
             </section>
 
             {/* 3.5. Programs Section (New) */}
-            <ProgramsSection />
+
+
 
           </div>
 
@@ -80,6 +81,9 @@ export default async function DashboardPage({
             <CounterpartLinks />
           </div>
         </div>
+
+        {/* 4.5. Programs Section (Relocated) */}
+        <ProgramsSection />
 
         {/* 5. Quick Manual */}
         <section id="manual" className="container mx-auto max-w-[1200px] px-4 mb-16">

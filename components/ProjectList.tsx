@@ -7,6 +7,8 @@ import { smartSearch } from "@/lib/searchEngine";
 import counterparts from '@/lib/counterparts_raw.json';
 import { getInstitutionalLogo } from "@/lib/logos";
 import Toast from "@/components/ui/Toast";
+import Image from 'next/image';
+import SearchableSelect from "@/components/SearchableSelect"; // Import the new component
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info } from "lucide-react";
 
@@ -125,14 +127,16 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                         />
                     </div>
 
-                    {/* Contador de Resultados */}
-                    <div className="text-sm text-gray-600">
-                        Mostrando <strong className="text-[var(--iica-navy)]">{filteredProjects.length}</strong> de <strong>{projects.length}</strong> convocatorias
-                        {searchTerm && (
-                            <span className="ml-2 text-[var(--iica-cyan)]">
-                                (búsqueda inteligente activa con sinónimos)
-                            </span>
-                        )}
+                    {/* Contador de Resultados (Optimizado y Centrado) */}
+                    <div className="flex items-center justify-between">
+                        <div className="text-sm text-gray-600">
+                            Mostrando <strong className="text-[var(--iica-navy)]">{filteredProjects.length}</strong> de <strong>{projects.length}</strong> convocatorias
+                            {searchTerm && (
+                                <span className="ml-2 text-[var(--iica-cyan)]">
+                                    (búsqueda inteligente activa)
+                                </span>
+                            )}
+                        </div>
                     </div>
 
                     {/* Filter Chips & Advanced Selects */}
@@ -189,24 +193,16 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                 <ChevronDown className="absolute right-2.5 top-2.5 h-4 w-4 text-gray-500 pointer-events-none group-hover:text-[var(--iica-blue)]" />
                             </div>
 
-                            {/* Counterpart Filter */}
-                            <div className="relative group w-full md:w-auto">
-                                <select
-                                    value={selectedCounterpart}
-                                    onChange={(e) => setSelectedCounterpart(e.target.value)}
-                                    className="appearance-none bg-white border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-[var(--iica-blue)] focus:border-[var(--iica-blue)] block w-full pl-3 pr-8 py-2 cursor-pointer hover:border-[var(--iica-blue)] transition-colors shadow-sm"
-                                    style={{ maxWidth: '250px' }}
-                                >
-                                    <option value="Todas">Todas las Instituciones</option>
-                                    {Array.from(new Set([
-                                        ...projects.map(p => p.institucion),
-                                        ...counterparts.slice(0, 20).map(c => c.name)
-                                    ])).sort().map(inst => (
-                                        <option key={inst} value={inst}>{inst}</option>
-                                    ))}
-                                </select>
-                                <ChevronDown className="absolute right-2.5 top-2.5 h-4 w-4 text-gray-500 pointer-events-none group-hover:text-[var(--iica-blue)]" />
-                            </div>
+                            {/* Counterpart Filter (Searchable) */}
+                            <SearchableSelect
+                                options={['Todas', ...Array.from(new Set([
+                                    ...projects.map(p => p.institucion),
+                                    ...counterparts.slice(0, 50).map(c => c.name) // Increased limit slightly for better variety
+                                ])).sort()]}
+                                value={selectedCounterpart === 'Todas' ? 'Todas las Instituciones' : selectedCounterpart}
+                                onChange={(val) => setSelectedCounterpart(val === 'Todas las Instituciones' ? 'Todas' : val)}
+                                placeholder="Filtrar por Institución"
+                            />
 
                         </div>
                     </div>
@@ -276,12 +272,15 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                     </td>
                                                     <td className="py-5 px-6">
                                                         <div className="flex items-center gap-3">
-                                                            <img
-                                                                src={getLogoUrl(project.institucion)}
-                                                                alt={project.institucion}
-                                                                className="w-8 h-8 rounded bg-white shadow-sm p-0.5 object-contain border border-gray-100"
-                                                                onError={(e) => { (e.target as HTMLImageElement).style.visibility = 'hidden' }}
-                                                            />
+                                                            <div className="relative w-8 h-8 flex-shrink-0">
+                                                                <Image
+                                                                    src={getLogoUrl(project.institucion)}
+                                                                    alt={project.institucion}
+                                                                    fill
+                                                                    className="rounded bg-white shadow-sm p-0.5 object-contain border border-gray-100"
+                                                                    sizes="32px"
+                                                                />
+                                                            </div>
                                                             <span className="font-bold text-gray-700">{project.institucion}</span>
                                                         </div>
                                                     </td>
@@ -366,11 +365,15 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                     >
                                         <div className="flex justify-between items-start">
                                             <div className="flex items-center gap-2">
-                                                <img
-                                                    src={getLogoUrl(project.institucion)}
-                                                    alt={project.institucion}
-                                                    className="w-6 h-6 rounded bg-white object-contain border border-gray-100"
-                                                />
+                                                <div className="relative w-6 h-6 flex-shrink-0">
+                                                    <Image
+                                                        src={getLogoUrl(project.institucion)}
+                                                        alt={project.institucion}
+                                                        fill
+                                                        className="rounded bg-white object-contain border border-gray-100"
+                                                        sizes="24px"
+                                                    />
+                                                </div>
                                                 <span className="text-xs font-bold text-[var(--iica-secondary)] bg-green-50 px-2 py-1 rounded border border-green-100">
                                                     {project.institucion}
                                                 </span>
@@ -546,10 +549,10 @@ function ActionButton({ url, date, projectName, onTrack }: { url: string, date: 
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleClick}
-            aria-label={`Ver bases oficiales para ${projectName}`}
-            className="inline-flex items-center gap-1.5 text-sm font-bold text-white bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] px-4 py-2 rounded transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--iica-blue)]"
+            aria-label={`Ver bases oficiales para ${projectName} (se abre en nueva pestaña)`}
+            className="inline-flex items-center gap-1.5 text-sm font-bold text-white bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] px-4 py-2 rounded transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--iica-blue)] group"
         >
-            Ver Bases Oficiales <ExternalLink className="h-4 w-4" aria-hidden="true" />
+            Ver Bases <ExternalLink className="h-4 w-4 group-hover:scale-110 transition-transform" aria-hidden="true" />
         </a>
     );
 }
@@ -573,22 +576,30 @@ function UrgencyBadge({ date, mobile = false }: { date: string, mobile?: boolean
         return (
             <div className="flex flex-col items-start">
                 <span className="text-gray-400 text-sm flex items-center gap-1"><AlertCircle className="h-4 w-4" /> Finalizado</span>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-red-500 bg-red-50 px-1.5 py-0.5 rounded border border-red-100">🔴 Cerrado</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-red-500 bg-red-50 px-1.5 py-0.5 rounded border border-red-100 border-l-2 border-l-red-500">CERRADO</span>
             </div>
         );
     }
 
     return (
-        <div className="flex flex-col items-start gap-0.5">
-            <div className={`flex items-center gap-1.5 ${isUrgent ? 'text-red-600 font-bold' : 'text-gray-600'}`}>
-                {!mobile && <Calendar className="h-4 w-4 text-gray-400" />}
+        <div className="flex flex-col items-start gap-1">
+            <div className={`flex items-center gap-1.5 ${isUrgent ? 'text-red-700 font-bold' : 'text-gray-600'}`}>
+                {!mobile && <Calendar className={`h-4 w-4 ${isUrgent ? 'text-red-600' : 'text-gray-400'}`} />}
                 <span className="text-sm">
-                    {isUrgent ? `¡Cierra en ${diffDays} días!` : new Date(date).toLocaleDateString('es-CL')}
+                    {/* Format Date as DD/MM/YYYY */}
+                    {new Date(date).toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric' })}
                 </span>
             </div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-green-600 bg-green-50 px-1.5 py-0.5 rounded border border-green-100">
-                🟢 Abierto
-            </span>
+
+            {isUrgent ? (
+                <span className="text-[10px] font-bold uppercase tracking-wider text-white bg-red-600 px-2 py-0.5 rounded shadow-sm animate-pulse">
+                    ¡Cierra en {diffDays} días!
+                </span>
+            ) : (
+                <span className="text-[10px] font-bold uppercase tracking-wider text-green-700 bg-green-100 px-1.5 py-0.5 rounded border border-green-200">
+                    Abierto
+                </span>
+            )}
         </div>
     );
 }

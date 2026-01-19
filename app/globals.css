@@ -21,7 +21,9 @@
   body {
     font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: var(--iica-dark);
+    color: var(--iica-dark);
     background-color: #ffffff;
+    scroll-behavior: smooth;
   }
 
   h1,

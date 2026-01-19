@@ -10,9 +10,6 @@ export default function SkeletonProjectList() {
                     <div className="w-full h-12 bg-gray-200 rounded-lg"></div>
                     <div className="flex gap-2">
                         <div className="h-4 w-24 bg-gray-200 rounded"></div>
-                        <div className="h-8 w-20 bg-gray-200 rounded-full"></div>
-                        <div className="h-8 w-20 bg-gray-200 rounded-full"></div>
-                        <div className="h-8 w-20 bg-gray-200 rounded-full"></div>
                     </div>
                 </div>
             </div>
