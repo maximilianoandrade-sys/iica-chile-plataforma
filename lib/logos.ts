@@ -1,15 +1,24 @@
 export const LOGO_MAP: Record<string, string> = {
-    // Nacionales
-    'INDAP': 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Indap_Chile_%28logo%29.svg/1200px-Indap_Chile_%28logo%29.svg.png',
-    'CNR': 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_Comisi%C3%B3n_Nacional_de_Riego.png',
-    'CORFO': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Corfo_Chile_2013_%28logo%29.svg/2560px-Corfo_Chile_2013_%28logo%29.svg.png',
-    'FIA': 'https://upload.wikimedia.org/wikipedia/commons/3/36/Logo_FIA.jpg', // Fallback, FIA logo is harder to find on commons
+    // Nacionales - Using local generated logos
+    'INDAP': '/logos/indap.png',
+    'CNR': '/logos/cnr.png',
+    'CORFO': '/logos/corfo.png',
+    'FIA': '/logos/fia.png',
     'SAG': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Sag_Chile_%28logo%29.svg/1200px-Sag_Chile_%28logo%29.svg.png',
 
     // Internacionales
+    'FONTAGRO': '/logos/fontagro.png',
     'Fondo Chile (PNUD)': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/UNDP_logo.svg/1200px-UNDP_logo.svg.png',
     'Unión Europea': 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Flag_of_Europe.svg/1200px-Flag_of_Europe.svg.png',
-    'FAO': 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/FAO_logo.svg/1200px-FAO_logo.svg.png'
+    'European Union': 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Flag_of_Europe.svg/1200px-Flag_of_Europe.svg.png',
+    'FAO': 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/FAO_logo.svg/1200px-FAO_logo.svg.png',
+    'IFAD': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/IFAD_logo.svg/1200px-IFAD_logo.svg.png',
+    'IDB': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Inter-American_Development_Bank_logo.svg/1200px-Inter-American_Development_Bank_logo.svg.png',
+    'USAID': 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/USAID-Identity.svg/1200px-USAID-Identity.svg.png',
+    'GIZ': 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/GIZ_logo.svg/1200px-GIZ_logo.svg.png',
+    'GCF': 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Green_Climate_Fund_logo.svg/1200px-Green_Climate_Fund_logo.svg.png',
+    'World Bank': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/World_Bank_logo.svg/1200px-World_Bank_logo.svg.png',
+    'CAF': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/CAF_logo.svg/1200px-CAF_logo.svg.png'
 };
 
 export const getInstitutionalLogo = (institution: string): string => {
