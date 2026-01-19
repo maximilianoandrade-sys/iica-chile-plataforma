@@ -223,5 +223,142 @@
             "plazo_ejecucion": "3-6 meses",
             "observaciones": "Pasantía en oficinas FAO (Roma, Santiago u otras)"
         }
+    },
+    {
+        "id": 9,
+        "nombre": "Concursos Ley N°18.450 - Calendario 2026",
+        "institucion": "CNR",
+        "monto": 0,
+        "fecha_cierre": "2026-12-31",
+        "estado": "Abierto",
+        "categoria": "Riego",
+        "url_bases": "https://www.cnr.gob.cl",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "Agricultor",
+            "Organización de Usuarios"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Variable según concurso (bonificación estatal)",
+            "requisitos_clave": [
+                "Proyecto de riego aprobado",
+                "Derechos de agua",
+                "Consultor inscrito en CNR"
+            ],
+            "plazo_ejecucion": "Según bases",
+            "observaciones": "Calendario anual con múltiples llamados para tecnificación y obras civiles"
+        }
+    },
+    {
+        "id": 10,
+        "nombre": "SIRSD-S Recuperación de Suelos (Arica y Parinacota 2026)",
+        "institucion": "INDAP",
+        "monto": 8000000,
+        "fecha_cierre": "2026-02-27",
+        "estado": "Abierto",
+        "categoria": "Suelos",
+        "url_bases": "https://www.indap.gob.cl/concursos",
+        "regiones": [
+            "Arica y Parinacota"
+        ],
+        "beneficiarios": [
+            "Pequeño Agricultor",
+            "Usuario INDAP"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Hasta 90% de los costos netos",
+            "requisitos_clave": [
+                "Plan de manejo de suelos",
+                "Acreditación de usuario INDAP",
+                "Sin deudas morosas con INDAP"
+            ],
+            "plazo_ejecucion": "Temporada 2026",
+            "observaciones": "Operación Temprana 2026 para recuperación de suelos degradados"
+        }
+    },
+    {
+        "id": 11,
+        "nombre": "Concurso CICYT 2025 (Innovación y Tecnología)",
+        "institucion": "Sercotec",
+        "monto": 6000000,
+        "fecha_cierre": "2026-01-23",
+        "estado": "Por Cerrar",
+        "categoria": "Innovación",
+        "url_bases": "https://www.sercotec.cl",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "Microempresa",
+            "Cooperativa"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Subsidio para adopción tecnológica",
+            "requisitos_clave": [
+                "Inicio de actividades en primera categoría",
+                "Ventas netas anuales demostrables",
+                "Proyecto de innovación tecnológica"
+            ],
+            "plazo_ejecucion": "6-12 meses",
+            "observaciones": "Fomenta la competitividad a través de la ciencia y tecnología"
+        }
+    },
+    {
+        "id": 12,
+        "nombre": "Convocatoria 2026 - Innovación en Agricultura Familiar",
+        "institucion": "FONTAGRO",
+        "monto": 200000,
+        "fecha_cierre": "2026-03-30",
+        "estado": "Abierto",
+        "categoria": "Internacional",
+        "url_bases": "https://www.fontagro.org",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "Centro de Investigación",
+            "Organización de Productores",
+            "ONG"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Hasta USD 200.000 por proyecto",
+            "requisitos_clave": [
+                "Plataforma multi-país (mínimo 2 países miembros)",
+                "Innovación tecnológica u organizacional",
+                "Cofinanciamiento de contraparte"
+            ],
+            "plazo_ejecucion": "36 meses",
+            "observaciones": "Foco en sostenibilidad y resiliencia climática de la agricultura familiar"
+        }
+    },
+    {
+        "id": 13,
+        "nombre": "Arauco Raíz Innovadora (Corfo)",
+        "institucion": "CORFO",
+        "monto": 15000000,
+        "fecha_cierre": "2026-03-01",
+        "estado": "Abierto",
+        "categoria": "Emprendimiento",
+        "url_bases": "https://www.irade.cl",
+        "regiones": [
+            "Biobío"
+        ],
+        "beneficiarios": [
+            "Emprendedor",
+            "Mujeres",
+            "Jóvenes"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Cofinanciamiento para emprendimientos dinámicos",
+            "requisitos_clave": [
+                "Residencia en Provincia de Arauco",
+                "Proyecto de innovación",
+                "Foco en actividades productivas locales"
+            ],
+            "plazo_ejecucion": "12 meses",
+            "observaciones": "Impulsado por Irade y Corfo para reactivación económica"
+        }
     }
 ]
