@@ -100,6 +100,7 @@ export default function ProjectFilters({
                     </div>
                     <input
                         type="text"
+                        list="search-suggestions"
                         aria-label="Buscar convocatorias"
                         placeholder="Buscar por nombre, palabra clave o institución..."
                         className="pl-10 pr-4 py-3 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--iica-blue)] focus:border-transparent outline-none transition-shadow text-gray-700"
@@ -166,9 +167,48 @@ export default function ProjectFilters({
                             onChange={(val) => handleFilterChange('institution', val)}
                             defaultText="Todas las Instituciones"
                         />
+                        {/* Amount Filter */}
+                        <div className="relative group">
+                            <select
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    const params = new URLSearchParams(searchParams.toString());
+                                    if (val === 'all') {
+                                        params.delete('minAmount');
+                                        params.delete('maxAmount');
+                                    } else {
+                                        const [min, max] = val.split('-');
+                                        params.set('minAmount', min);
+                                        params.set('maxAmount', max);
+                                    }
+                                    router.replace(`?${params.toString()}`, { scroll: false });
+                                }}
+                                className="appearance-none bg-white border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-[var(--iica-blue)] focus:border-[var(--iica-blue)] block w-full pl-3 pr-8 py-2 cursor-pointer hover:border-[var(--iica-blue)] transition-colors shadow-sm"
+                                style={{ maxWidth: '200px' }}
+                            >
+                                <option value="all">Cualquier Monto</option>
+                                <option value="0-10000000">Menos de $10 Millones</option>
+                                <option value="10000000-50000000">$10MM - $50 Millones</option>
+                                <option value="50000000-100000000">$50MM - $100 Millones</option>
+                                <option value="100000000-999999999999">Más de $100 Millones</option>
+                            </select>
+                            <ChevronDown className="absolute right-2.5 top-2.5 h-4 w-4 text-gray-500 pointer-events-none group-hover:text-[var(--iica-blue)]" />
+                        </div>
                     </div>
                 </div>
             </div>
+            {/* Predictive Search Suggestions */}
+            <datalist id="search-suggestions">
+                <option value="Riego" />
+                <option value="Agricultura Familiar" />
+                <option value="Innovación Agrícola" />
+                <option value="Mujeres Rurales" />
+                <option value="Sustentabilidad" />
+                <option value="Emergencia Agrícola" />
+                <option value="Pueblos Indígenas" />
+                <option value="Jóvenes Rurales" />
+            </datalist>
+
         </div>
     );
 }

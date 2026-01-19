@@ -27,6 +27,9 @@ export default async function ProjectListContainer({
     const selectedBeneficiary = typeof searchParams.beneficiary === 'string' ? searchParams.beneficiary : 'Todos';
     const selectedInstitution = typeof searchParams.institution === 'string' ? searchParams.institution : 'Todas';
 
+    const minAmount = typeof searchParams.minAmount === 'string' ? parseInt(searchParams.minAmount) : 0;
+    const maxAmount = typeof searchParams.maxAmount === 'string' ? parseInt(searchParams.maxAmount) : Infinity;
+
     // 1. Calculate Options
     const categories = ['Todas', ...Array.from(new Set(projects.map(p => p.categoria)))];
     const uniqueRegions = Array.from(new Set(projects.flatMap(p => p.regiones || []))).sort();
@@ -50,7 +53,15 @@ export default async function ProjectListContainer({
         const matchesBeneficiary = selectedBeneficiary === 'Todos' || (project.beneficiarios && project.beneficiarios.includes(selectedBeneficiary));
         const matchesInstitution = selectedInstitution === 'Todas' || project.institucion === selectedInstitution || project.institucion.includes(selectedInstitution);
 
-        return matchesSearch && matchesCategory && matchesRegion && matchesBeneficiary && matchesInstitution;
+        // Amount Filter
+        // Note: Project amount is a number. If amount is 0/null in JSON, we might want to include it or exclude it depending on logic.
+        // Assuming 0 means "Not specified" or "Variable". Let's handle standard ranges.
+        // If project.monto is 0, we treat it as matching "Any" but if a specific range is set, maybe exclude? 
+        // Let's assume matches if (project.monto >= min && project.monto <= max) OR if amount filter is not active (0-Infinity).
+        const filterActive = minAmount > 0 || maxAmount < Infinity;
+        const matchesAmount = !filterActive || (project.monto >= minAmount && project.monto <= maxAmount);
+
+        return matchesSearch && matchesCategory && matchesRegion && matchesBeneficiary && matchesInstitution && matchesAmount;
     });
 
     return (
