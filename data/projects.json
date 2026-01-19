@@ -360,5 +360,287 @@
             "plazo_ejecucion": "12 meses",
             "observaciones": "Impulsado por Irade y Corfo para reactivación económica"
         }
+    },
+    {
+        "id": 14,
+        "nombre": "FAO Forest and Farm Facility (FFF) Grants 2025",
+        "institucion": "FAO",
+        "monto": 100000,
+        "fecha_cierre": "2026-02-28",
+        "estado": "Abierto",
+        "categoria": "Forestal y Agricultura Familiar",
+        "url_bases": "https://www.fao.org/forest-farm-facility/",
+        "regiones": [
+            "América Latina y el Caribe"
+        ],
+        "beneficiarios": [
+            "Pequeños Productores",
+            "Comunidades Indígenas",
+            "Organizaciones de Mujeres Rurales"
+        ],
+        "resumen": {
+            "cofinanciamiento": "USD 5,000 a USD 100,000 por proyecto",
+            "requisitos_clave": [
+                "Organizaciones de productores forestales y agrícolas",
+                "Enfoque en pequeños productores",
+                "Fortalecimiento institucional"
+            ],
+            "plazo_ejecucion": "12-24 meses",
+            "observaciones": "Apoyo directo financiero y técnico para fortalecer organizaciones de productores"
+        }
+    },
+    {
+        "id": 15,
+        "nombre": "FONTAGRO Convocatoria 2026 - Sistemas Agroalimentarios Sostenibles",
+        "institucion": "FONTAGRO",
+        "monto": 250000,
+        "fecha_cierre": "2026-03-30",
+        "estado": "Abierto",
+        "categoria": "Investigación e Innovación Agrícola",
+        "url_bases": "https://www.fontagro.org/new/convocatorias/",
+        "regiones": [
+            "América Latina y el Caribe"
+        ],
+        "beneficiarios": [
+            "Instituciones de Investigación",
+            "Universidades",
+            "Centros Tecnológicos"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Hasta USD 250,000 por proyecto",
+            "requisitos_clave": [
+                "Consorcio regional (mínimo 2 países miembros)",
+                "Incluir entidad pública de investigación",
+                "Alineación con Programas Insignia PMP 2025-2030"
+            ],
+            "plazo_ejecucion": "36 meses",
+            "observaciones": "Se financiarán hasta 5 proyectos. Enfoque en productividad, rentabilidad y menor huella ambiental"
+        }
+    },
+    {
+        "id": 16,
+        "nombre": "IFAD FO4IMPACT - Fortalecimiento Institucional LAC",
+        "institucion": "IFAD",
+        "monto": 500000,
+        "fecha_cierre": "2025-11-14",
+        "estado": "Abierto",
+        "categoria": "Desarrollo Institucional",
+        "url_bases": "https://www.ifad.org/en/calls-for-proposals",
+        "regiones": [
+            "América Latina y el Caribe"
+        ],
+        "beneficiarios": [
+            "Organizaciones de Productores",
+            "Cooperativas",
+            "Asociaciones Rurales"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Grant regional para fortalecimiento institucional",
+            "requisitos_clave": [
+                "Organizaciones legalmente constituidas en países miembros IFAD",
+                "Enfoque en acceso a mercados",
+                "Participación en políticas públicas"
+            ],
+            "plazo_ejecucion": "24-36 meses",
+            "observaciones": "Co-desarrollo e implementación de grant regional para transformación comunitaria"
+        }
+    },
+    {
+        "id": 17,
+        "nombre": "IDB Lab AGRInnova - Agronegocios Sostenibles",
+        "institucion": "IDB",
+        "monto": 1000000,
+        "fecha_cierre": "2026-06-30",
+        "estado": "Abierto",
+        "categoria": "Innovación y Agronegocios",
+        "url_bases": "https://bidlab.org/",
+        "regiones": [
+            "América Latina y el Caribe"
+        ],
+        "beneficiarios": [
+            "Agronegocios",
+            "Startups Agtech",
+            "Cooperativas"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Asistencia técnica y capital de inversión",
+            "requisitos_clave": [
+                "Modelo de negocio sostenible y competitivo",
+                "Enfoque en productividad y eficiencia",
+                "Resiliencia climática"
+            ],
+            "plazo_ejecucion": "18-36 meses",
+            "observaciones": "Apoyo a agronegocios para enfrentar riesgos del cambio climático"
+        }
+    },
+    {
+        "id": 18,
+        "nombre": "EU-Mercosur Sustainable Agriculture Transition Fund",
+        "institucion": "European Union",
+        "monto": 5000000,
+        "fecha_cierre": "2026-12-31",
+        "estado": "Abierto",
+        "categoria": "Transición Sostenible",
+        "url_bases": "https://europa.eu/",
+        "regiones": [
+            "Argentina",
+            "Brasil",
+            "Paraguay",
+            "Uruguay"
+        ],
+        "beneficiarios": [
+            "Gobiernos",
+            "Instituciones Públicas",
+            "PyMEs Agrícolas"
+        ],
+        "resumen": {
+            "cofinanciamiento": "€5 mil millones para transición sostenible",
+            "requisitos_clave": [
+                "Países Mercosur",
+                "Enfoque en agricultura sostenible",
+                "Adopción de estándares ambientales"
+            ],
+            "plazo_ejecucion": "Múltiples fases hasta 2030",
+            "observaciones": "Parte del acuerdo de libre comercio EU-Mercosur. Incluye asistencia técnica para PyMEs"
+        }
+    },
+    {
+        "id": 19,
+        "nombre": "USAID Feed the Future - Resiliencia Agrícola Guatemala",
+        "institucion": "USAID",
+        "monto": 60000000,
+        "fecha_cierre": "2026-09-30",
+        "estado": "Abierto",
+        "categoria": "Seguridad Alimentaria",
+        "url_bases": "https://www.usaid.gov/",
+        "regiones": [
+            "Guatemala"
+        ],
+        "beneficiarios": [
+            "Pequeños Agricultores",
+            "Agro negocios",
+            "Comunidades Rurales"
+        ],
+        "resumen": {
+            "cofinanciamiento": "USD 60 millones en 5 años",
+            "requisitos_clave": [
+                "Enfoque en pequeños agricultores",
+                "Prácticas climáticamente inteligentes",
+                "Mejora de ingresos y resiliencia"
+            ],
+            "plazo_ejecucion": "60 meses",
+            "observaciones": "Incluye componente de inclusión financiera rural (USD 13M adicionales)"
+        }
+    },
+    {
+        "id": 20,
+        "nombre": "GIZ Investment Readiness Programme 2026 - Agritech África",
+        "institucion": "GIZ",
+        "monto": 20000,
+        "fecha_cierre": "2025-09-28",
+        "estado": "Abierto",
+        "categoria": "Tecnología Agrícola",
+        "url_bases": "https://www.giz.de/",
+        "regiones": [
+            "África (aplicable a transferencia tecnológica LAC)"
+        ],
+        "beneficiarios": [
+            "Startups Agtech",
+            "Innovadores Agrícolas"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Hasta €20,000 en asistencia técnica + €50,000 en préstamos",
+            "requisitos_clave": [
+                "Startups africanas de agritech",
+                "Innovación tecnológica o tech-enabled",
+                "Transformación agrícola"
+            ],
+            "plazo_ejecucion": "12-18 meses",
+            "observaciones": "Modelo replicable para LAC. Enfoque en preparación para inversión"
+        }
+    },
+    {
+        "id": 21,
+        "nombre": "Green Climate Fund - Resiliencia Agrícola Kenia (FAO-led)",
+        "institucion": "GCF",
+        "monto": 130000000,
+        "fecha_cierre": "2026-12-31",
+        "estado": "En Implementación",
+        "categoria": "Adaptación Climática",
+        "url_bases": "https://www.greenclimate.fund/",
+        "regiones": [
+            "Kenia (modelo replicable LAC)"
+        ],
+        "beneficiarios": [
+            "Gobiernos",
+            "Instituciones Agrícolas",
+            "Comunidades Rurales"
+        ],
+        "resumen": {
+            "cofinanciamiento": "USD 130 millones para cadenas de valor agrícolas",
+            "requisitos_clave": [
+                "Propuestas a través de entidades acreditadas (ej: FAO)",
+                "Enfoque en resiliencia climática",
+                "Transformación de cadenas de valor"
+            ],
+            "plazo_ejecucion": "48-60 meses",
+            "observaciones": "Modelo de proyecto FAO-GCF replicable en LAC. Monitorear próximas convocatorias regionales"
+        }
+    },
+    {
+        "id": 22,
+        "nombre": "World Bank AgriConnect - Transformación Agrifood LAC",
+        "institucion": "World Bank",
+        "monto": 9000000000,
+        "fecha_cierre": "2030-12-31",
+        "estado": "Abierto",
+        "categoria": "Desarrollo Sectorial",
+        "url_bases": "https://www.worldbank.org/",
+        "regiones": [
+            "América Latina y el Caribe"
+        ],
+        "beneficiarios": [
+            "Gobiernos",
+            "Agricultores Familiares",
+            "Sector Privado"
+        ],
+        "resumen": {
+            "cofinanciamiento": "USD 9 mil millones anuales hasta 2030",
+            "requisitos_clave": [
+                "Proyectos gubernamentales o con aval gubernamental",
+                "Enfoque en productividad y resiliencia",
+                "Inversión privada y reformas políticas"
+            ],
+            "plazo_ejecucion": "Múltiples proyectos hasta 2030",
+            "observaciones": "Iniciativa estratégica para transformar sector agrifood. Incluye Alianzas Productivas"
+        }
+    },
+    {
+        "id": 23,
+        "nombre": "CAF Laboratorio de Inclusión Financiera (LIF) 2025",
+        "institucion": "CAF",
+        "monto": 500000,
+        "fecha_cierre": "2025-09-21",
+        "estado": "Abierto",
+        "categoria": "Inclusión Financiera",
+        "url_bases": "https://www.caf.com/",
+        "regiones": [
+            "América Latina y el Caribe"
+        ],
+        "beneficiarios": [
+            "Fintech",
+            "MiPymes Rurales",
+            "Poblaciones Desatendidas"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Financiamiento para soluciones digitales innovadoras",
+            "requisitos_clave": [
+                "Soluciones digitales para inclusión financiera",
+                "Enfoque en áreas rurales",
+                "Educación financiera y acceso a crédito"
+            ],
+            "plazo_ejecucion": "18-24 meses",
+            "observaciones": "7ª edición del LIF. Prioriza poblaciones desatendidas y MiPymes en zonas rurales"
+        }
     }
 ]
