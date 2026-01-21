@@ -2,12 +2,13 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
-import { Info, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check } from "lucide-react";
+import { Info, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, MessageCircle, Share2 } from "lucide-react";
 import Image from 'next/image';
 import { Project } from "@/lib/data";
 import { getInstitutionalLogo } from "@/lib/logos";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLinkGuardian } from "@/lib/linkGuardian";
+import { generateWhatsAppLink, downloadICSFile, generateGoogleCalendarLink } from "@/lib/ruralTools";
 import Toast from "@/components/ui/Toast";
 
 interface ProjectItemProps {
@@ -83,12 +84,15 @@ export default function ProjectItem({ project, viewMode }: ProjectItemProps) {
                         <UrgencyBadge date={project.fecha_cierre} />
                     </td>
                     <td className="py-5 px-6 text-right">
-                        <ActionButton
-                            url={project.url_bases}
-                            date={project.fecha_cierre}
-                            projectName={project.nombre}
-                            onTrack={() => setToastMessage("Redirigiendo a sitio oficial...")}
-                        />
+                        <div className="flex items-center justify-end gap-2">
+                            <ActionButton
+                                url={project.url_bases}
+                                date={project.fecha_cierre}
+                                projectName={project.nombre}
+                                onTrack={() => setToastMessage("Redirigiendo a sitio oficial...")}
+                            />
+                            <RuralTools project={project} />
+                        </div>
                     </td>
                 </motion.tr>
 
@@ -296,3 +300,5 @@ function UrgencyBadge({ date, mobile = false }: { date: string, mobile?: boolean
         </div>
     );
 }
+ 
+ 

@@ -1,7 +1,9 @@
 /**
- * Motor de Búsqueda Inteligente con Sinónimos y Tolerancia a Errores
- * Soluciona el problema de "búsqueda literal" mencionado en la crítica
+ * Motor de Búsqueda Inteligente con Sinónimos, Tolerancia a Errores y Búsqueda Semántica
+ * Integra Cosine Similarity para búsquedas más inteligentes
  */
+
+import { hybridSearch, semanticSearch, generateSearchSuggestions as semanticSuggestions } from './semanticSearch';
 
 // Diccionario de sinónimos para el contexto agrícola chileno
 const SYNONYMS_MAP: Record<string, string[]> = {
@@ -150,7 +152,31 @@ export function smartSearch(searchTerm: string, targetText: string): boolean {
 }
 
 /**
+ * Búsqueda semántica mejorada usando Cosine Similarity
+ * Retorna items ordenados por relevancia
+ */
+export function semanticSearchProjects<T>(
+    query: string,
+    items: T[],
+    getSearchableText: (item: T) => string
+): T[] {
+    if (!query || query.trim() === '') {
+        return items;
+    }
+
+    // Usar búsqueda híbrida (exacta + semántica)
+    const results = hybridSearch(query, items, getSearchableText, {
+        exactWeight: 0.6,
+        semanticWeight: 0.4,
+        threshold: 0.05
+    });
+
+    return results.map(r => r.item);
+}
+
+/**
  * Obtiene sugerencias de búsqueda basadas en términos comunes
+ * Integra sugerencias semánticas
  */
 export function getSearchSuggestions(partialTerm: string): string[] {
     if (!partialTerm || partialTerm.length < 2) return [];
@@ -158,7 +184,7 @@ export function getSearchSuggestions(partialTerm: string): string[] {
     const normalized = normalizeText(partialTerm);
     const suggestions: string[] = [];
 
-    // Buscar en el diccionario de sinónimos
+    // Buscar en el diccionario de sinónimos (búsqueda tradicional)
     for (const [key, synonyms] of Object.entries(SYNONYMS_MAP)) {
         if (key.startsWith(normalized)) {
             suggestions.push(key);
@@ -171,5 +197,14 @@ export function getSearchSuggestions(partialTerm: string): string[] {
         }
     }
 
-    return suggestions.slice(0, 5); // Máximo 5 sugerencias
+    // Agregar sugerencias semánticas
+    const semanticSugs = semanticSuggestions(partialTerm, 3);
+    semanticSugs.forEach(sug => {
+        if (!suggestions.includes(sug)) {
+            suggestions.push(sug);
+        }
+    });
+
+    return suggestions.slice(0, 8); // Máximo 8 sugerencias
 }
+
