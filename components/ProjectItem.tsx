@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { Project } from "@/lib/data";
 import { getInstitutionalLogo } from "@/lib/logos";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { useLinkGuardian } from "@/lib/linkGuardian";
 import Toast from "@/components/ui/Toast";
 
 interface ProjectItemProps {
@@ -223,15 +224,18 @@ function ProjectSummary({ resumen, mobile = false }: { resumen: any, mobile?: bo
 
 function ActionButton({ url, date, projectName, onTrack }: { url: string, date: string, projectName: string, onTrack?: () => void }) {
     const { trackEvent } = useAnalytics();
+    const { linkStatus, shouldShow, finalUrl, isFallback } = useLinkGuardian(url, projectName);
+
     const today = new Date();
     const closingDate = new Date(date);
     const isClosed = closingDate.getTime() < today.setHours(0, 0, 0, 0);
 
     const handleClick = () => {
-        trackEvent('click_outbound_link', 'Outbound', `Bases: ${projectName}`);
+        trackEvent('click_outbound_link', 'Outbound', `Bases: ${projectName}${isFallback ? ' (Fallback)' : ''}`);
         if (onTrack) onTrack();
     };
 
+    // Si está cerrado, mostrar botón deshabilitado
     if (isClosed) {
         return (
             <button disabled className="inline-flex items-center gap-1.5 text-sm font-bold text-gray-400 bg-gray-100 px-3 py-1.5 rounded cursor-not-allowed">
@@ -240,9 +244,15 @@ function ActionButton({ url, date, projectName, onTrack }: { url: string, date: 
         );
     }
 
+    // Si el guardián determinó que debe ocultarse, no mostrar nada
+    if (!shouldShow) {
+        return null;
+    }
+
+    // Mostrar botón con la URL final (original o fallback)
     return (
         <a
-            href={url}
+            href={finalUrl || url}
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleClick}

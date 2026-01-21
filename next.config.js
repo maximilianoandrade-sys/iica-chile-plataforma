@@ -17,7 +17,7 @@ const nextConfig = {
   // Configuración de Turbopack (Next.js 16+)
   turbopack: {},
 
-  // Headers de seguridad
+  // Headers de seguridad mejorados
   async headers() {
     return [
       {
@@ -33,24 +33,47 @@ const nextConfig = {
           },
           {
             key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
+            value: 'DENY'
           },
           {
             key: 'X-Content-Type-Options',
             value: 'nosniff'
           },
           {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block'
+          },
+          {
             key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin'
+            value: 'strict-origin-when-cross-origin'
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()'
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; img-src 'self' https://*.google.com https://*.googleapis.com https://upload.wikimedia.org data:; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://www.youtube.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; frame-src 'self' https://www.youtube.com;"
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://unpkg.com",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "img-src 'self' data: https: blob:",
+              "font-src 'self' https://fonts.gstatic.com",
+              "connect-src 'self' https://www.google-analytics.com https://*.gob.cl https://*.corfo.cl https://*.indap.cl",
+              "frame-src 'self' https://www.youtube.com",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'self'",
+              "frame-ancestors 'none'",
+              "upgrade-insecure-requests"
+            ].join('; ')
           }
         ],
       },
     ];
   },
+
+  // Configuración de imágenes externas
   images: {
     remotePatterns: [
       {
@@ -60,8 +83,27 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'www.google.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.gob.cl',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.corfo.cl',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.indap.cl',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
       }
     ],
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
 }
 
