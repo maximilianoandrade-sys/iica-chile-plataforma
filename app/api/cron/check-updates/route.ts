@@ -5,7 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { projects } from '@/lib/data';
+import { getProjects } from '@/lib/data';
 
 export const runtime = 'edge';
 
@@ -217,6 +217,9 @@ export async function GET(request: NextRequest) {
         const results: LinkCheckResult[] = [];
         const changedProjects: LinkCheckResult[] = [];
         const brokenLinks: LinkCheckResult[] = [];
+
+        // Obtener proyectos
+        const projects = await getProjects();
 
         // Verificar cada proyecto
         for (const project of projects) {
