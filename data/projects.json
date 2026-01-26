@@ -144,7 +144,7 @@
     {
         "id": 6,
         "nombre": "Cooperación Sur-Sur: Proyectos de Desarrollo Agrícola",
-        "institucion": "Fondo Chile (PNUD)",
+        "institucion": "PNUD",
         "monto": 85000,
         "fecha_cierre": "2026-02-20",
         "estado": "Abierto",
@@ -172,7 +172,7 @@
     {
         "id": 7,
         "nombre": "Horizonte Europa: Innovación Climática (Cluster 6)",
-        "institucion": "Unión Europea",
+        "institucion": "UE",
         "monto": 0,
         "fecha_cierre": "2026-02-28",
         "estado": "Abierto",
@@ -420,7 +420,7 @@
     {
         "id": 16,
         "nombre": "IFAD FO4IMPACT - Fortalecimiento Institucional LAC",
-        "institucion": "IFAD",
+        "institucion": "FIDA",
         "monto": 500000,
         "fecha_cierre": "2025-11-14",
         "estado": "Abierto",
@@ -448,7 +448,7 @@
     {
         "id": 17,
         "nombre": "IDB Lab AGRInnova - Agronegocios Sostenibles",
-        "institucion": "IDB",
+        "institucion": "BID",
         "monto": 1000000,
         "fecha_cierre": "2026-06-30",
         "estado": "Abierto",
@@ -474,123 +474,9 @@
         }
     },
     {
-        "id": 18,
-        "nombre": "EU-Mercosur Sustainable Agriculture Transition Fund",
-        "institucion": "European Union",
-        "monto": 5000000,
-        "fecha_cierre": "2026-12-31",
-        "estado": "Abierto",
-        "categoria": "Transición Sostenible",
-        "url_bases": "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/home",
-        "regiones": [
-            "Argentina",
-            "Brasil",
-            "Paraguay",
-            "Uruguay"
-        ],
-        "beneficiarios": [
-            "Gobiernos",
-            "Instituciones Públicas",
-            "PyMEs Agrícolas"
-        ],
-        "resumen": {
-            "cofinanciamiento": "€5 mil millones para transición sostenible",
-            "requisitos_clave": [
-                "Países Mercosur",
-                "Enfoque en agricultura sostenible",
-                "Adopción de estándares ambientales"
-            ],
-            "plazo_ejecucion": "Múltiples fases hasta 2030",
-            "observaciones": "Parte del acuerdo de libre comercio EU-Mercosur. Incluye asistencia técnica para PyMEs"
-        }
-    },
-    {
-        "id": 19,
-        "nombre": "USAID Feed the Future - Resiliencia Agrícola Guatemala",
-        "institucion": "USAID",
-        "monto": 60000000,
-        "fecha_cierre": "2026-09-30",
-        "estado": "Abierto",
-        "categoria": "Seguridad Alimentaria",
-        "url_bases": "https://www.grants.gov",
-        "regiones": [
-            "Guatemala"
-        ],
-        "beneficiarios": [
-            "Pequeños Agricultores",
-            "Agro negocios",
-            "Comunidades Rurales"
-        ],
-        "resumen": {
-            "cofinanciamiento": "USD 60 millones en 5 años",
-            "requisitos_clave": [
-                "Enfoque en pequeños agricultores",
-                "Prácticas climáticamente inteligentes",
-                "Mejora de ingresos y resiliencia"
-            ],
-            "plazo_ejecucion": "60 meses",
-            "observaciones": "Incluye componente de inclusión financiera rural (USD 13M adicionales)"
-        }
-    },
-    {
-        "id": 20,
-        "nombre": "GIZ Investment Readiness Programme 2026 - Agritech África",
-        "institucion": "GIZ",
-        "monto": 20000,
-        "fecha_cierre": "2025-09-28",
-        "estado": "Abierto",
-        "categoria": "Tecnología Agrícola",
-        "url_bases": "https://www.giz.de/en/worldwide/376.html",
-        "regiones": [
-            "África (aplicable a transferencia tecnológica LAC)"
-        ],
-        "beneficiarios": [
-            "Startups Agtech",
-            "Innovadores Agrícolas"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Hasta €20,000 en asistencia técnica + €50,000 en préstamos",
-            "requisitos_clave": [
-                "Startups africanas de agritech",
-                "Innovación tecnológica o tech-enabled",
-                "Transformación agrícola"
-            ],
-            "plazo_ejecucion": "12-18 meses",
-            "observaciones": "Modelo replicable para LAC. Enfoque en preparación para inversión"
-        }
-    },
-    {
-        "id": 21,
-        "nombre": "Green Climate Fund - Resiliencia Agrícola Kenia (FAO-led)",
-        "institucion": "GCF",
-        "monto": 130000000,
-        "fecha_cierre": "2026-12-31",
-        "estado": "En Implementación",
-        "categoria": "Adaptación Climática",
-        "url_bases": "https://www.greenclimate.fund/projects/access-funding",
-        "regiones": [
-            "Kenia (modelo replicable LAC)"
-        ],
-        "beneficiarios": [
-            "Gobiernos",
-            "Instituciones Agrícolas",
-            "Comunidades Rurales"
-        ],
-        "resumen": {
-            "cofinanciamiento": "USD 130 millones para cadenas de valor agrícolas",
-            "requisitos_clave": [
-                "Propuestas a través de entidades acreditadas (ej: FAO)",
-                "Enfoque en resiliencia climática",
-                "Transformación de cadenas de valor"
-            ],
-            "plazo_ejecucion": "48-60 meses",
-            "observaciones": "Modelo de proyecto FAO-GCF replicable en LAC. Monitorear próximas convocatorias regionales"
-        }
-    },
-    {
         "id": 22,
         "nombre": "World Bank AgriConnect - Transformación Agrifood LAC",
-        "institucion": "World Bank",
+        "institucion": "Banco Mundial",
         "monto": 9000000000,
         "fecha_cierre": "2030-12-31",
         "estado": "Abierto",

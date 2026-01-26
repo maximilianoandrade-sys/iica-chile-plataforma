@@ -19,7 +19,7 @@ export default async function DashboardPage({
     <>
       <div className="min-h-screen flex flex-col bg-[#f4f7f9]">
 
-        {/* 1. Header & Hero (Institutional) */}
+        {/* 1. Header Minimalista */}
         <div id="inicio">
           <Header />
         </div>
@@ -28,35 +28,20 @@ export default async function DashboardPage({
 
           <div className="flex flex-col gap-8">
 
-            {/* 2. Intro Section */}
-            <div className="bg-white rounded-xl p-8 shadow-sm border border-[var(--iica-border)]">
-              <h2 className="text-2xl font-bold text-[var(--iica-navy)] mb-4">
-                Bienvenido a la Plataforma de Financiamiento IICA
-              </h2>
-              <p className="text-gray-600 leading-relaxed">
-                Esta herramienta centraliza las oportunidades de financiamiento vigentes de
-                <span className="font-bold text-[var(--iica-secondary)]"> INDAP, CNR, CORFO, FIA y organismos internacionales</span>.
-                Utiliza los filtros inteligentes para encontrar rápidamente los concursos que se ajustan a tu perfil.
-              </p>
-            </div>
-
-            {/* 3. Smart Project Dashboard (Streaming) */}
+            {/* 2. PRIORIDAD: Buscador y Proyectos (LO QUE EL USUARIO VINO A BUSCAR) */}
             <section id="convocatorias" className="scroll-mt-28">
               <Suspense fallback={<SkeletonProjectList />}>
                 <ProjectListContainer searchParams={resolvedSearchParams} />
               </Suspense>
             </section>
 
-            {/* 3.5. Programs Section (New) */}
-
-
-
           </div>
 
         </main>
 
-        {/* 4. Additional Resources */}
+        {/* 3. SECUNDARIO: Recursos Adicionales (Abajo, no estorban) */}
         <div id="recursos" className="container mx-auto max-w-[1200px] px-4 mb-16">
+          <h2 className="text-2xl font-bold text-[var(--iica-navy)] mb-6">Recursos Adicionales</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <a href="https://chile.iica.int/" target="_blank" rel="noopener noreferrer" className="bg-[var(--iica-navy)] text-white p-8 rounded-lg shadow-lg relative overflow-hidden group hover:-translate-y-1 transition-transform cursor-pointer block">
               <div className="relative z-10">
@@ -82,10 +67,7 @@ export default async function DashboardPage({
           </div>
         </div>
 
-        {/* 4.5. Programs Section (Relocated) */}
-        <ProgramsSection />
-
-        {/* 5. Quick Manual */}
+        {/* 4. Manual de Uso */}
         <section id="manual" className="container mx-auto max-w-[1200px] px-4 mb-16">
           <div className="bg-blue-50 border border-blue-100 rounded-xl p-8">
             <h2 className="text-2xl font-bold text-[var(--iica-navy)] mb-6 flex items-center gap-2">
@@ -112,12 +94,15 @@ export default async function DashboardPage({
           </div>
         </section>
 
-        {/* 6. Newsletter (New Feature) */}
+        {/* 5. Newsletter */}
         <section className="container mx-auto max-w-[1200px] px-4">
           <Newsletter />
         </section>
 
-        {/* 7. About Section (Institutional Identity) */}
+        {/* 6. Programas Hemisféricos (Relleno institucional) */}
+        <ProgramsSection />
+
+        {/* 7. Quiénes Somos (Relleno institucional) */}
         <AboutSection />
 
         {/* 8. Footer */}
