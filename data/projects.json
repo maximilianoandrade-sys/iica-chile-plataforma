@@ -149,7 +149,7 @@
         "fecha_cierre": "2026-02-20",
         "estado": "Abierto",
         "categoria": "Internacional",
-        "url_bases": "https://www.undp.org/es/chile",
+        "url_bases": "https://www.undp.org/es/chile/noticias",
         "regiones": [
             "Todas"
         ],
@@ -177,7 +177,7 @@
         "fecha_cierre": "2026-02-28",
         "estado": "Abierto",
         "categoria": "Internacional",
-        "url_bases": "https://www.horizonteeuropa.es",
+        "url_bases": "https://ec.europa.eu/info/funding-tenders",
         "regiones": [
             "Todas"
         ],
@@ -205,7 +205,7 @@
         "fecha_cierre": "2026-02-15",
         "estado": "Abierto",
         "categoria": "Internacional",
-        "url_bases": "https://www.fao.org/employment",
+        "url_bases": "https://www.fao.org/forest-farm-facility/",
         "regiones": [
             "Todas"
         ],
@@ -313,7 +313,7 @@
         "fecha_cierre": "2026-03-30",
         "estado": "Abierto",
         "categoria": "Internacional",
-        "url_bases": "https://www.fontagro.org",
+        "url_bases": "https://www.fontagro.org/es/iniciativas/convocatorias",
         "regiones": [
             "Todas"
         ],
@@ -397,7 +397,7 @@
         "fecha_cierre": "2026-03-30",
         "estado": "Abierto",
         "categoria": "Investigación e Innovación Agrícola",
-        "url_bases": "https://www.fontagro.org/new/convocatorias/",
+        "url_bases": "https://www.fontagro.org/es/iniciativas/convocatorias",
         "regiones": [
             "América Latina y el Caribe"
         ],
@@ -453,7 +453,7 @@
         "fecha_cierre": "2026-06-30",
         "estado": "Abierto",
         "categoria": "Innovación y Agronegocios",
-        "url_bases": "https://bidlab.org/",
+        "url_bases": "https://bidlab.org/es/inicio/convocatorias-pagina",
         "regiones": [
             "América Latina y el Caribe"
         ],
@@ -512,7 +512,7 @@
         "fecha_cierre": "2026-09-30",
         "estado": "Abierto",
         "categoria": "Seguridad Alimentaria",
-        "url_bases": "https://www.usaid.gov/",
+        "url_bases": "https://www.grants.gov",
         "regiones": [
             "Guatemala"
         ],
@@ -540,7 +540,7 @@
         "fecha_cierre": "2025-09-28",
         "estado": "Abierto",
         "categoria": "Tecnología Agrícola",
-        "url_bases": "https://www.giz.de/",
+        "url_bases": "https://www.giz.de/en/worldwide/376.html",
         "regiones": [
             "África (aplicable a transferencia tecnológica LAC)"
         ],
@@ -567,7 +567,7 @@
         "fecha_cierre": "2026-12-31",
         "estado": "En Implementación",
         "categoria": "Adaptación Climática",
-        "url_bases": "https://www.greenclimate.fund/",
+        "url_bases": "https://www.greenclimate.fund/projects/access-funding",
         "regiones": [
             "Kenia (modelo replicable LAC)"
         ],
@@ -595,7 +595,7 @@
         "fecha_cierre": "2030-12-31",
         "estado": "Abierto",
         "categoria": "Desarrollo Sectorial",
-        "url_bases": "https://www.worldbank.org/",
+        "url_bases": "https://projects.worldbank.org",
         "regiones": [
             "América Latina y el Caribe"
         ],
