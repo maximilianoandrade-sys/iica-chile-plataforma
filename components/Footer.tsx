@@ -42,8 +42,8 @@ export function Footer() {
                 <div className="flex flex-col md:flex-row justify-between items-center text-xs text-blue-300">
                     <p>© {currentYear} Instituto Interamericano de Cooperación para la Agricultura (IICA).</p>
                     <div className="flex gap-4 mt-4 md:mt-0">
-                        <a href="#" className="hover:text-white">Política de Privacidad</a>
-                        <a href="#" className="hover:text-white">Términos de Uso</a>
+                        <a href="/legal/privacidad" className="hover:text-white">Política de Privacidad</a>
+                        <a href="/legal/terminos" className="hover:text-white">Términos de Uso</a>
                     </div>
                 </div>
             </div>
