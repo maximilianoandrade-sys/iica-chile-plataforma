@@ -67,7 +67,7 @@
         "fecha_cierre": "2026-04-10",
         "estado": "Abierto",
         "categoria": "Inversión",
-        "url_bases": "https://www.corfo.cl/sites/cpp/convocatorias",
+        "url_bases": "https://www.corfo.cl/sites/cpp/programas-y-convocatorias",
         "regiones": [
             "Todas"
         ],
@@ -205,7 +205,7 @@
         "fecha_cierre": "2026-02-15",
         "estado": "Abierto",
         "categoria": "Internacional",
-        "url_bases": "https://www.fao.org/forest-farm-facility/",
+        "url_bases": "https://www.fao.org/employment/es/",
         "regiones": [
             "Todas"
         ],
@@ -232,7 +232,7 @@
         "fecha_cierre": "2026-12-31",
         "estado": "Abierto",
         "categoria": "Riego",
-        "url_bases": "https://www.cnr.gob.cl",
+        "url_bases": "https://www.cnr.gob.cl/concursos-de-riego/",
         "regiones": [
             "Todas"
         ],
@@ -481,7 +481,7 @@
         "fecha_cierre": "2026-12-31",
         "estado": "Abierto",
         "categoria": "Transición Sostenible",
-        "url_bases": "https://europa.eu/",
+        "url_bases": "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/home",
         "regiones": [
             "Argentina",
             "Brasil",
