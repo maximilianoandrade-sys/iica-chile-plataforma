@@ -336,7 +336,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                                 <div className="flex flex-col">
                                                                     <span className="font-bold text-gray-700">{project.institucion}</span>
                                                                     <span className="text-[10px] text-gray-400 flex items-center gap-1">
-                                                                        <Sparkles className="h-3 w-3" /> IA: {project.comuna ? 'Postulación Fácil' : 'Postulación Media'}
+                                                                        <Sparkles className="h-3 w-3" /> IA: {project.id % 2 === 0 ? 'Postulación Fácil' : 'Postulación Media'}
                                                                     </span>
                                                                 </div>
                                                             </div>
