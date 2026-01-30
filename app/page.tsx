@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import type { Metadata } from 'next';
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import ProjectListContainer from "@/components/ProjectListContainer";
@@ -7,6 +8,38 @@ import AboutSection from "@/components/AboutSection";
 import Newsletter from "@/components/Newsletter";
 import ProgramsSection from "@/components/ProgramsSection";
 import CounterpartLinks from "@/components/CounterpartLinks";
+
+// Dynamic Metadata for SEO
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}): Promise<Metadata> {
+  const resolvedParams = await searchParams;
+  const region = typeof resolvedParams.region === 'string' ? resolvedParams.region : null;
+  const category = typeof resolvedParams.category === 'string' ? resolvedParams.category : null;
+
+  let title = 'Plataforma de Financiamiento Agrícola | IICA Chile';
+  let description = 'Encuentra fondos concursables, subsidios y créditos para el agro chileno. Información actualizada 2026.';
+
+  if (region) {
+    title = `Fondos Concursables en ${region} 2026 | IICA Chile`;
+    description = `Busca financiamiento agrícola disponible en la región de ${region}. Subsidios INDAP, CORFO, CNR activos.`;
+  }
+
+  if (category) {
+    title = `${category} - ${title}`;
+  }
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+    }
+  };
+}
 
 export default async function DashboardPage({
   searchParams,
@@ -23,6 +56,7 @@ export default async function DashboardPage({
         <div id="inicio">
           <Header />
         </div>
+
 
         <main className="flex-grow container mx-auto max-w-[1200px] px-4 py-8 -mt-8 relative z-20">
 
