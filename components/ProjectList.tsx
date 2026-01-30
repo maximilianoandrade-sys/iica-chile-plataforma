@@ -37,7 +37,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
 
     const toggleFavorite = (id: number) => {
         const newFavs = favorites.includes(id)
-            ? favorites.filter(fid => fid !== id)
+            ? favorites.filter((fid: number) => fid !== id)
             : [...favorites, id];
         setFavorites(newFavs);
         localStorage.setItem('iica_favorites', JSON.stringify(newFavs));
@@ -46,7 +46,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
 
     const toggleCompare = (id: number) => {
         if (compareList.includes(id)) {
-            setCompareList(compareList.filter(cid => cid !== id));
+            setCompareList(compareList.filter((cid: number) => cid !== id));
         } else {
             if (compareList.length >= 3) {
                 setToastMessage('Máximo 3 proyectos para comparar');
@@ -395,14 +395,14 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                             </div>
 
                             {/* MOBILE/TABLET CARD VIEW (Visible on screens smaller than Large) */}
-                            <div className="lg:hidden divide-y divide-[var(--iica-border)] min-h-[400px]">
+                            <div className="lg:hidden min-h-[400px] flex flex-col gap-2">
                                 <AnimatePresence>
                                     {displayedProjects.map((project) => (
                                         <motion.div
                                             key={project.id}
-                                            className={`p-5 flex flex-col gap-4 active:bg-blue-50/50 transition-colors ${compareList.includes(project.id) ? 'bg-blue-50/20' : ''}`}
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
+                                            className={`p-5 flex flex-col gap-4 mb-4 rounded-xl border shadow-sm ${compareList.includes(project.id) ? 'bg-blue-50/50 border-blue-200' : 'bg-white border-gray-200'} active:scale-[0.99] transition-all`}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
                                             exit={{ opacity: 0 }}
                                         >
                                             <div className="flex justify-between items-start">
@@ -746,7 +746,6 @@ function UrgencyBadge({ date, mobile = false }: { date: string, mobile?: boolean
             <div className={`flex items-center gap-1.5 ${isUrgent ? 'text-red-700 font-bold' : 'text-gray-600'}`}>
                 {!mobile && <Calendar className={`h-4 w-4 ${isUrgent ? 'text-red-600' : 'text-gray-400'}`} />}
                 <span className="text-sm">
-                    {/* Format Date as DD/MM/YYYY */}
                     {new Date(date).toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric' })}
                 </span>
             </div>
@@ -756,8 +755,8 @@ function UrgencyBadge({ date, mobile = false }: { date: string, mobile?: boolean
                     ¡Cierra en {diffDays} días!
                 </span>
             ) : (
-                <span className="text-[10px] font-bold uppercase tracking-wider text-green-700 bg-green-100 px-1.5 py-0.5 rounded border border-green-200">
-                    Abierto
+                <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-100 px-2 py-0.5 rounded border border-blue-200">
+                    Quedan {diffDays} días
                 </span>
             )}
         </div>

@@ -3,16 +3,8 @@ import ProjectList from "@/components/ProjectList";
 import ProjectFilters from "@/components/ProjectFilters";
 import JsonLd from "@/components/JsonLd";
 import { smartSearch } from "@/lib/searchEngine";
+import ProfilingWizard from "@/components/ProfilingWizard";
 import counterparts from '@/lib/counterparts_raw.json';
-import { trackSearch } from "@/lib/analytics"; // Wait, trackSearch is likely client side or needs checking? 
-// Checking lib/analytics.ts: "export function trackSearch". It uses localStorage and console. warn. 
-// Ideally we track on server, but for now we can't easily track from Server Component without a side effect or logging.
-// The user requirement was "The component ProjectList should be a Server Component that reads searchParams".
-// Analytics for "Search" is usually done client side or via middleware. 
-// I will omit direct tracking here or use a Client Component wrapper for tracking if strictly needed, 
-// but "trackSearch" in the original code put it in localStorage. 
-// I will move tracking to the "ProjectFilters" component (Client Side) when search changes?
-// Or leave it out for now to ensure server rendering speed.
 
 export default async function ProjectListContainer({
     searchParams
@@ -66,6 +58,7 @@ export default async function ProjectListContainer({
 
     return (
         <>
+            <ProfilingWizard />
             <JsonLd projects={filteredProjects} />
             <ProjectFilters
                 categories={categories}

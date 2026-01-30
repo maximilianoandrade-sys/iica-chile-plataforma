@@ -99,6 +99,14 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.fao.org',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.worldbank.org',
       }
     ],
     formats: ['image/avif', 'image/webp'],
