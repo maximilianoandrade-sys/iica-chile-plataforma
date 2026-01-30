@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     default: 'Plataforma de Financiamiento Agrícola | IICA Chile',
     template: '%s | IICA Chile'
   },
-  description: 'Encuentra fondos concursables, subsidios y créditos para el agro chileno. Información actualizada 2026 de INDAP, CORFO, CNR y FIA.',
+  description: 'Encuentra fondos concursables, subsidios y créditos para el agro chileno. Información actualizada 2026 de INDAP, CORFO, CNR, FIA y organismos internacionales.',
   keywords: ['financiamiento agrícola', 'fondos concursables', 'INDAP', 'CORFO', 'subsidios', 'agricultura Chile', 'IICA'],
   authors: [{ name: 'IICA Chile' }],
   creator: 'IICA Chile',
