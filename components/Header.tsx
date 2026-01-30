@@ -25,11 +25,12 @@ export function Header() {
                 </div>
 
                 <nav className="hidden md:flex gap-6 text-sm font-medium text-gray-600">
-                    <Link href="#inicio" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Inicio</Link>
-                    <Link href="#convocatorias" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Convocatorias</Link>
-                    <Link href="#manual" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Ayuda</Link>
-                    <Link href="#recursos" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Recursos</Link>
-                    <Link href="#contacto" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Contacto</Link>
+                    <Link href="/#inicio" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Inicio</Link>
+                    <Link href="/#convocatorias" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Convocatorias</Link>
+                    <Link href="/maletin" className="hover:text-[var(--iica-navy)] transition-colors">Mi Maletín</Link>
+                    <Link href="/consultores" className="hover:text-[var(--iica-navy)] transition-colors">Consultores</Link>
+                    <Link href="/#recursos" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Recursos</Link>
+                    <Link href="/#contacto" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Contacto</Link>
                 </nav>
 
 
