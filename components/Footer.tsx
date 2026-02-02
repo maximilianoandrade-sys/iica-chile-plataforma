@@ -33,7 +33,6 @@ export function Footer() {
                             <li><a href="/#convocatorias" className="hover:text-white transition-colors">Convocatorias</a></li>
                             <li><a href="/maletin" className="hover:text-white transition-colors">Mi Maletín</a></li>
                             <li><a href="/consultores" className="hover:text-white transition-colors">Consultores</a></li>
-                            <li><a href="/#recursos" className="hover:text-white transition-colors">Recursos Técnicos</a></li>
                         </ul>
                     </div>
 

@@ -62,35 +62,7 @@ export default async function DashboardPage({
 
           <div className="flex flex-col gap-8">
 
-            {/* 2. RECURSOS: Recursos Adicionales (Ahora más visible) */}
-            <div id="recursos" className="mb-8 scroll-mt-28">
-              <h2 className="text-2xl font-bold text-[var(--iica-navy)] mb-6">Recursos Adicionales</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <a href="https://chile.iica.int/" target="_blank" rel="noopener noreferrer" className="bg-[var(--iica-navy)] text-white p-8 rounded-lg shadow-lg relative overflow-hidden group hover:-translate-y-1 transition-transform cursor-pointer block">
-                  <div className="relative z-10">
-                    <h3 className="text-xl font-bold mb-2">Recursos para Postulación</h3>
-                    <p className="text-blue-100 mb-4 text-sm">Accede a guías, formatos tipo y tips para mejorar tus posibilidades de adjudicación en concursos públicos.</p>
-                    <span className="inline-block text-sm font-bold underline decoration-2 decoration-[var(--iica-secondary)] underline-offset-4">Ver Recursos</span>
-                  </div>
-                  {/* Decorative circle */}
-                  <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
-                </a>
-
-                <a href="https://repositorio.iica.int/" target="_blank" rel="noopener noreferrer" className="bg-white border border-[var(--iica-border)] p-8 rounded-lg shadow-sm hover:shadow-md transition-shadow group cursor-pointer block">
-                  <h3 className="text-xl font-bold text-[var(--iica-navy)] mb-2 flex items-center gap-2">
-                    <span>🌱</span> Buenas Prácticas Agrícolas
-                  </h3>
-                  <p className="text-gray-600 mb-4 text-sm">Biblioteca técnica del IICA con manuales sobre adaptación al cambio climático, eficiencia hídrica y más.</p>
-                  <div className="flex items-center text-[var(--iica-cyan)] font-bold text-sm group-hover:gap-2 transition-all">
-                    Ir a la Biblioteca <span>→</span>
-                  </div>
-                </a>
-
-                <CounterpartLinks />
-              </div>
-            </div>
-
-            {/* 3. PRIORIDAD: Buscador y Proyectos */}
+            {/* PRIORIDAD: Buscador y Proyectos */}
             <section id="convocatorias" className="scroll-mt-28">
               <Suspense fallback={<SkeletonProjectList />}>
                 <ProjectListContainer searchParams={resolvedSearchParams} />
@@ -101,7 +73,7 @@ export default async function DashboardPage({
 
         </main>
 
-        {/* 4. Manual de Uso */}
+        {/* Manual de Uso */}
         <section id="manual" className="container mx-auto max-w-[1200px] px-4 mb-16">
           <div className="bg-blue-50 border border-blue-100 rounded-xl p-8">
             <h2 className="text-2xl font-bold text-[var(--iica-navy)] mb-6 flex items-center gap-2">

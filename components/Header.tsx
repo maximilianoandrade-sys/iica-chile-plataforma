@@ -29,7 +29,6 @@ export function Header() {
                     <Link href="/#convocatorias" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Convocatorias</Link>
                     <Link href="/maletin" className="hover:text-[var(--iica-navy)] transition-colors">Mi Maletín</Link>
                     <Link href="/consultores" className="hover:text-[var(--iica-navy)] transition-colors">Consultores</Link>
-                    <Link href="/#recursos" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Recursos</Link>
                     <Link href="/#contacto" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Contacto</Link>
                 </nav>
 
