@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
-import { Info, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, MessageCircle, Share2 } from "lucide-react";
+import { Info, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, MessageCircle, Share2, Calculator } from "lucide-react";
 import Image from 'next/image';
 import { Project } from "@/lib/data";
 import { getInstitutionalLogo } from "@/lib/logos";
@@ -10,6 +10,7 @@ import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLinkGuardian } from "@/lib/linkGuardian";
 import { generateWhatsAppLink, downloadICSFile, generateGoogleCalendarLink } from "@/lib/ruralTools";
 import Toast from "@/components/ui/Toast";
+import EligibilityModal from "@/components/EligibilityModal";
 
 interface ProjectItemProps {
     project: Project;
@@ -19,6 +20,7 @@ interface ProjectItemProps {
 export default function ProjectItem({ project, viewMode }: ProjectItemProps) {
     const [expanded, setExpanded] = useState(false);
     const [toastMessage, setToastMessage] = useState<string | null>(null);
+    const [showEligibility, setShowEligibility] = useState(false);
     const { trackEvent } = useAnalytics();
 
     const getLogoUrl = (institution: string) => {
@@ -85,6 +87,14 @@ export default function ProjectItem({ project, viewMode }: ProjectItemProps) {
                     </td>
                     <td className="py-5 px-6 text-right">
                         <div className="flex items-center justify-end gap-2">
+                            <button
+                                onClick={() => setShowEligibility(true)}
+                                className="inline-flex items-center gap-1.5 text-sm font-bold text-[var(--iica-blue)] hover:text-[var(--iica-navy)] px-3 py-1.5 rounded border border-[var(--iica-blue)] hover:bg-blue-50 transition-colors"
+                                title="Calcular elegibilidad"
+                            >
+                                <Calculator className="h-4 w-4" />
+                                Elegibilidad
+                            </button>
                             <ActionButton
                                 url={project.url_bases}
                                 date={project.fecha_cierre}
@@ -110,6 +120,11 @@ export default function ProjectItem({ project, viewMode }: ProjectItemProps) {
                         </motion.tr>
                     )}
                 </AnimatePresence>
+                <EligibilityModal
+                    project={project}
+                    isOpen={showEligibility}
+                    onClose={() => setShowEligibility(false)}
+                />
             </React.Fragment>
         );
     }
@@ -174,14 +189,26 @@ export default function ProjectItem({ project, viewMode }: ProjectItemProps) {
                     )}
                 </AnimatePresence>
 
-                <div className="pt-2">
+                <div className="pt-2 space-y-2">
                     <ActionButton
                         url={project.url_bases}
                         date={project.fecha_cierre}
                         projectName={project.nombre}
                         onTrack={() => setToastMessage("Redirigiendo a sitio oficial...")}
                     />
+                    <button
+                        onClick={() => setShowEligibility(true)}
+                        className="w-full inline-flex items-center justify-center gap-2 text-sm font-bold text-[var(--iica-blue)] hover:text-[var(--iica-navy)] px-4 py-2 rounded border border-[var(--iica-blue)] hover:bg-blue-50 transition-colors"
+                    >
+                        <Calculator className="h-4 w-4" />
+                        Calcular Elegibilidad
+                    </button>
                 </div>
+                <EligibilityModal
+                    project={project}
+                    isOpen={showEligibility}
+                    onClose={() => setShowEligibility(false)}
+                />
             </motion.div>
         </React.Fragment>
     );

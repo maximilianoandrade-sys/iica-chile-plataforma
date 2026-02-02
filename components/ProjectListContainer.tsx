@@ -3,7 +3,7 @@ import ProjectList from "@/components/ProjectList";
 import ProjectFilters from "@/components/ProjectFilters";
 import JsonLd from "@/components/JsonLd";
 import { smartSearch } from "@/lib/searchEngine";
-import ProfilingWizard from "@/components/ProfilingWizard";
+import SmartAssistant from "@/components/SmartAssistant";
 import counterparts from '@/lib/counterparts_raw.json';
 
 export default async function ProjectListContainer({
@@ -58,7 +58,7 @@ export default async function ProjectListContainer({
 
     return (
         <>
-            <ProfilingWizard />
+            <SmartAssistant projects={projects} />
             <JsonLd projects={filteredProjects} />
             <ProjectFilters
                 categories={categories}

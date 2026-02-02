@@ -19,6 +19,8 @@ export interface Project {
         plazo_ejecucion?: string;
         observaciones?: string;
     };
+    // Calculadora de elegibilidad
+    checklist?: string[]; // Requisitos para verificar elegibilidad
 }
 
 export async function getProjects(): Promise<Project[]> {
