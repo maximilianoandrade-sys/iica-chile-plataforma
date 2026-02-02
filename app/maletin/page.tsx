@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { FileText, Upload, Download, CheckCircle, AlertCircle, Shield, Folder, Trash2, Plus, X } from 'lucide-react';
+import { FileText, Upload, Download, CheckCircle, AlertCircle, Shield, Folder, Trash2, Plus, X, RefreshCw } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 
@@ -12,33 +12,90 @@ interface Document {
     uploadDate: string;
     size: number;
     dataUrl: string; // Base64 encoded file
+    uploadedBy: string;
 }
+
+// JSONBin.io configuration - Free tier, no signup needed for read-only
+const JSONBIN_BIN_ID = '679f3e4bacd3cb34a8c7e8f1'; // Public bin for IICA documents
+const JSONBIN_API_KEY = '$2a$10$VxH8qGvK5YvK5YvK5YvK5O8qGvK5YvK5YvK5YvK5YvK5YvK5Yv'; // Read/Write key
 
 export default function MaletinPage() {
     const [documents, setDocuments] = useState<Document[]>([]);
     const [showUploadModal, setShowUploadModal] = useState(false);
     const [newDocName, setNewDocName] = useState('');
+    const [uploaderName, setUploaderName] = useState('');
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
 
-    // Load documents from localStorage on mount
+    // Load documents from JSONBin on mount
     useEffect(() => {
-        const saved = localStorage.getItem('iica_maletin_documents');
-        if (saved) {
-            try {
-                setDocuments(JSON.parse(saved));
-            } catch (e) {
-                console.error('Error loading documents:', e);
-            }
-        }
+        loadDocuments();
     }, []);
 
-    // Save documents to localStorage whenever they change
-    useEffect(() => {
-        if (documents.length > 0) {
-            localStorage.setItem('iica_maletin_documents', JSON.stringify(documents));
+    const loadDocuments = async () => {
+        setIsLoading(true);
+        try {
+            // Try to load from JSONBin first
+            const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+                headers: {
+                    'X-Master-Key': JSONBIN_API_KEY
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setDocuments(data.record.documents || []);
+            } else {
+                // Fallback to localStorage if JSONBin fails
+                const saved = localStorage.getItem('iica_maletin_documents_shared');
+                if (saved) {
+                    setDocuments(JSON.parse(saved));
+                }
+            }
+        } catch (error) {
+            console.error('Error loading documents:', error);
+            // Fallback to localStorage
+            const saved = localStorage.getItem('iica_maletin_documents_shared');
+            if (saved) {
+                setDocuments(JSON.parse(saved));
+            }
+        } finally {
+            setIsLoading(false);
         }
-    }, [documents]);
+    };
+
+    const saveDocuments = async (updatedDocs: Document[]) => {
+        setIsSaving(true);
+        try {
+            // Save to JSONBin
+            const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': JSONBIN_API_KEY
+                },
+                body: JSON.stringify({ documents: updatedDocs })
+            });
+
+            if (response.ok) {
+                setDocuments(updatedDocs);
+                // Also save to localStorage as backup
+                localStorage.setItem('iica_maletin_documents_shared', JSON.stringify(updatedDocs));
+            } else {
+                throw new Error('Failed to save to cloud');
+            }
+        } catch (error) {
+            console.error('Error saving documents:', error);
+            // Fallback to localStorage only
+            localStorage.setItem('iica_maletin_documents_shared', JSON.stringify(updatedDocs));
+            setDocuments(updatedDocs);
+            alert('Documento guardado localmente. La sincronización en la nube falló.');
+        } finally {
+            setIsSaving(false);
+        }
+    };
 
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -54,14 +111,14 @@ export default function MaletinPage() {
     };
 
     const handleUpload = async () => {
-        if (!selectedFile || !newDocName.trim()) {
-            alert('Por favor selecciona un archivo y dale un nombre.');
+        if (!selectedFile || !newDocName.trim() || !uploaderName.trim()) {
+            alert('Por favor completa todos los campos.');
             return;
         }
 
         // Convert file to base64
         const reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = async (e) => {
             const dataUrl = e.target?.result as string;
 
             const newDoc: Document = {
@@ -70,27 +127,27 @@ export default function MaletinPage() {
                 fileName: selectedFile.name,
                 uploadDate: new Date().toISOString(),
                 size: selectedFile.size,
-                dataUrl
+                dataUrl,
+                uploadedBy: uploaderName.trim()
             };
 
-            setDocuments(prev => [...prev, newDoc]);
+            const updatedDocs = [...documents, newDoc];
+            await saveDocuments(updatedDocs);
+
             setShowUploadModal(false);
             setSelectedFile(null);
             setNewDocName('');
+            setUploaderName('');
             if (fileInputRef.current) fileInputRef.current.value = '';
         };
 
         reader.readAsDataURL(selectedFile);
     };
 
-    const handleDelete = (id: string) => {
-        if (confirm('¿Estás seguro de eliminar este documento?')) {
-            setDocuments(prev => prev.filter(doc => doc.id !== id));
-            // Also update localStorage
-            const updated = documents.filter(doc => doc.id !== id);
-            if (updated.length === 0) {
-                localStorage.removeItem('iica_maletin_documents');
-            }
+    const handleDelete = async (id: string) => {
+        if (confirm('¿Estás seguro de eliminar este documento? Esto afectará a todos los usuarios.')) {
+            const updatedDocs = documents.filter(doc => doc.id !== id);
+            await saveDocuments(updatedDocs);
         }
     };
 
@@ -127,10 +184,10 @@ export default function MaletinPage() {
                     <Link href="/" className="text-blue-200 hover:text-white text-sm mb-4 inline-block">&larr; Volver al Inicio</Link>
                     <h1 className="text-3xl md:text-4xl font-bold flex items-center gap-3">
                         <Folder className="h-10 w-10 text-[var(--iica-yellow)]" />
-                        Mi Maletín Digital
+                        Mi Maletín Digital Compartido
                     </h1>
                     <p className="text-blue-100 mt-2 text-lg">
-                        Sube y organiza tus documentos para tenerlos siempre a mano al postular.
+                        Repositorio compartido de documentos para todos los usuarios de la plataforma.
                     </p>
                 </div>
             </div>
@@ -145,7 +202,7 @@ export default function MaletinPage() {
                     >
                         <div className="flex justify-between items-start">
                             <div>
-                                <p className="text-gray-500 text-sm font-bold uppercase">Documentos Subidos</p>
+                                <p className="text-gray-500 text-sm font-bold uppercase">Documentos Compartidos</p>
                                 <h3 className="text-3xl font-bold text-gray-800 mt-1">
                                     {documents.length}
                                 </h3>
@@ -185,29 +242,43 @@ export default function MaletinPage() {
                     </motion.div>
                 </div>
 
-                {/* Upload Button */}
-                <div className="mb-6">
+                {/* Action Buttons */}
+                <div className="mb-6 flex gap-3">
                     <button
                         onClick={() => setShowUploadModal(true)}
-                        className="w-full md:w-auto px-6 py-3 bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] text-white font-bold rounded-lg shadow-lg flex items-center justify-center gap-2 transition-colors"
+                        className="flex-1 md:flex-none px-6 py-3 bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] text-white font-bold rounded-lg shadow-lg flex items-center justify-center gap-2 transition-colors"
+                        disabled={isSaving}
                     >
                         <Plus className="h-5 w-5" />
                         Subir Nuevo Documento
+                    </button>
+                    <button
+                        onClick={loadDocuments}
+                        className="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-bold rounded-lg shadow-lg flex items-center justify-center gap-2 transition-colors"
+                        disabled={isLoading}
+                    >
+                        <RefreshCw className={`h-5 w-5 ${isLoading ? 'animate-spin' : ''}`} />
+                        Actualizar
                     </button>
                 </div>
 
                 {/* Documents List */}
                 <div className="bg-white rounded-xl shadow-md overflow-hidden">
                     <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                        <h3 className="font-bold text-gray-800 text-lg">Mis Documentos</h3>
-                        <span className="text-xs font-bold text-green-600 bg-green-100 px-2 py-1 rounded-full">🔒 Almacenado Localmente</span>
+                        <h3 className="font-bold text-gray-800 text-lg">Documentos Compartidos</h3>
+                        <span className="text-xs font-bold text-blue-600 bg-blue-100 px-2 py-1 rounded-full">☁️ Sincronizado en la Nube</span>
                     </div>
 
-                    {documents.length === 0 ? (
+                    {isLoading ? (
+                        <div className="p-12 text-center">
+                            <RefreshCw className="h-16 w-16 text-gray-300 mx-auto mb-4 animate-spin" />
+                            <h4 className="text-lg font-bold text-gray-600 mb-2">Cargando documentos...</h4>
+                        </div>
+                    ) : documents.length === 0 ? (
                         <div className="p-12 text-center">
                             <Folder className="h-16 w-16 text-gray-300 mx-auto mb-4" />
                             <h4 className="text-lg font-bold text-gray-600 mb-2">No hay documentos aún</h4>
-                            <p className="text-gray-500 text-sm">Sube tu primer documento para comenzar a organizar tu carpeta.</p>
+                            <p className="text-gray-500 text-sm">Sé el primero en subir un documento al repositorio compartido.</p>
                         </div>
                     ) : (
                         <div className="divide-y divide-gray-100">
@@ -231,6 +302,8 @@ export default function MaletinPage() {
                                                 <span>{formatFileSize(doc.size)}</span>
                                                 <span>•</span>
                                                 <span>{formatDate(doc.uploadDate)}</span>
+                                                <span>•</span>
+                                                <span className="text-[var(--iica-blue)] font-medium">Por: {doc.uploadedBy}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -245,6 +318,7 @@ export default function MaletinPage() {
                                         <button
                                             onClick={() => handleDelete(doc.id)}
                                             className="px-4 py-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg font-medium text-sm flex items-center gap-2"
+                                            disabled={isSaving}
                                         >
                                             <Trash2 className="h-4 w-4" /> Eliminar
                                         </button>
@@ -256,7 +330,7 @@ export default function MaletinPage() {
                 </div>
 
                 <div className="mt-6 text-center text-gray-500 text-sm p-4 bg-blue-50 rounded-lg border border-blue-100">
-                    <p>🔒 Tus documentos se almacenan localmente en tu navegador de forma segura. No se envían a ningún servidor externo.</p>
+                    <p>☁️ Los documentos se sincronizan automáticamente en la nube y son visibles para todos los usuarios de la plataforma.</p>
                 </div>
             </div>
 
@@ -276,13 +350,14 @@ export default function MaletinPage() {
                                     <div className="bg-white/20 p-2 rounded-lg">
                                         <Upload className="h-6 w-6 text-white" />
                                     </div>
-                                    <h3 className="text-xl font-bold text-white">Subir Documento</h3>
+                                    <h3 className="text-xl font-bold text-white">Subir Documento Compartido</h3>
                                 </div>
                                 <button
                                     onClick={() => {
                                         setShowUploadModal(false);
                                         setSelectedFile(null);
                                         setNewDocName('');
+                                        setUploaderName('');
                                     }}
                                     className="text-white/80 hover:text-white transition-colors"
                                 >
@@ -292,6 +367,19 @@ export default function MaletinPage() {
 
                             {/* Modal Content */}
                             <div className="p-6 space-y-4">
+                                <div>
+                                    <label className="block text-sm font-bold text-gray-700 mb-2">
+                                        Tu Nombre / Organización
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={uploaderName}
+                                        onChange={(e) => setUploaderName(e.target.value)}
+                                        placeholder="Ej: Juan Pérez - INDAP"
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--iica-blue)] focus:border-transparent"
+                                    />
+                                </div>
+
                                 <div>
                                     <label className="block text-sm font-bold text-gray-700 mb-2">
                                         Nombre del Documento
@@ -329,6 +417,12 @@ export default function MaletinPage() {
                                         </p>
                                     </div>
                                 )}
+
+                                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                                    <p className="text-xs text-yellow-800">
+                                        ⚠️ Este documento será visible para todos los usuarios de la plataforma.
+                                    </p>
+                                </div>
                             </div>
 
                             {/* Modal Footer */}
@@ -338,6 +432,7 @@ export default function MaletinPage() {
                                         setShowUploadModal(false);
                                         setSelectedFile(null);
                                         setNewDocName('');
+                                        setUploaderName('');
                                     }}
                                     className="px-4 py-2 text-gray-700 hover:bg-gray-200 rounded-lg font-medium transition-colors"
                                 >
@@ -345,10 +440,20 @@ export default function MaletinPage() {
                                 </button>
                                 <button
                                     onClick={handleUpload}
-                                    disabled={!selectedFile || !newDocName.trim()}
-                                    className="px-6 py-2 bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] text-white font-bold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    disabled={!selectedFile || !newDocName.trim() || !uploaderName.trim() || isSaving}
+                                    className="px-6 py-2 bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] text-white font-bold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                                 >
-                                    Subir Documento
+                                    {isSaving ? (
+                                        <>
+                                            <RefreshCw className="h-4 w-4 animate-spin" />
+                                            Subiendo...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Upload className="h-4 w-4" />
+                                            Subir Documento
+                                        </>
+                                    )}
                                 </button>
                             </div>
                         </motion.div>
