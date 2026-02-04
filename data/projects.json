@@ -38,7 +38,7 @@
         "fecha_cierre": "2026-03-01",
         "estado": "Abierto",
         "categoria": "Suelos",
-        "url_bases": "https://www.indap.gob.cl/concursos",
+        "url_bases": "https://www.indap.gob.cl/convocatorias",
         "regiones": [
             "Biobío",
             "La Araucanía",
@@ -67,7 +67,7 @@
         "fecha_cierre": "2026-04-10",
         "estado": "Abierto",
         "categoria": "Inversión",
-        "url_bases": "https://www.corfo.cl/sites/cpp/programas-y-convocatorias",
+        "url_bases": "https://www.corfo.cl/sites/cpp/convocatorias",
         "regiones": [
             "Todas"
         ],
@@ -122,7 +122,7 @@
         "fecha_cierre": "2026-12-31",
         "estado": "Ventanilla Abierta",
         "categoria": "Crédito",
-        "url_bases": "https://www.indap.gob.cl/concursos",
+        "url_bases": "https://www.indap.gob.cl/convocatorias",
         "regiones": [
             "Todas"
         ],
@@ -259,7 +259,7 @@
         "fecha_cierre": "2026-02-27",
         "estado": "Abierto",
         "categoria": "Suelos",
-        "url_bases": "https://www.indap.gob.cl/concursos",
+        "url_bases": "https://www.indap.gob.cl/convocatorias",
         "regiones": [
             "Arica y Parinacota"
         ],

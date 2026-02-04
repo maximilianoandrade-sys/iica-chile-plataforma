@@ -9,7 +9,9 @@
     "scrape": "tsx lib/scrapers.ts"
   },
   "dependencies": {
+    "@ai-sdk/google": "^1.1.0",
     "@tailwindcss/line-clamp": "^0.4.4",
+    "ai": "^4.1.0",
     "autoprefixer": "^10.4.0",
     "axios": "^1.7.0",
     "cheerio": "^1.0.0-rc.12",

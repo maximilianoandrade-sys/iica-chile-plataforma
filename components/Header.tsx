@@ -28,6 +28,7 @@ export function Header() {
                     <Link href="/#inicio" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Inicio</Link>
                     <Link href="/#convocatorias" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Convocatorias</Link>
                     <Link href="/maletin" className="hover:text-[var(--iica-navy)] transition-colors">Mi Maletín</Link>
+                    <Link href="/dashboard" className="text-[var(--iica-yellow)] hover:text-white font-bold transition-colors bg-white/10 px-3 py-1 rounded-full">Modo Experto 🚀</Link>
                     <Link href="/consultores" className="hover:text-[var(--iica-navy)] transition-colors">Consultores</Link>
                     <Link href="/#contacto" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Contacto</Link>
                 </nav>
@@ -61,6 +62,12 @@ export function Header() {
                             className="bg-[var(--iica-secondary)] hover:bg-green-600 text-white font-bold py-4 px-10 rounded-full shadow-xl transition-all hover:-translate-y-1 inline-block cursor-pointer ring-4 ring-white/20"
                         >
                             Ver Convocatorias Abiertas
+                        </Link>
+                        <Link
+                            href="/dashboard"
+                            className="bg-white/10 hover:bg-white/20 text-white font-bold py-4 px-10 rounded-full backdrop-blur-md transition-all border border-white/30"
+                        >
+                            Ir a Dashboard Experto
                         </Link>
                     </div>
                 </div>
