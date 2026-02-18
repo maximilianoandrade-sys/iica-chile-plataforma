@@ -11,7 +11,7 @@ import Toast from "@/components/ui/Toast";
 import Image from 'next/image';
 import SearchableSelect from "@/components/SearchableSelect"; // Import the new component
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info, Sparkles } from "lucide-react";
+import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info, Sparkles, Copy, Eye, CheckCheck, MapPin, Users, Banknote, Clock, ChevronRight } from "lucide-react";
 
 export default function ProjectList({ projects }: { projects: Project[] }) {
     // State for client-side interactions
@@ -26,6 +26,35 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
     const [compareList, setCompareList] = useState<number[]>([]);
     const [showCompareModal, setShowCompareModal] = useState(false);
     const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+
+    // Vista Rápida & Copiar
+    const [quickViewProject, setQuickViewProject] = useState<Project | null>(null);
+    const [copiedId, setCopiedId] = useState<number | null>(null);
+
+    const copyProjectFicha = (project: Project, e: React.MouseEvent) => {
+        e.stopPropagation();
+        const today = new Date();
+        const closeDate = new Date(project.fecha_cierre);
+        const diffDays = Math.ceil((closeDate.getTime() - today.getTime()) / 86400000);
+        const estado = diffDays < 0 ? 'CERRADO' : `Abierto – cierra en ${diffDays} días`;
+        const monto = project.monto > 0
+            ? `$${(project.monto / 1000000).toFixed(0)}M`
+            : 'Ver bases';
+        const texto = [
+            `📋 ${project.nombre}`,
+            `🏛️ Institución: ${project.institucion}`,
+            `📂 Categoría: ${project.categoria}`,
+            `💰 Monto máximo: ${monto}`,
+            `📅 Cierre: ${new Date(project.fecha_cierre).toLocaleDateString('es-CL')} (${estado})`,
+            project.resumen?.cofinanciamiento ? `🤝 Cofinanciamiento: ${project.resumen.cofinanciamiento}` : '',
+            `🔗 Bases: ${project.url_bases}`,
+        ].filter(Boolean).join('\n');
+        navigator.clipboard.writeText(texto).then(() => {
+            setCopiedId(project.id);
+            setToastMessage('✅ Ficha copiada al portapapeles');
+            setTimeout(() => setCopiedId(null), 2000);
+        });
+    };
 
 
 
@@ -339,7 +368,31 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                             <UrgencyBadge date={project.fecha_cierre} />
                                                         </td>
                                                         <td className="py-5 px-6 text-right">
-                                                            <div className="flex flex-col gap-2 items-end">
+                                                            <div className="flex items-center gap-2 justify-end">
+                                                                {/* Copiar Ficha */}
+                                                                <button
+                                                                    onClick={(e) => copyProjectFicha(project, e)}
+                                                                    title="Copiar ficha para WhatsApp/email"
+                                                                    className={`p-2 rounded-lg transition-all border ${copiedId === project.id
+                                                                            ? 'bg-green-100 text-green-600 border-green-200'
+                                                                            : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-blue-50 hover:text-[var(--iica-blue)] hover:border-blue-200'
+                                                                        }`}
+                                                                >
+                                                                    {copiedId === project.id
+                                                                        ? <CheckCheck className="h-4 w-4" />
+                                                                        : <Copy className="h-4 w-4" />}
+                                                                </button>
+                                                                {/* Vista Rápida */}
+                                                                <button
+                                                                    onClick={() => setQuickViewProject(quickViewProject?.id === project.id ? null : project)}
+                                                                    title="Vista rápida sin salir de la lista"
+                                                                    className={`p-2 rounded-lg transition-all border ${quickViewProject?.id === project.id
+                                                                            ? 'bg-[var(--iica-blue)] text-white border-[var(--iica-blue)]'
+                                                                            : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-blue-50 hover:text-[var(--iica-blue)] hover:border-blue-200'
+                                                                        }`}
+                                                                >
+                                                                    <Eye className="h-4 w-4" />
+                                                                </button>
                                                                 <ActionButton
                                                                     url={project.url_bases}
                                                                     date={project.fecha_cierre}
@@ -517,7 +570,29 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
 
                                             <div className="flex justify-between items-center pt-2">
                                                 <UrgencyBadge date={project.fecha_cierre} mobile />
-                                                <div className="flex flex-col gap-2 items-end w-1/2">
+                                                <div className="flex items-center gap-2">
+                                                    {/* Copiar Ficha (móvil) */}
+                                                    <button
+                                                        onClick={(e) => copyProjectFicha(project, e)}
+                                                        title="Copiar ficha"
+                                                        className={`p-2 rounded-lg border transition-all ${copiedId === project.id
+                                                                ? 'bg-green-100 text-green-600 border-green-200'
+                                                                : 'bg-gray-50 text-gray-400 border-gray-200'
+                                                            }`}
+                                                    >
+                                                        {copiedId === project.id ? <CheckCheck className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                                                    </button>
+                                                    {/* Vista Rápida (móvil) */}
+                                                    <button
+                                                        onClick={() => setQuickViewProject(quickViewProject?.id === project.id ? null : project)}
+                                                        title="Vista rápida"
+                                                        className={`p-2 rounded-lg border transition-all ${quickViewProject?.id === project.id
+                                                                ? 'bg-[var(--iica-blue)] text-white border-[var(--iica-blue)]'
+                                                                : 'bg-gray-50 text-gray-400 border-gray-200'
+                                                            }`}
+                                                    >
+                                                        <Eye className="h-4 w-4" />
+                                                    </button>
                                                     <ActionButton
                                                         url={project.url_bases}
                                                         date={project.fecha_cierre}
@@ -684,8 +759,171 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                     </div>
                 )
             }
+            {/* ── QUICK VIEW PANEL ── */}
+            <AnimatePresence>
+                {quickViewProject && (
+                    <>
+                        {/* Backdrop */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setQuickViewProject(null)}
+                            className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm"
+                        />
+                        {/* Panel */}
+                        <motion.div
+                            initial={{ x: '100%' }}
+                            animate={{ x: 0 }}
+                            exit={{ x: '100%' }}
+                            transition={{ type: 'spring', damping: 28, stiffness: 300 }}
+                            className="fixed right-0 top-0 bottom-0 z-50 w-full max-w-md bg-white shadow-2xl flex flex-col overflow-hidden"
+                        >
+                            {/* Header */}
+                            <div className="bg-gradient-to-r from-[var(--iica-navy)] to-[var(--iica-blue)] px-5 py-4 flex items-start justify-between gap-3 flex-shrink-0">
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <span className="text-[10px] font-bold bg-white/20 text-white px-2 py-0.5 rounded-full border border-white/30">
+                                            {quickViewProject.categoria}
+                                        </span>
+                                        <span className="text-[10px] font-bold bg-white/20 text-white px-2 py-0.5 rounded-full border border-white/30">
+                                            {quickViewProject.institucion}
+                                        </span>
+                                    </div>
+                                    <h3 className="text-white font-bold text-base leading-snug line-clamp-3">
+                                        {quickViewProject.nombre}
+                                    </h3>
+                                </div>
+                                <button
+                                    onClick={() => setQuickViewProject(null)}
+                                    className="text-white/70 hover:text-white transition-colors flex-shrink-0 mt-0.5"
+                                >
+                                    <X className="h-5 w-5" />
+                                </button>
+                            </div>
 
+                            {/* Scrollable content */}
+                            <div className="flex-1 overflow-y-auto p-5 space-y-4">
 
+                                {/* Urgency + Monto */}
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
+                                        <p className="text-[10px] font-bold text-gray-400 uppercase mb-1.5 flex items-center gap-1">
+                                            <Calendar className="h-3 w-3" /> Cierre
+                                        </p>
+                                        <UrgencyBadge date={quickViewProject.fecha_cierre} />
+                                    </div>
+                                    <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
+                                        <p className="text-[10px] font-bold text-gray-400 uppercase mb-1.5 flex items-center gap-1">
+                                            <Banknote className="h-3 w-3" /> Monto Máximo
+                                        </p>
+                                        <p className="font-bold text-[var(--iica-navy)] text-lg">
+                                            {quickViewProject.monto > 0
+                                                ? `$${(quickViewProject.monto / 1000000).toFixed(0)}M`
+                                                : <span className="text-sm text-gray-500">Ver bases</span>}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Cofinanciamiento */}
+                                {quickViewProject.resumen?.cofinanciamiento && (
+                                    <div className="bg-green-50 border border-green-100 rounded-xl p-3">
+                                        <p className="text-[10px] font-bold text-green-600 uppercase mb-1">💰 Cofinanciamiento</p>
+                                        <p className="text-sm text-gray-700 font-medium">{quickViewProject.resumen.cofinanciamiento}</p>
+                                    </div>
+                                )}
+
+                                {/* Plazo */}
+                                {quickViewProject.resumen?.plazo_ejecucion && (
+                                    <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 flex items-start gap-2">
+                                        <Clock className="h-4 w-4 text-blue-500 flex-shrink-0 mt-0.5" />
+                                        <div>
+                                            <p className="text-[10px] font-bold text-blue-600 uppercase mb-0.5">Plazo de Ejecución</p>
+                                            <p className="text-sm text-gray-700">{quickViewProject.resumen.plazo_ejecucion}</p>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Requisitos */}
+                                {quickViewProject.resumen?.requisitos_clave && quickViewProject.resumen.requisitos_clave.length > 0 && (
+                                    <div>
+                                        <p className="text-xs font-bold text-gray-500 uppercase mb-2 flex items-center gap-1">
+                                            <Check className="h-3.5 w-3.5" /> Requisitos Clave
+                                        </p>
+                                        <ul className="space-y-2">
+                                            {quickViewProject.resumen.requisitos_clave.map((req, i) => (
+                                                <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                                                    <ChevronRight className="h-4 w-4 text-[var(--iica-blue)] flex-shrink-0 mt-0.5" />
+                                                    {req}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+
+                                {/* Observaciones */}
+                                {quickViewProject.resumen?.observaciones && (
+                                    <div className="bg-amber-50 border border-amber-100 rounded-xl p-3">
+                                        <p className="text-[10px] font-bold text-amber-600 uppercase mb-1">ℹ️ Observaciones</p>
+                                        <p className="text-sm text-gray-700">{quickViewProject.resumen.observaciones}</p>
+                                    </div>
+                                )}
+
+                                {/* Regiones */}
+                                {quickViewProject.regiones && quickViewProject.regiones.length > 0 && (
+                                    <div>
+                                        <p className="text-xs font-bold text-gray-500 uppercase mb-2 flex items-center gap-1">
+                                            <MapPin className="h-3.5 w-3.5" /> Regiones
+                                        </p>
+                                        <div className="flex flex-wrap gap-1.5">
+                                            {quickViewProject.regiones.map(r => (
+                                                <span key={r} className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full border border-gray-200">{r}</span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Beneficiarios */}
+                                {quickViewProject.beneficiarios && quickViewProject.beneficiarios.length > 0 && (
+                                    <div>
+                                        <p className="text-xs font-bold text-gray-500 uppercase mb-2 flex items-center gap-1">
+                                            <Users className="h-3.5 w-3.5" /> Beneficiarios
+                                        </p>
+                                        <div className="flex flex-wrap gap-1.5">
+                                            {quickViewProject.beneficiarios.map(b => (
+                                                <span key={b} className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full border border-blue-100">{b}</span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Footer actions */}
+                            <div className="flex-shrink-0 border-t border-gray-100 p-4 flex gap-3 bg-gray-50">
+                                <button
+                                    onClick={(e) => copyProjectFicha(quickViewProject, e)}
+                                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-bold text-sm border transition-all ${copiedId === quickViewProject.id
+                                            ? 'bg-green-100 text-green-700 border-green-200'
+                                            : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-100'
+                                        }`}
+                                >
+                                    {copiedId === quickViewProject.id
+                                        ? <><CheckCheck className="h-4 w-4" /> ¡Copiado!</>
+                                        : <><Copy className="h-4 w-4" /> Copiar Ficha</>}
+                                </button>
+                                <a
+                                    href={quickViewProject.url_bases}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-bold text-sm bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] text-white transition-colors"
+                                >
+                                    <ExternalLink className="h-4 w-4" /> Ver Bases
+                                </a>
+                            </div>
+                        </motion.div>
+                    </>
+                )}
+            </AnimatePresence>
 
         </div >
     );
