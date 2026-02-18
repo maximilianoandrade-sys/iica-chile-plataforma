@@ -15,9 +15,8 @@ interface Document {
     uploadedBy: string;
 }
 
-// JSONBin.io configuration - Free tier, no signup needed for read-only
-const JSONBIN_BIN_ID = '679f3e4bacd3cb34a8c7e8f1'; // Public bin for IICA documents
-const JSONBIN_API_KEY = '$2a$10$VxH8qGvK5YvK5YvK5YvK5O8qGvK5YvK5YvK5YvK5YvK5YvK5Yv'; // Read/Write key
+// Storage key for shared documents
+const STORAGE_KEY = 'iica_maletin_documents_shared';
 
 export default function MaletinPage() {
     const [documents, setDocuments] = useState<Document[]>([]);
@@ -37,30 +36,12 @@ export default function MaletinPage() {
     const loadDocuments = async () => {
         setIsLoading(true);
         try {
-            // Try to load from JSONBin first
-            const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
-                headers: {
-                    'X-Master-Key': JSONBIN_API_KEY
-                }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                setDocuments(data.record.documents || []);
-            } else {
-                // Fallback to localStorage if JSONBin fails
-                const saved = localStorage.getItem('iica_maletin_documents_shared');
-                if (saved) {
-                    setDocuments(JSON.parse(saved));
-                }
-            }
-        } catch (error) {
-            console.error('Error loading documents:', error);
-            // Fallback to localStorage
-            const saved = localStorage.getItem('iica_maletin_documents_shared');
+            const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
                 setDocuments(JSON.parse(saved));
             }
+        } catch (error) {
+            console.error('Error loading documents:', error);
         } finally {
             setIsLoading(false);
         }
@@ -69,29 +50,11 @@ export default function MaletinPage() {
     const saveDocuments = async (updatedDocs: Document[]) => {
         setIsSaving(true);
         try {
-            // Save to JSONBin
-            const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Master-Key': JSONBIN_API_KEY
-                },
-                body: JSON.stringify({ documents: updatedDocs })
-            });
-
-            if (response.ok) {
-                setDocuments(updatedDocs);
-                // Also save to localStorage as backup
-                localStorage.setItem('iica_maletin_documents_shared', JSON.stringify(updatedDocs));
-            } else {
-                throw new Error('Failed to save to cloud');
-            }
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedDocs));
+            setDocuments(updatedDocs);
         } catch (error) {
             console.error('Error saving documents:', error);
-            // Fallback to localStorage only
-            localStorage.setItem('iica_maletin_documents_shared', JSON.stringify(updatedDocs));
-            setDocuments(updatedDocs);
-            alert('Documento guardado localmente. La sincronización en la nube falló.');
+            alert('Error al guardar el documento. Verifica el espacio disponible.');
         } finally {
             setIsSaving(false);
         }
@@ -266,7 +229,7 @@ export default function MaletinPage() {
                 <div className="bg-white rounded-xl shadow-md overflow-hidden">
                     <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                         <h3 className="font-bold text-gray-800 text-lg">Documentos Compartidos</h3>
-                        <span className="text-xs font-bold text-blue-600 bg-blue-100 px-2 py-1 rounded-full">☁️ Sincronizado en la Nube</span>
+                        <span className="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-1 rounded-full">💾 Almacenado localmente</span>
                     </div>
 
                     {isLoading ? (
