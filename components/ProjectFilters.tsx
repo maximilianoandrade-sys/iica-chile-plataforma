@@ -2,10 +2,10 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import { Search, Filter, ChevronDown, X, Sparkles } from "lucide-react";
+import { Search, Filter, ChevronDown, X, Sparkles, SlidersHorizontal, ArrowUpDown } from "lucide-react";
 import { useAnalytics } from '@/hooks/useAnalytics';
 
-// Sugerencias de búsqueda en lenguaje natural
+// Chips de búsqueda rápida
 const QUICK_SEARCHES = [
     { label: '💧 Riego', query: 'riego' },
     { label: '🌱 Suelos', query: 'suelos' },
@@ -16,8 +16,12 @@ const QUICK_SEARCHES = [
     { label: '🌍 Internacional', query: 'internacional' },
     { label: '🤝 Asociatividad', query: 'asociatividad' },
     { label: '🏔️ Emergencia', query: 'emergencia' },
+    { label: '🌲 Forestal', query: 'forestal' },
+    { label: '🐄 Ganadería', query: 'ganadería' },
+    { label: '🌾 Capital Semilla', query: 'capital semilla' },
 ];
 
+// Sugerencias en lenguaje natural (frases reales de agricultores)
 const NATURAL_SUGGESTIONS = [
     'se me secó el pozo',
     'necesito tecnificar el riego',
@@ -29,6 +33,20 @@ const NATURAL_SUGGESTIONS = [
     'emergencia por helada',
     'exportar mis productos',
     'crédito para maquinaria',
+    'reforestar mi predio',
+    'mejorar mi ganado',
+    'proyecto de riego tecnificado',
+    'pequeño agricultor INDAP',
+    'fondo CORFO emprendimiento',
+    'subsidio CNR riego',
+];
+
+const SORT_OPTIONS = [
+    { value: 'relevance', label: 'Más relevantes' },
+    { value: 'date_asc', label: 'Cierre más próximo' },
+    { value: 'date_desc', label: 'Cierre más lejano' },
+    { value: 'amount_desc', label: 'Mayor monto' },
+    { value: 'amount_asc', label: 'Menor monto' },
 ];
 
 export default function ProjectFilters({
@@ -42,7 +60,7 @@ export default function ProjectFilters({
     regions: string[];
     beneficiaries: string[];
     institutions: string[];
-    counts: { filtered: number; total: number };
+    counts: { filtered: number; total: number; open: number };
 }) {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -51,6 +69,7 @@ export default function ProjectFilters({
     const [searchTerm, setSearchTerm] = useState(searchParams.get('q') || '');
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
+    const [showAdvanced, setShowAdvanced] = useState(false);
 
     const createQueryString = useCallback(
         (name: string, value: string) => {
@@ -65,12 +84,12 @@ export default function ProjectFilters({
         [searchParams]
     );
 
-    // Sync from URL
+    // Sync desde URL
     useEffect(() => {
         setSearchTerm(searchParams.get('q') || '');
     }, [searchParams]);
 
-    // Debounced URL update
+    // Debounced URL update (300ms)
     useEffect(() => {
         const timer = setTimeout(() => {
             const currentQ = searchParams.get('q') || '';
@@ -87,11 +106,13 @@ export default function ProjectFilters({
         return () => clearTimeout(timer);
     }, [searchTerm, router, searchParams]);
 
-    // Filter suggestions as user types
+    // Autocompletado inteligente
     useEffect(() => {
         if (searchTerm.length >= 2) {
+            const term = searchTerm.toLowerCase();
             const matches = NATURAL_SUGGESTIONS.filter(s =>
-                s.toLowerCase().includes(searchTerm.toLowerCase())
+                s.toLowerCase().includes(term) ||
+                term.split(' ').some(word => s.toLowerCase().includes(word))
             );
             setFilteredSuggestions(matches.slice(0, 5));
         } else {
@@ -103,8 +124,10 @@ export default function ProjectFilters({
     const selectedRegion = searchParams.get('region') || 'Todas';
     const selectedBeneficiary = searchParams.get('beneficiary') || 'Todos';
     const selectedInstitution = searchParams.get('institution') || 'Todas';
+    const soloAbiertos = searchParams.get('open') === '1';
+    const sortBy = searchParams.get('sort') || 'relevance';
 
-    const hasActiveFilters = !!(searchTerm || selectedCategory !== 'Todas' || selectedRegion !== 'Todas' || selectedBeneficiary !== 'Todos' || selectedInstitution !== 'Todas');
+    const hasActiveFilters = !!(searchTerm || selectedCategory !== 'Todas' || selectedRegion !== 'Todas' || selectedBeneficiary !== 'Todos' || selectedInstitution !== 'Todas' || soloAbiertos);
 
     // Track search
     useEffect(() => {
@@ -121,6 +144,26 @@ export default function ProjectFilters({
 
     const handleFilterChange = (key: string, value: string) => {
         router.push(`?${createQueryString(key, value)}`, { scroll: false });
+    };
+
+    const toggleSoloAbiertos = () => {
+        const params = new URLSearchParams(searchParams.toString());
+        if (soloAbiertos) {
+            params.delete('open');
+        } else {
+            params.set('open', '1');
+        }
+        router.push(`?${params.toString()}`, { scroll: false });
+    };
+
+    const handleSortChange = (value: string) => {
+        const params = new URLSearchParams(searchParams.toString());
+        if (value === 'relevance') {
+            params.delete('sort');
+        } else {
+            params.set('sort', value);
+        }
+        router.push(`?${params.toString()}`, { scroll: false });
     };
 
     const clearAllFilters = () => {
@@ -154,6 +197,9 @@ export default function ProjectFilters({
                         }}
                         onFocus={() => setShowSuggestions(true)}
                         onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Escape') { setSearchTerm(''); setShowSuggestions(false); }
+                        }}
                     />
                     {searchTerm && (
                         <button
@@ -168,6 +214,9 @@ export default function ProjectFilters({
                     {/* Autocomplete Dropdown */}
                     {showSuggestions && filteredSuggestions.length > 0 && (
                         <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl z-30 overflow-hidden">
+                            <div className="px-3 py-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100">
+                                Sugerencias
+                            </div>
                             {filteredSuggestions.map((suggestion) => (
                                 <button
                                     key={suggestion}
@@ -200,11 +249,24 @@ export default function ProjectFilters({
             </div>
 
             {/* Filters Row */}
-            <div className="px-4 md:px-6 py-4 bg-gray-50/50 flex flex-col md:flex-row gap-3 items-start md:items-center flex-wrap">
+            <div className="px-4 md:px-6 py-3 bg-gray-50/50 flex flex-col md:flex-row gap-3 items-start md:items-center flex-wrap border-b border-gray-100">
                 <div className="flex items-center gap-1.5 text-sm font-bold text-gray-600 flex-shrink-0">
                     <Filter className="h-4 w-4" />
-                    Filtrar por:
+                    Filtrar:
                 </div>
+
+                {/* Solo Abiertos toggle */}
+                <button
+                    onClick={toggleSoloAbiertos}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all border flex-shrink-0 ${soloAbiertos
+                        ? 'bg-green-600 text-white border-green-600 shadow-sm'
+                        : 'bg-white text-gray-600 border-gray-200 hover:bg-green-50 hover:border-green-300 hover:text-green-700'
+                        }`}
+                    title={`${counts.open} convocatorias abiertas`}
+                >
+                    <span className={`w-1.5 h-1.5 rounded-full ${soloAbiertos ? 'bg-white' : 'bg-green-500'}`}></span>
+                    Solo Abiertos ({counts.open})
+                </button>
 
                 {/* Category Chips */}
                 <div className="flex flex-wrap gap-1.5">
@@ -223,10 +285,23 @@ export default function ProjectFilters({
                     ))}
                 </div>
 
-                <div className="hidden md:block w-px h-6 bg-gray-300 mx-1 flex-shrink-0"></div>
+                {/* Advanced Filters Toggle */}
+                <button
+                    onClick={() => setShowAdvanced(!showAdvanced)}
+                    className={`ml-auto flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full border transition-all flex-shrink-0 ${showAdvanced
+                        ? 'bg-[var(--iica-navy)] text-white border-[var(--iica-navy)]'
+                        : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                        }`}
+                >
+                    <SlidersHorizontal className="h-3.5 w-3.5" />
+                    Filtros avanzados
+                    <ChevronDown className={`h-3.5 w-3.5 transition-transform ${showAdvanced ? 'rotate-180' : ''}`} />
+                </button>
+            </div>
 
-                {/* Dropdowns */}
-                <div className="flex flex-wrap gap-2">
+            {/* Advanced Filters Panel */}
+            {showAdvanced && (
+                <div className="px-4 md:px-6 py-4 bg-gray-50 border-b border-gray-100 flex flex-wrap gap-3 items-center">
                     <FilterSelect
                         label="Región"
                         value={selectedRegion}
@@ -248,7 +323,8 @@ export default function ProjectFilters({
                         onChange={(val) => handleFilterChange('institution', val)}
                         defaultText="Todas las Instituciones"
                     />
-                    {/* Amount Filter */}
+
+                    {/* Monto */}
                     <div className="relative">
                         <select
                             onChange={(e) => {
@@ -274,40 +350,54 @@ export default function ProjectFilters({
                         </select>
                         <ChevronDown className="absolute right-2.5 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
                     </div>
-                </div>
 
-                {/* Clear Filters */}
-                {hasActiveFilters && (
-                    <button
-                        onClick={clearAllFilters}
-                        className="ml-auto flex items-center gap-1.5 text-xs font-bold text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-full border border-red-200 transition-all flex-shrink-0"
-                    >
-                        <X className="h-3.5 w-3.5" />
-                        Limpiar filtros
-                    </button>
-                )}
-            </div>
+                    {/* Ordenamiento */}
+                    <div className="relative flex items-center gap-1.5">
+                        <ArrowUpDown className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                        <select
+                            value={sortBy}
+                            onChange={(e) => handleSortChange(e.target.value)}
+                            className="appearance-none bg-white border border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-[var(--iica-blue)] focus:border-[var(--iica-blue)] block pl-3 pr-8 py-2 cursor-pointer hover:border-[var(--iica-blue)] transition-colors shadow-sm"
+                        >
+                            {SORT_OPTIONS.map(opt => (
+                                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                            ))}
+                        </select>
+                        <ChevronDown className="absolute right-2.5 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
+                    </div>
+                </div>
+            )}
 
             {/* Results Counter */}
-            <div className="px-4 md:px-6 py-3 border-t border-gray-100 flex items-center justify-between flex-wrap gap-2">
-                <div className="text-sm text-gray-600">
+            <div className="px-4 md:px-6 py-3 flex items-center justify-between flex-wrap gap-2">
+                <div className="text-sm text-gray-600 flex items-center gap-2 flex-wrap">
                     Mostrando{' '}
                     <strong className="text-[var(--iica-navy)] text-base">{counts.filtered}</strong>
                     {' '}de{' '}
                     <strong>{counts.total}</strong>
                     {' '}convocatorias
                     {searchTerm && (
-                        <span className="ml-2 inline-flex items-center gap-1 text-[var(--iica-blue)] font-medium">
-                            <Sparkles className="h-3.5 w-3.5" />
-                            búsqueda inteligente activa
+                        <span className="inline-flex items-center gap-1 text-[var(--iica-blue)] font-medium text-xs bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
+                            <Sparkles className="h-3 w-3" />
+                            ordenadas por relevancia
+                        </span>
+                    )}
+                    {counts.filtered === 0 && (
+                        <span className="text-amber-600 font-medium bg-amber-50 px-3 py-1 rounded-full border border-amber-200 text-xs">
+                            💡 Prueba con términos más generales como &quot;riego&quot; o &quot;suelos&quot;
                         </span>
                     )}
                 </div>
+
                 <div className="flex items-center gap-2">
-                    {counts.filtered === 0 && (
-                        <div className="text-sm text-amber-600 font-medium bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
-                            💡 Prueba con términos más generales como "riego" o "suelos"
-                        </div>
+                    {hasActiveFilters && (
+                        <button
+                            onClick={clearAllFilters}
+                            className="flex items-center gap-1.5 text-xs font-bold text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-full border border-red-200 transition-all"
+                        >
+                            <X className="h-3.5 w-3.5" />
+                            Limpiar filtros
+                        </button>
                     )}
                     <a
                         href={`/api/export-csv?${new URLSearchParams({
@@ -320,7 +410,7 @@ export default function ProjectFilters({
                         title="Exportar lista a Excel/CSV"
                         className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--iica-secondary)] hover:text-green-700 bg-green-50 hover:bg-green-100 px-3 py-1.5 rounded-full border border-green-200 transition-all"
                     >
-                        📅 Exportar CSV
+                        📊 Exportar CSV
                     </a>
                 </div>
             </div>
@@ -342,6 +432,7 @@ function FilterSelect({ label, value, options, onChange, defaultText }: FilterSe
             <select
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
+                aria-label={label}
                 className="appearance-none bg-white border border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-[var(--iica-blue)] focus:border-[var(--iica-blue)] block pl-3 pr-8 py-2 cursor-pointer hover:border-[var(--iica-blue)] transition-colors shadow-sm"
             >
                 <option value={defaultText.includes("Todos") ? "Todos" : "Todas"}>{defaultText}</option>
