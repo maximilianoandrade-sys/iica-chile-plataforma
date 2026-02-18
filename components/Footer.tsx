@@ -40,8 +40,7 @@ export function Footer() {
                         <h4 className="text-lg font-semibold mb-4 text-white">Plataforma</h4>
                         <ul className="space-y-2 text-sm text-blue-200">
                             <li><a href="/#inicio" className="hover:text-white transition-colors">Inicio</a></li>
-                            <li><a href="/#convocatorias" className="hover:text-white transition-colors">Convocatorias Abiertas</a></li>
-                            <li><a href="/#calculadora" className="hover:text-white transition-colors">Calculadora de Elegibilidad</a></li>
+                            <li><a href="/#convocatorias" className="hover:text-white transition-colors">Buscar Convocatorias</a></li>
                             <li><a href="/#fuentes" className="hover:text-white transition-colors">Fuentes Oficiales</a></li>
                             <li><a href="/maletin" className="hover:text-white transition-colors">Mi Maletín Digital</a></li>
                             <li><a href="/consultores" className="hover:text-white transition-colors">Directorio de Consultores</a></li>

@@ -3,14 +3,10 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Sparkles, Menu, X } from 'lucide-react';
+import { Menu, X, Search } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
-import dynamic from 'next/dynamic';
-
-const SimpleModeWizard = dynamic(() => import('@/components/SimpleModeWizard'), { ssr: false });
 
 export function Header() {
-    const [showSimpleMode, setShowSimpleMode] = useState(false);
     const [showMobileMenu, setShowMobileMenu] = useState(false);
 
     return (
@@ -36,23 +32,21 @@ export function Header() {
                     <nav className="hidden md:flex gap-5 text-sm font-medium text-gray-600">
                         <Link href="/#inicio" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Inicio</Link>
                         <Link href="/#convocatorias" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Convocatorias</Link>
-                        <Link href="/#calculadora" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Elegibilidad</Link>
+                        <Link href="/#fuentes" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Fuentes Oficiales</Link>
                         <Link href="/maletin" className="hover:text-[var(--iica-navy)] transition-colors">Mi Maletín</Link>
                         <Link href="/consultores" className="hover:text-[var(--iica-navy)] transition-colors">Consultores</Link>
                         <Link href="/#contacto" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Contacto</Link>
                     </nav>
 
                     <div className="flex items-center gap-2">
-                        {/* Modo Simple Button - Always visible */}
-                        <button
-                            onClick={() => setShowSimpleMode(true)}
-                            className="flex items-center gap-2 px-4 py-2.5 bg-[var(--iica-secondary)] hover:bg-green-600 text-white font-bold rounded-xl shadow-md transition-all hover:shadow-lg hover:-translate-y-0.5 text-sm min-h-[44px]"
-                            id="btn-modo-simple"
+                        {/* CTA Desktop */}
+                        <Link
+                            href="/#convocatorias"
+                            className="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-[var(--iica-secondary)] hover:bg-green-600 text-white font-bold rounded-xl shadow-md transition-all hover:shadow-lg hover:-translate-y-0.5 text-sm min-h-[44px]"
                         >
-                            <Sparkles className="h-4 w-4" />
-                            <span className="hidden sm:inline">Modo Simple</span>
-                            <span className="sm:hidden">Simple</span>
-                        </button>
+                            <Search className="h-4 w-4" />
+                            Buscar Fondos
+                        </Link>
 
                         {/* Mobile Menu Toggle */}
                         <button
@@ -76,12 +70,12 @@ export function Header() {
                         >
                             <nav className="flex flex-col p-4 gap-1">
                                 {[
-                                    { href: '/#inicio', label: 'Inicio' },
-                                    { href: '/#convocatorias', label: 'Convocatorias' },
-                                    { href: '/#calculadora', label: 'Calculadora de Elegibilidad' },
-                                    { href: '/maletin', label: 'Mi Maletín' },
-                                    { href: '/consultores', label: 'Directorio de Consultores' },
-                                    { href: '/#contacto', label: 'Contacto' },
+                                    { href: '/#inicio', label: '🏠 Inicio' },
+                                    { href: '/#convocatorias', label: '🔍 Buscar Convocatorias' },
+                                    { href: '/#fuentes', label: '🔗 Fuentes Oficiales' },
+                                    { href: '/maletin', label: '💼 Mi Maletín' },
+                                    { href: '/consultores', label: '👤 Directorio de Consultores' },
+                                    { href: '/#contacto', label: '📞 Contacto' },
                                 ].map((item) => (
                                     <Link
                                         key={item.href}
@@ -109,28 +103,28 @@ export function Header() {
                     <div className="relative z-10 container mx-auto px-4">
                         <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full text-sm font-medium text-blue-100 mb-6">
                             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                            48 fondos activos · Actualizado hoy
+                            25 fondos activos · CNR · INDAP · FIA · CORFO · Sercotec · GOREs
                         </div>
                         <h1 className="text-3xl md:text-5xl font-extrabold mb-6 leading-tight drop-shadow-lg">
                             Encuentra Financiamiento para tu Campo <span className="text-[var(--iica-yellow)]">2026</span>
                         </h1>
                         <p className="text-lg md:text-xl font-medium text-blue-50 max-w-2xl mx-auto mb-10 drop-shadow-md">
-                            Accede a fondos concursables, subsidios y créditos para modernizar tu producción agrícola. Información actualizada y simplificada.
+                            Fondos concursables, subsidios y créditos reales de instituciones oficiales chilenas. Busca por región, rubro o institución.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <Link
                                 href="#convocatorias"
-                                className="bg-[var(--iica-secondary)] hover:bg-green-600 text-white font-bold py-4 px-10 rounded-full shadow-xl transition-all hover:-translate-y-1 inline-block cursor-pointer ring-4 ring-white/20 min-h-[56px] flex items-center justify-center"
+                                className="bg-[var(--iica-secondary)] hover:bg-green-600 text-white font-bold py-4 px-10 rounded-full shadow-xl transition-all hover:-translate-y-1 inline-flex items-center justify-center gap-2 cursor-pointer ring-4 ring-white/20 min-h-[56px]"
                             >
-                                Ver Convocatorias Abiertas
+                                <Search className="h-5 w-5" />
+                                Buscar Convocatorias Abiertas
                             </Link>
-                            <button
-                                onClick={() => setShowSimpleMode(true)}
+                            <Link
+                                href="#fuentes"
                                 className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border-2 border-white/40 text-white font-bold py-4 px-10 rounded-full shadow-xl transition-all hover:-translate-y-1 inline-flex items-center justify-center gap-2 cursor-pointer min-h-[56px]"
                             >
-                                <Sparkles className="h-5 w-5 text-[var(--iica-yellow)]" />
-                                Modo Simple (3 preguntas)
-                            </button>
+                                🔗 Ver Fuentes Oficiales
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -148,13 +142,6 @@ export function Header() {
                     <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
                 </div>
             </header>
-
-            {/* Simple Mode Wizard Modal */}
-            <AnimatePresence>
-                {showSimpleMode && (
-                    <SimpleModeWizard onClose={() => setShowSimpleMode(false)} />
-                )}
-            </AnimatePresence>
         </>
     );
 }

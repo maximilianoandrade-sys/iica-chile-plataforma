@@ -3,7 +3,6 @@ import ProjectList from "@/components/ProjectList";
 import ProjectFilters from "@/components/ProjectFilters";
 import JsonLd from "@/components/JsonLd";
 import { smartSearch } from "@/lib/searchEngine";
-import SmartAssistant from "@/components/SmartAssistant";
 import counterparts from '@/lib/counterparts_raw.json';
 
 export default async function ProjectListContainer({
@@ -30,14 +29,13 @@ export default async function ProjectListContainer({
     // Institution list from projects + counterparts
     const uniqueInstitutions = Array.from(new Set([
         ...projects.map(p => p.institucion),
-        ...counterparts.slice(0, 20).map(c => c.name) // Keep logic from original
+        ...counterparts.slice(0, 20).map(c => c.name)
     ])).sort();
-
 
     // 2. Filter Results
     const filteredProjects = projects.filter(project => {
         // Smart Search
-        const searchableText = `${project.nombre} ${project.institucion} ${project.categoria} ${(project.regiones || []).join(' ')} ${(project.beneficiarios || []).join(' ')}`;
+        const searchableText = `${project.nombre} ${project.institucion} ${project.categoria} ${(project.regiones || []).join(' ')} ${(project.beneficiarios || []).join(' ')} ${project.resumen?.observaciones || ''} ${(project.resumen?.requisitos_clave || []).join(' ')}`;
         const matchesSearch = searchTerm ? smartSearch(searchTerm, searchableText) : true;
 
         const matchesCategory = selectedCategory === 'Todas' || project.categoria === selectedCategory;
@@ -45,11 +43,6 @@ export default async function ProjectListContainer({
         const matchesBeneficiary = selectedBeneficiary === 'Todos' || (project.beneficiarios && project.beneficiarios.includes(selectedBeneficiary));
         const matchesInstitution = selectedInstitution === 'Todas' || project.institucion === selectedInstitution || project.institucion.includes(selectedInstitution);
 
-        // Amount Filter
-        // Note: Project amount is a number. If amount is 0/null in JSON, we might want to include it or exclude it depending on logic.
-        // Assuming 0 means "Not specified" or "Variable". Let's handle standard ranges.
-        // If project.monto is 0, we treat it as matching "Any" but if a specific range is set, maybe exclude? 
-        // Let's assume matches if (project.monto >= min && project.monto <= max) OR if amount filter is not active (0-Infinity).
         const filterActive = minAmount > 0 || maxAmount < Infinity;
         const matchesAmount = !filterActive || (project.monto >= minAmount && project.monto <= maxAmount);
 
@@ -58,7 +51,6 @@ export default async function ProjectListContainer({
 
     return (
         <>
-            <SmartAssistant projects={projects} />
             <JsonLd projects={filteredProjects} />
             <ProjectFilters
                 categories={categories}
