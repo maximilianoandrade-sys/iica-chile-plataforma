@@ -374,8 +374,8 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                                     onClick={(e) => copyProjectFicha(project, e)}
                                                                     title="Copiar ficha para WhatsApp/email"
                                                                     className={`p-2 rounded-lg transition-all border ${copiedId === project.id
-                                                                            ? 'bg-green-100 text-green-600 border-green-200'
-                                                                            : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-blue-50 hover:text-[var(--iica-blue)] hover:border-blue-200'
+                                                                        ? 'bg-green-100 text-green-600 border-green-200'
+                                                                        : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-blue-50 hover:text-[var(--iica-blue)] hover:border-blue-200'
                                                                         }`}
                                                                 >
                                                                     {copiedId === project.id
@@ -387,8 +387,8 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                                     onClick={() => setQuickViewProject(quickViewProject?.id === project.id ? null : project)}
                                                                     title="Vista rápida sin salir de la lista"
                                                                     className={`p-2 rounded-lg transition-all border ${quickViewProject?.id === project.id
-                                                                            ? 'bg-[var(--iica-blue)] text-white border-[var(--iica-blue)]'
-                                                                            : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-blue-50 hover:text-[var(--iica-blue)] hover:border-blue-200'
+                                                                        ? 'bg-[var(--iica-blue)] text-white border-[var(--iica-blue)]'
+                                                                        : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-blue-50 hover:text-[var(--iica-blue)] hover:border-blue-200'
                                                                         }`}
                                                                 >
                                                                     <Eye className="h-4 w-4" />
@@ -575,9 +575,9 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                     <button
                                                         onClick={(e) => copyProjectFicha(project, e)}
                                                         title="Copiar ficha"
-                                                        className={`p-2 rounded-lg border transition-all ${copiedId === project.id
-                                                                ? 'bg-green-100 text-green-600 border-green-200'
-                                                                : 'bg-gray-50 text-gray-400 border-gray-200'
+                                                        className={`p-3 rounded-lg border transition-all ${copiedId === project.id
+                                                            ? 'bg-green-100 text-green-600 border-green-200'
+                                                            : 'bg-gray-50 text-gray-400 border-gray-200 active:bg-gray-100'
                                                             }`}
                                                     >
                                                         {copiedId === project.id ? <CheckCheck className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
@@ -586,9 +586,9 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                     <button
                                                         onClick={() => setQuickViewProject(quickViewProject?.id === project.id ? null : project)}
                                                         title="Vista rápida"
-                                                        className={`p-2 rounded-lg border transition-all ${quickViewProject?.id === project.id
-                                                                ? 'bg-[var(--iica-blue)] text-white border-[var(--iica-blue)]'
-                                                                : 'bg-gray-50 text-gray-400 border-gray-200'
+                                                        className={`p-3 rounded-lg border transition-all ${quickViewProject?.id === project.id
+                                                            ? 'bg-[var(--iica-blue)] text-white border-[var(--iica-blue)]'
+                                                            : 'bg-gray-50 text-gray-400 border-gray-200 active:bg-gray-100'
                                                             }`}
                                                     >
                                                         <Eye className="h-4 w-4" />
@@ -903,8 +903,8 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                 <button
                                     onClick={(e) => copyProjectFicha(quickViewProject, e)}
                                     className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-bold text-sm border transition-all ${copiedId === quickViewProject.id
-                                            ? 'bg-green-100 text-green-700 border-green-200'
-                                            : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-100'
+                                        ? 'bg-green-100 text-green-700 border-green-200'
+                                        : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-100'
                                         }`}
                                 >
                                     {copiedId === quickViewProject.id

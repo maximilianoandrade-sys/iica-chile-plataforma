@@ -345,13 +345,13 @@ export default function MaletinPage() {
                 </div>
 
                 {/* ── Tabs ── */}
-                <div className="flex gap-1 bg-gray-100 p-1 rounded-xl mb-5 w-fit">
+                <div className="flex w-full md:w-fit gap-1 bg-gray-100 p-1 rounded-xl mb-5">
                     {([
                         { id: 'recursos', label: `🔗 Recursos de Referencia (${REFERENCE_RESOURCES.length})` },
                         { id: 'mis-docs', label: `📁 Mis Documentos (${documents.length})` },
                     ] as const).map(tab => (
                         <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-                            className={`px-5 py-2.5 rounded-lg text-sm font-bold transition-all ${activeTab === tab.id ? 'bg-white shadow-sm text-[var(--iica-navy)]' : 'text-gray-500 hover:text-gray-700'}`}>
+                            className={`flex-1 md:flex-none justify-center px-4 py-3 md:px-5 md:py-2.5 rounded-lg text-sm font-bold transition-all ${activeTab === tab.id ? 'bg-white shadow-sm text-[var(--iica-navy)]' : 'text-gray-500 hover:text-gray-700'}`}>
                             {tab.label}
                         </button>
                     ))}
@@ -459,11 +459,12 @@ export default function MaletinPage() {
                             onDragLeave={() => setIsDragging(false)}
                             onDrop={handleDrop}
                             onClick={() => setShowUploadModal(true)}
-                            className={`mb-6 border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all ${isDragging
+                            className={`mb-6 border-2 border-dashed rounded-xl p-6 md:p-8 text-center cursor-pointer transition-all active:scale-95 ${isDragging
                                 ? 'border-[var(--iica-blue)] bg-blue-50 scale-[1.01]'
                                 : 'border-gray-300 hover:border-[var(--iica-blue)] hover:bg-blue-50/30'}`}>
                             <Upload className={`h-10 w-10 mx-auto mb-3 transition-colors ${isDragging ? 'text-[var(--iica-blue)]' : 'text-gray-400'}`} />
-                            <p className="font-bold text-gray-700">Arrastra un archivo aquí o haz clic para subir</p>
+                            <p className="font-bold text-gray-700 hidden md:block">Arrastra un archivo aquí o haz clic para subir</p>
+                            <p className="font-bold text-gray-700 md:hidden">Toca aquí para subir un documento o tomar una foto</p>
                             <p className="text-xs text-gray-500 mt-1">PDF, DOC, DOCX, XLS, JPG, PNG — Máximo 10MB</p>
                         </div>
 

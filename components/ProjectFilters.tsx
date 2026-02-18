@@ -268,14 +268,13 @@ export default function ProjectFilters({
                     Solo Abiertos ({counts.open})
                 </button>
 
-                {/* Category Chips */}
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex overflow-x-auto md:flex-wrap gap-2 md:gap-1.5 pb-2 md:pb-0 scrollbar-hide snap-x">
                     {categories.map(cat => (
                         <button
                             key={cat}
                             onClick={() => handleFilterChange('category', cat)}
                             aria-pressed={selectedCategory === cat}
-                            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${selectedCategory === cat
+                            className={`flex-shrink-0 snap-start px-4 md:px-3 py-2 md:py-1.5 rounded-full text-sm md:text-xs font-bold transition-all border whitespace-nowrap ${selectedCategory === cat
                                 ? 'bg-[var(--iica-blue)] text-white border-[var(--iica-blue)] shadow-sm'
                                 : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
                                 }`}
