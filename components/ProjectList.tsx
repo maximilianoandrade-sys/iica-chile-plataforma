@@ -440,12 +440,6 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                                                         <p>{project.resumen.plazo_ejecucion}</p>
                                                                                     </div>
                                                                                 )}
-                                                                                {project.resumen.objetivo && (
-                                                                                    <div className="col-span-2">
-                                                                                        <strong className="text-[var(--iica-navy)] block mb-1 text-xs uppercase">Objetivo</strong>
-                                                                                        <p>{project.resumen.objetivo}</p>
-                                                                                    </div>
-                                                                                )}
                                                                                 {project.resumen.requisitos_clave && (
                                                                                     <div className="col-span-2">
                                                                                         <strong className="text-[var(--iica-navy)] block mb-1 text-xs uppercase">Requisitos Clave</strong>
