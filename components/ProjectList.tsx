@@ -19,7 +19,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
     const [showAgrovoc, setShowAgrovoc] = useState(false);
     const [showRequirements, setShowRequirements] = useState(false);
     const [toastMessage, setToastMessage] = useState<string | null>(null);
-    const [expandedProject, setExpandedProject] = useState<number | null>(null);
+
 
     // New Features State
     const [favorites, setFavorites] = useState<number[]>([]);
@@ -30,6 +30,17 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
     // Vista Rápida & Copiar
     const [quickViewProject, setQuickViewProject] = useState<Project | null>(null);
     const [copiedId, setCopiedId] = useState<number | null>(null);
+    const [quickFilter, setQuickFilter] = useState<'all' | 'facil' | 'cierre' | 'mujeres'>('all');
+
+    // Helper for Closing Soon (Moved here to be used in filtering)
+    const isClosingSoon = (dateStr: string) => {
+        if (!dateStr) return false;
+        const today = new Date();
+        const closeDate = new Date(dateStr);
+        const diffTime = closeDate.getTime() - today.getTime();
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays > 0 && diffDays <= 7;
+    };
 
     const copyProjectFicha = (project: Project, e: React.MouseEvent) => {
         e.stopPropagation();
@@ -111,18 +122,20 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
             filtered = filtered.filter(p => favorites.includes(p.id));
         }
 
+        // Apply Quick Filters
+        if (quickFilter === 'facil') {
+            filtered = filtered.filter(p => p.id % 2 === 0); // Mock logic for IA Facil
+        } else if (quickFilter === 'cierre') {
+            filtered = filtered.filter(p => isClosingSoon(p.fecha_cierre));
+        } else if (quickFilter === 'mujeres') {
+            filtered = filtered.filter(p => p.beneficiarios?.some(b => b.toLowerCase().includes('mujer')));
+        }
+
         return filtered;
-    }, [projects, selectedAgrovoc, showFavoritesOnly, favorites]);
+    }, [projects, selectedAgrovoc, showFavoritesOnly, favorites, quickFilter]);
 
     // Helper for Closing Soon
-    const isClosingSoon = (dateStr: string) => {
-        if (!dateStr) return false;
-        const today = new Date();
-        const closeDate = new Date(dateStr);
-        const diffTime = closeDate.getTime() - today.getTime();
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        return diffDays > 0 && diffDays <= 7;
-    };
+
 
     return (
         <div className="bg-white rounded-xl shadow-sm border border-[var(--iica-border)] overflow-hidden">
@@ -208,6 +221,37 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                         )}
                     </AnimatePresence>
                 </div>
+            </div>
+
+            {/* QUICK FILTERS (CHIPS) */}
+            <div className="px-6 py-4 border-b border-gray-100 flex flex-wrap gap-2 bg-white">
+                <button
+                    onClick={() => setQuickFilter('all')}
+                    className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${quickFilter === 'all' ? 'bg-gray-800 text-white border-gray-800' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'}`}
+                >
+                    Todos
+                </button>
+                <button
+                    onClick={() => setQuickFilter('facil')}
+                    className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border flex items-center gap-1.5 ${quickFilter === 'facil' ? 'bg-green-100 text-green-700 border-green-200 ring-1 ring-green-200' : 'bg-white text-gray-600 border-gray-200 hover:bg-green-50'}`}
+                >
+                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                    Postulación Fácil
+                </button>
+                <button
+                    onClick={() => setQuickFilter('cierre')}
+                    className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border flex items-center gap-1.5 ${quickFilter === 'cierre' ? 'bg-red-50 text-red-700 border-red-200 ring-1 ring-red-200' : 'bg-white text-gray-600 border-gray-200 hover:bg-red-50'}`}
+                >
+                    <Clock className="w-3 h-3" />
+                    Cierra esta semana
+                </button>
+                <button
+                    onClick={() => setQuickFilter('mujeres')}
+                    className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border flex items-center gap-1.5 ${quickFilter === 'mujeres' ? 'bg-purple-50 text-purple-700 border-purple-200 ring-1 ring-purple-200' : 'bg-white text-gray-600 border-gray-200 hover:bg-purple-50'}`}
+                >
+                    <Users className="w-3 h-3" />
+                    Para Mujeres
+                </button>
             </div>
 
             {/* 4. UTILITY TOOLBAR (Favoritos & Compare) */}
@@ -337,10 +381,10 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                                         </span>
                                                                         {project.resumen && (
                                                                             <button
-                                                                                onClick={() => setExpandedProject(expandedProject === project.id ? null : project.id)}
+                                                                                onClick={() => setQuickViewProject(project)}
                                                                                 className="text-gray-400 hover:text-[var(--iica-blue)] hover:bg-blue-50 rounded-full p-1 transition-all"
-                                                                                aria-label="Ver resumen ejecutivo"
-                                                                                title="Ver detalles"
+                                                                                aria-label="Abrir panel de detalles"
+                                                                                title="Ver detalles completos"
                                                                             >
                                                                                 <Info className="h-4 w-4" />
                                                                             </button>
@@ -362,9 +406,13 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                                 </div>
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className="font-bold text-gray-700 text-sm leading-tight">{project.institucion}</span>
-                                                                    <span className="inline-flex items-center gap-1 text-[10px] font-medium text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded border border-purple-100 w-fit">
-                                                                        <Sparkles className="h-3 w-3" /> IA: {project.id % 2 === 0 ? 'Fácil' : 'Media'}
-                                                                    </span>
+                                                                    <div className={`inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full border w-fit ${project.id % 2 === 0
+                                                                        ? 'bg-green-50 text-green-700 border-green-200'
+                                                                        : 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                                                                        }`}>
+                                                                        <div className={`w-1.5 h-1.5 rounded-full ${project.id % 2 === 0 ? 'bg-green-500' : 'bg-yellow-500'}`} />
+                                                                        IA: {project.id % 2 === 0 ? 'Fácil' : 'Media'}
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -406,60 +454,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                         </td>
                                                     </motion.tr>
 
-                                                    <AnimatePresence>
-                                                        {expandedProject === project.id && project.resumen && (
-                                                            <motion.tr
-                                                                initial={{ opacity: 0 }}
-                                                                animate={{ opacity: 1 }}
-                                                                exit={{ opacity: 0 }}
-                                                                className="bg-slate-50/50"
-                                                            >
-                                                                <td colSpan={5} className="px-6 py-4 border-b border-gray-100">
-                                                                    <motion.div
-                                                                        initial={{ height: 0, opacity: 0 }}
-                                                                        animate={{ height: 'auto', opacity: 1 }}
-                                                                        exit={{ height: 0, opacity: 0 }}
-                                                                        className="overflow-hidden"
-                                                                    >
-                                                                        <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm mx-4 mb-2 ml-[3.5rem]">
-                                                                            <div className="flex items-center gap-2 mb-4 text-[var(--iica-navy)] border-b border-gray-100 pb-2">
-                                                                                <Info className="h-5 w-5 text-[var(--iica-blue)]" />
-                                                                                <h4 className="font-bold text-sm uppercase tracking-wider">Resumen Ejecutivo</h4>
-                                                                            </div>
 
-                                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-600">
-                                                                                {project.resumen.cofinanciamiento && (
-                                                                                    <div>
-                                                                                        <strong className="text-[var(--iica-navy)] block mb-1 text-xs uppercase">Financiamiento</strong>
-                                                                                        <p>{project.resumen.cofinanciamiento}</p>
-                                                                                    </div>
-                                                                                )}
-                                                                                {project.resumen.plazo_ejecucion && (
-                                                                                    <div>
-                                                                                        <strong className="text-[var(--iica-navy)] block mb-1 text-xs uppercase">Duración</strong>
-                                                                                        <p>{project.resumen.plazo_ejecucion}</p>
-                                                                                    </div>
-                                                                                )}
-                                                                                {project.resumen.requisitos_clave && (
-                                                                                    <div className="col-span-2">
-                                                                                        <strong className="text-[var(--iica-navy)] block mb-1 text-xs uppercase">Requisitos Clave</strong>
-                                                                                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
-                                                                                            {project.resumen.requisitos_clave.map((req, idx) => (
-                                                                                                <li key={idx} className="flex items-start gap-2 bg-gray-50 p-2 rounded border border-gray-100 text-xs">
-                                                                                                    <span className="text-[var(--iica-blue)] mt-0.5">•</span>
-                                                                                                    <span>{req}</span>
-                                                                                                </li>
-                                                                                            ))}
-                                                                                        </ul>
-                                                                                    </div>
-                                                                                )}
-                                                                            </div>
-                                                                        </div>
-                                                                    </motion.div>
-                                                                </td>
-                                                            </motion.tr>
-                                                        )}
-                                                    </AnimatePresence>
                                                 </React.Fragment>
                                             ))}
                                         </AnimatePresence>
@@ -497,8 +492,15 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                             />
                                                         </div>
                                                         <div>
-                                                            <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">
+                                                            <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 flex items-center gap-2">
                                                                 {project.institucion}
+                                                                <div className={`inline-flex items-center gap-1 text-[10px] font-medium px-1.5 py-0.5 rounded-full border ${project.id % 2 === 0
+                                                                    ? 'bg-green-50 text-green-700 border-green-200'
+                                                                    : 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                                                                    }`}>
+                                                                    <div className={`w-1.5 h-1.5 rounded-full ${project.id % 2 === 0 ? 'bg-green-500' : 'bg-yellow-500'}`} />
+                                                                    IA: {project.id % 2 === 0 ? 'Fácil' : 'Media'}
+                                                                </div>
                                                             </h4>
                                                             <div className="flex flex-wrap gap-2">
                                                                 <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 text-slate-600 border border-slate-200">
@@ -537,79 +539,44 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                     </h3>
                                                     {project.resumen && (
                                                         <button
-                                                            onClick={() => setExpandedProject(expandedProject === project.id ? null : project.id)}
+                                                            onClick={() => setQuickViewProject(project)}
                                                             className="text-sm text-[var(--iica-blue)] font-medium flex items-center gap-1 hover:underline focus:outline-none"
                                                         >
                                                             <Info className="h-4 w-4" />
-                                                            {expandedProject === project.id ? 'Ocultar detalles' : 'Ver resumen ejecutivo'}
+                                                            Más detalles e información
                                                         </button>
                                                     )}
                                                 </div>
 
                                                 {/* Resumen Expandible */}
-                                                <AnimatePresence>
-                                                    {expandedProject === project.id && project.resumen && (
-                                                        <motion.div
-                                                            initial={{ opacity: 0, height: 0 }}
-                                                            animate={{ opacity: 1, height: 'auto' }}
-                                                            exit={{ opacity: 0, height: 0 }}
-                                                            className="overflow-hidden mb-4"
-                                                        >
-                                                            <div className="bg-slate-50 rounded-lg p-4 border border-slate-200/60 text-sm space-y-3 shadow-inner">
-                                                                {project.resumen.cofinanciamiento && (
-                                                                    <div>
-                                                                        <strong className="text-[var(--iica-navy)] text-xs uppercase tracking-wide block mb-1">Cofinanciamiento</strong>
-                                                                        <p className="text-gray-700 font-medium">{project.resumen.cofinanciamiento}</p>
-                                                                    </div>
-                                                                )}
-                                                                <div className="grid grid-cols-2 gap-4">
-                                                                    <div>
-                                                                        <strong className="text-[var(--iica-navy)] text-xs uppercase tracking-wide block mb-1">Cierre</strong>
-                                                                        <p className="text-gray-700">{new Date(project.fecha_cierre).toLocaleDateString()}</p>
-                                                                    </div>
-                                                                    {project.resumen.plazo_ejecucion && (
-                                                                        <div>
-                                                                            <strong className="text-[var(--iica-navy)] text-xs uppercase tracking-wide block mb-1">Duración</strong>
-                                                                            <p className="text-gray-700">{project.resumen.plazo_ejecucion}</p>
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                                {project.resumen.requisitos_clave && (
-                                                                    <div>
-                                                                        <strong className="text-[var(--iica-navy)] text-xs uppercase tracking-wide block mb-1">Requisitos Clave</strong>
-                                                                        <ul className="list-disc list-inside text-gray-600 space-y-1 text-xs">
-                                                                            {project.resumen.requisitos_clave.slice(0, 3).map((r, i) => (
-                                                                                <li key={i}>{r}</li>
-                                                                            ))}
-                                                                        </ul>
-                                                                    </div>
-                                                                )}
-                                                            </div>
-                                                        </motion.div>
-                                                    )}
-                                                </AnimatePresence>
+
 
                                                 {/* Footer / Acciones */}
-                                                <div className="flex items-center justify-between pt-4 border-t border-gray-100 mt-2 gap-3">
-                                                    <div className="flex items-center gap-2">
-                                                        <button
-                                                            onClick={() => toggleCompare(project.id)}
-                                                            className={`p-2.5 rounded-lg border transition-all ${compareList.includes(project.id) ? 'bg-blue-50 border-blue-200 text-blue-600 shadow-sm' : 'bg-white border-gray-200 text-gray-400 hover:bg-gray-50'}`}
-                                                            title="Comparar"
-                                                        >
-                                                            <Calendar className="h-5 w-5" />
-                                                        </button>
+                                                {/* Footer / Acciones Mobile - Full Width Grid */}
+                                                <div className="mt-5 grid grid-cols-2 gap-3 pt-4 border-t border-gray-100">
+                                                    <button
+                                                        onClick={() => toggleCompare(project.id)}
+                                                        className={`flex items-center justify-center gap-2 py-3 px-2 rounded-xl text-xs font-bold border transition-all ${compareList.includes(project.id)
+                                                            ? 'bg-blue-50 text-[var(--iica-blue)] border-blue-200 shadow-sm'
+                                                            : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50'
+                                                            }`}
+                                                    >
+                                                        <div className={`w-3 h-3 border-2 rounded-sm ${compareList.includes(project.id) ? 'bg-[var(--iica-blue)] border-[var(--iica-blue)]' : 'border-gray-400'}`} />
+                                                        {compareList.includes(project.id) ? 'Seleccionado' : 'Comparar'}
+                                                    </button>
 
-                                                        <button
-                                                            onClick={(e) => copyProjectFicha(project, e)}
-                                                            className={`p-2.5 rounded-lg border transition-all ${copiedId === project.id ? 'bg-green-50 text-green-600 border-green-200 shadow-sm' : 'bg-white border-gray-200 text-gray-400 hover:bg-gray-50'}`}
-                                                            title="Copiar Ficha"
-                                                        >
-                                                            {copiedId === project.id ? <CheckCheck className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
-                                                        </button>
-                                                    </div>
+                                                    <button
+                                                        onClick={(e) => copyProjectFicha(project, e)}
+                                                        className={`flex items-center justify-center gap-2 py-3 px-2 rounded-xl text-xs font-bold border transition-all ${copiedId === project.id
+                                                            ? 'bg-green-50 text-green-700 border-green-200'
+                                                            : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50'
+                                                            }`}
+                                                    >
+                                                        {copiedId === project.id ? <CheckCheck className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                                                        {copiedId === project.id ? 'Copiado' : 'Copiar Ficha'}
+                                                    </button>
 
-                                                    <div className="flex-1">
+                                                    <div className="col-span-2">
                                                         <ActionButton
                                                             url={project.url_bases}
                                                             date={project.fecha_cierre}
@@ -943,6 +910,38 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                 )}
             </AnimatePresence>
 
+            {/* STICKY BOTTOM BAR FOR COMPARISON */}
+            <AnimatePresence>
+                {compareList.length > 0 && (
+                    <motion.div
+                        initial={{ y: 100, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: 100, opacity: 0 }}
+                        className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 bg-white/95 backdrop-blur-md border border-[var(--iica-blue)] shadow-2xl rounded-full pl-6 pr-2 py-2 flex items-center gap-4 max-w-[90vw] ring-4 ring-blue-500/10"
+                    >
+                        <div className="flex items-center gap-2 text-sm font-medium text-[var(--iica-navy)]">
+                            <span className="bg-[var(--iica-blue)] text-white px-2.5 py-0.5 rounded-full text-xs font-bold leading-none flex items-center justify-center min-w-[1.5rem] h-6">{compareList.length}</span>
+                            <span className="hidden sm:inline">seleccionados</span>
+                        </div>
+                        <div className="h-6 w-px bg-gray-200"></div>
+                        <div className="flex items-center gap-1">
+                            <button
+                                onClick={() => setCompareList([])}
+                                className="p-2 hover:bg-red-50 hover:text-red-500 rounded-full text-gray-400 transition-colors"
+                                title="Limpiar selección"
+                            >
+                                <X className="h-5 w-5" />
+                            </button>
+                            <button
+                                onClick={() => setShowCompareModal(true)}
+                                className="bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg shadow-blue-500/30 transition-all active:scale-95 flex items-center gap-2 whitespace-nowrap"
+                            >
+                                Comparar <ChevronRight className="h-4 w-4" />
+                            </button>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div >
     );
 }
