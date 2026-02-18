@@ -33,13 +33,13 @@ export default function Newsletter() {
                 <div className="max-w-xl">
                     <div className="flex items-center gap-3 mb-3 text-[var(--iica-yellow)] font-bold uppercase tracking-wider text-xs">
                         <Mail className="h-4 w-4" />
-                        <span>Kiosco IICA Informa</span>
+                        <span>Boletín IICA Informa</span>
                     </div>
                     <h2 className="text-2xl md:text-3xl font-bold mb-3">
                         ¿Quieres saber cuando abren nuevos fondos?
                     </h2>
                     <p className="text-blue-100/90 text-sm md:text-base">
-                        Suscríbete a nuestra alerta semanal. Solo enviamos correos cuando hay oportunidades reales para tu perfil. Cero spam.
+                        Suscríbete para recibir alertas personalizadas en tu email y whatsapp con las últimas convocatorias. Cero spam.
                     </p>
                 </div>
 

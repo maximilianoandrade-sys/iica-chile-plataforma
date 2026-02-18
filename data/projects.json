@@ -207,40 +207,6 @@
         ]
     },
     {
-        "id": 6,
-        "nombre": "Crédito de Enlace INDAP – Temporada 2026",
-        "institucion": "INDAP",
-        "monto": 0,
-        "fecha_cierre": "2026-12-31",
-        "estado": "Ventanilla Abierta",
-        "categoria": "Crédito",
-        "url_bases": "https://www.indap.gob.cl/programas/creditos",
-        "regiones": [
-            "Todas"
-        ],
-        "beneficiarios": [
-            "Pequeño Agricultor",
-            "Usuario INDAP"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Crédito (no subsidio) – Tasa preferencial 2–4% anual",
-            "requisitos_clave": [
-                "Ser usuario INDAP activo",
-                "Capacidad de pago demostrable",
-                "Garantía (prenda agraria, hipoteca o aval)",
-                "Proyecto productivo viable"
-            ],
-            "plazo_ejecucion": "Hasta 10 años plazo de pago",
-            "observaciones": "Financia inversiones en riego, maquinaria, infraestructura y capital de trabajo hasta UF 3.000."
-        },
-        "checklist": [
-            "Ser usuario INDAP activo",
-            "Capacidad de pago demostrable",
-            "Garantía disponible",
-            "Proyecto productivo viable"
-        ]
-    },
-    {
         "id": 7,
         "nombre": "FIA – Jóvenes Innovadores Agrícolas 2026",
         "institucion": "FIA",
@@ -273,41 +239,6 @@
             "Proyecto innovador validado",
             "Carta de respaldo técnico",
             "Presentación ante comité"
-        ]
-    },
-    {
-        "id": 8,
-        "nombre": "PRODESAL – Programa de Desarrollo Local (INDAP 2026)",
-        "institucion": "INDAP",
-        "monto": 0,
-        "fecha_cierre": "2026-12-31",
-        "estado": "Ventanilla Abierta",
-        "categoria": "Asistencia Técnica",
-        "url_bases": "https://www.indap.gob.cl/programas/prodesal",
-        "regiones": [
-            "Todas"
-        ],
-        "beneficiarios": [
-            "Pequeño Agricultor",
-            "Agricultor Familiar Campesino",
-            "Mujer Rural"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Asistencia técnica gratuita + bono de fomento productivo",
-            "requisitos_clave": [
-                "Ser agricultor familiar campesino (AFC)",
-                "Residir en la comuna donde opera la Unidad PRODESAL",
-                "Inscribirse en la Unidad Operativa local (municipio)",
-                "Predios de hasta 12 HRB"
-            ],
-            "plazo_ejecucion": "Anual (renovable)",
-            "observaciones": "Programa de asistencia técnica y transferencia tecnológica para AFC. Incluye bonos de fomento productivo para inversiones menores."
-        },
-        "checklist": [
-            "Ser AFC (agricultor familiar campesino)",
-            "Residir en la comuna",
-            "Predios hasta 12 HRB",
-            "Inscripción en Unidad PRODESAL"
         ]
     },
     {
@@ -671,41 +602,6 @@
         ]
     },
     {
-        "id": 21,
-        "nombre": "INDAP – SAT (Servicio de Asesoría Técnica) 2026",
-        "institucion": "INDAP",
-        "monto": 0,
-        "fecha_cierre": "2026-12-31",
-        "estado": "Ventanilla Abierta",
-        "categoria": "Asistencia Técnica",
-        "url_bases": "https://www.indap.gob.cl/programas/sat",
-        "regiones": [
-            "Todas"
-        ],
-        "beneficiarios": [
-            "Pequeño Agricultor",
-            "Usuario INDAP",
-            "Agricultor Familiar Campesino"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Asistencia técnica subsidiada (pago mínimo del usuario)",
-            "requisitos_clave": [
-                "Ser usuario INDAP activo",
-                "Tener un plan productivo definido",
-                "Contratación de empresa consultora inscrita en INDAP",
-                "Predios de hasta 12 HRB"
-            ],
-            "plazo_ejecucion": "Anual (renovable)",
-            "observaciones": "Permite contratar asesoría técnica especializada con subsidio INDAP. El usuario paga solo una fracción del costo real."
-        },
-        "checklist": [
-            "Ser usuario INDAP activo",
-            "Plan productivo definido",
-            "Empresa consultora inscrita en INDAP",
-            "Predios hasta 12 HRB"
-        ]
-    },
-    {
         "id": 22,
         "nombre": "GORE Biobío – FIC-R Forestal y Biomasa 2026",
         "institucion": "GORE Biobío",
@@ -919,42 +815,6 @@
             "Cadena de valor definida",
             "Enfoque en resiliencia climática",
             "Plan organizacional elaborado"
-        ]
-    },
-    {
-        "id": 30,
-        "nombre": "Unión Europea – Horizonte Europa: Agricultura Digital y Cambio Climático (Clúster 6)",
-        "institucion": "Unión Europea",
-        "monto": 980000000,
-        "fecha_cierre": "2026-09-17",
-        "estado": "Abierto",
-        "categoria": "Internacional",
-        "url_bases": "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/programmes/horizon",
-        "regiones": [
-            "Todas"
-        ],
-        "beneficiarios": [
-            "Universidad",
-            "Centro de Investigación",
-            "Empresa AgTech",
-            "Consorcio Internacional"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Hasta EUR 1 millón (~$980M CLP) por proyecto. Financiamiento no reembolsable.",
-            "requisitos_clave": [
-                "Consorcio internacional (mínimo 3 entidades de 3 países distintos)",
-                "Chile puede participar como país asociado a Horizonte Europa",
-                "Proyecto de I+D en agricultura digital, cambio climático o biodiversidad",
-                "Postulación vía portal oficial de la UE (Funding & Tenders Portal)"
-            ],
-            "plazo_ejecucion": "36–60 meses",
-            "observaciones": "Chile es país asociado a Horizonte Europa. El Clúster 6 'Alimentos, Bioeconomía, Recursos Naturales, Agricultura y Medioambiente' financia proyectos de investigación e innovación. Las instituciones chilenas pueden liderar o participar en consorcios internacionales."
-        },
-        "checklist": [
-            "Consorcio 3+ entidades de 3+ países",
-            "Chile como país asociado a Horizonte Europa",
-            "Proyecto I+D en agricultura o medioambiente",
-            "Registro en Funding & Tenders Portal UE"
         ]
     }
 ]

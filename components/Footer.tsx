@@ -8,7 +8,7 @@ const FUENTES_FOOTER = [
     { sigla: 'FIA', nombre: 'Convocatorias Innovación', url: 'https://www.fia.cl/convocatorias/', emoji: '🔬' },
     { sigla: 'CORFO', nombre: 'Programas Agro', url: 'https://www.corfo.cl/sites/cpp/programas-y-convocatorias', emoji: '🏭' },
     { sigla: 'Sercotec', nombre: 'Fondos de Fomento', url: 'https://www.sercotec.cl/fondos-concursables/', emoji: '🌻' },
-    { sigla: 'GOREs', nombre: 'Fondos FIC-R Regionales', url: 'https://www.subdere.gov.cl/gore', emoji: '🗺️' },
+    { sigla: 'GOREs', nombre: 'Fondos FIC-R Regionales', url: 'https://www.subdere.gov.cl/institucional/gobiernos-regionales/', emoji: '🗺️' },
 ];
 
 export function Footer() {
@@ -81,7 +81,8 @@ export function Footer() {
                         <ul className="space-y-2 text-sm text-blue-200">
                             <li>📍 Calle Rancagua No.0320, Providencia, Santiago.</li>
                             <li>✉️ <a href="mailto:representacion.chile@iica.int" className="hover:text-white transition-colors">representacion.chile@iica.int</a></li>
-                            <li>📞 <a href="tel:+56222252511" className="hover:text-white transition-colors">(+56) 2 2225 2511</a></li>
+                            <li>📱 <a href="https://wa.me/56912345678" className="hover:text-white transition-colors">WhatsApp: +56 9 1234 5678 (Soporte)</a></li>
+                            <li>📞 <a href="tel:+56222252511" className="hover:text-white transition-colors">Fijo: (+56) 2 2225 2511</a></li>
                         </ul>
                         <div className="mt-4 p-3 bg-white/10 rounded-xl border border-white/20">
                             <p className="text-xs text-blue-200 font-medium">¿Tienes dudas sobre un fondo?</p>
@@ -96,7 +97,7 @@ export function Footer() {
                 </div>
 
                 <div className="flex flex-col md:flex-row justify-between items-center text-xs text-blue-300 gap-3">
-                    <p>© {currentYear} Instituto Interamericano de Cooperación para la Agricultura (IICA). Todos los derechos reservados.</p>
+                    <p>© 2026 Instituto Interamericano de Cooperación para la Agricultura (IICA). Todos los derechos reservados.</p>
                     <div className="flex gap-4">
                         <a href="/legal/privacidad" className="hover:text-white transition-colors">Política de Privacidad</a>
                         <a href="/legal/terminos" className="hover:text-white transition-colors">Términos de Uso</a>

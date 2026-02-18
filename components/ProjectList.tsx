@@ -11,7 +11,7 @@ import Toast from "@/components/ui/Toast";
 import Image from 'next/image';
 import SearchableSelect from "@/components/SearchableSelect"; // Import the new component
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info, Sparkles, Copy, Eye, CheckCheck, MapPin, Users, Banknote, Clock, ChevronRight } from "lucide-react";
+import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info, Sparkles, Copy, Eye, CheckCheck, MapPin, Users, Banknote, Clock, ChevronRight, ArrowUpDown } from "lucide-react";
 
 export default function ProjectList({ projects }: { projects: Project[] }) {
     // State for client-side interactions
@@ -31,6 +31,15 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
     const [quickViewProject, setQuickViewProject] = useState<Project | null>(null);
     const [copiedId, setCopiedId] = useState<number | null>(null);
     const [quickFilter, setQuickFilter] = useState<'all' | 'facil' | 'cierre' | 'mujeres'>('all');
+    const [sortConfig, setSortConfig] = useState<{ key: keyof Project | 'dificultad', direction: 'asc' | 'desc' } | null>(null);
+
+    const handleSort = (key: keyof Project | 'dificultad') => {
+        let direction: 'asc' | 'desc' = 'asc';
+        if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
+            direction = 'desc';
+        }
+        setSortConfig({ key, direction });
+    };
 
     // Helper for Closing Soon (Moved here to be used in filtering)
     const isClosingSoon = (dateStr: string) => {
@@ -129,6 +138,23 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
             filtered = filtered.filter(p => isClosingSoon(p.fecha_cierre));
         } else if (quickFilter === 'mujeres') {
             filtered = filtered.filter(p => p.beneficiarios?.some(b => b.toLowerCase().includes('mujer')));
+        }
+
+        if (sortConfig) {
+            filtered = [...filtered].sort((a, b) => {
+                let aValue: any = a[sortConfig.key as keyof Project];
+                let bValue: any = b[sortConfig.key as keyof Project];
+
+                if (sortConfig.key === 'dificultad') {
+                    // Sort by ID is a proxy for difficulty in current logic (even IDs are easy)
+                    aValue = a.id % 2;
+                    bValue = b.id % 2;
+                }
+
+                if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+                if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+                return 0;
+            });
         }
 
         return filtered;
@@ -320,9 +346,24 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                             <th className="py-5 px-6 w-12 text-center">
                                                 <span className="sr-only">Comparar</span>
                                             </th>
-                                            <th className="py-5 px-6">Proyecto</th>
-                                            <th className="py-5 px-6">Institución</th>
-                                            <th className="py-5 px-6">Cierre</th>
+                                            <th className="py-5 px-6 cursor-pointer hover:bg-gray-100 transition-colors group" onClick={() => handleSort('nombre')}>
+                                                <div className="flex items-center gap-2">
+                                                    Proyecto
+                                                    <ArrowUpDown className={`h-4 w-4 text-gray-400 group-hover:text-[var(--iica-blue)] ${sortConfig?.key === 'nombre' ? 'text-[var(--iica-blue)]' : ''}`} />
+                                                </div>
+                                            </th>
+                                            <th className="py-5 px-6 cursor-pointer hover:bg-gray-100 transition-colors group" onClick={() => handleSort('institucion')}>
+                                                <div className="flex items-center gap-2">
+                                                    Institución
+                                                    <ArrowUpDown className={`h-4 w-4 text-gray-400 group-hover:text-[var(--iica-blue)] ${sortConfig?.key === 'institucion' ? 'text-[var(--iica-blue)]' : ''}`} />
+                                                </div>
+                                            </th>
+                                            <th className="py-5 px-6 cursor-pointer hover:bg-gray-100 transition-colors group" onClick={() => handleSort('fecha_cierre')}>
+                                                <div className="flex items-center gap-2">
+                                                    Cierre
+                                                    <ArrowUpDown className={`h-4 w-4 text-gray-400 group-hover:text-[var(--iica-blue)] ${sortConfig?.key === 'fecha_cierre' ? 'text-[var(--iica-blue)]' : ''}`} />
+                                                </div>
+                                            </th>
                                             <th className="py-5 px-6 text-right">Acciones</th>
                                         </tr>
                                     </thead>
@@ -405,7 +446,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                                     />
                                                                 </div>
                                                                 <div className="flex flex-col gap-1">
-                                                                    <span className="font-bold text-gray-700 text-sm leading-tight">{project.institucion}</span>
+                                                                    {/* Redundant text removed per audit */}
                                                                     <div
                                                                         title="Dificultad de postulación estimada por IA analizando requisitos y burocracia."
                                                                         className={`inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full border w-fit cursor-help ${project.id % 2 === 0

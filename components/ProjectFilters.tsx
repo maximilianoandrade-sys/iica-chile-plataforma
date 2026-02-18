@@ -9,13 +9,11 @@ import { useAnalytics } from '@/hooks/useAnalytics';
 const QUICK_SEARCHES = [
     { label: '💧 Riego', query: 'riego' },
     { label: '🌱 Suelos', query: 'suelos' },
-    { label: '🚜 Maquinaria', query: 'maquinaria' },
     { label: '🔬 Innovación', query: 'innovación' },
     { label: '👩 Mujer Rural', query: 'mujer' },
     { label: '🌿 Sustentabilidad', query: 'sustentable' },
     { label: '🌍 Internacional', query: 'internacional' },
     { label: '🤝 Asociatividad', query: 'asociatividad' },
-    { label: '🏔️ Emergencia', query: 'emergencia' },
     { label: '🌲 Forestal', query: 'forestal' },
     { label: '🐄 Ganadería', query: 'ganadería' },
     { label: '🌾 Capital Semilla', query: 'capital semilla' },
