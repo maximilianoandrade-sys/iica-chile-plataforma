@@ -2,8 +2,9 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
-import { Info, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, MessageCircle, Share2 } from "lucide-react";
+import { Info, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, MessageCircle, Share2, ArrowRight } from "lucide-react";
 import Image from 'next/image';
+import Link from 'next/link';
 import { Project } from "@/lib/data";
 import { getInstitutionalLogo } from "@/lib/logos";
 import { useAnalytics } from "@/hooks/useAnalytics";
@@ -85,6 +86,13 @@ export default function ProjectItem({ project, viewMode }: ProjectItemProps) {
                     </td>
                     <td className="py-5 px-6 text-right">
                         <div className="flex items-center justify-end gap-2">
+                            <Link
+                                href={`/proyecto/${project.id}`}
+                                className="inline-flex items-center gap-1 text-xs font-bold text-[var(--iica-blue)] hover:text-[var(--iica-navy)] transition-colors"
+                                title="Ver página de detalle"
+                            >
+                                Detalle <ArrowRight className="h-3.5 w-3.5" />
+                            </Link>
                             <ActionButton
                                 url={project.url_bases}
                                 date={project.fecha_cierre}
@@ -174,7 +182,13 @@ export default function ProjectItem({ project, viewMode }: ProjectItemProps) {
                     )}
                 </AnimatePresence>
 
-                <div className="pt-2">
+                <div className="pt-2 flex gap-2">
+                    <Link
+                        href={`/proyecto/${project.id}`}
+                        className="flex-1 inline-flex items-center justify-center gap-1.5 text-sm font-bold text-[var(--iica-navy)] bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded transition-colors"
+                    >
+                        Ver Detalle <ArrowRight className="h-4 w-4" />
+                    </Link>
                     <ActionButton
                         url={project.url_bases}
                         date={project.fecha_cierre}

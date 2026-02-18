@@ -13,8 +13,9 @@ const QUICK_SEARCHES = [
     { label: '🔬 Innovación', query: 'innovación' },
     { label: '👩 Mujer Rural', query: 'mujer' },
     { label: '🌿 Sustentabilidad', query: 'sustentable' },
-    { label: '🏔️ Emergencia', query: 'emergencia' },
+    { label: '🌍 Internacional', query: 'internacional' },
     { label: '🤝 Asociatividad', query: 'asociatividad' },
+    { label: '🏔️ Emergencia', query: 'emergencia' },
 ];
 
 const NATURAL_SUGGESTIONS = [
@@ -188,8 +189,8 @@ export default function ProjectFilters({
                             key={query}
                             onClick={() => applyQuickSearch(query)}
                             className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${searchTerm === query
-                                    ? 'bg-[var(--iica-navy)] text-white border-[var(--iica-navy)] shadow-md'
-                                    : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100 hover:border-gray-300'
+                                ? 'bg-[var(--iica-navy)] text-white border-[var(--iica-navy)] shadow-md'
+                                : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100 hover:border-gray-300'
                                 }`}
                         >
                             {label}
@@ -302,11 +303,26 @@ export default function ProjectFilters({
                         </span>
                     )}
                 </div>
-                {counts.filtered === 0 && (
-                    <div className="text-sm text-amber-600 font-medium bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
-                        💡 Prueba con términos más generales como "riego" o "suelos"
-                    </div>
-                )}
+                <div className="flex items-center gap-2">
+                    {counts.filtered === 0 && (
+                        <div className="text-sm text-amber-600 font-medium bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
+                            💡 Prueba con términos más generales como "riego" o "suelos"
+                        </div>
+                    )}
+                    <a
+                        href={`/api/export-csv?${new URLSearchParams({
+                            ...(searchTerm ? { q: searchTerm } : {}),
+                            ...(selectedCategory !== 'Todas' ? { category: selectedCategory } : {}),
+                            ...(selectedRegion !== 'Todas' ? { region: selectedRegion } : {}),
+                            ...(selectedInstitution !== 'Todas' ? { institution: selectedInstitution } : {}),
+                        }).toString()}`}
+                        download
+                        title="Exportar lista a Excel/CSV"
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--iica-secondary)] hover:text-green-700 bg-green-50 hover:bg-green-100 px-3 py-1.5 rounded-full border border-green-200 transition-all"
+                    >
+                        📅 Exportar CSV
+                    </a>
+                </div>
             </div>
         </div>
     );
