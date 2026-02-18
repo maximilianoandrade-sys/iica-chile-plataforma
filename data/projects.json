@@ -1,70 +1,101 @@
 [
     {
         "id": 1,
-        "nombre": "Subsidio para Tecnificación del Riego (Norte Chico y Centro)",
+        "nombre": "Concurso Ley 18.450 – Tecnificación del Riego (Llamado Nacional 2026)",
         "institucion": "CNR",
         "monto": 570000000,
-        "fecha_cierre": "2026-01-23",
+        "fecha_cierre": "2026-04-30",
         "estado": "Abierto",
         "categoria": "Riego",
         "url_bases": "https://www.cnr.gob.cl/agricultores/concursos-de-riego/",
         "regiones": [
+            "Arica y Parinacota",
+            "Tarapacá",
+            "Antofagasta",
+            "Atacama",
             "Coquimbo",
             "Valparaíso",
             "Metropolitana",
-            "O'Higgins"
+            "O'Higgins",
+            "Maule",
+            "Ñuble",
+            "Biobío",
+            "La Araucanía",
+            "Los Ríos",
+            "Los Lagos",
+            "Aysén",
+            "Magallanes"
         ],
         "beneficiarios": [
             "Pequeño Agricultor",
             "Mediano Agricultor",
+            "Organización de Usuarios de Agua",
             "Comunidades"
         ],
         "resumen": {
-            "cofinanciamiento": "Hasta 90% (pequeños agricultores) o 75% (medianos)",
+            "cofinanciamiento": "Hasta 90% pequeños agricultores / 75% medianos",
             "requisitos_clave": [
-                "Derechos de agua inscritos",
-                "Proyecto técnico aprobado",
-                "Tenencia de tierra acreditada"
+                "Derechos de agua inscritos en Registro de Aguas",
+                "Proyecto técnico firmado por consultor inscrito en CNR",
+                "Tenencia de tierra acreditada (título, contrato arriendo ≥5 años)",
+                "Predio ubicado en zona de riego elegible"
             ],
-            "plazo_ejecucion": "18 meses desde adjudicación",
-            "observaciones": "Prioriza sistemas de riego tecnificado (goteo, aspersión)"
-        }
+            "plazo_ejecucion": "18 meses desde resolución de adjudicación",
+            "observaciones": "Financia goteo, aspersión, microaspersión y obras civiles asociadas. Calendario 2026 con múltiples llamados regionales."
+        },
+        "checklist": [
+            "Derechos de agua inscritos",
+            "Consultor CNR habilitado",
+            "Tenencia de tierra acreditada",
+            "Sin deudas con el Fisco"
+        ]
     },
     {
         "id": 2,
-        "nombre": "Subsidio para Recuperación de Suelos Degradados",
+        "nombre": "SIRSD-S – Recuperación de Suelos Degradados (Operación Temprana 2026)",
         "institucion": "INDAP",
         "monto": 8500000,
-        "fecha_cierre": "2026-03-01",
+        "fecha_cierre": "2026-03-31",
         "estado": "Abierto",
         "categoria": "Suelos",
-        "url_bases": "https://www.indap.gob.cl/concursos",
+        "url_bases": "https://www.indap.gob.cl/programas/sirsd-s",
         "regiones": [
             "Biobío",
             "La Araucanía",
-            "Los Ríos"
+            "Los Ríos",
+            "Los Lagos",
+            "O'Higgins",
+            "Maule",
+            "Ñuble"
         ],
         "beneficiarios": [
             "Pequeño Agricultor",
             "Usuario INDAP"
         ],
         "resumen": {
-            "cofinanciamiento": "Hasta 95% para usuarios INDAP",
+            "cofinanciamiento": "Hasta 95% para usuarios INDAP calificados",
             "requisitos_clave": [
-                "Ser usuario INDAP vigente",
-                "Análisis de suelo (máx. 2 años)",
-                "Compromiso de manejo sustentable"
+                "Ser usuario INDAP vigente (activo en el sistema)",
+                "Análisis de suelo con antigüedad máxima de 2 años",
+                "Plan de manejo elaborado por profesional habilitado",
+                "Sin deudas morosas con INDAP"
             ],
-            "plazo_ejecucion": "1 temporada agrícola",
-            "observaciones": "Incluye enmiendas calcáreas, fertilización y análisis"
-        }
+            "plazo_ejecucion": "1 temporada agrícola (marzo–diciembre 2026)",
+            "observaciones": "Incluye enmiendas calcáreas, fertilización de establecimiento y análisis de suelo. Operación Temprana prioriza regiones del sur."
+        },
+        "checklist": [
+            "Ser usuario INDAP activo",
+            "Análisis de suelo vigente",
+            "Sin deudas con INDAP",
+            "Plan de manejo aprobado"
+        ]
     },
     {
         "id": 3,
-        "nombre": "Activa Inversión: Riego Eficiente",
+        "nombre": "Activa Inversión Agro – Riego Eficiente y Eficiencia Energética",
         "institucion": "CORFO",
         "monto": 30000000,
-        "fecha_cierre": "2026-04-10",
+        "fecha_cierre": "2026-06-30",
         "estado": "Abierto",
         "categoria": "Inversión",
         "url_bases": "https://www.corfo.cl/sites/cpp/programas-y-convocatorias",
@@ -77,52 +108,104 @@
             "Asociación Gremial"
         ],
         "resumen": {
-            "cofinanciamiento": "Hasta 70% del proyecto (tope $30M)",
+            "cofinanciamiento": "Hasta 70% del proyecto (tope $30M por empresa)",
             "requisitos_clave": [
-                "Empresa constituida legalmente",
-                "Ventas entre UF 2.400-100.000",
-                "Proyecto de inversión detallado"
+                "Empresa constituida legalmente en Chile",
+                "Ventas anuales entre UF 2.400 y UF 100.000",
+                "Proyecto de inversión con evaluación técnica y financiera",
+                "No haber recibido el mismo subsidio en los últimos 24 meses"
             ],
-            "plazo_ejecucion": "24 meses",
-            "observaciones": "Financia equipamiento de riego tecnificado y obras civiles asociadas"
-        }
+            "plazo_ejecucion": "24 meses desde firma de contrato",
+            "observaciones": "Financia equipamiento de riego tecnificado, paneles solares para bombeo, obras civiles y sistemas de monitoreo."
+        },
+        "checklist": [
+            "Empresa legalmente constituida",
+            "Ventas entre UF 2.400-100.000",
+            "Proyecto de inversión elaborado",
+            "Sin subsidio CORFO en últimos 24 meses"
+        ]
     },
     {
         "id": 4,
-        "nombre": "Convocatoria Jóvenes Innovadores Agrícolas 2026",
+        "nombre": "FIA – Convocatoria Innovación Agraria 2026 (Proyectos de Innovación)",
         "institucion": "FIA",
-        "monto": 15000000,
-        "fecha_cierre": "2026-05-05",
-        "estado": "Próxima Apertura",
+        "monto": 50000000,
+        "fecha_cierre": "2026-05-31",
+        "estado": "Abierto",
         "categoria": "Innovación",
         "url_bases": "https://www.fia.cl/convocatorias/",
         "regiones": [
             "Todas"
         ],
         "beneficiarios": [
-            "Joven (18-35 años)",
-            "Emprendedor Agrícola"
+            "Empresa Agrícola",
+            "Centro de Investigación",
+            "Universidad",
+            "Cooperativa",
+            "Startup AgTech"
         ],
         "resumen": {
-            "cofinanciamiento": "Hasta 80% (máx. $15M)",
+            "cofinanciamiento": "Hasta 80% (máx. $50M por proyecto)",
             "requisitos_clave": [
-                "Edad entre 18-35 años",
-                "Proyecto innovador validado",
-                "Carta de respaldo técnico"
+                "Proyecto de innovación con potencial de escalamiento",
+                "Carta de respaldo de entidad técnica o universidad",
+                "Cofinanciamiento mínimo del 20% por parte del postulante",
+                "Asociatividad con al menos 2 actores del sistema de innovación"
             ],
-            "plazo_ejecucion": "12-18 meses",
-            "observaciones": "Prioriza innovación tecnológica, sustentabilidad y asociatividad"
-        }
+            "plazo_ejecucion": "18–36 meses",
+            "observaciones": "Prioriza AgTech, agricultura de precisión, sustentabilidad, nuevos cultivos y adaptación al cambio climático."
+        },
+        "checklist": [
+            "Proyecto innovador con potencial de mercado",
+            "Carta de respaldo técnico",
+            "Cofinanciamiento del 20% disponible",
+            "Asociatividad con actores del sistema"
+        ]
     },
     {
         "id": 5,
-        "nombre": "Crédito Enlace Riego - Temporada 2026",
+        "nombre": "Capital Semilla Emprende – Sercotec 2026",
+        "institucion": "Sercotec",
+        "monto": 3500000,
+        "fecha_cierre": "2026-04-15",
+        "estado": "Abierto",
+        "categoria": "Emprendimiento",
+        "url_bases": "https://www.sercotec.cl/capital-semilla-emprende/",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "Microempresa",
+            "Emprendedor",
+            "Agricultor Familiar"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Subsidio no reembolsable hasta $3,5M (aporte propio mínimo 20%)",
+            "requisitos_clave": [
+                "Inicio de actividades en primera categoría (SII)",
+                "Ventas anuales hasta UF 2.400",
+                "Proyecto de negocio con plan de inversión",
+                "No haber recibido Capital Semilla en los últimos 2 años"
+            ],
+            "plazo_ejecucion": "6 meses desde firma de convenio",
+            "observaciones": "Ideal para micro y pequeñas empresas agrícolas que necesitan capital inicial. Incluye capacitación y mentoría."
+        },
+        "checklist": [
+            "Inicio de actividades SII vigente",
+            "Ventas hasta UF 2.400",
+            "Plan de negocio elaborado",
+            "Sin Capital Semilla en últimos 2 años"
+        ]
+    },
+    {
+        "id": 6,
+        "nombre": "Crédito de Enlace INDAP – Temporada 2026",
         "institucion": "INDAP",
         "monto": 0,
         "fecha_cierre": "2026-12-31",
         "estado": "Ventanilla Abierta",
         "categoria": "Crédito",
-        "url_bases": "https://www.indap.gob.cl/concursos",
+        "url_bases": "https://www.indap.gob.cl/programas/creditos",
         "regiones": [
             "Todas"
         ],
@@ -131,137 +214,146 @@
             "Usuario INDAP"
         ],
         "resumen": {
-            "cofinanciamiento": "Crédito (no subsidio) - Tasa preferencial 2-4%",
+            "cofinanciamiento": "Crédito (no subsidio) – Tasa preferencial 2–4% anual",
             "requisitos_clave": [
-                "Ser usuario INDAP",
-                "Capacidad de pago",
-                "Garantía (prenda o hipoteca)"
+                "Ser usuario INDAP activo",
+                "Capacidad de pago demostrable",
+                "Garantía (prenda agraria, hipoteca o aval)",
+                "Proyecto productivo viable"
             ],
-            "plazo_ejecucion": "Hasta 10 años plazo",
-            "observaciones": "Financia inversiones en riego hasta UF 3.000"
-        }
-    },
-    {
-        "id": 6,
-        "nombre": "Cooperación Sur-Sur: Proyectos de Desarrollo Agrícola",
-        "institucion": "PNUD",
-        "monto": 85000,
-        "fecha_cierre": "2026-02-20",
-        "estado": "Abierto",
-        "categoria": "Internacional",
-        "url_bases": "https://www.undp.org/es/chile/noticias",
-        "regiones": [
-            "Todas"
-        ],
-        "beneficiarios": [
-            "ONG",
-            "Cooperativa",
-            "Asociación Indígena"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Hasta USD 85.000 (100% financiado)",
-            "requisitos_clave": [
-                "Personalidad jurídica vigente",
-                "Experiencia en desarrollo rural",
-                "Contraparte local"
-            ],
-            "plazo_ejecucion": "12 meses",
-            "observaciones": "Prioriza proyectos con enfoque de género y pueblos originarios"
-        }
+            "plazo_ejecucion": "Hasta 10 años plazo de pago",
+            "observaciones": "Financia inversiones en riego, maquinaria, infraestructura y capital de trabajo hasta UF 3.000."
+        },
+        "checklist": [
+            "Ser usuario INDAP activo",
+            "Capacidad de pago demostrable",
+            "Garantía disponible",
+            "Proyecto productivo viable"
+        ]
     },
     {
         "id": 7,
-        "nombre": "Horizonte Europa: Innovación Climática (Cluster 6)",
-        "institucion": "UE",
-        "monto": 0,
-        "fecha_cierre": "2026-02-28",
+        "nombre": "FIA – Jóvenes Innovadores Agrícolas 2026",
+        "institucion": "FIA",
+        "monto": 15000000,
+        "fecha_cierre": "2026-06-15",
         "estado": "Abierto",
-        "categoria": "Internacional",
-        "url_bases": "https://ec.europa.eu/info/funding-tenders",
+        "categoria": "Innovación",
+        "url_bases": "https://www.fia.cl/convocatorias/",
         "regiones": [
             "Todas"
         ],
         "beneficiarios": [
-            "Universidad",
-            "Centro de Investigación",
-            "Empresa Innovadora"
+            "Joven (18-35 años)",
+            "Emprendedor Agrícola",
+            "Startup AgTech"
         ],
         "resumen": {
-            "cofinanciamiento": "Hasta 100% (investigación) o 70% (empresas)",
+            "cofinanciamiento": "Hasta 80% (máx. $15M)",
             "requisitos_clave": [
-                "Consorcio internacional (mín. 3 países)",
-                "Proyecto I+D validado",
-                "Inglés técnico"
+                "Edad entre 18 y 35 años al momento de postular",
+                "Proyecto innovador con validación técnica",
+                "Carta de respaldo de entidad técnica o empresa",
+                "Presentación ante comité evaluador"
             ],
-            "plazo_ejecucion": "36-48 meses",
-            "observaciones": "Requiere socio europeo. Altamente competitivo"
-        }
+            "plazo_ejecucion": "12–18 meses",
+            "observaciones": "Prioriza innovación tecnológica, sustentabilidad y asociatividad. Incluye mentoría de expertos FIA."
+        },
+        "checklist": [
+            "Edad 18-35 años",
+            "Proyecto innovador validado",
+            "Carta de respaldo técnico",
+            "Presentación ante comité"
+        ]
     },
     {
         "id": 8,
-        "nombre": "Programa de Pasantías y Jóvenes Talentos Agrícolas",
-        "institucion": "FAO",
+        "nombre": "PRODESAL – Programa de Desarrollo Local (INDAP 2026)",
+        "institucion": "INDAP",
         "monto": 0,
-        "fecha_cierre": "2026-02-15",
-        "estado": "Abierto",
-        "categoria": "Internacional",
-        "url_bases": "https://www.fao.org/employment/es/",
+        "fecha_cierre": "2026-12-31",
+        "estado": "Ventanilla Abierta",
+        "categoria": "Asistencia Técnica",
+        "url_bases": "https://www.indap.gob.cl/programas/prodesal",
         "regiones": [
             "Todas"
         ],
         "beneficiarios": [
-            "Joven Profesional",
-            "Estudiante Postgrado"
+            "Pequeño Agricultor",
+            "Agricultor Familiar Campesino",
+            "Mujer Rural"
         ],
         "resumen": {
-            "cofinanciamiento": "Beca completa (pasaje + estipendio mensual)",
+            "cofinanciamiento": "Asistencia técnica gratuita + bono de fomento productivo",
             "requisitos_clave": [
-                "Título profesional o estudiante postgrado",
-                "Inglés avanzado",
-                "Experiencia en desarrollo rural"
+                "Ser agricultor familiar campesino (AFC)",
+                "Residir en la comuna donde opera la Unidad PRODESAL",
+                "Inscribirse en la Unidad Operativa local (municipio)",
+                "Predios de hasta 12 HRB"
             ],
-            "plazo_ejecucion": "3-6 meses",
-            "observaciones": "Pasantía en oficinas FAO (Roma, Santiago u otras)"
-        }
+            "plazo_ejecucion": "Anual (renovable)",
+            "observaciones": "Programa de asistencia técnica y transferencia tecnológica para AFC. Incluye bonos de fomento productivo para inversiones menores."
+        },
+        "checklist": [
+            "Ser AFC (agricultor familiar campesino)",
+            "Residir en la comuna",
+            "Predios hasta 12 HRB",
+            "Inscripción en Unidad PRODESAL"
+        ]
     },
     {
         "id": 9,
-        "nombre": "Concursos Ley N°18.450 - Calendario 2026",
+        "nombre": "Concurso CNR – Obras de Riego y Drenaje (Llamado Regional 2026)",
         "institucion": "CNR",
-        "monto": 0,
-        "fecha_cierre": "2026-12-31",
+        "monto": 300000000,
+        "fecha_cierre": "2026-05-15",
         "estado": "Abierto",
         "categoria": "Riego",
-        "url_bases": "https://www.cnr.gob.cl/concursos-de-riego/",
+        "url_bases": "https://www.cnr.gob.cl/agricultores/concursos-de-riego/",
         "regiones": [
-            "Todas"
+            "Coquimbo",
+            "Valparaíso",
+            "Metropolitana",
+            "O'Higgins",
+            "Maule",
+            "Ñuble",
+            "Biobío"
         ],
         "beneficiarios": [
-            "Agricultor",
-            "Organización de Usuarios"
+            "Organización de Usuarios de Agua",
+            "Junta de Vigilancia",
+            "Asociación de Canalistas"
         ],
         "resumen": {
-            "cofinanciamiento": "Variable según concurso (bonificación estatal)",
+            "cofinanciamiento": "Hasta 75% del costo de obras (bonificación estatal)",
             "requisitos_clave": [
-                "Proyecto de riego aprobado",
-                "Derechos de agua",
-                "Consultor inscrito en CNR"
+                "Organización de usuarios legalmente constituida",
+                "Proyecto de ingeniería aprobado por DOH o consultor CNR",
+                "Derechos de agua de todos los beneficiarios inscritos",
+                "Acuerdo de asamblea de usuarios"
             ],
-            "plazo_ejecucion": "Según bases",
-            "observaciones": "Calendario anual con múltiples llamados para tecnificación y obras civiles"
-        }
+            "plazo_ejecucion": "24 meses desde adjudicación",
+            "observaciones": "Financia canales revestidos, embalses de acumulación, bocatomas y obras de drenaje. Prioriza proyectos colectivos."
+        },
+        "checklist": [
+            "Organización legalmente constituida",
+            "Proyecto de ingeniería aprobado",
+            "Derechos de agua de todos los beneficiarios",
+            "Acuerdo de asamblea"
+        ]
     },
     {
         "id": 10,
-        "nombre": "SIRSD-S Recuperación de Suelos (Arica y Parinacota 2026)",
+        "nombre": "SIRSD-S – Recuperación de Suelos Arica y Parinacota 2026",
         "institucion": "INDAP",
         "monto": 8000000,
-        "fecha_cierre": "2026-02-27",
+        "fecha_cierre": "2026-03-15",
         "estado": "Abierto",
         "categoria": "Suelos",
-        "url_bases": "https://www.indap.gob.cl/concursos",
+        "url_bases": "https://www.indap.gob.cl/programas/sirsd-s",
         "regiones": [
-            "Arica y Parinacota"
+            "Arica y Parinacota",
+            "Tarapacá"
         ],
         "beneficiarios": [
             "Pequeño Agricultor",
@@ -270,46 +362,452 @@
         "resumen": {
             "cofinanciamiento": "Hasta 90% de los costos netos",
             "requisitos_clave": [
-                "Plan de manejo de suelos",
-                "Acreditación de usuario INDAP",
-                "Sin deudas morosas con INDAP"
+                "Plan de manejo de suelos elaborado por profesional habilitado",
+                "Acreditación de usuario INDAP vigente",
+                "Sin deudas morosas con INDAP",
+                "Análisis de suelo con antigüedad máxima de 2 años"
             ],
-            "plazo_ejecucion": "Temporada 2026",
-            "observaciones": "Operación Temprana 2026 para recuperación de suelos degradados"
-        }
+            "plazo_ejecucion": "Temporada 2026 (hasta diciembre)",
+            "observaciones": "Operación Temprana 2026 para recuperación de suelos degradados en el norte de Chile."
+        },
+        "checklist": [
+            "Ser usuario INDAP activo",
+            "Análisis de suelo vigente",
+            "Sin deudas con INDAP",
+            "Plan de manejo aprobado"
+        ]
     },
     {
         "id": 11,
-        "nombre": "Concurso CICYT 2025 (Innovación y Tecnología)",
+        "nombre": "Sercotec – Fondo de Desarrollo de Negocios (Reactívate) 2026",
         "institucion": "Sercotec",
-        "monto": 6000000,
-        "fecha_cierre": "2026-01-23",
-        "estado": "Por Cerrar",
-        "categoria": "Innovación",
-        "url_bases": "https://www.sercotec.cl",
+        "monto": 8000000,
+        "fecha_cierre": "2026-05-30",
+        "estado": "Abierto",
+        "categoria": "Inversión",
+        "url_bases": "https://www.sercotec.cl/fondos-de-desarrollo/",
         "regiones": [
             "Todas"
         ],
         "beneficiarios": [
             "Microempresa",
-            "Cooperativa"
+            "Pequeña Empresa",
+            "Cooperativa Agrícola"
         ],
         "resumen": {
-            "cofinanciamiento": "Subsidio para adopción tecnológica",
+            "cofinanciamiento": "Subsidio no reembolsable hasta $8M (aporte propio mínimo 20%)",
             "requisitos_clave": [
-                "Inicio de actividades en primera categoría",
-                "Ventas netas anuales demostrables",
-                "Proyecto de innovación tecnológica"
+                "Inicio de actividades en primera categoría (SII)",
+                "Ventas anuales entre UF 2.400 y UF 25.000",
+                "Plan de inversión detallado",
+                "Empresa con al menos 1 año de antigüedad"
             ],
-            "plazo_ejecucion": "6-12 meses",
-            "observaciones": "Fomenta la competitividad a través de la ciencia y tecnología"
-        }
+            "plazo_ejecucion": "6–12 meses",
+            "observaciones": "Para micro y pequeñas empresas que necesitan inversión en activos, tecnología o capital de trabajo."
+        },
+        "checklist": [
+            "Inicio de actividades SII vigente",
+            "Ventas entre UF 2.400-25.000",
+            "Plan de inversión elaborado",
+            "Empresa con 1+ año de antigüedad"
+        ]
     },
     {
         "id": 12,
-        "nombre": "Convocatoria 2026 - Innovación en Agricultura Familiar",
+        "nombre": "GORE Coquimbo – FIC-R Innovación Agrícola Región 2026",
+        "institucion": "GORE Coquimbo",
+        "monto": 100000000,
+        "fecha_cierre": "2026-04-30",
+        "estado": "Abierto",
+        "categoria": "Innovación",
+        "url_bases": "https://www.gorecoquimbo.cl/fondo-de-innovacion-para-la-competitividad/",
+        "regiones": [
+            "Coquimbo"
+        ],
+        "beneficiarios": [
+            "Empresa Agrícola",
+            "Universidad",
+            "Centro de Investigación",
+            "Cooperativa"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Hasta 80% del proyecto (máx. $100M)",
+            "requisitos_clave": [
+                "Proyecto de innovación con impacto regional demostrable",
+                "Entidad ejecutora con personalidad jurídica vigente en la región",
+                "Cofinanciamiento mínimo del 20%",
+                "Alineación con Estrategia Regional de Innovación"
+            ],
+            "plazo_ejecucion": "24 meses",
+            "observaciones": "Fondo FIC-R específico para la Región de Coquimbo. Prioriza proyectos de eficiencia hídrica, fruticultura y viticultura."
+        },
+        "checklist": [
+            "Proyecto con impacto regional",
+            "Personalidad jurídica en la región",
+            "Cofinanciamiento 20% disponible",
+            "Alineación con estrategia regional"
+        ]
+    },
+    {
+        "id": 13,
+        "nombre": "GORE Maule – FIC-R Desarrollo Agrícola y Ganadero 2026",
+        "institucion": "GORE Maule",
+        "monto": 80000000,
+        "fecha_cierre": "2026-05-15",
+        "estado": "Abierto",
+        "categoria": "Innovación",
+        "url_bases": "https://www.goremaule.cl/gore/fondos-concursables/",
+        "regiones": [
+            "Maule"
+        ],
+        "beneficiarios": [
+            "Empresa Agrícola",
+            "Cooperativa",
+            "Asociación de Productores",
+            "Universidad"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Hasta 75% del proyecto (máx. $80M)",
+            "requisitos_clave": [
+                "Proyecto con impacto en la Región del Maule",
+                "Entidad con personalidad jurídica vigente",
+                "Cofinanciamiento mínimo del 25%",
+                "Presentación ante Consejo Regional (CORE)"
+            ],
+            "plazo_ejecucion": "18–24 meses",
+            "observaciones": "Prioriza proyectos de viticultura, fruticultura, ganadería y turismo rural en la Región del Maule."
+        },
+        "checklist": [
+            "Proyecto con impacto en el Maule",
+            "Personalidad jurídica vigente",
+            "Cofinanciamiento 25% disponible",
+            "Aprobación CORE"
+        ]
+    },
+    {
+        "id": 14,
+        "nombre": "GORE Araucanía – FIC-R Agricultura Mapuche y Pueblos Originarios 2026",
+        "institucion": "GORE La Araucanía",
+        "monto": 60000000,
+        "fecha_cierre": "2026-06-30",
+        "estado": "Próxima Apertura",
+        "categoria": "Innovación",
+        "url_bases": "https://www.gorearaucania.cl/fondos-concursables/",
+        "regiones": [
+            "La Araucanía"
+        ],
+        "beneficiarios": [
+            "Comunidad Indígena",
+            "Cooperativa Mapuche",
+            "Asociación de Productores",
+            "Mujer Rural"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Hasta 90% para comunidades indígenas (máx. $60M)",
+            "requisitos_clave": [
+                "Proyecto con pertinencia cultural mapuche",
+                "Comunidad o asociación legalmente constituida",
+                "Enfoque en soberanía alimentaria o economía local",
+                "Aval de CONADI o municipio"
+            ],
+            "plazo_ejecucion": "18 meses",
+            "observaciones": "Fondo especial para proyectos productivos con enfoque intercultural en la Región de La Araucanía."
+        },
+        "checklist": [
+            "Pertinencia cultural mapuche",
+            "Comunidad legalmente constituida",
+            "Enfoque en soberanía alimentaria",
+            "Aval CONADI o municipio"
+        ]
+    },
+    {
+        "id": 15,
+        "nombre": "CORFO – Programa de Economía Circular Agro 2026",
+        "institucion": "CORFO",
+        "monto": 50000000,
+        "fecha_cierre": "2026-07-31",
+        "estado": "Abierto",
+        "categoria": "Sustentabilidad",
+        "url_bases": "https://www.corfo.cl/sites/cpp/programas-y-convocatorias",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "Empresa Agrícola",
+            "Cooperativa",
+            "PYME Agroindustrial"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Hasta 60% del proyecto (máx. $50M)",
+            "requisitos_clave": [
+                "Empresa con ventas entre UF 2.400 y UF 100.000",
+                "Proyecto de economía circular con métricas de impacto ambiental",
+                "Evaluación de ciclo de vida del producto",
+                "Compromiso de reducción de residuos medible"
+            ],
+            "plazo_ejecucion": "24 meses",
+            "observaciones": "Financia proyectos de valorización de residuos agrícolas, biogás, compostaje industrial y packaging sustentable."
+        },
+        "checklist": [
+            "Empresa con ventas UF 2.400-100.000",
+            "Proyecto de economía circular",
+            "Métricas de impacto ambiental",
+            "Compromiso de reducción de residuos"
+        ]
+    },
+    {
+        "id": 16,
+        "nombre": "INDAP – Bono de Fomento Productivo para Mujeres Rurales 2026",
+        "institucion": "INDAP",
+        "monto": 5000000,
+        "fecha_cierre": "2026-04-30",
+        "estado": "Abierto",
+        "categoria": "Género y Ruralidad",
+        "url_bases": "https://www.indap.gob.cl/programas/mujer-rural",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "Mujer Rural",
+            "Mujer Agricultora",
+            "Jefa de Hogar Rural"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Bono no reembolsable hasta $5M (sin aporte propio requerido)",
+            "requisitos_clave": [
+                "Ser mujer agricultora familiar campesina",
+                "Ser usuaria INDAP vigente",
+                "Proyecto productivo con enfoque de género",
+                "Residencia en zona rural"
+            ],
+            "plazo_ejecucion": "6–12 meses",
+            "observaciones": "Programa especial para mujeres rurales. Incluye asistencia técnica diferenciada y capacitación en gestión."
+        },
+        "checklist": [
+            "Ser mujer AFC",
+            "Ser usuaria INDAP vigente",
+            "Proyecto productivo con enfoque género",
+            "Residencia rural"
+        ]
+    },
+    {
+        "id": 17,
+        "nombre": "FIA – Innovación en Agricultura Sustentable y Cambio Climático 2026",
+        "institucion": "FIA",
+        "monto": 80000000,
+        "fecha_cierre": "2026-08-31",
+        "estado": "Próxima Apertura",
+        "categoria": "Sustentabilidad",
+        "url_bases": "https://www.fia.cl/convocatorias/",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "Empresa Agrícola",
+            "Universidad",
+            "Centro de Investigación",
+            "Cooperativa"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Hasta 80% (máx. $80M por proyecto)",
+            "requisitos_clave": [
+                "Proyecto con métricas de reducción de huella de carbono",
+                "Asociatividad con al menos 2 actores del sistema de innovación",
+                "Cofinanciamiento mínimo del 20%",
+                "Alineación con NDC de Chile (Contribuciones Nacionales)"
+            ],
+            "plazo_ejecucion": "24–36 meses",
+            "observaciones": "Prioriza proyectos de captura de carbono, agricultura regenerativa, bioinsumos y adaptación climática."
+        },
+        "checklist": [
+            "Métricas de reducción de huella de carbono",
+            "Asociatividad con actores del sistema",
+            "Cofinanciamiento 20% disponible",
+            "Alineación con NDC Chile"
+        ]
+    },
+    {
+        "id": 18,
+        "nombre": "Sercotec – Capital Abeja (Emprendimiento Femenino Rural) 2026",
+        "institucion": "Sercotec",
+        "monto": 4000000,
+        "fecha_cierre": "2026-05-15",
+        "estado": "Abierto",
+        "categoria": "Género y Ruralidad",
+        "url_bases": "https://www.sercotec.cl/capital-abeja/",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "Mujer Emprendedora",
+            "Mujer Rural",
+            "Microempresaria"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Subsidio no reembolsable hasta $4M (aporte propio mínimo 20%)",
+            "requisitos_clave": [
+                "Ser mujer mayor de 18 años",
+                "Inicio de actividades en primera categoría (SII)",
+                "Ventas anuales hasta UF 2.400",
+                "Plan de negocio con enfoque de género"
+            ],
+            "plazo_ejecucion": "6 meses",
+            "observaciones": "Programa exclusivo para mujeres emprendedoras. Incluye capacitación, mentoría y red de apoyo."
+        },
+        "checklist": [
+            "Ser mujer mayor de 18 años",
+            "Inicio de actividades SII",
+            "Ventas hasta UF 2.400",
+            "Plan de negocio elaborado"
+        ]
+    },
+    {
+        "id": 19,
+        "nombre": "GORE Los Lagos – FIC-R Acuicultura y Pesca Artesanal 2026",
+        "institucion": "GORE Los Lagos",
+        "monto": 120000000,
+        "fecha_cierre": "2026-06-30",
+        "estado": "Abierto",
+        "categoria": "Acuicultura",
+        "url_bases": "https://www.goreloslagos.cl/fondos-concursables/",
+        "regiones": [
+            "Los Lagos"
+        ],
+        "beneficiarios": [
+            "Pescador Artesanal",
+            "Acuicultor",
+            "Cooperativa de Pesca",
+            "Empresa Acuícola"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Hasta 80% del proyecto (máx. $120M)",
+            "requisitos_clave": [
+                "Proyecto con impacto en la Región de Los Lagos",
+                "Entidad con personalidad jurídica vigente",
+                "Cofinanciamiento mínimo del 20%",
+                "Registro en SERNAPESCA vigente"
+            ],
+            "plazo_ejecucion": "24 meses",
+            "observaciones": "Prioriza proyectos de mitilicultura, salmónidos, algas y pesca artesanal sustentable en la Región de Los Lagos."
+        },
+        "checklist": [
+            "Proyecto con impacto en Los Lagos",
+            "Personalidad jurídica vigente",
+            "Registro SERNAPESCA vigente",
+            "Cofinanciamiento 20% disponible"
+        ]
+    },
+    {
+        "id": 20,
+        "nombre": "CORFO – Escalamiento Productivo Agro (Línea 3) 2026",
+        "institucion": "CORFO",
+        "monto": 100000000,
+        "fecha_cierre": "2026-09-30",
+        "estado": "Abierto",
+        "categoria": "Inversión",
+        "url_bases": "https://www.corfo.cl/sites/cpp/programas-y-convocatorias",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "Empresa Agrícola Mediana",
+            "Agroindustria",
+            "Cooperativa Exportadora"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Hasta 50% del proyecto (máx. $100M)",
+            "requisitos_clave": [
+                "Empresa con ventas entre UF 25.000 y UF 100.000",
+                "Proyecto de escalamiento con impacto en exportaciones",
+                "Evaluación técnica y financiera independiente",
+                "Compromiso de generación de empleo"
+            ],
+            "plazo_ejecucion": "36 meses",
+            "observaciones": "Para empresas medianas que buscan escalar su producción, modernizar plantas y acceder a mercados de exportación."
+        },
+        "checklist": [
+            "Ventas entre UF 25.000-100.000",
+            "Proyecto de escalamiento elaborado",
+            "Evaluación técnica independiente",
+            "Compromiso de generación de empleo"
+        ]
+    },
+    {
+        "id": 21,
+        "nombre": "INDAP – SAT (Servicio de Asesoría Técnica) 2026",
+        "institucion": "INDAP",
+        "monto": 0,
+        "fecha_cierre": "2026-12-31",
+        "estado": "Ventanilla Abierta",
+        "categoria": "Asistencia Técnica",
+        "url_bases": "https://www.indap.gob.cl/programas/sat",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "Pequeño Agricultor",
+            "Usuario INDAP",
+            "Agricultor Familiar Campesino"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Asistencia técnica subsidiada (pago mínimo del usuario)",
+            "requisitos_clave": [
+                "Ser usuario INDAP activo",
+                "Tener un plan productivo definido",
+                "Contratación de empresa consultora inscrita en INDAP",
+                "Predios de hasta 12 HRB"
+            ],
+            "plazo_ejecucion": "Anual (renovable)",
+            "observaciones": "Permite contratar asesoría técnica especializada con subsidio INDAP. El usuario paga solo una fracción del costo real."
+        },
+        "checklist": [
+            "Ser usuario INDAP activo",
+            "Plan productivo definido",
+            "Empresa consultora inscrita en INDAP",
+            "Predios hasta 12 HRB"
+        ]
+    },
+    {
+        "id": 22,
+        "nombre": "GORE Biobío – FIC-R Forestal y Biomasa 2026",
+        "institucion": "GORE Biobío",
+        "monto": 90000000,
+        "fecha_cierre": "2026-07-31",
+        "estado": "Próxima Apertura",
+        "categoria": "Forestal",
+        "url_bases": "https://www.gorebio.cl/fondos-concursables/",
+        "regiones": [
+            "Biobío"
+        ],
+        "beneficiarios": [
+            "Empresa Forestal",
+            "Cooperativa",
+            "PYME Maderera",
+            "Centro de Investigación"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Hasta 70% del proyecto (máx. $90M)",
+            "requisitos_clave": [
+                "Proyecto con impacto en la Región del Biobío",
+                "Entidad con personalidad jurídica vigente",
+                "Cofinanciamiento mínimo del 30%",
+                "Alineación con Plan Regional de Desarrollo Forestal"
+            ],
+            "plazo_ejecucion": "24 meses",
+            "observaciones": "Prioriza proyectos de biomasa, bioenergía, madera modificada y certificación forestal en la Región del Biobío."
+        },
+        "checklist": [
+            "Proyecto con impacto en el Biobío",
+            "Personalidad jurídica vigente",
+            "Cofinanciamiento 30% disponible",
+            "Alineación con plan forestal regional"
+        ]
+    },
+    {
+        "id": 23,
+        "nombre": "FONTAGRO – Convocatoria 2026 Sistemas Agroalimentarios Sostenibles",
         "institucion": "FONTAGRO",
-        "monto": 200000,
+        "monto": 250000,
         "fecha_cierre": "2026-03-30",
         "estado": "Abierto",
         "categoria": "Internacional",
@@ -319,214 +817,96 @@
         ],
         "beneficiarios": [
             "Centro de Investigación",
-            "Organización de Productores",
-            "ONG"
+            "Universidad",
+            "Organización de Productores"
         ],
         "resumen": {
-            "cofinanciamiento": "Hasta USD 200.000 por proyecto",
+            "cofinanciamiento": "Hasta USD 250.000 por proyecto",
             "requisitos_clave": [
-                "Plataforma multi-país (mínimo 2 países miembros)",
-                "Innovación tecnológica u organizacional",
+                "Consorcio regional (mínimo 2 países miembros FONTAGRO)",
+                "Incluir entidad pública de investigación",
+                "Alineación con Programas Insignia PMP 2025-2030",
                 "Cofinanciamiento de contraparte"
             ],
             "plazo_ejecucion": "36 meses",
-            "observaciones": "Foco en sostenibilidad y resiliencia climática de la agricultura familiar"
-        }
+            "observaciones": "Foco en productividad, rentabilidad y menor huella ambiental. Se financiarán hasta 5 proyectos."
+        },
+        "checklist": [
+            "Consorcio regional 2+ países",
+            "Entidad pública de investigación",
+            "Alineación con PMP 2025-2030",
+            "Cofinanciamiento de contraparte"
+        ]
     },
     {
-        "id": 13,
-        "nombre": "Arauco Raíz Innovadora (Corfo)",
-        "institucion": "CORFO",
+        "id": 24,
+        "nombre": "GORE Valparaíso – FIC-R Vitivinicultura y Fruticultura 2026",
+        "institucion": "GORE Valparaíso",
+        "monto": 70000000,
+        "fecha_cierre": "2026-05-31",
+        "estado": "Abierto",
+        "categoria": "Innovación",
+        "url_bases": "https://www.gorevalparaiso.cl/fondos-concursables/",
+        "regiones": [
+            "Valparaíso"
+        ],
+        "beneficiarios": [
+            "Viñatero",
+            "Fruticultores",
+            "Cooperativa Vitivinícola",
+            "Empresa Agrícola"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Hasta 75% del proyecto (máx. $70M)",
+            "requisitos_clave": [
+                "Proyecto con impacto en la Región de Valparaíso",
+                "Entidad con personalidad jurídica vigente en la región",
+                "Cofinanciamiento mínimo del 25%",
+                "Alineación con Estrategia Regional de Innovación"
+            ],
+            "plazo_ejecucion": "18–24 meses",
+            "observaciones": "Prioriza proyectos de enoturismo, exportación vitivinícola, fruticultura de exportación y agricultura de precisión."
+        },
+        "checklist": [
+            "Proyecto con impacto en Valparaíso",
+            "Personalidad jurídica en la región",
+            "Cofinanciamiento 25% disponible",
+            "Alineación con estrategia regional"
+        ]
+    },
+    {
+        "id": 25,
+        "nombre": "Sercotec – Programa de Asociatividad Empresarial (PAE) Agro 2026",
+        "institucion": "Sercotec",
         "monto": 15000000,
-        "fecha_cierre": "2026-03-01",
-        "estado": "Abierto",
-        "categoria": "Emprendimiento",
-        "url_bases": "https://www.irade.cl",
-        "regiones": [
-            "Biobío"
-        ],
-        "beneficiarios": [
-            "Emprendedor",
-            "Mujeres",
-            "Jóvenes"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Cofinanciamiento para emprendimientos dinámicos",
-            "requisitos_clave": [
-                "Residencia en Provincia de Arauco",
-                "Proyecto de innovación",
-                "Foco en actividades productivas locales"
-            ],
-            "plazo_ejecucion": "12 meses",
-            "observaciones": "Impulsado por Irade y Corfo para reactivación económica"
-        }
-    },
-    {
-        "id": 14,
-        "nombre": "FAO Forest and Farm Facility (FFF) Grants 2025",
-        "institucion": "FAO",
-        "monto": 100000,
-        "fecha_cierre": "2026-02-28",
-        "estado": "Abierto",
-        "categoria": "Forestal y Agricultura Familiar",
-        "url_bases": "https://www.fao.org/forest-farm-facility/",
-        "regiones": [
-            "América Latina y el Caribe"
-        ],
-        "beneficiarios": [
-            "Pequeños Productores",
-            "Comunidades Indígenas",
-            "Organizaciones de Mujeres Rurales"
-        ],
-        "resumen": {
-            "cofinanciamiento": "USD 5,000 a USD 100,000 por proyecto",
-            "requisitos_clave": [
-                "Organizaciones de productores forestales y agrícolas",
-                "Enfoque en pequeños productores",
-                "Fortalecimiento institucional"
-            ],
-            "plazo_ejecucion": "12-24 meses",
-            "observaciones": "Apoyo directo financiero y técnico para fortalecer organizaciones de productores"
-        }
-    },
-    {
-        "id": 15,
-        "nombre": "FONTAGRO Convocatoria 2026 - Sistemas Agroalimentarios Sostenibles",
-        "institucion": "FONTAGRO",
-        "monto": 250000,
-        "fecha_cierre": "2026-03-30",
-        "estado": "Abierto",
-        "categoria": "Investigación e Innovación Agrícola",
-        "url_bases": "https://www.fontagro.org/es/iniciativas/convocatorias",
-        "regiones": [
-            "América Latina y el Caribe"
-        ],
-        "beneficiarios": [
-            "Instituciones de Investigación",
-            "Universidades",
-            "Centros Tecnológicos"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Hasta USD 250,000 por proyecto",
-            "requisitos_clave": [
-                "Consorcio regional (mínimo 2 países miembros)",
-                "Incluir entidad pública de investigación",
-                "Alineación con Programas Insignia PMP 2025-2030"
-            ],
-            "plazo_ejecucion": "36 meses",
-            "observaciones": "Se financiarán hasta 5 proyectos. Enfoque en productividad, rentabilidad y menor huella ambiental"
-        }
-    },
-    {
-        "id": 16,
-        "nombre": "IFAD FO4IMPACT - Fortalecimiento Institucional LAC",
-        "institucion": "FIDA",
-        "monto": 500000,
-        "fecha_cierre": "2025-11-14",
-        "estado": "Abierto",
-        "categoria": "Desarrollo Institucional",
-        "url_bases": "https://www.ifad.org/en/calls-for-proposals",
-        "regiones": [
-            "América Latina y el Caribe"
-        ],
-        "beneficiarios": [
-            "Organizaciones de Productores",
-            "Cooperativas",
-            "Asociaciones Rurales"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Grant regional para fortalecimiento institucional",
-            "requisitos_clave": [
-                "Organizaciones legalmente constituidas en países miembros IFAD",
-                "Enfoque en acceso a mercados",
-                "Participación en políticas públicas"
-            ],
-            "plazo_ejecucion": "24-36 meses",
-            "observaciones": "Co-desarrollo e implementación de grant regional para transformación comunitaria"
-        }
-    },
-    {
-        "id": 17,
-        "nombre": "IDB Lab AGRInnova - Agronegocios Sostenibles",
-        "institucion": "BID",
-        "monto": 1000000,
         "fecha_cierre": "2026-06-30",
         "estado": "Abierto",
-        "categoria": "Innovación y Agronegocios",
-        "url_bases": "https://bidlab.org/es/inicio/convocatorias-pagina",
+        "categoria": "Asociatividad",
+        "url_bases": "https://www.sercotec.cl/asociatividad/",
         "regiones": [
-            "América Latina y el Caribe"
+            "Todas"
         ],
         "beneficiarios": [
-            "Agronegocios",
-            "Startups Agtech",
-            "Cooperativas"
+            "Grupo de Microempresas",
+            "Cooperativa Agrícola",
+            "Asociación de Productores"
         ],
         "resumen": {
-            "cofinanciamiento": "Asistencia técnica y capital de inversión",
+            "cofinanciamiento": "Subsidio no reembolsable hasta $15M para el grupo (aporte propio mínimo 20%)",
             "requisitos_clave": [
-                "Modelo de negocio sostenible y competitivo",
-                "Enfoque en productividad y eficiencia",
-                "Resiliencia climática"
+                "Grupo de al menos 5 empresas o productores",
+                "Proyecto de asociatividad con objetivo común",
+                "Ventas individuales hasta UF 25.000",
+                "Acuerdo formal de asociatividad"
             ],
-            "plazo_ejecucion": "18-36 meses",
-            "observaciones": "Apoyo a agronegocios para enfrentar riesgos del cambio climático"
-        }
-    },
-    {
-        "id": 22,
-        "nombre": "World Bank AgriConnect - Transformación Agrifood LAC",
-        "institucion": "Banco Mundial",
-        "monto": 9000000000,
-        "fecha_cierre": "2030-12-31",
-        "estado": "Abierto",
-        "categoria": "Desarrollo Sectorial",
-        "url_bases": "https://projects.worldbank.org",
-        "regiones": [
-            "América Latina y el Caribe"
-        ],
-        "beneficiarios": [
-            "Gobiernos",
-            "Agricultores Familiares",
-            "Sector Privado"
-        ],
-        "resumen": {
-            "cofinanciamiento": "USD 9 mil millones anuales hasta 2030",
-            "requisitos_clave": [
-                "Proyectos gubernamentales o con aval gubernamental",
-                "Enfoque en productividad y resiliencia",
-                "Inversión privada y reformas políticas"
-            ],
-            "plazo_ejecucion": "Múltiples proyectos hasta 2030",
-            "observaciones": "Iniciativa estratégica para transformar sector agrifood. Incluye Alianzas Productivas"
-        }
-    },
-    {
-        "id": 23,
-        "nombre": "CAF Laboratorio de Inclusión Financiera (LIF) 2025",
-        "institucion": "CAF",
-        "monto": 500000,
-        "fecha_cierre": "2025-09-21",
-        "estado": "Abierto",
-        "categoria": "Inclusión Financiera",
-        "url_bases": "https://www.caf.com/",
-        "regiones": [
-            "América Latina y el Caribe"
-        ],
-        "beneficiarios": [
-            "Fintech",
-            "MiPymes Rurales",
-            "Poblaciones Desatendidas"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Financiamiento para soluciones digitales innovadoras",
-            "requisitos_clave": [
-                "Soluciones digitales para inclusión financiera",
-                "Enfoque en áreas rurales",
-                "Educación financiera y acceso a crédito"
-            ],
-            "plazo_ejecucion": "18-24 meses",
-            "observaciones": "7ª edición del LIF. Prioriza poblaciones desatendidas y MiPymes en zonas rurales"
-        }
+            "plazo_ejecucion": "12 meses",
+            "observaciones": "Para grupos de micro y pequeñas empresas agrícolas que quieren trabajar juntas para acceder a mercados, compras conjuntas o certificaciones."
+        },
+        "checklist": [
+            "Grupo de 5+ empresas o productores",
+            "Proyecto de asociatividad definido",
+            "Ventas individuales hasta UF 25.000",
+            "Acuerdo formal de asociatividad"
+        ]
     }
 ]

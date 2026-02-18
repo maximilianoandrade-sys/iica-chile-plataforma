@@ -8,6 +8,75 @@
 // DICCIONARIO DE SINÓNIMOS Y CONCEPTOS RELACIONADOS
 // ============================================================================
 
+// ============================================================================
+// MAPEO DE FRASES NATURALES (Lenguaje Rural)
+// Permite que frases conversacionales encuentren los fondos correctos
+// Ej: "se me secó el pozo" → busca fondos de riego y pozos
+// ============================================================================
+
+export const NATURAL_LANGUAGE_PHRASES: Record<string, string[]> = {
+    // Problemas de agua
+    'seco el pozo': ['riego', 'pozo', 'profundización', 'hídrico', 'agua'],
+    'se seco el pozo': ['riego', 'pozo', 'profundización', 'hídrico', 'agua'],
+    'sin agua': ['riego', 'pozo', 'hídrico', 'agua', 'tecnificación'],
+    'falta agua': ['riego', 'pozo', 'hídrico', 'agua', 'tecnificación'],
+    'no tengo agua': ['riego', 'pozo', 'hídrico', 'agua'],
+    'sequia': ['riego', 'agua', 'emergencia', 'hídrico', 'pozo'],
+    'no llueve': ['riego', 'agua', 'emergencia', 'sequía'],
+
+    // Problemas de suelo
+    'tierra mala': ['suelo', 'recuperación', 'SIRSD', 'enmienda', 'fertilización'],
+    'suelo degradado': ['suelo', 'recuperación', 'SIRSD', 'enmienda'],
+    'tierra erosionada': ['suelo', 'recuperación', 'SIRSD', 'erosión'],
+    'no produce': ['suelo', 'recuperación', 'fertilización', 'innovación'],
+
+    // Maquinaria
+    'no tengo tractor': ['maquinaria', 'mecanización', 'equipo', 'implemento'],
+    'necesito maquinaria': ['maquinaria', 'mecanización', 'equipo', 'implemento'],
+    'quiero tecnificar': ['maquinaria', 'tecnificación', 'innovación', 'modernización'],
+
+    // Financiamiento
+    'necesito plata': ['crédito', 'financiamiento', 'capital', 'préstamo', 'fondo'],
+    'necesito dinero': ['crédito', 'financiamiento', 'capital', 'préstamo', 'fondo'],
+    'sin capital': ['crédito', 'financiamiento', 'capital', 'préstamo'],
+    'quiero postular': ['fondo', 'subsidio', 'concursable', 'financiamiento'],
+
+    // Emergencias
+    'me quemo': ['emergencia', 'incendio', 'catástrofe', 'siniestro'],
+    'incendio': ['emergencia', 'catástrofe', 'siniestro', 'reconstrucción'],
+    'helada': ['emergencia', 'catástrofe', 'contingencia', 'clima'],
+    'granizo': ['emergencia', 'catástrofe', 'contingencia', 'clima'],
+
+    // Exportación
+    'quiero exportar': ['exportación', 'comercio exterior', 'internacional', 'mercado'],
+    'vender afuera': ['exportación', 'comercio exterior', 'internacional'],
+
+    // Mujer rural
+    'soy mujer': ['mujer', 'género', 'mujeres rurales', 'agricultora'],
+    'mujer agricultora': ['mujer', 'género', 'mujeres rurales', 'agricultora'],
+
+    // Jóvenes
+    'soy joven': ['joven', 'juventud', 'jóvenes rurales', 'recambio generacional'],
+    'empezar a producir': ['joven', 'capital semilla', 'emprendimiento', 'inicio'],
+};
+
+/**
+ * Detecta frases naturales en una consulta y expande los términos
+ */
+export function expandNaturalLanguage(query: string): string[] {
+    const normalized = normalizeText(query);
+    const extraTerms: string[] = [];
+
+    Object.entries(NATURAL_LANGUAGE_PHRASES).forEach(([phrase, terms]) => {
+        const normalizedPhrase = normalizeText(phrase);
+        if (normalized.includes(normalizedPhrase)) {
+            extraTerms.push(...terms);
+        }
+    });
+
+    return extraTerms;
+}
+
 export const AGRICULTURAL_THESAURUS: Record<string, string[]> = {
     // Agua y Riego
     'sequía': ['riego', 'agua', 'irrigación', 'sequía', 'hidráulico', 'embalse', 'pozo', 'tecnificación'],
@@ -94,16 +163,21 @@ export function tokenize(text: string): string[] {
 
 /**
  * Expande un término de búsqueda con sinónimos y conceptos relacionados
+ * Incluye expansión de frases en lenguaje natural (ej: "se me secó el pozo")
  */
 export function expandSearchTerms(query: string): string[] {
     const normalized = normalizeText(query);
     const tokens = tokenize(normalized);
     const expandedTerms = new Set<string>();
 
-    // Agregar términos originales
+    // 1. Agregar términos originales
     tokens.forEach(token => expandedTerms.add(token));
 
-    // Agregar sinónimos y conceptos relacionados
+    // 2. Expandir frases en lenguaje natural PRIMERO (mayor prioridad)
+    const naturalTerms = expandNaturalLanguage(query);
+    naturalTerms.forEach(term => expandedTerms.add(normalizeText(term)));
+
+    // 3. Agregar sinónimos y conceptos relacionados del tesauro
     tokens.forEach(token => {
         // Buscar en el tesauro
         Object.entries(AGRICULTURAL_THESAURUS).forEach(([key, synonyms]) => {
@@ -121,6 +195,7 @@ export function expandSearchTerms(query: string): string[] {
 
     return Array.from(expandedTerms);
 }
+
 
 // ============================================================================
 // COSINE SIMILARITY
