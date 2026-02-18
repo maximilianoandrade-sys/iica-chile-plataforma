@@ -11,8 +11,7 @@ import Toast from "@/components/ui/Toast";
 import Image from 'next/image';
 import SearchableSelect from "@/components/SearchableSelect"; // Import the new component
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info, Calculator, Sparkles } from "lucide-react";
-import EligibilityCalculator from "@/components/EligibilityCalculator";
+import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info, Sparkles } from "lucide-react";
 
 export default function ProjectList({ projects }: { projects: Project[] }) {
     // State for client-side interactions
@@ -28,9 +27,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
     const [showCompareModal, setShowCompareModal] = useState(false);
     const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
-    // Eligibility Calculator State
-    const [showCalculator, setShowCalculator] = useState(false);
-    const [calculatorProject, setCalculatorProject] = useState<string>('');
+
 
     // Load favorites from local storage
     useEffect(() => {
@@ -61,10 +58,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
         }
     };
 
-    const openCalculator = (name: string) => {
-        setCalculatorProject(name);
-        setShowCalculator(true);
-    };
+
 
     const getLogoUrl = (institution: string) => {
         return getInstitutionalLogo(institution);
@@ -352,12 +346,6 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                                     projectName={project.nombre}
                                                                     onTrack={() => setToastMessage("Redirigiendo a sitio oficial...")}
                                                                 />
-                                                                <button
-                                                                    onClick={() => openCalculator(project.nombre)}
-                                                                    className="text-xs text-[var(--iica-blue)] hover:underline flex items-center gap-1"
-                                                                >
-                                                                    <Calculator className="h-3 w-3" /> Calcular Elegibilidad
-                                                                </button>
                                                             </div>
                                                         </td>
                                                     </motion.tr>
@@ -536,12 +524,6 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                         projectName={project.nombre}
                                                         onTrack={() => setToastMessage("Redirigiendo a sitio oficial...")}
                                                     />
-                                                    <button
-                                                        onClick={() => openCalculator(project.nombre)}
-                                                        className="text-xs text-[var(--iica-blue)] hover:underline flex items-center gap-1"
-                                                    >
-                                                        <Calculator className="h-3 w-3" /> Calcular Elegibilidad
-                                                    </button>
                                                 </div>
                                             </div>
                                         </motion.div>
@@ -703,12 +685,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                 )
             }
 
-            {/* ELIGIBILITY CALCULATOR */}
-            <EligibilityCalculator
-                isOpen={showCalculator}
-                onClose={() => setShowCalculator(false)}
-                projectName={calculatorProject}
-            />
+
 
         </div >
     );
