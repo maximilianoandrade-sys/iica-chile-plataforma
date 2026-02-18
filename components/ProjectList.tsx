@@ -459,146 +459,155 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                             </div>
 
                             {/* MOBILE/TABLET CARD VIEW (Visible on screens smaller than Large) */}
-                            <div className="lg:hidden min-h-[400px] flex flex-col gap-2">
+                            <div className="lg:hidden min-h-[400px] flex flex-col gap-4">
                                 <AnimatePresence>
                                     {displayedProjects.map((project) => (
                                         <motion.div
                                             key={project.id}
-                                            className={`p-5 flex flex-col gap-4 mb-4 rounded-xl border shadow-sm ${compareList.includes(project.id) ? 'bg-blue-50/50 border-blue-200' : 'bg-white border-gray-200'} active:scale-[0.99] transition-all`}
-                                            initial={{ opacity: 0, y: 10 }}
+                                            layout
+                                            initial={{ opacity: 0, y: 20 }}
                                             animate={{ opacity: 1, y: 0 }}
-                                            exit={{ opacity: 0 }}
+                                            exit={{ opacity: 0, scale: 0.95 }}
+                                            transition={{ duration: 0.2 }}
+                                            className={`relative bg-white rounded-xl shadow-sm hover:shadow-md border transition-all overflow-hidden ${compareList.includes(project.id) ? 'border-[var(--iica-blue)] ring-1 ring-blue-100' : 'border-gray-200'}`}
                                         >
-                                            <div className="flex justify-between items-start">
-                                                <div className="flex items-center gap-3">
-                                                    {/* Checkbox Mobile */}
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={compareList.includes(project.id)}
-                                                        onChange={() => toggleCompare(project.id)}
-                                                        className="w-5 h-5 text-[var(--iica-blue)] border-gray-300 rounded focus:ring-[var(--iica-blue)]"
-                                                    />
+                                            {/* Borde lateral decorativo */}
+                                            <div className={`absolute top-0 bottom-0 left-0 w-1.5 ${isClosingSoon(project.fecha_cierre) ? 'bg-red-500' : 'bg-[var(--iica-blue)]'}`} />
 
-                                                    <div className="relative w-8 h-8 flex-shrink-0">
-                                                        <Image
-                                                            src={getLogoUrl(project.institucion)}
-                                                            alt={project.institucion}
-                                                            fill
-                                                            className="rounded bg-white object-contain border border-gray-100"
-                                                            sizes="32px"
-                                                        />
+                                            <div className="p-5 pl-7">
+                                                {/* Header Tarjeta */}
+                                                <div className="flex justify-between items-start mb-4">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="relative w-12 h-12 flex-shrink-0 bg-white rounded-lg border border-gray-100 shadow-sm p-1.5">
+                                                            <Image
+                                                                src={getLogoUrl(project.institucion)}
+                                                                alt={project.institucion}
+                                                                fill
+                                                                className="object-contain"
+                                                                sizes="48px"
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">
+                                                                {project.institucion}
+                                                            </h4>
+                                                            <div className="flex flex-wrap gap-2">
+                                                                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                                                                    {project.categoria}
+                                                                </span>
+                                                                {isClosingSoon(project.fecha_cierre) && (
+                                                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-50 text-red-600 border border-red-100 animate-pulse">
+                                                                        <Clock className="h-3 w-3" /> Cierra pronto
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                                <button
-                                                    onClick={() => toggleFavorite(project.id)}
-                                                    className="p-1 focus:outline-none"
-                                                >
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        viewBox="0 0 24 24"
-                                                        fill={favorites.includes(project.id) ? "#ef4444" : "none"}
-                                                        stroke="currentColor"
-                                                        className={`w-6 h-6 ${favorites.includes(project.id) ? 'text-red-500' : 'text-gray-300'}`}
-                                                        strokeWidth={2}
+                                                    <button
+                                                        onClick={() => toggleFavorite(project.id)}
+                                                        className="p-2 -mr-2 -mt-2 text-gray-400 hover:text-red-500 transition-colors focus:outline-none"
                                                     >
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-
-                                            <div>
-                                                <div className="flex items-center gap-2 mb-1">
-                                                    <span className="text-xs font-bold text-[var(--iica-secondary)] bg-green-50 px-2 py-0.5 rounded border border-green-100">
-                                                        {project.institucion}
-                                                    </span>
-                                                    {isClosingSoon(project.fecha_cierre) && (
-                                                        <span className="text-[10px] font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded animate-pulse">
-                                                            ¡Cierra Pronto!
-                                                        </span>
-                                                    )}
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            viewBox="0 0 24 24"
+                                                            fill={favorites.includes(project.id) ? "#ef4444" : "none"}
+                                                            stroke="currentColor"
+                                                            className={`w-6 h-6 ${favorites.includes(project.id) ? 'text-red-500' : ''}`}
+                                                            strokeWidth={2}
+                                                        >
+                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                                        </svg>
+                                                    </button>
                                                 </div>
 
-                                                <div className="flex items-start gap-2">
-                                                    <h3 className="font-bold text-lg text-[var(--iica-navy)] leading-snug flex-1">
+                                                {/* Contenido Principal */}
+                                                <div className="mb-4">
+                                                    <h3 className="font-bold text-lg text-[var(--iica-navy)] leading-snug mb-2">
                                                         {project.nombre}
                                                     </h3>
                                                     {project.resumen && (
                                                         <button
                                                             onClick={() => setExpandedProject(expandedProject === project.id ? null : project.id)}
-                                                            className="text-[var(--iica-cyan)] hover:text-[var(--iica-blue)] transition-colors p-1 flex-shrink-0"
-                                                            aria-label="Ver resumen ejecutivo"
+                                                            className="text-sm text-[var(--iica-blue)] font-medium flex items-center gap-1 hover:underline focus:outline-none"
                                                         >
-                                                            <Info className="h-5 w-5" />
+                                                            <Info className="h-4 w-4" />
+                                                            {expandedProject === project.id ? 'Ocultar detalles' : 'Ver resumen ejecutivo'}
                                                         </button>
                                                     )}
                                                 </div>
-                                            </div>
 
-                                            {/* Resumen ejecutivo expandible (móvil) */}
-                                            {expandedProject === project.id && project.resumen && (
-                                                <motion.div
-                                                    initial={{ opacity: 0, height: 0 }}
-                                                    animate={{ opacity: 1, height: 'auto' }}
-                                                    exit={{ opacity: 0, height: 0 }}
-                                                    className="bg-blue-50 rounded-lg p-3 border border-blue-200 text-sm"
-                                                >
-                                                    <h4 className="font-bold text-[var(--iica-navy)] mb-2 flex items-center gap-1 text-sm">
-                                                        <Info className="h-3 w-3" />
-                                                        Resumen Ejecutivo
-                                                    </h4>
-                                                    <div className="space-y-2">
-                                                        {project.resumen.cofinanciamiento && (
-                                                            <div>
-                                                                <strong className="text-gray-700 text-xs">💰 Cofinanciamiento:</strong>
-                                                                <p className="text-gray-600 text-xs mt-0.5">{project.resumen.cofinanciamiento}</p>
+                                                {/* Resumen Expandible */}
+                                                <AnimatePresence>
+                                                    {expandedProject === project.id && project.resumen && (
+                                                        <motion.div
+                                                            initial={{ opacity: 0, height: 0 }}
+                                                            animate={{ opacity: 1, height: 'auto' }}
+                                                            exit={{ opacity: 0, height: 0 }}
+                                                            className="overflow-hidden mb-4"
+                                                        >
+                                                            <div className="bg-slate-50 rounded-lg p-4 border border-slate-200/60 text-sm space-y-3 shadow-inner">
+                                                                {project.resumen.cofinanciamiento && (
+                                                                    <div>
+                                                                        <strong className="text-[var(--iica-navy)] text-xs uppercase tracking-wide block mb-1">Cofinanciamiento</strong>
+                                                                        <p className="text-gray-700 font-medium">{project.resumen.cofinanciamiento}</p>
+                                                                    </div>
+                                                                )}
+                                                                <div className="grid grid-cols-2 gap-4">
+                                                                    <div>
+                                                                        <strong className="text-[var(--iica-navy)] text-xs uppercase tracking-wide block mb-1">Cierre</strong>
+                                                                        <p className="text-gray-700">{new Date(project.fecha_cierre).toLocaleDateString()}</p>
+                                                                    </div>
+                                                                    {project.resumen.plazo_ejecucion && (
+                                                                        <div>
+                                                                            <strong className="text-[var(--iica-navy)] text-xs uppercase tracking-wide block mb-1">Duración</strong>
+                                                                            <p className="text-gray-700">{project.resumen.plazo_ejecucion}</p>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                                {project.resumen.requisitos_clave && (
+                                                                    <div>
+                                                                        <strong className="text-[var(--iica-navy)] text-xs uppercase tracking-wide block mb-1">Requisitos Clave</strong>
+                                                                        <ul className="list-disc list-inside text-gray-600 space-y-1 text-xs">
+                                                                            {project.resumen.requisitos_clave.slice(0, 3).map((r, i) => (
+                                                                                <li key={i}>{r}</li>
+                                                                            ))}
+                                                                        </ul>
+                                                                    </div>
+                                                                )}
                                                             </div>
-                                                        )}
-                                                        {project.resumen.requisitos_clave && project.resumen.requisitos_clave.length > 0 && (
-                                                            <div>
-                                                                <strong className="text-gray-700 text-xs">📋 Requisitos:</strong>
-                                                                <ul className="list-disc list-inside text-gray-600 text-xs mt-0.5 space-y-0.5">
-                                                                    {project.resumen.requisitos_clave.slice(0, 3).map((req, idx) => (
-                                                                        <li key={idx}>{req}</li>
-                                                                    ))}
-                                                                </ul>
-                                                            </div>
-                                                        )}
+                                                        </motion.div>
+                                                    )}
+                                                </AnimatePresence>
+
+                                                {/* Footer / Acciones */}
+                                                <div className="flex items-center justify-between pt-4 border-t border-gray-100 mt-2 gap-3">
+                                                    <div className="flex items-center gap-2">
+                                                        <button
+                                                            onClick={() => toggleCompare(project.id)}
+                                                            className={`p-2.5 rounded-lg border transition-all ${compareList.includes(project.id) ? 'bg-blue-50 border-blue-200 text-blue-600 shadow-sm' : 'bg-white border-gray-200 text-gray-400 hover:bg-gray-50'}`}
+                                                            title="Comparar"
+                                                        >
+                                                            <Calendar className="h-5 w-5" />
+                                                        </button>
+
+                                                        <button
+                                                            onClick={(e) => copyProjectFicha(project, e)}
+                                                            className={`p-2.5 rounded-lg border transition-all ${copiedId === project.id ? 'bg-green-50 text-green-600 border-green-200 shadow-sm' : 'bg-white border-gray-200 text-gray-400 hover:bg-gray-50'}`}
+                                                            title="Copiar Ficha"
+                                                        >
+                                                            {copiedId === project.id ? <CheckCheck className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
+                                                        </button>
                                                     </div>
-                                                </motion.div>
-                                            )}
 
-                                            <div className="flex justify-between items-center pt-2">
-                                                <UrgencyBadge date={project.fecha_cierre} mobile />
-                                                <div className="flex items-center gap-2">
-                                                    {/* Copiar Ficha (móvil) */}
-                                                    <button
-                                                        onClick={(e) => copyProjectFicha(project, e)}
-                                                        title="Copiar ficha"
-                                                        className={`p-3 rounded-lg border transition-all ${copiedId === project.id
-                                                            ? 'bg-green-100 text-green-600 border-green-200'
-                                                            : 'bg-gray-50 text-gray-400 border-gray-200 active:bg-gray-100'
-                                                            }`}
-                                                    >
-                                                        {copiedId === project.id ? <CheckCheck className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                                                    </button>
-                                                    {/* Vista Rápida (móvil) */}
-                                                    <button
-                                                        onClick={() => setQuickViewProject(quickViewProject?.id === project.id ? null : project)}
-                                                        title="Vista rápida"
-                                                        className={`p-3 rounded-lg border transition-all ${quickViewProject?.id === project.id
-                                                            ? 'bg-[var(--iica-blue)] text-white border-[var(--iica-blue)]'
-                                                            : 'bg-gray-50 text-gray-400 border-gray-200 active:bg-gray-100'
-                                                            }`}
-                                                    >
-                                                        <Eye className="h-4 w-4" />
-                                                    </button>
-                                                    <ActionButton
-                                                        url={project.url_bases}
-                                                        date={project.fecha_cierre}
-                                                        projectName={project.nombre}
-                                                        onTrack={() => setToastMessage("Redirigiendo a sitio oficial...")}
-                                                    />
+                                                    <div className="flex-1">
+                                                        <ActionButton
+                                                            url={project.url_bases}
+                                                            date={project.fecha_cierre}
+                                                            projectName={project.nombre}
+                                                            onTrack={() => setToastMessage("Redirigiendo a sitio oficial...")}
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </motion.div>
