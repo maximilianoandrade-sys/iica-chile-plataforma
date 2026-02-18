@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useTransition } from 'react';
 import { Search, Filter, ChevronDown, X, Sparkles, SlidersHorizontal, ArrowUpDown } from "lucide-react";
 import { useAnalytics } from '@/hooks/useAnalytics';
 
@@ -65,6 +65,7 @@ export default function ProjectFilters({
     const router = useRouter();
     const searchParams = useSearchParams();
     const { trackSearch } = useAnalytics();
+    const [isPending, startTransition] = useTransition();
 
     const [searchTerm, setSearchTerm] = useState(searchParams.get('q') || '');
     const [showSuggestions, setShowSuggestions] = useState(false);
@@ -100,7 +101,9 @@ export default function ProjectFilters({
                 } else {
                     params.delete('q');
                 }
-                router.replace(`?${params.toString()}`, { scroll: false });
+                startTransition(() => {
+                    router.replace(`?${params.toString()}`, { scroll: false });
+                });
             }
         }, 300);
         return () => clearTimeout(timer);
@@ -143,7 +146,9 @@ export default function ProjectFilters({
     }, [searchParams, counts.filtered, selectedCategory, selectedRegion, selectedBeneficiary, selectedInstitution, trackSearch]);
 
     const handleFilterChange = (key: string, value: string) => {
-        router.push(`?${createQueryString(key, value)}`, { scroll: false });
+        startTransition(() => {
+            router.push(`?${createQueryString(key, value)}`, { scroll: false });
+        });
     };
 
     const toggleSoloAbiertos = () => {
@@ -153,7 +158,9 @@ export default function ProjectFilters({
         } else {
             params.set('open', '1');
         }
-        router.push(`?${params.toString()}`, { scroll: false });
+        startTransition(() => {
+            router.push(`?${params.toString()}`, { scroll: false });
+        });
     };
 
     const handleSortChange = (value: string) => {
@@ -163,12 +170,16 @@ export default function ProjectFilters({
         } else {
             params.set('sort', value);
         }
-        router.push(`?${params.toString()}`, { scroll: false });
+        startTransition(() => {
+            router.push(`?${params.toString()}`, { scroll: false });
+        });
     };
 
     const clearAllFilters = () => {
         setSearchTerm('');
-        router.push('/', { scroll: false });
+        startTransition(() => {
+            router.push('/', { scroll: false });
+        });
     };
 
     const applyQuickSearch = (query: string) => {

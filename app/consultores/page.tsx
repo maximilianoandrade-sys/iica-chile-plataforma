@@ -5,6 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Search, MapPin, Star, MessageCircle, Phone, Award, CheckCircle, Clock, TrendingUp, Users, Filter, ChevronDown } from 'lucide-react';
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
 
 const CONSULTORES = [
     {
@@ -134,246 +136,249 @@ export default function ConsultoresPage() {
     });
 
     return (
-        <div className="min-h-screen bg-[#f4f7f9] pb-20">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-[var(--iica-navy)] to-[var(--iica-blue)] text-white pt-24 pb-16 px-6">
-                <div className="max-w-6xl mx-auto">
-                    <Link href="/" className="text-blue-200 hover:text-white text-sm mb-6 inline-flex items-center gap-1 transition-colors">
-                        ← Volver al Inicio
-                    </Link>
-                    <div className="flex flex-col md:flex-row justify-between items-start gap-6">
-                        <div>
-                            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3 py-1.5 rounded-full text-sm font-medium text-blue-100 mb-4">
-                                <Award className="h-4 w-4 text-[var(--iica-yellow)]" />
-                                Validados por IICA Chile
+        <div className="min-h-screen bg-[#f4f7f9] flex flex-col">
+            <Header />
+
+            <main className="flex-grow">
+                {/* Hero */}
+                <div className="bg-gradient-to-r from-[var(--iica-navy)] to-[var(--iica-blue)] text-white pt-10 pb-20 px-6">
+                    <div className="max-w-6xl mx-auto">
+                        <div className="flex flex-col md:flex-row justify-between items-start gap-6">
+                            <div>
+                                <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-3 py-1.5 rounded-full text-sm font-medium text-blue-100 mb-4">
+                                    <Award className="h-4 w-4 text-[var(--iica-yellow)]" />
+                                    Validados por IICA Chile
+                                </div>
+                                <h1 className="text-3xl md:text-4xl font-extrabold mb-3">
+                                    Directorio de Formuladores
+                                </h1>
+                                <p className="text-blue-100 text-lg max-w-xl">
+                                    Expertos certificados que te ayudan a postular y ganar fondos. No pierdas una oportunidad por falta de apoyo técnico.
+                                </p>
                             </div>
-                            <h1 className="text-3xl md:text-4xl font-extrabold mb-3">
-                                Directorio de Formuladores
-                            </h1>
-                            <p className="text-blue-100 text-lg max-w-xl">
-                                Expertos certificados que te ayudan a postular y ganar fondos. No pierdas una oportunidad por falta de apoyo técnico.
-                            </p>
-                        </div>
-                        <div className="flex gap-3 flex-shrink-0">
-                            <div className="bg-white/10 border border-white/20 rounded-xl p-4 text-center">
-                                <p className="text-2xl font-bold text-[var(--iica-yellow)]">{CONSULTORES.length}</p>
-                                <p className="text-blue-200 text-xs">Consultores</p>
-                            </div>
-                            <div className="bg-white/10 border border-white/20 rounded-xl p-4 text-center">
-                                <p className="text-2xl font-bold text-green-400">73%</p>
-                                <p className="text-blue-200 text-xs">Tasa Éxito</p>
+                            <div className="flex gap-3 flex-shrink-0">
+                                <div className="bg-white/10 border border-white/20 rounded-xl p-4 text-center">
+                                    <p className="text-2xl font-bold text-[var(--iica-yellow)]">{CONSULTORES.length}</p>
+                                    <p className="text-blue-200 text-xs">Consultores</p>
+                                </div>
+                                <div className="bg-white/10 border border-white/20 rounded-xl p-4 text-center">
+                                    <p className="text-2xl font-bold text-green-400">73%</p>
+                                    <p className="text-blue-200 text-xs">Tasa Éxito</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="max-w-6xl mx-auto px-4 -mt-8">
-                {/* Search & Filters Card */}
-                <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 mb-8">
-                    <div className="flex flex-col md:flex-row gap-3 items-center">
-                        <div className="relative flex-1 w-full">
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
-                            <input
-                                type="text"
-                                placeholder="Buscar por nombre, especialidad o región..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--iica-blue)] focus:border-transparent outline-none text-gray-700 min-h-[48px]"
-                            />
+                <div className="max-w-6xl mx-auto px-4 -mt-8 pb-12">
+                    {/* Search & Filters Card */}
+                    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 mb-8">
+                        <div className="flex flex-col md:flex-row gap-3 items-center">
+                            <div className="relative flex-1 w-full">
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                                <input
+                                    type="text"
+                                    placeholder="Buscar por nombre, especialidad o región..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--iica-blue)] focus:border-transparent outline-none text-gray-700 min-h-[48px]"
+                                />
+                            </div>
+                            <button
+                                onClick={() => setShowFilters(!showFilters)}
+                                className="flex items-center gap-2 px-4 py-3 border border-gray-200 rounded-xl text-gray-600 hover:border-[var(--iica-blue)] hover:text-[var(--iica-blue)] transition-colors font-medium min-h-[48px]"
+                            >
+                                <Filter className="h-4 w-4" />
+                                Filtros
+                                <ChevronDown className={`h-4 w-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+                            </button>
                         </div>
-                        <button
-                            onClick={() => setShowFilters(!showFilters)}
-                            className="flex items-center gap-2 px-4 py-3 border border-gray-200 rounded-xl text-gray-600 hover:border-[var(--iica-blue)] hover:text-[var(--iica-blue)] transition-colors font-medium min-h-[48px]"
-                        >
-                            <Filter className="h-4 w-4" />
-                            Filtros
-                            <ChevronDown className={`h-4 w-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
-                        </button>
+
+                        {showFilters && (
+                            <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col gap-4">
+                                <div>
+                                    <p className="text-sm font-bold text-gray-700 mb-2">Especialidad:</p>
+                                    <div className="flex flex-wrap gap-2">
+                                        {FILTROS_ESPECIALIDAD.map(f => (
+                                            <button
+                                                key={f}
+                                                onClick={() => setFilterEsp(f)}
+                                                className={`px-4 py-2 rounded-full text-sm font-medium transition-all min-h-[40px] ${filterEsp === f
+                                                    ? 'bg-[var(--iica-navy)] text-white shadow-md'
+                                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                                    }`}
+                                            >
+                                                {f}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div>
+                                    <p className="text-sm font-bold text-gray-700 mb-2">Región:</p>
+                                    <div className="flex flex-wrap gap-2">
+                                        {FILTROS_REGION.map(r => (
+                                            <button
+                                                key={r}
+                                                onClick={() => setFilterRegion(r)}
+                                                className={`px-4 py-2 rounded-full text-sm font-medium transition-all min-h-[40px] ${filterRegion === r
+                                                    ? 'bg-[var(--iica-blue)] text-white shadow-md'
+                                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                                    }`}
+                                            >
+                                                {r}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
-                    {showFilters && (
-                        <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col gap-4">
-                            <div>
-                                <p className="text-sm font-bold text-gray-700 mb-2">Especialidad:</p>
-                                <div className="flex flex-wrap gap-2">
-                                    {FILTROS_ESPECIALIDAD.map(f => (
-                                        <button
-                                            key={f}
-                                            onClick={() => setFilterEsp(f)}
-                                            className={`px-4 py-2 rounded-full text-sm font-medium transition-all min-h-[40px] ${filterEsp === f
-                                                ? 'bg-[var(--iica-navy)] text-white shadow-md'
-                                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                                }`}
-                                        >
-                                            {f}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                            <div>
-                                <p className="text-sm font-bold text-gray-700 mb-2">Región:</p>
-                                <div className="flex flex-wrap gap-2">
-                                    {FILTROS_REGION.map(r => (
-                                        <button
-                                            key={r}
-                                            onClick={() => setFilterRegion(r)}
-                                            className={`px-4 py-2 rounded-full text-sm font-medium transition-all min-h-[40px] ${filterRegion === r
-                                                ? 'bg-[var(--iica-blue)] text-white shadow-md'
-                                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                                }`}
-                                        >
-                                            {r}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
+                    {/* Results count */}
+                    <p className="text-sm text-gray-500 mb-4">
+                        Mostrando <strong className="text-[var(--iica-navy)]">{filtered.length}</strong> de {CONSULTORES.length} consultores
+                    </p>
 
-                {/* Results count */}
-                <p className="text-sm text-gray-500 mb-4">
-                    Mostrando <strong className="text-[var(--iica-navy)]">{filtered.length}</strong> de {CONSULTORES.length} consultores
-                </p>
-
-                {/* Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {filtered.map((consultor, i) => (
-                        <motion.div
-                            key={consultor.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: i * 0.05 }}
-                            className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all group"
-                        >
-                            {/* Card Header */}
-                            <div className="relative h-20 bg-gradient-to-r from-[var(--iica-navy)] to-[var(--iica-blue)]">
-                                {consultor.disponible ? (
-                                    <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-green-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">
-                                        <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
-                                        Disponible
-                                    </div>
-                                ) : (
-                                    <div className="absolute top-3 right-3 bg-gray-400 text-white text-xs font-bold px-2.5 py-1 rounded-full">
-                                        Ocupado
-                                    </div>
-                                )}
-                                <div className="absolute -bottom-10 left-1/2 -translate-x-1/2">
-                                    <div className="relative w-20 h-20 rounded-full border-4 border-white overflow-hidden bg-gray-200 shadow-md">
-                                        <Image
-                                            src={consultor.image}
-                                            alt={consultor.name}
-                                            fill
-                                            className="object-cover"
-                                        />
-                                    </div>
-                                    {consultor.verificado && (
-                                        <div className="absolute -bottom-1 -right-1 bg-[var(--iica-blue)] rounded-full p-0.5">
-                                            <CheckCircle className="h-4 w-4 text-white fill-white" />
+                    {/* Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {filtered.map((consultor, i) => (
+                            <motion.div
+                                key={consultor.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: i * 0.05 }}
+                                className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all group"
+                            >
+                                {/* Card Header */}
+                                <div className="relative h-20 bg-gradient-to-r from-[var(--iica-navy)] to-[var(--iica-blue)]">
+                                    {consultor.disponible ? (
+                                        <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-green-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">
+                                            <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>
+                                            Disponible
+                                        </div>
+                                    ) : (
+                                        <div className="absolute top-3 right-3 bg-gray-400 text-white text-xs font-bold px-2.5 py-1 rounded-full">
+                                            Ocupado
                                         </div>
                                     )}
-                                </div>
-                            </div>
-
-                            {/* Card Body */}
-                            <div className="pt-12 pb-5 px-5 text-center">
-                                <h3 className="font-bold text-lg text-gray-800">{consultor.name}</h3>
-                                <p className="text-[var(--iica-blue)] font-medium text-sm mb-1">{consultor.specialty}</p>
-
-                                <div className="flex items-center justify-center gap-1 mb-3 text-sm text-gray-500">
-                                    <MapPin className="h-3 w-3" /> {consultor.region}
-                                </div>
-
-                                {/* Rating */}
-                                <div className="flex justify-center items-center gap-1 mb-3">
-                                    {[...Array(5)].map((_, j) => (
-                                        <Star key={j} className={`h-4 w-4 ${j < Math.floor(consultor.rating) ? 'text-yellow-400 fill-current' : 'text-gray-200 fill-current'}`} />
-                                    ))}
-                                    <span className="font-bold text-gray-800 ml-1">{consultor.rating}</span>
-                                    <span className="text-gray-400 text-xs">({consultor.reviews})</span>
-                                </div>
-
-                                {/* Stats */}
-                                <div className="grid grid-cols-2 gap-2 mb-4">
-                                    <div className="bg-gray-50 rounded-lg p-2 text-center">
-                                        <p className="text-lg font-bold text-[var(--iica-navy)]">{consultor.proyectosGanados}</p>
-                                        <p className="text-xs text-gray-500">Proyectos ganados</p>
-                                    </div>
-                                    <div className="bg-gray-50 rounded-lg p-2 text-center">
-                                        <p className="text-lg font-bold text-[var(--iica-secondary)]">{consultor.montoGestionado}</p>
-                                        <p className="text-xs text-gray-500">Gestionado</p>
+                                    <div className="absolute -bottom-10 left-1/2 -translate-x-1/2">
+                                        <div className="relative w-20 h-20 rounded-full border-4 border-white overflow-hidden bg-gray-200 shadow-md">
+                                            <Image
+                                                src={consultor.image}
+                                                alt={consultor.name}
+                                                fill
+                                                className="object-cover"
+                                            />
+                                        </div>
+                                        {consultor.verificado && (
+                                            <div className="absolute -bottom-1 -right-1 bg-[var(--iica-blue)] rounded-full p-0.5">
+                                                <CheckCircle className="h-4 w-4 text-white fill-white" />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 
-                                {/* Tags */}
-                                <div className="flex flex-wrap justify-center gap-1.5 mb-4">
-                                    {consultor.tags.map(tag => (
-                                        <span key={tag} className="px-2 py-0.5 bg-blue-50 text-[var(--iica-blue)] text-[10px] font-bold uppercase rounded-full border border-blue-100">
-                                            {tag}
-                                        </span>
-                                    ))}
+                                {/* Card Body */}
+                                <div className="pt-12 pb-5 px-5 text-center">
+                                    <h3 className="font-bold text-lg text-gray-800">{consultor.name}</h3>
+                                    <p className="text-[var(--iica-blue)] font-medium text-sm mb-1">{consultor.specialty}</p>
+
+                                    <div className="flex items-center justify-center gap-1 mb-3 text-sm text-gray-500">
+                                        <MapPin className="h-3 w-3" /> {consultor.region}
+                                    </div>
+
+                                    {/* Rating */}
+                                    <div className="flex justify-center items-center gap-1 mb-3">
+                                        {[...Array(5)].map((_, j) => (
+                                            <Star key={j} className={`h-4 w-4 ${j < Math.floor(consultor.rating) ? 'text-yellow-400 fill-current' : 'text-gray-200 fill-current'}`} />
+                                        ))}
+                                        <span className="font-bold text-gray-800 ml-1">{consultor.rating}</span>
+                                        <span className="text-gray-400 text-xs">({consultor.reviews})</span>
+                                    </div>
+
+                                    {/* Stats */}
+                                    <div className="grid grid-cols-2 gap-2 mb-4">
+                                        <div className="bg-gray-50 rounded-lg p-2 text-center">
+                                            <p className="text-lg font-bold text-[var(--iica-navy)]">{consultor.proyectosGanados}</p>
+                                            <p className="text-xs text-gray-500">Proyectos ganados</p>
+                                        </div>
+                                        <div className="bg-gray-50 rounded-lg p-2 text-center">
+                                            <p className="text-lg font-bold text-[var(--iica-secondary)]">{consultor.montoGestionado}</p>
+                                            <p className="text-xs text-gray-500">Gestionado</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Tags */}
+                                    <div className="flex flex-wrap justify-center gap-1.5 mb-4">
+                                        {consultor.tags.map(tag => (
+                                            <span key={tag} className="px-2 py-0.5 bg-blue-50 text-[var(--iica-blue)] text-[10px] font-bold uppercase rounded-full border border-blue-100">
+                                                {tag}
+                                            </span>
+                                        ))}
+                                    </div>
+
+                                    {/* Response time */}
+                                    <div className="flex items-center justify-center gap-1 text-xs text-gray-500 mb-4">
+                                        <Clock className="h-3 w-3" />
+                                        Responde en {consultor.tiempoRespuesta}
+                                    </div>
+
+                                    {/* Price */}
+                                    <p className="text-sm font-bold text-gray-700 mb-4">{consultor.precio}</p>
+
+                                    {/* CTA Buttons */}
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <a
+                                            href={`mailto:chile@iica.int?subject=Consulta sobre ${consultor.name}&body=Hola, vi el perfil de ${consultor.name} en la plataforma IICA Chile y me gustaría contactarle para recibir asesoría en fondos concursables.`}
+                                            className="flex items-center justify-center gap-1.5 py-3 px-3 bg-[#25D366] text-white text-sm font-bold rounded-xl hover:brightness-110 transition-all min-h-[48px]"
+                                        >
+                                            <MessageCircle className="h-4 w-4" />
+                                            Contactar
+                                        </a>
+                                        <a
+                                            href={`mailto:chile@iica.int?subject=Solicitud de contacto con ${consultor.name}&body=Hola, deseo contactar a ${consultor.name} (${consultor.specialty}) para recibir asesoría.`}
+                                            className="flex items-center justify-center gap-1.5 py-3 px-3 border-2 border-gray-200 text-gray-700 text-sm font-bold rounded-xl hover:border-[var(--iica-blue)] hover:text-[var(--iica-blue)] transition-all min-h-[48px]"
+                                        >
+                                            <Phone className="h-4 w-4" /> Solicitar
+                                        </a>
+                                    </div>
                                 </div>
-
-                                {/* Response time */}
-                                <div className="flex items-center justify-center gap-1 text-xs text-gray-500 mb-4">
-                                    <Clock className="h-3 w-3" />
-                                    Responde en {consultor.tiempoRespuesta}
-                                </div>
-
-                                {/* Price */}
-                                <p className="text-sm font-bold text-gray-700 mb-4">{consultor.precio}</p>
-
-                                {/* CTA Buttons */}
-                                <div className="grid grid-cols-2 gap-2">
-                                    <a
-                                        href={`mailto:chile@iica.int?subject=Consulta sobre ${consultor.name}&body=Hola, vi el perfil de ${consultor.name} en la plataforma IICA Chile y me gustaría contactarle para recibir asesoría en fondos concursables.`}
-                                        className="flex items-center justify-center gap-1.5 py-3 px-3 bg-[#25D366] text-white text-sm font-bold rounded-xl hover:brightness-110 transition-all min-h-[48px]"
-                                    >
-                                        <MessageCircle className="h-4 w-4" />
-                                        Contactar
-                                    </a>
-                                    <a
-                                        href={`mailto:chile@iica.int?subject=Solicitud de contacto con ${consultor.name}&body=Hola, deseo contactar a ${consultor.name} (${consultor.specialty}) para recibir asesoría.`}
-                                        className="flex items-center justify-center gap-1.5 py-3 px-3 border-2 border-gray-200 text-gray-700 text-sm font-bold rounded-xl hover:border-[var(--iica-blue)] hover:text-[var(--iica-blue)] transition-all min-h-[48px]"
-                                    >
-                                        <Phone className="h-4 w-4" /> Solicitar
-                                    </a>
-                                </div>
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
-
-                {filtered.length === 0 && (
-                    <div className="text-center py-16">
-                        <div className="text-5xl mb-4">🔍</div>
-                        <h3 className="text-xl font-bold text-gray-700 mb-2">No se encontraron consultores</h3>
-                        <p className="text-gray-500">Intenta con otros filtros o términos de búsqueda.</p>
-                        <button
-                            onClick={() => { setFilterEsp('Todos'); setFilterRegion('Todas'); setSearchTerm(''); }}
-                            className="mt-4 px-6 py-3 bg-[var(--iica-blue)] text-white font-bold rounded-xl hover:bg-[var(--iica-navy)] transition-colors"
-                        >
-                            Limpiar filtros
-                        </button>
+                            </motion.div>
+                        ))}
                     </div>
-                )}
 
-                {/* CTA para consultores */}
-                <div className="mt-12 bg-gradient-to-r from-[var(--iica-navy)] to-[var(--iica-blue)] rounded-2xl p-8 text-white text-center">
-                    <Award className="h-10 w-10 text-[var(--iica-yellow)] mx-auto mb-4" />
-                    <h3 className="text-2xl font-bold mb-2">¿Eres consultor agrícola?</h3>
-                    <p className="text-blue-200 mb-6 max-w-md mx-auto">
-                        Únete a nuestra red de formuladores validados por IICA y conecta con agricultores que necesitan tu experiencia.
-                    </p>
-                    <a
-                        href="mailto:chile@iica.int?subject=Solicitud de ingreso al Directorio de Consultores"
-                        className="inline-flex items-center gap-2 bg-[var(--iica-yellow)] text-[var(--iica-navy)] font-bold px-8 py-4 rounded-xl hover:brightness-110 transition-all min-h-[56px]"
-                    >
-                        Solicitar Validación IICA →
-                    </a>
+                    {filtered.length === 0 && (
+                        <div className="text-center py-16">
+                            <div className="text-5xl mb-4">🔍</div>
+                            <h3 className="text-xl font-bold text-gray-700 mb-2">No se encontraron consultores</h3>
+                            <p className="text-gray-500">Intenta con otros filtros o términos de búsqueda.</p>
+                            <button
+                                onClick={() => { setFilterEsp('Todos'); setFilterRegion('Todas'); setSearchTerm(''); }}
+                                className="mt-4 px-6 py-3 bg-[var(--iica-blue)] text-white font-bold rounded-xl hover:bg-[var(--iica-navy)] transition-colors"
+                            >
+                                Limpiar filtros
+                            </button>
+                        </div>
+                    )}
+
+                    {/* CTA para consultores */}
+                    <div className="mt-12 bg-gradient-to-r from-[var(--iica-navy)] to-[var(--iica-blue)] rounded-2xl p-8 text-white text-center">
+                        <Award className="h-10 w-10 text-[var(--iica-yellow)] mx-auto mb-4" />
+                        <h3 className="text-2xl font-bold mb-2">¿Eres consultor agrícola?</h3>
+                        <p className="text-blue-200 mb-6 max-w-md mx-auto">
+                            Únete a nuestra red de formuladores validados por IICA y conecta con agricultores que necesitan tu experiencia.
+                        </p>
+                        <a
+                            href="mailto:chile@iica.int?subject=Solicitud de ingreso al Directorio de Consultores"
+                            className="inline-flex items-center gap-2 bg-[var(--iica-yellow)] text-[var(--iica-navy)] font-bold px-8 py-4 rounded-xl hover:brightness-110 transition-all min-h-[56px]"
+                        >
+                            Solicitar Validación IICA →
+                        </a>
+                    </div>
                 </div>
-            </div>
+            </main>
+
+            <Footer />
         </div>
     );
 }

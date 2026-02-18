@@ -80,22 +80,32 @@ const ProgramsSection = () => {
                 </div>
 
                 {/* Grid de Tarjetas */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                     {programs.map((program) => (
                         <Link
                             key={program.id}
                             href={program.deepLink}
-                            className="group p-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 dark:border-gray-700 cursor-pointer"
+                            className="group flex flex-col items-start p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700 cursor-pointer h-full relative overflow-hidden"
                         >
-                            <div className="flex items-center justify-center w-12 h-12 mb-4 rounded-full bg-blue-50 text-2xl group-hover:bg-blue-100 transition-colors">
+                            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                                <span className="text-6xl">{program.icon}</span>
+                            </div>
+
+                            <div className="flex items-center justify-center w-14 h-14 mb-4 rounded-full bg-blue-50 dark:bg-blue-900/20 text-3xl group-hover:bg-[var(--iica-blue)] group-hover:text-white transition-all duration-300 shadow-sm">
                                 {program.icon}
                             </div>
-                            <h3 className="text-xl font-semibold text-[var(--iica-navy)] dark:text-white mb-2 group-hover:text-[var(--iica-blue)] transition-colors">
+
+                            <h3 className="text-lg md:text-xl font-bold text-[var(--iica-navy)] dark:text-white mb-3 group-hover:text-[var(--iica-blue)] transition-colors leading-tight">
                                 {program.title}
                             </h3>
-                            <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+
+                            <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed font-medium">
                                 {program.description}
                             </p>
+
+                            <div className="mt-auto pt-4 flex items-center text-sm font-bold text-[var(--iica-blue)] opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">
+                                Ver convocatorias →
+                            </div>
                         </Link>
                     ))}
                 </div>

@@ -4,6 +4,7 @@ import CookieConsent from '@/components/CookieConsent';
 import PWAInstallBanner from '@/components/PWAInstallBanner';
 import OfflineIndicator from '@/components/OfflineIndicator';
 import PushNotificationManager from '@/components/PushNotificationManager';
+import ScrollToTop from '@/components/ScrollToTop';
 import { SECURITY_HEADERS } from '@/lib/security';
 
 // ============================================================================
@@ -146,6 +147,8 @@ export default function RootLayout({
         {/* Componentes globales */}
         <CookieConsent />
         <PWAInstallBanner />
+        <ScrollToTop />
+        <PushNotificationManager />
 
         {/* Service Worker Registration */}
         <script
