@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import { Outfit } from 'next/font/google'
 import './globals.css'
 import CookieConsent from '@/components/CookieConsent';
 import PWAInstallBanner from '@/components/PWAInstallBanner';
@@ -6,6 +7,8 @@ import OfflineIndicator from '@/components/OfflineIndicator';
 import PushNotificationManager from '@/components/PushNotificationManager';
 import ScrollToTop from '@/components/ScrollToTop';
 import { SECURITY_HEADERS } from '@/lib/security';
+
+const outfit = Outfit({ subsets: ['latin'] })
 
 // ============================================================================
 // METADATA - SEO & PWA
@@ -92,7 +95,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es" dir="ltr">
+    <html lang="es" dir="ltr" className={outfit.className}>
       <head>
         {/* Preconnect a dominios externos */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -116,15 +119,6 @@ export default function RootLayout({
         <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
         <meta httpEquiv="X-Frame-Options" content="DENY" />
         <meta httpEquiv="X-XSS-Protection" content="1; mode=block" />
-
-        {/* Preload Critical Resources */}
-        <link
-          rel="preload"
-          href="/fonts/inter-var.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
       </head>
 
       <body className="flex flex-col min-h-screen bg-[#f4f7f9] antialiased">
