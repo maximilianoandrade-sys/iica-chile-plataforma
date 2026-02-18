@@ -282,32 +282,33 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                             <th className="py-5 px-6 text-right">Acciones</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-[var(--iica-border)]">
+                                    <tbody className="divide-y divide-gray-100 bg-white">
                                         <AnimatePresence>
                                             {displayedProjects.map((project) => (
                                                 <React.Fragment key={project.id}>
                                                     <motion.tr
-                                                        className={`hover:bg-blue-50/40 transition-colors group ${compareList.includes(project.id) ? 'bg-blue-50/30' : ''}`}
+                                                        className={`hover:bg-blue-50/60 transition-colors group ${compareList.includes(project.id) ? 'bg-blue-50/40' : ''}`}
                                                         initial={{ opacity: 0, y: 10 }}
                                                         animate={{ opacity: 1, y: 0 }}
                                                         exit={{ opacity: 0, height: 0 }}
                                                         transition={{ duration: 0.2 }}
                                                     >
-                                                        <td className="py-5 px-6 text-center">
-                                                            <input
-                                                                type="checkbox"
-                                                                checked={compareList.includes(project.id)}
-                                                                onChange={() => toggleCompare(project.id)}
-                                                                className="w-4 h-4 text-[var(--iica-blue)] border-gray-300 rounded focus:ring-[var(--iica-blue)] cursor-pointer"
-                                                                title="Comparar este proyecto"
-                                                            />
+                                                        <td className="py-6 px-6 text-center align-middle">
+                                                            <div className="flex justify-center">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    checked={compareList.includes(project.id)}
+                                                                    onChange={() => toggleCompare(project.id)}
+                                                                    className="w-5 h-5 text-[var(--iica-blue)] border-gray-300 rounded focus:ring-[var(--iica-blue)] cursor-pointer transition-transform active:scale-95"
+                                                                    title="Comparar este proyecto"
+                                                                />
+                                                            </div>
                                                         </td>
-                                                        <td className="py-5 px-6">
-                                                            <div className="flex items-start gap-2">
-                                                                {/* Heart Button Desktop */}
+                                                        <td className="py-6 px-6 align-middle">
+                                                            <div className="flex items-start gap-4">
                                                                 <button
                                                                     onClick={() => toggleFavorite(project.id)}
-                                                                    className="mt-1 text-gray-300 hover:text-red-500 focus:outline-none transition-colors"
+                                                                    className="mt-1 text-gray-300 hover:text-red-500 focus:outline-none transition-colors transform active:scale-90"
                                                                     title={favorites.includes(project.id) ? "Quitar de favoritos" : "Guardar en favoritos"}
                                                                 >
                                                                     <svg
@@ -315,83 +316,85 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                                         viewBox="0 0 24 24"
                                                                         fill={favorites.includes(project.id) ? "#ef4444" : "none"}
                                                                         stroke="currentColor"
-                                                                        className={`w-5 h-5 ${favorites.includes(project.id) ? 'text-red-500' : 'text-gray-400 group-hover:text-gray-500'}`}
+                                                                        className={`w-6 h-6 ${favorites.includes(project.id) ? 'text-red-500' : 'text-gray-300 group-hover:text-gray-400'}`}
                                                                         strokeWidth={2}
                                                                     >
                                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                                                     </svg>
                                                                 </button>
                                                                 <div className="flex-1">
-                                                                    <div className="flex items-center gap-2 mb-1">
-                                                                        <div className="font-bold text-[var(--iica-navy)] text-base">{project.nombre}</div>
+                                                                    <div className="flex items-center gap-2 mb-1.5">
+                                                                        <div className="font-bold text-[var(--iica-navy)] text-base group-hover:text-[var(--iica-blue)] transition-colors">{project.nombre}</div>
                                                                         {isClosingSoon(project.fecha_cierre) && (
-                                                                            <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-700 animate-pulse">
-                                                                                Cierra Pronto
+                                                                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-50 text-red-600 border border-red-100 animate-pulse whitespace-nowrap">
+                                                                                <Clock className="h-3 w-3" /> Cierra Pronto
                                                                             </span>
                                                                         )}
                                                                     </div>
-                                                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
-                                                                        {project.categoria}
-                                                                    </span>
+                                                                    <div className="flex items-center gap-2">
+                                                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                                                                            {project.categoria}
+                                                                        </span>
+                                                                        {project.resumen && (
+                                                                            <button
+                                                                                onClick={() => setExpandedProject(expandedProject === project.id ? null : project.id)}
+                                                                                className="text-gray-400 hover:text-[var(--iica-blue)] hover:bg-blue-50 rounded-full p-1 transition-all"
+                                                                                aria-label="Ver resumen ejecutivo"
+                                                                                title="Ver detalles"
+                                                                            >
+                                                                                <Info className="h-4 w-4" />
+                                                                            </button>
+                                                                        )}
+                                                                    </div>
                                                                 </div>
-                                                                {project.resumen && (
-                                                                    <button
-                                                                        onClick={() => setExpandedProject(expandedProject === project.id ? null : project.id)}
-                                                                        className="text-[var(--iica-cyan)] hover:text-[var(--iica-blue)] transition-colors p-1"
-                                                                        aria-label="Ver resumen ejecutivo"
-                                                                    >
-                                                                        <Info className="h-5 w-5" />
-                                                                    </button>
-                                                                )}
                                                             </div>
                                                         </td>
-                                                        <td className="py-5 px-6">
+                                                        <td className="py-6 px-6 align-middle">
                                                             <div className="flex items-center gap-3">
-                                                                <div className="relative w-8 h-8 flex-shrink-0">
+                                                                <div className="relative w-10 h-10 flex-shrink-0 bg-white rounded-lg border border-gray-100 shadow-sm p-1">
                                                                     <Image
                                                                         src={getLogoUrl(project.institucion)}
                                                                         alt={project.institucion}
                                                                         fill
-                                                                        className="rounded bg-white shadow-sm p-0.5 object-contain border border-gray-100"
-                                                                        sizes="32px"
+                                                                        className="object-contain"
+                                                                        sizes="40px"
                                                                     />
                                                                 </div>
-                                                                <div className="flex flex-col">
-                                                                    <span className="font-bold text-gray-700">{project.institucion}</span>
-                                                                    <span className="text-[10px] text-gray-400 flex items-center gap-1">
-                                                                        <Sparkles className="h-3 w-3" /> IA: {project.id % 2 === 0 ? 'Postulación Fácil' : 'Postulación Media'}
+                                                                <div className="flex flex-col gap-1">
+                                                                    <span className="font-bold text-gray-700 text-sm leading-tight">{project.institucion}</span>
+                                                                    <span className="inline-flex items-center gap-1 text-[10px] font-medium text-purple-600 bg-purple-50 px-1.5 py-0.5 rounded border border-purple-100 w-fit">
+                                                                        <Sparkles className="h-3 w-3" /> IA: {project.id % 2 === 0 ? 'Fácil' : 'Media'}
                                                                     </span>
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <td className="py-5 px-6">
+                                                        <td className="py-6 px-6 align-middle">
                                                             <UrgencyBadge date={project.fecha_cierre} />
                                                         </td>
-                                                        <td className="py-5 px-6 text-right">
+                                                        <td className="py-6 px-6 text-right align-middle">
                                                             <div className="flex items-center gap-2 justify-end">
-                                                                {/* Copiar Ficha */}
                                                                 <button
                                                                     onClick={(e) => copyProjectFicha(project, e)}
-                                                                    title="Copiar ficha para WhatsApp/email"
-                                                                    className={`p-2 rounded-lg transition-all border ${copiedId === project.id
-                                                                        ? 'bg-green-100 text-green-600 border-green-200'
-                                                                        : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-blue-50 hover:text-[var(--iica-blue)] hover:border-blue-200'
+                                                                    title="Copiar ficha"
+                                                                    className={`p-2.5 rounded-xl border transition-all ${copiedId === project.id
+                                                                        ? 'bg-green-50 text-green-600 border-green-200 shadow-sm'
+                                                                        : 'bg-white text-gray-400 border-gray-200 hover:bg-gray-50 hover:text-gray-600 hover:border-gray-300'
                                                                         }`}
                                                                 >
                                                                     {copiedId === project.id
-                                                                        ? <CheckCheck className="h-4 w-4" />
-                                                                        : <Copy className="h-4 w-4" />}
+                                                                        ? <CheckCheck className="h-5 w-5" />
+                                                                        : <Copy className="h-5 w-5" />}
                                                                 </button>
-                                                                {/* Vista Rápida */}
+
                                                                 <button
                                                                     onClick={() => setQuickViewProject(quickViewProject?.id === project.id ? null : project)}
-                                                                    title="Vista rápida sin salir de la lista"
-                                                                    className={`p-2 rounded-lg transition-all border ${quickViewProject?.id === project.id
-                                                                        ? 'bg-[var(--iica-blue)] text-white border-[var(--iica-blue)]'
-                                                                        : 'bg-gray-50 text-gray-400 border-gray-200 hover:bg-blue-50 hover:text-[var(--iica-blue)] hover:border-blue-200'
+                                                                    title="Vista rápida"
+                                                                    className={`p-2.5 rounded-xl border transition-all ${quickViewProject?.id === project.id
+                                                                        ? 'bg-blue-50 text-[var(--iica-blue)] border-blue-200 shadow-sm'
+                                                                        : 'bg-white text-gray-400 border-gray-200 hover:bg-gray-50 hover:text-gray-600 hover:border-gray-300'
                                                                         }`}
                                                                 >
-                                                                    <Eye className="h-4 w-4" />
+                                                                    <Eye className="h-5 w-5" />
                                                                 </button>
                                                                 <ActionButton
                                                                     url={project.url_bases}
@@ -403,54 +406,66 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                         </td>
                                                     </motion.tr>
 
-                                                    {/* Fila expandible con resumen ejecutivo */}
-                                                    {expandedProject === project.id && project.resumen && (
-                                                        <motion.tr
-                                                            initial={{ opacity: 0, height: 0 }}
-                                                            animate={{ opacity: 1, height: 'auto' }}
-                                                            exit={{ opacity: 0, height: 0 }}
-                                                            className="bg-blue-50/30"
-                                                        >
-                                                            <td colSpan={5} className="px-6 py-4">
-                                                                <div className="bg-white rounded-lg p-4 border border-blue-200 shadow-inner">
-                                                                    <h4 className="font-bold text-[var(--iica-navy)] mb-3 flex items-center gap-2">
-                                                                        <Info className="h-4 w-4" />
-                                                                        Resumen Ejecutivo
-                                                                    </h4>
-                                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                                                                        {project.resumen.cofinanciamiento && (
-                                                                            <div>
-                                                                                <strong className="text-gray-700">💰 Cofinanciamiento:</strong>
-                                                                                <p className="text-gray-600 mt-1">{project.resumen.cofinanciamiento}</p>
+                                                    <AnimatePresence>
+                                                        {expandedProject === project.id && project.resumen && (
+                                                            <motion.tr
+                                                                initial={{ opacity: 0 }}
+                                                                animate={{ opacity: 1 }}
+                                                                exit={{ opacity: 0 }}
+                                                                className="bg-slate-50/50"
+                                                            >
+                                                                <td colSpan={5} className="px-6 py-4 border-b border-gray-100">
+                                                                    <motion.div
+                                                                        initial={{ height: 0, opacity: 0 }}
+                                                                        animate={{ height: 'auto', opacity: 1 }}
+                                                                        exit={{ height: 0, opacity: 0 }}
+                                                                        className="overflow-hidden"
+                                                                    >
+                                                                        <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm mx-4 mb-2 ml-[3.5rem]">
+                                                                            <div className="flex items-center gap-2 mb-4 text-[var(--iica-navy)] border-b border-gray-100 pb-2">
+                                                                                <Info className="h-5 w-5 text-[var(--iica-blue)]" />
+                                                                                <h4 className="font-bold text-sm uppercase tracking-wider">Resumen Ejecutivo</h4>
                                                                             </div>
-                                                                        )}
-                                                                        {project.resumen.plazo_ejecucion && (
-                                                                            <div>
-                                                                                <strong className="text-gray-700">⏱️ Plazo de Ejecución:</strong>
-                                                                                <p className="text-gray-600 mt-1">{project.resumen.plazo_ejecucion}</p>
+
+                                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-600">
+                                                                                {project.resumen.cofinanciamiento && (
+                                                                                    <div>
+                                                                                        <strong className="text-[var(--iica-navy)] block mb-1 text-xs uppercase">Financiamiento</strong>
+                                                                                        <p>{project.resumen.cofinanciamiento}</p>
+                                                                                    </div>
+                                                                                )}
+                                                                                {project.resumen.plazo_ejecucion && (
+                                                                                    <div>
+                                                                                        <strong className="text-[var(--iica-navy)] block mb-1 text-xs uppercase">Duración</strong>
+                                                                                        <p>{project.resumen.plazo_ejecucion}</p>
+                                                                                    </div>
+                                                                                )}
+                                                                                {project.resumen.objetivo && (
+                                                                                    <div className="col-span-2">
+                                                                                        <strong className="text-[var(--iica-navy)] block mb-1 text-xs uppercase">Objetivo</strong>
+                                                                                        <p>{project.resumen.objetivo}</p>
+                                                                                    </div>
+                                                                                )}
+                                                                                {project.resumen.requisitos_clave && (
+                                                                                    <div className="col-span-2">
+                                                                                        <strong className="text-[var(--iica-navy)] block mb-1 text-xs uppercase">Requisitos Clave</strong>
+                                                                                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+                                                                                            {project.resumen.requisitos_clave.map((req, idx) => (
+                                                                                                <li key={idx} className="flex items-start gap-2 bg-gray-50 p-2 rounded border border-gray-100 text-xs">
+                                                                                                    <span className="text-[var(--iica-blue)] mt-0.5">•</span>
+                                                                                                    <span>{req}</span>
+                                                                                                </li>
+                                                                                            ))}
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                )}
                                                                             </div>
-                                                                        )}
-                                                                        {project.resumen.requisitos_clave && project.resumen.requisitos_clave.length > 0 && (
-                                                                            <div className="md:col-span-2">
-                                                                                <strong className="text-gray-700">📋 Requisitos Clave:</strong>
-                                                                                <ul className="list-disc list-inside text-gray-600 mt-1 space-y-1">
-                                                                                    {project.resumen.requisitos_clave.map((req, idx) => (
-                                                                                        <li key={idx}>{req}</li>
-                                                                                    ))}
-                                                                                </ul>
-                                                                            </div>
-                                                                        )}
-                                                                        {project.resumen.observaciones && (
-                                                                            <div className="md:col-span-2">
-                                                                                <strong className="text-gray-700">ℹ️ Observaciones:</strong>
-                                                                                <p className="text-gray-600 mt-1">{project.resumen.observaciones}</p>
-                                                                            </div>
-                                                                        )}
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </motion.tr>
-                                                    )}
+                                                                        </div>
+                                                                    </motion.div>
+                                                                </td>
+                                                            </motion.tr>
+                                                        )}
+                                                    </AnimatePresence>
                                                 </React.Fragment>
                                             ))}
                                         </AnimatePresence>
