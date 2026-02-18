@@ -10,41 +10,42 @@ interface Program {
     deepLink: string; // URL with category filter
 }
 
-{
-    id: 1,
+const programs: Program[] = [
+    {
+        id: 1,
         title: "Innovación y Bioeconomía",
-            description: "Nuevos usos de la biomasa, biotecnología y economía circular.",
-                icon: "🌱",
-                    deepLink: "/?category=Innovación#convocatorias"
-},
-{
-    id: 2,
+        description: "Nuevos usos de la biomasa, biotecnología y economía circular.",
+        icon: "🌱",
+        deepLink: "/?category=Innovación#convocatorias"
+    },
+    {
+        id: 2,
         title: "Desarrollo Territorial y Agricultura Familiar",
-            description: "Fortalecimiento de pequeños productores y asociatividad rural.",
-                icon: "🚜",
-                    deepLink: "/?beneficiary=Pequeño Agricultor#convocatorias"
-},
-{
-    id: 3,
+        description: "Fortalecimiento de pequeños productores y asociatividad rural.",
+        icon: "🚜",
+        deepLink: "/?beneficiary=Pequeño Agricultor#convocatorias"
+    },
+    {
+        id: 3,
         title: "Comercio Internacional e Integración",
-            description: "Acceso a mercados, sanidad para exportación y cadenas de valor.",
-                icon: "🌍",
-                    deepLink: "/?category=Internacional#convocatorias"
-},
-{
-    id: 4,
+        description: "Acceso a mercados, sanidad para exportación y cadenas de valor.",
+        icon: "🌍",
+        deepLink: "/?category=Internacional#convocatorias"
+    },
+    {
+        id: 4,
         title: "Acción Climática y Sostenibilidad",
-            description: "Adaptación al cambio climático y gestión hídrica eficiente.",
-                icon: "💧",
-                    deepLink: "/?category=Riego#convocatorias"
-},
-{
-    id: 7,
+        description: "Adaptación al cambio climático y gestión hídrica eficiente.",
+        icon: "💧",
+        deepLink: "/?category=Riego#convocatorias"
+    },
+    {
+        id: 7,
         title: "Equidad de Género y Juventudes",
-            description: "Inclusión y liderazgo de mujeres y jóvenes en el agro.",
-                icon: "👥",
-                    deepLink: "/?beneficiary=Mujer#convocatorias"
-}
+        description: "Inclusión y liderazgo de mujeres y jóvenes en el agro.",
+        icon: "👥",
+        deepLink: "/?beneficiary=Mujer#convocatorias"
+    }
 ];
 
 const ProgramsSection = () => {
