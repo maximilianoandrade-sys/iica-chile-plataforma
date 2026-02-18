@@ -1,142 +1,77 @@
-import React from 'react';
-
-export const metadata = {
-    title: 'Términos de Uso | IICA Chile',
-    description: 'Términos y Condiciones de Uso de la Plataforma de Financiamiento Agrícola del IICA Chile',
-};
 
 export default function TermsOfUsePage() {
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-            <div className="container mx-auto max-w-4xl px-4 py-12">
-                {/* Header */}
-                <div className="mb-8 border-b border-gray-200 pb-6">
-                    <h1 className="text-4xl font-bold text-[var(--iica-navy)] mb-2">
-                        Términos de Uso
-                    </h1>
-                    <p className="text-sm text-gray-600">
-                        Al utilizar la Plataforma de Financiamiento Agrícola IICA Chile, usted acepta los siguientes términos y condiciones.
-                    </p>
-                </div>
-
-                {/* Content */}
-                <div className="prose prose-lg max-w-none">
-                    {/* Section 1 */}
-                    <section className="mb-8">
-                        <h2 className="text-2xl font-semibold text-[var(--iica-navy)] mb-4">
-                            1. Naturaleza de la Información
-                        </h2>
-                        <p className="text-gray-700 leading-relaxed mb-4">
-                            Esta plataforma es una herramienta informativa diseñada para facilitar el acceso a oportunidades de financiamiento agrícola en Chile.
-                        </p>
-                        <ul className="space-y-3">
-                            <li className="flex items-start">
-                                <span className="text-[var(--iica-blue)] font-bold mr-2">•</span>
-                                <div>
-                                    <strong className="text-gray-900">Carácter Referencial:</strong>
-                                    <span className="text-gray-700"> La información sobre fechas, montos y requisitos de los fondos concursables es referencial.</span>
-                                </div>
-                            </li>
-                            <li className="flex items-start">
-                                <span className="text-[var(--iica-blue)] font-bold mr-2">•</span>
-                                <div>
-                                    <strong className="text-gray-900">Fuente Oficial:</strong>
-                                    <span className="text-gray-700"> El usuario <strong>siempre</strong> debe verificar las bases oficiales en el sitio web de la institución otorgante (INDAP, CORFO, FIA, etc.) antes de postular.</span>
-                                </div>
-                            </li>
-                            <li className="flex items-start">
-                                <span className="text-[var(--iica-blue)] font-bold mr-2">•</span>
-                                <div>
-                                    <strong className="text-gray-900">Sin Responsabilidad:</strong>
-                                    <span className="text-gray-700"> El IICA no se hace responsable por cambios de última hora en las bases, errores en la postulación o la no adjudicación de los fondos.</span>
-                                </div>
-                            </li>
-                        </ul>
-                        <div className="mt-4 p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded">
-                            <p className="text-gray-800 text-sm">
-                                <strong>⚠️ Importante:</strong> Esta plataforma es una herramienta de apoyo informativo. La responsabilidad de verificar la información oficial y cumplir con los requisitos de postulación recae exclusivamente en el usuario.
-                            </p>
-                        </div>
-                    </section>
-
-                    {/* Section 2 */}
-                    <section className="mb-8">
-                        <h2 className="text-2xl font-semibold text-[var(--iica-navy)] mb-4">
-                            2. Propiedad Intelectual
-                        </h2>
-                        <p className="text-gray-700 leading-relaxed mb-4">
-                            Todo el material contenido en este sitio (logos, textos, compilaciones de datos y código fuente) es propiedad del <strong>Instituto Interamericano de Cooperación para la Agricultura (IICA)</strong> o de sus fuentes citadas, y está protegido por las leyes de derecho de autor y tratados internacionales.
-                        </p>
-                        <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
-                            <li>Se permite el uso del contenido para fines informativos, educativos o de investigación.</li>
-                            <li>Queda prohibida la reproducción total o parcial con fines comerciales sin autorización expresa.</li>
-                        </ul>
-                    </section>
-
-                    {/* Section 3 */}
-                    <section className="mb-8">
-                        <h2 className="text-2xl font-semibold text-[var(--iica-navy)] mb-4">
-                            3. Enlaces a Terceros
-                        </h2>
-                        <p className="text-gray-700 leading-relaxed">
-                            La plataforma contiene enlaces a sitios web externos (ej. indap.gob.cl, corfo.cl). El IICA no tiene control sobre dichos sitios y no es responsable de su contenido, disponibilidad o políticas de privacidad.
-                        </p>
-                    </section>
-
-                    {/* Section 4 */}
-                    <section className="mb-8">
-                        <h2 className="text-2xl font-semibold text-[var(--iica-navy)] mb-4">
-                            4. Modificaciones
-                        </h2>
-                        <p className="text-gray-700 leading-relaxed">
-                            El IICA se reserva el derecho de modificar, suspender o discontinuar cualquier aspecto de la plataforma en cualquier momento sin previo aviso.
-                        </p>
-                    </section>
-
-                    {/* Contact Section */}
-                    <section className="mt-12 p-6 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg border border-gray-200">
-                        <h3 className="text-xl font-semibold text-[var(--iica-navy)] mb-4">
-                            Contacto Legal
-                        </h3>
-                        <p className="text-gray-700 mb-2">
-                            Si tiene dudas sobre estos términos, contáctenos en:
-                        </p>
-                        <ul className="space-y-2 text-gray-700">
-                            <li>
-                                <strong>Email:</strong>{' '}
-                                <a
-                                    href="mailto:representacion.chile@iica.int"
-                                    className="text-[var(--iica-blue)] hover:underline"
-                                >
-                                    representacion.chile@iica.int
-                                </a>
-                            </li>
-                            <li>
-                                <strong>Dirección:</strong> Calle Rancagua No.0320, Providencia, Santiago, Chile.
-                            </li>
-                            <li>
-                                <strong>Teléfono:</strong> (+56) 2 2225 2511
-                            </li>
-                        </ul>
-                    </section>
-
-                    {/* Footer */}
-                    <div className="mt-12 pt-6 border-t border-gray-200">
-                        <p className="text-sm text-gray-600 text-center">
-                            Estos términos se basan en las normativas de Copyright y estatus de organismo internacional del IICA.
-                            Para más información, visite{' '}
-                            <a
-                                href="https://www.iica.int"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-[var(--iica-blue)] hover:underline"
-                            >
-                                iica.int
-                            </a>
-                        </p>
-                    </div>
-                </div>
+        <main className="container mx-auto px-4 py-12 max-w-4xl text-gray-700 leading-relaxed space-y-8">
+            <div>
+                <h1 className="text-3xl md:text-4xl font-bold text-[var(--iica-navy)] mb-4">Términos y Condiciones de Uso</h1>
+                <p className="text-sm text-gray-500">Última actualización: Febrero 2026</p>
             </div>
-        </div>
+
+            <section className="space-y-4">
+                <p>
+                    Bienvenido a la Plataforma de Financiamiento Agrícola de IICA Chile. Al acceder y utilizar este sitio web, usted acepta cumplir con los siguientes Términos y Condiciones de Uso. Si no está de acuerdo con alguna parte de estos términos, le recomendamos que no utilice nuestros servicios.
+                </p>
+            </section>
+
+            <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-[var(--iica-blue)]">1. Objeto de la Plataforma</h2>
+                <p>
+                    Esta plataforma tiene un carácter <strong>informativo y facilitador</strong>. Su objetivo principal es centralizar y simplificar el acceso a la información sobre fondos concursables, subsidios y créditos disponibles para el sector agrícola chileno, provenientes de diversas fuentes públicas (INDAP, CORFO, CNR, FIA, Sercotec, GOREs) e internacionales.
+                </p>
+                <p className="font-semibold text-red-600">
+                    IMPORTANTE: IICA Chile NO es la entidad que otorga estos financiamientos, salvo que se indique explícitamente lo contrario en una convocatoria propia.
+                </p>
+            </section>
+
+            <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-[var(--iica-blue)]">2. Responsabilidad de la Información</h2>
+                <p>
+                    Si bien realizamos nuestros mejores esfuerzos para garantizar que la información presentada (fechas, montos, requisitos) sea precisa y esté actualizada, <strong>IICA Chile no se hace responsable por errores, omisiones o cambios de última hora</strong> realizados por las instituciones convocantes oficiales.
+                </p>
+                <p>
+                    Es responsabilidad exclusiva del usuario <strong>verificar siempre la información en las bases oficiales y sitios web de las instituciones correspondientes</strong> antes de realizar cualquier postulación o toma de decisiones financieras. Proporcionamos enlaces directos a estas fuentes oficiales para facilitar dicha verificación.
+                </p>
+            </section>
+
+            <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-[var(--iica-blue)]">3. Uso Aceptable</h2>
+                <p>
+                    Usted se compromete a utilizar la plataforma únicamente con fines legales y de acuerdo con estos términos. Queda prohibido:
+                </p>
+                <ul className="list-disc pl-5 space-y-2">
+                    <li>Utilizar la plataforma de manera que pueda dañar, deshabilitar o sobrecargar nuestros servidores o redes.</li>
+                    <li>Intentar obtener acceso no autorizado a sistemas informáticos o redes conectadas a la plataforma.</li>
+                    <li>Utilizar bots, scrapers u otros medios automatizados para acceder a la plataforma sin nuestro permiso previo por escrito.</li>
+                </ul>
+            </section>
+
+            <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-[var(--iica-blue)]">4. Enlaces a Terceros</h2>
+                <p>
+                    Nuestra plataforma puede contener enlaces a sitios web de terceros que no son propiedad ni están controlados por IICA Chile. No tenemos control sobre el contenido, las políticas de privacidad o las prácticas de dichos sitios web y no asumimos ninguna responsabilidad por ellos.
+                </p>
+            </section>
+
+            <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-[var(--iica-blue)]">5. Propiedad Intelectual</h2>
+                <p>
+                    Todo el contenido original de la plataforma, incluyendo textos, gráficos, logotipos e íconos, es propiedad exclusiva de IICA Chile o sus licenciatarios y está protegido por las leyes de propiedad intelectual chilenas e internacionales. El uso no autorizado de dicho contenido está estrictamente prohibido.
+                </p>
+            </section>
+
+            <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-[var(--iica-blue)]">6. Modificaciones de los Términos</h2>
+                <p>
+                    Nos reservamos el derecho de modificar o reemplazar estos Términos en cualquier momento a nuestra entera discreción. Es su responsabilidad revisar periódicamente estos Términos para estar informado de cualquier cambio.
+                </p>
+            </section>
+
+            <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-[var(--iica-blue)]">7. Contacto</h2>
+                <p>
+                    Si tiene alguna duda sobre estos Términos y Condiciones, por favor contáctenos a través de iica.chile@iica.int.
+                </p>
+            </section>
+        </main>
     );
 }

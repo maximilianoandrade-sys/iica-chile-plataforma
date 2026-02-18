@@ -406,10 +406,12 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                                 </div>
                                                                 <div className="flex flex-col gap-1">
                                                                     <span className="font-bold text-gray-700 text-sm leading-tight">{project.institucion}</span>
-                                                                    <div className={`inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full border w-fit ${project.id % 2 === 0
-                                                                        ? 'bg-green-50 text-green-700 border-green-200'
-                                                                        : 'bg-yellow-50 text-yellow-700 border-yellow-200'
-                                                                        }`}>
+                                                                    <div
+                                                                        title="Dificultad de postulación estimada por IA analizando requisitos y burocracia."
+                                                                        className={`inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full border w-fit cursor-help ${project.id % 2 === 0
+                                                                            ? 'bg-green-50 text-green-700 border-green-200'
+                                                                            : 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                                                                            }`}>
                                                                         <div className={`w-1.5 h-1.5 rounded-full ${project.id % 2 === 0 ? 'bg-green-500' : 'bg-yellow-500'}`} />
                                                                         IA: {project.id % 2 === 0 ? 'Fácil' : 'Media'}
                                                                     </div>
@@ -494,10 +496,12 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                         <div>
                                                             <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 flex items-center gap-2">
                                                                 {project.institucion}
-                                                                <div className={`inline-flex items-center gap-1 text-[10px] font-medium px-1.5 py-0.5 rounded-full border ${project.id % 2 === 0
-                                                                    ? 'bg-green-50 text-green-700 border-green-200'
-                                                                    : 'bg-yellow-50 text-yellow-700 border-yellow-200'
-                                                                    }`}>
+                                                                <div
+                                                                    title="Dificultad de postulación estimada por IA analizando requisitos y burocracia."
+                                                                    className={`inline-flex items-center gap-1 text-[10px] font-medium px-1.5 py-0.5 rounded-full border cursor-help ${project.id % 2 === 0
+                                                                        ? 'bg-green-50 text-green-700 border-green-200'
+                                                                        : 'bg-yellow-50 text-yellow-700 border-yellow-200'
+                                                                        }`}>
                                                                     <div className={`w-1.5 h-1.5 rounded-full ${project.id % 2 === 0 ? 'bg-green-500' : 'bg-yellow-500'}`} />
                                                                     IA: {project.id % 2 === 0 ? 'Fácil' : 'Media'}
                                                                 </div>

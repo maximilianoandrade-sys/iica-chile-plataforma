@@ -8,6 +8,10 @@ export async function GET(request: Request) {
     const institution = searchParams.get('institution') || '';
     const q = searchParams.get('q') || '';
 
+    const beneficiary = searchParams.get('beneficiary') || '';
+    const minAmount = searchParams.get('minAmount');
+    const maxAmount = searchParams.get('maxAmount');
+
     const projects = await getProjects();
 
     // Apply filters
@@ -15,8 +19,15 @@ export async function GET(request: Request) {
         const matchCat = !category || p.categoria === category;
         const matchReg = !region || (p.regiones && (p.regiones.includes(region) || p.regiones.includes('Todas')));
         const matchInst = !institution || p.institucion === institution;
-        const matchQ = !q || `${p.nombre} ${p.institucion} ${p.categoria}`.toLowerCase().includes(q.toLowerCase());
-        return matchCat && matchReg && matchInst && matchQ;
+        const matchQ = !q || `${p.nombre} ${p.institucion} ${p.categoria} ${p.resumen?.observaciones || ''}`.toLowerCase().includes(q.toLowerCase());
+        const matchBen = !beneficiary || (p.beneficiarios && p.beneficiarios.includes(beneficiary));
+
+        // Amount logic handling "sin monto definido" (0 or null)
+        const amount = p.monto || 0;
+        const matchMin = !minAmount || amount >= parseInt(minAmount);
+        const matchMax = !maxAmount || amount <= parseInt(maxAmount);
+
+        return matchCat && matchReg && matchInst && matchQ && matchBen && matchMin && matchMax;
     });
 
     // Build CSV

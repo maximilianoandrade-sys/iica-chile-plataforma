@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Menu, X, Search } from 'lucide-react';
+import projects from '@/data/projects.json';
 import { AnimatePresence, motion } from 'framer-motion';
 
 export function Header() {
@@ -103,7 +104,7 @@ export function Header() {
                     <div className="relative z-10 container mx-auto px-4">
                         <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full text-sm font-medium text-blue-100 mb-6">
                             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                            25 fondos activos · CNR · INDAP · FIA · CORFO · Sercotec · GOREs
+                            {projects.length} fondos reales y activos · CNR · INDAP · FIA · CORFO · Sercotec · GOREs
                         </div>
                         <h1 className="text-3xl md:text-5xl font-extrabold mb-6 leading-tight drop-shadow-lg">
                             Encuentra Financiamiento para tu Campo <span className="text-[var(--iica-yellow)]">2026</span>

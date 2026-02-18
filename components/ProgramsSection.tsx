@@ -23,7 +23,7 @@ const programs: Program[] = [
         title: "Desarrollo Territorial y Agricultura Familiar",
         description: "Fortalecimiento de pequeños productores y asociatividad rural.",
         icon: "🚜",
-        deepLink: "/?beneficiary=Pequeño productor#convocatorias"
+        deepLink: "/?beneficiary=Pequeño Agricultor#convocatorias"
     },
     {
         id: 3,
@@ -37,7 +37,7 @@ const programs: Program[] = [
         title: "Acción Climática y Sostenibilidad",
         description: "Adaptación al cambio climático y gestión hídrica eficiente.",
         icon: "💧",
-        deepLink: "/?category=Riego y Drenaje#convocatorias"
+        deepLink: "/?category=Riego#convocatorias"
     },
     {
         id: 5,
@@ -58,7 +58,7 @@ const programs: Program[] = [
         title: "Equidad de Género y Juventudes",
         description: "Inclusión y liderazgo de mujeres y jóvenes en el agro.",
         icon: "👥",
-        deepLink: "/?beneficiary=Personas naturales#convocatorias"
+        deepLink: "/?beneficiary=Mujer#convocatorias"
     }
 ];
 

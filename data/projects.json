@@ -60,13 +60,22 @@
         "categoria": "Suelos",
         "url_bases": "https://www.indap.gob.cl/programas/sirsd-s",
         "regiones": [
+            "Arica y Parinacota",
+            "Tarapacá",
+            "Antofagasta",
+            "Atacama",
+            "Coquimbo",
+            "Valparaíso",
+            "Metropolitana",
+            "O'Higgins",
+            "Maule",
+            "Ñuble",
             "Biobío",
             "La Araucanía",
             "Los Ríos",
             "Los Lagos",
-            "O'Higgins",
-            "Maule",
-            "Ñuble"
+            "Aysén",
+            "Magallanes"
         ],
         "beneficiarios": [
             "Pequeño Agricultor",
@@ -343,41 +352,6 @@
         ]
     },
     {
-        "id": 10,
-        "nombre": "SIRSD-S – Recuperación de Suelos Arica y Parinacota 2026",
-        "institucion": "INDAP",
-        "monto": 8000000,
-        "fecha_cierre": "2026-03-15",
-        "estado": "Abierto",
-        "categoria": "Suelos",
-        "url_bases": "https://www.indap.gob.cl/programas/sirsd-s",
-        "regiones": [
-            "Arica y Parinacota",
-            "Tarapacá"
-        ],
-        "beneficiarios": [
-            "Pequeño Agricultor",
-            "Usuario INDAP"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Hasta 90% de los costos netos",
-            "requisitos_clave": [
-                "Plan de manejo de suelos elaborado por profesional habilitado",
-                "Acreditación de usuario INDAP vigente",
-                "Sin deudas morosas con INDAP",
-                "Análisis de suelo con antigüedad máxima de 2 años"
-            ],
-            "plazo_ejecucion": "Temporada 2026 (hasta diciembre)",
-            "observaciones": "Operación Temprana 2026 para recuperación de suelos degradados en el norte de Chile."
-        },
-        "checklist": [
-            "Ser usuario INDAP activo",
-            "Análisis de suelo vigente",
-            "Sin deudas con INDAP",
-            "Plan de manejo aprobado"
-        ]
-    },
-    {
         "id": 11,
         "nombre": "Sercotec – Fondo de Desarrollo de Negocios (Reactívate) 2026",
         "institucion": "Sercotec",
@@ -588,42 +562,6 @@
             "Ser usuaria INDAP vigente",
             "Proyecto productivo con enfoque género",
             "Residencia rural"
-        ]
-    },
-    {
-        "id": 17,
-        "nombre": "FIA – Innovación en Agricultura Sustentable y Cambio Climático 2026",
-        "institucion": "FIA",
-        "monto": 80000000,
-        "fecha_cierre": "2026-08-31",
-        "estado": "Próxima Apertura",
-        "categoria": "Sustentabilidad",
-        "url_bases": "https://convocatoria.fia.cl/",
-        "regiones": [
-            "Todas"
-        ],
-        "beneficiarios": [
-            "Empresa Agrícola",
-            "Universidad",
-            "Centro de Investigación",
-            "Cooperativa"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Hasta 80% (máx. $80M por proyecto)",
-            "requisitos_clave": [
-                "Proyecto con métricas de reducción de huella de carbono",
-                "Asociatividad con al menos 2 actores del sistema de innovación",
-                "Cofinanciamiento mínimo del 20%",
-                "Alineación con NDC de Chile (Contribuciones Nacionales)"
-            ],
-            "plazo_ejecucion": "24–36 meses",
-            "observaciones": "Prioriza proyectos de captura de carbono, agricultura regenerativa, bioinsumos y adaptación climática."
-        },
-        "checklist": [
-            "Métricas de reducción de huella de carbono",
-            "Asociatividad con actores del sistema",
-            "Cofinanciamiento 20% disponible",
-            "Alineación con NDC Chile"
         ]
     },
     {
@@ -984,79 +922,6 @@
         ]
     },
     {
-        "id": 28,
-        "nombre": "BID – Chile Alimenta el Futuro: Seguridad Alimentaria y Agro Sostenible 2024-2029",
-        "institucion": "BID / MINAGRI",
-        "monto": 49000000000,
-        "fecha_cierre": "2029-12-31",
-        "estado": "Ventanilla Abierta",
-        "categoria": "Internacional",
-        "url_bases": "https://www.iadb.org/es/project/CH-L1129",
-        "regiones": [
-            "Todas"
-        ],
-        "beneficiarios": [
-            "Pequeño Agricultor",
-            "Agricultor Familiar Campesino",
-            "Mujer Rural",
-            "Comunidad Indígena",
-            "Cooperativa Agrícola"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Programa de USD 50 millones (~$49.000M CLP) del BID con MINAGRI. Implementación gradual 2024-2029.",
-            "requisitos_clave": [
-                "Acceder a través de programas INDAP, CORFO o SERCOTEC participantes",
-                "Proyecto productivo con enfoque de seguridad alimentaria",
-                "Prioridad a pequeños productores, mujeres y comunidades indígenas",
-                "Alineación con Política Agrícola Nacional"
-            ],
-            "plazo_ejecucion": "2024–2029 (5 años)",
-            "observaciones": "Programa BID-MINAGRI de USD 50 millones para aumentar la seguridad alimentaria en Chile. Los fondos se canalizan a través de instituciones nacionales (INDAP, CORFO, Sercotec). Contactar MINAGRI para acceder a los subprogramas."
-        },
-        "checklist": [
-            "Contactar INDAP, CORFO o Sercotec para subprogramas",
-            "Proyecto de seguridad alimentaria",
-            "Prioridad pequeños productores y mujeres",
-            "Alineación con política agrícola"
-        ]
-    },
-    {
-        "id": 29,
-        "nombre": "FAO Chile – Cooperación Técnica: Sistemas Alimentarios Sostenibles 2023-2026",
-        "institucion": "FAO",
-        "monto": 0,
-        "fecha_cierre": "2026-12-31",
-        "estado": "Ventanilla Abierta",
-        "categoria": "Internacional",
-        "url_bases": "https://www.fao.org/chile/programas-y-proyectos/es/",
-        "regiones": [
-            "Todas"
-        ],
-        "beneficiarios": [
-            "Institución Pública",
-            "Universidad",
-            "Organización de Productores",
-            "ONG de Desarrollo Rural"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Cooperación técnica no reembolsable (asistencia técnica, capacitación, estudios).",
-            "requisitos_clave": [
-                "Institución o organización con personalidad jurídica",
-                "Proyecto alineado con Marco de Programación País FAO-Chile 2023-2026",
-                "Enfoque en nutrición, producción sostenible o medioambiente",
-                "Carta de intención dirigida a la Representación FAO Chile"
-            ],
-            "plazo_ejecucion": "Variable según proyecto (6–36 meses)",
-            "observaciones": "La FAO en Chile opera bajo el Marco de Programación País 2023-2026. Ofrece cooperación técnica en nutrición, agricultura sostenible, cambio climático y sistemas alimentarios. Contactar directamente a la Representación FAO Chile para propuestas."
-        },
-        "checklist": [
-            "Institución con personalidad jurídica",
-            "Proyecto alineado con Marco FAO-Chile",
-            "Enfoque en nutrición o producción sostenible",
-            "Carta de intención a FAO Chile"
-        ]
-    },
-    {
         "id": 30,
         "nombre": "Unión Europea – Horizonte Europa: Agricultura Digital y Cambio Climático (Clúster 6)",
         "institucion": "Unión Europea",
@@ -1090,78 +955,6 @@
             "Chile como país asociado a Horizonte Europa",
             "Proyecto I+D en agricultura o medioambiente",
             "Registro en Funding & Tenders Portal UE"
-        ]
-    },
-    {
-        "id": 31,
-        "nombre": "IICA – Fondo Concursable Cooperación Técnica Chile 2026",
-        "institucion": "IICA",
-        "monto": 30000000,
-        "fecha_cierre": "2026-05-31",
-        "estado": "Próxima Apertura",
-        "categoria": "Internacional",
-        "url_bases": "https://www.iica.int/es/proyectos",
-        "regiones": [
-            "Todas"
-        ],
-        "beneficiarios": [
-            "Institución Pública Agrícola",
-            "Universidad",
-            "Organización de Productores",
-            "Municipio Rural"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Cooperación técnica y financiera hasta USD 30.000 (~$30M CLP) por proyecto.",
-            "requisitos_clave": [
-                "Institución con personalidad jurídica vigente en Chile",
-                "Proyecto alineado con Plan de Mediano Plazo IICA 2022-2026",
-                "Enfoque en innovación, sustentabilidad o agricultura familiar",
-                "Carta de intención a la Representación IICA Chile"
-            ],
-            "plazo_ejecucion": "12–24 meses",
-            "observaciones": "El IICA Chile apoya proyectos de cooperación técnica alineados con sus ejes estratégicos: innovación y bioeconomía, agricultura familiar, acción climática, sanidad agropecuaria y digitalización. Contactar directamente a la Oficina IICA Chile."
-        },
-        "checklist": [
-            "Institución con personalidad jurídica",
-            "Proyecto alineado con PMP IICA 2022-2026",
-            "Enfoque en innovación o agricultura familiar",
-            "Carta de intención a IICA Chile"
-        ]
-    },
-    {
-        "id": 32,
-        "nombre": "Banco Mundial – Proyecto Resiliencia Hídrica y Agricultura Sostenible Chile",
-        "institucion": "Banco Mundial",
-        "monto": 9800000000,
-        "fecha_cierre": "2028-12-31",
-        "estado": "Ventanilla Abierta",
-        "categoria": "Internacional",
-        "url_bases": "https://projects.worldbank.org/en/projects-operations/projects-list?countrycode_exact=CL",
-        "regiones": [
-            "Todas"
-        ],
-        "beneficiarios": [
-            "Institución Pública",
-            "Organización de Usuarios de Agua",
-            "Comunidad Rural",
-            "Municipio"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Préstamos y donaciones del Banco Mundial canalizados a través del Estado chileno. Proyectos de USD 10M+ (~$9.800M CLP).",
-            "requisitos_clave": [
-                "Acceso a través de instituciones del Estado chileno (MOP, MINAGRI, CNR)",
-                "Proyecto de gestión hídrica, riego o resiliencia climática",
-                "Evaluación técnica y ambiental del Banco Mundial",
-                "Alineación con estrategia de país del Banco Mundial en Chile"
-            ],
-            "plazo_ejecucion": "3–7 años",
-            "observaciones": "El Banco Mundial financia proyectos de gran escala en Chile a través de instituciones del Estado. Para acceder, contactar al MOP (obras de riego), MINAGRI o CNR. Los proyectos se canalizan como préstamos al Estado con condiciones preferenciales."
-        },
-        "checklist": [
-            "Contactar MOP, MINAGRI o CNR",
-            "Proyecto de gestión hídrica o resiliencia",
-            "Evaluación técnica y ambiental",
-            "Alineación con estrategia Banco Mundial Chile"
         ]
     }
 ]
