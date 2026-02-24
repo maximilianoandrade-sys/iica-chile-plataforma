@@ -11,7 +11,7 @@ import Toast from "@/components/ui/Toast";
 import Image from 'next/image';
 import SearchableSelect from "@/components/SearchableSelect"; // Import the new component
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info, Sparkles, Copy, Eye, CheckCheck, MapPin, Users, Banknote, Clock, ChevronRight, ArrowUpDown } from "lucide-react";
+import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info, Sparkles, Copy, Eye, CheckCheck, MapPin, Users, Banknote, Clock, ChevronRight, ArrowUpDown, FileText, HelpCircle, MonitorPlay, PenTool, CheckCircle2, XCircle, AlertTriangle } from "lucide-react";
 
 export default function ProjectList({ projects }: { projects: Project[] }) {
     // State for client-side interactions
@@ -158,7 +158,18 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
         }
 
         return filtered;
-    }, [projects, selectedAgrovoc, showFavoritesOnly, favorites, quickFilter]);
+    }, [projects, selectedAgrovoc, showFavoritesOnly, favorites, quickFilter, sortConfig]);
+
+    // Dashboard Counters Logic
+    const activeFundsByInstitution = useMemo(() => {
+        const counts: Record<string, number> = {};
+        projects.forEach(p => {
+            if (p.estado === 'Abierto') {
+                counts[p.institucion] = (counts[p.institucion] || 0) + 1;
+            }
+        });
+        return Object.entries(counts).sort((a, b) => b[1] - a[1]); // Sort by count desc
+    }, [projects]);
 
     // Helper for Closing Soon
 
@@ -173,21 +184,28 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                 />
             )}
 
-            {/* DISCLAIMER LEGAL */}
-            <div className="bg-yellow-50 border-b border-yellow-200 px-6 py-3">
-                <div className="flex items-start gap-2 text-sm">
-                    <AlertCircle className="h-4 w-4 text-yellow-600 mt-0.5 flex-shrink-0" />
-                    <p className="text-yellow-800">
-                        <strong>Aviso Legal:</strong> Las fechas y condiciones son referenciales.
-                        <strong className="underline">Siempre verifique en la fuente oficial</strong> antes de postular.
-                        Esta plataforma no se responsabiliza por cambios en las bases o fechas de cierre.
-                    </p>
+            {/* HEADER METADATA DASHBOARD */}
+            <div className="px-6 py-4 bg-white border-b border-gray-100 overflow-x-auto">
+                <div className="flex gap-4 items-center min-w-max">
+                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1">
+                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                        Fondos Activos Hoy:
+                    </span>
+                    {activeFundsByInstitution.slice(0, 6).map(([inst, count]) => (
+                        <div key={inst} className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 border border-blue-100 text-xs font-medium text-[var(--iica-navy)]">
+                            <span className="font-bold">{inst}</span>
+                            <span className="bg-[var(--iica-blue)] text-white text-[10px] px-1.5 rounded-full font-bold h-4 flex items-center justify-center">{count}</span>
+                        </div>
+                    ))}
+                    {activeFundsByInstitution.length > 6 && (
+                        <span className="text-xs text-gray-400">+{activeFundsByInstitution.length - 6} más</span>
+                    )}
                 </div>
-            </div>
+            </div >
 
 
             {/* Agrovoc Keywords Section - Collapsible & Aesthetic */}
-            <div className="p-6 border-b border-[var(--iica-border)] bg-gray-50/50">
+            < div className="p-6 border-b border-[var(--iica-border)] bg-gray-50/50" >
                 <div className="w-full">
                     <button
                         onClick={() => setShowAgrovoc(!showAgrovoc)}
@@ -247,10 +265,10 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                         )}
                     </AnimatePresence>
                 </div>
-            </div>
+            </div >
 
             {/* QUICK FILTERS (CHIPS) */}
-            <div className="px-6 py-4 border-b border-gray-100 flex flex-wrap gap-2 bg-white">
+            < div className="px-6 py-4 border-b border-gray-100 flex flex-wrap gap-2 bg-white" >
                 <button
                     onClick={() => setQuickFilter('all')}
                     className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${quickFilter === 'all' ? 'bg-gray-800 text-white border-gray-800' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'}`}
@@ -278,10 +296,10 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                     <Users className="w-3 h-3" />
                     Para Mujeres
                 </button>
-            </div>
+            </div >
 
             {/* 4. UTILITY TOOLBAR (Favoritos & Compare) */}
-            <div className="flex items-center justify-between p-4 bg-white border-b border-gray-100">
+            < div className="flex items-center justify-between p-4 bg-white border-b border-gray-100" >
                 <div className="flex items-center gap-4">
                     <button
                         onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
@@ -310,10 +328,10 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                 <div className="text-xs text-gray-500">
                     Mostrando <strong>{displayedProjects.length}</strong> de {projects.length}
                 </div>
-            </div>
+            </div >
 
             {/* 5. CONTENT AREA */}
-            <div className="relative">
+            < div className="relative" >
                 {
                     displayedProjects.length === 0 ? (
                         <div className="p-16 text-center">
@@ -430,6 +448,36 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                                                 <Info className="h-4 w-4" />
                                                                             </button>
                                                                         )}
+                                                                    </div>
+                                                                    <div className="flex items-center gap-2 mt-2">
+                                                                        {/* Semáforo Documentación */}
+                                                                        <div className="flex items-center gap-1" title={`Estado Bases: ${project.bases_estado || 'Desconocido'}`}>
+                                                                            <div className={`w-3 h-3 rounded-full border border-gray-300 ${project.bases_estado === 'publicada' ? 'bg-green-500' : project.bases_estado === 'borrador' ? 'bg-yellow-400' : 'bg-gray-300'}`} />
+                                                                        </div>
+
+                                                                        {/* Metadata Icons */}
+                                                                        <div className="flex gap-1">
+                                                                            {project.faq_disponible && (
+                                                                                <span title="Preguntas Frecuentes Disponibles" className="text-blue-500 bg-blue-50 p-1 rounded hover:bg-blue-100 cursor-help">
+                                                                                    <HelpCircle className="h-3.5 w-3.5" />
+                                                                                </span>
+                                                                            )}
+                                                                            {project.webinar_fecha && (
+                                                                                <span title={`Webinar: ${new Date(project.webinar_fecha).toLocaleDateString()}`} className="text-purple-500 bg-purple-50 p-1 rounded hover:bg-purple-100 cursor-help">
+                                                                                    <MonitorPlay className="h-3.5 w-3.5" />
+                                                                                </span>
+                                                                            )}
+                                                                            {project.requiere_firma && (
+                                                                                <span title="Requiere firma profesional acreditado" className="text-orange-600 bg-orange-50 p-1 rounded hover:bg-orange-100 cursor-help">
+                                                                                    <PenTool className="h-3.5 w-3.5" />
+                                                                                </span>
+                                                                            )}
+                                                                            {project.permite_adendas && (
+                                                                                <span title="Permite Adendas (Modificaciones)" className="text-teal-600 bg-teal-50 p-1 rounded hover:bg-teal-100 cursor-help text-[10px] font-bold px-1.5 flex items-center">
+                                                                                    ADENDAS
+                                                                                </span>
+                                                                            )}
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -558,87 +606,97 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                                 )}
                                                             </div>
                                                         </div>
+                                                        {/* Mobile Metadata Row */}
+                                                        <div className="mt-2 flex items-center gap-3">
+                                                            <div className="flex items-center gap-1.5 bg-gray-50 px-2 py-1 rounded border border-gray-100" title="Estado Documentación">
+                                                                <div className={`w-2.5 h-2.5 rounded-full ${project.bases_estado === 'publicada' ? 'bg-green-500' : project.bases_estado === 'borrador' ? 'bg-yellow-400' : 'bg-gray-300'}`} />
+                                                                <span className="text-[10px] text-gray-500 font-medium">Doc</span>
+                                                            </div>
+                                                            {project.faq_disponible && <HelpCircle className="h-3.5 w-3.5 text-blue-500" />}
+                                                            {project.webinar_fecha && <MonitorPlay className="h-3.5 w-3.5 text-purple-500" />}
+                                                            {project.requiere_firma && <PenTool className="h-3.5 w-3.5 text-orange-500" />}
+                                                        </div>
                                                     </div>
-
-                                                    <button
-                                                        onClick={() => toggleFavorite(project.id)}
-                                                        className="p-2 -mr-2 -mt-2 text-gray-400 hover:text-red-500 transition-colors focus:outline-none"
-                                                    >
-                                                        <svg
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            viewBox="0 0 24 24"
-                                                            fill={favorites.includes(project.id) ? "#ef4444" : "none"}
-                                                            stroke="currentColor"
-                                                            className={`w-6 h-6 ${favorites.includes(project.id) ? 'text-red-500' : ''}`}
-                                                            strokeWidth={2}
-                                                        >
-                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                                        </svg>
-                                                    </button>
                                                 </div>
-
-                                                {/* Contenido Principal */}
-                                                <div className="mb-4">
-                                                    <h3 className="font-bold text-lg text-[var(--iica-navy)] leading-snug mb-2">
-                                                        {project.nombre}
-                                                    </h3>
-                                                    {project.resumen && (
-                                                        <button
-                                                            onClick={() => setQuickViewProject(project)}
-                                                            className="text-sm text-[var(--iica-blue)] font-medium flex items-center gap-1 hover:underline focus:outline-none"
-                                                        >
-                                                            <Info className="h-4 w-4" />
-                                                            Más detalles e información
-                                                        </button>
-                                                    )}
-                                                </div>
-
-                                                {/* Resumen Expandible */}
-
-
-                                                {/* Footer / Acciones */}
-                                                {/* Footer / Acciones Mobile - Full Width Grid */}
-                                                <div className="mt-5 grid grid-cols-2 gap-3 pt-4 border-t border-gray-100">
-                                                    <button
-                                                        onClick={() => toggleCompare(project.id)}
-                                                        className={`flex items-center justify-center gap-2 py-3 px-2 rounded-xl text-xs font-bold border transition-all ${compareList.includes(project.id)
-                                                            ? 'bg-blue-50 text-[var(--iica-blue)] border-blue-200 shadow-sm'
-                                                            : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50'
-                                                            }`}
+                                                <button
+                                                    onClick={() => toggleFavorite(project.id)}
+                                                    className="p-2 -mr-2 -mt-2 text-gray-400 hover:text-red-500 transition-colors focus:outline-none"
+                                                >
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        viewBox="0 0 24 24"
+                                                        fill={favorites.includes(project.id) ? "#ef4444" : "none"}
+                                                        stroke="currentColor"
+                                                        className={`w-6 h-6 ${favorites.includes(project.id) ? 'text-red-500' : ''}`}
+                                                        strokeWidth={2}
                                                     >
-                                                        <div className={`w-3 h-3 border-2 rounded-sm ${compareList.includes(project.id) ? 'bg-[var(--iica-blue)] border-[var(--iica-blue)]' : 'border-gray-400'}`} />
-                                                        {compareList.includes(project.id) ? 'Seleccionado' : 'Comparar'}
-                                                    </button>
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
 
+                                            {/* Contenido Principal */}
+                                            <div className="mb-4">
+                                                <h3 className="font-bold text-lg text-[var(--iica-navy)] leading-snug mb-2">
+                                                    {project.nombre}
+                                                </h3>
+                                                {project.resumen && (
                                                     <button
-                                                        onClick={(e) => copyProjectFicha(project, e)}
-                                                        className={`flex items-center justify-center gap-2 py-3 px-2 rounded-xl text-xs font-bold border transition-all ${copiedId === project.id
-                                                            ? 'bg-green-50 text-green-700 border-green-200'
-                                                            : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50'
-                                                            }`}
+                                                        onClick={() => setQuickViewProject(project)}
+                                                        className="text-sm text-[var(--iica-blue)] font-medium flex items-center gap-1 hover:underline focus:outline-none"
                                                     >
-                                                        {copiedId === project.id ? <CheckCheck className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                                                        {copiedId === project.id ? 'Copiado' : 'Copiar Ficha'}
+                                                        <Info className="h-4 w-4" />
+                                                        Más detalles e información
                                                     </button>
+                                                )}
+                                            </div>
 
-                                                    <div className="col-span-2">
-                                                        <ActionButton
-                                                            url={project.url_bases}
-                                                            date={project.fecha_cierre}
-                                                            projectName={project.nombre}
-                                                            onTrack={() => setToastMessage("Redirigiendo a sitio oficial...")}
-                                                        />
-                                                    </div>
+                                            {/* Resumen Expandible */}
+
+
+                                            {/* Footer / Acciones */}
+                                            {/* Footer / Acciones Mobile - Full Width Grid */}
+                                            <div className="mt-5 grid grid-cols-2 gap-3 pt-4 border-t border-gray-100">
+                                                <button
+                                                    onClick={() => toggleCompare(project.id)}
+                                                    className={`flex items-center justify-center gap-2 py-3 px-2 rounded-xl text-xs font-bold border transition-all ${compareList.includes(project.id)
+                                                        ? 'bg-blue-50 text-[var(--iica-blue)] border-blue-200 shadow-sm'
+                                                        : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50'
+                                                        }`}
+                                                >
+                                                    <div className={`w-3 h-3 border-2 rounded-sm ${compareList.includes(project.id) ? 'bg-[var(--iica-blue)] border-[var(--iica-blue)]' : 'border-gray-400'}`} />
+                                                    {compareList.includes(project.id) ? 'Seleccionado' : 'Comparar'}
+                                                </button>
+
+                                                <button
+                                                    onClick={(e) => copyProjectFicha(project, e)}
+                                                    className={`flex items-center justify-center gap-2 py-3 px-2 rounded-xl text-xs font-bold border transition-all ${copiedId === project.id
+                                                        ? 'bg-green-50 text-green-700 border-green-200'
+                                                        : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50'
+                                                        }`}
+                                                >
+                                                    {copiedId === project.id ? <CheckCheck className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                                                    {copiedId === project.id ? 'Copiado' : 'Copiar Ficha'}
+                                                </button>
+
+                                                <div className="col-span-2">
+                                                    <ActionButton
+                                                        url={project.url_bases}
+                                                        date={project.fecha_cierre}
+                                                        projectName={project.nombre}
+                                                        onTrack={() => setToastMessage("Redirigiendo a sitio oficial...")}
+                                                    />
                                                 </div>
                                             </div>
                                         </motion.div>
-                                    ))}
-                                </AnimatePresence>
-                            </div>
+                                    ))
+                                    }
+                                </AnimatePresence >
+                            </div >
                         </>
-                    )
-                }
-            </div >
+                    )}
+            </div>
+
 
             {/* REQUIREMENTS MODAL */}
             {

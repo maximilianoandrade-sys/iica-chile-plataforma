@@ -5,46 +5,70 @@ import { useCallback, useEffect, useState, useTransition } from 'react';
 import { Search, Filter, ChevronDown, X, Sparkles, SlidersHorizontal, ArrowUpDown } from "lucide-react";
 import { useAnalytics } from '@/hooks/useAnalytics';
 
-// Chips de búsqueda rápida
+// ─────────────────────────────────────
+// Chips de búsqueda rápida IICA
+// ─────────────────────────────────────
 const QUICK_SEARCHES = [
-    { label: '💧 Riego', query: 'riego' },
-    { label: '🌱 Suelos', query: 'suelos' },
-    { label: '🔬 Innovación', query: 'innovación' },
-    { label: '👩 Mujer Rural', query: 'mujer' },
-    { label: '🌿 Sustentabilidad', query: 'sustentable' },
-    { label: '🌍 Internacional', query: 'internacional' },
-    { label: '🤝 Asociatividad', query: 'asociatividad' },
-    { label: '🌲 Forestal', query: 'forestal' },
-    { label: '🐄 Ganadería', query: 'ganadería' },
-    { label: '🌾 Capital Semilla', query: 'capital semilla' },
+    { label: '🌎 FONTAGRO', query: 'FONTAGRO' },
+    { label: '🌍 FAO', query: 'FAO' },
+    { label: '🏦 BID', query: 'BID' },
+    { label: '🤝 FIDA', query: 'FIDA' },
+    { label: '🌿 GEF/GCF', query: 'GEF' },
+    { label: '🇪🇺 EUROCLIMA', query: 'EUROCLIMA' },
+    { label: '💧 Agua', query: 'agua' },
+    { label: '🌱 Innovación', query: 'innovación' },
+    { label: '🌡️ Clima', query: 'cambio climático' },
+    { label: '🤝 Cooperación', query: 'cooperación' },
 ];
 
-// Sugerencias en lenguaje natural (frases reales de agricultores)
 const NATURAL_SUGGESTIONS = [
-    'se me secó el pozo',
-    'necesito tecnificar el riego',
-    'recuperar suelo degradado',
-    'capital semilla para mi campo',
-    'soy mujer agricultora',
-    'fondo para jóvenes rurales',
-    'innovación agrícola',
-    'emergencia por helada',
-    'exportar mis productos',
-    'crédito para maquinaria',
-    'reforestar mi predio',
-    'mejorar mi ganado',
-    'proyecto de riego tecnificado',
-    'pequeño agricultor INDAP',
-    'fondo CORFO emprendimiento',
-    'subsidio CNR riego',
+    'innovación agropecuaria regional',
+    'adaptación climática zonas áridas',
+    'cooperación técnica FAO TCP',
+    'fondos FONTAGRO consorcio',
+    'asistencia técnica BID',
+    'inclusión financiera pequeños agricultores',
+    'sistemas alimentarios sostenibles',
+    'agroforestería patagonia',
+    'trazabilidad sanidad vegetal',
+    'extensión agrícola digital',
+    'biodiversidad suelos degradados',
+    'resiliencia climática chile central',
+    'financiamiento climático GCF',
+    'agricultura familiar campesina',
 ];
 
 const SORT_OPTIONS = [
     { value: 'relevance', label: 'Más relevantes' },
     { value: 'date_asc', label: 'Cierre más próximo' },
     { value: 'date_desc', label: 'Cierre más lejano' },
+    { value: 'viabilidad_desc', label: 'Mayor viabilidad IICA' },
     { value: 'amount_desc', label: 'Mayor monto' },
     { value: 'amount_asc', label: 'Menor monto' },
+];
+
+// Opciones de ámbito (ítem 8)
+const AMBITO_OPTIONS = [
+    { value: 'Todos', label: '🌐 Todos' },
+    { value: 'Internacional', label: '🌎 Internacional' },
+    { value: 'Nacional', label: '🇨🇱 Nacional' },
+    { value: 'Regional', label: '🗺️ Regional' },
+];
+
+// Opciones de viabilidad (ítem 9)
+const VIABILIDAD_OPTIONS = [
+    { value: 'Todas', label: '⭐ Todas' },
+    { value: 'Alta', label: '★★★ Alta' },
+    { value: 'Media', label: '★★ Media' },
+    { value: 'Baja', label: '★ Baja' },
+];
+
+// Opciones de estado de postulación (ítem 10)
+const ESTADO_OPTIONS = [
+    { value: 'Todos', label: '📋 Todos los estados' },
+    { value: 'Abierta', label: '🟢 Abierta' },
+    { value: 'Próxima', label: '🟡 Próxima' },
+    { value: 'Cerrada', label: '🔴 Cerrada' },
 ];
 
 export default function ProjectFilters({
@@ -73,7 +97,8 @@ export default function ProjectFilters({
     const createQueryString = useCallback(
         (name: string, value: string) => {
             const params = new URLSearchParams(searchParams.toString());
-            if (value && value !== 'Todas' && value !== 'Todos') {
+            const empties = ['Todas', 'Todos', 'Todas las Regiones', 'Todos los Perfiles', 'Todas las Instituciones'];
+            if (value && !empties.includes(value)) {
                 params.set(name, value);
             } else {
                 params.delete(name);
@@ -88,7 +113,7 @@ export default function ProjectFilters({
         setSearchTerm(searchParams.get('q') || '');
     }, [searchParams]);
 
-    // Debounced URL update (300ms)
+    // Debounced URL update (300ms) — ítem 7
     useEffect(() => {
         const timer = setTimeout(() => {
             const currentQ = searchParams.get('q') || '';
@@ -107,7 +132,7 @@ export default function ProjectFilters({
         return () => clearTimeout(timer);
     }, [searchTerm, router, searchParams]);
 
-    // Autocompletado inteligente
+    // Autocompletado
     useEffect(() => {
         if (searchTerm.length >= 2) {
             const term = searchTerm.toLowerCase();
@@ -121,14 +146,28 @@ export default function ProjectFilters({
         }
     }, [searchTerm]);
 
+    // Leer filtros de URL
     const selectedCategory = searchParams.get('category') || 'Todas';
     const selectedRegion = searchParams.get('region') || 'Todas';
     const selectedBeneficiary = searchParams.get('beneficiary') || 'Todos';
     const selectedInstitution = searchParams.get('institution') || 'Todas';
+    const selectedAmbito = searchParams.get('ambito') || 'Todos';       // ítem 8
+    const selectedViabilidad = searchParams.get('viabilidad') || 'Todas'; // ítem 9
+    const selectedEstado = searchParams.get('estado') || 'Todos';        // ítem 10
     const soloAbiertos = searchParams.get('open') === '1';
     const sortBy = searchParams.get('sort') || 'relevance';
 
-    const hasActiveFilters = !!(searchTerm || selectedCategory !== 'Todas' || selectedRegion !== 'Todas' || selectedBeneficiary !== 'Todos' || selectedInstitution !== 'Todas' || soloAbiertos);
+    const hasActiveFilters = !!(
+        searchTerm ||
+        selectedCategory !== 'Todas' ||
+        selectedRegion !== 'Todas' ||
+        selectedBeneficiary !== 'Todos' ||
+        selectedInstitution !== 'Todas' ||
+        selectedAmbito !== 'Todos' ||
+        selectedViabilidad !== 'Todas' ||
+        selectedEstado !== 'Todos' ||
+        soloAbiertos
+    );
 
     // Track search
     useEffect(() => {
@@ -151,33 +190,19 @@ export default function ProjectFilters({
 
     const toggleSoloAbiertos = () => {
         const params = new URLSearchParams(searchParams.toString());
-        if (soloAbiertos) {
-            params.delete('open');
-        } else {
-            params.set('open', '1');
-        }
-        startTransition(() => {
-            router.push(`?${params.toString()}`, { scroll: false });
-        });
+        if (soloAbiertos) { params.delete('open'); } else { params.set('open', '1'); }
+        startTransition(() => { router.push(`?${params.toString()}`, { scroll: false }); });
     };
 
     const handleSortChange = (value: string) => {
         const params = new URLSearchParams(searchParams.toString());
-        if (value === 'relevance') {
-            params.delete('sort');
-        } else {
-            params.set('sort', value);
-        }
-        startTransition(() => {
-            router.push(`?${params.toString()}`, { scroll: false });
-        });
+        if (value === 'relevance') { params.delete('sort'); } else { params.set('sort', value); }
+        startTransition(() => { router.push(`?${params.toString()}`, { scroll: false }); });
     };
 
     const clearAllFilters = () => {
         setSearchTerm('');
-        startTransition(() => {
-            router.push('/', { scroll: false });
-        });
+        startTransition(() => { router.push('/', { scroll: false }); });
     };
 
     const applyQuickSearch = (query: string) => {
@@ -188,7 +213,7 @@ export default function ProjectFilters({
     return (
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
 
-            {/* Search Bar */}
+            {/* Search Bar — ítem 7 */}
             <div className="p-4 md:p-6 border-b border-gray-100">
                 <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -196,8 +221,8 @@ export default function ProjectFilters({
                     </div>
                     <input
                         type="text"
-                        aria-label="Buscar convocatorias"
-                        placeholder='Busca en lenguaje natural: "riego", "mujer rural", "se me secó el pozo"...'
+                        aria-label="Buscar oportunidades IICA"
+                        placeholder='Busca por fuente, tema, región o tipo: "FONTAGRO", "adaptación climática", "BID"...'
                         className="pl-11 pr-10 py-3.5 w-full border-2 border-gray-200 rounded-xl focus:ring-0 focus:border-[var(--iica-blue)] outline-none transition-colors text-gray-700 text-sm md:text-base bg-gray-50 focus:bg-white"
                         value={searchTerm}
                         onChange={(e) => {
@@ -219,8 +244,7 @@ export default function ProjectFilters({
                             <X className="h-4 w-4" />
                         </button>
                     )}
-
-                    {/* Autocomplete Dropdown */}
+                    {/* Autocomplete */}
                     {showSuggestions && filteredSuggestions.length > 0 && (
                         <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl z-30 overflow-hidden">
                             <div className="px-3 py-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100">
@@ -257,11 +281,64 @@ export default function ProjectFilters({
                 </div>
             </div>
 
-            {/* Filters Row */}
-            <div className="px-4 md:px-6 py-3 bg-gray-50/50 flex flex-col md:flex-row gap-3 items-start md:items-center flex-wrap border-b border-gray-100">
+            {/* ── PILLS de Ámbito (ítem 8) ── */}
+            <div className="px-4 md:px-6 py-3 border-b border-gray-100 bg-gray-50/50">
+                <div className="flex flex-wrap gap-2 items-center">
+                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wider flex-shrink-0">Ámbito:</span>
+                    {AMBITO_OPTIONS.map(opt => (
+                        <button
+                            key={opt.value}
+                            onClick={() => handleFilterChange('ambito', opt.value)}
+                            aria-pressed={selectedAmbito === opt.value}
+                            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border whitespace-nowrap ${selectedAmbito === opt.value
+                                ? 'bg-[var(--iica-blue)] text-white border-[var(--iica-blue)] shadow-sm'
+                                : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                                }`}
+                        >
+                            {opt.label}
+                        </button>
+                    ))}
+
+                    {/* Viabilidad IICA (ítem 9) */}
+                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wider flex-shrink-0 ml-3">Viabilidad:</span>
+                    {VIABILIDAD_OPTIONS.map(opt => (
+                        <button
+                            key={opt.value}
+                            onClick={() => handleFilterChange('viabilidad', opt.value)}
+                            aria-pressed={selectedViabilidad === opt.value}
+                            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border whitespace-nowrap ${selectedViabilidad === opt.value
+                                ? 'bg-green-600 text-white border-green-600 shadow-sm'
+                                : 'bg-white text-gray-600 border-gray-200 hover:bg-green-50 hover:border-green-300'
+                                }`}
+                        >
+                            {opt.label}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {/* ── PILLS de Estado de Postulación (ítem 10) ── */}
+            <div className="px-4 md:px-6 py-3 bg-gray-50/30 flex flex-col md:flex-row gap-3 items-start md:items-center flex-wrap border-b border-gray-100">
                 <div className="flex items-center gap-1.5 text-sm font-bold text-gray-600 flex-shrink-0">
                     <Filter className="h-4 w-4" />
-                    Filtrar:
+                    Más filtros:
+                </div>
+
+                {/* Estado de postulación */}
+                <div className="flex flex-wrap gap-1.5">
+                    {ESTADO_OPTIONS.map(opt => (
+                        <button
+                            key={opt.value}
+                            onClick={() => handleFilterChange('estado', opt.value)}
+                            aria-pressed={selectedEstado === opt.value}
+                            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border whitespace-nowrap ${selectedEstado === opt.value
+                                ? 'bg-[var(--iica-navy)] text-white border-[var(--iica-navy)] shadow-sm'
+                                : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                                }`}
+                        >
+                            {opt.label}
+                        </button>
+                    ))}
                 </div>
 
                 {/* Solo Abiertos toggle */}
@@ -271,12 +348,13 @@ export default function ProjectFilters({
                         ? 'bg-green-600 text-white border-green-600 shadow-sm'
                         : 'bg-white text-gray-600 border-gray-200 hover:bg-green-50 hover:border-green-300 hover:text-green-700'
                         }`}
-                    title={`${counts.open} convocatorias abiertas`}
+                    title={`${counts.open} oportunidades abiertas`}
                 >
                     <span className={`w-1.5 h-1.5 rounded-full ${soloAbiertos ? 'bg-white' : 'bg-green-500'}`}></span>
-                    Solo Abiertos ({counts.open})
+                    Solo Abiertas ({counts.open})
                 </button>
 
+                {/* Categoría chips */}
                 <div className="flex overflow-x-auto md:flex-wrap gap-2 md:gap-1.5 pb-2 md:pb-0 scrollbar-hide snap-x">
                     {categories.map(cat => (
                         <button
@@ -325,11 +403,11 @@ export default function ProjectFilters({
                         defaultText="Todos los Perfiles"
                     />
                     <FilterSelect
-                        label="Institución"
+                        label="Fuente"
                         value={selectedInstitution}
                         options={institutions}
                         onChange={(val) => handleFilterChange('institution', val)}
-                        defaultText="Todas las Instituciones"
+                        defaultText="Todas las Fuentes"
                     />
 
                     {/* Monto */}
@@ -351,15 +429,15 @@ export default function ProjectFilters({
                             className="appearance-none bg-white border border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-[var(--iica-blue)] focus:border-[var(--iica-blue)] block pl-3 pr-8 py-2 cursor-pointer hover:border-[var(--iica-blue)] transition-colors shadow-sm"
                         >
                             <option value="all">Cualquier Monto</option>
-                            <option value="0-10000000">Menos de $10M</option>
-                            <option value="10000000-50000000">$10M – $50M</option>
-                            <option value="50000000-100000000">$50M – $100M</option>
-                            <option value="100000000-999999999999">Más de $100M</option>
+                            <option value="0-100000000">Menos de $100M</option>
+                            <option value="100000000-300000000">$100M – $300M</option>
+                            <option value="300000000-600000000">$300M – $600M</option>
+                            <option value="600000000-999999999999">Más de $600M</option>
                         </select>
                         <ChevronDown className="absolute right-2.5 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
                     </div>
 
-                    {/* Ordenamiento */}
+                    {/* Ordenamiento — ítem 11 */}
                     <div className="relative flex items-center gap-1.5">
                         <ArrowUpDown className="h-4 w-4 text-gray-400 flex-shrink-0" />
                         <select
@@ -383,16 +461,16 @@ export default function ProjectFilters({
                     <strong className="text-[var(--iica-navy)] text-base">{counts.filtered}</strong>
                     {' '}de{' '}
                     <strong>{counts.total}</strong>
-                    {' '}convocatorias
+                    {' '}oportunidades
                     {searchTerm && (
                         <span className="inline-flex items-center gap-1 text-[var(--iica-blue)] font-medium text-xs bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
                             <Sparkles className="h-3 w-3" />
-                            ordenadas por relevancia
+                            por relevancia
                         </span>
                     )}
                     {counts.filtered === 0 && (
                         <span className="text-amber-600 font-medium bg-amber-50 px-3 py-1 rounded-full border border-amber-200 text-xs">
-                            💡 Prueba con términos más generales como &quot;riego&quot; o &quot;suelos&quot;
+                            💡 Prueba con &quot;FONTAGRO&quot;, &quot;BID&quot; o &quot;clima&quot;
                         </span>
                     )}
                 </div>
@@ -413,6 +491,7 @@ export default function ProjectFilters({
                             ...(selectedCategory !== 'Todas' ? { category: selectedCategory } : {}),
                             ...(selectedRegion !== 'Todas' ? { region: selectedRegion } : {}),
                             ...(selectedInstitution !== 'Todas' ? { institution: selectedInstitution } : {}),
+                            ...(selectedAmbito !== 'Todos' ? { ambito: selectedAmbito } : {}),
                         }).toString()}`}
                         download
                         title="Exportar lista a Excel/CSV"

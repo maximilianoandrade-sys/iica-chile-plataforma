@@ -1,820 +1,1014 @@
 [
     {
-        "id": 1,
-        "nombre": "Concurso Ley 18.450 – Tecnificación del Riego (Llamado Nacional 2026)",
-        "institucion": "CNR",
-        "monto": 570000000,
+        "id": 101,
+        "nombre": "FONTAGRO – Convocatoria Regional de Innovación Agropecuaria 2026",
+        "institucion": "FONTAGRO",
+        "monto": 245000000,
         "fecha_cierre": "2026-04-30",
         "estado": "Abierto",
-        "categoria": "Riego",
-        "url_bases": "https://www.cnr.gob.cl/agricultores/concursos-de-riego/calendario-de-concursos/",
+        "categoria": "Internacional",
+        "url_bases": "https://www.fontagro.org/new/es/convocatorias",
         "regiones": [
-            "Arica y Parinacota",
-            "Tarapacá",
-            "Antofagasta",
-            "Atacama",
-            "Coquimbo",
-            "Valparaíso",
-            "Metropolitana",
-            "O'Higgins",
-            "Maule",
-            "Ñuble",
-            "Biobío",
-            "La Araucanía",
-            "Los Ríos",
-            "Los Lagos",
-            "Aysén",
-            "Magallanes"
+            "Todas"
         ],
         "beneficiarios": [
-            "Pequeño Agricultor",
-            "Mediano Agricultor",
-            "Organización de Usuarios de Agua",
-            "Comunidades"
+            "Institución pública",
+            "Centro de investigación",
+            "Universidad"
         ],
         "resumen": {
-            "cofinanciamiento": "Hasta 90% pequeños agricultores / 75% medianos",
+            "cofinanciamiento": "Hasta USD 250.000 (≈$245M CLP)",
             "requisitos_clave": [
-                "Derechos de agua inscritos en Registro de Aguas",
-                "Proyecto técnico firmado por consultor inscrito en CNR",
-                "Tenencia de tierra acreditada (título, contrato arriendo ≥5 años)",
-                "Predio ubicado en zona de riego elegible"
+                "Consorcio mínimo 2 países ALC",
+                "Institución líder acreditada",
+                "40% cofinanciamiento"
             ],
-            "plazo_ejecucion": "18 meses desde resolución de adjudicación",
-            "observaciones": "Financia goteo, aspersión, microaspersión y obras civiles asociadas. Calendario 2026 con múltiples llamados regionales."
+            "plazo_ejecucion": "36 meses",
+            "observaciones": "El IICA Chile puede liderar o coliderar consorcios regionales."
         },
-        "checklist": [
-            "Derechos de agua inscritos",
-            "Consultor CNR habilitado",
-            "Tenencia de tierra acreditada",
-            "Sin deudas con el Fisco"
-        ]
+        "monto_min": 100000000,
+        "monto_max": 245000000,
+        "plazo_meses": 36,
+        "requiere_cofinanciamiento": true,
+        "idioma": "es",
+        "faq_disponible": true,
+        "webinar_fecha": "2026-03-20T15:00:00",
+        "permite_adendas": false,
+        "bases_estado": "publicada",
+        "requiere_firma": true,
+        "tipos_solicitante": [
+            "Organizacion"
+        ],
+        "ambito": "Internacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Alta",
+        "porcentajeViabilidad": 90,
+        "responsableIICA": "Carlos Guajardo",
+        "region": "América Latina y el Caribe",
+        "objetivo": "Co-liderar consorcio regional de innovación agrícola con instituciones de AL",
+        "descripcionIICA": "El IICA Chile actuaría como líder de consorcio, articulando instituciones de investigación de la región. Gracias a nuestra presencia en 34 países, podemos garantizar los requisitos de consorcio multinacional.",
+        "requisitos": [
+            "Consorcio de mínimo 2 países ALC",
+            "Institución líder con personería jurídica",
+            "Cofinanciamiento del 40%",
+            "Carta de intención de socios firmada"
+        ],
+        "fortalezas": [
+            "Presencia en 34 países IICA",
+            "Red de investigación establecida",
+            "Experiencia en gestión de fondos regionales",
+            "Mandato institucional alineado"
+        ],
+        "debilidades": [
+            "Alta competencia regional",
+            "Requiere cofinanciamiento significativo"
+        ],
+        "notasInternas": "Prioridad alta. Contactar al equipo de investigación de IICA San José para alianzas. Plazo de preparación de propuesta: 8 semanas.",
+        "ejeIICA": "Innovación para la productividad",
+        "complejidad": "Alta"
     },
     {
-        "id": 2,
-        "nombre": "SIRSD-S – Recuperación de Suelos Degradados (Operación Temprana 2026)",
-        "institucion": "INDAP",
-        "monto": 8500000,
-        "fecha_cierre": "2026-03-31",
+        "id": 102,
+        "nombre": "FAO TCP/RLA – Programa de Cooperación Técnica para Resiliencia Climática Chile 2026",
+        "institucion": "FAO",
+        "monto": 150000000,
+        "fecha_cierre": "2026-05-31",
         "estado": "Abierto",
-        "categoria": "Suelos",
-        "url_bases": "https://www.indap.gob.cl/programas/sirsd-s",
+        "categoria": "Internacional",
+        "url_bases": "https://www.fao.org/chile/programas-y-proyectos/es/",
+        "regiones": [
+            "Coquimbo",
+            "Atacama",
+            "Maule",
+            "O'Higgins"
+        ],
+        "beneficiarios": [
+            "Institución pública",
+            "MINAGRI",
+            "SAG"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Hasta USD 150.000 (Fondo TCP bilateral)",
+            "requisitos_clave": [
+                "Solicitud gobierno chileno",
+                "Contrapartes nacionales definidas",
+                "Plan de implementación"
+            ],
+            "plazo_ejecucion": "24 meses",
+            "observaciones": "TCP bilateral solicitado por Chile a FAO. IICA puede ser implementador técnico."
+        },
+        "monto_min": 50000000,
+        "monto_max": 150000000,
+        "plazo_meses": 24,
+        "requiere_cofinanciamiento": false,
+        "idioma": "es",
+        "faq_disponible": false,
+        "webinar_fecha": null,
+        "permite_adendas": true,
+        "bases_estado": "publicada",
+        "requiere_firma": true,
+        "tipos_solicitante": [
+            "Organizacion"
+        ],
+        "ambito": "Internacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Alta",
+        "porcentajeViabilidad": 85,
+        "responsableIICA": "Ana Lía Gutiérrez",
+        "region": "Zona Centro-Norte Chile",
+        "objetivo": "Ejecutar programa de adaptación climática en zonas áridas de Chile como implementador técnico FAO",
+        "descripcionIICA": "El IICA Chile participaría como implementador técnico del TCP, diseñando e implementando estrategias de resiliencia climática para pequeños agricultores de zonas áridas. Tenemos experiencia comprobada en estas regiones.",
+        "requisitos": [
+            "Acuerdo entre Gobierno de Chile y FAO",
+            "Contrapartes técnicas nacionales (SAG, INDAP)",
+            "Marco lógico aprobado por FAO Roma"
+        ],
+        "fortalezas": [
+            "Relación establecida con FAO Chile",
+            "Experiencia en zonas áridas",
+            "Red de técnicos regionales disponibles"
+        ],
+        "debilidades": [
+            "Proceso de aprobación en FAO Roma puede demorar 3-6 meses",
+            "Depende de voluntad política del MINAGRI"
+        ],
+        "notasInternas": "Gestionar reunión con Rodrigo Castillo (FAO Chile) para explorar roles. Hay TCP pendiente de aprobación para región de Coquimbo.",
+        "ejeIICA": "Bioeconomía y cambio climático",
+        "complejidad": "Media"
+    },
+    {
+        "id": 103,
+        "nombre": "FIDA – Proyecto de Inclusión Financiera para Pequeños Agricultores Andinos",
+        "institucion": "FIDA",
+        "monto": 800000000,
+        "fecha_cierre": "2026-06-30",
+        "estado": "Abierto",
+        "categoria": "Internacional",
+        "url_bases": "https://www.ifad.org/es/web/operations/w/country/chile",
         "regiones": [
             "Arica y Parinacota",
             "Tarapacá",
-            "Antofagasta",
-            "Atacama",
+            "Antofagasta"
+        ],
+        "beneficiarios": [
+            "Comunidades indígenas",
+            "Pequeño Agricultor",
+            "Organización campesina"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Hasta USD 850.000 (Préstamo FIDA + contrapartida Estado)",
+            "requisitos_clave": [
+                "Gobierno Chile como prestatario",
+                "Unidad ejecutora en INDAP",
+                "Beneficiarios indígenas documentados"
+            ],
+            "plazo_ejecucion": "60 meses",
+            "observaciones": "FIDA busca implementadores técnicos con capacidad en Norte Grande."
+        },
+        "monto_min": 400000000,
+        "monto_max": 800000000,
+        "plazo_meses": 60,
+        "requiere_cofinanciamiento": true,
+        "idioma": "es",
+        "faq_disponible": true,
+        "webinar_fecha": "2026-04-10T14:00:00",
+        "permite_adendas": false,
+        "bases_estado": "publicada",
+        "requiere_firma": true,
+        "tipos_solicitante": [
+            "Organizacion"
+        ],
+        "ambito": "Internacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Media",
+        "porcentajeViabilidad": 65,
+        "responsableIICA": "",
+        "region": "Norte Grande Chile",
+        "objetivo": "Liderar implementación técnica de proyecto FIDA de inclusión financiera en comunidades andinas",
+        "descripcionIICA": "El IICA Chile puede actuar como organismo de implementación técnica, diseñando sistemas de extensión agrícola y acceso a servicios financieros para comunidades quechua y aymara del Norte Grande.",
+        "requisitos": [
+            "Acuerdo con FIDA como implementador técnico",
+            "Experiencia documentada con pueblos originarios",
+            "Oficina operativa en la región designada"
+        ],
+        "fortalezas": [
+            "Experiencia en cooperación con comunidades indígenas",
+            "Mandato hemisférico que incluye inclusión social"
+        ],
+        "debilidades": [
+            "No hay responsable IICA asignado",
+            "IICA no tiene oficina permanente en Norte Grande",
+            "Proceso competitivo con otros organismos"
+        ],
+        "notasInternas": "URGENTE: Designar responsable. Hay ventana de oportunidad para el período COSOP 2026-2030 que se está negociando con FIDA.",
+        "ejeIICA": "Inclusión social y desarrollo rural",
+        "complejidad": "Alta"
+    },
+    {
+        "id": 104,
+        "nombre": "BID – Modernización de Servicios de Extensión Agrícola Chile (Asistencia Técnica)",
+        "institucion": "BID",
+        "monto": 350000000,
+        "fecha_cierre": "2026-07-15",
+        "estado": "Abierto",
+        "categoria": "Internacional",
+        "url_bases": "https://www.iadb.org/es/project/CH-T1186",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "INDAP",
+            "SAG",
+            "Institución pública"
+        ],
+        "resumen": {
+            "cofinanciamiento": "ATN/OC de hasta USD 350.000 sin cofinanciamiento requerido",
+            "requisitos_clave": [
+                "Institución ejecutora con capacidad técnica",
+                "Diagnóstico de sistemas de extensión",
+                "Plan de implementación en 18 meses"
+            ],
+            "plazo_ejecucion": "18 meses",
+            "observaciones": "BID busca organismo técnico para modernizar INDAP. IICA es candidato natural."
+        },
+        "monto_min": 200000000,
+        "monto_max": 350000000,
+        "plazo_meses": 18,
+        "requiere_cofinanciamiento": false,
+        "idioma": "es",
+        "faq_disponible": false,
+        "webinar_fecha": null,
+        "permite_adendas": true,
+        "bases_estado": "publicada",
+        "requiere_firma": true,
+        "tipos_solicitante": [
+            "Organizacion"
+        ],
+        "ambito": "Internacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Alta",
+        "porcentajeViabilidad": 88,
+        "responsableIICA": "Ricardo Moreira",
+        "region": "Nacional",
+        "objetivo": "Ejecutar asistencia técnica BID para modernización del sistema nacional de extensión agrícola",
+        "descripcionIICA": "El IICA Chile lideraría la consultoría técnica para modernizar los servicios de extensión de INDAP/SAG, incorporando TICs, enfoque territorial y metodologías participativas probadas en la región.",
+        "requisitos": [
+            "Convenio marco IICA-BID vigente",
+            "Equipo técnico multidisciplinario disponible",
+            "Experiencia comprobada en extensión agrícola ALC"
+        ],
+        "fortalezas": [
+            "Convenio marco con BID vigente",
+            "Amplia experiencia en extensión rural ALC",
+            "Metodología IICA reconocida internacionalmente"
+        ],
+        "debilidades": [
+            "Alta competencia de consultoras privadas internacionales"
+        ],
+        "notasInternas": "Ricardo Moreira ya tiene contacto con el coordinador de país BID. Preparar TDR propios antes de que el BID lance licitación formal.",
+        "ejeIICA": "Sanidad agropecuaria e inocuidad",
+        "complejidad": "Media"
+    },
+    {
+        "id": 105,
+        "nombre": "GEF-8 – Fondo de Adaptación: Territorios Agroforestales Resilientes en Chile Central",
+        "institucion": "GEF",
+        "monto": 600000000,
+        "fecha_cierre": "2026-08-31",
+        "estado": "Abierto",
+        "categoria": "Internacional",
+        "url_bases": "https://www.thegef.org/projects-operations/projects",
+        "regiones": [
+            "Biobío",
+            "Ñuble",
+            "La Araucanía"
+        ],
+        "beneficiarios": [
+            "ONG",
+            "Comunidad campesina",
+            "Municipio"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Hasta USD 600.000 – requiere cofinanciamiento 50%",
+            "requisitos_clave": [
+                "Organismo acreditado GEF",
+                "Componente agroforestal documentado",
+                "Cofinanciamiento 50% garantizado"
+            ],
+            "plazo_ejecucion": "48 meses",
+            "observaciones": "IICA está acreditado ante GEF. Oportunidad de liderar proyecto climático."
+        },
+        "monto_min": 300000000,
+        "monto_max": 600000000,
+        "plazo_meses": 48,
+        "requiere_cofinanciamiento": true,
+        "idioma": "es",
+        "faq_disponible": true,
+        "webinar_fecha": "2026-05-05T11:00:00",
+        "permite_adendas": false,
+        "bases_estado": "publicada",
+        "requiere_firma": true,
+        "tipos_solicitante": [
+            "Organizacion"
+        ],
+        "ambito": "Internacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Alta",
+        "porcentajeViabilidad": 82,
+        "responsableIICA": "Patricia Villareal",
+        "region": "Chile Central Sur",
+        "objetivo": "Diseñar e implementar proyecto GEF-8 de sistemas agroforestales para adaptación climática en Chile Central",
+        "descripcionIICA": "El IICA Chile, como organismo acreditado ante GEF, puede actuar como Agencia de Implementación. Desarrollaríamos sistemas agroforestales resilientes con comunidades campesinas de la Macrozona Centro-Sur.",
+        "requisitos": [
+            "Acreditación GEF del IICA (vigente)",
+            "Diagnóstico de línea base territorial",
+            "Alianzas con municipios de la zona",
+            "Plan de M&E con indicadores GEF"
+        ],
+        "fortalezas": [
+            "IICA acreditado ante GEF",
+            "Experiencia en proyectos agroforestales en Chile",
+            "Red de partners locales establecida en Biobío y La Araucanía"
+        ],
+        "debilidades": [
+            "Proceso de aprobación GEF tarda 12-18 meses",
+            "Requiere cofinanciamiento de 50% que debe asegurarse"
+        ],
+        "notasInternas": "Patricia ya inició conversaciones con CONAF para cofinanciamiento. Verificar que acreditación GEF del IICA esté vigente para Ciclo 8.",
+        "ejeIICA": "Bioeconomía y cambio climático",
+        "complejidad": "Alta"
+    },
+    {
+        "id": 106,
+        "nombre": "EUROCLIMA+ – Gestión Sostenible del Agua en Territorios Agrícolas Vulnerables",
+        "institucion": "UE (EUROCLIMA+)",
+        "monto": 280000000,
+        "fecha_cierre": "2026-09-30",
+        "estado": "Abierto",
+        "categoria": "Internacional",
+        "url_bases": "https://euroclimaplus.org/convocatorias",
+        "regiones": [
             "Coquimbo",
             "Valparaíso",
-            "Metropolitana",
-            "O'Higgins",
+            "Atacama"
+        ],
+        "beneficiarios": [
+            "Institución pública",
+            "Centro de investigación",
+            "Organización de regantes"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Hasta EUR 280k (≈$280M CLP) sin cofinanciamiento",
+            "requisitos_clave": [
+                "Socio europeo acreditado",
+                "Componente de género mínimo 30%",
+                "Marco de resultados EUROCLIMA"
+            ],
+            "plazo_ejecucion": "36 meses",
+            "observaciones": "IICA puede actuar como implementador en áreas de gestión hídrica."
+        },
+        "monto_min": 150000000,
+        "monto_max": 280000000,
+        "plazo_meses": 36,
+        "requiere_cofinanciamiento": false,
+        "idioma": "multi",
+        "faq_disponible": true,
+        "webinar_fecha": "2026-06-10T15:00:00",
+        "permite_adendas": false,
+        "bases_estado": "publicada",
+        "requiere_firma": false,
+        "tipos_solicitante": [
+            "Organizacion"
+        ],
+        "ambito": "Internacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Media",
+        "porcentajeViabilidad": 70,
+        "responsableIICA": "",
+        "region": "Zona Norte-Centro Chile",
+        "objetivo": "Diseñar e implementar sistema de gestión sostenible del agua agrícola en zonas de escasez hídrica",
+        "descripcionIICA": "Partneriando con institución europea, el IICA Chile implementaría el componente técnico de gestión hídrica agrícola, incorporando tecnologías de precisión y enfoques adaptados al contexto del Norte Chico.",
+        "requisitos": [
+            "Socio europeo acreditado EUROCLIMA",
+            "Equipo técnico con experiencia en gestión hídrica",
+            "Componente de enfoque de género (mín. 30%)"
+        ],
+        "fortalezas": [
+            "Experiencia en gestión del agua agrícola",
+            "Capacidad de articulación multiactor"
+        ],
+        "debilidades": [
+            "Sin responsable IICA asignado aún",
+            "Necesita socio europeo que IICA no tiene identificado",
+            "Propuesta bilingual requerida"
+        ],
+        "notasInternas": "PRÓXIMA ACCIÓN: Identificar socio europeo. Explorar con Wageningen UR o CIHEAM. Sin responsable designado.",
+        "ejeIICA": "Bioeconomía y cambio climático",
+        "complejidad": "Alta"
+    },
+    {
+        "id": 107,
+        "nombre": "FONTAGRO – TCP Plataforma Digital de Extensión Agrícola Clima-Inteligente ALC",
+        "institucion": "FONTAGRO",
+        "monto": 180000000,
+        "fecha_cierre": "2026-03-31",
+        "estado": "Abierto",
+        "categoria": "Internacional",
+        "url_bases": "https://www.fontagro.org/new/es/convocatorias/fondo-complementario",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "Centro de investigación",
+            "INIA",
+            "Universidad"
+        ],
+        "resumen": {
+            "cofinanciamiento": "USD 180k + 30% cofinanciamiento local",
+            "requisitos_clave": [
+                "Consorcio 3+ países",
+                "Plataforma digital demostrable",
+                "INIA como socio nacional recomendado"
+            ],
+            "plazo_ejecucion": "30 meses",
+            "observaciones": "Componente TICs agrícolas ideal para rol IICA como facilitador."
+        },
+        "monto_min": 80000000,
+        "monto_max": 180000000,
+        "plazo_meses": 30,
+        "requiere_cofinanciamiento": true,
+        "idioma": "es",
+        "faq_disponible": true,
+        "webinar_fecha": null,
+        "permite_adendas": true,
+        "bases_estado": "publicada",
+        "requiere_firma": false,
+        "tipos_solicitante": [
+            "Organizacion"
+        ],
+        "ambito": "Internacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Alta",
+        "porcentajeViabilidad": 78,
+        "responsableIICA": "Carlos Guajardo",
+        "region": "América Latina y el Caribe",
+        "objetivo": "Co-liderar desarrollo de plataforma digital de extensión agrícola inteligente para la región ALC",
+        "descripcionIICA": "El IICA Chile, como co-líder o facilitador de consorcio, coordinaría el desarrollo de una plataforma digital de extensión agrícola adaptada al cambio climático, articulando centros de investigación nacionales de 3+ países.",
+        "requisitos": [
+            "Consorcio mínimo 3 países ALC",
+            "Componente digital demostrable",
+            "INIA Chile como socio técnico nacional"
+        ],
+        "fortalezas": [
+            "Red en 34 países para conformar consorcio",
+            "Relación establecida con INIA Chile",
+            "Mandato específico en extensión agrícola"
+        ],
+        "debilidades": [
+            "Plazo de cierre muy próximo (31 marzo)",
+            "Conformar consorcio toma tiempo"
+        ],
+        "notasInternas": "⚠️ URGENTE: Cierra en días. Carlos Guajardo debe confirmar si IICA/INIA/CIAT pueden conformar consorcio esta semana.",
+        "ejeIICA": "Innovación para la productividad",
+        "complejidad": "Media"
+    },
+    {
+        "id": 108,
+        "nombre": "MINAGRI-SAG – Programa Nacional de Trazabilidad y Sanidad Vegetal 2026",
+        "institucion": "MINAGRI",
+        "monto": 450000000,
+        "fecha_cierre": "2026-05-15",
+        "estado": "Abierto",
+        "categoria": "Nacional",
+        "url_bases": "https://www.sag.gob.cl/convocatorias",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "Institución pública",
+            "SAG",
+            "Exportadores agrícolas"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Fondos SAG – sin cofinanciamiento requerido",
+            "requisitos_clave": [
+                "Expertise en trazabilidad agroalimentaria",
+                "Capacidad de cobertura nacional",
+                "Certificaciones SAG"
+            ],
+            "plazo_ejecucion": "24 meses",
+            "observaciones": "IICA puede aportar experiencia en estándares internacionales de trazabilidad."
+        },
+        "monto_min": 200000000,
+        "monto_max": 450000000,
+        "plazo_meses": 24,
+        "requiere_cofinanciamiento": false,
+        "idioma": "es",
+        "faq_disponible": false,
+        "webinar_fecha": null,
+        "permite_adendas": true,
+        "bases_estado": "publicada",
+        "requiere_firma": true,
+        "tipos_solicitante": [
+            "Organizacion"
+        ],
+        "ambito": "Nacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Media",
+        "porcentajeViabilidad": 60,
+        "responsableIICA": "Felipe Donoso",
+        "region": "Nacional",
+        "objetivo": "Proveer asistencia técnica al SAG para implementar sistema nacional de trazabilidad vegetal",
+        "descripcionIICA": "El IICA Chile puede aportar expertise técnico en sistemas de trazabilidad agroalimentaria, aprovechando experiencias regionales exitosas de ALC y su rol en organismos internacionales como CODEX y OIE.",
+        "requisitos": [
+            "Convenio marco con MINAGRI/SAG",
+            "Equipo técnico en inocuidad y trazabilidad",
+            "Capacidad de implementación nacional"
+        ],
+        "fortalezas": [
+            "Experiencia IICA en normativas internacionales (CODEX, OIE)",
+            "Relación institucional con SAG",
+            "Red de expertos en la región"
+        ],
+        "debilidades": [
+            "Alta competencia de consultoras privadas especializadas en TI",
+            "SAG puede preferir solución tecnológica pura"
+        ],
+        "notasInternas": "Felipe Donoso tiene reunión agendada con subdirector SAG el 15 de marzo. Preparar presentación técnica.",
+        "ejeIICA": "Sanidad agropecuaria e inocuidad",
+        "complejidad": "Media"
+    },
+    {
+        "id": 109,
+        "nombre": "INDAP – Programa de Desarrollo Agroalimentario para Agricultura Familiar Campesina 2026",
+        "institucion": "INDAP",
+        "monto": 320000000,
+        "fecha_cierre": "2026-04-20",
+        "estado": "Abierto",
+        "categoria": "Nacional",
+        "url_bases": "https://www.indap.gob.cl/programas/prodesal",
+        "regiones": [
             "Maule",
-            "Ñuble",
             "Biobío",
-            "La Araucanía",
-            "Los Ríos",
-            "Los Lagos",
-            "Aysén",
-            "Magallanes"
+            "Ñuble",
+            "La Araucanía"
         ],
         "beneficiarios": [
             "Pequeño Agricultor",
+            "Agricultura Familiar Campesina",
             "Usuario INDAP"
         ],
         "resumen": {
-            "cofinanciamiento": "Hasta 95% para usuarios INDAP calificados",
+            "cofinanciamiento": "Subsidio directo INDAP sin cofinanciamiento",
             "requisitos_clave": [
-                "Ser usuario INDAP vigente (activo en el sistema)",
-                "Análisis de suelo con antigüedad máxima de 2 años",
-                "Plan de manejo elaborado por profesional habilitado",
-                "Sin deudas morosas con INDAP"
+                "Municipio contraparte",
+                "Equipo técnico PDT disponible",
+                "Mínimo 200 familias beneficiarias"
             ],
-            "plazo_ejecucion": "1 temporada agrícola (marzo–diciembre 2026)",
-            "observaciones": "Incluye enmiendas calcáreas, fertilización de establecimiento y análisis de suelo. Operación Temprana prioriza regiones del sur."
+            "plazo_ejecucion": "12 meses (renovable)",
+            "observaciones": "IICA puede apoyar a municipios para postular y gestionar PRODESAL."
         },
-        "checklist": [
-            "Ser usuario INDAP activo",
-            "Análisis de suelo vigente",
-            "Sin deudas con INDAP",
-            "Plan de manejo aprobado"
-        ]
+        "monto_min": 100000000,
+        "monto_max": 320000000,
+        "plazo_meses": 12,
+        "requiere_cofinanciamiento": false,
+        "idioma": "es",
+        "faq_disponible": true,
+        "webinar_fecha": null,
+        "permite_adendas": true,
+        "bases_estado": "publicada",
+        "requiere_firma": true,
+        "tipos_solicitante": [
+            "Organizacion"
+        ],
+        "ambito": "Nacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Media",
+        "porcentajeViabilidad": 55,
+        "responsableIICA": "Ana Lía Gutiérrez",
+        "region": "Macrozona Sur",
+        "objetivo": "Apoyar técnicamente municipios para implementar PRODESAL en macrozona sur",
+        "descripcionIICA": "El IICA Chile podría actuar como asesor técnico de municipios postulantes al PRODESAL, fortaleciendo capacidades locales e incorporando enfoques innovadores de extensión territorial.",
+        "requisitos": [
+            "Alianza con municipio(s) de la región",
+            "Equipo técnico disponible para trabajo territorial",
+            "Conocimiento de normativa INDAP"
+        ],
+        "fortalezas": [
+            "Experiencia en extensión rural con AFC",
+            "Relación histórica con INDAP",
+            "Presencia territorial en las regiones"
+        ],
+        "debilidades": [
+            "Rol indirecto (apoyo a municipio, no ejecución directa)",
+            "Monto por familia relativamente pequeño para IICA"
+        ],
+        "notasInternas": "Explorar alianza con Municipalidad de Cauquenes o Mulchén que ya son contrapartes INDAP. Ana coordina.",
+        "ejeIICA": "Sanidad agropecuaria e inocuidad",
+        "complejidad": "Fácil"
     },
     {
-        "id": 3,
-        "nombre": "Activa Inversión Agro – Riego Eficiente y Eficiencia Energética",
-        "institucion": "CORFO",
-        "monto": 30000000,
-        "fecha_cierre": "2026-06-30",
+        "id": 110,
+        "nombre": "FIA – Convocatoria de Innovación Agraria para Sistemas Silvoagropecuarios 2026",
+        "institucion": "FIA",
+        "monto": 120000000,
+        "fecha_cierre": "2026-06-15",
         "estado": "Abierto",
-        "categoria": "Inversión",
-        "url_bases": "https://www.corfo.cl/sites/cpp/activa-inversion-agro",
+        "categoria": "Nacional",
+        "url_bases": "https://www.fia.cl/convocatorias/",
         "regiones": [
-            "Todas"
+            "La Araucanía",
+            "Los Ríos",
+            "Los Lagos"
+        ],
+        "beneficiarios": [
+            "Centro de investigación",
+            "Universidad",
+            "Empresa Agrícola"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Hasta $120M – 20% cofinanciamiento requerido",
+            "requisitos_clave": [
+                "Consorcio público-privado",
+                "Componente silvoagropecuario",
+                "Cofinanciamiento 20%"
+            ],
+            "plazo_ejecucion": "30 meses",
+            "observaciones": "Temática alineada con trabajo IICA en agroforestería."
+        },
+        "monto_min": 50000000,
+        "monto_max": 120000000,
+        "plazo_meses": 30,
+        "requiere_cofinanciamiento": true,
+        "idioma": "es",
+        "faq_disponible": true,
+        "webinar_fecha": "2026-04-15T11:00:00",
+        "permite_adendas": false,
+        "bases_estado": "publicada",
+        "requiere_firma": false,
+        "tipos_solicitante": [
+            "Juridica",
+            "Organizacion"
+        ],
+        "ambito": "Nacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Alta",
+        "porcentajeViabilidad": 75,
+        "responsableIICA": "Patricia Villareal",
+        "region": "Macrozona Sur",
+        "objetivo": "Liderar consorcio I+D en sistemas silvoagropecuarios para La Araucanía y Los Ríos",
+        "descripcionIICA": "El IICA Chile puede co-liderar un consorcio de innovación con INIA Carillanca y Universidad de La Frontera para desarrollar e implementar sistemas silvoagropecuarios resilientes al clima.",
+        "requisitos": [
+            "Consorcio público-privado con empresa",
+            "Especialistas en sistemas silvoagropecuarios",
+            "20% cofinanciamiento en especie o efectivo"
+        ],
+        "fortalezas": [
+            "Relación establecida con INIA Carillanca y UFRO",
+            "Experiencia en agroforestería",
+            "Conocimiento del territorio"
+        ],
+        "debilidades": [
+            "FIA tiene procesos competitivos difíciles",
+            "Requiere empresa privada como socio"
+        ],
+        "notasInternas": "Patricia exploró alianza con Empresas Arauco como socio privado. Confirmar interés empresa.",
+        "ejeIICA": "Innovación para la productividad",
+        "complejidad": "Media"
+    },
+    {
+        "id": 111,
+        "nombre": "CORFO – Programa de Transformación Agroalimentaria: Eficiencia y Digitalización 2026",
+        "institucion": "CORFO",
+        "monto": 200000000,
+        "fecha_cierre": "2026-07-31",
+        "estado": "Abierto",
+        "categoria": "Nacional",
+        "url_bases": "https://www.corfo.cl/sites/cpp/programas-y-convocatorias",
+        "regiones": [
+            "Metropolitana",
+            "Valparaíso",
+            "O'Higgins",
+            "Maule"
         ],
         "beneficiarios": [
             "PYME Agrícola",
             "Cooperativa",
-            "Asociación Gremial"
+            "Empresa Agroalimentaria"
         ],
         "resumen": {
-            "cofinanciamiento": "Hasta 70% del proyecto (tope $30M por empresa)",
+            "cofinanciamiento": "Hasta $200M – subsidio 50%, requiere aporte 50%",
             "requisitos_clave": [
-                "Empresa constituida legalmente en Chile",
-                "Ventas anuales entre UF 2.400 y UF 100.000",
-                "Proyecto de inversión con evaluación técnica y financiera",
-                "No haber recibido el mismo subsidio en los últimos 24 meses"
-            ],
-            "plazo_ejecucion": "24 meses desde firma de contrato",
-            "observaciones": "Financia equipamiento de riego tecnificado, paneles solares para bombeo, obras civiles y sistemas de monitoreo."
-        },
-        "checklist": [
-            "Empresa legalmente constituida",
-            "Ventas entre UF 2.400-100.000",
-            "Proyecto de inversión elaborado",
-            "Sin subsidio CORFO en últimos 24 meses"
-        ]
-    },
-    {
-        "id": 4,
-        "nombre": "FIA – Convocatoria Innovación Agraria 2026 (Proyectos de Innovación)",
-        "institucion": "FIA",
-        "monto": 50000000,
-        "fecha_cierre": "2026-05-31",
-        "estado": "Abierto",
-        "categoria": "Innovación",
-        "url_bases": "https://convocatoria.fia.cl/",
-        "regiones": [
-            "Todas"
-        ],
-        "beneficiarios": [
-            "Empresa Agrícola",
-            "Centro de Investigación",
-            "Universidad",
-            "Cooperativa",
-            "Startup AgTech"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Hasta 80% (máx. $50M por proyecto)",
-            "requisitos_clave": [
-                "Proyecto de innovación con potencial de escalamiento",
-                "Carta de respaldo de entidad técnica o universidad",
-                "Cofinanciamiento mínimo del 20% por parte del postulante",
-                "Asociatividad con al menos 2 actores del sistema de innovación"
-            ],
-            "plazo_ejecucion": "18–36 meses",
-            "observaciones": "Prioriza AgTech, agricultura de precisión, sustentabilidad, nuevos cultivos y adaptación al cambio climático."
-        },
-        "checklist": [
-            "Proyecto innovador con potencial de mercado",
-            "Carta de respaldo técnico",
-            "Cofinanciamiento del 20% disponible",
-            "Asociatividad con actores del sistema"
-        ]
-    },
-    {
-        "id": 5,
-        "nombre": "Capital Semilla Emprende – Sercotec 2026",
-        "institucion": "Sercotec",
-        "monto": 3500000,
-        "fecha_cierre": "2026-04-15",
-        "estado": "Abierto",
-        "categoria": "Emprendimiento",
-        "url_bases": "https://www.sercotec.cl/capital-semilla-emprende/",
-        "regiones": [
-            "Todas"
-        ],
-        "beneficiarios": [
-            "Microempresa",
-            "Emprendedor",
-            "Agricultor Familiar"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Subsidio no reembolsable hasta $3,5M (aporte propio mínimo 20%)",
-            "requisitos_clave": [
-                "Inicio de actividades en primera categoría (SII)",
-                "Ventas anuales hasta UF 2.400",
-                "Proyecto de negocio con plan de inversión",
-                "No haber recibido Capital Semilla en los últimos 2 años"
-            ],
-            "plazo_ejecucion": "6 meses desde firma de convenio",
-            "observaciones": "Ideal para micro y pequeñas empresas agrícolas que necesitan capital inicial. Incluye capacitación y mentoría."
-        },
-        "checklist": [
-            "Inicio de actividades SII vigente",
-            "Ventas hasta UF 2.400",
-            "Plan de negocio elaborado",
-            "Sin Capital Semilla en últimos 2 años"
-        ]
-    },
-    {
-        "id": 7,
-        "nombre": "FIA – Jóvenes Innovadores Agrícolas 2026",
-        "institucion": "FIA",
-        "monto": 15000000,
-        "fecha_cierre": "2026-06-15",
-        "estado": "Abierto",
-        "categoria": "Innovación",
-        "url_bases": "https://convocatoria.fia.cl/",
-        "regiones": [
-            "Todas"
-        ],
-        "beneficiarios": [
-            "Joven (18-35 años)",
-            "Emprendedor Agrícola",
-            "Startup AgTech"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Hasta 80% (máx. $15M)",
-            "requisitos_clave": [
-                "Edad entre 18 y 35 años al momento de postular",
-                "Proyecto innovador con validación técnica",
-                "Carta de respaldo de entidad técnica o empresa",
-                "Presentación ante comité evaluador"
-            ],
-            "plazo_ejecucion": "12–18 meses",
-            "observaciones": "Prioriza innovación tecnológica, sustentabilidad y asociatividad. Incluye mentoría de expertos FIA."
-        },
-        "checklist": [
-            "Edad 18-35 años",
-            "Proyecto innovador validado",
-            "Carta de respaldo técnico",
-            "Presentación ante comité"
-        ]
-    },
-    {
-        "id": 9,
-        "nombre": "Concurso CNR – Obras de Riego y Drenaje (Llamado Regional 2026)",
-        "institucion": "CNR",
-        "monto": 300000000,
-        "fecha_cierre": "2026-05-15",
-        "estado": "Abierto",
-        "categoria": "Riego",
-        "url_bases": "https://www.cnr.gob.cl/agricultores/concursos-de-riego/calendario-de-concursos/",
-        "regiones": [
-            "Coquimbo",
-            "Valparaíso",
-            "Metropolitana",
-            "O'Higgins",
-            "Maule",
-            "Ñuble",
-            "Biobío"
-        ],
-        "beneficiarios": [
-            "Organización de Usuarios de Agua",
-            "Junta de Vigilancia",
-            "Asociación de Canalistas"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Hasta 75% del costo de obras (bonificación estatal)",
-            "requisitos_clave": [
-                "Organización de usuarios legalmente constituida",
-                "Proyecto de ingeniería aprobado por DOH o consultor CNR",
-                "Derechos de agua de todos los beneficiarios inscritos",
-                "Acuerdo de asamblea de usuarios"
-            ],
-            "plazo_ejecucion": "24 meses desde adjudicación",
-            "observaciones": "Financia canales revestidos, embalses de acumulación, bocatomas y obras de drenaje. Prioriza proyectos colectivos."
-        },
-        "checklist": [
-            "Organización legalmente constituida",
-            "Proyecto de ingeniería aprobado",
-            "Derechos de agua de todos los beneficiarios",
-            "Acuerdo de asamblea"
-        ]
-    },
-    {
-        "id": 11,
-        "nombre": "Sercotec – Fondo de Desarrollo de Negocios (Reactívate) 2026",
-        "institucion": "Sercotec",
-        "monto": 8000000,
-        "fecha_cierre": "2026-05-30",
-        "estado": "Abierto",
-        "categoria": "Inversión",
-        "url_bases": "https://www.sercotec.cl/fondo-de-desarrollo-de-negocios/",
-        "regiones": [
-            "Todas"
-        ],
-        "beneficiarios": [
-            "Microempresa",
-            "Pequeña Empresa",
-            "Cooperativa Agrícola"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Subsidio no reembolsable hasta $8M (aporte propio mínimo 20%)",
-            "requisitos_clave": [
-                "Inicio de actividades en primera categoría (SII)",
-                "Ventas anuales entre UF 2.400 y UF 25.000",
-                "Plan de inversión detallado",
-                "Empresa con al menos 1 año de antigüedad"
-            ],
-            "plazo_ejecucion": "6–12 meses",
-            "observaciones": "Para micro y pequeñas empresas que necesitan inversión en activos, tecnología o capital de trabajo."
-        },
-        "checklist": [
-            "Inicio de actividades SII vigente",
-            "Ventas entre UF 2.400-25.000",
-            "Plan de inversión elaborado",
-            "Empresa con 1+ año de antigüedad"
-        ]
-    },
-    {
-        "id": 12,
-        "nombre": "GORE Coquimbo – FIC-R Innovación Agrícola Región 2026",
-        "institucion": "GORE Coquimbo",
-        "monto": 100000000,
-        "fecha_cierre": "2026-04-30",
-        "estado": "Abierto",
-        "categoria": "Innovación",
-        "url_bases": "https://www.gorecoquimbo.cl/fondo-de-innovacion-para-la-competitividad/",
-        "regiones": [
-            "Coquimbo"
-        ],
-        "beneficiarios": [
-            "Empresa Agrícola",
-            "Universidad",
-            "Centro de Investigación",
-            "Cooperativa"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Hasta 80% del proyecto (máx. $100M)",
-            "requisitos_clave": [
-                "Proyecto de innovación con impacto regional demostrable",
-                "Entidad ejecutora con personalidad jurídica vigente en la región",
-                "Cofinanciamiento mínimo del 20%",
-                "Alineación con Estrategia Regional de Innovación"
+                "Empresa con ventas >UF 5.000",
+                "Plan de digitalización",
+                "Cofinanciamiento 50%"
             ],
             "plazo_ejecucion": "24 meses",
-            "observaciones": "Fondo FIC-R específico para la Región de Coquimbo. Prioriza proyectos de eficiencia hídrica, fruticultura y viticultura."
+            "observaciones": "IICA podría apoyar cadenas agroalimentarias de exportación."
         },
-        "checklist": [
-            "Proyecto con impacto regional",
-            "Personalidad jurídica en la región",
-            "Cofinanciamiento 20% disponible",
-            "Alineación con estrategia regional"
-        ]
+        "monto_min": 80000000,
+        "monto_max": 200000000,
+        "plazo_meses": 24,
+        "requiere_cofinanciamiento": true,
+        "idioma": "es",
+        "faq_disponible": false,
+        "webinar_fecha": null,
+        "permite_adendas": true,
+        "bases_estado": "publicada",
+        "requiere_firma": false,
+        "tipos_solicitante": [
+            "Juridica"
+        ],
+        "ambito": "Nacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Baja",
+        "porcentajeViabilidad": 35,
+        "responsableIICA": "Ricardo Moreira",
+        "region": "Zona Central",
+        "objetivo": "Participar como proveedor de asistencia técnica para PYMES que acceden al programa",
+        "descripcionIICA": "El IICA Chile puede posicionarse como proveedor de servicios técnicos (consultoría, capacitación) para las PYMES que acceden a CORFO, no como ejecutor directo del subsidio.",
+        "requisitos": [
+            "IICA como proveedor técnico habilitado en registro CORFO",
+            "Propuesta de servicio técnico competitiva"
+        ],
+        "fortalezas": [
+            "Expertise técnico reconocido en transformación agroalimentaria"
+        ],
+        "debilidades": [
+            "IICA no puede ser receptor directo del subsidio (solo empresas)",
+            "Rol muy indirecto como proveedor",
+            "Alta competencia de consultoras privadas"
+        ],
+        "notasInternas": "Rol muy indirecto. Evaluar si vale el esfuerzo o es mejor enfocarse en fondos internacionales con mayor apropiación.",
+        "ejeIICA": "Innovación para la productividad",
+        "complejidad": "Media"
     },
     {
-        "id": 13,
-        "nombre": "GORE Maule – FIC-R Desarrollo Agrícola y Ganadero 2026",
-        "institucion": "GORE Maule",
-        "monto": 80000000,
-        "fecha_cierre": "2026-05-15",
+        "id": 112,
+        "nombre": "FAO TCP/RLA – Fortalecimiento de Sistemas de Información Agrícola para la Seguridad Alimentaria",
+        "institucion": "FAO",
+        "monto": 95000000,
+        "fecha_cierre": "2026-05-20",
         "estado": "Abierto",
-        "categoria": "Innovación",
-        "url_bases": "https://www.goremaule.cl/gore/fondos-concursables/",
+        "categoria": "Internacional",
+        "url_bases": "https://www.fao.org/americas/tcp/es/",
         "regiones": [
-            "Maule"
+            "Todas"
         ],
         "beneficiarios": [
-            "Empresa Agrícola",
-            "Cooperativa",
-            "Asociación de Productores",
-            "Universidad"
+            "MINAGRI",
+            "INE",
+            "Institución pública estadística"
         ],
         "resumen": {
-            "cofinanciamiento": "Hasta 75% del proyecto (máx. $80M)",
+            "cofinanciamiento": "USD 95.000 TCP bilateral sin cofinanciamiento",
             "requisitos_clave": [
-                "Proyecto con impacto en la Región del Maule",
-                "Entidad con personalidad jurídica vigente",
-                "Cofinanciamiento mínimo del 25%",
-                "Presentación ante Consejo Regional (CORE)"
-            ],
-            "plazo_ejecucion": "18–24 meses",
-            "observaciones": "Prioriza proyectos de viticultura, fruticultura, ganadería y turismo rural en la Región del Maule."
-        },
-        "checklist": [
-            "Proyecto con impacto en el Maule",
-            "Personalidad jurídica vigente",
-            "Cofinanciamiento 25% disponible",
-            "Aprobación CORE"
-        ]
-    },
-    {
-        "id": 14,
-        "nombre": "GORE Araucanía – FIC-R Agricultura Mapuche y Pueblos Originarios 2026",
-        "institucion": "GORE La Araucanía",
-        "monto": 60000000,
-        "fecha_cierre": "2026-06-30",
-        "estado": "Próxima Apertura",
-        "categoria": "Innovación",
-        "url_bases": "https://www.gorearaucania.cl/fondos-concursables/",
-        "regiones": [
-            "La Araucanía"
-        ],
-        "beneficiarios": [
-            "Comunidad Indígena",
-            "Cooperativa Mapuche",
-            "Asociación de Productores",
-            "Mujer Rural"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Hasta 90% para comunidades indígenas (máx. $60M)",
-            "requisitos_clave": [
-                "Proyecto con pertinencia cultural mapuche",
-                "Comunidad o asociación legalmente constituida",
-                "Enfoque en soberanía alimentaria o economía local",
-                "Aval de CONADI o municipio"
+                "Contraparte MINAGRI o INE",
+                "Equipo de análisis de datos agrícolas",
+                "Plataforma de datos existente"
             ],
             "plazo_ejecucion": "18 meses",
-            "observaciones": "Fondo especial para proyectos productivos con enfoque intercultural en la Región de La Araucanía."
+            "observaciones": "Oportunidad de fortalecer sistemas de estadísticas agropecuarias."
         },
-        "checklist": [
-            "Pertinencia cultural mapuche",
-            "Comunidad legalmente constituida",
-            "Enfoque en soberanía alimentaria",
-            "Aval CONADI o municipio"
-        ]
+        "monto_min": 50000000,
+        "monto_max": 95000000,
+        "plazo_meses": 18,
+        "requiere_cofinanciamiento": false,
+        "idioma": "es",
+        "faq_disponible": false,
+        "webinar_fecha": null,
+        "permite_adendas": false,
+        "bases_estado": "publicada",
+        "requiere_firma": true,
+        "tipos_solicitante": [
+            "Organizacion"
+        ],
+        "ambito": "Internacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Media",
+        "porcentajeViabilidad": 62,
+        "responsableIICA": "Felipe Donoso",
+        "region": "Nacional",
+        "objetivo": "Actuar como implementador técnico del TCP FAO para modernizar estadísticas agrícolas de Chile",
+        "descripcionIICA": "El IICA Chile puede implementar la asistencia técnica del TCP, desarrollando nuevas metodologías de recolección y análisis de datos agrícolas para el sistema de información de MINAGRI.",
+        "requisitos": [
+            "Acuerdo de implementación con FAO Chile",
+            "Equipo con expertise en estadísticas agrícolas",
+            "Acceso a plataformas de datos MINAGRI"
+        ],
+        "fortalezas": [
+            "Experiencia en sistemas de información agrícola ALC",
+            "Relación con FAO Chile establecida"
+        ],
+        "debilidades": [
+            "Monto relativamente pequeño para los recursos que requiere el equipo técnico"
+        ],
+        "notasInternas": "Felipe mantiene contacto regular con FAO Chile. Solicitar reunión para explorar este TCP específico.",
+        "ejeIICA": "Sanidad agropecuaria e inocuidad",
+        "complejidad": "Fácil"
     },
     {
-        "id": 15,
-        "nombre": "CORFO – Programa de Economía Circular Agro 2026",
-        "institucion": "CORFO",
-        "monto": 50000000,
-        "fecha_cierre": "2026-07-31",
-        "estado": "Abierto",
-        "categoria": "Sustentabilidad",
-        "url_bases": "https://www.corfo.cl/sites/cpp/economia-circular",
-        "regiones": [
-            "Todas"
-        ],
-        "beneficiarios": [
-            "Empresa Agrícola",
-            "Cooperativa",
-            "PYME Agroindustrial"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Hasta 60% del proyecto (máx. $50M)",
-            "requisitos_clave": [
-                "Empresa con ventas entre UF 2.400 y UF 100.000",
-                "Proyecto de economía circular con métricas de impacto ambiental",
-                "Evaluación de ciclo de vida del producto",
-                "Compromiso de reducción de residuos medible"
-            ],
-            "plazo_ejecucion": "24 meses",
-            "observaciones": "Financia proyectos de valorización de residuos agrícolas, biogás, compostaje industrial y packaging sustentable."
-        },
-        "checklist": [
-            "Empresa con ventas UF 2.400-100.000",
-            "Proyecto de economía circular",
-            "Métricas de impacto ambiental",
-            "Compromiso de reducción de residuos"
-        ]
-    },
-    {
-        "id": 16,
-        "nombre": "INDAP – Bono de Fomento Productivo para Mujeres Rurales 2026",
-        "institucion": "INDAP",
-        "monto": 5000000,
+        "id": 113,
+        "nombre": "CNR – Concurso Ley 18.450: Sistema de Riego Tecnificado Macrozona Sur 2026",
+        "institucion": "CNR",
+        "monto": 400000000,
         "fecha_cierre": "2026-04-30",
         "estado": "Abierto",
-        "categoria": "Género y Ruralidad",
-        "url_bases": "https://www.indap.gob.cl/programas/mujer-rural",
+        "categoria": "Nacional",
+        "url_bases": "https://www.cnr.gob.cl/agricultores/concursos-de-riego/",
         "regiones": [
-            "Todas"
-        ],
-        "beneficiarios": [
-            "Mujer Rural",
-            "Mujer Agricultora",
-            "Jefa de Hogar Rural"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Bono no reembolsable hasta $5M (sin aporte propio requerido)",
-            "requisitos_clave": [
-                "Ser mujer agricultora familiar campesina",
-                "Ser usuaria INDAP vigente",
-                "Proyecto productivo con enfoque de género",
-                "Residencia en zona rural"
-            ],
-            "plazo_ejecucion": "6–12 meses",
-            "observaciones": "Programa especial para mujeres rurales. Incluye asistencia técnica diferenciada y capacitación en gestión."
-        },
-        "checklist": [
-            "Ser mujer AFC",
-            "Ser usuaria INDAP vigente",
-            "Proyecto productivo con enfoque género",
-            "Residencia rural"
-        ]
-    },
-    {
-        "id": 18,
-        "nombre": "Sercotec – Capital Abeja (Emprendimiento Femenino Rural) 2026",
-        "institucion": "Sercotec",
-        "monto": 4000000,
-        "fecha_cierre": "2026-05-15",
-        "estado": "Abierto",
-        "categoria": "Género y Ruralidad",
-        "url_bases": "https://www.sercotec.cl/capital-abeja/",
-        "regiones": [
-            "Todas"
-        ],
-        "beneficiarios": [
-            "Mujer Emprendedora",
-            "Mujer Rural",
-            "Microempresaria"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Subsidio no reembolsable hasta $4M (aporte propio mínimo 20%)",
-            "requisitos_clave": [
-                "Ser mujer mayor de 18 años",
-                "Inicio de actividades en primera categoría (SII)",
-                "Ventas anuales hasta UF 2.400",
-                "Plan de negocio con enfoque de género"
-            ],
-            "plazo_ejecucion": "6 meses",
-            "observaciones": "Programa exclusivo para mujeres emprendedoras. Incluye capacitación, mentoría y red de apoyo."
-        },
-        "checklist": [
-            "Ser mujer mayor de 18 años",
-            "Inicio de actividades SII",
-            "Ventas hasta UF 2.400",
-            "Plan de negocio elaborado"
-        ]
-    },
-    {
-        "id": 19,
-        "nombre": "GORE Los Lagos – FIC-R Acuicultura y Pesca Artesanal 2026",
-        "institucion": "GORE Los Lagos",
-        "monto": 120000000,
-        "fecha_cierre": "2026-06-30",
-        "estado": "Abierto",
-        "categoria": "Acuicultura",
-        "url_bases": "https://www.goreloslagos.cl/fondos-concursables/",
-        "regiones": [
+            "La Araucanía",
+            "Los Ríos",
             "Los Lagos"
         ],
         "beneficiarios": [
-            "Pescador Artesanal",
-            "Acuicultor",
-            "Cooperativa de Pesca",
-            "Empresa Acuícola"
+            "Organización de Usuarios",
+            "Pequeño Agricultor",
+            "Mediano Agricultor"
         ],
         "resumen": {
-            "cofinanciamiento": "Hasta 80% del proyecto (máx. $120M)",
+            "cofinanciamiento": "Hasta 75% subsidio CNR",
             "requisitos_clave": [
-                "Proyecto con impacto en la Región de Los Lagos",
-                "Entidad con personalidad jurídica vigente",
-                "Cofinanciamiento mínimo del 20%",
-                "Registro en SERNAPESCA vigente"
+                "Derechos de agua inscritos",
+                "Organización legal constituida",
+                "Consultor CNR habilitado"
             ],
             "plazo_ejecucion": "24 meses",
-            "observaciones": "Prioriza proyectos de mitilicultura, salmónidos, algas y pesca artesanal sustentable en la Región de Los Lagos."
+            "observaciones": "IICA puede apoyar organizaciones de regantes para postular."
         },
-        "checklist": [
-            "Proyecto con impacto en Los Lagos",
-            "Personalidad jurídica vigente",
-            "Registro SERNAPESCA vigente",
-            "Cofinanciamiento 20% disponible"
-        ]
+        "monto_min": 50000000,
+        "monto_max": 400000000,
+        "plazo_meses": 24,
+        "requiere_cofinanciamiento": true,
+        "idioma": "es",
+        "faq_disponible": true,
+        "webinar_fecha": null,
+        "permite_adendas": false,
+        "bases_estado": "publicada",
+        "requiere_firma": true,
+        "tipos_solicitante": [
+            "Natural",
+            "Organizacion"
+        ],
+        "ambito": "Nacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Baja",
+        "porcentajeViabilidad": 30,
+        "responsableIICA": "",
+        "region": "Macrozona Sur",
+        "objetivo": "Apoyar organizaciones de regantes en postulación a fondos CNR",
+        "descripcionIICA": "Rol de asistencia técnica a organizaciones para postular, no como ejecutor directo del subsidio CNR.",
+        "requisitos": [
+            "Alianza con organización de regantes",
+            "Consultor CNR habilitado en equipo"
+        ],
+        "fortalezas": [
+            "Experiencia en gestión del agua agrícola"
+        ],
+        "debilidades": [
+            "IICA no puede ser receptor directo",
+            "Requiere consultor CNR habilitado",
+            "Rol muy indirecto"
+        ],
+        "notasInternas": "Baja prioridad IICA. Enfocarse en fondos internacionales donde IICA tiene mayor ventaja comparativa.",
+        "ejeIICA": "Bioeconomía y cambio climático",
+        "complejidad": "Fácil"
     },
     {
-        "id": 20,
-        "nombre": "CORFO – Escalamiento Productivo Agro (Línea 3) 2026",
-        "institucion": "CORFO",
-        "monto": 100000000,
-        "fecha_cierre": "2026-09-30",
-        "estado": "Abierto",
-        "categoria": "Inversión",
-        "url_bases": "https://www.corfo.cl/sites/cpp/escalamiento-productivo",
-        "regiones": [
-            "Todas"
-        ],
-        "beneficiarios": [
-            "Empresa Agrícola Mediana",
-            "Agroindustria",
-            "Cooperativa Exportadora"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Hasta 50% del proyecto (máx. $100M)",
-            "requisitos_clave": [
-                "Empresa con ventas entre UF 25.000 y UF 100.000",
-                "Proyecto de escalamiento con impacto en exportaciones",
-                "Evaluación técnica y financiera independiente",
-                "Compromiso de generación de empleo"
-            ],
-            "plazo_ejecucion": "36 meses",
-            "observaciones": "Para empresas medianas que buscan escalar su producción, modernizar plantas y acceder a mercados de exportación."
-        },
-        "checklist": [
-            "Ventas entre UF 25.000-100.000",
-            "Proyecto de escalamiento elaborado",
-            "Evaluación técnica independiente",
-            "Compromiso de generación de empleo"
-        ]
-    },
-    {
-        "id": 22,
-        "nombre": "GORE Biobío – FIC-R Forestal y Biomasa 2026",
-        "institucion": "GORE Biobío",
-        "monto": 90000000,
-        "fecha_cierre": "2026-07-31",
-        "estado": "Próxima Apertura",
-        "categoria": "Forestal",
-        "url_bases": "https://www.gorebio.cl/fondos-concursables/",
-        "regiones": [
-            "Biobío"
-        ],
-        "beneficiarios": [
-            "Empresa Forestal",
-            "Cooperativa",
-            "PYME Maderera",
-            "Centro de Investigación"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Hasta 70% del proyecto (máx. $90M)",
-            "requisitos_clave": [
-                "Proyecto con impacto en la Región del Biobío",
-                "Entidad con personalidad jurídica vigente",
-                "Cofinanciamiento mínimo del 30%",
-                "Alineación con Plan Regional de Desarrollo Forestal"
-            ],
-            "plazo_ejecucion": "24 meses",
-            "observaciones": "Prioriza proyectos de biomasa, bioenergía, madera modificada y certificación forestal en la Región del Biobío."
-        },
-        "checklist": [
-            "Proyecto con impacto en el Biobío",
-            "Personalidad jurídica vigente",
-            "Cofinanciamiento 30% disponible",
-            "Alineación con plan forestal regional"
-        ]
-    },
-    {
-        "id": 23,
-        "nombre": "FONTAGRO – Convocatoria 2026 Sistemas Agroalimentarios Sostenibles",
-        "institucion": "FONTAGRO",
-        "monto": 245000000,
-        "fecha_cierre": "2026-04-20",
+        "id": 114,
+        "nombre": "BID – Programa Regional de Transformación de Sistemas Alimentarios Sostenibles (PTSA)",
+        "institucion": "BID",
+        "monto": 950000000,
+        "fecha_cierre": "2026-10-31",
         "estado": "Abierto",
         "categoria": "Internacional",
-        "url_bases": "https://fontagro.org/en/iniciativas/convocatorias/convocatoria-2026",
+        "url_bases": "https://www.iadb.org/es/sectors/agriculture-rural-development/overview",
         "regiones": [
             "Todas"
         ],
         "beneficiarios": [
-            "Centro de Investigación",
-            "Universidad",
-            "Organización de Productores"
+            "Institución pública",
+            "Organismo multilateral",
+            "MINAGRI"
         ],
         "resumen": {
-            "cofinanciamiento": "Hasta USD 250.000 por proyecto (~$245M CLP). Se financiarán hasta 5 proyectos regionales.",
+            "cofinanciamiento": "Préstamo BID hasta USD 1M por país – sin cofinanciamiento IICA",
             "requisitos_clave": [
-                "Consorcio regional (mínimo 2 países miembros FONTAGRO)",
-                "Incluir entidad pública de investigación",
-                "Alineación con Programas Insignia PMP 2025-2030",
-                "Cofinanciamiento de contraparte"
+                "Organismo facilitador con mandato regional",
+                "Capacidad de coordinación multi-país",
+                "Marco de resultados alineado a ODS 2"
             ],
-            "plazo_ejecucion": "36 meses",
-            "observaciones": "Foco en productividad, rentabilidad y menor huella ambiental. Se financiarán hasta 5 proyectos."
+            "plazo_ejecucion": "60 meses",
+            "observaciones": "IICA es candidato natural como facilitador regional por su mandato hemisférico."
         },
-        "checklist": [
-            "Consorcio regional 2+ países",
-            "Entidad pública de investigación",
-            "Alineación con PMP 2025-2030",
-            "Cofinanciamiento de contraparte"
-        ]
+        "monto_min": 500000000,
+        "monto_max": 950000000,
+        "plazo_meses": 60,
+        "requiere_cofinanciamiento": false,
+        "idioma": "es",
+        "faq_disponible": false,
+        "webinar_fecha": "2026-07-20T10:00:00",
+        "permite_adendas": true,
+        "bases_estado": "publicada",
+        "requiere_firma": true,
+        "tipos_solicitante": [
+            "Organizacion"
+        ],
+        "ambito": "Internacional",
+        "estadoPostulacion": "Próxima",
+        "viabilidadIICA": "Alta",
+        "porcentajeViabilidad": 80,
+        "responsableIICA": "Carlos Guajardo",
+        "region": "América Latina y el Caribe",
+        "objetivo": "Actuar como facilitador regional del Programa de Transformación de Sistemas Alimentarios BID",
+        "descripcionIICA": "Por su mandato hemisférico y presencia en 34 países, el IICA es el organismo natural para facilitar la coordinación regional de este programa BID, actuando como secretaría técnica y coordinador de implementación entre los países beneficiarios.",
+        "requisitos": [
+            "Mandato hemisférico documentado",
+            "Capacidad de coordinación en 34 países",
+            "Experiencia en programas BID regionales"
+        ],
+        "fortalezas": [
+            "Mandato hemisférico único",
+            "Presencia en todos los países ALC",
+            "Convenio marco BID vigente",
+            "Credibilidad técnica reconocida"
+        ],
+        "debilidades": [
+            "Alta competencia con CEPAL y OECD",
+            "Proceso de negociación con BID muy largo"
+        ],
+        "notasInternas": "Oportunidad estratégica de alta prioridad. Carlos lidera negociaciones con BID Washington. Requiere apoyo de IICA Sede.",
+        "ejeIICA": "Innovación para la productividad",
+        "complejidad": "Alta"
     },
     {
-        "id": 24,
-        "nombre": "GORE Valparaíso – FIC-R Vitivinicultura y Fruticultura 2026",
-        "institucion": "GORE Valparaíso",
-        "monto": 70000000,
-        "fecha_cierre": "2026-05-31",
-        "estado": "Abierto",
-        "categoria": "Innovación",
-        "url_bases": "https://www.gorevalparaiso.cl/fondos-concursables/",
-        "regiones": [
-            "Valparaíso"
-        ],
-        "beneficiarios": [
-            "Viñatero",
-            "Fruticultores",
-            "Cooperativa Vitivinícola",
-            "Empresa Agrícola"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Hasta 75% del proyecto (máx. $70M)",
-            "requisitos_clave": [
-                "Proyecto con impacto en la Región de Valparaíso",
-                "Entidad con personalidad jurídica vigente en la región",
-                "Cofinanciamiento mínimo del 25%",
-                "Alineación con Estrategia Regional de Innovación"
-            ],
-            "plazo_ejecucion": "18–24 meses",
-            "observaciones": "Prioriza proyectos de enoturismo, exportación vitivinícola, fruticultura de exportación y agricultura de precisión."
-        },
-        "checklist": [
-            "Proyecto con impacto en Valparaíso",
-            "Personalidad jurídica en la región",
-            "Cofinanciamiento 25% disponible",
-            "Alineación con estrategia regional"
-        ]
-    },
-    {
-        "id": 25,
-        "nombre": "Sercotec – Programa de Asociatividad Empresarial (PAE) Agro 2026",
-        "institucion": "Sercotec",
-        "monto": 15000000,
-        "fecha_cierre": "2026-06-30",
-        "estado": "Abierto",
-        "categoria": "Asociatividad",
-        "url_bases": "https://www.sercotec.cl/asociatividad/",
-        "regiones": [
-            "Todas"
-        ],
-        "beneficiarios": [
-            "Grupo de Microempresas",
-            "Cooperativa Agrícola",
-            "Asociación de Productores"
-        ],
-        "resumen": {
-            "cofinanciamiento": "Subsidio no reembolsable hasta $15M para el grupo (aporte propio mínimo 20%)",
-            "requisitos_clave": [
-                "Grupo de al menos 5 empresas o productores",
-                "Proyecto de asociatividad con objetivo común",
-                "Ventas individuales hasta UF 25.000",
-                "Acuerdo formal de asociatividad"
-            ],
-            "plazo_ejecucion": "12 meses",
-            "observaciones": "Para grupos de micro y pequeñas empresas agrícolas que quieren trabajar juntas para acceder a mercados, compras conjuntas o certificaciones."
-        },
-        "checklist": [
-            "Grupo de 5+ empresas o productores",
-            "Proyecto de asociatividad definido",
-            "Ventas individuales hasta UF 25.000",
-            "Acuerdo formal de asociatividad"
-        ]
-    },
-    {
-        "id": 26,
-        "nombre": "GEF Pequeñas Donaciones (SGP) – Agricultura Sostenible y Biodiversidad Chile 2026",
-        "institucion": "PNUD / GEF",
-        "monto": 50000000,
-        "fecha_cierre": "2026-06-30",
+        "id": 115,
+        "nombre": "GCF – Fondo Verde para el Clima: Agricultura Regenerativa en Patagonia Chilena",
+        "institucion": "GCF",
+        "monto": 1200000000,
+        "fecha_cierre": "2026-12-31",
         "estado": "Abierto",
         "categoria": "Internacional",
-        "url_bases": "https://www.cl.undp.org/content/chile/es/home/projects/gef-small-grants-programme.html",
+        "url_bases": "https://www.greenclimate.fund/projects/funding-proposals",
         "regiones": [
-            "Atacama",
-            "Ñuble",
-            "Los Ríos"
+            "Aysén",
+            "Magallanes"
         ],
         "beneficiarios": [
-            "Organización de la Sociedad Civil",
-            "Comunidad Local",
-            "Organización de Productores",
-            "ONG Ambiental"
+            "Institución pública",
+            "ONG ambiental",
+            "Comunidades rurales"
         ],
         "resumen": {
-            "cofinanciamiento": "Hasta USD 50.000 (~$50M CLP) por proyecto. Donación directa sin reembolso.",
+            "cofinanciamiento": "Hasta USD 1.2M GCF – requiere cofinanciamiento 50%",
             "requisitos_clave": [
-                "Ser organización de la sociedad civil o comunitaria legalmente constituida",
-                "Proyecto con impacto ambiental medible (biodiversidad, cambio climático, suelos)",
-                "Participación comunitaria demostrable",
-                "Cofinanciamiento o aportes en especie del 20%"
+                "Entidad acreditada GCF",
+                "Componente NDC Chile alineado",
+                "Cofinanciamiento 50% garantizado"
             ],
-            "plazo_ejecucion": "12–24 meses",
-            "observaciones": "El Programa de Pequeñas Donaciones del GEF/PNUD financia iniciativas de organizaciones locales en las regiones de Atacama, Ñuble y Los Ríos (Proyecto Comunidades por el Desarrollo Sostenible 2026-2028). Foco en agricultura sustentable, biodiversidad y gestión hídrica."
+            "plazo_ejecucion": "72 meses",
+            "observaciones": "IICA acreditado ante GCF. Patagonia tiene alta prioridad climática global."
         },
-        "checklist": [
-            "Organización civil o comunitaria constituida",
-            "Proyecto con impacto ambiental medible",
-            "Participación comunitaria activa",
-            "Cofinanciamiento o aportes en especie"
-        ]
-    },
-    {
-        "id": 27,
-        "nombre": "FIDA – FO4IMPACT: Fortalecimiento de Organizaciones de Agricultores ALC 2026",
-        "institucion": "FIDA",
-        "monto": 200000000,
-        "fecha_cierre": "2026-09-30",
-        "estado": "Próxima Apertura",
-        "categoria": "Internacional",
-        "url_bases": "https://www.ifad.org/en/web/latest/-/fo4impact",
-        "regiones": [
-            "Todas"
+        "monto_min": 600000000,
+        "monto_max": 1200000000,
+        "plazo_meses": 72,
+        "requiere_cofinanciamiento": true,
+        "idioma": "multi",
+        "faq_disponible": true,
+        "webinar_fecha": "2026-09-15T14:00:00",
+        "permite_adendas": false,
+        "bases_estado": "publicada",
+        "requiere_firma": true,
+        "tipos_solicitante": [
+            "Organizacion"
         ],
-        "beneficiarios": [
-            "Organización de Agricultores",
-            "Cooperativa Agrícola",
-            "Asociación de Productores",
-            "Federación Campesina"
+        "ambito": "Internacional",
+        "estadoPostulacion": "Próxima",
+        "viabilidadIICA": "Media",
+        "porcentajeViabilidad": 58,
+        "responsableIICA": "",
+        "region": "Patagonia Chilena",
+        "objetivo": "Diseñar y presentar propuesta GCF para transformar sistemas agropecuarios de Patagonia hacia modelo regenerativo",
+        "descripcionIICA": "Como entidad acreditada ante el GCF, el IICA Chile puede presentar una propuesta de financiamiento climático para transformar los sistemas ganaderos extensivos de Patagonia hacia modelos regenerativos, aprovechando el interés internacional por los ecosistemas patagónicos.",
+        "requisitos": [
+            "Acreditación GCF vigente",
+            "No objection letter del Gobierno de Chile",
+            "Cofinanciamiento de 50% asegurado (MMA, CONAF o sector privado)",
+            "Concepto Note aprobado previamente"
         ],
-        "resumen": {
-            "cofinanciamiento": "Hasta USD 200.000 (~$200M CLP) por organización. Fondo no reembolsable.",
-            "requisitos_clave": [
-                "Organización de agricultores legalmente constituida",
-                "Cadena de valor agrícola inclusiva y sostenible",
-                "Enfoque en resiliencia climática",
-                "Plan de fortalecimiento organizacional"
-            ],
-            "plazo_ejecucion": "24–36 meses",
-            "observaciones": "Iniciativa del FIDA para fortalecer organizaciones de agricultores en América Latina y el Caribe. Prioriza cadenas de valor inclusivas, sostenibles y resilientes al clima. Convocatoria periódica."
-        },
-        "checklist": [
-            "Organización de agricultores constituida",
-            "Cadena de valor definida",
-            "Enfoque en resiliencia climática",
-            "Plan organizacional elaborado"
-        ]
+        "fortalezas": [
+            "IICA acreditado ante GCF",
+            "Alta visibilidad global de la Patagonia",
+            "Alineado con NDC de Chile"
+        ],
+        "debilidades": [
+            "Sin responsable asignado",
+            "Proceso GCF muy largo (24-36 meses para aprobación)",
+            "Requiere cofinanciamiento enorme",
+            "Necesita No Objection Letter del Gobierno"
+        ],
+        "notasInternas": "Largo plazo estratégico. Identificar responsable y comenzar conversaciones con MMA sobre No Objection Letter. Plazo real: 2027.",
+        "ejeIICA": "Bioeconomía y cambio climático",
+        "complejidad": "Alta"
     }
 ]

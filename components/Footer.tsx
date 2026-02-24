@@ -3,12 +3,12 @@ import React from 'react';
 import { ExternalLink } from 'lucide-react';
 
 const FUENTES_FOOTER = [
-    { sigla: 'CNR', nombre: 'Concursos de Riego', url: 'https://www.cnr.gob.cl/agricultores/concursos-de-riego/', emoji: '💧' },
-    { sigla: 'INDAP', nombre: 'Programas y Concursos', url: 'https://www.indap.gob.cl/programas', emoji: '🌱' },
-    { sigla: 'FIA', nombre: 'Convocatorias Innovación', url: 'https://www.fia.cl/convocatorias/', emoji: '🔬' },
-    { sigla: 'CORFO', nombre: 'Programas Agro', url: 'https://www.corfo.cl/sites/cpp/programas-y-convocatorias', emoji: '🏭' },
-    { sigla: 'Sercotec', nombre: 'Fondos de Fomento', url: 'https://www.sercotec.cl/fondos-concursables/', emoji: '🌻' },
-    { sigla: 'GOREs', nombre: 'Fondos FIC-R Regionales', url: 'https://www.subdere.gov.cl/institucional/gobiernos-regionales/', emoji: '🗺️' },
+    { sigla: 'FONTAGRO', nombre: 'Fondo Regional de Tecnología Agropecuaria', url: 'https://www.fontagro.org/', emoji: '🌱' },
+    { sigla: 'FAO', nombre: 'TCP Chile – Programas Técnicos', url: 'https://www.fao.org/chile/', emoji: '🌍' },
+    { sigla: 'BID', nombre: 'Asistencia Técnica Regional', url: 'https://www.iadb.org/es', emoji: '🏦' },
+    { sigla: 'FIDA', nombre: 'Fondo Internacional de Desarrollo Agrícola', url: 'https://www.ifad.org/', emoji: '🤝' },
+    { sigla: 'GEF/GCF', nombre: 'Financiamiento Climático', url: 'https://www.thegef.org/', emoji: '🌿' },
+    { sigla: 'UE', nombre: 'EUROCLIMA+ / Cooperación', url: 'https://euroclimaplus.org/', emoji: '🇪🇺' },
 ];
 
 export function Footer() {
@@ -37,20 +37,21 @@ export function Footer() {
 
                     {/* Column 2: Quick Links */}
                     <div>
-                        <h4 className="text-lg font-semibold mb-4 text-white">Plataforma</h4>
+                        <h4 className="text-lg font-semibold mb-4 text-white">Radar de Oportunidades</h4>
                         <ul className="space-y-2 text-sm text-blue-200">
                             <li><a href="/#inicio" className="hover:text-white transition-colors">Inicio</a></li>
-                            <li><a href="/#convocatorias" className="hover:text-white transition-colors">Buscar Convocatorias</a></li>
-                            <li><a href="/#fuentes" className="hover:text-white transition-colors">Fuentes Oficiales</a></li>
-                            <li><a href="/maletin" className="hover:text-white transition-colors">Mi Maletín Digital</a></li>
+                            <li><a href="/#convocatorias" className="hover:text-white transition-colors">Ver Oportunidades</a></li>
+                            <li><a href="/#fuentes" className="hover:text-white transition-colors">Fuentes Internacionales</a></li>
+                            <li><a href="/maletin" className="hover:text-white transition-colors">Mi Maletín de Proyectos</a></li>
                             <li><a href="/consultores" className="hover:text-white transition-colors">Directorio de Consultores</a></li>
+                            <li><a href="/admin" className="hover:text-white transition-colors">➕ Agregar Oportunidad</a></li>
                         </ul>
                     </div>
 
                     {/* Column 3: Official Sources */}
                     <div>
                         <h4 className="text-lg font-semibold mb-4 text-white flex items-center gap-2">
-                            🔗 Fuentes Oficiales
+                            🌎 Fuentes Internacionales
                         </h4>
                         <ul className="space-y-2 text-sm">
                             {FUENTES_FOOTER.map(fuente => (
@@ -71,7 +72,7 @@ export function Footer() {
                         </ul>
                         <p className="text-blue-400 text-xs mt-3 flex items-center gap-1">
                             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse inline-block"></span>
-                            Links verificados: 18 Feb 2026
+                            Fuentes verificadas: Feb 2026
                         </p>
                     </div>
 
@@ -85,12 +86,12 @@ export function Footer() {
                             <li>📞 <a href="tel:+56222252511" className="hover:text-white transition-colors">Fijo: (+56) 2 2225 2511</a></li>
                         </ul>
                         <div className="mt-4 p-3 bg-white/10 rounded-xl border border-white/20">
-                            <p className="text-xs text-blue-200 font-medium">¿Tienes dudas sobre un fondo?</p>
+                            <p className="text-xs text-blue-200 font-medium">¿Encontraste una oportunidad relevante?</p>
                             <a
-                                href="mailto:representacion.chile@iica.int?subject=Consulta sobre fondos agrícolas"
+                                href="mailto:representacion.chile@iica.int?subject=Oportunidad de Proyecto IICA Chile 2026"
                                 className="text-[var(--iica-yellow)] text-xs font-bold hover:underline"
                             >
-                                Escríbenos →
+                                Compártela con el equipo →
                             </a>
                         </div>
                     </div>

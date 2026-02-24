@@ -20,6 +20,11 @@ export default async function ProjectListContainer({
     const soloAbiertos = searchParams.open === '1';
     const sortBy = typeof searchParams.sort === 'string' ? searchParams.sort : 'relevance';
 
+    // Nuevos filtros Fase 1 (ítems 8, 9, 10)
+    const selectedAmbito = typeof searchParams.ambito === 'string' ? searchParams.ambito : 'Todos';
+    const selectedViabilidad = typeof searchParams.viabilidad === 'string' ? searchParams.viabilidad : 'Todas';
+    const selectedEstado = typeof searchParams.estado === 'string' ? searchParams.estado : 'Todos';
+
     const minAmount = typeof searchParams.minAmount === 'string' ? parseInt(searchParams.minAmount) : 0;
     const maxAmount = typeof searchParams.maxAmount === 'string' ? parseInt(searchParams.maxAmount) : Infinity;
 
@@ -54,7 +59,14 @@ export default async function ProjectListContainer({
         const isOpen = closeDate.getTime() >= today.getTime();
         const matchesOpen = !soloAbiertos || isOpen;
 
-        return matchesCategory && matchesRegion && matchesBeneficiary && matchesInstitution && matchesAmount && matchesOpen;
+        // Nuevos filtros Fase 1 (ítems 8, 9, 10)
+        const matchesAmbito = selectedAmbito === 'Todos' || project.ambito === selectedAmbito;
+        const matchesViabilidad = selectedViabilidad === 'Todas' || project.viabilidadIICA === selectedViabilidad;
+        const matchesEstado = selectedEstado === 'Todos' || project.estadoPostulacion === selectedEstado;
+
+        return matchesCategory && matchesRegion && matchesBeneficiary && matchesInstitution
+            && matchesAmount && matchesOpen
+            && matchesAmbito && matchesViabilidad && matchesEstado;
     });
 
     // 3. Ordenamiento secundario (cuando no hay búsqueda de texto)
@@ -67,6 +79,9 @@ export default async function ProjectListContainer({
             filteredProjects.sort((a, b) => b.monto - a.monto);
         } else if (sortBy === 'amount_asc') {
             filteredProjects.sort((a, b) => a.monto - b.monto);
+        } else if (sortBy === 'viabilidad_desc') {
+            // Ordenar por porcentaje de viabilidad descendente
+            filteredProjects.sort((a, b) => (b.porcentajeViabilidad || 0) - (a.porcentajeViabilidad || 0));
         } else {
             // Default: abiertos primero, luego por fecha de cierre más próxima
             filteredProjects.sort((a, b) => {

@@ -16,11 +16,11 @@ const outfit = Outfit({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: {
-    default: 'Plataforma de Financiamiento Agrícola | IICA Chile',
+    default: 'Radar de Oportunidades IICA Chile 2026',
     template: '%s | IICA Chile'
   },
-  description: 'Encuentra fondos concursables, subsidios y créditos para el agro chileno. Información actualizada 2026 de INDAP, CORFO, CNR, FIA y organismos internacionales.',
-  keywords: ['financiamiento agrícola', 'fondos concursables', 'INDAP', 'CORFO', 'subsidios', 'agricultura Chile', 'IICA'],
+  description: 'Radar de oportunidades de proyectos para el IICA Chile 2026. Convocatorias activas de FONTAGRO, FAO, BID, FIDA, GEF y fuentes nacionales e internacionales.',
+  keywords: ['IICA Chile', 'oportunidades proyectos', 'FONTAGRO', 'FAO', 'BID', 'FIDA', 'cooperación agrícola internacional', 'convocatorias 2026'],
   authors: [{ name: 'IICA Chile' }],
   creator: 'IICA Chile',
   publisher: 'IICA Chile',
@@ -35,8 +35,8 @@ export const metadata: Metadata = {
     telephone: false,
   },
   openGraph: {
-    title: 'Plataforma de Financiamiento Agrícola | IICA Chile',
-    description: 'Buscador oficial de fondos concursables para el agro chileno 2026.',
+    title: 'Radar de Oportunidades IICA Chile 2026',
+    description: 'Plataforma institucional del IICA Chile para identificar y gestionar oportunidades de proyectos 2026.',
     url: 'https://iica-chile-plataforma.vercel.app',
     siteName: 'IICA Chile',
     images: [
@@ -52,8 +52,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Plataforma de Financiamiento Agrícola 2026',
-    description: 'Encuentra subsidios y créditos para tu campo.',
+    title: 'Radar de Oportunidades IICA Chile 2026',
+    description: 'Convocatorias activas de FONTAGRO, FAO, BID, FIDA, GEF para proyectos agrícolas.',
     images: ['https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200'],
   },
   robots: {
