@@ -2,7 +2,7 @@ import { getProjects } from "@/lib/data";
 import ProjectList from "@/components/ProjectList";
 import ProjectFilters from "@/components/ProjectFilters";
 import JsonLd from "@/components/JsonLd";
-import { searchAndRankProjects } from "@/lib/searchEngine";
+import { searchAndRankProjects, buildDynamicSuggestions, defaultSortProjects, getZeroResultsSuggestions } from "@/lib/searchEngine";
 import counterparts from '@/lib/counterparts_raw.json';
 
 export default async function ProjectListContainer({
@@ -38,7 +38,10 @@ export default async function ProjectListContainer({
         ...counterparts.slice(0, 20).map(c => c.name)
     ])).sort();
 
-    // 2. Filtrar + ordenar por relevancia
+    // 2. Sugerencias dinámicas generadas del contenido real de proyectos
+    const dynamicSuggestions = buildDynamicSuggestions(projects);
+
+    // 3. Filtrar + ordenar por relevancia
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -71,7 +74,7 @@ export default async function ProjectListContainer({
             && matchesAmbito && matchesViabilidad && matchesEstado && matchesRol;
     });
 
-    // 3. Ordenamiento secundario (cuando no hay búsqueda de texto)
+    // 4. Ordenamiento secundario
     if (!searchTerm) {
         if (sortBy === 'date_asc') {
             filteredProjects.sort((a, b) => new Date(a.fecha_cierre).getTime() - new Date(b.fecha_cierre).getTime());
@@ -82,19 +85,17 @@ export default async function ProjectListContainer({
         } else if (sortBy === 'amount_asc') {
             filteredProjects.sort((a, b) => a.monto - b.monto);
         } else if (sortBy === 'viabilidad_desc') {
-            // Ordenar por porcentaje de viabilidad descendente
             filteredProjects.sort((a, b) => (b.porcentajeViabilidad || 0) - (a.porcentajeViabilidad || 0));
         } else {
-            // Default: abiertos primero, luego por fecha de cierre más próxima
-            filteredProjects.sort((a, b) => {
-                const aOpen = new Date(a.fecha_cierre).getTime() >= today.getTime();
-                const bOpen = new Date(b.fecha_cierre).getTime() >= today.getTime();
-                if (aOpen && !bOpen) return -1;
-                if (!aOpen && bOpen) return 1;
-                return new Date(a.fecha_cierre).getTime() - new Date(b.fecha_cierre).getTime();
-            });
+            // Default inteligente: Abierta > Ejecutor/Implementador > viabilidad > urgencia
+            filteredProjects = defaultSortProjects(filteredProjects);
         }
     }
+
+    // 5. Sugerencias para 0 resultados
+    const zeroResultsSuggestions = filteredProjects.length === 0 && searchTerm
+        ? getZeroResultsSuggestions(searchTerm, projects)
+        : [];
 
     // Contar abiertos para el badge
     const openCount = projects.filter(p => new Date(p.fecha_cierre).getTime() >= today.getTime()).length;
@@ -108,6 +109,8 @@ export default async function ProjectListContainer({
                 beneficiaries={uniqueBeneficiaries}
                 institutions={uniqueInstitutions}
                 counts={{ filtered: filteredProjects.length, total: projects.length, open: openCount }}
+                dynamicSuggestions={dynamicSuggestions}
+                zeroResultsSuggestions={zeroResultsSuggestions}
             />
             <ProjectList projects={filteredProjects} />
         </>

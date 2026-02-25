@@ -85,13 +85,17 @@ export default function ProjectFilters({
     regions,
     beneficiaries,
     institutions,
-    counts
+    counts,
+    dynamicSuggestions = [],
+    zeroResultsSuggestions = [],
 }: {
     categories: string[];
     regions: string[];
     beneficiaries: string[];
     institutions: string[];
     counts: { filtered: number; total: number; open: number };
+    dynamicSuggestions?: string[];
+    zeroResultsSuggestions?: string[];
 }) {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -141,19 +145,33 @@ export default function ProjectFilters({
         return () => clearTimeout(timer);
     }, [searchTerm, router, searchParams]);
 
-    // Autocompletado
+    // Autocompletado — usa sugerencias dinámicas del servidor
     useEffect(() => {
         if (searchTerm.length >= 2) {
             const term = searchTerm.toLowerCase();
-            const matches = NATURAL_SUGGESTIONS.filter(s =>
+            // Combina sugerencias dinámicas (del JSON real) con las estáticas como fallback
+            const allSuggestions = dynamicSuggestions.length > 0
+                ? dynamicSuggestions
+                : NATURAL_SUGGESTIONS;
+            const matches = allSuggestions.filter(s =>
                 s.toLowerCase().includes(term) ||
-                term.split(' ').some(word => s.toLowerCase().includes(word))
+                term.split(' ').some(word => word.length > 2 && s.toLowerCase().includes(word))
             );
-            setFilteredSuggestions(matches.slice(0, 5));
+            setFilteredSuggestions(matches.slice(0, 6));
+        } else if (searchTerm.length === 0) {
+            // Sin query: sugerir las 5 más útiles dinámicamente
+            const topPicks = [
+                'IICA Ejecutor directo',
+                'Alta viabilidad IICA',
+                'Sin cofinanciamiento requerido',
+                'Cooperación Sur-Sur ALC',
+                'Resiliencia climática',
+            ];
+            setFilteredSuggestions(topPicks);
         } else {
             setFilteredSuggestions([]);
         }
-    }, [searchTerm]);
+    }, [searchTerm, dynamicSuggestions]);
 
     // Leer filtros de URL
     const selectedCategory = searchParams.get('category') || 'Todas';
@@ -275,6 +293,41 @@ export default function ProjectFilters({
                     )}
                 </div>
 
+                {/* Tip: búsqueda por frase exacta */}
+                {searchTerm && !searchTerm.includes('"') && (
+                    <p className="mt-2 text-[11px] text-gray-400 flex items-center gap-1">
+                        <span>💡</span>
+                        <span>Frase exacta:</span>
+                        <button
+                            onClick={() => setSearchTerm(`"${searchTerm}"`)}
+                            className="font-mono bg-gray-100 px-1.5 py-0.5 rounded text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                        >
+                            &quot;{searchTerm.slice(0, 30)}&quot;
+                        </button>
+                    </p>
+                )}
+
+                {/* Banner ¿Quisiste decir? — cuando hay 0 resultados */}
+                {zeroResultsSuggestions.length > 0 && (
+                    <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-xl">
+                        <p className="text-xs font-semibold text-amber-800 mb-2">🔍 Sin resultados. ¿Quisiste decir...?</p>
+                        <div className="flex flex-wrap gap-2">
+                            {zeroResultsSuggestions.map(sug => (
+                                <button
+                                    key={sug}
+                                    onClick={() => setSearchTerm(sug)}
+                                    className="px-2.5 py-1 bg-white border border-amber-300 text-amber-800 rounded-full text-xs hover:bg-amber-100 transition-colors font-medium"
+                                >
+                                    {sug}
+                                </button>
+                            ))}
+                        </div>
+                        <p className="text-[10px] text-amber-600 mt-2">
+                            Prueba filtrar por Ámbito &quot;Internacional&quot; o Rol &quot;Ejecutor&quot; para oportunidades directas del IICA.
+                        </p>
+                    </div>
+                )}
+
                 {/* Quick Search Chips */}
                 <div className="flex flex-wrap gap-2 mt-3">
                     {QUICK_SEARCHES.map(({ label, query }) => (
@@ -303,10 +356,10 @@ export default function ProjectFilters({
                             aria-pressed={selectedRol === opt.value}
                             title={opt.title}
                             className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border whitespace-nowrap ${selectedRol === opt.value
-                                    ? opt.value === 'Indirecto'
-                                        ? 'bg-gray-500 text-white border-gray-500 shadow-sm'
-                                        : 'bg-[var(--iica-navy)] text-white border-[var(--iica-navy)] shadow-sm'
-                                    : 'bg-white text-gray-600 border-gray-200 hover:bg-blue-50 hover:border-blue-300'
+                                ? opt.value === 'Indirecto'
+                                    ? 'bg-gray-500 text-white border-gray-500 shadow-sm'
+                                    : 'bg-[var(--iica-navy)] text-white border-[var(--iica-navy)] shadow-sm'
+                                : 'bg-white text-gray-600 border-gray-200 hover:bg-blue-50 hover:border-blue-300'
                                 }`}
                         >
                             {opt.label}

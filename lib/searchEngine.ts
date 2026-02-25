@@ -280,6 +280,21 @@ export function smartSearch(searchTerm: string, input: Project | string): boolea
         : buildProjectCorpus(input).full;
 
     const normalizedTarget = normalizeText(targetText);
+
+    // ── Búsqueda por frase exacta con comillas: "FAO TCP" ──
+    const phraseMatches = searchTerm.match(/"([^"]+)"/g);
+    if (phraseMatches) {
+        // Todas las frases entre comillas deben estar presentes
+        for (const match of phraseMatches) {
+            const phrase = normalizeText(match.replace(/"/g, ''));
+            if (!normalizedTarget.includes(phrase)) return false;
+        }
+        // El resto del query (sin comillas) también debe coincidir
+        const remainingQuery = searchTerm.replace(/"[^"]+"/g, '').trim();
+        if (!remainingQuery) return true;
+        return smartSearch(remainingQuery, targetText);
+    }
+
     const expandedTerms = expandSearchTerms(searchTerm);
     const targetWords = normalizedTarget.split(/\s+/);
 
@@ -305,6 +320,8 @@ export function smartSearch(searchTerm: string, input: Project | string): boolea
 
         if (!found) return false;
     }
+    // Suprimir warning de variable no usada
+    void expandedTerms;
     return true;
 }
 
@@ -500,7 +517,151 @@ export function searchAndRankProjects(
 }
 
 // ============================================================================
-// SUGERENCIAS DE BÚSQUEDA AUTOCOMPLETADAS
+// SUGERENCIAS DINÁMICAS desde datos reales de proyectos
+// ============================================================================
+
+/**
+ * Extrae sugerencias de autocompletado directamente del contenido real de proyectos.
+ * Mucho más relevante que una lista hardcodeada.
+ */
+export function buildDynamicSuggestions(projects: Project[]): string[] {
+    const suggestions = new Set<string>();
+
+    projects.forEach(p => {
+        // Títulos completos (muy útiles)
+        if (p.nombre) suggestions.add(p.nombre);
+
+        // Instituciones
+        if (p.institucion) suggestions.add(p.institucion);
+
+        // Ejes IICA (frases cortas muy descriptivas)
+        if (p.ejeIICA) suggestions.add(p.ejeIICA);
+
+        // Responsables IICA
+        if (p.responsableIICA) suggestions.add(p.responsableIICA);
+
+        // Objetivos (primeras 60 chars)
+        if (p.objetivo) suggestions.add(p.objetivo.slice(0, 60) + (p.objetivo.length > 60 ? '...' : ''));
+
+        // Requisitos clave (frases cortas)
+        p.resumen?.requisitos_clave?.forEach(r => {
+            if (r.length < 50) suggestions.add(r);
+        });
+
+        // Regiones
+        p.regiones?.forEach(r => {
+            if (r !== 'Todas') suggestions.add(r);
+        });
+    });
+
+    // También agregar frases de lenguaje natural (IICA-específicas)
+    const iicaPhrases = [
+        'IICA Ejecutor directo',
+        'Alta viabilidad IICA',
+        'Sin cofinanciamiento requerido',
+        'Fondo GEF acreditado',
+        'Cooperación Sur-Sur ALC',
+        'Extensión agrícola digital',
+        'Resiliencia climática',
+        'Agricultura familiar campesina',
+        'Sistemas alimentarios sostenibles',
+        'Trazabilidad sanidad vegetal',
+        'Innovación agropecuaria regional',
+        'Inclusión financiera andina',
+        'Agroforestaría Patagonia',
+        'Gestión hídrica zonas áridas',
+    ];
+    iicaPhrases.forEach(p => suggestions.add(p));
+
+    return Array.from(suggestions).filter(s => s.length > 3);
+}
+
+/**
+ * Cuando una búsqueda retorna 0 resultados, sugiere términos relacionados.
+ * Implementa "¿Quisiste decir?"
+ */
+export function getZeroResultsSuggestions(
+    query: string,
+    projects: Project[],
+    maxSuggestions = 5
+): string[] {
+    const normalizedQuery = normalizeText(query);
+    const suggestions: Array<{ text: string; score: number }> = [];
+
+    // Buscar términos del tesauro que sean similares a la query
+    Object.entries(AGRICULTURAL_THESAURUS).forEach(([key, synonyms]) => {
+        const nkey = normalizeText(key);
+        const dist = levenshtein(normalizedQuery, nkey);
+        if (dist <= 3 || nkey.includes(normalizedQuery.slice(0, 4))) {
+            suggestions.push({ text: key, score: dist });
+            synonyms.slice(0, 2).forEach(s => {
+                suggestions.push({ text: s, score: dist + 1 });
+            });
+        }
+    });
+
+    // Buscar en los nombres reales de proyectos
+    projects.forEach(p => {
+        const words = normalizeText(p.nombre).split(' ').filter(w => w.length > 4);
+        words.forEach(word => {
+            const dist = levenshtein(normalizedQuery, word);
+            if (dist <= 2) {
+                suggestions.push({ text: p.nombre.split(' ').slice(0, 4).join(' '), score: dist });
+            }
+        });
+        if (p.institucion) {
+            const dist = levenshtein(normalizedQuery, normalizeText(p.institucion));
+            if (dist <= 2) suggestions.push({ text: p.institucion, score: dist });
+        }
+    });
+
+    return suggestions
+        .sort((a, b) => a.score - b.score)
+        .map(s => s.text)
+        .filter((s, i, arr) => arr.indexOf(s) === i) // unique
+        .slice(0, maxSuggestions);
+}
+
+/**
+ * Orden inteligente por defecto cuando no hay búsqueda activa.
+ * Prioridad: Abierta > Ejecutor/Implementador > Alta viabilidad > cierre próximo
+ */
+export function defaultSortProjects(projects: Project[]): Project[] {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const ROL_PRIORITY: Record<string, number> = {
+        'Ejecutor': 4,
+        'Implementador': 3,
+        'Asesor': 2,
+        'Indirecto': 1,
+    };
+
+    return [...projects].sort((a, b) => {
+        const aOpen = new Date(a.fecha_cierre).getTime() >= today.getTime();
+        const bOpen = new Date(b.fecha_cierre).getTime() >= today.getTime();
+
+        // 1. Abiertas primero
+        if (aOpen && !bOpen) return -1;
+        if (!aOpen && bOpen) return 1;
+
+        // 2. Rol IICA (Ejecutor > Implementador > Asesor > Indirecto)
+        const aRol = ROL_PRIORITY[a.rolIICA || ''] || 0;
+        const bRol = ROL_PRIORITY[b.rolIICA || ''] || 0;
+        if (aRol !== bRol) return bRol - aRol;
+
+        // 3. Viabilidad IICA (porcentaje)
+        const aViab = a.porcentajeViabilidad || 0;
+        const bViab = b.porcentajeViabilidad || 0;
+        if (aViab !== bViab) return bViab - aViab;
+
+        // 4. Cierre más próximo (urgencia)
+        return new Date(a.fecha_cierre).getTime() - new Date(b.fecha_cierre).getTime();
+    });
+}
+
+// ============================================================================
+// SUGERENCIAS DE BÚSQL (compatibilidad legacy)
 // ============================================================================
 
 export function generateSearchSuggestions(query: string, maxSuggestions = 6): string[] {
@@ -530,4 +691,4 @@ export function generateSearchSuggestions(query: string, maxSuggestions = 6): st
 // RE-EXPORTS para compatibilidad con código existente
 // ============================================================================
 
-export { expandNaturalLanguage, tokenize };
+export { expandNaturalLanguage, tokenize, levenshtein };
