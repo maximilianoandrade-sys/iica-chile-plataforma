@@ -1,5 +1,6 @@
 
 import React from 'react';
+import Link from 'next/link';
 import { ExternalLink } from 'lucide-react';
 
 const FUENTES_FOOTER = [
@@ -39,12 +40,12 @@ export function Footer() {
                     <div>
                         <h4 className="text-lg font-semibold mb-4 text-white">Radar de Oportunidades</h4>
                         <ul className="space-y-2 text-sm text-blue-200">
-                            <li><a href="/#inicio" className="hover:text-white transition-colors">Inicio</a></li>
-                            <li><a href="/#convocatorias" className="hover:text-white transition-colors">Ver Oportunidades</a></li>
-                            <li><a href="/#fuentes" className="hover:text-white transition-colors">Fuentes Internacionales</a></li>
-                            <li><a href="/maletin" className="hover:text-white transition-colors">Mi Maletín de Proyectos</a></li>
-                            <li><a href="/consultores" className="hover:text-white transition-colors">Directorio de Consultores</a></li>
-                            <li><a href="/admin" className="hover:text-white transition-colors">➕ Agregar Oportunidad</a></li>
+                            <li><Link href="/#inicio" className="hover:text-white transition-colors">Inicio</Link></li>
+                            <li><Link href="/#convocatorias" className="hover:text-white transition-colors">Ver Oportunidades</Link></li>
+                            <li><Link href="/#fuentes" className="hover:text-white transition-colors">Fuentes Internacionales</Link></li>
+                            <li><Link href="/maletin" className="hover:text-white transition-colors">Mi Maletín de Proyectos</Link></li>
+                            <li><Link href="/consultores" className="hover:text-white transition-colors">Directorio de Consultores</Link></li>
+                            <li><Link href="/admin" className="hover:text-white transition-colors">➕ Agregar Oportunidad</Link></li>
                         </ul>
                     </div>
 

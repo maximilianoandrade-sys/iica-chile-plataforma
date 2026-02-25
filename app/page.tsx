@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { Header } from "@/components/Header";
+import { HeroSection } from "@/components/HeroSection";
 import { Footer } from "@/components/Footer";
 import ProjectListContainer from "@/components/ProjectListContainer";
 import SkeletonProjectList from "@/components/SkeletonProjectList";
@@ -57,6 +58,7 @@ export default async function DashboardPage({
         {/* 1. Header con Hero */}
         <div id="inicio">
           <Header />
+          <HeroSection />
         </div>
 
         <main className="flex-grow container mx-auto max-w-[1200px] px-4 py-8 -mt-8 relative z-20">
