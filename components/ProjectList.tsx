@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Project } from "@/lib/data";
 import { trackEvent, trackSearch } from "@/lib/analytics";
-import { smartSearch } from "@/lib/searchEngine";
+import { smartSearch, buildInvertedIndex, searchAndRankProjects, InvertedIndex } from "@/lib/searchEngine";
 import counterparts from '@/lib/counterparts_raw.json';
 import { getInstitutionalLogo } from "@/lib/logos";
 import { AGROVOC_KEYWORDS } from "@/lib/agrovoc";
@@ -30,8 +30,15 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
     // Vista Rápida & Copiar
     const [quickViewProject, setQuickViewProject] = useState<Project | null>(null);
     const [copiedId, setCopiedId] = useState<number | null>(null);
-    const [quickFilter, setQuickFilter] = useState<'all' | 'facil' | 'cierre' | 'mujeres'>('all');
+    const [quickFilter, setQuickFilter] = useState<'all' | 'facil' | 'cierre' | 'mujeres' | 'alta_viabilidad'>('all');
     const [sortConfig, setSortConfig] = useState<{ key: keyof Project | 'dificultad', direction: 'asc' | 'desc' } | null>(null);
+
+    // Índice invertido pre-computado para búsqueda O(1)
+    const [invertedIndex, setInvertedIndex] = useState<InvertedIndex | null>(null);
+    useEffect(() => {
+        const idx = buildInvertedIndex(projects);
+        setInvertedIndex(idx);
+    }, [projects]);
 
     const handleSort = (key: keyof Project | 'dificultad') => {
         let direction: 'asc' | 'desc' = 'asc';
@@ -117,27 +124,32 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
     const displayedProjects = useMemo(() => {
         let filtered = projects;
 
-        // Apply Agrovoc Filter
+        // ── Filtro Agrovoc (usa el nuevo motor de búsqueda completo) ──────────
         if (selectedAgrovoc !== 'Cualquiera') {
-            filtered = filtered.filter(project => {
-                const resumenText = project.resumen ? `${project.resumen.cofinanciamiento || ''} ${project.resumen.observaciones || ''} ${(project.resumen.requisitos_clave || []).join(' ')}` : '';
-                const searchableText = `${project.nombre} ${project.institucion} ${project.categoria} ${(project.regiones || []).join(' ')} ${(project.beneficiarios || []).join(' ')} ${resumenText}`;
-                return searchableText.toLowerCase().includes(selectedAgrovoc.toLowerCase());
-            });
+            filtered = filtered.filter(p => smartSearch(selectedAgrovoc, p));
         }
 
-        // Apply Favorites Filter
+        // ── Filtro Favoritos ─────────────────────────────────────────────────
         if (showFavoritesOnly) {
             filtered = filtered.filter(p => favorites.includes(p.id));
         }
 
-        // Apply Quick Filters
+        // ── Quick Filters (lógica real basada en campos del proyecto) ────────
         if (quickFilter === 'facil') {
-            filtered = filtered.filter(p => p.id % 2 === 0); // Mock logic for IA Facil
+            // Usa el campo real complejidad, no un proxy falso
+            filtered = filtered.filter(p => p.complejidad === 'Fácil');
         } else if (quickFilter === 'cierre') {
             filtered = filtered.filter(p => isClosingSoon(p.fecha_cierre));
         } else if (quickFilter === 'mujeres') {
-            filtered = filtered.filter(p => p.beneficiarios?.some(b => b.toLowerCase().includes('mujer')));
+            filtered = filtered.filter(p =>
+                p.beneficiarios?.some(b => b.toLowerCase().includes('mujer')) ||
+                (p.descripcionIICA || '').toLowerCase().includes('mujer') ||
+                (p.objetivo || '').toLowerCase().includes('mujer')
+            );
+        } else if (quickFilter === 'alta_viabilidad') {
+            filtered = filtered.filter(p =>
+                p.viabilidadIICA === 'Alta' || (p.porcentajeViabilidad || 0) >= 75
+            );
         }
 
         if (sortConfig) {
