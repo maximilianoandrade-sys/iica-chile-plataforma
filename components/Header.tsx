@@ -21,7 +21,7 @@ function getUrgentCount(): number {
 // Calcular estadísticas para el hero
 const totalOportunidades = projects.length;
 const internacionales = projects.filter((p: any) =>
-    ['FONTAGRO', 'FAO', 'FIDA', 'BID', 'PNUD', 'GEF', 'GCF', 'UE', 'UE (EUROCLIMA+)'].includes(p.institucion)
+    ['FONTAGRO', 'FAO', 'FIDA', 'BID', 'PNUD', 'GEF', 'GCF', 'UE', 'UE (EUROCLIMA+)', 'UE (AECID)', 'IICA Hemisférico'].includes(p.institucion)
 ).length;
 const abiertas = projects.filter((p: any) => {
     const now = new Date();
@@ -59,6 +59,8 @@ export function Header() {
                         <Link href="/#fuentes" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Fuentes</Link>
                         <Link href="/maletin" className="hover:text-[var(--iica-navy)] transition-colors">Mi Maletín</Link>
                         <Link href="/consultores" className="hover:text-[var(--iica-navy)] transition-colors">Consultores</Link>
+                        <Link href="/#impacto" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Impacto</Link>
+                        <Link href="/about" className="hover:text-[var(--iica-navy)] transition-colors">Sobre IICA</Link>
                         <Link href="/#contacto" className="hover:text-[var(--iica-navy)] transition-colors scroll-smooth">Contacto</Link>
                     </nav>
 
@@ -119,6 +121,8 @@ export function Header() {
                                     { href: '/#fuentes', label: '🔗 Fuentes Oficiales' },
                                     { href: '/maletin', label: '💼 Mi Maletín' },
                                     { href: '/consultores', label: '👤 Directorio de Consultores' },
+                                    { href: '/#impacto', label: '📈 Impacto IICA' },
+                                    { href: '/about', label: '🏦 Sobre el IICA' },
                                     { href: '/admin', label: '➕ Agregar Oportunidad' },
                                     { href: '/#contacto', label: '📞 Contacto' },
                                 ].map((item) => (

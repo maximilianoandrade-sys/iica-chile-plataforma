@@ -8,6 +8,7 @@ import AboutSection from "@/components/AboutSection";
 import Newsletter from "@/components/Newsletter";
 import ProgramsSection from "@/components/ProgramsSection";
 import FuentesOficiales from "@/components/FuentesOficiales";
+import ImpactSection from "@/components/ImpactSection";
 
 // Dynamic Metadata for SEO
 export async function generateMetadata({
@@ -82,6 +83,11 @@ export default async function DashboardPage({
 
         {/* Programas Hemisféricos */}
         <ProgramsSection />
+
+        {/* Impacto IICA */}
+        <div id="impacto" className="scroll-mt-20">
+          <ImpactSection />
+        </div>
 
         {/* Quiénes Somos */}
         <AboutSection />

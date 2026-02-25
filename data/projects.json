@@ -1010,5 +1010,285 @@
         "notasInternas": "Largo plazo estratégico. Identificar responsable y comenzar conversaciones con MMA sobre No Objection Letter. Plazo real: 2027.",
         "ejeIICA": "Bioeconomía y cambio climático",
         "complejidad": "Alta"
+    },
+    {
+        "id": 120,
+        "nombre": "AECID – Programa de Cooperación para el Desarrollo Rural Sostenible en Chile 2026",
+        "institucion": "UE (AECID)",
+        "monto": 320000000,
+        "fecha_cierre": "2026-10-31",
+        "estado": "Abierto",
+        "categoria": "Internacional",
+        "url_bases": "https://www.aecid.es/es/AECID/programas-y-proyectos",
+        "regiones": [
+            "Maule",
+            "Biobío",
+            "La Araucanía",
+            "Los Ríos"
+        ],
+        "beneficiarios": [
+            "Institución pública",
+            "ONG",
+            "Organización campesina",
+            "Universidad"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Hasta EUR 320k – subvención directa sin cofinanciamiento obligatorio",
+            "requisitos_clave": [
+                "Socio español o europeo acreditado",
+                "Componente de igualdad de género ≥30%",
+                "Plan de sostenibilidad post-proyecto",
+                "Alineación con ODS 2 y ODS 15"
+            ],
+            "plazo_ejecucion": "36 meses",
+            "observaciones": "AECID financia proyectos de desarrollo rural en países prioritarios de ALC. Chile entra en la categoría de asociación avanzada."
+        },
+        "monto_min": 150000000,
+        "monto_max": 320000000,
+        "plazo_meses": 36,
+        "requiere_cofinanciamiento": false,
+        "idioma": "multi",
+        "faq_disponible": true,
+        "webinar_fecha": "2026-07-15T15:00:00",
+        "permite_adendas": false,
+        "bases_estado": "publicada",
+        "requiere_firma": true,
+        "tipos_solicitante": [
+            "Organizacion"
+        ],
+        "ambito": "Internacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Alta",
+        "porcentajeViabilidad": 80,
+        "responsableIICA": "Ana Lía Gutiérrez",
+        "region": "Macrozona Sur",
+        "objetivo": "Formular y co-ejecutar proyecto AECID de desarrollo rural sostenible en macrozona sur de Chile",
+        "descripcionIICA": "El IICA Chile puede actuar como socio latinoamericano ante AECID, articulando el componente técnico del proyecto y garantizando la sostenibilidad y el enfoque de género requerido por la cooperación española.",
+        "requisitos": [
+            "Socio europeo/español como socios principales",
+            "Contrapartes locales (GORE, municipio, universidad)",
+            "Componente de género documentado",
+            "Marco lógico con indicadores ODS"
+        ],
+        "fortalezas": [
+            "IICA como socio natural de AECID en ALC",
+            "Experiencia en macrozona sur",
+            "Red de alianzas con universidades e instituciones públicas"
+        ],
+        "debilidades": [
+            "Requiere identificar socio español/europeo acreditado",
+            "Propuesta bilingual (español/inglés)"
+        ],
+        "notasInternas": "Contactar Embajada de España y AECID Santiago para explorar proyectos conjuntos en Araucanía.",
+        "ejeIICA": "Inclusión social y desarrollo rural",
+        "complejidad": "Media"
+    },
+    {
+        "id": 121,
+        "nombre": "EUROCLIMA+ – Biodiversidad Agrícola y Sistemas Alimentarios Resilientes al Clima (Chile-UE)",
+        "institucion": "UE (EUROCLIMA+)",
+        "monto": 450000000,
+        "fecha_cierre": "2026-12-15",
+        "estado": "Abierto",
+        "categoria": "Internacional",
+        "url_bases": "https://euroclimaplus.org/convocatorias",
+        "regiones": [
+            "Valparaíso",
+            "O'Higgins",
+            "Maule",
+            "Biobío"
+        ],
+        "beneficiarios": [
+            "Centro de investigación",
+            "INIA",
+            "Institución pública",
+            "ONG ambiental"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Hasta EUR 450k – financiamiento UE sin cofinanciamiento obligatorio",
+            "requisitos_clave": [
+                "Consorcio con mínimo 1 institución europea",
+                "Componente de biodiversidad agrícola documentado",
+                "Marco de monitoreo climático",
+                "Indicadores de género y juventud rural"
+            ],
+            "plazo_ejecucion": "48 meses",
+            "observaciones": "EUROCLIMA+ financia proyectos que vinculen cambio climático con sistemas alimentarios. Período 2024-2028 abierto."
+        },
+        "monto_min": 200000000,
+        "monto_max": 450000000,
+        "plazo_meses": 48,
+        "requiere_cofinanciamiento": false,
+        "idioma": "multi",
+        "faq_disponible": true,
+        "webinar_fecha": "2026-08-20T14:00:00",
+        "permite_adendas": true,
+        "bases_estado": "publicada",
+        "requiere_firma": false,
+        "tipos_solicitante": [
+            "Organizacion"
+        ],
+        "ambito": "Internacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Media",
+        "porcentajeViabilidad": 72,
+        "responsableIICA": "Patricia Villareal",
+        "region": "Chile Central",
+        "objetivo": "Co-liderar proyecto EUROCLIMA+ enfocado en biodiversidad agrícola y resiliencia climática en Chile Central",
+        "descripcionIICA": "El IICA Chile puede asumir el rol de implementador latinoamericano del proyecto EUROCLIMA+, diseñando e implementando estrategias de conservación de agrobiodiversidad y fortalecimiento de sistemas alimentarios ante el cambio climático.",
+        "requisitos": [
+            "Institución europea como socio principal",
+            "Diagnóstico de biodiversidad agrícola en la zona",
+            "Plan de acción climática verificable",
+            "Equipo multidisciplinario disponible"
+        ],
+        "fortalezas": [
+            "IICA como organismo reconocido por la UE",
+            "Experiencia técnica en recursos fitogenéticos",
+            "Alianzas con INIA y Universidades de Chile Central"
+        ],
+        "debilidades": [
+            "Proceso de selección muy competitivo",
+            "Coordinación con socio europeo puede ser compleja"
+        ],
+        "notasInternas": "Patricia tiene contacto con Bioversity International (Roma). Explorar consorcio IICA-Bioversity-INIA para esta convocatoria.",
+        "ejeIICA": "Bioeconomía y cambio climático",
+        "complejidad": "Alta"
+    },
+    {
+        "id": 122,
+        "nombre": "IICA Hemisférico – Fondo Sur-Sur: Transferencia de Innovaciones Exitosas entre Países ALC",
+        "institucion": "IICA Hemisférico",
+        "monto": 85000000,
+        "fecha_cierre": "2026-11-30",
+        "estado": "Abierto",
+        "categoria": "Internacional",
+        "url_bases": "https://www.iica.int/es/nuestro-trabajo/cooperacion/cooperacion-sur-sur",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "Institución pública",
+            "Centro de investigación",
+            "IICA Oficina Nacional"
+        ],
+        "resumen": {
+            "cofinanciamiento": "USD 85k – fondo interno IICA sin cofinanciamiento requerido",
+            "requisitos_clave": [
+                "Propuesta de transferencia de innovación documentada",
+                "Dos oficinas IICA nacionales como co-ejecutoras",
+                "Indicadores de impacto medibles en 24 meses",
+                "Alineación con Plan Estratégico IICA 2022-2026"
+            ],
+            "plazo_ejecucion": "24 meses",
+            "observaciones": "Fondo IICA para facilitar la transferencia de experiencias exitosas entre países miembros."
+        },
+        "monto_min": 30000000,
+        "monto_max": 85000000,
+        "plazo_meses": 24,
+        "requiere_cofinanciamiento": false,
+        "idioma": "es",
+        "faq_disponible": false,
+        "webinar_fecha": null,
+        "permite_adendas": true,
+        "bases_estado": "publicada",
+        "requiere_firma": true,
+        "tipos_solicitante": [
+            "Organizacion"
+        ],
+        "ambito": "Internacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Alta",
+        "porcentajeViabilidad": 85,
+        "responsableIICA": "Carlos Guajardo",
+        "region": "América Latina y el Caribe",
+        "objetivo": "Formular y liderar proyecto de cooperación Sur-Sur para transferir innovaciones agrícolas exitosas de Chile a otros países ALC",
+        "descripcionIICA": "El IICA Chile puede liderar un proyecto Sur-Sur transfiriendo experiencias exitosas chilenas (ej: riego tecnificado, trazabilidad, digitalización agrícola) hacia países ALC que las requieran, aprovechando la red del IICA en 34 países.",
+        "requisitos": [
+            "Dos o más oficinas IICA nacionales coordinadas",
+            "Innovación chilena probada y documentada",
+            "País receptor con demanda identificada",
+            "Plan de implementación en 24 meses"
+        ],
+        "fortalezas": [
+            "IICA es el dueño del fondo — máxima apropiación",
+            "Red en 34 países en ALC",
+            "Chile tiene innovaciones exportables",
+            "Proceso interno más ágil que fondos externos"
+        ],
+        "debilidades": [
+            "Monto relativamente pequeño",
+            "Impacto difícil de medir en 24 meses"
+        ],
+        "notasInternas": "Alta probabilidad de éxito. Carlos debe identificar 2 países ALC interesados en recibir transferencia. Propuestas recibidas en ventanilla continua.",
+        "ejeIICA": "Innovación para la productividad",
+        "complejidad": "Fácil"
+    },
+    {
+        "id": 123,
+        "nombre": "IICA Hemisférico – Cooperación Técnica Interna: Fortalecimiento Capacidades IICA Chile 2026",
+        "institucion": "IICA Hemisférico",
+        "monto": 65000000,
+        "fecha_cierre": "2026-09-30",
+        "estado": "Abierto",
+        "categoria": "Internacional",
+        "url_bases": "https://www.iica.int/es/nuestro-trabajo/cooperacion",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "IICA Oficina Nacional",
+            "Personal técnico IICA",
+            "Institución pública contraparte"
+        ],
+        "resumen": {
+            "cofinanciamiento": "USD 65k – asignación interna IICA sin requerimiento externo",
+            "requisitos_clave": [
+                "Plan de fortalecimiento aprobado por DG IICA",
+                "Alineación con Plan Estratégico 2022-2026",
+                "Indicadores de capacidad mensurables",
+                "Contraparte nacional identificada"
+            ],
+            "plazo_ejecucion": "18 meses",
+            "observaciones": "Fondo para fortalecer capacidades técnicas de la oficina IICA Chile en áreas estratégicas prioritarias."
+        },
+        "monto_min": 20000000,
+        "monto_max": 65000000,
+        "plazo_meses": 18,
+        "requiere_cofinanciamiento": false,
+        "idioma": "es",
+        "faq_disponible": false,
+        "webinar_fecha": null,
+        "permite_adendas": false,
+        "bases_estado": "publicada",
+        "requiere_firma": false,
+        "tipos_solicitante": [
+            "Organizacion"
+        ],
+        "ambito": "Internacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Alta",
+        "porcentajeViabilidad": 92,
+        "responsableIICA": "Hernán Chiriboga",
+        "region": "Nacional",
+        "objetivo": "Fortalecer las capacidades técnicas de IICA Chile en gestión de fondos climáticos y cooperación internacional",
+        "descripcionIICA": "La oficina IICA Chile puede acceder a este fondo interno para fortalecer sus propias capacidades técnicas, mejorar sus sistemas de gestión, capacitar al equipo y desarrollar nuevas alianzas estratégicas que multipliquen su impacto.",
+        "requisitos": [
+            "Plan de fortalecimiento aprobado internamente",
+            "Alianza con contrapartida nacional (MINAGRI, INDAP o GORE)",
+            "Métricas de impacto definidas"
+        ],
+        "fortalezas": [
+            "Fondo propio del IICA — máxima viabilidad",
+            "Proceso de aprobación interno más rápido",
+            "Posiciona a Chile como oficina modelo hemisférica"
+        ],
+        "debilidades": [
+            "Monto limitado",
+            "Requiere aprobación DG San José"
+        ],
+        "notasInternas": "Máxima prioridad institucional. Hernán debe presentar plan al DG en la próxima visita a San José.",
+        "ejeIICA": "Inclusión social y desarrollo rural",
+        "complejidad": "Fácil"
     }
 ]
