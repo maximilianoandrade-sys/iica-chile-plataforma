@@ -77,7 +77,7 @@
         "fecha_cierre": "2026-05-31",
         "estado": "Abierto",
         "categoria": "Internacional",
-        "url_bases": "https://www.fao.org/chile/programas-y-proyectos/es/",
+        "url_bases": "https://www.fao.org/chile/fao-en-chile/es/",
         "regiones": [
             "Coquimbo",
             "Atacama",
@@ -147,7 +147,7 @@
         "fecha_cierre": "2026-06-30",
         "estado": "Abierto",
         "categoria": "Internacional",
-        "url_bases": "https://www.ifad.org/es/web/operations/w/country/chile",
+        "url_bases": "https://www.ifad.org/es/web/operations/country/chile",
         "regiones": [
             "Arica y Parinacota",
             "Tarapacá",
@@ -216,7 +216,7 @@
         "fecha_cierre": "2026-07-15",
         "estado": "Abierto",
         "categoria": "Internacional",
-        "url_bases": "https://www.iadb.org/es/project/CH-T1186",
+        "url_bases": "https://www.iadb.org/es/project/CH-L1171",
         "regiones": [
             "Todas"
         ],
@@ -421,7 +421,7 @@
         "fecha_cierre": "2026-03-31",
         "estado": "Abierto",
         "categoria": "Internacional",
-        "url_bases": "https://www.fontagro.org/new/es/convocatorias/fondo-complementario",
+        "url_bases": "https://www.fontagro.org/es/iniciativas/convocatorias/convocatoria-2026",
         "regiones": [
             "Todas"
         ],
@@ -488,7 +488,7 @@
         "fecha_cierre": "2026-05-15",
         "estado": "Abierto",
         "categoria": "Nacional",
-        "url_bases": "https://www.sag.gob.cl/convocatorias",
+        "url_bases": "https://www.sag.gob.cl/",
         "regiones": [
             "Todas"
         ],
@@ -695,7 +695,7 @@
         "fecha_cierre": "2026-07-31",
         "estado": "Abierto",
         "categoria": "Nacional",
-        "url_bases": "https://www.corfo.cl/sites/cpp/programas-y-convocatorias",
+        "url_bases": "https://www.corfo.cl/sites/cpp/convocatorias",
         "regiones": [
             "Metropolitana",
             "Valparaíso",
@@ -896,7 +896,7 @@
         "fecha_cierre": "2026-10-31",
         "estado": "Abierto",
         "categoria": "Internacional",
-        "url_bases": "https://www.iadb.org/es/sectors/agriculture-rural-development/overview",
+        "url_bases": "https://www.iadb.org/es/sectores/agricultura-y-desarrollo-rural/resumen",
         "regiones": [
             "Todas"
         ],
@@ -1108,7 +1108,7 @@
         "fecha_cierre": "2026-12-15",
         "estado": "Abierto",
         "categoria": "Internacional",
-        "url_bases": "https://euroclimaplus.org/convocatorias",
+        "url_bases": "https://www.euroclima.org/en/",
         "regiones": [
             "Valparaíso",
             "O'Higgins",
