@@ -1,0 +1,29 @@
+name: Link Guardian - Verification
+on:
+  schedule:
+    - cron: '0 0 * * 1' # Todos los lunes a las 00:00 UTC
+  workflow_dispatch: # Permite ejecución manual
+  push:
+    paths:
+      - 'data/projects.json'
+
+jobs:
+  check-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Run Link Verification Script
+        run: node scripts/check_all_links.js
+        
+      - name: Upload Broken Links Report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: broken-links-report
+          path: scripts/broken_links.json
