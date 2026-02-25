@@ -12,7 +12,7 @@
  * ============================================================================
  */
 
-import { Project } from './data';
+import { Project, daysUntilClose } from './data';
 
 // ============================================================================
 // TESAURO AGRÍCOLA UNIFICADO (sinónimos + conceptos relacionados)
@@ -624,38 +624,38 @@ export function getZeroResultsSuggestions(
 
 /**
  * Orden inteligente por defecto cuando no hay búsqueda activa.
- * Prioridad: Abierta > Ejecutor/Implementador > Alta viabilidad > cierre próximo
+ * Usa un urgencyScore compuesto que combina:
+ *   40% urgencia temporal + 35% viabilidad IICA + 25% rol IICA
+ * Proyectos cerrados siempre al final.
  */
 export function defaultSortProjects(projects: Project[]): Project[] {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const ROL_PRIORITY: Record<string, number> = {
-        'Ejecutor': 4,
-        'Implementador': 3,
-        'Asesor': 2,
-        'Indirecto': 1,
+    const ROL_MULT: Record<string, number> = {
+        'Ejecutor': 1.0, 'Implementador': 0.85, 'Asesor': 0.65, 'Indirecto': 0.4,
+    };
+    const VIA_MULT: Record<string, number> = {
+        'Alta': 1.0, 'Media': 0.7, 'Baja': 0.4,
+    };
+
+    const getScore = (p: Project): number => {
+        const days = daysUntilClose(p);
+        if (days <= 0) return 0;
+        const urgency = Math.max(0, 100 - (days / 120) * 100);
+        const viab = p.porcentajeViabilidad ?? 50;
+        const rolMult = ROL_MULT[p.rolIICA ?? ''] ?? 0.5;
+        const viaMult = VIA_MULT[p.viabilidadIICA ?? ''] ?? 0.5;
+        return Math.round((urgency * 0.40) + (viab * 0.35) + (rolMult * viaMult * 100 * 0.25));
     };
 
     return [...projects].sort((a, b) => {
         const aOpen = new Date(a.fecha_cierre).getTime() >= today.getTime();
         const bOpen = new Date(b.fecha_cierre).getTime() >= today.getTime();
-
-        // 1. Abiertas primero
         if (aOpen && !bOpen) return -1;
         if (!aOpen && bOpen) return 1;
-
-        // 2. Rol IICA (Ejecutor > Implementador > Asesor > Indirecto)
-        const aRol = ROL_PRIORITY[a.rolIICA || ''] || 0;
-        const bRol = ROL_PRIORITY[b.rolIICA || ''] || 0;
-        if (aRol !== bRol) return bRol - aRol;
-
-        // 3. Viabilidad IICA (porcentaje)
-        const aViab = a.porcentajeViabilidad || 0;
-        const bViab = b.porcentajeViabilidad || 0;
-        if (aViab !== bViab) return bViab - aViab;
-
-        // 4. Cierre más próximo (urgencia)
+        const diff = getScore(b) - getScore(a);
+        if (diff !== 0) return diff;
         return new Date(a.fecha_cierre).getTime() - new Date(b.fecha_cierre).getTime();
     });
 }

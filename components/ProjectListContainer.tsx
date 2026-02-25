@@ -2,6 +2,7 @@ import { getProjects } from "@/lib/data";
 import ProjectList from "@/components/ProjectList";
 import ProjectFilters from "@/components/ProjectFilters";
 import JsonLd from "@/components/JsonLd";
+import AnalyticsStrip from "@/components/AnalyticsStrip";
 import { searchAndRankProjects, buildDynamicSuggestions, defaultSortProjects, getZeroResultsSuggestions } from "@/lib/searchEngine";
 import counterparts from '@/lib/counterparts_raw.json';
 
@@ -100,6 +101,11 @@ export default async function ProjectListContainer({
     // Contar abiertos para el badge
     const openCount = projects.filter(p => new Date(p.fecha_cierre).getTime() >= today.getTime()).length;
 
+    const hasActiveFilters = !!(searchTerm || selectedCategory !== 'Todas' || selectedRegion !== 'Todas'
+        || selectedBeneficiary !== 'Todos' || selectedInstitution !== 'Todas' || soloAbiertos
+        || selectedAmbito !== 'Todos' || selectedViabilidad !== 'Todas' || selectedEstado !== 'Todos'
+        || selectedRol !== 'Todos');
+
     return (
         <>
             <JsonLd projects={filteredProjects} />
@@ -111,6 +117,11 @@ export default async function ProjectListContainer({
                 counts={{ filtered: filteredProjects.length, total: projects.length, open: openCount }}
                 dynamicSuggestions={dynamicSuggestions}
                 zeroResultsSuggestions={zeroResultsSuggestions}
+            />
+            <AnalyticsStrip
+                projects={filteredProjects}
+                totalAll={projects.length}
+                searchActive={hasActiveFilters}
             />
             <ProjectList projects={filteredProjects} />
         </>
