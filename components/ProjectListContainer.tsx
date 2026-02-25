@@ -27,6 +27,7 @@ export default async function ProjectListContainer({
 
     const minAmount = typeof searchParams.minAmount === 'string' ? parseInt(searchParams.minAmount) : 0;
     const maxAmount = typeof searchParams.maxAmount === 'string' ? parseInt(searchParams.maxAmount) : Infinity;
+    const selectedRol = typeof searchParams.rol === 'string' ? searchParams.rol : 'Todos';
 
     // 1. Opciones de filtros (calculadas sobre todos los proyectos)
     const categories = ['Todas', ...Array.from(new Set(projects.map(p => p.categoria)))];
@@ -63,10 +64,11 @@ export default async function ProjectListContainer({
         const matchesAmbito = selectedAmbito === 'Todos' || project.ambito === selectedAmbito;
         const matchesViabilidad = selectedViabilidad === 'Todas' || project.viabilidadIICA === selectedViabilidad;
         const matchesEstado = selectedEstado === 'Todos' || project.estadoPostulacion === selectedEstado;
+        const matchesRol = selectedRol === 'Todos' || project.rolIICA === selectedRol;
 
         return matchesCategory && matchesRegion && matchesBeneficiary && matchesInstitution
             && matchesAmount && matchesOpen
-            && matchesAmbito && matchesViabilidad && matchesEstado;
+            && matchesAmbito && matchesViabilidad && matchesEstado && matchesRol;
     });
 
     // 3. Ordenamiento secundario (cuando no hay búsqueda de texto)

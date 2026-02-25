@@ -246,11 +246,13 @@ export function buildProjectCorpus(p: Project): {
         p.resumen?.plazo_ejecucion || '',
     ].join(' ');
     const notasInternas = p.notasInternas || '';
+    const rolIICA = p.rolIICA || '';
 
     const full = [
         titulo, institucion, ejeIICA, responsable, region, categoria,
         objetivo, descripcion, regiones, beneficiarios,
         requisitos, fortalezas, resumen, notasInternas,
+        rolIICA,
         p.viabilidadIICA || '',
         p.complejidad || '',
         p.estadoPostulacion || '',
@@ -366,6 +368,12 @@ export function scoreProject(searchTerm: string, project: Project): number {
 
     // Estado de postulación
     if (project.estadoPostulacion === 'Abierta') score += 5;
+
+    // ── Rol IICA (boost/penalización según apropiación directa) ───────────
+    if (project.rolIICA === 'Ejecutor') score += 15;
+    else if (project.rolIICA === 'Implementador') score += 10;
+    else if (project.rolIICA === 'Asesor') score += 3;
+    else if (project.rolIICA === 'Indirecto') score -= 10; // penalizar rol indirecto
 
     // Complejidad (proyectos fáciles más accesibles para el equipo)
     if (project.complejidad === 'Fácil') score += 3;

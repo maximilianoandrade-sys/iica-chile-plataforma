@@ -45,6 +45,7 @@
         "porcentajeViabilidad": 90,
         "responsableIICA": "Carlos Guajardo",
         "region": "América Latina y el Caribe",
+        "rolIICA": "Ejecutor",
         "objetivo": "Co-liderar consorcio regional de innovación agrícola con instituciones de AL",
         "descripcionIICA": "El IICA Chile actuaría como líder de consorcio, articulando instituciones de investigación de la región. Gracias a nuestra presencia en 34 países, podemos garantizar los requisitos de consorcio multinacional.",
         "requisitos": [
@@ -116,6 +117,7 @@
         "porcentajeViabilidad": 85,
         "responsableIICA": "Ana Lía Gutiérrez",
         "region": "Zona Centro-Norte Chile",
+        "rolIICA": "Implementador",
         "objetivo": "Ejecutar programa de adaptación climática en zonas áridas de Chile como implementador técnico FAO",
         "descripcionIICA": "El IICA Chile participaría como implementador técnico del TCP, diseñando e implementando estrategias de resiliencia climática para pequeños agricultores de zonas áridas. Tenemos experiencia comprobada en estas regiones.",
         "requisitos": [
@@ -184,6 +186,7 @@
         "porcentajeViabilidad": 65,
         "responsableIICA": "",
         "region": "Norte Grande Chile",
+        "rolIICA": "Implementador",
         "objetivo": "Liderar implementación técnica de proyecto FIDA de inclusión financiera en comunidades andinas",
         "descripcionIICA": "El IICA Chile puede actuar como organismo de implementación técnica, diseñando sistemas de extensión agrícola y acceso a servicios financieros para comunidades quechua y aymara del Norte Grande.",
         "requisitos": [
@@ -250,6 +253,7 @@
         "porcentajeViabilidad": 88,
         "responsableIICA": "Ricardo Moreira",
         "region": "Nacional",
+        "rolIICA": "Ejecutor",
         "objetivo": "Ejecutar asistencia técnica BID para modernización del sistema nacional de extensión agrícola",
         "descripcionIICA": "El IICA Chile lideraría la consultoría técnica para modernizar los servicios de extensión de INDAP/SAG, incorporando TICs, enfoque territorial y metodologías participativas probadas en la región.",
         "requisitos": [
@@ -317,6 +321,7 @@
         "porcentajeViabilidad": 82,
         "responsableIICA": "Patricia Villareal",
         "region": "Chile Central Sur",
+        "rolIICA": "Ejecutor",
         "objetivo": "Diseñar e implementar proyecto GEF-8 de sistemas agroforestales para adaptación climática en Chile Central",
         "descripcionIICA": "El IICA Chile, como organismo acreditado ante GEF, puede actuar como Agencia de Implementación. Desarrollaríamos sistemas agroforestales resilientes con comunidades campesinas de la Macrozona Centro-Sur.",
         "requisitos": [
@@ -386,6 +391,7 @@
         "porcentajeViabilidad": 70,
         "responsableIICA": "",
         "region": "Zona Norte-Centro Chile",
+        "rolIICA": "Implementador",
         "objetivo": "Diseñar e implementar sistema de gestión sostenible del agua agrícola en zonas de escasez hídrica",
         "descripcionIICA": "Partneriando con institución europea, el IICA Chile implementaría el componente técnico de gestión hídrica agrícola, incorporando tecnologías de precisión y enfoques adaptados al contexto del Norte Chico.",
         "requisitos": [
@@ -452,6 +458,7 @@
         "porcentajeViabilidad": 78,
         "responsableIICA": "Carlos Guajardo",
         "region": "América Latina y el Caribe",
+        "rolIICA": "Ejecutor",
         "objetivo": "Co-liderar desarrollo de plataforma digital de extensión agrícola inteligente para la región ALC",
         "descripcionIICA": "El IICA Chile, como co-líder o facilitador de consorcio, coordinaría el desarrollo de una plataforma digital de extensión agrícola adaptada al cambio climático, articulando centros de investigación nacionales de 3+ países.",
         "requisitos": [
@@ -518,6 +525,7 @@
         "porcentajeViabilidad": 60,
         "responsableIICA": "Felipe Donoso",
         "region": "Nacional",
+        "rolIICA": "Implementador",
         "objetivo": "Proveer asistencia técnica al SAG para implementar sistema nacional de trazabilidad vegetal",
         "descripcionIICA": "El IICA Chile puede aportar expertise técnico en sistemas de trazabilidad agroalimentaria, aprovechando experiencias regionales exitosas de ALC y su rol en organismos internacionales como CODEX y OIE.",
         "requisitos": [
@@ -587,6 +595,7 @@
         "porcentajeViabilidad": 55,
         "responsableIICA": "Ana Lía Gutiérrez",
         "region": "Macrozona Sur",
+        "rolIICA": "Asesor",
         "objetivo": "Apoyar técnicamente municipios para implementar PRODESAL en macrozona sur",
         "descripcionIICA": "El IICA Chile podría actuar como asesor técnico de municipios postulantes al PRODESAL, fortaleciendo capacidades locales e incorporando enfoques innovadores de extensión territorial.",
         "requisitos": [
@@ -656,6 +665,7 @@
         "porcentajeViabilidad": 75,
         "responsableIICA": "Patricia Villareal",
         "region": "Macrozona Sur",
+        "rolIICA": "Ejecutor",
         "objetivo": "Liderar consorcio I+D en sistemas silvoagropecuarios para La Araucanía y Los Ríos",
         "descripcionIICA": "El IICA Chile puede co-liderar un consorcio de innovación con INIA Carillanca y Universidad de La Frontera para desarrollar e implementar sistemas silvoagropecuarios resilientes al clima.",
         "requisitos": [
@@ -725,6 +735,7 @@
         "porcentajeViabilidad": 35,
         "responsableIICA": "Ricardo Moreira",
         "region": "Zona Central",
+        "rolIICA": "Indirecto",
         "objetivo": "Participar como proveedor de asistencia técnica para PYMES que acceden al programa",
         "descripcionIICA": "El IICA Chile puede posicionarse como proveedor de servicios técnicos (consultoría, capacitación) para las PYMES que acceden a CORFO, no como ejecutor directo del subsidio.",
         "requisitos": [
@@ -789,6 +800,7 @@
         "porcentajeViabilidad": 62,
         "responsableIICA": "Felipe Donoso",
         "region": "Nacional",
+        "rolIICA": "Implementador",
         "objetivo": "Actuar como implementador técnico del TCP FAO para modernizar estadísticas agrícolas de Chile",
         "descripcionIICA": "El IICA Chile puede implementar la asistencia técnica del TCP, desarrollando nuevas metodologías de recolección y análisis de datos agrícolas para el sistema de información de MINAGRI.",
         "requisitos": [
@@ -856,6 +868,7 @@
         "porcentajeViabilidad": 30,
         "responsableIICA": "",
         "region": "Macrozona Sur",
+        "rolIICA": "Indirecto",
         "objetivo": "Apoyar organizaciones de regantes en postulación a fondos CNR",
         "descripcionIICA": "Rol de asistencia técnica a organizaciones para postular, no como ejecutor directo del subsidio CNR.",
         "requisitos": [
@@ -920,6 +933,7 @@
         "porcentajeViabilidad": 80,
         "responsableIICA": "Carlos Guajardo",
         "region": "América Latina y el Caribe",
+        "rolIICA": "Ejecutor",
         "objetivo": "Actuar como facilitador regional del Programa de Transformación de Sistemas Alimentarios BID",
         "descripcionIICA": "Por su mandato hemisférico y presencia en 34 países, el IICA es el organismo natural para facilitar la coordinación regional de este programa BID, actuando como secretaría técnica y coordinador de implementación entre los países beneficiarios.",
         "requisitos": [
@@ -988,6 +1002,7 @@
         "porcentajeViabilidad": 58,
         "responsableIICA": "",
         "region": "Patagonia Chilena",
+        "rolIICA": "Ejecutor",
         "objetivo": "Diseñar y presentar propuesta GCF para transformar sistemas agropecuarios de Patagonia hacia modelo regenerativo",
         "descripcionIICA": "Como entidad acreditada ante el GCF, el IICA Chile puede presentar una propuesta de financiamiento climático para transformar los sistemas ganaderos extensivos de Patagonia hacia modelos regenerativos, aprovechando el interés internacional por los ecosistemas patagónicos.",
         "requisitos": [
@@ -1062,6 +1077,7 @@
         "porcentajeViabilidad": 80,
         "responsableIICA": "Ana Lía Gutiérrez",
         "region": "Macrozona Sur",
+        "rolIICA": "Implementador",
         "objetivo": "Formular y co-ejecutar proyecto AECID de desarrollo rural sostenible en macrozona sur de Chile",
         "descripcionIICA": "El IICA Chile puede actuar como socio latinoamericano ante AECID, articulando el componente técnico del proyecto y garantizando la sostenibilidad y el enfoque de género requerido por la cooperación española.",
         "requisitos": [
@@ -1134,6 +1150,7 @@
         "porcentajeViabilidad": 72,
         "responsableIICA": "Patricia Villareal",
         "region": "Chile Central",
+        "rolIICA": "Implementador",
         "objetivo": "Co-liderar proyecto EUROCLIMA+ enfocado en biodiversidad agrícola y resiliencia climática en Chile Central",
         "descripcionIICA": "El IICA Chile puede asumir el rol de implementador latinoamericano del proyecto EUROCLIMA+, diseñando e implementando estrategias de conservación de agrobiodiversidad y fortalecimiento de sistemas alimentarios ante el cambio climático.",
         "requisitos": [
@@ -1202,6 +1219,7 @@
         "porcentajeViabilidad": 85,
         "responsableIICA": "Carlos Guajardo",
         "region": "América Latina y el Caribe",
+        "rolIICA": "Ejecutor",
         "objetivo": "Formular y liderar proyecto de cooperación Sur-Sur para transferir innovaciones agrícolas exitosas de Chile a otros países ALC",
         "descripcionIICA": "El IICA Chile puede liderar un proyecto Sur-Sur transfiriendo experiencias exitosas chilenas (ej: riego tecnificado, trazabilidad, digitalización agrícola) hacia países ALC que las requieran, aprovechando la red del IICA en 34 países.",
         "requisitos": [
@@ -1271,6 +1289,7 @@
         "porcentajeViabilidad": 92,
         "responsableIICA": "Hernán Chiriboga",
         "region": "Nacional",
+        "rolIICA": "Ejecutor",
         "objetivo": "Fortalecer las capacidades técnicas de IICA Chile en gestión de fondos climáticos y cooperación internacional",
         "descripcionIICA": "La oficina IICA Chile puede acceder a este fondo interno para fortalecer sus propias capacidades técnicas, mejorar sus sistemas de gestión, capacitar al equipo y desarrollar nuevas alianzas estratégicas que multipliquen su impacto.",
         "requisitos": [

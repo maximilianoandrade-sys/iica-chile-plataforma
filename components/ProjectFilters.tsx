@@ -63,6 +63,15 @@ const VIABILIDAD_OPTIONS = [
     { value: 'Baja', label: '★ Baja' },
 ];
 
+// Opciones de Rol IICA
+const ROL_IICA_OPTIONS = [
+    { value: 'Todos', label: '🎯 Todos los roles', title: 'Mostrar todas las oportunidades' },
+    { value: 'Ejecutor', label: '✅ IICA Ejecutor', title: 'IICA postula y ejecuta directamente' },
+    { value: 'Implementador', label: '🔧 Implementador', title: 'IICA como agencia de implementación técnica' },
+    { value: 'Asesor', label: '💼 Asesor técnico', title: 'IICA apoya a terceros que ejecutan' },
+    { value: 'Indirecto', label: '⚠️ Rol indirecto', title: 'Rol muy indirecto o sin apropiación directa' },
+];
+
 // Opciones de estado de postulación (ítem 10)
 const ESTADO_OPTIONS = [
     { value: 'Todos', label: '📋 Todos los estados' },
@@ -154,6 +163,7 @@ export default function ProjectFilters({
     const selectedAmbito = searchParams.get('ambito') || 'Todos';       // ítem 8
     const selectedViabilidad = searchParams.get('viabilidad') || 'Todas'; // ítem 9
     const selectedEstado = searchParams.get('estado') || 'Todos';        // ítem 10
+    const selectedRol = searchParams.get('rol') || 'Todos';              // Rol IICA
     const soloAbiertos = searchParams.get('open') === '1';
     const sortBy = searchParams.get('sort') || 'relevance';
 
@@ -166,6 +176,7 @@ export default function ProjectFilters({
         selectedAmbito !== 'Todos' ||
         selectedViabilidad !== 'Todas' ||
         selectedEstado !== 'Todos' ||
+        selectedRol !== 'Todos' ||
         soloAbiertos
     );
 
@@ -278,6 +289,32 @@ export default function ProjectFilters({
                             {label}
                         </button>
                     ))}
+                </div>
+            </div>
+
+            {/* ── PILLS de Rol IICA ── */}
+            <div className="px-4 md:px-6 py-3 border-b border-gray-100 bg-blue-50/30">
+                <div className="flex flex-wrap gap-2 items-center">
+                    <span className="text-xs font-bold text-[var(--iica-navy)] uppercase tracking-wider flex-shrink-0">Rol IICA:</span>
+                    {ROL_IICA_OPTIONS.map(opt => (
+                        <button
+                            key={opt.value}
+                            onClick={() => handleFilterChange('rol', opt.value)}
+                            aria-pressed={selectedRol === opt.value}
+                            title={opt.title}
+                            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border whitespace-nowrap ${selectedRol === opt.value
+                                    ? opt.value === 'Indirecto'
+                                        ? 'bg-gray-500 text-white border-gray-500 shadow-sm'
+                                        : 'bg-[var(--iica-navy)] text-white border-[var(--iica-navy)] shadow-sm'
+                                    : 'bg-white text-gray-600 border-gray-200 hover:bg-blue-50 hover:border-blue-300'
+                                }`}
+                        >
+                            {opt.label}
+                        </button>
+                    ))}
+                    <span className="ml-auto text-[10px] text-gray-400 italic hidden md:block">
+                        Filtra por cómo puede participar el IICA Chile
+                    </span>
                 </div>
             </div>
 

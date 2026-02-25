@@ -84,6 +84,15 @@ export interface Project {
     /** Complejidad de postulación estimada */
     complejidad?: 'Fácil' | 'Media' | 'Alta';
 
+    /**
+     * Rol del IICA en esta oportunidad:
+     * - 'Ejecutor': IICA postula y ejecuta directamente
+     * - 'Implementador': IICA como agencia de implementación técnica
+     * - 'Asesor': IICA apoya a terceros (indirecto)
+     * - 'Indirecto': Sin rol claro o muy indirecto para IICA
+     */
+    rolIICA?: 'Ejecutor' | 'Implementador' | 'Asesor' | 'Indirecto';
+
     // ── Campo de checklist (legacy) ──────────────────────────────────────
     checklist?: string[];
 }
@@ -150,6 +159,17 @@ export function complejidadColors(nivel?: string): { text: string; bg: string } 
         case 'Media': return { text: 'text-blue-700', bg: 'bg-blue-50' };
         case 'Alta': return { text: 'text-purple-700', bg: 'bg-purple-50' };
         default: return { text: 'text-gray-600', bg: 'bg-gray-50' };
+    }
+}
+
+/** Devuelve colores e icono para el rol del IICA en la oportunidad */
+export function rolIICAInfo(rol?: string): { text: string; bg: string; border: string; label: string; icon: string } {
+    switch (rol) {
+        case 'Ejecutor': return { text: 'text-green-800', bg: 'bg-green-50', border: 'border-green-300', label: 'IICA Ejecutor', icon: '✅' };
+        case 'Implementador': return { text: 'text-blue-800', bg: 'bg-blue-50', border: 'border-blue-300', label: 'IICA Implementador', icon: '🔧' };
+        case 'Asesor': return { text: 'text-amber-800', bg: 'bg-amber-50', border: 'border-amber-300', label: 'IICA Asesor técnico', icon: '💼' };
+        case 'Indirecto': return { text: 'text-gray-600', bg: 'bg-gray-100', border: 'border-gray-300', label: 'Rol indirecto', icon: '⚠️' };
+        default: return { text: 'text-gray-500', bg: 'bg-gray-50', border: 'border-gray-200', label: 'Sin definir', icon: '❓' };
     }
 }
 
