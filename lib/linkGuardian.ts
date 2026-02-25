@@ -126,16 +126,33 @@ async function checkLinkStatus(url: string): Promise<boolean> {
 /**
  * Genera URL de búsqueda de Google como fallback
  */
-function generateGoogleSearchUrl(originalUrl: string, projectName: string): string {
+function generateGoogleSearchUrl(originalUrl: string, projectName: string, institution?: string): string {
     const year = new Date().getFullYear();
+    const lastYear = year - 1;
+
+    // Simplificar el nombre del proyecto para la búsqueda
+    const cleanProjectName = projectName
+        .split(/[–:|]/)[0] // Cortar en guiones largos, dos puntos o pipes
+        .trim()
+        .split(' ')
+        .slice(0, 7)
+        .join(' ');
+
+    const institutionQuery = institution ? `${institution} ` : '';
+
     try {
-        const domain = new URL(originalUrl).hostname;
-        // Búsqueda avanzada orientador a bases y PDFs del año actual
-        const searchQuery = `site:${domain} "${projectName}" (bases OR "términos de referencia") ${year} filetype:pdf`;
+        let domainSearch = '';
+        if (originalUrl && originalUrl.startsWith('http')) {
+            const urlObj = new URL(originalUrl);
+            domainSearch = `site:${urlObj.hostname} `;
+        }
+
+        // Búsqueda más amplia e inteligente
+        const searchQuery = `${domainSearch}${institutionQuery}"${cleanProjectName}" (bases OR "términos de referencia" OR convocatoria) (${year} OR ${lastYear})`;
         return `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
     } catch (error) {
-        // Fallback si no hay URL base
-        const searchQuery = `"${projectName}" bases convocatoria ${year} Chile`;
+        // Fallback robusto sin dominio
+        const searchQuery = `${institutionQuery}"${cleanProjectName}" bases convocatoria Chile (${year} OR ${lastYear})`;
         return `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
     }
 }
@@ -188,7 +205,7 @@ export async function getLinkStatus(
 
     // Enlace inválido, crear fallback inteligente
     if (projectName && projectName.trim() !== '') {
-        const fallbackUrl = generateGoogleSearchUrl(url, projectName);
+        const fallbackUrl = generateGoogleSearchUrl(url, projectName, institution);
         const archivedUrl = generateWaybackUrl(url);
         const status: LinkStatus = {
             url,
@@ -311,10 +328,10 @@ export function getLinkCacheStats(): {
 /**
  * Fuerza la re-verificación de un enlace
  */
-export async function recheckLink(url: string, projectName: string): Promise<LinkStatus> {
+export async function recheckLink(url: string, projectName: string, institution?: string): Promise<LinkStatus> {
     // Eliminar del caché
     linkCache.delete(url);
 
     // Verificar nuevamente
-    return getLinkStatus(url, projectName);
+    return getLinkStatus(url, projectName, institution);
 }

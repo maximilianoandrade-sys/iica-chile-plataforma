@@ -183,6 +183,7 @@ export default function ProjectItem({ project, viewMode }: ProjectItemProps) {
                                 url={project.url_bases}
                                 date={project.fecha_cierre}
                                 projectName={project.nombre}
+                                institution={project.institucion}
                                 onTrack={() => setToastMessage("Redirigiendo a sitio oficial...")}
                             />
                             <RuralTools project={project} />
@@ -307,6 +308,7 @@ export default function ProjectItem({ project, viewMode }: ProjectItemProps) {
                             url={project.url_bases}
                             date={project.fecha_cierre}
                             projectName={project.nombre}
+                            institution={project.institucion}
                             onTrack={() => setToastMessage("Redirigiendo a sitio oficial...")}
                         />
                     </div>
@@ -399,9 +401,9 @@ function ProjectSummary({ resumen, project, mobile = false }: { resumen: any; pr
     );
 }
 
-export function ActionButton({ url, date, projectName, onTrack }: { url: string; date: string; projectName: string; onTrack?: () => void }) {
+export function ActionButton({ url, date, projectName, institution, onTrack }: { url: string; date: string; projectName: string; institution?: string; onTrack?: () => void }) {
     const { trackEvent } = useAnalytics();
-    const { shouldShow, finalUrl, archivedUrl, isFallback, isLoading } = useLinkGuardian(url, projectName);
+    const { shouldShow, finalUrl, archivedUrl, isFallback, isLoading } = useLinkGuardian(url, projectName, institution);
 
     const today = new Date();
     const closingDate = new Date(date);
