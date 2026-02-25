@@ -13,7 +13,7 @@ import SearchableSelect from "@/components/SearchableSelect"; // Import the new 
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info, Sparkles, Copy, Eye, CheckCheck, MapPin, Users, Banknote, Clock, ChevronRight, ArrowUpDown, FileText, HelpCircle, MonitorPlay, PenTool, CheckCircle2, XCircle, AlertTriangle } from "lucide-react";
 import { ActionButton, UrgencyBadge } from "@/components/ProjectItem";
-import { OportunidadCard } from "./OportunidadCard";
+import { OportunidadCard, Oportunidad } from "./OportunidadCard";
 import { daysUntilClose } from "@/lib/data";
 
 export default function ProjectList({ projects }: { projects: Project[] }) {
@@ -189,9 +189,11 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
     // Helper for Closing Soon
 
 
+    const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
+
+    // ── UTILITY TOOLBAR (Favoritos, Compare & View Mode) ───────────────────
     return (
         <div className="bg-white rounded-xl shadow-sm border border-[var(--iica-border)] overflow-hidden">
-
             {toastMessage && (
                 <Toast
                     message={toastMessage}
@@ -200,42 +202,39 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
             )}
 
             {/* HEADER METADATA DASHBOARD */}
-            <div className="px-6 py-4 bg-white border-b border-gray-100 overflow-x-auto">
+            <div className="px-6 py-4 bg-white border-b border-gray-100 overflow-x-auto scrollbar-hide">
                 <div className="flex gap-4 items-center min-w-max">
-                    <span className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1">
-                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                        Fondos Activos Hoy:
+                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
+                        En Vivo:
                     </span>
-                    {activeFundsByInstitution.slice(0, 6).map(([inst, count]) => (
-                        <div key={inst} className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 border border-blue-100 text-xs font-medium text-[var(--iica-navy)]">
-                            <span className="font-bold">{inst}</span>
-                            <span className="bg-[var(--iica-blue)] text-white text-[10px] px-1.5 rounded-full font-bold h-4 flex items-center justify-center">{count}</span>
+                    {activeFundsByInstitution.slice(0, 6).map(([inst, count]: [string, number]) => (
+                        <div key={inst} className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-50 border border-gray-100 text-[11px] font-bold text-[var(--iica-navy)] hover:border-blue-200 hover:bg-white transition-all">
+                            <span className="opacity-70">{inst}</span>
+                            <span className="bg-[var(--iica-blue)] text-white text-[10px] px-1.5 rounded-lg h-4 flex items-center justify-center min-w-[1.2rem]">{count}</span>
                         </div>
                     ))}
-                    {activeFundsByInstitution.length > 6 && (
-                        <span className="text-xs text-gray-400">+{activeFundsByInstitution.length - 6} más</span>
-                    )}
                 </div>
             </div >
 
 
             {/* Agrovoc Keywords Section - Collapsible & Aesthetic */}
-            < div className="p-6 border-b border-[var(--iica-border)] bg-gray-50/50" >
+            < div className="p-6 border-b border-[var(--iica-border)] bg-gray-50/30" >
                 <div className="w-full">
                     <button
                         onClick={() => setShowAgrovoc(!showAgrovoc)}
                         className="w-full flex items-center justify-between text-sm font-bold text-gray-700 hover:text-[var(--iica-blue)] transition-colors"
                     >
                         <span className="flex items-center gap-2">
-                            <Filter className="h-4 w-4" />
-                            Filtrar por Palabras Clave Temáticas (Agrovoc)
+                            <Sparkles className="h-4 w-4 text-blue-500" />
+                            Explorar por Temas Agrovoc
                             {selectedAgrovoc !== 'Cualquiera' && (
-                                <span className="ml-2 px-2 py-0.5 bg-[var(--iica-blue)] text-white text-xs rounded-full">
+                                <span className="ml-2 px-3 py-1 bg-[var(--iica-blue)] text-white text-[10px] font-black uppercase rounded-full tracking-wider">
                                     {selectedAgrovoc}
                                 </span>
                             )}
                         </span>
-                        <ChevronDown className={`h-5 w-5 transition-transform ${showAgrovoc ? 'rotate-180' : ''}`} />
+                        <ChevronDown className={`h-5 w-5 transition-transform duration-300 ${showAgrovoc ? 'rotate-180' : ''}`} />
                     </button>
 
                     <AnimatePresence>
@@ -244,27 +243,26 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                 initial={{ height: 0, opacity: 0 }}
                                 animate={{ height: 'auto', opacity: 1 }}
                                 exit={{ height: 0, opacity: 0 }}
-                                transition={{ duration: 0.2 }}
                                 className="overflow-hidden"
                             >
-                                <div className="mt-3 bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-lg p-3 shadow-sm">
-                                    <div className="bg-white rounded-md p-2 max-h-56 overflow-y-auto shadow-inner grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1.5">
+                                <div className="mt-4 bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
+                                    <div className="max-h-60 overflow-y-auto pr-2 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 scrollbar-thin">
                                         <button
                                             onClick={() => setSelectedAgrovoc('Cualquiera')}
-                                            className={`text-left px-2.5 py-1.5 rounded text-xs font-medium transition-all ${selectedAgrovoc === 'Cualquiera'
-                                                ? 'bg-[var(--iica-blue)] text-white shadow-md scale-105'
-                                                : 'hover:bg-gray-100 text-gray-700 hover:shadow-sm'
+                                            className={`text-left px-3 py-2 rounded-xl text-[11px] font-bold transition-all border ${selectedAgrovoc === 'Cualquiera'
+                                                ? 'bg-gray-800 text-white border-gray-800 shadow-md scale-[1.02]'
+                                                : 'hover:bg-gray-50 text-gray-500 border-transparent'
                                                 }`}
                                         >
-                                            ✕ Limpiar filtro
+                                            ✕ Limpiar
                                         </button>
                                         {AGROVOC_KEYWORDS.map((keyword, index) => (
                                             <button
                                                 key={index}
                                                 onClick={() => setSelectedAgrovoc(keyword)}
-                                                className={`text-left px-2.5 py-1.5 rounded text-xs truncate transition-all ${selectedAgrovoc === keyword
-                                                    ? 'bg-[var(--iica-blue)] text-white font-medium shadow-md scale-105'
-                                                    : 'hover:bg-gray-100 text-gray-600 hover:shadow-sm'
+                                                className={`text-left px-3 py-2 rounded-xl text-[11px] font-medium truncate transition-all border ${selectedAgrovoc === keyword
+                                                    ? 'bg-[var(--iica-blue)] text-white border-[var(--iica-blue)] shadow-md scale-[1.02] font-bold'
+                                                    : 'hover:bg-blue-50 hover:text-[var(--iica-blue)] hover:border-blue-100 text-gray-600 border-transparent'
                                                     }`}
                                                 title={keyword}
                                             >
@@ -272,9 +270,6 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                             </button>
                                         ))}
                                     </div>
-                                    <p className="text-xs text-gray-500 mt-2 italic">
-                                        💡 Filtra proyectos por temas específicos del vocabulario controlado Agrovoc
-                                    </p>
                                 </div>
                             </motion.div>
                         )}
@@ -282,66 +277,79 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                 </div>
             </div >
 
-            {/* QUICK FILTERS (CHIPS) */}
-            < div className="px-6 py-4 border-b border-gray-100 flex flex-wrap gap-2 bg-white" >
-                <button
-                    onClick={() => setQuickFilter('all')}
-                    className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border ${quickFilter === 'all' ? 'bg-gray-800 text-white border-gray-800' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'}`}
-                >
-                    Todos
-                </button>
-                <button
-                    onClick={() => setQuickFilter('facil')}
-                    className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border flex items-center gap-1.5 ${quickFilter === 'facil' ? 'bg-green-100 text-green-700 border-green-200 ring-1 ring-green-200' : 'bg-white text-gray-600 border-gray-200 hover:bg-green-50'}`}
-                >
-                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                    Postulación Fácil
-                </button>
-                <button
-                    onClick={() => setQuickFilter('cierre')}
-                    className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border flex items-center gap-1.5 ${quickFilter === 'cierre' ? 'bg-red-50 text-red-700 border-red-200 ring-1 ring-red-200' : 'bg-white text-gray-600 border-gray-200 hover:bg-red-50'}`}
-                >
-                    <Clock className="w-3 h-3" />
-                    Cierra esta semana
-                </button>
-                <button
-                    onClick={() => setQuickFilter('mujeres')}
-                    className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all border flex items-center gap-1.5 ${quickFilter === 'mujeres' ? 'bg-purple-50 text-purple-700 border-purple-200 ring-1 ring-purple-200' : 'bg-white text-gray-600 border-gray-200 hover:bg-purple-50'}`}
-                >
-                    <Users className="w-3 h-3" />
-                    Para Mujeres
-                </button>
+            {/* QUICK FILTERS (CHIPS) & VIEW TOGGLE */}
+            < div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-4 bg-white" >
+                <div className="flex flex-wrap gap-2">
+                    <button
+                        onClick={() => setQuickFilter('all')}
+                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border ${quickFilter === 'all' ? 'bg-[var(--iica-navy)] text-white border-[var(--iica-navy)] shadow-sm' : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50'}`}
+                    >
+                        Todos
+                    </button>
+                    <button
+                        onClick={() => setQuickFilter('facil')}
+                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border flex items-center gap-2 ${quickFilter === 'facil' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-white text-gray-500 border-gray-200 hover:border-emerald-200 hover:text-emerald-600'}`}
+                    >
+                        <Zap className="w-3.5 h-3.5" />
+                        Postulación Fácil
+                    </button>
+                    <button
+                        onClick={() => setQuickFilter('cierre')}
+                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border flex items-center gap-2 ${quickFilter === 'cierre' ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-white text-gray-500 border-gray-200 hover:border-rose-200 hover:text-rose-600'}`}
+                    >
+                        <Clock className="w-3.5 h-3.5" />
+                        Cierre Inminente
+                    </button>
+                </div>
+
+                {/* View Mode Switcher (Desktop Only) */}
+                <div className="hidden lg:flex items-center p-1 bg-gray-100 rounded-xl border border-gray-200">
+                    <button
+                        onClick={() => setViewMode('table')}
+                        className={`p-2 rounded-lg transition-all ${viewMode === 'table' ? 'bg-white text-[var(--iica-blue)] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                        title="Vista de Tabla"
+                    >
+                        <FileText className="w-4 h-4" />
+                    </button>
+                    <button
+                        onClick={() => setViewMode('grid')}
+                        className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-white text-[var(--iica-blue)] shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                        title="Vista de Cuadrícula"
+                    >
+                        <Eye className="w-4 h-4" />
+                    </button>
+                </div>
             </div >
 
-            {/* 4. UTILITY TOOLBAR (Favoritos & Compare) */}
-            < div className="flex items-center justify-between p-4 bg-white border-b border-gray-100" >
+            {/* UTILITY TOOLBAR (Favoritos & Info) */}
+            < div className="flex items-center justify-between p-6 bg-white border-b border-gray-100" >
                 <div className="flex items-center gap-4">
                     <button
                         onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${showFavoritesOnly
-                            ? 'bg-red-50 text-red-600 ring-1 ring-red-200 shadow-sm'
-                            : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+                        className={`group flex items-center gap-2.5 px-4 py-2 rounded-2xl text-xs font-bold transition-all border ${showFavoritesOnly
+                            ? 'bg-rose-50 text-rose-600 border-rose-200 shadow-sm'
+                            : 'bg-white text-gray-500 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-100 border-gray-200'
                             }`}
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={showFavoritesOnly ? "currentColor" : "none"} stroke="currentColor" className="w-4 h-4 text-red-500">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={showFavoritesOnly ? "currentColor" : "none"} stroke="currentColor" className={`w-4 h-4 transition-transform group-hover:scale-110 ${showFavoritesOnly ? 'text-rose-500' : 'text-gray-300'}`}>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
-                        Mis Favoritos ({favorites.length})
+                        Favoritos ({favorites.length})
                     </button>
 
                     {compareList.length > 0 && (
                         <button
                             onClick={() => setShowCompareModal(true)}
-                            className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium bg-blue-50 text-blue-700 ring-1 ring-blue-200 shadow-sm animate-in fade-in"
+                            className="flex items-center gap-2.5 px-4 py-2 rounded-2xl text-xs font-bold bg-blue-50 text-blue-700 border border-blue-100 shadow-sm animate-in zoom-in"
                         >
-                            <Calendar className="w-4 h-4" />
+                            <ArrowUpDown className="w-4 h-4" />
                             Comparar ({compareList.length}/3)
                         </button>
                     )}
                 </div>
 
-                <div className="text-xs text-gray-500">
-                    Mostrando <strong>{displayedProjects.length}</strong> de {projects.length}
+                <div className="text-[11px] font-bold text-gray-400 uppercase tracking-widest hidden sm:block">
+                    Resultados: <span className="text-gray-800">{displayedProjects.length}</span>
                 </div>
             </div >
 
@@ -363,6 +371,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                 onClick={() => {
                                     setShowFavoritesOnly(false);
                                     setSelectedAgrovoc('Cualquiera');
+                                    setQuickFilter('all');
                                 }}
                                 className="text-[var(--iica-cyan)] font-bold hover:underline focus:outline-none focus:ring-2 focus:ring-[var(--iica-blue)] rounded px-2"
                             >
@@ -370,46 +379,50 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                             </button>
                         </div>
                     ) : (
-                        <>
-                            {/* DESKTOP TABLE VIEW (Visible only on Large screens) */}
-                            <div className="hidden lg:block overflow-x-auto min-h-[400px]">
-                                <table className="w-full text-left border-collapse">
-                                    <thead>
-                                        <tr className="bg-[#f4f7f9] text-gray-700 text-sm font-bold border-b border-[var(--iica-border)] uppercase tracking-wider sticky top-0 z-10">
-                                            <th className="py-5 px-6 w-12 text-center">
-                                                <span className="sr-only">Comparar</span>
-                                            </th>
-                                            <th className="py-5 px-6 cursor-pointer hover:bg-gray-100 transition-colors group" onClick={() => handleSort('nombre')}>
-                                                <div className="flex items-center gap-2">
-                                                    Proyecto
-                                                    <ArrowUpDown className={`h-4 w-4 text-gray-400 group-hover:text-[var(--iica-blue)] ${sortConfig?.key === 'nombre' ? 'text-[var(--iica-blue)]' : ''}`} />
-                                                </div>
-                                            </th>
-                                            <th className="py-5 px-6 cursor-pointer hover:bg-gray-100 transition-colors group" onClick={() => handleSort('institucion')}>
-                                                <div className="flex items-center gap-2">
-                                                    Institución
-                                                    <ArrowUpDown className={`h-4 w-4 text-gray-400 group-hover:text-[var(--iica-blue)] ${sortConfig?.key === 'institucion' ? 'text-[var(--iica-blue)]' : ''}`} />
-                                                </div>
-                                            </th>
-                                            <th className="py-5 px-6 cursor-pointer hover:bg-gray-100 transition-colors group" onClick={() => handleSort('fecha_cierre')}>
-                                                <div className="flex items-center gap-2">
-                                                    Cierre
-                                                    <ArrowUpDown className={`h-4 w-4 text-gray-400 group-hover:text-[var(--iica-blue)] ${sortConfig?.key === 'fecha_cierre' ? 'text-[var(--iica-blue)]' : ''}`} />
-                                                </div>
-                                            </th>
-                                            <th className="py-5 px-6 text-right">Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-gray-100 bg-white">
-                                        <AnimatePresence>
-                                            {displayedProjects.map((project) => (
-                                                <React.Fragment key={project.id}>
-                                                    <motion.tr
+                        <div className="min-h-[400px]">
+                            {/* Desktop/Tablet View Switcher Logic */}
+                            <AnimatePresence mode="wait">
+                                {viewMode === 'table' ? (
+                                    <motion.div
+                                        key="table-view"
+                                        initial={{ opacity: 0, x: -10 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        exit={{ opacity: 0, x: 10 }}
+                                        transition={{ duration: 0.2 }}
+                                        className="hidden lg:block overflow-x-auto"
+                                    >
+                                        <table className="w-full text-left border-collapse">
+                                            <thead>
+                                                <tr className="bg-[#f4f7f9] text-gray-700 text-sm font-bold border-b border-[var(--iica-border)] uppercase tracking-wider sticky top-0 z-10">
+                                                    <th className="py-5 px-6 w-12 text-center">
+                                                        <span className="sr-only">Comparar</span>
+                                                    </th>
+                                                    <th className="py-5 px-6 cursor-pointer hover:bg-gray-100 transition-colors group" onClick={() => handleSort('nombre')}>
+                                                        <div className="flex items-center gap-2">
+                                                            Proyecto
+                                                            <ArrowUpDown className={`h-4 w-4 text-gray-400 group-hover:text-[var(--iica-blue)] ${sortConfig?.key === 'nombre' ? 'text-[var(--iica-blue)]' : ''}`} />
+                                                        </div>
+                                                    </th>
+                                                    <th className="py-5 px-6 cursor-pointer hover:bg-gray-100 transition-colors group" onClick={() => handleSort('institucion')}>
+                                                        <div className="flex items-center gap-2">
+                                                            Institución
+                                                            <ArrowUpDown className={`h-4 w-4 text-gray-400 group-hover:text-[var(--iica-blue)] ${sortConfig?.key === 'institucion' ? 'text-[var(--iica-blue)]' : ''}`} />
+                                                        </div>
+                                                    </th>
+                                                    <th className="py-5 px-6 cursor-pointer hover:bg-gray-100 transition-colors group" onClick={() => handleSort('fecha_cierre')}>
+                                                        <div className="flex items-center gap-2">
+                                                            Cierre
+                                                            <ArrowUpDown className={`h-4 w-4 text-gray-400 group-hover:text-[var(--iica-blue)] ${sortConfig?.key === 'fecha_cierre' ? 'text-[var(--iica-blue)]' : ''}`} />
+                                                        </div>
+                                                    </th>
+                                                    <th className="py-5 px-6 text-right">Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-gray-100 bg-white">
+                                                {displayedProjects.map((project: Project) => (
+                                                    <tr
+                                                        key={project.id}
                                                         className={`hover:bg-blue-50/60 transition-colors group ${compareList.includes(project.id) ? 'bg-blue-50/40' : ''}`}
-                                                        initial={{ opacity: 0, y: 10 }}
-                                                        animate={{ opacity: 1, y: 0 }}
-                                                        exit={{ opacity: 0, height: 0 }}
-                                                        transition={{ duration: 0.2 }}
                                                     >
                                                         <td className="py-6 px-6 text-center align-middle">
                                                             <div className="flex justify-center">
@@ -464,36 +477,6 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                                             </button>
                                                                         )}
                                                                     </div>
-                                                                    <div className="flex items-center gap-2 mt-2">
-                                                                        {/* Semáforo Documentación */}
-                                                                        <div className="flex items-center gap-1" title={`Estado Bases: ${project.bases_estado || 'Desconocido'}`}>
-                                                                            <div className={`w-3 h-3 rounded-full border border-gray-300 ${project.bases_estado === 'publicada' ? 'bg-green-500' : project.bases_estado === 'borrador' ? 'bg-yellow-400' : 'bg-gray-300'}`} />
-                                                                        </div>
-
-                                                                        {/* Metadata Icons */}
-                                                                        <div className="flex gap-1">
-                                                                            {project.faq_disponible && (
-                                                                                <span title="Preguntas Frecuentes Disponibles" className="text-blue-500 bg-blue-50 p-1 rounded hover:bg-blue-100 cursor-help">
-                                                                                    <HelpCircle className="h-3.5 w-3.5" />
-                                                                                </span>
-                                                                            )}
-                                                                            {project.webinar_fecha && (
-                                                                                <span title={`Webinar: ${new Date(project.webinar_fecha).toLocaleDateString()}`} className="text-purple-500 bg-purple-50 p-1 rounded hover:bg-purple-100 cursor-help">
-                                                                                    <MonitorPlay className="h-3.5 w-3.5" />
-                                                                                </span>
-                                                                            )}
-                                                                            {project.requiere_firma && (
-                                                                                <span title="Requiere firma profesional acreditado" className="text-orange-600 bg-orange-50 p-1 rounded hover:bg-orange-100 cursor-help">
-                                                                                    <PenTool className="h-3.5 w-3.5" />
-                                                                                </span>
-                                                                            )}
-                                                                            {project.permite_adendas && (
-                                                                                <span title="Permite Adendas (Modificaciones)" className="text-teal-600 bg-teal-50 p-1 rounded hover:bg-teal-100 cursor-help text-[10px] font-bold px-1.5 flex items-center">
-                                                                                    ADENDAS
-                                                                                </span>
-                                                                            )}
-                                                                        </div>
-                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -509,14 +492,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                                     />
                                                                 </div>
                                                                 <div className="flex flex-col gap-1">
-                                                                    {/* Redundant text removed per audit */}
-                                                                    <div
-                                                                        title="Dificultad de postulación estimada por IA analizando requisitos y burocracia."
-                                                                        className={`inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full border w-fit cursor-help ${project.id % 2 === 0
-                                                                            ? 'bg-green-50 text-green-700 border-green-200'
-                                                                            : 'bg-yellow-50 text-yellow-700 border-yellow-200'
-                                                                            }`}>
-                                                                        <div className={`w-1.5 h-1.5 rounded-full ${project.id % 2 === 0 ? 'bg-green-500' : 'bg-yellow-500'}`} />
+                                                                    <div className={`inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full border w-fit ${project.id % 2 === 0 ? 'bg-green-50 text-green-700 border-green-200' : 'bg-yellow-50 text-yellow-700 border-yellow-200'}`}>
                                                                         IA: {project.id % 2 === 0 ? 'Fácil' : 'Media'}
                                                                     </div>
                                                                 </div>
@@ -528,25 +504,14 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                         <td className="py-6 px-6 text-right align-middle">
                                                             <div className="flex items-center gap-2 justify-end">
                                                                 <button
-                                                                    onClick={(e) => copyProjectFicha(project, e)}
-                                                                    title="Copiar ficha"
-                                                                    className={`p-2.5 rounded-xl border transition-all ${copiedId === project.id
-                                                                        ? 'bg-green-50 text-green-600 border-green-200 shadow-sm'
-                                                                        : 'bg-white text-gray-400 border-gray-200 hover:bg-gray-50 hover:text-gray-600 hover:border-gray-300'
-                                                                        }`}
+                                                                    onClick={(e: React.MouseEvent) => copyProjectFicha(project, e)}
+                                                                    className={`p-2.5 rounded-xl border transition-all ${copiedId === project.id ? 'bg-green-50 text-green-600 border-green-200' : 'bg-white text-gray-400 border-gray-200 hover:bg-gray-50'}`}
                                                                 >
-                                                                    {copiedId === project.id
-                                                                        ? <CheckCheck className="h-5 w-5" />
-                                                                        : <Copy className="h-5 w-5" />}
+                                                                    {copiedId === project.id ? <CheckCheck className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
                                                                 </button>
-
                                                                 <button
-                                                                    onClick={() => setQuickViewProject(quickViewProject?.id === project.id ? null : project)}
-                                                                    title="Vista rápida"
-                                                                    className={`p-2.5 rounded-xl border transition-all ${quickViewProject?.id === project.id
-                                                                        ? 'bg-blue-50 text-[var(--iica-blue)] border-blue-200 shadow-sm'
-                                                                        : 'bg-white text-gray-400 border-gray-200 hover:bg-gray-50 hover:text-gray-600 hover:border-gray-300'
-                                                                        }`}
+                                                                    onClick={() => setQuickViewProject(project)}
+                                                                    className="p-2.5 rounded-xl border bg-white text-gray-400 border-gray-200 hover:bg-gray-50 hover:text-gray-800 transition-all"
                                                                 >
                                                                     <Eye className="h-5 w-5" />
                                                                 </button>
@@ -554,52 +519,86 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                                     url={project.url_bases}
                                                                     date={project.fecha_cierre}
                                                                     projectName={project.nombre}
-                                                                    onTrack={() => setToastMessage("Redirigiendo a sitio oficial...")}
+                                                                    onTrack={() => setToastMessage("Enlace externo verificado.")}
                                                                 />
                                                             </div>
                                                         </td>
-                                                    </motion.tr>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </motion.div>
+                                ) : (
+                                    <motion.div
+                                        key="grid-view"
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        transition={{ duration: 0.2 }}
+                                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6"
+                                    >
+                                        {displayedProjects.map((project: Project) => {
+                                            const op: Oportunidad = {
+                                                id: String(project.id),
+                                                nombre: project.nombre,
+                                                institucion: project.institucion,
+                                                cierre: new Date(project.fecha_cierre).toLocaleDateString('es-CL'),
+                                                diasRestantes: daysUntilClose(project),
+                                                ambito: (project.ambito as "Internacional" | "Nacional" | "Regional") || "Nacional",
+                                                viabilidad: (project.viabilidadIICA as "Alta" | "Media" | "Baja") || "Media",
+                                                porcentajeViabilidad: project.porcentajeViabilidad,
+                                                rolIICA: project.rolIICA,
+                                                url: project.url_bases,
+                                                adenda: project.permite_adendas
+                                            };
+                                            return (
+                                                <div key={project.id} className="relative">
+                                                    {/* @ts-ignore */}
+                                                    <OportunidadCard op={op} />
+                                                    <div className="absolute top-4 right-4 z-20 flex gap-2">
+                                                        <button
+                                                            onClick={() => toggleFavorite(project.id)}
+                                                            className={`p-2 rounded-full shadow-md backdrop-blur-md transition-all ${favorites.includes(project.id) ? 'bg-rose-500 text-white' : 'bg-white/80 text-gray-400 hover:text-rose-500'}`}
+                                                        >
+                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={favorites.includes(project.id) ? "currentColor" : "none"} stroke="currentColor" className="w-4 h-4" strokeWidth={2.5}>
+                                                                <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
 
-
-                                                </React.Fragment>
-                                            ))}
-                                        </AnimatePresence>
-                                    </tbody>
-                                </table>
+                            {/* Mobile specific view (always cards) - visible only on smallest screens if needed */}
+                            <div className="lg:hidden p-4 space-y-4">
+                                {viewMode === 'table' && (
+                                    <div className="grid grid-cols-1 gap-4">
+                                        {displayedProjects.map((project: Project) => {
+                                            const op: Oportunidad = {
+                                                id: String(project.id),
+                                                nombre: project.nombre,
+                                                institucion: project.institucion,
+                                                cierre: new Date(project.fecha_cierre).toLocaleDateString('es-CL'),
+                                                diasRestantes: daysUntilClose(project),
+                                                ambito: (project.ambito as "Internacional" | "Nacional" | "Regional") || "Nacional",
+                                                viabilidad: (project.viabilidadIICA as "Alta" | "Media" | "Baja") || "Media",
+                                                porcentajeViabilidad: project.porcentajeViabilidad,
+                                                rolIICA: project.rolIICA,
+                                                url: project.url_bases,
+                                                adenda: project.permite_adendas
+                                            };
+                                            {/* @ts-ignore */ }
+                                            return <OportunidadCard key={project.id} op={op} />;
+                                        })}
+                                    </div>
+                                )}
                             </div>
-
-                            {/* MOBILE/TABLET CARD VIEW (Visible on screens smaller than Large) */}
-                            <div className="lg:hidden min-h-[400px] flex flex-col gap-4 px-4 py-4">
-                                <AnimatePresence>
-                                    {displayedProjects.map((project) => {
-                                        const op = {
-                                            id: String(project.id),
-                                            nombre: project.nombre,
-                                            institucion: project.institucion,
-                                            cierre: new Date(project.fecha_cierre).toLocaleDateString('es-CL'),
-                                            diasRestantes: daysUntilClose(project),
-                                            ambito: project.ambito || "Nacional",
-                                            viabilidad: project.viabilidadIICA || "Media",
-                                            url: project.url_bases,
-                                            adenda: project.permite_adendas
-                                        };
-                                        return (
-                                            <motion.div
-                                                key={project.id}
-                                                layout
-                                                initial={{ opacity: 0, y: 20 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0, scale: 0.95 }}
-                                                transition={{ duration: 0.2 }}
-                                            >
-                                                <OportunidadCard op={op as any} />
-                                            </motion.div>
-                                        );
-                                    })}
-                                </AnimatePresence >
-                            </div >
-                        </>
-                    )}
+                        </div>
+                    )
+                }
             </div>
 
 
