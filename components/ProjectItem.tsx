@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
-import { Info, ExternalLink, Calendar, AlertCircle, X, Check, MessageCircle, Share2, ArrowRight, AlertTriangle, User } from "lucide-react";
+import { Info, ExternalLink, Calendar, AlertCircle, X, Check, MessageCircle, Share2, ArrowRight, AlertTriangle, User, History, Search } from "lucide-react";
 import Image from 'next/image';
 import Link from 'next/link';
 import { Project } from "@/lib/data";
@@ -401,7 +401,7 @@ function ProjectSummary({ resumen, project, mobile = false }: { resumen: any; pr
 
 export function ActionButton({ url, date, projectName, onTrack }: { url: string; date: string; projectName: string; onTrack?: () => void }) {
     const { trackEvent } = useAnalytics();
-    const { shouldShow, finalUrl, isFallback, isLoading } = useLinkGuardian(url, projectName);
+    const { shouldShow, finalUrl, archivedUrl, isFallback, isLoading } = useLinkGuardian(url, projectName);
 
     const today = new Date();
     const closingDate = new Date(date);
@@ -432,16 +432,31 @@ export function ActionButton({ url, date, projectName, onTrack }: { url: string;
 
     if (isFallback) {
         return (
-            <a
-                href={finalUrl || url}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={handleClick}
-                aria-label={`Buscar bases para ${projectName}`}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 px-3 py-1.5 rounded transition-colors shadow-sm"
-            >
-                Buscar Bases <AlertTriangle className="h-3.5 w-3.5" />
-            </a>
+            <div className="flex items-center gap-1">
+                <a
+                    href={finalUrl || url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={handleClick}
+                    aria-label={`Buscar bases para ${projectName}`}
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 px-3 py-1.5 rounded transition-colors shadow-sm"
+                    title="Búsqueda Inteligente (PDFs y Bases 2026)"
+                >
+                    Buscar Bases <Search className="h-3.5 w-3.5" />
+                </a>
+
+                {archivedUrl && (
+                    <a
+                        href={archivedUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-1.5 text-gray-400 hover:text-[var(--iica-blue)] hover:bg-blue-50 rounded transition-colors"
+                        title="Ver versión histórica (Wayback Machine)"
+                    >
+                        <History className="h-4 w-4" />
+                    </a>
+                )}
+            </div>
         );
     }
 

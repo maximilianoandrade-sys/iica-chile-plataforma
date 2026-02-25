@@ -20,6 +20,7 @@ export interface LinkStatus {
     url: string;
     status: 'valid' | 'fallback' | 'hidden';
     fallbackUrl?: string;
+    archivedUrl?: string; // Nuevo: Para version histórica
     checked: boolean;
 }
 
@@ -126,15 +127,24 @@ async function checkLinkStatus(url: string): Promise<boolean> {
  * Genera URL de búsqueda de Google como fallback
  */
 function generateGoogleSearchUrl(originalUrl: string, projectName: string): string {
+    const year = new Date().getFullYear();
     try {
         const domain = new URL(originalUrl).hostname;
-        const searchQuery = `site:${domain} ${projectName} bases`;
+        // Búsqueda avanzada orientador a bases y PDFs del año actual
+        const searchQuery = `site:${domain} "${projectName}" (bases OR "términos de referencia") ${year} filetype:pdf`;
         return `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
     } catch (error) {
-        // Si no se puede parsear la URL, buscar solo por nombre
-        const searchQuery = `${projectName} bases convocatoria`;
+        // Fallback si no hay URL base
+        const searchQuery = `"${projectName}" bases convocatoria ${year} Chile`;
         return `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
     }
+}
+
+/**
+ * Genera URL para Wayback Machine (Internet Archive)
+ */
+function generateWaybackUrl(url: string): string {
+    return `https://web.archive.org/web/*/${url}`;
 }
 
 /**
@@ -176,13 +186,15 @@ export async function getLinkStatus(
         return status;
     }
 
-    // Enlace inválido, crear fallback
+    // Enlace inválido, crear fallback inteligente
     if (projectName && projectName.trim() !== '') {
         const fallbackUrl = generateGoogleSearchUrl(url, projectName);
+        const archivedUrl = generateWaybackUrl(url);
         const status: LinkStatus = {
             url,
             status: 'fallback',
             fallbackUrl,
+            archivedUrl,
             checked: true
         };
         cacheLinkStatus(url, status);
@@ -241,6 +253,7 @@ export function useLinkGuardian(url: string, projectName: string, institution?: 
         isLoading,
         shouldShow: linkStatus.status !== 'hidden',
         finalUrl: linkStatus.status === 'fallback' ? linkStatus.fallbackUrl : url,
+        archivedUrl: linkStatus.archivedUrl,
         isFallback: linkStatus.status === 'fallback'
     };
 }
