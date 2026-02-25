@@ -9,6 +9,7 @@ import Newsletter from "@/components/Newsletter";
 import ProgramsSection from "@/components/ProgramsSection";
 import FuentesOficiales from "@/components/FuentesOficiales";
 import ImpactSection from "@/components/ImpactSection";
+import LiveFeedSection from "@/components/LiveFeedSection";
 
 // Dynamic Metadata for SEO
 export async function generateMetadata({
@@ -65,6 +66,20 @@ export default async function DashboardPage({
             <section id="convocatorias" className="scroll-mt-28">
               <Suspense fallback={<SkeletonProjectList />}>
                 <ProjectListContainer searchParams={resolvedSearchParams} />
+              </Suspense>
+            </section>
+
+            {/* Feed en vivo: fondos concursables abiertos ahora */}
+            <section id="fondos-vivos" className="scroll-mt-20">
+              <Suspense fallback={
+                <div className="h-48 rounded-xl border border-gray-200 bg-gray-50 animate-pulse flex items-center justify-center">
+                  <div className="flex items-center gap-2 text-gray-400 text-sm">
+                    <div className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                    Cargando fondos en tiempo real...
+                  </div>
+                </div>
+              }>
+                <LiveFeedSection />
               </Suspense>
             </section>
 

@@ -1,13 +1,13 @@
 [
     {
         "id": 101,
-        "nombre": "FONTAGRO – Convocatoria Regional de Innovación Agropecuaria 2026",
+        "nombre": "FONTAGRO – Convocatoria 2026: Cooperación e Innovación para Sistemas Agroalimentarios ALC",
         "institucion": "FONTAGRO",
         "monto": 245000000,
-        "fecha_cierre": "2026-04-30",
+        "fecha_cierre": "2026-04-20",
         "estado": "Abierto",
         "categoria": "Internacional",
-        "url_bases": "https://www.fontagro.org/new/es/convocatorias",
+        "url_bases": "https://fontagro.org/en/iniciativas/convocatorias/convocatoria-2026",
         "regiones": [
             "Todas"
         ],
@@ -17,22 +17,23 @@
             "Universidad"
         ],
         "resumen": {
-            "cofinanciamiento": "Hasta USD 250.000 (≈$245M CLP)",
+            "cofinanciamiento": "Hasta USD 250.000 sin cofinanciamiento mínimo requerido explícito (se valoriza aporte de socios)",
             "requisitos_clave": [
-                "Consorcio mínimo 2 países ALC",
-                "Institución líder acreditada",
-                "40% cofinanciamiento"
+                "Consorcio mínimo 2 países ALC (Programas Insignia 1-5)",
+                "Institución líder registrada en sistema FONTAGRO",
+                "Envío Word + Excel antes del 20 abril 2026 · 15:00 ET",
+                "Confirmar recepción a fontagro@iica.int"
             ],
             "plazo_ejecucion": "36 meses",
-            "observaciones": "El IICA Chile puede liderar o coliderar consorcios regionales."
+            "observaciones": "IICA es co-administrador de FONTAGRO. El correo de contacto es fontagro@iica.int. Webinar disponible en YouTube (sPBkSd5z9JE)."
         },
         "monto_min": 100000000,
         "monto_max": 245000000,
         "plazo_meses": 36,
-        "requiere_cofinanciamiento": true,
+        "requiere_cofinanciamiento": false,
         "idioma": "es",
         "faq_disponible": true,
-        "webinar_fecha": "2026-03-20T15:00:00",
+        "webinar_fecha": "2025-12-15T15:00:00",
         "permite_adendas": false,
         "bases_estado": "publicada",
         "requiere_firma": true,
@@ -42,29 +43,29 @@
         "ambito": "Internacional",
         "estadoPostulacion": "Abierta",
         "viabilidadIICA": "Alta",
-        "porcentajeViabilidad": 90,
+        "porcentajeViabilidad": 95,
         "responsableIICA": "Carlos Guajardo",
         "region": "América Latina y el Caribe",
         "rolIICA": "Ejecutor",
-        "objetivo": "Co-liderar consorcio regional de innovación agrícola con instituciones de AL",
-        "descripcionIICA": "El IICA Chile actuaría como líder de consorcio, articulando instituciones de investigación de la región. Gracias a nuestra presencia en 34 países, podemos garantizar los requisitos de consorcio multinacional.",
+        "objetivo": "Co-liderar consorcio regional ALC de I+D+i que promueva productividad y menor huella ambiental en sistemas agroalimentarios",
+        "descripcionIICA": "IICA es co-administrador de FONTAGRO junto al BID. El IICA Chile puede liderar o co-liderar consorcios regionales. Contacto directo: fontagro@iica.int. Webinar de presentación disponible en YouTube: https://www.youtube.com/live/sPBkSd5z9JE",
         "requisitos": [
-            "Consorcio de mínimo 2 países ALC",
-            "Institución líder con personería jurídica",
-            "Cofinanciamiento del 40%",
-            "Carta de intención de socios firmada"
+            "Consorcio mínimo 2 países ALC",
+            "Alineación con Programas Insignia FONTAGRO 2025-2030 (1-5)",
+            "Envío final Word + Excel antes del 20/04/2026 · 15:00 ET",
+            "Email de confirmación a fontagro@iica.int"
         ],
         "fortalezas": [
-            "Presencia en 34 países IICA",
-            "Red de investigación establecida",
-            "Experiencia en gestión de fondos regionales",
-            "Mandato institucional alineado"
+            "IICA es co-administrador de FONTAGRO con BID",
+            "Presencia en 34 países garantiza requisito multinacional",
+            "Red de investigación regional consolidada",
+            "Convocatoria activa verificada (cierre 20 abril 2026)"
         ],
         "debilidades": [
-            "Alta competencia regional",
-            "Requiere cofinanciamiento significativo"
+            "Alta competencia regional de instituciones de investigación",
+            "Requiere preparación de propuesta en Word+Excel (8 semanas)"
         ],
-        "notasInternas": "Prioridad alta. Contactar al equipo de investigación de IICA San José para alianzas. Plazo de preparación de propuesta: 8 semanas.",
+        "notasInternas": "✅ VERIFICADO 25/02/2026. URL real: fontagro.org/en/iniciativas/convocatorias/convocatoria-2026. Cierre: 20 abril 2026 15:00 ET. Contacto: fontagro@iica.int. Webinar: youtube.com/live/sPBkSd5z9JE. Prioridad MÁXIMA — el IICA es co-administrador.",
         "ejeIICA": "Innovación para la productividad",
         "complejidad": "Alta"
     },
