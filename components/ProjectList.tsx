@@ -12,6 +12,9 @@ import Image from 'next/image';
 import SearchableSelect from "@/components/SearchableSelect"; // Import the new component
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info, Sparkles, Copy, Eye, CheckCheck, MapPin, Users, Banknote, Clock, ChevronRight, ArrowUpDown, FileText, HelpCircle, MonitorPlay, PenTool, CheckCircle2, XCircle, AlertTriangle } from "lucide-react";
+import { ActionButton, UrgencyBadge } from "@/components/ProjectItem";
+import { OportunidadCard } from "./OportunidadCard";
+import { daysUntilClose } from "@/lib/data";
 
 export default function ProjectList({ projects }: { projects: Project[] }) {
     // State for client-side interactions
@@ -566,143 +569,33 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                             </div>
 
                             {/* MOBILE/TABLET CARD VIEW (Visible on screens smaller than Large) */}
-                            <div className="lg:hidden min-h-[400px] flex flex-col gap-4">
+                            <div className="lg:hidden min-h-[400px] flex flex-col gap-4 px-4 py-4">
                                 <AnimatePresence>
-                                    {displayedProjects.map((project) => (
-                                        <motion.div
-                                            key={project.id}
-                                            layout
-                                            initial={{ opacity: 0, y: 20 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            exit={{ opacity: 0, scale: 0.95 }}
-                                            transition={{ duration: 0.2 }}
-                                            className={`relative bg-white rounded-xl shadow-sm hover:shadow-md border transition-all overflow-hidden ${compareList.includes(project.id) ? 'border-[var(--iica-blue)] ring-1 ring-blue-100' : 'border-gray-200'}`}
-                                        >
-                                            {/* Borde lateral decorativo */}
-                                            <div className={`absolute top-0 bottom-0 left-0 w-1.5 ${isClosingSoon(project.fecha_cierre) ? 'bg-red-500' : 'bg-[var(--iica-blue)]'}`} />
-
-                                            <div className="p-5 pl-7">
-                                                {/* Header Tarjeta */}
-                                                <div className="flex justify-between items-start mb-4">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="relative w-12 h-12 flex-shrink-0 bg-white rounded-lg border border-gray-100 shadow-sm p-1.5">
-                                                            <Image
-                                                                src={getLogoUrl(project.institucion)}
-                                                                alt={project.institucion}
-                                                                fill
-                                                                className="object-contain"
-                                                                sizes="48px"
-                                                            />
-                                                        </div>
-                                                        <div>
-                                                            <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1 flex items-center gap-2">
-                                                                {project.institucion}
-                                                                <div
-                                                                    title="Dificultad de postulación estimada por IA analizando requisitos y burocracia."
-                                                                    className={`inline-flex items-center gap-1 text-[10px] font-medium px-1.5 py-0.5 rounded-full border cursor-help ${project.id % 2 === 0
-                                                                        ? 'bg-green-50 text-green-700 border-green-200'
-                                                                        : 'bg-yellow-50 text-yellow-700 border-yellow-200'
-                                                                        }`}>
-                                                                    <div className={`w-1.5 h-1.5 rounded-full ${project.id % 2 === 0 ? 'bg-green-500' : 'bg-yellow-500'}`} />
-                                                                    IA: {project.id % 2 === 0 ? 'Fácil' : 'Media'}
-                                                                </div>
-                                                            </h4>
-                                                            <div className="flex flex-wrap gap-2">
-                                                                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 text-slate-600 border border-slate-200">
-                                                                    {project.categoria}
-                                                                </span>
-                                                                {isClosingSoon(project.fecha_cierre) && (
-                                                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-50 text-red-600 border border-red-100 animate-pulse">
-                                                                        <Clock className="h-3 w-3" /> Cierra pronto
-                                                                    </span>
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                        {/* Mobile Metadata Row */}
-                                                        <div className="mt-2 flex items-center gap-3">
-                                                            <div className="flex items-center gap-1.5 bg-gray-50 px-2 py-1 rounded border border-gray-100" title="Estado Documentación">
-                                                                <div className={`w-2.5 h-2.5 rounded-full ${project.bases_estado === 'publicada' ? 'bg-green-500' : project.bases_estado === 'borrador' ? 'bg-yellow-400' : 'bg-gray-300'}`} />
-                                                                <span className="text-[10px] text-gray-500 font-medium">Doc</span>
-                                                            </div>
-                                                            {project.faq_disponible && <HelpCircle className="h-3.5 w-3.5 text-blue-500" />}
-                                                            {project.webinar_fecha && <MonitorPlay className="h-3.5 w-3.5 text-purple-500" />}
-                                                            {project.requiere_firma && <PenTool className="h-3.5 w-3.5 text-orange-500" />}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <button
-                                                    onClick={() => toggleFavorite(project.id)}
-                                                    className="p-2 -mr-2 -mt-2 text-gray-400 hover:text-red-500 transition-colors focus:outline-none"
-                                                >
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        viewBox="0 0 24 24"
-                                                        fill={favorites.includes(project.id) ? "#ef4444" : "none"}
-                                                        stroke="currentColor"
-                                                        className={`w-6 h-6 ${favorites.includes(project.id) ? 'text-red-500' : ''}`}
-                                                        strokeWidth={2}
-                                                    >
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-
-                                            {/* Contenido Principal */}
-                                            <div className="mb-4">
-                                                <h3 className="font-bold text-lg text-[var(--iica-navy)] leading-snug mb-2">
-                                                    {project.nombre}
-                                                </h3>
-                                                {project.resumen && (
-                                                    <button
-                                                        onClick={() => setQuickViewProject(project)}
-                                                        className="text-sm text-[var(--iica-blue)] font-medium flex items-center gap-1 hover:underline focus:outline-none"
-                                                    >
-                                                        <Info className="h-4 w-4" />
-                                                        Más detalles e información
-                                                    </button>
-                                                )}
-                                            </div>
-
-                                            {/* Resumen Expandible */}
-
-
-                                            {/* Footer / Acciones */}
-                                            {/* Footer / Acciones Mobile - Full Width Grid */}
-                                            <div className="mt-5 grid grid-cols-2 gap-3 pt-4 border-t border-gray-100">
-                                                <button
-                                                    onClick={() => toggleCompare(project.id)}
-                                                    className={`flex items-center justify-center gap-2 py-3 px-2 rounded-xl text-xs font-bold border transition-all ${compareList.includes(project.id)
-                                                        ? 'bg-blue-50 text-[var(--iica-blue)] border-blue-200 shadow-sm'
-                                                        : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50'
-                                                        }`}
-                                                >
-                                                    <div className={`w-3 h-3 border-2 rounded-sm ${compareList.includes(project.id) ? 'bg-[var(--iica-blue)] border-[var(--iica-blue)]' : 'border-gray-400'}`} />
-                                                    {compareList.includes(project.id) ? 'Seleccionado' : 'Comparar'}
-                                                </button>
-
-                                                <button
-                                                    onClick={(e) => copyProjectFicha(project, e)}
-                                                    className={`flex items-center justify-center gap-2 py-3 px-2 rounded-xl text-xs font-bold border transition-all ${copiedId === project.id
-                                                        ? 'bg-green-50 text-green-700 border-green-200'
-                                                        : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50'
-                                                        }`}
-                                                >
-                                                    {copiedId === project.id ? <CheckCheck className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                                                    {copiedId === project.id ? 'Copiado' : 'Copiar Ficha'}
-                                                </button>
-
-                                                <div className="col-span-2">
-                                                    <ActionButton
-                                                        url={project.url_bases}
-                                                        date={project.fecha_cierre}
-                                                        projectName={project.nombre}
-                                                        onTrack={() => setToastMessage("Redirigiendo a sitio oficial...")}
-                                                    />
-                                                </div>
-                                            </div>
-                                        </motion.div>
-                                    ))
-                                    }
+                                    {displayedProjects.map((project) => {
+                                        const op = {
+                                            id: String(project.id),
+                                            nombre: project.nombre,
+                                            institucion: project.institucion,
+                                            cierre: new Date(project.fecha_cierre).toLocaleDateString('es-CL'),
+                                            diasRestantes: daysUntilClose(project),
+                                            ambito: project.ambito || "Nacional",
+                                            viabilidad: project.viabilidadIICA || "Media",
+                                            url: project.url_bases,
+                                            adenda: project.permite_adendas
+                                        };
+                                        return (
+                                            <motion.div
+                                                key={project.id}
+                                                layout
+                                                initial={{ opacity: 0, y: 20 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, scale: 0.95 }}
+                                                transition={{ duration: 0.2 }}
+                                            >
+                                                <OportunidadCard op={op as any} />
+                                            </motion.div>
+                                        );
+                                    })}
                                 </AnimatePresence >
                             </div >
                         </>
@@ -1061,87 +954,5 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
     );
 }
 
-// Helper Components
 
-function ActionButton({ url, date, projectName, onTrack }: { url: string, date: string, projectName: string, onTrack?: () => void }) {
-    const today = new Date();
-    const closingDate = new Date(date);
-    // Reset hours to compare only dates properly if needed, but timestamp diff is safer
-    const isClosed = closingDate.getTime() < today.setHours(0, 0, 0, 0);
-
-    const handleClick = () => {
-        trackEvent({
-            action: 'click_outbound_link',
-            category: 'Outbound',
-            label: `Bases: ${projectName}`
-        });
-        if (onTrack) onTrack();
-    };
-
-    if (isClosed) {
-        return (
-            <button disabled className="inline-flex items-center gap-1.5 text-sm font-bold text-gray-400 bg-gray-100 px-3 py-1.5 rounded cursor-not-allowed">
-                Cerrado <X className="h-4 w-4" aria-hidden="true" />
-            </button>
-        );
-    }
-
-    return (
-        <a
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={handleClick}
-            aria-label={`Ver bases oficiales para ${projectName} (se abre en nueva pestaña)`}
-            className="inline-flex items-center gap-1.5 text-sm font-bold text-white bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] px-4 py-2 rounded transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--iica-blue)] group"
-        >
-            Ver Bases <ExternalLink className="h-4 w-4 group-hover:scale-110 transition-transform" aria-hidden="true" />
-        </a>
-    );
-}
-
-function UrgencyBadge({ date, mobile = false }: { date: string, mobile?: boolean }) {
-    const targetDate = new Date(date);
-    const today = new Date();
-    // Normalize today to start of day
-    today.setHours(0, 0, 0, 0);
-
-    // Check if expired (target date is BEFORE today)
-    const isExpired = targetDate.getTime() < today.getTime();
-
-    // Calculate difference
-    const diffTime = targetDate.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    const isUrgent = diffDays <= 7 && diffDays >= 0;
-
-    if (isExpired) {
-        return (
-            <div className="flex flex-col items-start">
-                <span className="text-gray-400 text-sm flex items-center gap-1"><AlertCircle className="h-4 w-4" /> Finalizado</span>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-red-500 bg-red-50 px-1.5 py-0.5 rounded border border-red-100 border-l-2 border-l-red-500">CERRADO</span>
-            </div>
-        );
-    }
-
-    return (
-        <div className="flex flex-col items-start gap-1">
-            <div className={`flex items-center gap-1.5 ${isUrgent ? 'text-red-700 font-bold' : 'text-gray-600'}`}>
-                {!mobile && <Calendar className={`h-4 w-4 ${isUrgent ? 'text-red-600' : 'text-gray-400'}`} />}
-                <span className="text-sm">
-                    {new Date(date).toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric' })}
-                </span>
-            </div>
-
-            {isUrgent ? (
-                <span className="text-[10px] font-bold uppercase tracking-wider text-white bg-red-600 px-2 py-0.5 rounded shadow-sm animate-pulse">
-                    ¡Cierra en {diffDays} días!
-                </span>
-            ) : (
-                <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-100 px-2 py-0.5 rounded border border-blue-200">
-                    Quedan {diffDays} días
-                </span>
-            )}
-        </div>
-    );
-}
+// Helper components are now imported from @/components/ProjectItem

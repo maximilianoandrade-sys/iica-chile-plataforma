@@ -388,7 +388,7 @@ function ProjectSummary({ resumen, project, mobile = false }: { resumen: any; pr
     );
 }
 
-function ActionButton({ url, date, projectName, onTrack }: { url: string; date: string; projectName: string; onTrack?: () => void }) {
+export function ActionButton({ url, date, projectName, onTrack }: { url: string; date: string; projectName: string; onTrack?: () => void }) {
     const { trackEvent } = useAnalytics();
     const { shouldShow, finalUrl, isFallback } = useLinkGuardian(url, projectName);
 
@@ -425,7 +425,7 @@ function ActionButton({ url, date, projectName, onTrack }: { url: string; date: 
     );
 }
 
-function UrgencyBadge({ date, mobile = false }: { date: string; mobile?: boolean }) {
+export function UrgencyBadge({ date, mobile = false }: { date: string; mobile?: boolean }) {
     const targetDate = new Date(date);
     const today = new Date();
     today.setHours(0, 0, 0, 0);

@@ -4,28 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { TrendingUp, Globe, Users, Award, Leaf, DollarSign, Calendar } from 'lucide-react';
 
-// ──────────────────────────────────────────────────────
-// Animated Counter Hook
-// ──────────────────────────────────────────────────────
-function useCounter(end: number, duration = 1800, start = 0) {
-    const [count, setCount] = useState(start);
-    const [isActive, setIsActive] = useState(false);
-
-    useEffect(() => {
-        if (!isActive) return;
-        let startTime: number | null = null;
-        const step = (timestamp: number) => {
-            if (!startTime) startTime = timestamp;
-            const progress = Math.min((timestamp - startTime) / duration, 1);
-            const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
-            setCount(Math.floor(eased * (end - start) + start));
-            if (progress < 1) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-    }, [isActive, end, start, duration]);
-
-    return { count, activate: () => setIsActive(true) };
-}
+import { AnimatedCounter } from './AnimatedCounter';
 
 // ──────────────────────────────────────────────────────
 // Individual Metric Card
@@ -51,11 +30,6 @@ function MetricCard({
 }) {
     const ref = useRef<HTMLDivElement>(null);
     const inView = useInView(ref, { once: true, margin: '-60px' });
-    const { count, activate } = useCounter(value, 1600);
-
-    useEffect(() => {
-        if (inView) activate();
-    }, [inView]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <motion.div
@@ -72,12 +46,8 @@ function MetricCard({
                 <Icon className={`h-5 w-5 ${color.replace('bg-', 'text-')}`} />
             </div>
 
-            <div className="flex items-end gap-1 mb-1">
-                {prefix && <span className="text-2xl font-black text-gray-700">{prefix}</span>}
-                <span className="text-4xl font-black text-[var(--iica-navy)] tabular-nums leading-none">
-                    {count.toLocaleString('es-CL')}
-                </span>
-                {suffix && <span className="text-xl font-bold text-gray-500 mb-1">{suffix}</span>}
+            <div className="flex items-end gap-1 mb-1 text-4xl font-black text-[var(--iica-navy)] tabular-nums leading-none">
+                <AnimatedCounter end={value} prefix={prefix} suffix={suffix} duration={1600} />
             </div>
 
             <div className="font-bold text-gray-800 mb-1 text-sm">{label}</div>
