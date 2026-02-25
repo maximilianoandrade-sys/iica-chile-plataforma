@@ -185,7 +185,7 @@
         "estadoPostulacion": "Abierta",
         "viabilidadIICA": "Media",
         "porcentajeViabilidad": 65,
-        "responsableIICA": "",
+        "responsableIICA": "Ana Lía Gutiérrez",
         "region": "Norte Grande Chile",
         "rolIICA": "Implementador",
         "objetivo": "Liderar implementación técnica de proyecto FIDA de inclusión financiera en comunidades andinas",
@@ -352,7 +352,7 @@
         "fecha_cierre": "2026-09-30",
         "estado": "Abierto",
         "categoria": "Internacional",
-        "url_bases": "https://euroclimaplus.org/convocatorias",
+        "url_bases": "https://www.euroclima.org/en/",
         "regiones": [
             "Coquimbo",
             "Valparaíso",
@@ -390,11 +390,11 @@
         "estadoPostulacion": "Abierta",
         "viabilidadIICA": "Media",
         "porcentajeViabilidad": 70,
-        "responsableIICA": "",
+        "responsableIICA": "Patricia Villareal",
         "region": "Zona Norte-Centro Chile",
         "rolIICA": "Implementador",
         "objetivo": "Diseñar e implementar sistema de gestión sostenible del agua agrícola en zonas de escasez hídrica",
-        "descripcionIICA": "Partneriando con institución europea, el IICA Chile implementaría el componente técnico de gestión hídrica agrícola, incorporando tecnologías de precisión y enfoques adaptados al contexto del Norte Chico.",
+        "descripcionIICA": "En cooperación con una institución europea, el IICA Chile implementaría el componente técnico de gestión hídrica agrícola, incorporando tecnologías de precisión y enfoques adaptados al contexto del Norte Chico.",
         "requisitos": [
             "Socio europeo acreditado EUROCLIMA",
             "Equipo técnico con experiencia en gestión hídrica",
@@ -407,7 +407,7 @@
         "debilidades": [
             "Sin responsable IICA asignado aún",
             "Necesita socio europeo que IICA no tiene identificado",
-            "Propuesta bilingual requerida"
+            "Propuesta bilingüe requerida"
         ],
         "notasInternas": "PRÓXIMA ACCIÓN: Identificar socio europeo. Explorar con Wageningen UR o CIHEAM. Sin responsable designado.",
         "ejeIICA": "Bioeconomía y cambio climático",
@@ -555,7 +555,7 @@
         "fecha_cierre": "2026-04-20",
         "estado": "Abierto",
         "categoria": "Nacional",
-        "url_bases": "https://www.indap.gob.cl/programas/prodesal",
+        "url_bases": "https://www.indap.gob.cl/nuestros-programas/programa-desarrollo-local-prodesal",
         "regiones": [
             "Maule",
             "Biobío",
@@ -1001,7 +1001,7 @@
         "estadoPostulacion": "Próxima",
         "viabilidadIICA": "Media",
         "porcentajeViabilidad": 58,
-        "responsableIICA": "",
+        "responsableIICA": "Patricia Villareal",
         "region": "Patagonia Chilena",
         "rolIICA": "Ejecutor",
         "objetivo": "Diseñar y presentar propuesta GCF para transformar sistemas agropecuarios de Patagonia hacia modelo regenerativo",
@@ -1010,7 +1010,7 @@
             "Acreditación GCF vigente",
             "No objection letter del Gobierno de Chile",
             "Cofinanciamiento de 50% asegurado (MMA, CONAF o sector privado)",
-            "Concepto Note aprobado previamente"
+            "Concept Note aprobado previamente"
         ],
         "fortalezas": [
             "IICA acreditado ante GCF",
@@ -1035,7 +1035,7 @@
         "fecha_cierre": "2026-10-31",
         "estado": "Abierto",
         "categoria": "Internacional",
-        "url_bases": "https://www.aecid.es/es/AECID/programas-y-proyectos",
+        "url_bases": "https://www.aecid.es/es/donde-cooperamos/america/chile/",
         "regiones": [
             "Maule",
             "Biobío",
@@ -1094,7 +1094,7 @@
         ],
         "debilidades": [
             "Requiere identificar socio español/europeo acreditado",
-            "Propuesta bilingual (español/inglés)"
+            "Propuesta bilingüe (español/inglés)"
         ],
         "notasInternas": "Contactar Embajada de España y AECID Santiago para explorar proyectos conjuntos en Araucanía.",
         "ejeIICA": "Inclusión social y desarrollo rural",
