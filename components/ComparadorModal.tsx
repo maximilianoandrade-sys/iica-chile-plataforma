@@ -121,10 +121,10 @@ export function CompareButton({ project }: { project: Project }) {
             title={isFull ? 'Máximo 3 para comparar' : selected_ ? 'Quitar del comparador' : 'Agregar al comparador'}
             aria-label={selected_ ? 'Quitar del comparador' : 'Agregar al comparador'}
             className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border transition-all ${selected_
-                    ? 'bg-[var(--iica-blue)] text-white border-[var(--iica-blue)] shadow-sm'
-                    : isFull
-                        ? 'bg-gray-50 text-gray-300 border-gray-200 cursor-not-allowed'
-                        : 'bg-white text-gray-600 border-gray-200 hover:border-[var(--iica-blue)] hover:text-[var(--iica-blue)]'
+                ? 'bg-[var(--iica-blue)] text-white border-[var(--iica-blue)] shadow-sm'
+                : isFull
+                    ? 'bg-gray-50 text-gray-300 border-gray-200 cursor-not-allowed'
+                    : 'bg-white text-gray-600 border-gray-200 hover:border-[var(--iica-blue)] hover:text-[var(--iica-blue)]'
                 }`}
         >
             <Scale className="h-3.5 w-3.5" />
@@ -176,7 +176,7 @@ function getVal(project: Project, key: string): unknown {
         if (project.regiones.includes('Todas')) return 'Todo Chile';
         return project.regiones.slice(0, 3).join(', ') + (project.regiones.length > 3 ? '...' : '');
     }
-    return (project as Record<string, unknown>)[key] ?? '—';
+    return (project as unknown as Record<string, unknown>)[key] ?? '—';
 }
 
 function ComparadorModal() {
