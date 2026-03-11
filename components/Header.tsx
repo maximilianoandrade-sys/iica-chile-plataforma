@@ -52,16 +52,6 @@ export function Header() {
                 </nav>
 
                 <div className="flex items-center gap-2">
-                    {/* Botón Agregar Oportunidad */}
-                    <Link
-                        href="/admin"
-                        className="hidden lg:flex items-center gap-1.5 px-3 py-2 bg-[var(--iica-navy)] hover:bg-blue-900 text-white font-bold rounded-xl text-xs transition-all shadow-sm"
-                        title="Agregar nueva oportunidad"
-                    >
-                        <Plus className="h-3.5 w-3.5" />
-                        Agregar
-                    </Link>
-
                     {/* CTA con badge de urgentes */}
                     <Link
                         href="/#convocatorias"
@@ -110,7 +100,6 @@ export function Header() {
                                 { href: '/consultores', label: '👤 Directorio de Consultores' },
                                 { href: '/#impacto', label: '📈 Impacto IICA' },
                                 { href: '/about', label: '🏦 Sobre el IICA' },
-                                { href: '/admin', label: '➕ Agregar Oportunidad' },
                                 { href: '/#contacto', label: '📞 Contacto' },
                             ].map((item) => (
                                 <Link

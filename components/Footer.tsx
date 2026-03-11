@@ -45,7 +45,7 @@ export function Footer() {
                             <li><Link href="/#fuentes" className="hover:text-white transition-colors">Fuentes Internacionales</Link></li>
                             <li><Link href="/maletin" className="hover:text-white transition-colors">Mi Maletín de Proyectos</Link></li>
                             <li><Link href="/consultores" className="hover:text-white transition-colors">Directorio de Consultores</Link></li>
-                            <li><Link href="/admin" className="hover:text-white transition-colors">➕ Agregar Oportunidad</Link></li>
+
                         </ul>
                     </div>
 
