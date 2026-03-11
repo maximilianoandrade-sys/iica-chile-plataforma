@@ -2090,5 +2090,283 @@
         "notasInternas":  "NUEVO REAL 11/03/2026. Fuente verificada: sag.gob.cl — Concursos SIRSD-S Temporada 2026 abiertos con calendarios provinciales. Programa emblemático SAG de sustentabilidad. Ana Lía debe mapear fechas por región prioritaria (Maule, Biobío, La Araucanía). Articular con INIA como socio técnico.",
         "ejeIICA":  "Bioeconomía y cambio climático",
         "complejidad":  "Fácil"
+    },
+    {
+        "id":  135,
+        "nombre":  "Horizonte Europa – Clúster 6: Zonas Rurales Sostenibles e Innovación Agroalimentaria 2026",
+        "institucion":  "Comisión Europea / Horizonte Europa",
+        "monto":  2000000000,
+        "fecha_cierre":  "2026-04-16",
+        "estado":  "Abierto",
+        "categoria":  "Internacional",
+        "url_bases":  "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/search;callCode=null;freeTextSearchKeyword=CL6-2026;matchWholeText=true;typeCodes=1,0;statusCodes=31094501;programmePeriod=2021-2027;programCcm2Id=43108390;programDivisionCode=null;focusAreaCode=null;destination=null;mission=null;geographicalZonesCode=null;programmeDivisionProspect=null;startDateLte=null;startDateGte=null;crossCuttingPriorityCode=null;cpvCode=null;performanceOfDelivery=null;sortQuery=sortStatus;orderBy=asc;onlyPrograms=false;topicListKey=callTopicSearchTableState",
+        "regiones":  [
+                         "Todas"
+                     ],
+        "beneficiarios":  [
+                              "Universidad",
+                              "Centro de investigación",
+                              "Institución pública",
+                              "Empresa"
+                          ],
+        "resumen":  {
+                        "cofinanciamiento":  "Hasta EUR 2M-5M por proyecto – financiamiento hasta 100% para organismos internacionales y ONGs",
+                        "requisitos_clave":  [
+                                                 "Consorcio mínimo 3 socios de 3 países distintos (1 Estado UE + países asociados)",
+                                                 "Chile es elegible como país asociado a Horizonte Europa",
+                                                 "Convocatoria HORIZON-CL6-2026-02-COMMUNITIES-01 y otras",
+                                                 "Cierre 14-16 abril 2026 según convocatoria específica",
+                                                 "Postulación en Funding \u0026 Tenders Portal EU"
+                                             ],
+                        "plazo_ejecucion":  "36-60 meses",
+                        "observaciones":  "REAL y VERIFICADO. Múltiples convocatorias del Clúster 6 de Horizonte Europa abiertas desde enero 2026. Chile es elegible. El IICA puede actuar como socio internacional de investigación en consorcios liderados por universidades europeas. Temas: agricultura sostenible, zonas rurales, cambio climático."
+                    },
+        "monto_min":  500000000,
+        "monto_max":  2000000000,
+        "plazo_meses":  48,
+        "requiere_cofinanciamiento":  false,
+        "idioma":  "en",
+        "faq_disponible":  true,
+        "webinar_fecha":  "2026-01-22T10:00:00",
+        "permite_adendas":  true,
+        "bases_estado":  "publicada",
+        "requiere_firma":  true,
+        "tipos_solicitante":  [
+                                  "Organizacion"
+                              ],
+        "ambito":  "Internacional",
+        "estadoPostulacion":  "Abierta",
+        "viabilidadIICA":  "Media",
+        "porcentajeViabilidad":  62,
+        "responsableIICA":  "Carlos Guajardo",
+        "region":  "Europa / América Latina",
+        "rolIICA":  "Implementador",
+        "objetivo":  "Posicionar al IICA como socio internacional en consorcio Horizonte Europa Clúster 6 (agricultura, zonas rurales y cambio climático)",
+        "descripcionIICA":  "Horizonte Europa Clúster 6 tiene múltiples convocatorias abiertas hasta abril 2026 sobre zonas rurales, adaptación climática en agricultura y bioeconomía. Chile es elegible. El IICA puede ser socio de consorcio liderado por universidad europea (CSIC España, WUR Holanda, etc.), aportando datos, campo experimental y conocimiento latinoamericano. La convocatoria HORIZON-CL6-2026-02-COMMUNITIES-01 es la más relevante.",
+        "requisitos":  [
+                           "Alianza con universidad europea como líder del consorcio",
+                           "Propuesta en inglés",
+                           "Registro en Funding \u0026 Tenders Portal EU (PADOR)"
+                       ],
+        "fortalezas":  [
+                           "Chile es elegible (verificado) — mismo estatus que Horizonte 2020",
+                           "Montos muy altos (EUR 2M-5M)",
+                           "IICA aporta red latinoamericana única — valor diferencial",
+                           "Múltiples convocatorias activas simultáneamente"
+                       ],
+        "debilidades":  [
+                            "Propuesta en inglés",
+                            "Requiere consorcio europeo — debe iniciarse contacto urgente",
+                            "Competencia muy alta: miles de solicitudes",
+                            "Plazo cierre 16 abril — muy ajustado sin consorcio previo"
+                        ],
+        "notasInternas":  "NUEVO REAL 11/03/2026. Múltiples convocatorias CL6-2026 verificadas: COMMUNITIES-01, CLIMATE-01, FARM2FORK-01, FARM2FORK-03. Cierre: 14-16 abril 2026. Postulación completa en portal EU. Requiere contactar red RESEL o CSIC España urgente. Carlos Guajardo gestionar.",
+        "ejeIICA":  "Innovación para la productividad",
+        "complejidad":  "Alta"
+    },
+    {
+        "id":  136,
+        "nombre":  "FIA – AgroCoopInnova 2026: Cooperativas Agroalimentarias Innovadoras",
+        "institucion":  "FIA",
+        "monto":  80000000,
+        "fecha_cierre":  "2026-03-31",
+        "estado":  "Abierto",
+        "categoria":  "Nacional",
+        "url_bases":  "https://convocatoria.fia.cl",
+        "regiones":  [
+                         "Todas"
+                     ],
+        "beneficiarios":  [
+                              "Cooperativa agroalimentaria",
+                              "Organización de productores"
+                          ],
+        "resumen":  {
+                        "cofinanciamiento":  "FIA financia hasta 80-90% del costo total del proyecto",
+                        "requisitos_clave":  [
+                                                 "Cooperativa agroalimentaria legalmente constituida",
+                                                 "Proyecto de innovación en proceso o producto",
+                                                 "Postulación en plataforma FIA: convocatoria.fia.cl",
+                                                 "Cierre 31 marzo 2026 a las 15:00 hrs"
+                                             ],
+                        "plazo_ejecucion":  "24-36 meses",
+                        "observaciones":  "REAL y VERIFICADO. AgroCoopInnova 2026 verificado en fia.cl y reporteagricola.cl. Cierre 31 marzo 2026. Portal de postulación: convocatoria.fia.cl. Selecciona hasta 20 cooperativas. El IICA puede ser socio técnico, asesor de innovación y acompañamiento en proceso."
+                    },
+        "monto_min":  40000000,
+        "monto_max":  80000000,
+        "plazo_meses":  36,
+        "requiere_cofinanciamiento":  true,
+        "idioma":  "es",
+        "faq_disponible":  true,
+        "webinar_fecha":  null,
+        "permite_adendas":  false,
+        "bases_estado":  "publicada",
+        "requiere_firma":  true,
+        "tipos_solicitante":  [
+                                  "Organizacion"
+                              ],
+        "ambito":  "Nacional",
+        "estadoPostulacion":  "Abierta",
+        "viabilidadIICA":  "Media",
+        "porcentajeViabilidad":  65,
+        "responsableIICA":  "Ana Lía Gutiérrez",
+        "region":  "Nacional",
+        "rolIICA":  "Asesor",
+        "objetivo":  "Articular cooperativas agroalimentarias socias para postular a AgroCoopInnova con IICA como asesor técnico de innovación",
+        "descripcionIICA":  "AgroCoopInnova 2026 es una convocatoria REAL verificada de FIA para innovación en cooperativas agroalimentarias. IICA puede actuar como socio técnico o asesor en innovación, aportando conocimiento técnico en buenas prácticas, trazabilidad, mercados y gestión cooperativa. Cierre 31 marzo — URGENTE.",
+        "requisitos":  [
+                           "Alianza con cooperativa agroalimentaria chilena",
+                           "Propuesta de innovación en proceso o producto",
+                           "Registro en convocatoria.fia.cl"
+                       ],
+        "fortalezas":  [
+                           "REAL y VERIFICADO — convocatoria activa hasta 31 marzo",
+                           "Portal directo verificado: convocatoria.fia.cl",
+                           "IICA tiene expertise en cooperativas y gestión asociativa",
+                           "Selecciona hasta 20 cooperativas — tasa de éxito relativa alta"
+                       ],
+        "debilidades":  [
+                            "Cierra 31 MARZO — menos de 20 días",
+                            "IICA es asesor, no ejecutor directo",
+                            "Montos pequeños vs esfuerzo de coordinación"
+                        ],
+        "notasInternas":  "URGENTE 11/03/2026. AgroCoopInnova 2026 verificado en fia.cl. Cierre 31 MARZO. Ana Lía debe contactar cooperativas hoy (ej: Coopeumo, Concha y Toro Cooperativa). Portal: convocatoria.fia.cl. Soporte técnico IICA puede ser diferenciador.",
+        "ejeIICA":  "Inclusión social y desarrollo rural",
+        "complejidad":  "Fácil"
+    },
+    {
+        "id":  137,
+        "nombre":  "fondos.gob.cl – Portal Único Fondos Concursables: Agricultura y Desarrollo Rural 2026",
+        "institucion":  "Múltiples instituciones del Estado de Chile",
+        "monto":  500000000,
+        "fecha_cierre":  "2026-12-31",
+        "estado":  "Abierto",
+        "categoria":  "Nacional",
+        "url_bases":  "https://fondos.gob.cl/buscador/?categoria=agricultura-y-desarrollo-rural\u0026estado=abierto",
+        "regiones":  [
+                         "Todas"
+                     ],
+        "beneficiarios":  [
+                              "Institución pública",
+                              "Agricultor",
+                              "Organización",
+                              "Empresa"
+                          ],
+        "resumen":  {
+                        "cofinanciamiento":  "Variable según fondo — desde 50% a 100%",
+                        "requisitos_clave":  [
+                                                 "Ver fondo específico en portal",
+                                                 "Portal agrega 11+ fondos en categoría Agricultura",
+                                                 "Filtrar por estado \u0027Abierto\u0027 para ver vigentes"
+                                             ],
+                        "plazo_ejecucion":  "Variable",
+                        "observaciones":  "fondos.gob.cl es el portal oficial del gobierno que agrega todos los fondos concursables del Estado de Chile. La categoría \u0027Agricultura y desarrollo rural\u0027 lista 11 fondos activos. El IICA debe monitorear este portal permanentemente como fuente de oportunidades nacionales."
+                    },
+        "monto_min":  10000000,
+        "monto_max":  500000000,
+        "plazo_meses":  24,
+        "requiere_cofinanciamiento":  false,
+        "idioma":  "es",
+        "faq_disponible":  true,
+        "webinar_fecha":  null,
+        "permite_adendas":  false,
+        "bases_estado":  "publicada",
+        "requiere_firma":  false,
+        "tipos_solicitante":  [
+                                  "Natural",
+                                  "Organizacion"
+                              ],
+        "ambito":  "Nacional",
+        "estadoPostulacion":  "Abierta",
+        "viabilidadIICA":  "Media",
+        "porcentajeViabilidad":  55,
+        "responsableIICA":  "Ana Lía Gutiérrez",
+        "region":  "Nacional",
+        "rolIICA":  "Asesor",
+        "objetivo":  "Usar el portal único de fondos del gobierno como herramienta de vigilancia de oportunidades concursables nacionales",
+        "descripcionIICA":  "El Portal Único de Fondos Concursables del Gobierno de Chile (fondos.gob.cl) agrega todos los fondos estatales. La categoría \u0027Agricultura y desarrollo rural\u0027 lista 11 fondos activos. Este registro funciona como fuente de vigilancia permanente. El IICA debe revisar este portal semanalmente para detectar oportunidades emergentes y apoyar a actores del agro a postular.",
+        "requisitos":  [
+                           "Revisar fondo específico — varía por convocatoria"
+                       ],
+        "fortalezas":  [
+                           "Portal oficial con todos los fondos estatales en un lugar",
+                           "11 fondos activos en categoría agricultura",
+                           "Fuente de vigilancia permanente para nuevas convocatorias"
+                       ],
+        "debilidades":  [
+                            "No es un fondo específico — es un agregador",
+                            "Requiere revisión constante para detectar aperturas"
+                        ],
+        "notasInternas":  "11/03/2026. fondos.gob.cl verificado como portal oficial del Estado. Incluir como referencia de vigilancia de mercado. URL directa a categoría agricultura con filtro abierto. Ana Lía debe revisar semanalmente. Verificado: 11 fondos en categoría agricultura.",
+        "ejeIICA":  "Innovación para la productividad",
+        "complejidad":  "Fácil"
+    },
+    {
+        "id":  138,
+        "nombre":  "Fondo Conjunto Chile–UE: Cooperación Triangular para Tercer País (AGCID)",
+        "institucion":  "AGCID / Unión Europea",
+        "monto":  400000000,
+        "fecha_cierre":  "2026-12-31",
+        "estado":  "Próximo",
+        "categoria":  "Internacional",
+        "url_bases":  "https://www.agcid.gob.cl/cooperacion-triangular/",
+        "regiones":  [
+                         "Todas"
+                     ],
+        "beneficiarios":  [
+                              "Institución pública",
+                              "Universidad",
+                              "Organismo internacional"
+                          ],
+        "resumen":  {
+                        "cofinanciamiento":  "Hasta EUR 400.000 por proyecto — 100% financiado Chile+UE",
+                        "requisitos_clave":  [
+                                                 "Proyecto que beneficie a tercer país ALC de menor desarrollo",
+                                                 "Alianza Chile (AGCID) + UE + país receptor",
+                                                 "Alineación con Pacto Verde Europeo y ODS",
+                                                 "Actividades en áreas: seguridad alimentaria, medioambiente, clima"
+                                             ],
+                        "plazo_ejecucion":  "18-24 meses",
+                        "observaciones":  "REAL. Fondo Conjunto Chile-UE firmado en 2022, vigencia hasta 2026. Verificado en agcid.gob.cl. Este fondo financia proyectos chilenos que benefician a terceros países ALC. El IICA puede actuar como implementador técnico con expertise latinoamericano. No hay convocatoria abierta ahora — seguimiento requerido."
+                    },
+        "monto_min":  100000000,
+        "monto_max":  400000000,
+        "plazo_meses":  24,
+        "requiere_cofinanciamiento":  false,
+        "idioma":  "multi",
+        "faq_disponible":  false,
+        "webinar_fecha":  null,
+        "permite_adendas":  false,
+        "bases_estado":  "en_preparacion",
+        "requiere_firma":  true,
+        "tipos_solicitante":  [
+                                  "Organizacion"
+                              ],
+        "ambito":  "Internacional",
+        "estadoPostulacion":  "Próxima",
+        "viabilidadIICA":  "Alta",
+        "porcentajeViabilidad":  72,
+        "responsableIICA":  "Carlos Guajardo",
+        "region":  "América Latina y el Caribe",
+        "rolIICA":  "Ejecutor",
+        "objetivo":  "Posicionarse como implementador técnico del Fondo Conjunto Chile-UE para proyectos de cooperación triangular en agricultura y seguridad alimentaria",
+        "descripcionIICA":  "El Fondo Conjunto de Cooperación Triangular Chile-UE (firmado mayo 2022) financia proyectos que benefician a terceros países ALC. IICA es el socio ideal: organismo técnico multilateral con presencia en 34 países, mandato en seguridad alimentaria y cambio climático, y experiencia en cooperación Sur-Sur. Proyectos vigencia hasta 2026. Contactar AGCID para próxima convocatoria.",
+        "requisitos":  [
+                           "Propuesta con beneficiario en tercer país ALC",
+                           "Alianza formal con AGCID como canal chileno",
+                           "Componente de género y sostenibilidad ambiental"
+                       ],
+        "fortalezas":  [
+                           "IICA es el socio técnico ideal por mandato y cobertura",
+                           "Fondo verificado — existente desde 2022 con vigencia 2026",
+                           "Alta alineación con capacidades IICA en cooperación Sur-Sur",
+                           "Sin competencia directa de otras organizaciones internacionales"
+                       ],
+        "debilidades":  [
+                            "Convocatoria no abierta actualmente — seguimiento necesario",
+                            "Requiere coordinación con AGCID y representación UE en Chile"
+                        ],
+        "notasInternas":  "11/03/2026. Fondo verificado en agcid.gob.cl. Vigencia hasta 2026. Carlos Guajardo debe contactar a AGCID para saber cuándo se abre próxima convocatoria. Argumento: IICA tiene presencia en los países receptores (Centroamérica, Caribe). Alta prioridad estratégica.",
+        "ejeIICA":  "Bioeconomía y cambio climático",
+        "complejidad":  "Media"
     }
 ]
