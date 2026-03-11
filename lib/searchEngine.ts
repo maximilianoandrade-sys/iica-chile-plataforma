@@ -589,33 +589,48 @@ export function scoreProject(searchTerm: string, project: Project, prebuiltCorpu
 }
 
 // ============================================================================
-// COSINE SIMILARITY (para ranking semántico profundo)
+// BM25 SCORING (State-of-the-Art Lexical Ranking - Lucene/Elasticsearch Standard)
 // ============================================================================
 
-function tfVectorSparse(tokens: string[]): Map<string, number> {
-    const freq = new Map<string, number>();
-    for (const t of tokens) {
-        freq.set(t, (freq.get(t) || 0) + 1);
+function computeBM25(
+    queryTokens: string[],
+    docTokens: string[],
+    docLen: number,
+    invertedIndex: InvertedIndex | null
+): number {
+    const k1 = 1.5;
+    const b = 0.75;
+    let score = 0;
+    
+    // Contar tf(q, D) en el documento
+    const tf = new Map<string, number>();
+    for (const token of docTokens) {
+        tf.set(token, (tf.get(token) || 0) + 1);
     }
-    return freq;
-}
 
-function cosineSparse(a: Map<string, number>, b: Map<string, number>): number {
-    let dot = 0;
-    let magA = 0;
+    // Default params si no hay invertedIndex global
+    const totalDocs = invertedIndex ? invertedIndex.totalDocs : 1000;
+    const avgdl = invertedIndex ? invertedIndex.avgdl : 200;
+
+    for (const q of queryTokens) {
+        // Frequency in document
+        const f = tf.get(q) || 0;
+        if (f === 0) continue;
+
+        // DF: number of documents containing term q
+        const nq = invertedIndex ? (invertedIndex.index.get(q)?.size || 1) : 1;
+        
+        // IDF calculation (BM25 variant)
+        const idf = Math.log(1 + (totalDocs - nq + 0.5) / (nq + 0.5));
+        
+        // TF-IDF combined with length normalization
+        const numerator = f * (k1 + 1);
+        const denominator = f + k1 * (1 - b + b * (docLen / avgdl));
+        
+        score += idf * (numerator / denominator);
+    }
     
-    Array.from(a.entries()).forEach(([key, valA]) => {
-        const valB = b.get(key);
-        if (valB) dot += valA * valB;
-        magA += valA * valA;
-    });
-    
-    let magB = 0;
-    Array.from(b.values()).forEach(valB => {
-        magB += valB * valB;
-    });
-    
-    return magA && magB ? dot / (Math.sqrt(magA) * Math.sqrt(magB)) : 0;
+    return score;
 }
 
 // ============================================================================
@@ -626,12 +641,17 @@ export interface InvertedIndex {
     index: Map<string, Set<number>>;   // term → set of project IDs
     projectMap: Map<number, Project>;  // id → project
     bigramIndex: Map<string, Set<number>>; // bigram → set of project IDs
+    docLengths: Map<number, number>; // id -> doc length
+    avgdl: number; // average doc length
+    totalDocs: number; // N
 }
 
 export function buildInvertedIndex(projects: Project[]): InvertedIndex {
     const index = new Map<string, Set<number>>();
     const bigramIndex = new Map<string, Set<number>>();
     const projectMap = new Map<number, Project>();
+    const docLengths = new Map<number, number>();
+    let totalLength = 0;
 
     projects.forEach(project => {
         projectMap.set(project.id, project);
@@ -639,6 +659,9 @@ export function buildInvertedIndex(projects: Project[]): InvertedIndex {
         const tokens = tokenize(corpus.full);
         const expanded = expandSearchTerms(corpus.full);
         const bgrams = bigrams(tokens);
+
+        docLengths.set(project.id, tokens.length);
+        totalLength += tokens.length;
 
         [...tokens, ...expanded].forEach(term => {
             if (!index.has(term)) index.set(term, new Set());
@@ -651,7 +674,8 @@ export function buildInvertedIndex(projects: Project[]): InvertedIndex {
         });
     });
 
-    return { index, projectMap, bigramIndex };
+    const avgdl = projects.length > 0 ? totalLength / projects.length : 0;
+    return { index, projectMap, bigramIndex, docLengths, avgdl, totalDocs: projects.length };
 }
 
 export function lookupIndex(query: string, invertedIndex: InvertedIndex): Set<number> {
@@ -710,18 +734,18 @@ export function searchAndRankProjects(
     const corpusMap = new Map<number, ReturnType<typeof buildProjectCorpus>>();
     verified.forEach(p => corpusMap.set(p.id, buildProjectCorpus(p)));
 
-    // Cosine similarity semántico (ahora usa vectores dispersos de alta eficiencia en memoria O(Tokens))
+    // Cosine similarity semántico (ahora reemplazado por BM25, estándar de oro)
     const queryTokens = tokenize(expandSearchTerms(searchTerm).join(' '));
-    const queryVec = tfVectorSparse(queryTokens);
 
-    // Score combinado: campo-ponderado (70%) + cosine (30%)
+    // Score combinado: campo-ponderado (70%) + BM25 (30%)
     const scored = verified.map(p => {
         const corpus = corpusMap.get(p.id)!;
         const fieldScore = scoreProject(searchTerm, p, corpus);
         const docTokens = tokenize(corpus.full);
-        const docVec = tfVectorSparse(docTokens);
-        const semScore = cosineSparse(queryVec, docVec) * 100;
-        return { project: p, total: fieldScore * 0.7 + semScore * 0.3 };
+        const docLen = invertedIndex ? (invertedIndex.docLengths.get(p.id) || docTokens.length) : docTokens.length;
+        
+        const bm25 = computeBM25(queryTokens, docTokens, docLen, invertedIndex || null) * 15; // escalar bm25 para equiparar
+        return { project: p, total: fieldScore * 0.7 + bm25 * 0.3 };
     });
 
     return scored
