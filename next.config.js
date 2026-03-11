@@ -14,8 +14,7 @@ const nextConfig = {
     return config;
   },
 
-  // Configuración de Turbopack (Next.js 16+)
-  turbopack: {},
+  // Configuración de Paths
 
   // Headers de seguridad mejorados
   async headers() {
