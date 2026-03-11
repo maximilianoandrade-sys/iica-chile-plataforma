@@ -449,7 +449,7 @@ export function smartSearch(searchTerm: string, input: Project | string): boolea
     if (Object.keys(parsed.fieldFilters).length > 0 && typeof input !== 'string') {
         const project = input as Project;
         for (const [field, value] of Object.entries(parsed.fieldFilters)) {
-            const projValue = normalizeText(String((project as Record<string, unknown>)[field] || ''));
+            const projValue = normalizeText(String((project as unknown as Record<string, unknown>)[field] || ''));
             if (!projValue.includes(normalizeText(value))) return false;
         }
     }
@@ -790,7 +790,7 @@ export function getZeroResultsSuggestions(
     });
 
     // Buscar instituciones que se parezcan
-    const uniqueInsts = [...new Set(projects.map(p => p.institucion))];
+    const uniqueInsts = Array.from(new Set(projects.map(p => p.institucion)));
     uniqueInsts.forEach(inst => {
         const nInst = normalizeText(inst);
         const dist = levenshtein(normalizedQuery, nInst);
