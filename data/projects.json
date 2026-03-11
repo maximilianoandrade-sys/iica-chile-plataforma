@@ -7,7 +7,7 @@
         "fecha_cierre":  "2026-04-20",
         "estado":  "Abierto",
         "categoria":  "Internacional",
-        "url_bases":  "https://fontagro.org/en/iniciativas/convocatorias/convocatoria-2026",
+        "url_bases":  "https://plataforma.fontagro.org/login",
         "regiones":  [
                          "Todas"
                      ],
@@ -77,7 +77,7 @@
         "fecha_cierre":  "2026-05-31",
         "estado":  "Abierto",
         "categoria":  "Internacional",
-        "url_bases":  "https://www.fao.org/chile/fao-en-chile/es/",
+        "url_bases":  "https://www.fao.org/technical-cooperation-programme/tcp-guidelines/es/",
         "regiones":  [
                          "Coquimbo",
                          "Atacama",
@@ -147,7 +147,7 @@
         "fecha_cierre":  "2026-06-30",
         "estado":  "Abierto",
         "categoria":  "Internacional",
-        "url_bases":  "https://www.ifad.org/es/web/operations/country/chile",
+        "url_bases":  "https://www.ifad.org/en/web/operations/country/chile",
         "regiones":  [
                          "Arica y Parinacota",
                          "Tarapacá",
@@ -352,7 +352,7 @@
         "fecha_cierre":  "2026-09-30",
         "estado":  "Abierto",
         "categoria":  "Internacional",
-        "url_bases":  "https://www.euroclima.org/en/",
+        "url_bases":  "https://www.euroclima.org/es/convocatorias",
         "regiones":  [
                          "Coquimbo",
                          "Valparaíso",
@@ -421,7 +421,7 @@
         "fecha_cierre":  "2026-04-20",
         "estado":  "Abierto",
         "categoria":  "Internacional",
-        "url_bases":  "https://www.fontagro.org/es/iniciativas/convocatorias/convocatoria-2026",
+        "url_bases":  "https://plataforma.fontagro.org/login",
         "regiones":  [
                          "Todas"
                      ],
@@ -488,7 +488,7 @@
         "fecha_cierre":  "2026-05-15",
         "estado":  "Abierto",
         "categoria":  "Nacional",
-        "url_bases":  "https://www.sag.gob.cl/",
+        "url_bases":  "https://www.sag.gob.cl/content/concursos-abiertos",
         "regiones":  [
                          "Todas"
                      ],
@@ -555,7 +555,7 @@
         "fecha_cierre":  "2026-04-20",
         "estado":  "Abierto",
         "categoria":  "Nacional",
-        "url_bases":  "https://www.indap.gob.cl/nuestros-programas/programa-desarrollo-local-prodesal",
+        "url_bases":  "https://www.ventanillaunicasocial.gob.cl/ficha/1070-programa-de-desarrollo-local-prodesal",
         "regiones":  [
                          "Maule",
                          "Biobío",
@@ -625,7 +625,7 @@
         "fecha_cierre":  "2026-06-15",
         "estado":  "Abierto",
         "categoria":  "Nacional",
-        "url_bases":  "https://www.fia.cl/convocatorias/",
+        "url_bases":  "https://convocatoria.fia.cl",
         "regiones":  [
                          "La Araucanía",
                          "Los Ríos",
@@ -763,7 +763,7 @@
         "fecha_cierre":  "2026-05-20",
         "estado":  "Abierto",
         "categoria":  "Internacional",
-        "url_bases":  "https://www.fao.org/americas/tcp/es/",
+        "url_bases":  "https://www.fao.org/technical-cooperation-programme/tcp-guidelines/es/",
         "regiones":  [
                          "Todas"
                      ],
@@ -828,7 +828,7 @@
         "fecha_cierre":  "2026-04-30",
         "estado":  "Abierto",
         "categoria":  "Nacional",
-        "url_bases":  "https://www.cnr.gob.cl/agricultores/concursos-de-riego/",
+        "url_bases":  "https://www.cnr.gob.cl/agricultores/concursos-de-riego-y-drenaje/bases-de-concurso/",
         "regiones":  [
                          "La Araucanía",
                          "Los Ríos",
@@ -1035,7 +1035,7 @@
         "fecha_cierre":  "2026-10-31",
         "estado":  "Abierto",
         "categoria":  "Internacional",
-        "url_bases":  "https://www.aecid.es/es/donde-cooperamos/america/chile/",
+        "url_bases":  "https://www.aecid.es/es/convocatorias-activas",
         "regiones":  [
                          "Maule",
                          "Biobío",
@@ -1108,7 +1108,7 @@
         "fecha_cierre":  "2026-12-15",
         "estado":  "Abierto",
         "categoria":  "Internacional",
-        "url_bases":  "https://www.euroclima.org/en/",
+        "url_bases":  "https://www.euroclima.org/es/convocatorias",
         "regiones":  [
                          "Valparaíso",
                          "O\u0027Higgins",
@@ -1319,7 +1319,7 @@
         "fecha_cierre":  "2026-04-30",
         "estado":  "Abierto",
         "categoria":  "Nacional",
-        "url_bases":  "https://www.cnr.gob.cl/agricultores/concursos-de-riego/",
+        "url_bases":  "https://www.cnr.gob.cl/agricultores/concursos-de-riego-y-drenaje/bases-de-concurso/",
         "regiones":  [
                          "Todas"
                      ],
@@ -1389,7 +1389,7 @@
         "fecha_cierre":  "2026-04-30",
         "estado":  "Abierto",
         "categoria":  "Nacional",
-        "url_bases":  "https://www.cnr.gob.cl/agricultores/concursos-de-riego/",
+        "url_bases":  "https://www.cnr.gob.cl/agricultores/concursos-de-riego-y-drenaje/bases-de-concurso/",
         "regiones":  [
                          "La Araucanía",
                          "Los Ríos",
@@ -1462,7 +1462,7 @@
         "fecha_cierre":  "2026-04-30",
         "estado":  "Abierto",
         "categoria":  "Internacional",
-        "url_bases":  "https://www.fondo-cooperacion-triangular.net/",
+        "url_bases":  "https://fondo-cooperacion-triangular.net/postulacion-de-proyectos/",
         "regiones":  [
                          "Todas"
                      ],
@@ -1533,7 +1533,7 @@
         "fecha_cierre":  "2028-03-31",
         "estado":  "Abierto",
         "categoria":  "Internacional",
-        "url_bases":  "https://www.greenclimate.fund/readiness",
+        "url_bases":  "https://www.greenclimate.fund/countries/chile",
         "regiones":  [
                          "Todas"
                      ],
@@ -1605,7 +1605,7 @@
         "fecha_cierre":  "2027-02-20",
         "estado":  "Próximo",
         "categoria":  "Nacional",
-        "url_bases":  "https://www.agcid.gob.cl/multilateral/fondo-chile/",
+        "url_bases":  "https://fondochile.cl/convocatorias/",
         "regiones":  [
                          "Todas"
                      ],
@@ -1676,7 +1676,7 @@
         "fecha_cierre":  "2026-05-24",
         "estado":  "Próximo",
         "categoria":  "Nacional",
-        "url_bases":  "https://www.cnr.gob.cl/agricultores/concursos-de-riego/",
+        "url_bases":  "https://www.cnr.gob.cl/agricultores/concursos-de-riego-y-drenaje/bases-de-concurso/",
         "regiones":  [
                          "Todas"
                      ],
@@ -1747,7 +1747,7 @@
         "fecha_cierre":  "2026-05-21",
         "estado":  "Próximo",
         "categoria":  "Nacional",
-        "url_bases":  "https://www.cnr.gob.cl/agricultores/concursos-de-riego/",
+        "url_bases":  "https://www.cnr.gob.cl/agricultores/concursos-de-riego-y-drenaje/bases-de-concurso/",
         "regiones":  [
                          "Todas"
                      ],
@@ -1818,7 +1818,7 @@
         "fecha_cierre":  "2026-07-07",
         "estado":  "Próximo",
         "categoria":  "Nacional",
-        "url_bases":  "https://www.cnr.gob.cl/agricultores/concursos-de-riego/",
+        "url_bases":  "https://www.cnr.gob.cl/agricultores/concursos-de-riego-y-drenaje/bases-de-concurso/",
         "regiones":  [
                          "Todas"
                      ],
@@ -1962,7 +1962,7 @@
         "fecha_cierre":  "2026-04-20",
         "estado":  "Abierto",
         "categoria":  "Internacional",
-        "url_bases":  "https://fontagro.org/en/iniciativas/convocatorias/convocatoria-2026",
+        "url_bases":  "https://plataforma.fontagro.org/login",
         "regiones":  [
                          "Todas"
                      ],
@@ -2028,7 +2028,7 @@
         "fecha_cierre":  "2026-06-30",
         "estado":  "Abierto",
         "categoria":  "Nacional",
-        "url_bases":  "https://www.sag.gob.cl/ambitos-de-accion/sirsd-s",
+        "url_bases":  "https://www.sag.gob.cl/ambitos-de-accion/sirsd-s-sistema-de-incentivos-para-la-sustentabilidad-agroambiental-de-los-suelos",
         "regiones":  [
                          "Todas"
                      ],
