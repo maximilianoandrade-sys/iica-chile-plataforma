@@ -149,32 +149,32 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
 
     // Filter projects logic (Agrovoc is the only client-side filter remaining + Favorites toggle)
     const displayedProjects = useMemo(() => {
-        let filtered = searchResults ?? projects;
+        let filtered: any[] = searchResults ?? projects;
 
         // ── Filtro Agrovoc (usa el nuevo motor de búsqueda completo) ──────────
         if (selectedAgrovoc !== 'Cualquiera') {
-            filtered = filtered.filter(p => smartSearch(selectedAgrovoc, p as any));
+            filtered = filtered.filter((p: any) => smartSearch(selectedAgrovoc, p as any));
         }
 
         // ── Filtro Favoritos ─────────────────────────────────────────────────
         if (showFavoritesOnly) {
-            filtered = filtered.filter(p => favorites.includes(p.id));
+            filtered = filtered.filter((p: any) => favorites.includes(p.id));
         }
 
         // ── Quick Filters (lógica real basada en campos del proyecto) ────────
         if (quickFilter === 'facil') {
             // Usa el campo real complejidad, no un proxy falso
-            filtered = filtered.filter(p => p.complejidad === 'Fácil');
+            filtered = filtered.filter((p: any) => p.complejidad === 'Fácil');
         } else if (quickFilter === 'cierre') {
-            filtered = filtered.filter(p => isClosingSoon(p.fecha_cierre));
+            filtered = filtered.filter((p: any) => isClosingSoon(p.fecha_cierre));
         } else if (quickFilter === 'mujeres') {
-            filtered = filtered.filter(p =>
-                p.beneficiarios?.some(b => b.toLowerCase().includes('mujer')) ||
+            filtered = filtered.filter((p: any) =>
+                p.beneficiarios?.some((b: string) => b.toLowerCase().includes('mujer')) ||
                 (p.descripcionIICA || '').toLowerCase().includes('mujer') ||
                 (p.objetivo || '').toLowerCase().includes('mujer')
             );
         } else if (quickFilter === 'alta_viabilidad') {
-            filtered = filtered.filter(p =>
+            filtered = filtered.filter((p: any) =>
                 p.viabilidadIICA === 'Alta' || (p.porcentajeViabilidad || 0) >= 75
             );
         }
