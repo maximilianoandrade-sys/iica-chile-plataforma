@@ -549,7 +549,8 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                 porcentajeViabilidad: project.porcentajeViabilidad,
                                                 rolIICA: project.rolIICA,
                                                 url: project.url_bases,
-                                                adenda: project.permite_adendas
+                                                adenda: project.permite_adendas,
+                                                descripcion: project.descripcionIICA || project.resumen?.observaciones || ''
                                             };
                                             return (
                                                 <div key={project.id} className="relative">
@@ -588,7 +589,8 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                 porcentajeViabilidad: project.porcentajeViabilidad,
                                                 rolIICA: project.rolIICA,
                                                 url: project.url_bases,
-                                                adenda: project.permite_adendas
+                                                adenda: project.permite_adendas,
+                                                descripcion: project.descripcionIICA || project.resumen?.observaciones || ''
                                             };
                                             {/* @ts-ignore */ }
                                             return <OportunidadCard key={project.id} op={op} />;

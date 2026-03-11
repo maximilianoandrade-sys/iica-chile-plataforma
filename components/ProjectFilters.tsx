@@ -105,7 +105,26 @@ export default function ProjectFilters({
     const [searchTerm, setSearchTerm] = useState(searchParams.get('q') || '');
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
+    const [recentSearches, setRecentSearches] = useState<string[]>([]);
     const [showAdvanced, setShowAdvanced] = useState(false);
+
+    // Cargar búsquedas recientes
+    useEffect(() => {
+        try {
+            const saved = localStorage.getItem('iica_recent_searches');
+            if (saved) setRecentSearches(JSON.parse(saved));
+        } catch (e) { console.error('Error reading recent searches', e); }
+    }, []);
+
+    const saveRecentSearch = useCallback((term: string) => {
+        const cleanTerm = term.trim();
+        if (!cleanTerm || cleanTerm.length < 3) return;
+        setRecentSearches(prev => {
+            const updated = [cleanTerm, ...prev.filter(t => t.toLowerCase() !== cleanTerm.toLowerCase())].slice(0, 5);
+            try { localStorage.setItem('iica_recent_searches', JSON.stringify(updated)); } catch (e) { }
+            return updated;
+        });
+    }, []);
 
     const createQueryString = useCallback(
         (name: string, value: string) => {
@@ -134,6 +153,7 @@ export default function ProjectFilters({
                 const params = new URLSearchParams(searchParams.toString());
                 if (searchTerm) {
                     params.set('q', searchTerm);
+                    saveRecentSearch(searchTerm); // Guardamos historial en el submit demorado
                 } else {
                     params.delete('q');
                 }
@@ -159,19 +179,23 @@ export default function ProjectFilters({
             );
             setFilteredSuggestions(matches.slice(0, 6));
         } else if (searchTerm.length === 0) {
-            // Sin query: sugerir las 5 más útiles dinámicamente
-            const topPicks = [
-                'IICA Ejecutor directo',
-                'Alta viabilidad IICA',
-                'Sin cofinanciamiento requerido',
-                'Cooperación Sur-Sur ALC',
-                'Resiliencia climática',
-            ];
-            setFilteredSuggestions(topPicks);
+            // Sin query: mostrar recientes, sino sugerir las 5 más útiles
+            if (recentSearches.length > 0) {
+                setFilteredSuggestions(recentSearches);
+            } else {
+                const topPicks = [
+                    'IICA Ejecutor directo',
+                    'Alta viabilidad IICA',
+                    'Sin cofinanciamiento requerido',
+                    'Cooperación Sur-Sur ALC',
+                    'Resiliencia climática',
+                ];
+                setFilteredSuggestions(topPicks);
+            }
         } else {
             setFilteredSuggestions([]);
         }
-    }, [searchTerm, dynamicSuggestions]);
+    }, [searchTerm, dynamicSuggestions, recentSearches]);
 
     // Leer filtros de URL
     const selectedCategory = searchParams.get('category') || 'Todas';
@@ -276,8 +300,20 @@ export default function ProjectFilters({
                     {/* Autocomplete */}
                     {showSuggestions && filteredSuggestions.length > 0 && (
                         <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl z-30 overflow-hidden">
-                            <div className="px-3 py-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100">
-                                Sugerencias
+                            <div className="flex items-center justify-between px-3 py-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100">
+                                <span>{searchTerm.length === 0 && recentSearches.length > 0 ? 'Búsquedas Recientes' : 'Sugerencias'}</span>
+                                {searchTerm.length === 0 && recentSearches.length > 0 && (
+                                    <button 
+                                        onMouseDown={(e) => { 
+                                            e.preventDefault(); 
+                                            setRecentSearches([]); 
+                                            localStorage.removeItem('iica_recent_searches'); 
+                                        }} 
+                                        className="text-[10px] text-gray-400 hover:text-red-500 lowercase font-normal"
+                                    >
+                                        Limpiar
+                                    </button>
+                                )}
                             </div>
                             {filteredSuggestions.map((suggestion) => (
                                 <button

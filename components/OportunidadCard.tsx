@@ -1,5 +1,6 @@
 "use client";
 import React from 'react';
+import { useSearchParams } from 'next/navigation';
 import { InstitutionLogo } from "./InstitutionLogo";
 // @ts-ignore
 import { Clock, MapPin, Award, Zap, ChevronRight, Info } from "lucide-react";
@@ -16,9 +17,38 @@ export interface Oportunidad {
     rolIICA?: string;
     url: string;
     adenda?: boolean;
+    descripcion?: string;
 }
 
 export function OportunidadCard({ op }: { op: Oportunidad }) {
+    const searchParams = useSearchParams();
+    const query = searchParams.get('q') || '';
+
+    // Utilidad simple para resaltar el texto buscado (similar a mark)
+    const Highlight = ({ text, highlight }: { text: string; highlight: string }) => {
+        if (!highlight.trim() || !text) return <>{text}</>;
+        
+        // Excluye búsqueda por campo 'inst:xxx' del highlighter
+        const cleanHighlight = highlight.replace(/\w+:\S+/g, '').replace(/"/g, '').trim();
+        if (!cleanHighlight || cleanHighlight.length < 3) return <>{text}</>;
+
+        const escaped = cleanHighlight.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`(${escaped})`, 'gi');
+        const parts = text.split(regex);
+
+        return (
+            <>
+                {parts.map((part, i) =>
+                    regex.test(part) ? (
+                        <mark key={i} className="bg-yellow-200 text-yellow-900 rounded-sm px-0.5">{part}</mark>
+                    ) : (
+                        <span key={i}>{part}</span>
+                    )
+                )}
+            </>
+        );
+    };
+
     const colorViabilidad = {
         Alta: "bg-emerald-50 text-emerald-700 border-emerald-100",
         Media: "bg-amber-50 text-amber-700 border-amber-100",
@@ -60,7 +90,7 @@ export function OportunidadCard({ op }: { op: Oportunidad }) {
                     </div>
 
                     <h3 className="text-base font-bold text-gray-900 leading-tight line-clamp-2 group-hover:text-[var(--iica-blue)] transition-colors">
-                        {op.nombre}
+                        <Highlight text={op.nombre} highlight={query} />
                     </h3>
                     <div className="flex flex-col gap-1.5 mt-2">
                         <p className="text-xs font-medium text-gray-500 flex items-center gap-1.5">
@@ -74,6 +104,11 @@ export function OportunidadCard({ op }: { op: Oportunidad }) {
                             </div>
                         )}
                     </div>
+                    {op.descripcion && (
+                        <p className="mt-3 text-xs text-gray-500 line-clamp-2 leading-relaxed">
+                             <Highlight text={op.descripcion} highlight={query} />
+                        </p>
+                    )}
                 </div>
             </div>
 
