@@ -2595,5 +2595,231 @@
         },
         "viabilidadIICA": "Media",
         "descripcionIICA": "Apoyo técnico a organizaciones de base."
+    },
+    {
+        "id": 160,
+        "nombre": "USAID – Feed the Future: Climate Resilient Agriculture",
+        "institucion": "USAID",
+        "monto": 5000000000,
+        "fecha_cierre": "2026-11-20",
+        "estado": "Abierto",
+        "categoria": "Internacional",
+        "url_bases": "https://grants.gov",
+        "regiones": [
+            "Todas"
+        ],
+        "resumen": {
+            "requisitos_clave": [
+                "Consorcio Internacional",
+                "Registro SAM.gov",
+                "Impacto en Seguridad Alimentaria"
+            ],
+            "plazo_ejecucion": "60 meses"
+        },
+        "viabilidadIICA": "Alta",
+        "descripcionIICA": "USAID es un donante histórico. IICA puede ir de Sub-Grantee o Prime con socios grandes."
+    },
+    {
+        "id": 161,
+        "nombre": "Unión Europea (EuropeAid) – AL-INVEST Verde: Cadenas Libres de Deforestación",
+        "institucion": "Unión Europea",
+        "monto": 8000000000,
+        "fecha_cierre": "2026-06-15",
+        "estado": "Abierto",
+        "categoria": "Internacional",
+        "url_bases": "https://ec.europa.eu/europeaid/",
+        "regiones": [
+            "Todas"
+        ],
+        "resumen": {
+            "requisitos_clave": [
+                "Registro PADOR",
+                "Socios en Europa y LATAM",
+                "Cofinanciamiento 20%"
+            ],
+            "plazo_ejecucion": "48 meses"
+        },
+        "viabilidadIICA": "Alta",
+        "descripcionIICA": "Convocatoria vital para el IICA en su agenda verde con Europa."
+    },
+    {
+        "id": 162,
+        "nombre": "Banco Mundial – Programa de Competitividad Agrologística (Préstamo Soberano)",
+        "institucion": "Banco Mundial",
+        "monto": 50000000000,
+        "fecha_cierre": "2026-09-30",
+        "estado": "Próxima",
+        "categoria": "Internacional",
+        "url_bases": "https://projects.worldbank.org",
+        "regiones": [
+            "Todas"
+        ],
+        "resumen": {
+            "requisitos_clave": [
+                "Licitación Pública Internacional (LPI)",
+                "Aprobación del Gobierno"
+            ],
+            "plazo_ejecucion": "60 meses"
+        },
+        "viabilidadIICA": "Media",
+        "descripcionIICA": "IICA puede posicionarse como agencia ejecutora del préstamo para el gobierno de Chile."
+    },
+    {
+        "id": 163,
+        "nombre": "IFAD (FIDA) – Rural Poverty Reduction & Digital Extension",
+        "institucion": "FIDA",
+        "monto": 1500000000,
+        "fecha_cierre": "2026-08-01",
+        "estado": "Abierto",
+        "categoria": "Internacional",
+        "url_bases": "https://www.ifad.org",
+        "regiones": [
+            "Todas"
+        ],
+        "resumen": {
+            "requisitos_clave": [
+                "Enfoque en Extensión Digital",
+                "Pequeños productores",
+                "Metodología validada"
+            ],
+            "plazo_ejecucion": "36 meses"
+        },
+        "viabilidadIICA": "Alta",
+        "descripcionIICA": "Match perfecto con el programa hemisférico de digitalización rural."
+    },
+    {
+        "id": 164,
+        "nombre": "GEF (Global Environment Facility) – Conservación de la Agrobiodiversidad Sistémica",
+        "institucion": "GEF",
+        "monto": 4000000000,
+        "fecha_cierre": "2026-10-31",
+        "estado": "Abierto",
+        "categoria": "Internacional",
+        "url_bases": "https://www.thegef.org",
+        "regiones": [
+            "Todas"
+        ],
+        "resumen": {
+            "requisitos_clave": [
+                "Agencia Implementadora GEF",
+                "Carta de endoso del punto focal OFP"
+            ],
+            "plazo_ejecucion": "48 meses"
+        },
+        "viabilidadIICA": "Alta",
+        "descripcionIICA": "IICA debe coordinar con el Ministerio del Medio Ambiente como OFP en Chile."
+    },
+    {
+        "id": 165,
+        "nombre": "GIZ (Cooperación Alemana) – Transformación hacia Economías Circulares Agrícolas",
+        "institucion": "GIZ",
+        "monto": 1200000000,
+        "fecha_cierre": "2026-05-30",
+        "estado": "Abierto",
+        "categoria": "Internacional",
+        "url_bases": "https://www.giz.de",
+        "regiones": [
+            "Todas"
+        ],
+        "resumen": {
+            "requisitos_clave": [
+                "Alianzas público-privadas",
+                "Transferencia de conocimiento"
+            ],
+            "plazo_ejecucion": "24 meses"
+        },
+        "viabilidadIICA": "Media",
+        "descripcionIICA": "Excelente oportunidad para consorcios tripartitos (Alemania-Chile-IICA)."
+    },
+    {
+        "id": 166,
+        "nombre": "JICA (Cooperación Japonesa) – Asistencia Técnica para Prevención de Desastres Agrícolas",
+        "institucion": "JICA",
+        "monto": 800000000,
+        "fecha_cierre": "2026-07-15",
+        "estado": "Próxima",
+        "categoria": "Internacional",
+        "url_bases": "https://www.jica.go.jp",
+        "regiones": [
+            "Valparaíso",
+            "O'Higgins",
+            "Maule"
+        ],
+        "resumen": {
+            "requisitos_clave": [
+                "Expertise en tecnologías sísmicas y aluviones",
+                "Contraparte estatal"
+            ],
+            "plazo_ejecucion": "18 meses"
+        },
+        "viabilidadIICA": "Baja",
+        "descripcionIICA": "Muy técnico e ingenieril, IICA podría aportar metodología comunitaria."
+    },
+    {
+        "id": 167,
+        "nombre": "PNUD – Fondo Jóvenes por el Liderazgo Climático y el Agro",
+        "institucion": "PNUD",
+        "monto": 300000000,
+        "fecha_cierre": "2026-04-15",
+        "estado": "Abierto",
+        "categoria": "Internacional",
+        "url_bases": "https://www.undp.org",
+        "regiones": [
+            "Todas"
+        ],
+        "resumen": {
+            "requisitos_clave": [
+                "Liderazgo Sub-30",
+                "Trabajo en zonas de rezago"
+            ],
+            "plazo_ejecucion": "12 meses"
+        },
+        "viabilidadIICA": "Media",
+        "descripcionIICA": "Oportunidad de trabajar la agenda de recambio generacional."
+    },
+    {
+        "id": 168,
+        "nombre": "Bill & Melinda Gates Foundation – Agricultural Innovations for the Global South",
+        "institucion": "BMGF",
+        "monto": 10000000000,
+        "fecha_cierre": "2026-12-01",
+        "estado": "Abierto",
+        "categoria": "Internacional",
+        "url_bases": "https://www.gatesfoundation.org",
+        "regiones": [
+            "Todas"
+        ],
+        "resumen": {
+            "requisitos_clave": [
+                "Innovación Radical",
+                "Modelo Open Data",
+                "Impacto a 1 millón de productores"
+            ],
+            "plazo_ejecucion": "36 meses"
+        },
+        "viabilidadIICA": "Alta",
+        "descripcionIICA": "Un grant muy prestigioso. IICA puede aportar capilaridad y redes ministeriales."
+    },
+    {
+        "id": 169,
+        "nombre": "AECID (Cooperación Española) – Cadenas de Valor Inclusivas e Igualdad de Género",
+        "institucion": "AECID",
+        "monto": 600000000,
+        "fecha_cierre": "2026-06-25",
+        "estado": "Abierto",
+        "categoria": "Internacional",
+        "url_bases": "https://www.aecid.es",
+        "regiones": [
+            "Todas"
+        ],
+        "resumen": {
+            "requisitos_clave": [
+                "Promoción activa de cooperativas femeninas",
+                "Presupuesto con enfoque de género"
+            ],
+            "plazo_ejecucion": "24 meses"
+        },
+        "viabilidadIICA": "Alta",
+        "descripcionIICA": "Alineación total con la estrategia transversal de género del IICA."
     }
 ]
