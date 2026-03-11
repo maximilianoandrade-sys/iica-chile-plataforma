@@ -1,14 +1,18 @@
 /**
  * ============================================================================
- * MOTOR DE BÚSQUEDA IICA CHILE — v2.0
+ * MOTOR DE BÚSQUEDA IICA CHILE — v3.0
  * ============================================================================
- * Motor híbrido unificado que combina:
+ * Motor híbrido de alta precisión que combina:
  *   1. Búsqueda exacta ponderada por campo (título > institución > eje > descripción...)
- *   2. Expansión de sinónimos agrícolas + lenguaje natural rural
- *   3. Tolerancia a errores de tipeo (Levenshtein)
- *   4. Cosine Similarity TF-IDF simplificada
- *   5. Índice invertido pre-computado para O(1) lookup
- *   6. Scoring contextual: viabilidad IICA + urgencia de cierre + complejidad
+ *   2. Bigramas para capturar frases de dos palabras ("cambio climático")
+ *   3. Expansión de sinónimos agrícolas + lenguaje natural rural
+ *   4. Tolerancia a errores de tipeo (Levenshtein calibrado)
+ *   5. Cosine Similarity TF-IDF simplificada
+ *   6. Índice invertido pre-computado para O(1) lookup
+ *   7. Scoring contextual: viabilidad IICA + urgencia de cierre + complejidad
+ *   8. Operadores booleanos: AND (default), OR (|), NOT (-)
+ *   9. Filtro por campo específico: inst:FAO, rol:Ejecutor, region:Maule
+ *  10. Protección contra falsos positivos: umbral mínimo de similitud
  * ============================================================================
  */
 
@@ -20,67 +24,79 @@ import { Project, daysUntilClose } from './data';
 
 export const AGRICULTURAL_THESAURUS: Record<string, string[]> = {
     // Agua y Riego
-    'agua': ['riego', 'pozo', 'hidrico', 'hidraulico', 'tecnificacion', 'aspersion', 'goteo', 'drenaje', 'irrigacion', 'embalse', 'recursos hidricos'],
-    'riego': ['agua', 'pozo', 'tecnificacion', 'aspersion', 'goteo', 'hidrico', 'cnr', 'irrigacion'],
-    'sequia': ['seco', 'agua', 'riego', 'emergencia', 'hidrico', 'pozo', 'contingencia'],
+    'agua': ['riego', 'pozo', 'hidrico', 'hidraulico', 'tecnificacion', 'aspersion', 'goteo', 'drenaje', 'irrigacion', 'embalse', 'recursos hidricos', 'hidrica', 'hidricidad'],
+    'riego': ['agua', 'pozo', 'tecnificacion', 'aspersion', 'goteo', 'hidrico', 'cnr', 'irrigacion', 'regantes'],
+    'sequia': ['seco', 'agua', 'riego', 'emergencia', 'hidrico', 'pozo', 'contingencia', 'escasez'],
     'pozo': ['agua', 'riego', 'hidrico', 'perforacion', 'profundizacion'],
+    'hidrico': ['agua', 'riego', 'hidricidad', 'recursos hidricos', 'gestion hidrica', 'gobernanza del agua'],
 
     // Suelos
-    'suelo': ['tierra', 'recuperacion', 'fertilizacion', 'enmienda', 'sirsd', 'degradado', 'erosion'],
+    'suelo': ['tierra', 'recuperacion', 'fertilizacion', 'enmienda', 'sirsd', 'degradado', 'erosion', 'sustrato'],
     'degradado': ['suelo', 'recuperacion', 'sirsd', 'erosion', 'tierra'],
 
     // Maquinaria
-    'maquinaria': ['mecanizacion', 'tractor', 'equipo', 'implemento', 'tecnologia', 'inversion', 'modernizacion'],
+    'maquinaria': ['mecanizacion', 'tractor', 'equipo', 'implemento', 'tecnologia', 'inversion', 'modernizacion', 'mecanizacion agricola'],
     'mecanizacion': ['maquinaria', 'tractor', 'equipo', 'implemento', 'modernizacion'],
 
     // Instituciones nacionales
-    'indap': ['instituto desarrollo agropecuario', 'usuario indap', 'pequeno agricultor', 'agricultura familiar'],
-    'cnr': ['comision nacional riego', 'riego', 'agua', 'ley 18450'],
-    'corfo': ['corporacion fomento', 'innovacion', 'emprendimiento', 'pyme'],
-    'fia': ['fundacion innovacion agraria', 'innovacion', 'investigacion', 'i+d'],
-    'sercotec': ['servicio cooperacion tecnica', 'pyme', 'emprendimiento', 'micro'],
-    'gore': ['gobierno regional', 'region', 'regional', 'fndr'],
-    'minagri': ['ministerio agricultura', 'agricultura', 'sag', 'indap'],
-    'conaf': ['corporacion nacional forestal', 'forestal', 'bosque', 'arboles'],
-    'sag': ['servicio agricola ganadero', 'ganaderia', 'sanidad animal', 'fitosanitario'],
-    'inia': ['instituto investigaciones agropecuarias', 'investigacion', 'semillas', 'variedades'],
+    'indap': ['instituto desarrollo agropecuario', 'usuario indap', 'pequeno agricultor', 'agricultura familiar', 'prodesal', 'pdti', 'saf'],
+    'cnr': ['comision nacional riego', 'riego', 'agua', 'ley 18450', 'concurso de riego'],
+    'corfo': ['corporacion fomento', 'innovacion', 'emprendimiento', 'pyme', 'startups'],
+    'fia': ['fundacion innovacion agraria', 'innovacion', 'investigacion', 'i+d', 'convocatoria fia'],
+    'sercotec': ['servicio cooperacion tecnica', 'pyme', 'emprendimiento', 'micro', 'capital semilla'],
+    'gore': ['gobierno regional', 'region', 'regional', 'fndr', 'fondo nacional desarrollo regional'],
+    'minagri': ['ministerio agricultura', 'agricultura', 'sag', 'indap', 'odepa'],
+    'conaf': ['corporacion nacional forestal', 'forestal', 'bosque', 'arboles', 'reforestacion'],
+    'sag': ['servicio agricola ganadero', 'ganaderia', 'sanidad animal', 'fitosanitario', 'trazabilidad'],
+    'inia': ['instituto investigaciones agropecuarias', 'investigacion', 'semillas', 'variedades', 'carillanca'],
 
     // Instituciones internacionales
-    'fontagro': ['fondo regional tecnologia agropecuaria', 'innovacion', 'regional', 'alc'],
-    'fao': ['naciones unidas', 'alimentacion', 'agricultura', 'seguridad alimentaria'],
-    'fida': ['desarrollo agricola', 'rural', 'pobreza', 'campesino'],
-    'bid': ['banco interamericano', 'financiamiento', 'desarrollo', 'prestamo'],
-    'gcf': ['green climate fund', 'fondo verde clima', 'cambio climatico', 'climatico'],
-    'iica': ['instituto interamericano', 'cooperacion', 'hemisferico', 'alc', 'agricola'],
-    'aecid': ['espana', 'cooperacion espanola', 'desarrollo rural', 'ods'],
-    'euroclima': ['union europea', 'biodiversidad', 'cambio climatico', 'resiliencia', 'alianza'],
+    'fontagro': ['fondo regional tecnologia agropecuaria', 'innovacion', 'regional', 'alc', 'consorcio fontagro', 'iica bid'],
+    'fao': ['naciones unidas', 'alimentacion', 'agricultura', 'seguridad alimentaria', 'tcp', 'programa cooperacion tecnica'],
+    'fida': ['ifad', 'desarrollo agricola', 'rural', 'pobreza', 'campesino', 'prestamo fida', 'cosop'],
+    'bid': ['banco interamericano', 'financiamiento', 'desarrollo', 'prestamo', 'atn', 'banco interamericano de desarrollo'],
+    'gcf': ['green climate fund', 'fondo verde clima', 'cambio climatico', 'climatico', 'fondo verde para el clima'],
+    'gef': ['global environment facility', 'fondo mundial ambiente', 'biodiversidad', 'climatico', 'implementacion gef'],
+    'iica': ['instituto interamericano', 'cooperacion', 'hemisferico', 'alc', 'agricola', 'san jose'],
+    'aecid': ['espana', 'cooperacion espanola', 'desarrollo rural', 'ods', 'espanol'],
+    'euroclima': ['union europea', 'biodiversidad', 'cambio climatico', 'resiliencia', 'alianza', 'euroclima+', 'ue'],
+    'ue': ['union europea', 'euroclima', 'europa', 'horizonte europa', 'life'],
 
     // Beneficiarios
-    'mujer': ['mujeres', 'femenino', 'genero', 'rural', 'agricultora', 'campesina'],
-    'joven': ['jovenes', 'juventud', 'recambio generacional', 'joven rural'],
-    'indigena': ['pueblos originarios', 'mapuche', 'aymara', 'comunidad'],
-    'pequeno': ['pequena', 'pyme', 'micro', 'indap', 'minifundio', 'afc'],
-    'cooperativa': ['asociatividad', 'organizacion', 'comunidad', 'colectivo'],
+    'mujer': ['mujeres', 'femenino', 'genero', 'rural', 'agricultora', 'campesina', 'empoderamiento', 'enfoque de genero'],
+    'joven': ['jovenes', 'juventud', 'recambio generacional', 'joven rural', 'jovenes agricultores'],
+    'indigena': ['pueblos originarios', 'mapuche', 'aymara', 'quechua', 'comunidad', 'interculturalidad'],
+    'pequeno': ['pequena', 'pyme', 'micro', 'indap', 'minifundio', 'afc', 'agricultura familiar'],
+    'cooperativa': ['asociatividad', 'organizacion', 'comunidad', 'colectivo', 'organizacion de productores'],
     'asociatividad': ['cooperativa', 'organizacion', 'comunidad', 'colectivo'],
 
     // Temáticas
-    'innovacion': ['tecnologia', 'i+d', 'investigacion', 'fia', 'corfo', 'digitalizacion'],
-    'digitalizacion': ['tecnologia', 'innovacion', 'automatizacion', 'datos', 'software'],
-    'exportacion': ['export', 'prochile', 'mercado internacional', 'comercio exterior'],
-    'sustentable': ['sostenible', 'ambiental', 'ecologico', 'verde', 'organico', 'limpio'],
-    'organico': ['agroecologico', 'sustentable', 'certificacion', 'ecologico'],
-    'bioeconomia': ['sustentable', 'circular', 'verde', 'biodiversidad', 'ambiental'],
-    'ganaderia': ['ganado', 'bovino', 'ovino', 'sag', 'pecuario', 'praderas', 'forraje'],
-    'forestal': ['bosque', 'arbol', 'conaf', 'reforestacion', 'plantacion'],
+    'innovacion': ['tecnologia', 'i+d', 'investigacion', 'fia', 'corfo', 'digitalizacion', 'transferencia tecnologica'],
+    'digitalizacion': ['tecnologia', 'innovacion', 'automatizacion', 'datos', 'software', 'plataforma digital', 'trazabilidad'],
+    'exportacion': ['export', 'prochile', 'mercado internacional', 'comercio exterior', 'agroexportacion'],
+    'sustentable': ['sostenible', 'ambiental', 'ecologico', 'verde', 'organico', 'limpio', 'sostenibilidad'],
+    'organico': ['agroecologico', 'sustentable', 'certificacion', 'ecologico', 'agroecologia'],
+    'bioeconomia': ['sustentable', 'circular', 'verde', 'biodiversidad', 'ambiental', 'economia circular'],
+    'ganaderia': ['ganado', 'bovino', 'ovino', 'sag', 'pecuario', 'praderas', 'forraje', 'leche', 'carne'],
+    'forestal': ['bosque', 'arbol', 'conaf', 'reforestacion', 'plantacion', 'silvicola'],
+    'silvoagropecuario': ['forestal', 'innovacion', 'fia', 'agroforesteria', 'agroforestal'],
+    'agroforestal': ['silvoagropecuario', 'forestal', 'innovacion', 'bosque', 'resiliencia'],
     'emergencia': ['catastrofe', 'desastre', 'helada', 'sequia', 'incendio', 'contingencia'],
-    'credito': ['prestamo', 'financiamiento', 'inversion', 'indap', 'capital'],
+    'credito': ['prestamo', 'financiamiento', 'inversion', 'indap', 'capital', 'acceso a financiamiento'],
     'subsidio': ['apoyo', 'ayuda', 'financiamiento', 'fondo', 'bonificacion'],
-    'capacitacion': ['formacion', 'asistencia tecnica', 'educacion', 'consultoria'],
-    'sanidad': ['fitosanitario', 'inocuidad', 'veterinario', 'sag', 'plagas'],
-    'inocuidad': ['seguridad alimentaria', 'sanidad', 'calidad', 'certificacion'],
-    'cambio climatico': ['adaptacion', 'mitigacion', 'emisiones', 'gcf', 'clima', 'ndc'],
-    'sur sur': ['cooperacion', 'transferencia', 'alc', 'hemisferico', 'iica'],
+    'capacitacion': ['formacion', 'asistencia tecnica', 'educacion', 'consultoria', 'extension rural'],
+    'sanidad': ['fitosanitario', 'inocuidad', 'veterinario', 'sag', 'plagas', 'sanidad vegetal'],
+    'inocuidad': ['seguridad alimentaria', 'sanidad', 'calidad', 'certificacion', 'inocuidad alimentaria'],
+    'cambio climatico': ['adaptacion', 'mitigacion', 'emisiones', 'gcf', 'clima', 'ndc', 'paris', 'carbono'],
+    'adaptacion': ['resiliencia', 'clima', 'vulnerabilidad', 'cambio climatico', 'medidas adaptacion'],
+    'resiliencia': ['adaptacion', 'recuperacion', 'clima', 'cambio climatico', 'fortalecimiento'],
+    'sur sur': ['cooperacion', 'transferencia', 'alc', 'hemisferico', 'iica', 'triangular'],
     'patagonia': ['aysen', 'magallanes', 'sur', 'regenerativo', 'ganaderia'],
+    'extension': ['asistencia tecnica', 'capacitacion', 'transferencia', 'servicio extension'],
+    'trazabilidad': ['sanidad', 'sag', 'inocuidad', 'certificacion', 'sistema trazabilidad'],
+    'inclusio': ['genero', 'mujer', 'indigena', 'social', 'joven', 'equidad'],
+    'seguridad alimentaria': ['fao', 'hambre', 'produccion', 'inocuidad', 'acceso alimentos'],
+    'cop': ['cambio climatico', 'clima', 'emisiiones', 'ods'],
 };
 
 // ============================================================================
@@ -112,6 +128,12 @@ export const NATURAL_LANGUAGE_PHRASES: Record<string, string[]> = {
     'cooperacion iica': ['iica', 'hemisferico', 'sur sur', 'cooperacion'],
     'alta viabilidad': ['viabilidad alta', 'porcentaje alto', 'prioritario'],
     'facil de postular': ['complejidad facil', 'requisitos simples'],
+    'sin cofinancia': ['sin cofinanciamiento', 'sin aporte', 'no requiere cofinanciamiento'],
+    'iica ejecutor': ['ejecutor', 'rol ejecutor', 'iica postula directamente'],
+    'zona arida': ['sequia', 'agua', 'coquimbo', 'atacama', 'arica', 'norte'],
+    'agricultura familiar': ['afc', 'indap', 'pequeno agricultor', 'campesino'],
+    'clima inteligente': ['cambio climatico', 'adaptacion', 'clima', 'resiliencia'],
+    'recursos hidricos': ['agua', 'riego', 'hidrico', 'gestion hidrica'],
 };
 
 // ============================================================================
@@ -134,8 +156,20 @@ function tokenize(text: string): string[] {
         .filter(w => w.length > 2);
 }
 
+/**
+ * Genera bigramas a partir de una lista de tokens.
+ * Ejemplo: ['cambio', 'climatico', 'zona'] → ['cambio climatico', 'climatico zona']
+ */
+function bigrams(tokens: string[]): string[] {
+    const result: string[] = [];
+    for (let i = 0; i < tokens.length - 1; i++) {
+        result.push(`${tokens[i]} ${tokens[i + 1]}`);
+    }
+    return result;
+}
+
 // ============================================================================
-// EXPANSIÓN DE TÉRMINOS
+// EXPANSIÓN DE TÉRMINOS (con bigramas)
 // ============================================================================
 
 function expandNaturalLanguage(query: string): string[] {
@@ -154,31 +188,44 @@ export function expandSearchTerms(query: string): string[] {
     const tokens = tokenize(normalized);
     const expanded = new Set<string>();
 
+    // Tokens originales
     tokens.forEach(t => expanded.add(t));
+
+    // Bigramas del query
+    bigrams(tokens).forEach(b => expanded.add(b));
 
     // Frases naturales primero (mayor prioridad)
     expandNaturalLanguage(query).forEach(t => expanded.add(normalizeText(t)));
 
-    // Sinónimos del tesauro
+    // Sinónimos del tesauro (1 nivel de expansión)
     tokens.forEach(token => {
         Object.entries(AGRICULTURAL_THESAURUS).forEach(([key, synonyms]) => {
             const nkey = normalizeText(key);
-            if (token.includes(nkey) || nkey.includes(token) || token === nkey) {
+            if (token === nkey || token.startsWith(nkey) || nkey.startsWith(token)) {
                 synonyms.forEach(s => expanded.add(normalizeText(s)));
                 expanded.add(nkey);
             }
         });
     });
 
+    // También buscar bigramas en el tesauro
+    bigrams(tokens).forEach(bigram => {
+        const nbigram = normalizeText(bigram);
+        if (AGRICULTURAL_THESAURUS[nbigram]) {
+            AGRICULTURAL_THESAURUS[nbigram].forEach(s => expanded.add(normalizeText(s)));
+        }
+    });
+
     return Array.from(expanded);
 }
 
 // ============================================================================
-// DISTANCIA DE LEVENSHTEIN (tolerancia a typos)
+// DISTANCIA DE LEVENSHTEIN (tolerancia a typos — calibrada para precisión)
 // ============================================================================
 
 function levenshtein(a: string, b: string): number {
     const m = a.length, n = b.length;
+    if (Math.abs(m - n) > 3) return Math.max(m, n); // early exit si longitud muy diferente
     const dp: number[][] = Array.from({ length: n + 1 }, (_, i) => [i]);
     for (let j = 0; j <= m; j++) dp[0][j] = j;
     for (let i = 1; i <= n; i++) {
@@ -191,20 +238,117 @@ function levenshtein(a: string, b: string): number {
     return dp[n][m];
 }
 
-function isSimilar(w1: string, w2: string, threshold = 2): boolean {
-    if (w1.length < 4 || w2.length < 4) return w1 === w2;
+/**
+ * Tolerancia a typos calibrada:
+ * - Palabras < 4 chars: solo exacto
+ * - Palabras 4-6 chars: max 1 error
+ * - Palabras > 6 chars: max 2 errores o 18% de la longitud
+ */
+function isSimilar(w1: string, w2: string): boolean {
+    if (w1 === w2) return true;
+    const minLen = Math.min(w1.length, w2.length);
+    const maxLen = Math.max(w1.length, w2.length);
+    if (minLen < 4) return false; // cortas solo si exactas
     const dist = levenshtein(w1, w2);
-    return dist <= threshold || dist / Math.max(w1.length, w2.length) <= 0.22;
+    if (minLen <= 6) return dist <= 1;
+    return dist <= 2 && dist / maxLen <= 0.18;
+}
+
+// ============================================================================
+// PARSER DE OPERADORES BOOLEANOS Y FILTROS POR CAMPO
+// ============================================================================
+
+interface ParsedQuery {
+    required: string[];   // términos AND (todos deben estar presentes)
+    optional: string[];   // términos OR (al menos uno)
+    forbidden: string[];  // términos NOT (ninguno debe estar)
+    fieldFilters: Record<string, string>; // inst:FAO, rol:Ejecutor, etc.
+    rawRequired: string[]; // raw sin expandir (para scoring exacto)
+}
+
+const FIELD_ALIASES: Record<string, string> = {
+    'inst': 'institucion',
+    'institución': 'institucion',
+    'institucion': 'institucion',
+    'rol': 'rolIICA',
+    'region': 'region',
+    'región': 'region',
+    'eje': 'ejeIICA',
+    'resp': 'responsableIICA',
+    'ambito': 'ambito',
+    'ámbito': 'ambito',
+    'estado': 'estadoPostulacion',
+    'via': 'viabilidadIICA',
+    'viabilidad': 'viabilidadIICA',
+};
+
+export function parseQuery(rawQuery: string): ParsedQuery {
+    const result: ParsedQuery = {
+        required: [],
+        optional: [],
+        forbidden: [],
+        fieldFilters: {},
+        rawRequired: [],
+    };
+
+    // Extraer filtros por campo: inst:FAO, rol:Ejecutor
+    const fieldRegex = /(\w+):(\S+)/g;
+    let cleanQuery = rawQuery;
+    let match;
+    while ((match = fieldRegex.exec(rawQuery)) !== null) {
+        const alias = match[1].toLowerCase();
+        const field = FIELD_ALIASES[alias];
+        if (field) {
+            result.fieldFilters[field] = match[2];
+            cleanQuery = cleanQuery.replace(match[0], '').trim();
+        }
+    }
+
+    // Extraer frases exactas entre comillas
+    const phrases: string[] = [];
+    const phraseRegex = /"([^"]+)"/g;
+    cleanQuery = cleanQuery.replace(phraseRegex, (_, phrase) => {
+        phrases.push(normalizeText(phrase));
+        return '';
+    }).trim();
+
+    // Tokenizar por espacios y detectar OR (|) y NOT (-)
+    const parts = cleanQuery.split(/\s+/).filter(Boolean);
+    let nextIsOr = false;
+
+    for (let i = 0; i < parts.length; i++) {
+        const part = parts[i];
+        if (part === '|' || part.toLowerCase() === 'or') {
+            nextIsOr = true;
+            continue;
+        }
+        if (part.startsWith('-') && part.length > 1) {
+            result.forbidden.push(...expandSearchTerms(part.slice(1)));
+            continue;
+        }
+        const expanded = expandSearchTerms(part);
+        if (nextIsOr) {
+            result.optional.push(...expanded);
+            nextIsOr = false;
+        } else {
+            result.required.push(...expanded);
+            result.rawRequired.push(normalizeText(part));
+        }
+    }
+
+    // Las frases exactas siempre son required
+    phrases.forEach(p => {
+        result.required.push(p);
+        result.rawRequired.push(p);
+    });
+
+    return result;
 }
 
 // ============================================================================
 // CORPUS COMPLETO DE PROYECTO → texto indexable
 // ============================================================================
 
-/**
- * Genera el corpus de texto de un proyecto, ponderado por importancia de campo.
- * Devuelve un objeto con cada zona para control fino del scoring.
- */
 export function buildProjectCorpus(p: Project): {
     titulo: string;
     institucion: string;
@@ -257,6 +401,8 @@ export function buildProjectCorpus(p: Project): {
         p.complejidad || '',
         p.estadoPostulacion || '',
         p.ambito || '',
+        // Añadimos bigramas del título para mejorar coincidencias de frases
+        bigrams(tokenize(titulo)).join(' '),
     ].join(' ');
 
     return {
@@ -270,6 +416,21 @@ export function buildProjectCorpus(p: Project): {
 // BÚSQUEDA BÁSICA (boolean) — para filtrado inicial
 // ============================================================================
 
+/**
+ * Comprueba si un término coincide con el target (exacto, expansión o Levenshtein)
+ */
+function termMatchesTarget(term: string, normalizedTarget: string, targetWords: string[]): boolean {
+    // Coincidencia exacta de subcadena (más fiable que por palabras)
+    if (normalizedTarget.includes(term)) return true;
+    // Coincidencia parcial por palabra
+    if (term.length > 3 && targetWords.some(tw => tw.startsWith(term) || term.startsWith(tw))) return true;
+    // Tolerancia a typos (solo para términos de longitud razonable)
+    if (term.length >= 4) {
+        return targetWords.some(tw => isSimilar(term, tw));
+    }
+    return false;
+}
+
 export function smartSearch(searchTerm: string, project: Project): boolean;
 export function smartSearch(searchTerm: string, targetText: string): boolean;
 export function smartSearch(searchTerm: string, input: Project | string): boolean {
@@ -280,60 +441,60 @@ export function smartSearch(searchTerm: string, input: Project | string): boolea
         : buildProjectCorpus(input).full;
 
     const normalizedTarget = normalizeText(targetText);
+    const targetWords = normalizedTarget.split(/\s+/).filter(w => w.length > 1);
 
-    // ── Búsqueda por frase exacta con comillas: "FAO TCP" ──
-    const phraseMatches = searchTerm.match(/"([^"]+)"/g);
-    if (phraseMatches) {
-        // Todas las frases entre comillas deben estar presentes
-        for (const match of phraseMatches) {
-            const phrase = normalizeText(match.replace(/"/g, ''));
-            if (!normalizedTarget.includes(phrase)) return false;
+    const parsed = parseQuery(searchTerm);
+
+    // ── Verificar filtros por campo específico ────────────────────────────
+    if (Object.keys(parsed.fieldFilters).length > 0 && typeof input !== 'string') {
+        const project = input as Project;
+        for (const [field, value] of Object.entries(parsed.fieldFilters)) {
+            const projValue = normalizeText(String((project as Record<string, unknown>)[field] || ''));
+            if (!projValue.includes(normalizeText(value))) return false;
         }
-        // El resto del query (sin comillas) también debe coincidir
-        const remainingQuery = searchTerm.replace(/"[^"]+"/g, '').trim();
-        if (!remainingQuery) return true;
-        return smartSearch(remainingQuery, targetText);
     }
 
-    const expandedTerms = expandSearchTerms(searchTerm);
-    const targetWords = normalizedTarget.split(/\s+/);
+    // ── Verificar términos NOT (ninguno debe estar) ───────────────────────
+    for (const forbiddenTerm of parsed.forbidden) {
+        if (normalizedTarget.includes(forbiddenTerm)) return false;
+    }
 
-    // Cada palabra del query debe encontrarse en alguna forma
-    const queryWords = searchTerm.trim().split(/\s+/);
+    // ── Verificar términos OR (al menos uno debe estar) ───────────────────
+    if (parsed.optional.length > 0) {
+        const hasOptional = parsed.optional.some(t => termMatchesTarget(t, normalizedTarget, targetWords));
+        if (!hasOptional) return false;
+    }
+
+    // ── Verificar términos AND (todos deben estar) ────────────────────────
+    // Agrupar por token original del usuario para evaluarlos en conjunto
+    if (parsed.rawRequired.length === 0 && parsed.required.length === 0) return true;
+
+    // Estrategia: cada "palabra original" del query debe encontrarse,
+    // usando sus expansiones como alternativas.
+    const queryWords = searchTerm
+        .replace(/"[^"]+"/g, '')
+        .replace(/\w+:\S+/g, '')
+        .trim()
+        .split(/\s+/)
+        .filter(w => w && !w.startsWith('-') && w !== '|' && w.toLowerCase() !== 'or');
+
     for (const word of queryWords) {
+        if (word.startsWith('-')) continue;
         const wordExpanded = expandSearchTerms(word);
-        let found = false;
-
-        for (const term of wordExpanded) {
-            if (normalizedTarget.includes(term)) { found = true; break; }
-        }
-
-        if (!found) {
-            // Tolerancia a typos
-            for (const targetWord of targetWords) {
-                for (const term of wordExpanded) {
-                    if (isSimilar(term, targetWord)) { found = true; break; }
-                }
-                if (found) break;
-            }
-        }
-
+        const found = wordExpanded.some(term => termMatchesTarget(term, normalizedTarget, targetWords));
         if (!found) return false;
     }
-    // Suprimir warning de variable no usada
-    void expandedTerms;
+
     return true;
 }
 
 // ============================================================================
 // SCORING DE RELEVANCIA MULTI-CAMPO
-// Pondera: título > institución > ejeIICA > objetivo > descripción > resto
-// + bonus: viabilidad IICA + urgencia cierre + complejidad + estado abierto
 // ============================================================================
 
 const FIELD_WEIGHTS: Record<string, number> = {
-    titulo: 50,
-    institucion: 30,
+    titulo: 60,       // boost mayor para título
+    institucion: 40,
     ejeIICA: 25,
     responsable: 20,
     objetivo: 18,
@@ -361,39 +522,46 @@ export function scoreProject(searchTerm: string, project: Project): number {
             if (!fieldText) continue;
 
             if (fieldText.includes(term)) {
-                // Bonus adicional si está al inicio del título
-                const bonus = (field === 'titulo' && fieldText.startsWith(term)) ? 15 : 0;
-                score += weight + bonus;
+                // Bonus si está al inicio del título
+                const positionBonus = (field === 'titulo' && fieldText.indexOf(term) < 20) ? 20 : 0;
+                // Bonus por exactitud del token (query original vs expansión)
+                const queryTokens = tokenize(normalizeText(searchTerm));
+                const exactBonus = queryTokens.includes(term) ? 5 : 0;
+                score += weight + positionBonus + exactBonus;
             }
         }
     }
 
     // ── Bonus contextual IICA ──────────────────────────────────────────────
 
-    // Viabilidad IICA (máx +20)
+    // Viabilidad IICA (máx +25)
     const viabilidad = project.porcentajeViabilidad || 0;
-    score += Math.round(viabilidad / 5); // 100% → +20, 50% → +10
+    score += Math.round(viabilidad / 4); // 100% → +25, 50% → +12.5
 
-    // Urgencia de cierre (máx +15)
+    // Urgencia de cierre (máx +20)
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const closing = new Date(project.fecha_cierre);
     const diffDays = Math.ceil((closing.getTime() - today.getTime()) / 86_400_000);
-    if (diffDays > 0 && diffDays <= 7) score += 15;  // cierra esta semana
-    else if (diffDays > 0 && diffDays <= 30) score += 8;   // cierra este mes
-    else if (diffDays > 0) score += 3;                      // abierto
+    if (diffDays > 0 && diffDays <= 3)  score += 20; // ¡urgente!
+    else if (diffDays > 0 && diffDays <= 7)  score += 15; // cierra esta semana
+    else if (diffDays > 0 && diffDays <= 30) score += 8;  // cierra este mes
+    else if (diffDays > 0) score += 3;                    // abierto
+    else score -= 20;                                     // penalizar cerrados
 
     // Estado de postulación
-    if (project.estadoPostulacion === 'Abierta') score += 5;
+    if (project.estadoPostulacion === 'Abierta') score += 8;
+    else if (project.estadoPostulacion === 'Próxima') score += 3;
+    else if (project.estadoPostulacion === 'Cerrada') score -= 15;
 
     // ── Rol IICA (boost/penalización según apropiación directa) ───────────
-    if (project.rolIICA === 'Ejecutor') score += 15;
-    else if (project.rolIICA === 'Implementador') score += 10;
-    else if (project.rolIICA === 'Asesor') score += 3;
-    else if (project.rolIICA === 'Indirecto') score -= 10; // penalizar rol indirecto
+    if (project.rolIICA === 'Ejecutor')     score += 20;
+    else if (project.rolIICA === 'Implementador') score += 12;
+    else if (project.rolIICA === 'Asesor')  score += 4;
+    else if (project.rolIICA === 'Indirecto') score -= 12;
 
-    // Complejidad (proyectos fáciles más accesibles para el equipo)
-    if (project.complejidad === 'Fácil') score += 3;
+    // Complejidad (fácil = más accesible)
+    if (project.complejidad === 'Fácil') score += 4;
 
     return score;
 }
@@ -417,16 +585,17 @@ function cosine(a: number[], b: number[]): number {
 
 // ============================================================================
 // ÍNDICE INVERTIDO PRE-COMPUTADO
-// Permite lookup O(1) por término en lugar de escanear todo el array
 // ============================================================================
 
 export interface InvertedIndex {
     index: Map<string, Set<number>>;   // term → set of project IDs
     projectMap: Map<number, Project>;  // id → project
+    bigramIndex: Map<string, Set<number>>; // bigram → set of project IDs
 }
 
 export function buildInvertedIndex(projects: Project[]): InvertedIndex {
     const index = new Map<string, Set<number>>();
+    const bigramIndex = new Map<string, Set<number>>();
     const projectMap = new Map<number, Project>();
 
     projects.forEach(project => {
@@ -434,34 +603,43 @@ export function buildInvertedIndex(projects: Project[]): InvertedIndex {
         const corpus = buildProjectCorpus(project);
         const tokens = tokenize(corpus.full);
         const expanded = expandSearchTerms(corpus.full);
+        const bgrams = bigrams(tokens);
 
         [...tokens, ...expanded].forEach(term => {
             if (!index.has(term)) index.set(term, new Set());
             index.get(term)!.add(project.id);
         });
+
+        bgrams.forEach(bigram => {
+            if (!bigramIndex.has(bigram)) bigramIndex.set(bigram, new Set());
+            bigramIndex.get(bigram)!.add(project.id);
+        });
     });
 
-    return { index, projectMap };
+    return { index, projectMap, bigramIndex };
 }
 
-/**
- * Lookup rápido en índice invertido para un query
- * Returns IDs de proyectos candidatos
- */
 export function lookupIndex(query: string, invertedIndex: InvertedIndex): Set<number> {
     const expanded = expandSearchTerms(query);
     const candidates = new Set<number>();
 
     expanded.forEach(term => {
+        // Lookup exacto
         const hits = invertedIndex.index.get(term);
         if (hits) hits.forEach(id => candidates.add(id));
 
-        // Búsqueda difusa en el índice
-        invertedIndex.index.forEach((ids, indexedTerm) => {
-            if (isSimilar(term, indexedTerm)) {
-                ids.forEach(id => candidates.add(id));
-            }
-        });
+        // Lookup en bigramas
+        const bigramHits = invertedIndex.bigramIndex.get(term);
+        if (bigramHits) bigramHits.forEach(id => candidates.add(id));
+
+        // Búsqueda difusa (solo si el exacto no tuvo hits)
+        if (!hits && term.length >= 4) {
+            invertedIndex.index.forEach((ids, indexedTerm) => {
+                if (isSimilar(term, indexedTerm)) {
+                    ids.forEach(id => candidates.add(id));
+                }
+            });
+        }
     });
 
     return candidates;
@@ -481,24 +659,26 @@ export function searchAndRankProjects(
     let candidates: Project[];
 
     if (invertedIndex) {
-        // Ruta rápida: usar índice invertido
         const candidateIds = lookupIndex(searchTerm, invertedIndex);
         candidates = Array.from(candidateIds)
             .map(id => invertedIndex.projectMap.get(id)!)
             .filter(Boolean);
     } else {
-        // Ruta de fallback: scan lineal
         candidates = projects.filter(p => smartSearch(searchTerm, p));
     }
 
-    // Verificación final de relevancia boolean (descarta falsos positivos del índice)
+    // Verificación final boolean (descarta falsos positivos del índice)
     const verified = candidates.filter(p => smartSearch(searchTerm, p));
+
+    if (verified.length === 0) return [];
 
     // Cosine similarity para score semántico
     const queryTokens = tokenize(expandSearchTerms(searchTerm).join(' '));
+    // Limitar el vocab para evitar O(n²) en corpora grandes
+    const maxProjects = Math.min(verified.length, 50);
     const vocab = Array.from(new Set([
         ...queryTokens,
-        ...verified.flatMap(p => tokenize(buildProjectCorpus(p).full)),
+        ...verified.slice(0, maxProjects).flatMap(p => tokenize(buildProjectCorpus(p).full)),
     ]));
     const queryVec = tfVector(queryTokens, vocab);
 
@@ -520,41 +700,40 @@ export function searchAndRankProjects(
 // SUGERENCIAS DINÁMICAS desde datos reales de proyectos
 // ============================================================================
 
-/**
- * Extrae sugerencias de autocompletado directamente del contenido real de proyectos.
- * Mucho más relevante que una lista hardcodeada.
- */
 export function buildDynamicSuggestions(projects: Project[]): string[] {
     const suggestions = new Set<string>();
 
+    // Instituciones (muy útiles para búsqueda directa)
+    const institutions = new Set<string>();
     projects.forEach(p => {
-        // Títulos completos (muy útiles)
-        if (p.nombre) suggestions.add(p.nombre);
+        if (p.institucion) institutions.add(p.institucion);
+    });
+    institutions.forEach(inst => suggestions.add(inst));
 
-        // Instituciones
-        if (p.institucion) suggestions.add(p.institucion);
+    // Ejes IICA (frases cortas muy descriptivas)
+    const ejes = new Set<string>();
+    projects.forEach(p => { if (p.ejeIICA) ejes.add(p.ejeIICA); });
+    ejes.forEach(eje => suggestions.add(eje));
 
-        // Ejes IICA (frases cortas muy descriptivas)
-        if (p.ejeIICA) suggestions.add(p.ejeIICA);
+    // Responsables IICA
+    const responsables = new Set<string>();
+    projects.forEach(p => { if (p.responsableIICA) responsables.add(p.responsableIICA); });
+    responsables.forEach(r => suggestions.add(r));
 
-        // Responsables IICA
-        if (p.responsableIICA) suggestions.add(p.responsableIICA);
+    // Regiones únicas (no "Todas")
+    const regiones = new Set<string>();
+    projects.forEach(p => {
+        p.regiones?.forEach(r => { if (r !== 'Todas') regiones.add(r); });
+    });
+    regiones.forEach(r => suggestions.add(r));
 
-        // Objetivos (primeras 60 chars)
-        if (p.objetivo) suggestions.add(p.objetivo.slice(0, 60) + (p.objetivo.length > 60 ? '...' : ''));
-
-        // Requisitos clave (frases cortas)
-        p.resumen?.requisitos_clave?.forEach(r => {
-            if (r.length < 50) suggestions.add(r);
-        });
-
-        // Regiones
-        p.regiones?.forEach(r => {
-            if (r !== 'Todas') suggestions.add(r);
-        });
+    // Títulos cortos (≤ 60 chars)
+    projects.forEach(p => {
+        if (p.nombre && p.nombre.length <= 60) suggestions.add(p.nombre);
+        else if (p.nombre) suggestions.add(p.nombre.split('–')[0].trim());
     });
 
-    // También agregar frases de lenguaje natural (IICA-específicas)
+    // Frases IICA-específicas (curadas, útiles)
     const iicaPhrases = [
         'IICA Ejecutor directo',
         'Alta viabilidad IICA',
@@ -567,13 +746,20 @@ export function buildDynamicSuggestions(projects: Project[]): string[] {
         'Sistemas alimentarios sostenibles',
         'Trazabilidad sanidad vegetal',
         'Innovación agropecuaria regional',
-        'Inclusión financiera andina',
-        'Agroforestaría Patagonia',
         'Gestión hídrica zonas áridas',
+        'Agroforestería Chile Central',
+        'Financiamiento climático GCF',
+        'Inclusión financiera andina',
+        'rol:Ejecutor',
+        'rol:Implementador',
+        'inst:FONTAGRO',
+        'inst:FAO',
+        'inst:BID',
+        'inst:GEF',
     ];
     iicaPhrases.forEach(p => suggestions.add(p));
 
-    return Array.from(suggestions).filter(s => s.length > 3);
+    return Array.from(suggestions).filter(s => s.length > 2 && s.length < 80);
 }
 
 /**
@@ -586,13 +772,16 @@ export function getZeroResultsSuggestions(
     maxSuggestions = 5
 ): string[] {
     const normalizedQuery = normalizeText(query);
+    const queryTokens = tokenize(normalizedQuery);
     const suggestions: Array<{ text: string; score: number }> = [];
 
-    // Buscar términos del tesauro que sean similares a la query
+    // Buscar términos del tesauro similares
     Object.entries(AGRICULTURAL_THESAURUS).forEach(([key, synonyms]) => {
         const nkey = normalizeText(key);
-        const dist = levenshtein(normalizedQuery, nkey);
-        if (dist <= 3 || nkey.includes(normalizedQuery.slice(0, 4))) {
+        const dist = queryTokens.length === 1
+            ? levenshtein(normalizedQuery, nkey)
+            : Math.min(...queryTokens.map(t => levenshtein(t, nkey)));
+        if (dist <= 3 || nkey.includes(normalizedQuery.slice(0, 5))) {
             suggestions.push({ text: key, score: dist });
             synonyms.slice(0, 2).forEach(s => {
                 suggestions.push({ text: s, score: dist + 1 });
@@ -600,31 +789,35 @@ export function getZeroResultsSuggestions(
         }
     });
 
-    // Buscar en los nombres reales de proyectos
+    // Buscar instituciones que se parezcan
+    const uniqueInsts = [...new Set(projects.map(p => p.institucion))];
+    uniqueInsts.forEach(inst => {
+        const nInst = normalizeText(inst);
+        const dist = levenshtein(normalizedQuery, nInst);
+        if (dist <= 2) suggestions.push({ text: inst, score: dist });
+    });
+
+    // Palabras clave de proyectos reales
     projects.forEach(p => {
         const words = normalizeText(p.nombre).split(' ').filter(w => w.length > 4);
         words.forEach(word => {
-            const dist = levenshtein(normalizedQuery, word);
+            const dist = levenshtein(normalizedQuery.split(' ')[0] || normalizedQuery, word);
             if (dist <= 2) {
-                suggestions.push({ text: p.nombre.split(' ').slice(0, 4).join(' '), score: dist });
+                suggestions.push({ text: p.nombre.split('–')[0].trim(), score: dist });
             }
         });
-        if (p.institucion) {
-            const dist = levenshtein(normalizedQuery, normalizeText(p.institucion));
-            if (dist <= 2) suggestions.push({ text: p.institucion, score: dist });
-        }
     });
 
     return suggestions
         .sort((a, b) => a.score - b.score)
         .map(s => s.text)
-        .filter((s, i, arr) => arr.indexOf(s) === i) // unique
+        .filter((s, i, arr) => arr.indexOf(s) === i)
         .slice(0, maxSuggestions);
 }
 
 /**
  * Orden inteligente por defecto cuando no hay búsqueda activa.
- * Usa un urgencyScore compuesto que combina:
+ * Usa un urgencyScore compuesto:
  *   40% urgencia temporal + 35% viabilidad IICA + 25% rol IICA
  * Proyectos cerrados siempre al final.
  */
@@ -661,7 +854,7 @@ export function defaultSortProjects(projects: Project[]): Project[] {
 }
 
 // ============================================================================
-// SUGERENCIAS DE BÚSQL (compatibilidad legacy)
+// SUGERENCIAS DE BÚSQUEDA (compatibilidad legacy)
 // ============================================================================
 
 export function generateSearchSuggestions(query: string, maxSuggestions = 6): string[] {
@@ -691,4 +884,4 @@ export function generateSearchSuggestions(query: string, maxSuggestions = 6): st
 // RE-EXPORTS para compatibilidad con código existente
 // ============================================================================
 
-export { expandNaturalLanguage, tokenize, levenshtein };
+export { expandNaturalLanguage, tokenize, levenshtein, bigrams };

@@ -21,7 +21,7 @@ export default async function ProjectListContainer({
     const soloAbiertos = searchParams.open === '1';
     const sortBy = typeof searchParams.sort === 'string' ? searchParams.sort : 'relevance';
 
-    // Nuevos filtros Fase 1 (ítems 8, 9, 10)
+    // Filtros avanzados
     const selectedAmbito = typeof searchParams.ambito === 'string' ? searchParams.ambito : 'Todos';
     const selectedViabilidad = typeof searchParams.viabilidad === 'string' ? searchParams.viabilidad : 'Todas';
     const selectedEstado = typeof searchParams.estado === 'string' ? searchParams.estado : 'Todos';
@@ -59,15 +59,31 @@ export default async function ProjectListContainer({
         const filterActive = minAmount > 0 || maxAmount < Infinity;
         const matchesAmount = !filterActive || (project.monto >= minAmount && project.monto <= maxAmount);
 
-        // Filtro solo abiertos
+        // Filtro solo abiertos — usa fecha real como fuente de verdad absoluta
         const closeDate = new Date(project.fecha_cierre);
-        const isOpen = closeDate.getTime() >= today.getTime();
+        const daysLeft = Math.ceil((closeDate.getTime() - today.getTime()) / 86_400_000);
+        const isOpen = daysLeft > 0;
         const matchesOpen = !soloAbiertos || isOpen;
 
-        // Nuevos filtros Fase 1 (ítems 8, 9, 10)
+        // Filtros Fase 1
         const matchesAmbito = selectedAmbito === 'Todos' || project.ambito === selectedAmbito;
         const matchesViabilidad = selectedViabilidad === 'Todas' || project.viabilidadIICA === selectedViabilidad;
-        const matchesEstado = selectedEstado === 'Todos' || project.estadoPostulacion === selectedEstado;
+
+        // Estado: primero usa estadoPostulacion del JSON, si no está disponible infiere por fecha
+        let matchesEstado = true;
+        if (selectedEstado !== 'Todos') {
+            if (project.estadoPostulacion) {
+                matchesEstado = project.estadoPostulacion === selectedEstado;
+            } else {
+                // Inferir estado por fecha cuando el campo no está definido
+                let inferredEstado: string;
+                if (daysLeft < 0) inferredEstado = 'Cerrada';
+                else if (daysLeft <= 30) inferredEstado = 'Próxima';
+                else inferredEstado = 'Abierta';
+                matchesEstado = inferredEstado === selectedEstado;
+            }
+        }
+
         const matchesRol = selectedRol === 'Todos' || project.rolIICA === selectedRol;
 
         return matchesCategory && matchesRegion && matchesBeneficiary && matchesInstitution
@@ -76,7 +92,23 @@ export default async function ProjectListContainer({
     });
 
     // 4. Ordenamiento secundario
-    if (!searchTerm) {
+    if (searchTerm && sortBy !== 'relevance') {
+        // Con búsqueda activa + orden manual elegido por usuario
+        if (sortBy === 'date_asc') {
+            filteredProjects.sort((a, b) => new Date(a.fecha_cierre).getTime() - new Date(b.fecha_cierre).getTime());
+        } else if (sortBy === 'date_desc') {
+            filteredProjects.sort((a, b) => new Date(b.fecha_cierre).getTime() - new Date(a.fecha_cierre).getTime());
+        } else if (sortBy === 'amount_desc') {
+            filteredProjects.sort((a, b) => b.monto - a.monto);
+        } else if (sortBy === 'amount_asc') {
+            filteredProjects.sort((a, b) => a.monto - b.monto);
+        } else if (sortBy === 'viabilidad_desc') {
+            filteredProjects.sort((a, b) => (b.porcentajeViabilidad || 0) - (a.porcentajeViabilidad || 0));
+        }
+        // sortBy === 'relevance' con query → mantiene orden del motor de búsqueda
+    } else if (!searchTerm || sortBy === 'relevance') {
+        // Sin búsqueda: ordenamiento elegido o inteligente por defecto
+        // Con búsqueda y sortBy 'relevance': si no hay resultados de búsqueda, se aplica el ordenamiento por defecto
         if (sortBy === 'date_asc') {
             filteredProjects.sort((a, b) => new Date(a.fecha_cierre).getTime() - new Date(b.fecha_cierre).getTime());
         } else if (sortBy === 'date_desc') {
@@ -88,7 +120,7 @@ export default async function ProjectListContainer({
         } else if (sortBy === 'viabilidad_desc') {
             filteredProjects.sort((a, b) => (b.porcentajeViabilidad || 0) - (a.porcentajeViabilidad || 0));
         } else {
-            // Default inteligente: Abierta > Ejecutor/Implementador > viabilidad > urgencia
+            // Default: urgencyScore compuesto (urgencia + viabilidad + rol)
             filteredProjects = defaultSortProjects(filteredProjects);
         }
     }
