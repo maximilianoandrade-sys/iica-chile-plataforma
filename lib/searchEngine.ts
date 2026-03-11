@@ -183,7 +183,11 @@ function expandNaturalLanguage(query: string): string[] {
     return extra;
 }
 
+const searchTermsCache = new Map<string, string[]>();
+
 export function expandSearchTerms(query: string): string[] {
+    if (searchTermsCache.has(query)) return searchTermsCache.get(query)!;
+
     const normalized = normalizeText(query);
     const tokens = tokenize(normalized);
     const expanded = new Set<string>();
@@ -216,7 +220,10 @@ export function expandSearchTerms(query: string): string[] {
         }
     });
 
-    return Array.from(expanded);
+    const result = Array.from(expanded);
+    if (searchTermsCache.size > 500) searchTermsCache.clear();
+    searchTermsCache.set(query, result);
+    return result;
 }
 
 // ============================================================================
@@ -225,17 +232,22 @@ export function expandSearchTerms(query: string): string[] {
 
 function levenshtein(a: string, b: string): number {
     const m = a.length, n = b.length;
-    if (Math.abs(m - n) > 3) return Math.max(m, n); // early exit si longitud muy diferente
-    const dp: number[][] = Array.from({ length: n + 1 }, (_, i) => [i]);
-    for (let j = 0; j <= m; j++) dp[0][j] = j;
-    for (let i = 1; i <= n; i++) {
-        for (let j = 1; j <= m; j++) {
-            dp[i][j] = b[i - 1] === a[j - 1]
-                ? dp[i - 1][j - 1]
-                : 1 + Math.min(dp[i - 1][j - 1], dp[i][j - 1], dp[i - 1][j]);
+    if (Math.abs(m - n) > 3) return Math.max(m, n); 
+    
+    // Algoritmo optimizado usando sólo dos arrays unidimensionales (menor GC y memoria O(N))
+    let prev = Array.from({ length: n + 1 }, (_, i) => i);
+    let curr = new Array(n + 1).fill(0);
+
+    for (let i = 1; i <= m; i++) {
+        curr[0] = i;
+        for (let j = 1; j <= n; j++) {
+            curr[j] = a[i - 1] === b[j - 1]
+                ? prev[j - 1]
+                : 1 + Math.min(prev[j - 1], curr[j - 1], prev[j]);
         }
+        [prev, curr] = [curr, prev];
     }
-    return dp[n][m];
+    return prev[n];
 }
 
 /**
@@ -246,9 +258,13 @@ function levenshtein(a: string, b: string): number {
  */
 function isSimilar(w1: string, w2: string): boolean {
     if (w1 === w2) return true;
-    const minLen = Math.min(w1.length, w2.length);
-    const maxLen = Math.max(w1.length, w2.length);
-    if (minLen < 4) return false; // cortas solo si exactas
+    const l1 = w1.length, l2 = w2.length;
+    const minLen = Math.min(l1, l2);
+    const maxLen = Math.max(l1, l2);
+    
+    if (minLen < 4) return false; 
+    if (maxLen - minLen > 2) return false; // Early exit: si las longitudes difieren mucho, Levenshtein fallará
+
     const dist = levenshtein(w1, w2);
     if (minLen <= 6) return dist <= 1;
     return dist <= 2 && dist / maxLen <= 0.18;
@@ -282,7 +298,11 @@ const FIELD_ALIASES: Record<string, string> = {
     'viabilidad': 'viabilidadIICA',
 };
 
+const parsedQueryCache = new Map<string, ParsedQuery>();
+
 export function parseQuery(rawQuery: string): ParsedQuery {
+    if (parsedQueryCache.has(rawQuery)) return parsedQueryCache.get(rawQuery)!;
+
     const result: ParsedQuery = {
         required: [],
         optional: [],
@@ -342,6 +362,8 @@ export function parseQuery(rawQuery: string): ParsedQuery {
         result.rawRequired.push(p);
     });
 
+    if (parsedQueryCache.size > 500) parsedQueryCache.clear();
+    parsedQueryCache.set(rawQuery, result);
     return result;
 }
 
@@ -509,10 +531,10 @@ const FIELD_WEIGHTS: Record<string, number> = {
     notasInternas: 4,
 };
 
-export function scoreProject(searchTerm: string, project: Project): number {
+export function scoreProject(searchTerm: string, project: Project, prebuiltCorpus?: ReturnType<typeof buildProjectCorpus>): number {
     if (!searchTerm.trim()) return 0;
 
-    const corpus = buildProjectCorpus(project);
+    const corpus = prebuiltCorpus || buildProjectCorpus(project);
     const expandedTerms = expandSearchTerms(searchTerm);
     let score = 0;
 
@@ -570,17 +592,30 @@ export function scoreProject(searchTerm: string, project: Project): number {
 // COSINE SIMILARITY (para ranking semántico profundo)
 // ============================================================================
 
-function tfVector(tokens: string[], vocab: string[]): number[] {
+function tfVectorSparse(tokens: string[]): Map<string, number> {
     const freq = new Map<string, number>();
-    tokens.forEach(t => freq.set(t, (freq.get(t) || 0) + 1));
-    return vocab.map(v => freq.get(v) || 0);
+    for (const t of tokens) {
+        freq.set(t, (freq.get(t) || 0) + 1);
+    }
+    return freq;
 }
 
-function cosine(a: number[], b: number[]): number {
-    const dot = a.reduce((s, v, i) => s + v * b[i], 0);
-    const magA = Math.sqrt(a.reduce((s, v) => s + v * v, 0));
-    const magB = Math.sqrt(b.reduce((s, v) => s + v * v, 0));
-    return magA && magB ? dot / (magA * magB) : 0;
+function cosineSparse(a: Map<string, number>, b: Map<string, number>): number {
+    let dot = 0;
+    let magA = 0;
+    
+    Array.from(a.entries()).forEach(([key, valA]) => {
+        const valB = b.get(key);
+        if (valB) dot += valA * valB;
+        magA += valA * valA;
+    });
+    
+    let magB = 0;
+    Array.from(b.values()).forEach(valB => {
+        magB += valB * valB;
+    });
+    
+    return magA && magB ? dot / (Math.sqrt(magA) * Math.sqrt(magB)) : 0;
 }
 
 // ============================================================================
@@ -656,38 +691,36 @@ export function searchAndRankProjects(
 ): Project[] {
     if (!searchTerm.trim()) return projects;
 
-    let candidates: Project[];
+    let verified: Project[];
 
     if (invertedIndex) {
         const candidateIds = lookupIndex(searchTerm, invertedIndex);
-        candidates = Array.from(candidateIds)
+        const candidates = Array.from(candidateIds)
             .map(id => invertedIndex.projectMap.get(id)!)
             .filter(Boolean);
+        // Verificación final boolean (descarta falsos positivos del índice)
+        verified = candidates.filter(p => smartSearch(searchTerm, p));
     } else {
-        candidates = projects.filter(p => smartSearch(searchTerm, p));
+        verified = projects.filter(p => smartSearch(searchTerm, p));
     }
-
-    // Verificación final boolean (descarta falsos positivos del índice)
-    const verified = candidates.filter(p => smartSearch(searchTerm, p));
 
     if (verified.length === 0) return [];
 
-    // Cosine similarity para score semántico
+    // Pre-calcular el corpus para evitar repetidas construcciones de strings largos y maps de array
+    const corpusMap = new Map<number, ReturnType<typeof buildProjectCorpus>>();
+    verified.forEach(p => corpusMap.set(p.id, buildProjectCorpus(p)));
+
+    // Cosine similarity semántico (ahora usa vectores dispersos de alta eficiencia en memoria O(Tokens))
     const queryTokens = tokenize(expandSearchTerms(searchTerm).join(' '));
-    // Limitar el vocab para evitar O(n²) en corpora grandes
-    const maxProjects = Math.min(verified.length, 50);
-    const vocab = Array.from(new Set([
-        ...queryTokens,
-        ...verified.slice(0, maxProjects).flatMap(p => tokenize(buildProjectCorpus(p).full)),
-    ]));
-    const queryVec = tfVector(queryTokens, vocab);
+    const queryVec = tfVectorSparse(queryTokens);
 
     // Score combinado: campo-ponderado (70%) + cosine (30%)
     const scored = verified.map(p => {
-        const fieldScore = scoreProject(searchTerm, p);
-        const docTokens = tokenize(buildProjectCorpus(p).full);
-        const docVec = tfVector(docTokens, vocab);
-        const semScore = cosine(queryVec, docVec) * 100;
+        const corpus = corpusMap.get(p.id)!;
+        const fieldScore = scoreProject(searchTerm, p, corpus);
+        const docTokens = tokenize(corpus.full);
+        const docVec = tfVectorSparse(docTokens);
+        const semScore = cosineSparse(queryVec, docVec) * 100;
         return { project: p, total: fieldScore * 0.7 + semScore * 0.3 };
     });
 
