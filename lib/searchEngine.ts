@@ -140,6 +140,10 @@ export const NATURAL_LANGUAGE_PHRASES: Record<string, string[]> = {
 // NORMALIZACIÓN
 // ============================================================================
 
+// ============================================================================
+// NORMALIZACIÓN Y STEMMER ESPAÑOL LIGERO
+// ============================================================================
+
 export function normalizeText(text: string): string {
     return text
         .toLowerCase()
@@ -150,15 +154,38 @@ export function normalizeText(text: string): string {
         .trim();
 }
 
+/**
+ * Lightweight Spanish Stemmer: remueve sufijos plurales y de género
+ * Asegura que "agricolas", "agricola", "agricultores", "agricultor" converjan mejor.
+ */
+function stemSpanish(word: string): string {
+    if (word.length <= 4) return word;
+    let stemmed = word;
+    // Remueve sufijos comunes (simplificado, pero muy efectivo en agro)
+    if (stemmed.endsWith('mente')) stemmed = stemmed.slice(0, -5);
+    if (stemmed.endsWith('idades')) stemmed = stemmed.slice(0, -6);
+    else if (stemmed.endsWith('idad')) stemmed = stemmed.slice(0, -4);
+    if (stemmed.endsWith('ciones')) stemmed = stemmed.slice(0, -6);
+    else if (stemmed.endsWith('cion')) stemmed = stemmed.slice(0, -4);
+    // Plurales simples
+    if (stemmed.endsWith('es') && stemmed.length > 5 && !stemmed.endsWith('res')) stemmed = stemmed.slice(0, -2);
+    else if (stemmed.endsWith('s') && !stemmed.endsWith('is') && !stemmed.endsWith('os')) stemmed = stemmed.slice(0, -1);
+    
+    // Normalizar terminaciones o/a (género)
+    if (stemmed.endsWith('o') || stemmed.endsWith('a')) stemmed = stemmed.slice(0, -1);
+    
+    return stemmed.length >= 3 ? stemmed : word;
+}
+
 function tokenize(text: string): string[] {
     return normalizeText(text)
         .split(' ')
-        .filter(w => w.length > 2);
+        .filter(w => w.length > 2)
+        .map(w => stemSpanish(w)); // Indexing with stemmed tokens
 }
 
 /**
  * Genera bigramas a partir de una lista de tokens.
- * Ejemplo: ['cambio', 'climatico', 'zona'] → ['cambio climatico', 'climatico zona']
  */
 function bigrams(tokens: string[]): string[] {
     const result: string[] = [];
@@ -551,6 +578,24 @@ export function scoreProject(searchTerm: string, project: Project, prebuiltCorpu
                 const exactBonus = queryTokens.includes(term) ? 5 : 0;
                 score += weight + positionBonus + exactBonus;
             }
+        }
+    }
+
+    // ── Phrasal Proximity Bonus (Lucene Slop) ──────────────────────────────
+    // Si múltiples palabras de la búsqueda original aparecen juntas o muy cerca
+    // en la descripción o título, el score se dispara (alta precisión).
+    const rawTokens = normalizeText(searchTerm).split(' ').filter(w => w.length > 2);
+    if (rawTokens.length > 1) {
+        const fullText = normalizeText(corpus.full);
+        let phrase = rawTokens.join(' ');
+        if (fullText.includes(phrase)) {
+            score += 100; // Bonus enorme por coincidencia exacta de frase
+        } else {
+            // Ver si las palabras están a menos de 5 posiciones de distancia (Slop 5)
+            const textTokens = fullText.split(' ');
+            let foundCount = 0;
+            rawTokens.forEach(t => { if (textTokens.includes(t)) foundCount++ });
+            if (foundCount === rawTokens.length) score += 30; // Todas presentes, aunque no ordenadas exactas
         }
     }
 
