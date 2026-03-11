@@ -11,7 +11,7 @@ import Toast from "@/components/ui/Toast";
 import Image from 'next/image';
 import SearchableSelect from "@/components/SearchableSelect"; // Import the new component
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info, Sparkles, Copy, Eye, CheckCheck, MapPin, Users, Banknote, Clock, ChevronRight, ArrowUpDown, FileText, HelpCircle, MonitorPlay, PenTool, CheckCircle2, XCircle, AlertTriangle } from "lucide-react";
+import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info, Sparkles, Copy, Eye, CheckCheck, MapPin, Users, Banknote, Clock, ChevronRight, ArrowUpDown, FileText, HelpCircle, MonitorPlay, PenTool, CheckCircle2, XCircle, AlertTriangle, Zap } from "lucide-react";
 import { ActionButton, UrgencyBadge } from "@/components/ProjectItem";
 import { OportunidadCard, Oportunidad } from "./OportunidadCard";
 import { daysUntilClose } from "@/lib/data";
