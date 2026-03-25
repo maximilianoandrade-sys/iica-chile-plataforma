@@ -617,7 +617,10 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                                     <div className="flex items-center gap-2 mb-1">
                                                                         <div className="font-bold text-[var(--iica-navy)] text-sm group-hover:text-[var(--iica-blue)] transition-colors truncate">{project.nombre}</div>
                                                                         {project.ambito === 'Internacional' && (
-                                                                            <Globe className="h-3 w-3 text-blue-500 shrink-0" title="Alcance Internacional" />
+                                                                            <Globe 
+                                                                                className="h-3 w-3 text-blue-500 shrink-0" 
+                                                                                aria-label="Alcance Internacional"
+                                                                            />
                                                                         )}
                                                                     </div>
                                                                     <div className="flex items-center gap-2">
