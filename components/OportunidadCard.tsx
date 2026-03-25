@@ -136,6 +136,46 @@ export function OportunidadCard({ op, query = "" }: OportunidadCardProps) {
                     <button
                         onClick={(e) => {
                             e.preventDefault();
+                            // Logic to add to pipeline
+                            const current = JSON.parse(localStorage.getItem('iica-pipeline-v2') || '[]');
+                            if (current.some((t: any) => t.id === op.id)) {
+                                alert('Este proyecto ya está en tu pipeline.');
+                                return;
+                            }
+                            const newTask = {
+                                id: op.id,
+                                project: {
+                                    id: op.id,
+                                    nombre: op.nombre,
+                                    institucion: op.institucion,
+                                    fecha_cierre: op.cierre.split('-').reverse().join('-'),
+                                    url_bases: op.url,
+                                    monto: 0,
+                                    categoria: op.categoria || 'Nacional'
+                                },
+                                column: 'descubierto',
+                                priority: op.viabilidad === 'Alta' ? 'Alta' : 'Media',
+                                responsible: 'Pendiente Asignar',
+                                checklist: [
+                                    { id: '1', text: 'Validación de bases legales', completed: false },
+                                    { id: '2', text: 'Presupuesto preliminar', completed: false },
+                                    { id: '3', text: 'Identificación de equipo técnico', completed: false },
+                                    { id: '4', text: 'Carta de intención IICA', completed: false },
+                                ],
+                                lastUpdate: new Date().toISOString()
+                            };
+                            localStorage.setItem('iica-pipeline-v2', JSON.stringify([...current, newTask]));
+                            alert('Proyecto añadido al Pipeline institucional.');
+                        }}
+                        className="bg-indigo-50 text-indigo-700 text-xs font-bold px-3 py-2.5 rounded-xl hover:bg-indigo-100 transition-colors flex items-center justify-center gap-1.5 border border-indigo-200 shadow-sm"
+                        title="Agregar al Pipeline institucional"
+                    >
+                        <LayoutDashboard className="w-3.5 h-3.5" />
+                    </button>
+
+                    <button
+                        onClick={(e) => {
+                            e.preventDefault();
                             const endDate = new Date(op.cierre.split('-').reverse().join('-') || Date.now());
                             const dateStr = endDate.toISOString().replace(/-|:|\.\d+/g, "").slice(0, 15) + "Z";
                             const icsContent = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nURL:${op.url}\nDTSTART:${dateStr}\nDTEND:${dateStr}\nSUMMARY:Cierre: ${op.nombre}\nDESCRIPTION:Convocatoria Institucional: ${op.institucion}. Cierre de Postulaciones.\nEND:VEVENT\nEND:VCALENDAR`;

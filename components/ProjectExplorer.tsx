@@ -14,6 +14,9 @@ const QUICK_FILTERS = [
     { id: 'clima', label: 'Clima', icon: "🌱" },
     { id: 'innovacion', label: 'Innovación', icon: "💡" },
     { id: 'adaptacion', label: 'Adaptación', icon: <Zap className="w-3.5 h-3.5 text-blue-500" /> },
+    { id: 'secano', label: 'Secano', icon: "🌵" },
+    { id: 'hidroponia', label: 'Hidroponía', icon: "🧪" },
+    { id: 'pasantia', label: 'Pasantías', icon: "🎓" },
 ];
 
 const AMBITO_OPTIONS = ['Todos', 'Internacional', 'Nacional', 'Regional'];
