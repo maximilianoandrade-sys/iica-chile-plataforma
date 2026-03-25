@@ -45,7 +45,34 @@ const SOURCE_META: Record<string, { color: string, icon: string, label: string, 
   IICA_GLOBAL: { color: colors.iicaGlobal, icon: "🤝", label: "IICA Global", url: "iica.int" },
   MERCADO_PUBLICO: { color: colors.mercado, icon: "📋", label: "Mercado Público", url: "mercadopublico.cl" },
   ANID: { color: "#7B1FA2", icon: "🧪", label: "ANID", url: "anid.cl" },
+  GEF: { color: "#00695C", icon: "🌍", label: "GEF", url: "thegef.org" },
+  GCF: { color: "#00897B", icon: "🌿", label: "GCF", url: "greenclimate.fund" },
+  EUROCLIMA: { color: "#1976D2", icon: "🇪🇺", label: "EUROCLIMA+", url: "euroclima.org" },
+  FIDA: { color: "#F57C00", icon: "🌾", label: "FIDA", url: "ifad.org" },
+  DEFAULT: { color: "#607D8B", icon: "📋", label: "Otro", url: "" },
 };
+
+// Mapa de nombre de institución a clave de SOURCE_META
+function getSourceMeta(project: any) {
+  if (project.source && SOURCE_META[project.source]) {
+    return SOURCE_META[project.source];
+  }
+  const inst = (project.institution || "").toUpperCase();
+  if (inst.includes("FONTAGRO") || inst.includes("BID") || inst.includes("IADB")) return SOURCE_META.BID_FONTAGRO;
+  if (inst.includes("FAO")) return SOURCE_META.IICA_GLOBAL;
+  if (inst.includes("FIA")) return SOURCE_META.FIA;
+  if (inst.includes("CNR")) return SOURCE_META.CNR;
+  if (inst.includes("INDAP")) return SOURCE_META.INDAP;
+  if (inst.includes("CORFO")) return SOURCE_META.CORFO;
+  if (inst.includes("IICA")) return SOURCE_META.IICA_GLOBAL;
+  if (inst.includes("MERCADO") || inst.includes("CHILECOMPRA")) return SOURCE_META.MERCADO_PUBLICO;
+  if (inst.includes("ANID") || inst.includes("FONDEF")) return SOURCE_META.ANID;
+  if (inst.includes("GEF")) return SOURCE_META.GEF;
+  if (inst.includes("GCF") || inst.includes("GREEN CLIMATE")) return SOURCE_META.GCF;
+  if (inst.includes("EUROCLIMA") || inst.includes("UNIÓN EUROPEA")) return SOURCE_META.EUROCLIMA;
+  if (inst.includes("FIDA") || inst.includes("IFAD")) return SOURCE_META.FIDA;
+  return SOURCE_META.DEFAULT;
+}
 
 const CATEGORIES = [
   { id: "all", label: "Todos", icon: "🔍" },
@@ -386,7 +413,7 @@ export default function ProjectSearchEngine() {
             {/* Cards grid */}
             <div style={{ display: "grid", gap: 16 }}>
               {(results.results || []).map((project: any) => {
-                const src = SOURCE_META[project.source] || SOURCE_META.MERCADO_PUBLICO;
+                const src = getSourceMeta(project);
                 const isOpen = project.status === "abierto" || project.status === "permanente";
                 const isSelected = selectedProject?.id === project.id;
 
@@ -440,7 +467,7 @@ export default function ProjectSearchEngine() {
                             color: colors.iicaDark,
                             lineHeight: 1.35,
                           }}>
-                            {project.title}
+                            {project.title || project.nombre || "Sin título"}
                           </h3>
                           {/* Status pill */}
                           <span style={{
@@ -474,13 +501,14 @@ export default function ProjectSearchEngine() {
                               💰 {project.budget}
                             </span>
                           )}
-                          <span style={{
+                          {project.relevance_score != null && <span style={{
                             fontSize: 11,
                             color: colors.iicaGold,
                             fontWeight: 600,
                           }}>
+
                             ⭐ Relevancia IICA: {project.relevance_score}/10
-                          </span>
+                          </span>}
                         </div>
                       </div>
                     </div>
