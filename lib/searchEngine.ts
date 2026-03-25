@@ -97,6 +97,8 @@ export const AGRICULTURAL_THESAURUS: Record<string, string[]> = {
     'inclusio': ['genero', 'mujer', 'indigena', 'social', 'joven', 'equidad'],
     'seguridad alimentaria': ['fao', 'hambre', 'produccion', 'inocuidad', 'acceso alimentos'],
     'cop': ['cambio climatico', 'clima', 'emisiiones', 'ods'],
+    'adaptation fund': ['fondo de adaptacion', 'fondo adaptacion', 'cambio climatico', 'resiliencia', 'secano costero'],
+    'fondo de adaptacion': ['adaptation fund', 'cambio climatico', 'resiliencia', 'secano costero', 'clima'],
 };
 
 // ============================================================================
@@ -515,17 +517,20 @@ export function smartSearch(searchTerm: string, input: Project | string): boolea
     }
 
     // ── Verificar términos AND (todos deben estar) ────────────────────────
-    // Agrupar por token original del usuario para evaluarlos en conjunto
-    if (parsed.rawRequired.length === 0 && parsed.required.length === 0) return true;
+    // Primero probar si alguna expansión de la frase completa (tesauro) coincide
+    const globalExpanded = expandSearchTerms(searchTerm);
+    const foundGlobal = globalExpanded.some(t => normalizedTarget.includes(t));
+    if (foundGlobal) return true;
 
-    // Estrategia: cada "palabra original" del query debe encontrarse,
-    // usando sus expansiones como alternativas.
+    // Si no, verificar palabra por palabra (AND lógico)
     const queryWords = searchTerm
         .replace(/"[^"]+"/g, '')
         .replace(/\w+:\S+/g, '')
         .trim()
         .split(/\s+/)
         .filter(w => w && !w.startsWith('-') && w !== '|' && w.toLowerCase() !== 'or');
+
+    if (queryWords.length === 0) return true;
 
     for (const word of queryWords) {
         if (word.startsWith('-')) continue;
