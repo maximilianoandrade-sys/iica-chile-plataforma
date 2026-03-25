@@ -33,7 +33,7 @@ export default function PipelinePage() {
     } else {
       // Pick top 10 as examples initially
       const initialTasks: KanbanTask[] = projectsData.slice(0, 8).map(p => ({
-        id: p.id,
+        id: String(p.id),
         project: p as Project,
         column: Math.random() > 0.7 ? 'analisis' : 'descubierto'
       }));
@@ -128,7 +128,7 @@ export default function PipelinePage() {
                         </p>
                         <div className="flex items-center justify-between mt-3">
                           <span className="text-[11px] font-medium bg-slate-100 text-slate-600 px-2 py-1 rounded-md">
-                            Cierre: {task.project.cierre.split('-').reverse().join('-')}
+                            Cierre: {task.project.fecha_cierre.split('-').reverse().join('-')}
                           </span>
                           {task.column === 'enviado' && <CheckCircle2 className="w-4 h-4 text-emerald-500" />}
                         </div>

@@ -85,7 +85,7 @@ export default function AdminPage() {
               <tbody className="divide-y divide-slate-100">
                 {filteredProjects.map((p) => (
                   <tr key={p.id} className="hover:bg-slate-50 transition-colors group">
-                    <td className="px-6 py-4 text-xs font-mono text-slate-400">{p.id.substring(0, 8)}</td>
+                    <td className="px-6 py-4 text-xs font-mono text-slate-400">{String(p.id).substring(0, 8)}</td>
                     <td className="px-6 py-4">
                       <div className="font-bold text-slate-900 text-sm max-w-[400px] truncate">{p.nombre}</div>
                     </td>
@@ -96,12 +96,12 @@ export default function AdminPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex flex-col text-sm">
-                        <span className="font-semibold text-slate-800">{p.cierre}</span>
+                        <span className="font-semibold text-slate-800">{p.fecha_cierre}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <a href={p.url} target="_blank" rel="noreferrer" className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-md">
+                        <a href={p.url_bases} target="_blank" rel="noreferrer" className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-md">
                           <ArrowUpRight className="w-4 h-4" />
                         </a>
                         <button className="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-md">
