@@ -4,7 +4,7 @@
  */
 
 import { useState, useCallback, useRef } from "react";
-import type { Project } from "@/types/project";
+import type { Project } from "@/lib/data";
 
 export interface SemanticResult {
   id: number;
@@ -12,11 +12,21 @@ export interface SemanticResult {
   reason: string;
 }
 
-export interface WebProject extends Omit<Project, "id"> {
+export interface WebProject {
   id: number;
+  nombre: string;
+  institucion: string;
+  monto: number;
+  fecha_cierre: string;
+  estado: string;
+  categoria: string;
+  url_bases: string;
+  ambito?: string;
+  viabilidadIICA?: "Alta" | "Media" | "Baja";
+  rolIICA?: "Ejecutor" | "Implementador" | "Asesor" | "Indirecto";
   _new: true;
   _reason: string;
-  score: number;
+  _score: number;
 }
 
 interface UseSemanticSearchReturn {
@@ -45,8 +55,8 @@ export function useSemanticSearch(): UseSemanticSearchReturn {
       try {
         const projectList = projects
           .map(
-            (p) =>
-              `ID:${p.id}|${p.title}|${p.fuente}|${p.ambito}|${p.viabilidad}|${p.keywords || ""}`
+            (p: Project) =>
+              `ID:${p.id}|${p.nombre}|${p.institucion}|${p.ambito ?? ""}|${p.viabilidadIICA ?? ""}|${p.categoria}`
           )
           .join("\n");
 
@@ -86,12 +96,39 @@ export function useSemanticSearch(): UseSemanticSearchReturn {
 
         if (!response.ok) throw new Error("Error en búsqueda web");
         const data = await response.json();
+        interface RawWebProject {
+          title?: string;
+          nombre?: string;
+          fuente?: string;
+          institucion?: string;
+          ambito?: string;
+          viabilidad?: string;
+          viabilidadIICA?: string;
+          rol?: string;
+          rolIICA?: string;
+          cierre?: string;
+          fecha_cierre?: string;
+          monto?: string | number;
+          url?: string;
+          url_bases?: string;
+          _reason?: string;
+        }
         return (data.projects ?? []).map(
-          (p: Omit<WebProject, "id" | "_new" | "score">, i: number) => ({
-            ...p,
+          (p: RawWebProject, i: number): WebProject => ({
             id: 9000 + i,
+            nombre: p.title || p.nombre || "Sin título",
+            institucion: p.fuente || p.institucion || "Desconocida",
+            monto: typeof p.monto === "number" ? p.monto : 0,
+            fecha_cierre: p.cierre || p.fecha_cierre || "",
+            estado: "Abierta",
+            categoria: "Internacional",
+            url_bases: p.url || p.url_bases || "",
+            ambito: p.ambito || "Internacional",
+            viabilidadIICA: (p.viabilidad || p.viabilidadIICA || "Media") as WebProject["viabilidadIICA"],
+            rolIICA: (p.rol || p.rolIICA || "Asesor") as WebProject["rolIICA"],
             _new: true as const,
-            score: 75,
+            _reason: p._reason || "",
+            _score: 75,
           })
         );
       } catch {

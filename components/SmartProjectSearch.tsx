@@ -2,29 +2,26 @@
 
 /**
  * SmartProjectSearch — Buscador semántico con IA para IICA Chile
- * Colocado en: components/SmartProjectSearch.tsx
- *
- * Props:
- *   projects: Project[]  — array de los proyectos actuales
- *   onSelect?: (p) => void — callback al hacer clic en un proyecto
+ * Usa campos reales del tipo Project definido en @/lib/data
  */
 
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useSemanticSearch } from "@/hooks/useSemanticSearch";
-import type { Project } from "@/types/project";
+import type { Project } from "@/lib/data";
+import type { WebProject } from "@/hooks/useSemanticSearch";
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 
-interface EnrichedProject extends Project {
+type EnrichedProject = (Project | WebProject) & {
   _score?: number;
   _reason?: string;
   _new?: boolean;
-}
+};
 
 interface Filters {
   ambito: string;
   viabilidad: string;
-  fuente: string;
+  institucion: string;
   rol: string;
   diasCierre: number;
 }
@@ -32,7 +29,7 @@ interface Filters {
 const EMPTY_FILTERS: Filters = {
   ambito: "",
   viabilidad: "",
-  fuente: "",
+  institucion: "",
   rol: "",
   diasCierre: 0,
 };
@@ -57,44 +54,43 @@ export default function SmartProjectSearch({
 }) {
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS);
-  const [activeTab, setActiveTab] = useState<
-    "all" | "high" | "intl" | "new"
-  >("all");
+  const [activeTab, setActiveTab] = useState<"all" | "high" | "intl" | "new">("all");
   const [favorites, setFavorites] = useState<Set<number>>(new Set());
   const [showFavOnly, setShowFavOnly] = useState(false);
   const [enriched, setEnriched] = useState<EnrichedProject[]>(projects);
   const [webProjects, setWebProjects] = useState<EnrichedProject[]>([]);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const { search, searchWeb, isSearching, isWebSearching } =
-    useSemanticSearch();
+  const { search, searchWeb, isSearching, isWebSearching } = useSemanticSearch();
 
   // ── Filtrado local (sin IA) ──────────────────────────────────────────────
   const filtered = useMemo(() => {
     const today = new Date();
     let base = enriched;
 
-    if (filters.ambito) base = base.filter((p) => p.ambito === filters.ambito);
+    if (filters.ambito)
+      base = base.filter((p: EnrichedProject) => p.ambito === filters.ambito);
     if (filters.viabilidad)
-      base = base.filter((p) => p.viabilidad === filters.viabilidad);
-    if (filters.fuente)
-      base = base.filter((p) => p.fuente?.includes(filters.fuente));
-    if (filters.rol) base = base.filter((p) => p.rol === filters.rol);
+      base = base.filter((p: EnrichedProject) => p.viabilidadIICA === filters.viabilidad);
+    if (filters.institucion)
+      base = base.filter((p: EnrichedProject) => p.institucion?.includes(filters.institucion));
+    if (filters.rol)
+      base = base.filter((p: EnrichedProject) => p.rolIICA === filters.rol);
     if (filters.diasCierre > 0) {
-      base = base.filter((p) => {
+      base = base.filter((p: EnrichedProject) => {
         const diff =
-          (new Date(p.cierre).getTime() - today.getTime()) /
+          (new Date(p.fecha_cierre).getTime() - today.getTime()) /
           (1000 * 60 * 60 * 24);
         return diff <= filters.diasCierre;
       });
     }
-    if (showFavOnly) base = base.filter((p) => favorites.has(p.id));
+    if (showFavOnly) base = base.filter((p: EnrichedProject) => favorites.has(p.id));
 
-    return base.sort((a, b) => {
+    return base.sort((a: EnrichedProject, b: EnrichedProject) => {
       const sa = a._score ?? 0;
       const sb = b._score ?? 0;
       if (sb !== sa) return sb - sa;
-      return new Date(a.cierre).getTime() - new Date(b.cierre).getTime();
+      return new Date(a.fecha_cierre).getTime() - new Date(b.fecha_cierre).getTime();
     });
   }, [enriched, filters, showFavOnly, favorites]);
 
@@ -102,9 +98,9 @@ export default function SmartProjectSearch({
   const displayed = useMemo(() => {
     if (activeTab === "new") return webProjects;
     if (activeTab === "high")
-      return filtered.filter((p) => p.viabilidad === "Alta");
+      return filtered.filter((p: EnrichedProject) => p.viabilidadIICA === "Alta");
     if (activeTab === "intl")
-      return filtered.filter((p) => p.ambito === "Internacional");
+      return filtered.filter((p: EnrichedProject) => p.ambito === "Internacional");
     return filtered;
   }, [filtered, webProjects, activeTab]);
 
@@ -125,8 +121,8 @@ export default function SmartProjectSearch({
       const matchedIds = new Set(results.map((r) => r.id));
       setEnriched(
         projects
-          .filter((p) => matchedIds.has(p.id))
-          .map((p) => ({
+          .filter((p: Project) => matchedIds.has(p.id))
+          .map((p: Project) => ({
             ...p,
             _score: scoreMap.get(p.id)?.score,
             _reason: scoreMap.get(p.id)?.reason,
@@ -143,7 +139,7 @@ export default function SmartProjectSearch({
   };
 
   const toggleFav = (id: number) => {
-    setFavorites((prev) => {
+    setFavorites((prev: Set<number>) => {
       const next = new Set(prev);
       next.has(id) ? next.delete(id) : next.add(id);
       return next;
@@ -167,7 +163,7 @@ export default function SmartProjectSearch({
       <div className="flex gap-2">
         <input
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
           placeholder='Ej: "fondos riego tecnificado con enfoque de género"'
           className="flex-1 h-10 px-4 border border-border rounded-md text-sm bg-background focus:ring-2 focus:ring-emerald-500 outline-none"
         />
@@ -218,7 +214,7 @@ export default function SmartProjectSearch({
             options: ["Alta", "Media", "Baja"],
           },
           {
-            id: "fuente",
+            id: "institucion",
             label: "Fuente",
             options: [
               "FONTAGRO","FAO","BID","FIDA","FIA","CNR",
@@ -233,9 +229,9 @@ export default function SmartProjectSearch({
         ].map(({ id, label, options }) => (
           <select
             key={id}
-            value={filters[id as keyof Filters]}
-            onChange={(e) =>
-              setFilters((f) => ({ ...f, [id]: e.target.value }))
+            value={filters[id as keyof Filters] as string}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+              setFilters((f: Filters) => ({ ...f, [id]: e.target.value }))
             }
             className="h-8 px-2 text-xs border border-border rounded-md bg-background"
           >
@@ -249,8 +245,8 @@ export default function SmartProjectSearch({
         ))}
         <select
           value={filters.diasCierre}
-          onChange={(e) =>
-            setFilters((f) => ({ ...f, diasCierre: +e.target.value }))
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            setFilters((f: Filters) => ({ ...f, diasCierre: +e.target.value }))
           }
           className="h-8 px-2 text-xs border border-border rounded-md bg-background"
         >
@@ -260,7 +256,7 @@ export default function SmartProjectSearch({
           <option value={90}>Cierra en ≤90 días</option>
         </select>
         <button
-          onClick={() => setShowFavOnly((v) => !v)}
+          onClick={() => setShowFavOnly((v: boolean) => !v)}
           className={`h-8 px-3 text-xs rounded-full border transition-colors ${
             showFavOnly
               ? "bg-emerald-50 border-emerald-300 text-emerald-700"
@@ -278,7 +274,7 @@ export default function SmartProjectSearch({
         </span>
         <span className="px-3 py-1 rounded-full bg-muted border border-border">
           Alta viabilidad:{" "}
-          <strong>{projects.filter((p) => p.viabilidad === "Alta").length}</strong>
+          <strong>{projects.filter((p: Project) => p.viabilidadIICA === "Alta").length}</strong>
         </span>
         {isSearching && (
           <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
@@ -325,11 +321,19 @@ export default function SmartProjectSearch({
               : "Sin resultados con los filtros actuales."}
           </p>
         ) : (
-          displayed.map((p) => {
+          displayed.map((p: EnrichedProject) => {
             const dias = Math.ceil(
-              (new Date(p.cierre).getTime() - today.getTime()) /
+              (new Date(p.fecha_cierre).getTime() - today.getTime()) /
                 (1000 * 60 * 60 * 24)
             );
+            const nombre = "nombre" in p ? p.nombre : "";
+            const montoDisplay =
+              p.monto > 0
+                ? p.monto >= 1_000_000
+                  ? `$${(p.monto / 1_000_000).toFixed(0)}M`
+                  : `$${p.monto.toLocaleString("es-CL")}`
+                : "";
+
             return (
               <div
                 key={p.id}
@@ -357,20 +361,20 @@ export default function SmartProjectSearch({
                         : "bg-green-50 text-green-700 border border-green-200"
                     }`}
                   >
-                    {p.ambito}
+                    {p.ambito ?? "Nacional"}
                   </span>
                   <span
                     className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                      p.viabilidad === "Alta"
+                      p.viabilidadIICA === "Alta"
                         ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                        : p.viabilidad === "Baja"
+                        : p.viabilidadIICA === "Baja"
                         ? "bg-red-50 text-red-700 border border-red-200"
                         : "bg-amber-50 text-amber-700 border border-amber-200"
                     }`}
                   >
-                    {p.viabilidad}
+                    {p.viabilidadIICA ?? "Media"}
                   </span>
-                  {dias <= 7 && (
+                  {dias <= 7 && dias > 0 && (
                     <span className="text-xs px-2 py-0.5 rounded-full bg-red-50 text-red-700 border border-red-200 font-medium">
                       Cierra en {dias}d
                     </span>
@@ -378,12 +382,12 @@ export default function SmartProjectSearch({
                 </div>
 
                 <p className="text-sm font-medium leading-snug mb-1">
-                  {p.title}
+                  {nombre}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {p.fuente} · Cierre:{" "}
-                  {new Date(p.cierre).toLocaleDateString("es-CL")} ({dias}d)
-                  {p.monto ? ` · ${p.monto}` : ""}
+                  {p.institucion} · Cierre:{" "}
+                  {new Date(p.fecha_cierre).toLocaleDateString("es-CL")} ({dias}d)
+                  {montoDisplay ? ` · ${montoDisplay}` : ""}
                 </p>
 
                 {p._reason && (
@@ -393,19 +397,19 @@ export default function SmartProjectSearch({
                 )}
 
                 <div className="flex gap-2 mt-3 items-center">
-                  {p.url && (
+                  {p.url_bases && (
                     <a
-                      href={p.url}
+                      href={p.url_bases}
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
+                      onClick={(e: React.MouseEvent) => e.stopPropagation()}
                       className="text-xs text-blue-600 hover:underline"
                     >
                       Ver bases →
                     </a>
                   )}
                   <button
-                    onClick={(e) => {
+                    onClick={(e: React.MouseEvent) => {
                       e.stopPropagation();
                       toggleFav(p.id);
                     }}
@@ -413,7 +417,7 @@ export default function SmartProjectSearch({
                   >
                     {favorites.has(p.id) ? "Guardado" : "Guardar"}
                   </button>
-                  {p._score && (
+                  {p._score !== undefined && p._score > 0 && (
                     <span className="ml-auto text-xs px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
                       Relevancia: {p._score}%
                     </span>
