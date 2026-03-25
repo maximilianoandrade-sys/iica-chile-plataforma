@@ -10,6 +10,7 @@ import ProgramsSection from "@/components/ProgramsSection";
 import FuentesOficiales from "@/components/FuentesOficiales";
 import ImpactSection from "@/components/ImpactSection";
 import LiveFeedSection from "@/components/LiveFeedSection";
+import Newsletter from "@/components/Newsletter";
 
 export const metadata: Metadata = {
   title: 'Radar de Oportunidades | IICA Chile',
@@ -80,6 +81,9 @@ export default async function DashboardPage({
       </main>
 
       <FuentesOficiales />
+      <section className="container mx-auto max-w-[1200px] px-4 py-8">
+          <Newsletter />
+      </section>
       <ProgramsSection />
       <ImpactSection />
       <AboutSection />
