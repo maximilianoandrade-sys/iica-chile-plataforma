@@ -5,7 +5,8 @@ import { useState } from "react";
 
 export function InstitutionLogo({ nombre, size = 40 }: { nombre: string; size?: number }) {
     const [error, setError] = useState(false);
-    const src = !error ? getInstitutionalLogo(nombre) : `https://placehold.co/${size}x${size}/2E7D32/white?text=${nombre.charAt(0)}`;
+    const safeName = nombre || "?";
+    const src = !error ? getInstitutionalLogo(safeName) : `https://placehold.co/${size}x${size}/2E7D32/white?text=${encodeURIComponent(safeName.charAt(0))}`;
 
     return (
         <div
