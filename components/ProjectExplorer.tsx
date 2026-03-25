@@ -362,7 +362,8 @@ export default function ProjectExplorer({ allProjects }: { allProjects: Project[
                                     adenda: p.permite_adendas,
                                     descripcion: p.descripcionIICA || (p.resumen?.observaciones),
                                     monto: formatMontoCLP(p.monto),
-                                    categoria: p.categoria
+                                    categoria: p.categoria,
+                                    ambito: p.ambito
                                 }} 
                             />
                         </motion.div>
