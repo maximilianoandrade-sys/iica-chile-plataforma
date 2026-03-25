@@ -19,6 +19,7 @@ export interface Oportunidad {
     descripcion?: string;
     monto?: string;
     categoria?: string;
+    ambito?: "Internacional" | "Nacional" | "Regional";
 }
 
 export interface OportunidadCardProps {
