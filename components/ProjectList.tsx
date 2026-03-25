@@ -11,7 +11,7 @@ import Toast from "@/components/ui/Toast";
 import Image from 'next/image';
 import SearchableSelect from "@/components/SearchableSelect"; // Import the new component
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info, Sparkles, Copy, Eye, CheckCheck, MapPin, Users, Banknote, Clock, ChevronRight, ArrowUpDown, FileText, HelpCircle, MonitorPlay, PenTool, CheckCircle2, XCircle, AlertTriangle, Zap } from "lucide-react";
+import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info, Sparkles, Copy, Eye, CheckCheck, MapPin, Users, Banknote, Clock, ChevronRight, ArrowUpDown, FileText, HelpCircle, MonitorPlay, PenTool, CheckCircle2, XCircle, AlertTriangle, Zap, Award } from "lucide-react";
 import { ActionButton, UrgencyBadge } from "@/components/ProjectItem";
 import { OportunidadCard, Oportunidad } from "./OportunidadCard";
 import { daysUntilClose } from "@/lib/data";
@@ -93,6 +93,10 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
     const [quickViewProject, setQuickViewProject] = useState<Project | null>(null);
     const [copiedId, setCopiedId] = useState<number | null>(null);
     const [quickFilter, setQuickFilter] = useState<'all' | 'facil' | 'cierre' | 'mujeres' | 'alta_viabilidad'>('all');
+    
+    // Alertas
+    const [alertEmail, setAlertEmail] = useState("");
+    const [alertSubscribed, setAlertSubscribed] = useState(false);
     const [sortConfig, setSortConfig] = useState<{ key: keyof Project | 'dificultad', direction: 'asc' | 'desc' } | null>(null);
 
     // Índice invertido pre-computado para búsqueda O(1)
@@ -281,7 +285,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                 </button>
                 {searchResults && (
                   <button
-                    onClick={() => { setSearchResults(null); setSearchMeta(null); setSearchQuery(""); }}
+                    onClick={() => { setSearchResults(null); setSearchMeta(null); setSearchQuery(""); setAlertSubscribed(false); }}
                     className="px-4 py-3 border border-gray-300 rounded-xl text-sm text-gray-600 font-medium hover:bg-gray-50 transition-colors bg-white whitespace-nowrap"
                   >
                     ✕ Limpiar
@@ -289,14 +293,50 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                 )}
               </div>
               {searchMeta && (
-                <div className="flex items-center gap-2 mt-2">
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold bg-green-50 text-green-700 border border-green-200">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    {searchMeta.total} Resultados Reales
-                  </span>
-                  <p className="text-xs text-gray-500 font-medium ml-1">
-                    {searchMeta.ai_generated ? "✨ Potenciado por Inteligencia Artificial y Búsqueda Web" : "📋 Desde Base de Datos Institucional"}
-                  </p>
+                <div className="flex flex-col gap-3 mt-4">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold bg-green-50 text-green-700 border border-green-200">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      {searchMeta.total} Resultados Reales
+                    </span>
+                    <p className="text-xs text-gray-500 font-medium ml-1">
+                      {searchMeta.ai_generated ? searchMeta.summary : "📋 Desde Base de Datos Institucional"}
+                    </p>
+                  </div>
+                  
+                  {/* ALERTA DE BÚSQUEDA */}
+                  <div className="bg-blue-50/50 border border-blue-100 rounded-xl p-4 mt-2 mb-2 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div>
+                      <h4 className="font-bold text-sm text-[var(--iica-navy)] flex items-center gap-2">
+                        <Sparkles className="w-4 h-4 text-blue-500" />
+                        ¿No encontraste lo que buscas? ¡Te avisamos!
+                      </h4>
+                      <p className="text-xs text-gray-600 mt-1 max-w-md">
+                        Nuestra IA monitorea nuevos fondos todos los días a las 3:00 AM. Inscríbete para recibir una alerta cuando se abra un nuevo fondo para <strong>"{searchQuery || 'esta búsqueda'}"</strong>.
+                      </p>
+                    </div>
+                    {alertSubscribed ? (
+                      <div className="bg-green-100 text-green-700 text-xs font-bold px-4 py-2 rounded-lg flex items-center gap-2 w-full sm:w-auto justify-center">
+                        <CheckCircle2 className="w-4 h-4" /> ¡Alerta configurada!
+                      </div>
+                    ) : (
+                      <div className="flex w-full sm:w-auto gap-2">
+                        <input 
+                          type="email" 
+                          placeholder="tu@correo.com" 
+                          value={alertEmail}
+                          onChange={(e) => setAlertEmail(e.target.value)}
+                          className="px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-blue-500 flex-1 sm:w-48 text-gray-800"
+                        />
+                        <button 
+                          onClick={() => { if(alertEmail) setAlertSubscribed(true); }}
+                          className="bg-[var(--iica-blue)] text-white text-xs font-bold px-4 py-2 rounded-lg hover:bg-[var(--iica-navy)] transition-colors whitespace-nowrap"
+                        >
+                          Avisarme
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
               {searchError && (
@@ -400,11 +440,25 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                         Postulación Fácil
                     </button>
                     <button
+                        onClick={() => setQuickFilter('alta_viabilidad')}
+                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border flex items-center gap-2 ${quickFilter === 'alta_viabilidad' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-white text-gray-500 border-gray-200 hover:border-blue-200 hover:text-blue-600'}`}
+                    >
+                        <Award className="w-3.5 h-3.5" />
+                        Alta Viabilidad IICA
+                    </button>
+                    <button
                         onClick={() => setQuickFilter('cierre')}
                         className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border flex items-center gap-2 ${quickFilter === 'cierre' ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-white text-gray-500 border-gray-200 hover:border-rose-200 hover:text-rose-600'}`}
                     >
                         <Clock className="w-3.5 h-3.5" />
                         Cierre Inminente
+                    </button>
+                    <button
+                        onClick={() => setQuickFilter('mujeres')}
+                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border flex items-center gap-2 ${quickFilter === 'mujeres' ? 'bg-purple-50 text-purple-700 border-purple-200' : 'bg-white text-gray-500 border-gray-200 hover:border-purple-200 hover:text-purple-600'}`}
+                    >
+                        <Users className="w-3.5 h-3.5" />
+                        Enfoque Género
                     </button>
                 </div>
 
