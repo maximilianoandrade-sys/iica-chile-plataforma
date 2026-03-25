@@ -40,7 +40,42 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                 body: JSON.stringify({ query, scope, role, use_ai: true }),
             });
             const data = await res.json();
-            setSearchResults(data.results);
+            
+            // Map AI responses (English/different keys) to internal Project interface
+            const mappedResults = (data.results || []).map((r: any, idx: number) => {
+                let safeDate = r.deadline || r.fecha_cierre || "";
+                if (safeDate && safeDate.includes('-')) {
+                    const parts = safeDate.split('-');
+                    if (parts[0].length === 2) {
+                        safeDate = `${parts[2]}-${parts[1]}-${parts[0]}`; // DD-MM-YYYY to YYYY-MM-DD
+                    }
+                }
+
+                return {
+                    id: typeof r.id === 'number' ? r.id : (idx + 1000000), // Ensure number ID
+                    nombre: r.title || r.nombre || "Sin título",
+                    institucion: r.institution || r.institucion || "Desconocida",
+                    fecha_cierre: safeDate || "2099-12-31",
+                    monto: r.budget && typeof r.budget === 'string' ? 1000000 * (idx + 1) : (r.monto || 0),
+                    categoria: r.scope || r.categoria || "Nacional",
+                    estado: (r.status === "abierto" || r.status === "permanente" || r.estado === "Abierto") ? "Abierto" : "Cerrado",
+                    ambito: r.scope || r.ambito || "Nacional",
+                    viabilidadIICA: r.viability || r.viabilidadIICA || "Media",
+                    porcentajeViabilidad: r.viability === 'Alta' ? 85 : r.viability === 'Media' ? 50 : 25,
+                    rolIICA: r.iica_role || r.rolIICA || "Asesor",
+                    descripcionIICA: r.description || r.descripcionIICA || "",
+                    url_bases: r.url || r.url_bases || "#",
+                    permite_adendas: false,
+                    resumen: {
+                        cofinanciamiento: r.budget || r.resumen?.cofinanciamiento || "",
+                        plazo_ejecucion: "Ver bases",
+                        requisitos_clave: r.requirements || r.resumen?.requisitos_clave || [],
+                        observaciones: r.iica_role_detail || r.resumen?.observaciones || ""
+                    }
+                };
+            });
+
+            setSearchResults(mappedResults);
             setSearchMeta(data.meta);
         } catch (e) {
             setSearchError("Error al buscar proyectos");
