@@ -27,7 +27,9 @@ export default async function DashboardPage({
   return (
     <div className="min-h-screen flex flex-col bg-[#f4f7f9] selection:bg-blue-100 italic-none">
       <Header />
-      <HeroSection />
+      <div id="inicio">
+        <HeroSection />
+      </div>
       
       <main className="flex-grow container mx-auto max-w-[1200px] px-4 py-8 -mt-12 relative z-20">
         <div className="flex flex-col gap-10">
@@ -80,13 +82,19 @@ export default async function DashboardPage({
         </div>
       </main>
 
-      <FuentesOficiales />
-      <section className="container mx-auto max-w-[1200px] px-4 py-8">
+      <div id="fuentes">
+        <FuentesOficiales />
+      </div>
+      <section id="contacto" className="container mx-auto max-w-[1200px] px-4 py-8">
           <Newsletter />
       </section>
       <ProgramsSection />
-      <ImpactSection />
-      <AboutSection />
+      <div id="impacto">
+        <ImpactSection />
+      </div>
+      <div id="about">
+        <AboutSection />
+      </div>
       
       <Footer />
     </div>

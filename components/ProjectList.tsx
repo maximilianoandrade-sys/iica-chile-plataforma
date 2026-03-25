@@ -11,7 +11,7 @@ import Toast from "@/components/ui/Toast";
 import Image from 'next/image';
 import SearchableSelect from "@/components/SearchableSelect"; // Import the new component
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info, Sparkles, Copy, Eye, CheckCheck, MapPin, Users, Banknote, Clock, ChevronRight, ArrowUpDown, FileText, HelpCircle, MonitorPlay, PenTool, CheckCircle2, XCircle, AlertTriangle, Zap, Award } from "lucide-react";
+import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info, Sparkles, Copy, Eye, CheckCheck, MapPin, Users, Banknote, Clock, ChevronRight, ArrowUpDown, FileText, HelpCircle, MonitorPlay, PenTool, CheckCircle2, XCircle, AlertTriangle, Zap, Award, Globe } from "lucide-react";
 import { ActionButton, UrgencyBadge } from "@/components/ProjectItem";
 import { OportunidadCard, Oportunidad } from "./OportunidadCard";
 import { daysUntilClose } from "@/lib/data";
@@ -553,36 +553,36 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                     >
                                         <table className="w-full text-left border-collapse">
                                             <thead>
-                                                <tr className="bg-[#f4f7f9] text-gray-700 text-sm font-bold border-b border-[var(--iica-border)] uppercase tracking-wider sticky top-0 z-10">
-                                                    <th className="py-5 px-6 w-12 text-center">
-                                                        <span className="sr-only">Comparar</span>
+                                                <tr className="bg-slate-50/50 text-slate-400 text-[10px] font-black border-b border-slate-100 uppercase tracking-[0.2em] sticky top-0 z-10 backdrop-blur-md">
+                                                    <th className="py-6 px-6 w-12 text-center">
+                                                        <HelpCircle className="w-4 h-4 mx-auto opacity-30" />
                                                     </th>
-                                                    <th className="py-5 px-6 cursor-pointer hover:bg-gray-100 transition-colors group" onClick={() => handleSort('nombre')}>
+                                                    <th className="py-6 px-6 cursor-pointer hover:bg-slate-100/50 transition-colors group" onClick={() => handleSort('nombre')}>
                                                         <div className="flex items-center gap-2">
-                                                            Proyecto
-                                                            <ArrowUpDown className={`h-4 w-4 text-gray-400 group-hover:text-[var(--iica-blue)] ${sortConfig?.key === 'nombre' ? 'text-[var(--iica-blue)]' : ''}`} />
+                                                            Nombre del Proyecto
+                                                            <ArrowUpDown className={`h-3 w-3 transition-colors ${sortConfig?.key === 'nombre' ? 'text-[var(--iica-blue)]' : 'opacity-0 group-hover:opacity-100'}`} />
                                                         </div>
                                                     </th>
-                                                    <th className="py-5 px-6 cursor-pointer hover:bg-gray-100 transition-colors group" onClick={() => handleSort('institucion')}>
+                                                    <th className="py-6 px-6 cursor-pointer hover:bg-slate-100/50 transition-colors group" onClick={() => handleSort('institucion')}>
                                                         <div className="flex items-center gap-2">
-                                                            Institución
-                                                            <ArrowUpDown className={`h-4 w-4 text-gray-400 group-hover:text-[var(--iica-blue)] ${sortConfig?.key === 'institucion' ? 'text-[var(--iica-blue)]' : ''}`} />
+                                                            Fuente Financiera
+                                                            <ArrowUpDown className={`h-3 w-3 transition-colors ${sortConfig?.key === 'institucion' ? 'text-[var(--iica-blue)]' : 'opacity-0 group-hover:opacity-100'}`} />
                                                         </div>
                                                     </th>
-                                                    <th className="py-5 px-6 cursor-pointer hover:bg-gray-100 transition-colors group" onClick={() => handleSort('fecha_cierre')}>
+                                                    <th className="py-6 px-6 cursor-pointer hover:bg-slate-100/50 transition-colors group" onClick={() => handleSort('fecha_cierre')}>
                                                         <div className="flex items-center gap-2">
-                                                            Cierre
-                                                            <ArrowUpDown className={`h-4 w-4 text-gray-400 group-hover:text-[var(--iica-blue)] ${sortConfig?.key === 'fecha_cierre' ? 'text-[var(--iica-blue)]' : ''}`} />
+                                                            Estado Cierre
+                                                            <ArrowUpDown className={`h-3 w-3 transition-colors ${sortConfig?.key === 'fecha_cierre' ? 'text-[var(--iica-blue)]' : 'opacity-0 group-hover:opacity-100'}`} />
                                                         </div>
                                                     </th>
-                                                    <th className="py-5 px-6 text-right">Acciones</th>
+                                                    <th className="py-6 px-6 text-right whitespace-nowrap">Herramientas</th>
                                                 </tr>
                                             </thead>
-                                            <tbody className="divide-y divide-gray-100 bg-white">
+                                            <tbody className="divide-y divide-slate-50 bg-white">
                                                 {displayedProjects.map((project: Project) => (
                                                     <tr
                                                         key={project.id}
-                                                        className={`hover:bg-blue-50/60 transition-colors group ${compareList.includes(project.id) ? 'bg-blue-50/40' : ''}`}
+                                                        className={`hover:bg-[var(--iica-blue)]/[0.02] transition-all group ${compareList.includes(project.id) ? 'bg-blue-50/40' : ''}`}
                                                     >
                                                         <td className="py-6 px-6 text-center align-middle">
                                                             <div className="flex justify-center">
@@ -590,16 +590,16 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                                     type="checkbox"
                                                                     checked={compareList.includes(project.id)}
                                                                     onChange={() => toggleCompare(project.id)}
-                                                                    className="w-5 h-5 text-[var(--iica-blue)] border-gray-300 rounded focus:ring-[var(--iica-blue)] cursor-pointer transition-transform active:scale-95"
-                                                                    title="Comparar este proyecto"
+                                                                    className="w-5 h-5 text-[var(--iica-blue)] border-slate-300 rounded-lg focus:ring-[var(--iica-blue)] cursor-pointer transition-all hover:scale-110 active:scale-90"
+                                                                    title="Añadir a comparación técnica"
                                                                 />
                                                             </div>
                                                         </td>
-                                                        <td className="py-6 px-6 align-middle">
+                                                        <td className="py-6 px-6 align-middle max-w-md">
                                                             <div className="flex items-start gap-4">
                                                                 <button
                                                                     onClick={() => toggleFavorite(project.id)}
-                                                                    className="mt-1 text-gray-300 hover:text-red-500 focus:outline-none transition-colors transform active:scale-90"
+                                                                    className="mt-1 transition-all transform active:scale-75"
                                                                     title={favorites.includes(project.id) ? "Quitar de favoritos" : "Guardar en favoritos"}
                                                                 >
                                                                     <svg
@@ -607,79 +607,82 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                                         viewBox="0 0 24 24"
                                                                         fill={favorites.includes(project.id) ? "#ef4444" : "none"}
                                                                         stroke="currentColor"
-                                                                        className={`w-6 h-6 ${favorites.includes(project.id) ? 'text-red-500' : 'text-gray-300 group-hover:text-gray-400'}`}
-                                                                        strokeWidth={2}
+                                                                        className={`w-5 h-5 ${favorites.includes(project.id) ? 'text-red-500' : 'text-slate-200 group-hover:text-slate-300'}`}
+                                                                        strokeWidth={2.5}
                                                                     >
                                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                                                     </svg>
                                                                 </button>
-                                                                <div className="flex-1">
-                                                                    <div className="flex items-center gap-2 mb-1.5">
-                                                                        <div className="font-bold text-[var(--iica-navy)] text-base group-hover:text-[var(--iica-blue)] transition-colors">{project.nombre}</div>
-                                                                        {isClosingSoon(project.fecha_cierre) && (
-                                                                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-50 text-red-600 border border-red-100 animate-pulse whitespace-nowrap">
-                                                                                <Clock className="h-3 w-3" /> Cierra Pronto
-                                                                            </span>
+                                                                <div className="flex-1 min-w-0">
+                                                                    <div className="flex items-center gap-2 mb-1">
+                                                                        <div className="font-bold text-[var(--iica-navy)] text-sm group-hover:text-[var(--iica-blue)] transition-colors truncate">{project.nombre}</div>
+                                                                        {project.ambito === 'Internacional' && (
+                                                                            <Globe className="h-3 w-3 text-blue-500 shrink-0" title="Alcance Internacional" />
                                                                         )}
                                                                     </div>
                                                                     <div className="flex items-center gap-2">
-                                                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                                                                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
                                                                             {project.categoria}
                                                                         </span>
-                                                                        {project.resumen && (
-                                                                            <button
-                                                                                onClick={() => setQuickViewProject(project)}
-                                                                                className="text-gray-400 hover:text-[var(--iica-blue)] hover:bg-blue-50 rounded-full p-1 transition-all"
-                                                                                aria-label="Abrir panel de detalles"
-                                                                                title="Ver detalles completos"
-                                                                            >
-                                                                                <Info className="h-4 w-4" />
-                                                                            </button>
-                                                                        )}
+                                                                        <span className="text-slate-200 opacity-50 text-[10px]">•</span>
+                                                                        <button
+                                                                            onClick={() => setQuickViewProject(project)}
+                                                                            className="text-[10px] font-bold text-blue-500 hover:underline flex items-center gap-1"
+                                                                        >
+                                                                            Ver Ficha <ChevronRight className="w-2.5 h-2.5" />
+                                                                        </button>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </td>
                                                         <td className="py-6 px-6 align-middle">
                                                             <div className="flex items-center gap-3">
-                                                                <div className="relative w-10 h-10 flex-shrink-0 bg-white rounded-lg border border-gray-100 shadow-sm p-1">
+                                                                <div className="relative w-8 h-8 flex-shrink-0 bg-white rounded-lg border border-slate-100 shadow-sm p-1.5 group-hover:rotate-6 transition-transform">
                                                                     <Image
                                                                         src={getLogoUrl(project.institucion)}
                                                                         alt={project.institucion}
                                                                         fill
                                                                         className="object-contain"
-                                                                        sizes="40px"
+                                                                        sizes="32px"
                                                                     />
                                                                 </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <div className={`inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full border w-fit ${project.id % 2 === 0 ? 'bg-green-50 text-green-700 border-green-200' : 'bg-yellow-50 text-yellow-700 border-yellow-200'}`}>
-                                                                        IA: {project.id % 2 === 0 ? 'Fácil' : 'Media'}
+                                                                <div className="flex flex-col">
+                                                                    <span className="text-xs font-bold text-slate-600 truncate max-w-[150px]">{project.institucion}</span>
+                                                                    <div className={`text-[9px] font-black uppercase tracking-widest ${project.viabilidadIICA === 'Alta' ? 'text-emerald-500' : project.viabilidadIICA === 'Media' ? 'text-amber-500' : 'text-rose-500'}`}>
+                                                                        Viabilidad {project.viabilidadIICA}
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </td>
                                                         <td className="py-6 px-6 align-middle">
-                                                            <UrgencyBadge date={project.fecha_cierre} />
+                                                            <div className="flex flex-col">
+                                                                <UrgencyBadge date={project.fecha_cierre} />
+                                                                <span className="text-[10px] text-slate-400 font-medium mt-1">
+                                                                    Cierra: {new Date(project.fecha_cierre).toLocaleDateString('es-CL')}
+                                                                </span>
+                                                            </div>
                                                         </td>
                                                         <td className="py-6 px-6 text-right align-middle">
-                                                            <div className="flex items-center gap-2 justify-end">
+                                                            <div className="flex items-center gap-2 justify-end opacity-0 group-hover:opacity-100 transition-opacity">
                                                                 <button
                                                                     onClick={(e: React.MouseEvent) => copyProjectFicha(project, e)}
-                                                                    className={`p-2.5 rounded-xl border transition-all ${copiedId === project.id ? 'bg-green-50 text-green-600 border-green-200' : 'bg-white text-gray-400 border-gray-200 hover:bg-gray-50'}`}
+                                                                    className={`p-1.5 rounded-lg border transition-all ${copiedId === project.id ? 'bg-green-50 text-green-600 border-green-200' : 'bg-white text-slate-400 border-slate-100 hover:border-slate-300 hover:text-slate-800'}`}
+                                                                    title="Copiar datos rápidos"
                                                                 >
-                                                                    {copiedId === project.id ? <CheckCheck className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
+                                                                    {copiedId === project.id ? <CheckCheck className="h-3.5 h-3.5" /> : <Copy className="h-3.5 h-3.5" />}
                                                                 </button>
                                                                 <button
                                                                     onClick={() => setQuickViewProject(project)}
-                                                                    className="p-2.5 rounded-xl border bg-white text-gray-400 border-gray-200 hover:bg-gray-50 hover:text-gray-800 transition-all"
+                                                                    className="p-1.5 rounded-lg border bg-white text-slate-400 border-slate-100 hover:border-slate-300 hover:text-slate-800 transition-all"
+                                                                    title="Vista previa rápida"
                                                                 >
-                                                                    <Eye className="h-5 w-5" />
+                                                                    <Eye className="h-3.5 h-3.5" />
                                                                 </button>
                                                                 <ActionButton
                                                                     url={project.url_bases}
                                                                     date={project.fecha_cierre}
                                                                     projectName={project.nombre}
-                                                                    onTrack={() => setToastMessage("Enlace externo verificado.")}
+                                                                    onTrack={() => setToastMessage("Enlace verificado.")}
                                                                 />
                                                             </div>
                                                         </td>

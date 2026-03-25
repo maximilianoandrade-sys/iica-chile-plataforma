@@ -116,49 +116,60 @@ export default function ProjectExplorer({ allProjects }: { allProjects: Project[
                 
                 <div className="relative z-10 flex flex-col gap-8">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                        <div className="max-w-xl">
-                            <h1 className="text-3xl md:text-4xl font-black text-[var(--iica-navy)] tracking-tight mb-3">
-                                Radar de <span className="text-[var(--iica-blue)]">Oportunidades</span>
+                        <div className="max-w-xl space-y-4">
+                            <div className="flex items-center gap-2">
+                                <span className="bg-blue-600/10 text-blue-600 text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-full border border-blue-600/20">
+                                    Inteligencia IICA
+                                </span>
+                                <div className="flex items-center gap-1.5 ml-2">
+                                    <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
+                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Radar Activo</span>
+                                </div>
+                            </div>
+                            <h1 className="text-4xl md:text-5xl font-black text-[var(--iica-navy)] tracking-tighter leading-[0.9] mb-4">
+                                Radar de <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--iica-blue)] to-indigo-600">Oportunidades</span>
                             </h1>
-                            <p className="text-gray-500 text-sm md:text-base leading-relaxed">
-                                Encuentra financiamiento internacional y nacional para el IICA Chile. 
-                                <span className="hidden sm:inline"> Usa lenguaje natural para filtrar por impacto o tecnología.</span>
+                            <p className="text-slate-500 font-medium text-sm md:text-base leading-relaxed max-w-sm">
+                                Gestiona el portafolio técnico con lenguaje natural. Filtra por <span className="text-[var(--iica-blue)] font-bold italic">impacto regional</span> o <span className="text-[var(--iica-blue)] font-bold italic">fuente financiera</span>.
                             </p>
                         </div>
                         
                         {/* Live Counter */}
-                        <div className="flex items-center gap-4 bg-gray-50 px-5 py-3 rounded-2xl border border-gray-100 shadow-inner">
-                            <div className="text-center">
-                                <div className="text-xl font-black text-[var(--iica-navy)] leading-none">{kpis.total}</div>
-                                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Vistos</div>
+                        <div className="flex items-center gap-2 bg-slate-50 p-2 rounded-[2rem] border border-slate-100 shadow-inner">
+                            <div className="bg-white px-6 py-4 rounded-[1.5rem] shadow-sm text-center min-w-[100px] border border-slate-50">
+                                <div className="text-2xl font-black text-[var(--iica-navy)] leading-none mb-1">{kpis.total}</div>
+                                <div className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Total</div>
                             </div>
-                            <div className="w-[1px] h-8 bg-gray-200" />
-                            <div className="text-center">
-                                <div className="text-xl font-black text-emerald-600 leading-none">{kpis.abiertos}</div>
-                                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Abiertos</div>
+                            <div className="bg-emerald-500 px-6 py-4 rounded-[1.5rem] shadow-lg shadow-emerald-500/20 text-center min-w-[100px] border border-emerald-400/20">
+                                <div className="text-2xl font-black text-white leading-none mb-1">{kpis.abiertos}</div>
+                                <div className="text-[9px] font-black text-emerald-100 uppercase tracking-[0.2em]">Vigentes</div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="relative group">
-                        <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
-                            <Search className={`h-6 w-6 transition-colors ${searchTerm ? 'text-[var(--iica-blue)]' : 'text-gray-300'}`} />
+                    <div className="relative group/search">
+                        <div className="absolute inset-y-0 left-0 pl-7 flex items-center pointer-events-none">
+                            <Search className={`h-6 w-6 transition-all duration-500 ${searchTerm ? 'text-[var(--iica-blue)] scale-110' : 'text-slate-300'}`} />
                         </div>
                         <input
                             type="text"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            placeholder='Ej: "proyectos adaptación climática fondo de adaptación"'
-                            className="w-full pl-16 pr-14 py-6 bg-gray-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-[var(--iica-blue)] focus:ring-4 focus:ring-blue-100 outline-none transition-all text-xl font-semibold text-gray-800 placeholder:text-gray-400 shadow-inner"
+                            placeholder='Ej: "proyectos de riego en el secano con fondos internacionales"'
+                            className="w-full pl-16 pr-14 py-7 bg-slate-50 border-2 border-transparent rounded-[2rem] focus:bg-white focus:border-[var(--iica-blue)]/30 focus:ring-8 focus:ring-blue-100/50 outline-none transition-all text-xl font-bold text-slate-800 placeholder:text-slate-300 shadow-inner"
                         />
                         {searchTerm && (
-                            <button onClick={() => setSearchTerm("")} className="absolute inset-y-0 right-0 pr-6 flex items-center text-gray-400 hover:text-rose-500 transition-colors">
+                            <button onClick={() => setSearchTerm("")} className="absolute inset-y-0 right-4 pr-4 flex items-center text-slate-300 hover:text-rose-500 transition-colors">
                                 <X className="h-6 w-6" />
                             </button>
                         )}
-                        <div className="absolute -bottom-3 right-8 flex items-center gap-1.5 px-3 py-1.5 bg-white border border-blue-100 rounded-full shadow-sm text-[10px] font-black text-[var(--iica-blue)] uppercase tracking-widest animate-pulse">
-                            <Sparkles className="h-3 w-3" /> Motor IA Activo
+                        <div className="absolute -bottom-3 right-10 flex items-center gap-2 px-4 py-2 bg-[var(--iica-navy)] border border-slate-700 rounded-full shadow-xl text-[9px] font-black text-white uppercase tracking-[0.2em] group-hover/search:translate-y-1 transition-transform">
+                            <Sparkles className="h-3 w-3 text-amber-400" /> Motor IA IICA
                         </div>
+                    </div>
+
+                    <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest px-1">
+                        💡 Tip: Prueba con "fondos para riego en el secano" o "proyectos climáticos internacionales"
                     </div>
 
                     <div className="flex flex-wrap gap-2">
