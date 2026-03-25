@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { Sparkles, X, FileText, Copy, Check } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/Dialog" || "react-dialog";
+
 
 export function ProposalGenerator({ project, isOpen, onClose }: { project: any, isOpen: boolean, onClose: () => void }) {
   const [loading, setLoading] = useState(false);
