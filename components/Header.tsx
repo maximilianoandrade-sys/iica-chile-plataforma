@@ -32,35 +32,33 @@ export function Header() {
             </div>
 
             {/* Navigation */}
-            <div className="container mx-auto max-w-[1200px] px-4 py-3 flex justify-between items-center gap-4">
+            <div className="container mx-auto max-w-[1200px] px-4 py-4 flex justify-between items-center gap-4">
                 <div className="flex items-center gap-3">
-                    <Link href="/" className="font-bold text-2xl text-[var(--iica-navy)] tracking-tight hover:opacity-90 transition-opacity">
-                        IICA <span className="text-[var(--iica-secondary)]">Chile</span>
+                    <Link href="/" className="font-black text-2xl text-[var(--iica-navy)] tracking-tighter hover:opacity-90 transition-opacity">
+                        IICA <span className="text-[var(--iica-blue)]">Chile</span>
                     </Link>
+                    <div className="h-6 w-[1px] bg-gray-200 mx-2 hidden sm:block" />
+                    <span className="text-[10px] font-black uppercase text-gray-400 tracking-widest hidden sm:block">Radar 2026</span>
                 </div>
 
                 {/* Desktop Nav */}
-                <nav className="hidden md:flex gap-5 text-sm font-medium text-gray-600">
-                    <Link href="/#inicio" className="hover:text-[var(--iica-navy)] transition-colors">Inicio</Link>
-                    <Link href="/#convocatorias" className="hover:text-[var(--iica-navy)] transition-colors">Oportunidades</Link>
-                    <Link href="/#fuentes" className="hover:text-[var(--iica-navy)] transition-colors">Fuentes</Link>
-                    <Link href="/maletin" className="hover:text-[var(--iica-navy)] transition-colors text-[var(--iica-blue)] font-bold italic">Mi Maletín</Link>
-                    <Link href="/consultores" className="hover:text-[var(--iica-navy)] transition-colors text-[var(--iica-secondary)] font-bold">Consultores</Link>
-                    <Link href="/#impacto" className="hover:text-[var(--iica-navy)] transition-colors">Impacto</Link>
-                    <Link href="/about" className="hover:text-[var(--iica-navy)] transition-colors">Sobre IICA</Link>
-                    <Link href="/#contacto" className="hover:text-[var(--iica-navy)] transition-colors">Contacto</Link>
+                <nav className="hidden lg:flex gap-6 text-xs font-bold uppercase tracking-widest text-gray-500">
+                    <Link href="/#convocatorias" className="hover:text-[var(--iica-blue)] transition-colors">Oportunidades</Link>
+                    <Link href="/pipeline" className="hover:text-[var(--iica-blue)] transition-colors">Pipeline</Link>
+                    <Link href="/maletin" className="hover:text-[var(--iica-blue)] transition-colors">Maletín</Link>
+                    <Link href="/admin" className="hover:text-[var(--iica-blue)] transition-colors">Admin</Link>
                 </nav>
 
                 <div className="flex items-center gap-2">
-                    {/* CTA con badge de urgentes */}
+                    {/* CTA Compacto */}
                     <Link
                         href="/#convocatorias"
-                        className="hidden sm:flex items-center gap-2 px-4 py-2.5 bg-[var(--iica-secondary)] hover:bg-green-600 text-white font-bold rounded-xl shadow-md transition-all hover:shadow-lg hover:-translate-y-0.5 text-sm min-h-[44px] relative"
+                        className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-[var(--iica-navy)] hover:bg-[var(--iica-blue)] text-white font-black uppercase tracking-widest rounded-xl shadow-lg shadow-blue-900/10 transition-all hover:-translate-y-0.5 text-[10px]"
                     >
                         <Target className="h-4 w-4" />
-                        Ver Oportunidades
+                        Explorar
                         {urgentCount > 0 && (
-                            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-md border-2 border-white animate-pulse">
+                            <span className="bg-rose-500 text-white w-4 h-4 rounded-full flex items-center justify-center text-[8px] animate-pulse">
                                 {urgentCount}
                             </span>
                         )}
@@ -68,16 +66,10 @@ export function Header() {
 
                     {/* Mobile Menu Toggle */}
                     <button
-                        className="md:hidden p-2 text-[var(--iica-navy)] hover:bg-gray-100 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center relative"
+                        className="lg:hidden p-2 text-[var(--iica-navy)] hover:bg-gray-100 rounded-lg transition-colors"
                         onClick={() => setShowMobileMenu(!showMobileMenu)}
-                        aria-label="Abrir menú"
                     >
                         {showMobileMenu ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-                        {urgentCount > 0 && !showMobileMenu && (
-                            <span className="absolute top-0.5 right-0.5 bg-red-500 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center">
-                                {urgentCount}
-                            </span>
-                        )}
                     </button>
                 </div>
             </div>

@@ -3877,5 +3877,30 @@
     "descripcionIICA": "PNUMA lidera el programa ONU de sistemas alimentarios. IICA puede ejecutar componente de reducción de pérdidas en cadenas agrícolas.",
     "ejeIICA": "Innovación para la productividad",
     "complejidad": "Media"
+  },
+  {
+    "id": 999,
+    "nombre": "Adaptation Fund - Fondos de adaptación climática para resiliencia rural",
+    "institucion": "Adaptation Fund",
+    "monto": 850000000,
+    "fecha_cierre": "2026-08-30",
+    "estado": "Abierto",
+    "categoria": "Internacional",
+    "url_bases": "https://www.adaptation-fund.org/apply-funding/project-funding/",
+    "regiones": ["Todas"],
+    "beneficiarios": ["Institución pública", "ONG", "Comunidades rurales"],
+    "resumen": {
+      "cofinanciamiento": "Grant directo basado en acreditación",
+      "requisitos_clave": ["Acreditación como Agencia de Implementación (IICA está acreditado)", "Propuesta con enfoque en vulnerabilidad climática", "Validación gubernamental"],
+      "plazo_ejecucion": "60 meses"
+    },
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 92,
+    "rolIICA": "Implementador",
+    "descripcionIICA": "IICA está acreditado ante el Adaptation Fund, lo que permite movilizar recursos directos para proyectos en Chile.",
+    "ejeIICA": "Resiliencia y Gestión de Riesgos",
+    "complejidad": "Alta"
   }
 ]
