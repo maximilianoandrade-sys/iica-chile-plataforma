@@ -9,8 +9,6 @@ export interface Oportunidad {
     institucion: string;
     cierre: string; // DD-MM-YYYY or similar for display
     diasRestantes: number;
-    viabilidad?: 'Alta' | 'Media' | 'Baja';
-    porcentajeViabilidad?: number;
     rolIICA?: string;
     url: string;
     adenda?: boolean;
@@ -78,7 +76,7 @@ export function OportunidadCard({ op, query = "" }: OportunidadCardProps) {
                 categoria: op.categoria || 'Nacional'
             },
             column: 'identificacion',
-            priority: op.viabilidad === 'Alta' ? 'Alta' : 'Media',
+            priority: op.diasRestantes <= 7 ? 'Alta' : 'Media',
             responsible: 'Pendiente Asignar',
             checklist: [
                 { id: '1', text: 'Análisis de bases', completed: true },
@@ -136,18 +134,12 @@ export function OportunidadCard({ op, query = "" }: OportunidadCardProps) {
                         </div>
                     </div>
                 </div>
-                
-
             </div>
 
             {/* Progressive Disclosure: Ver más ↓ */}
             {!isClosed && (
                 <div className="mt-4">
-                    {/* Resumen compacto siempre visible */}
-                    <div className="flex items-center justify-between">
-                        <span className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full shadow-sm ${op.viabilidad === 'Alta' ? 'bg-emerald-700 text-white' : op.viabilidad === 'Media' ? 'bg-amber-700 text-white' : 'bg-rose-700 text-white'}`}>
-                            Viabilidad {op.viabilidad}
-                        </span>
+                    <div className="flex items-center justify-end">
                         <button
                             onClick={(e) => { e.preventDefault(); setExpanded(!expanded); }}
                             className="flex items-center gap-1 text-[11px] font-bold text-slate-400 hover:text-[var(--iica-blue)] transition-colors"
@@ -165,22 +157,11 @@ export function OportunidadCard({ op, query = "" }: OportunidadCardProps) {
                                     <Highlight text={op.descripcion} highlight={query} />
                                 </p>
                             )}
-                            <div className="p-3 bg-slate-50/50 rounded-xl border border-slate-100">
-                                <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">
-                                    <span>Viabilidad Técnica IICA</span>
+                            {op.rolIICA && (
+                                <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-tight mt-2 italic px-3">
+                                    <Navigation className="w-3 h-3 text-slate-300" /> Rol para el IICA: {op.rolIICA}
                                 </div>
-                                <div className="h-1.5 bg-slate-200/50 rounded-full overflow-hidden flex">
-                                    <div
-                                        className={`h-full transition-all duration-1000 rounded-full ${op.viabilidad === 'Alta' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]' : op.viabilidad === 'Media' ? 'bg-amber-400' : 'bg-rose-500'}`}
-                                        style={{ width: `${op.porcentajeViabilidad || (op.viabilidad === 'Alta' ? 85 : op.viabilidad === 'Media' ? 50 : 25)}%` }}
-                                    />
-                                </div>
-                                {op.rolIICA && (
-                                    <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-tight mt-2 italic">
-                                        <Navigation className="w-3 h-3 text-slate-300" /> Rol: {op.rolIICA}
-                                    </div>
-                                )}
-                            </div>
+                            )}
                         </div>
                     )}
                 </div>
