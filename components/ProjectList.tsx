@@ -60,8 +60,6 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                     categoria: r.scope || r.categoria || "Nacional",
                     estado: (r.status === "abierto" || r.status === "permanente" || r.estado === "Abierto") ? "Abierto" : "Cerrado",
                     ambito: r.scope || r.ambito || "Nacional",
-                    viabilidadIICA: r.viability || r.viabilidadIICA || "Media",
-                    porcentajeViabilidad: r.viability === 'Alta' ? 85 : r.viability === 'Media' ? 50 : 25,
                     rolIICA: r.iica_role || r.rolIICA || "Asesor",
                     descripcionIICA: r.description || r.descripcionIICA || "",
                     url_bases: r.url || r.url_bases || "#",
@@ -213,9 +211,8 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                 (p.objetivo || '').toLowerCase().includes('mujer')
             );
         } else if (quickFilter === 'alta_viabilidad') {
-            filtered = filtered.filter((p: any) =>
-                p.viabilidadIICA === 'Alta' || (p.porcentajeViabilidad || 0) >= 75
-            );
+            // Se mantiene el filtro pero sin lógica de viabilidad manual, podrías filtrar por rol IICA o similar
+            filtered = filtered.filter((p: any) => p.rolIICA === 'Líder' || p.rolIICA === 'Socio de Ejecución');
         }
 
         if (sortConfig) {
@@ -650,9 +647,6 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                                 </div>
                                                                 <div className="flex flex-col">
                                                                     <span className="text-xs font-bold text-slate-600 truncate max-w-[150px]">{project.institucion}</span>
-                                                                    <div className={`text-[9px] font-black uppercase tracking-widest ${project.viabilidadIICA === 'Alta' ? 'text-emerald-500' : project.viabilidadIICA === 'Media' ? 'text-amber-500' : 'text-rose-500'}`}>
-                                                                        Viabilidad {project.viabilidadIICA}
-                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -710,8 +704,6 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                 cierre: project.fecha_cierre ? new Date(project.fecha_cierre).toLocaleDateString('es-CL') : 'Sin fecha',
                                                 diasRestantes: project.fecha_cierre ? daysUntilClose(project) : 999,
                                                 ambito: (project.ambito as "Internacional" | "Nacional" | "Regional") || "Nacional",
-                                                viabilidad: (project.viabilidadIICA as "Alta" | "Media" | "Baja") || "Media",
-                                                porcentajeViabilidad: project.porcentajeViabilidad,
                                                 rolIICA: project.rolIICA,
                                                 url: project.url_bases,
                                                 adenda: project.permite_adendas,
@@ -750,8 +742,6 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                 cierre: new Date(project.fecha_cierre).toLocaleDateString('es-CL'),
                                                 diasRestantes: daysUntilClose(project),
                                                 ambito: (project.ambito as "Internacional" | "Nacional" | "Regional") || "Nacional",
-                                                viabilidad: (project.viabilidadIICA as "Alta" | "Media" | "Baja") || "Media",
-                                                porcentajeViabilidad: project.porcentajeViabilidad,
                                                 rolIICA: project.rolIICA,
                                                 url: project.url_bases,
                                                 adenda: project.permite_adendas,

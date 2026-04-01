@@ -16,7 +16,6 @@ const QUICK_FILTERS = [
     { id: 'adaptacion', label: 'Adaptación', icon: <Zap className="w-3.5 h-3.5 text-blue-500" /> },
     { id: 'secano', label: 'Secano', icon: "🌵" },
     { id: 'hidroponia', label: 'Hidroponía', icon: "🧪" },
-    { id: 'pasantia', label: 'Pasantías', icon: "🎓" },
 ];
 
 export default function ProjectExplorer({ allProjects }: { allProjects: Project[] }) {

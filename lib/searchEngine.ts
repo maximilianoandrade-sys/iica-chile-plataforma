@@ -100,7 +100,6 @@ export const AGRICULTURAL_THESAURUS: Record<string, string[]> = {
     'fondo de adaptacion': ['adaptation fund', 'cambio climatico', 'resiliencia', 'secano costero', 'clima'],
     'secano': ['secano costero', 'arido', 'semiarido', 'clima seco', 'agricultura de secano'],
     'hidropico': ['hidroponia', 'cultivo sin suelo', 'agua', 'tecnologia'],
-    'pasantia': ['pasantias', 'practica', 'beca', 'estudio', 'juventud rural'],
     'seguridad hídrica': ['agua', 'gestion hidrica', 'escazes', 'embalse', 'riego'],
 };
 

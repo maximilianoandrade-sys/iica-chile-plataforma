@@ -272,15 +272,6 @@ proyectos_raw = [
         "link": "https://www.funiber.org"
     },
     {
-        "titulo": "IICA Pasantías 2026",
-        "descripcion": "Desarrollo profesional en sedes IICA.",
-        "estado": "Abierto",
-        "monto": "Estipendio",
-        "fecha": "Continuo",
-        "fuente": "IICA",
-        "link": "https://www.iica.int"
-    },
-    {
         "titulo": "CFC Call for Proposals 2026",
         "descripcion": "Financiamiento para proyectos de cadenas de valor de commodities inclusivas y restauración de ecosistemas.",
         "estado": "Próximamente",
