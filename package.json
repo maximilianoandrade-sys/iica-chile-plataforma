@@ -30,10 +30,10 @@
     "zod": "^4.3.5"
   },
   "devDependencies": {
-    "@types/node": "^25.0.3",
-    "@types/react": "^19.2.7",
-    "@types/react-dom": "^19.2.3",
-    "typescript": "^5.9.3"
+    "@types/node": "20.11.24",
+    "@types/react": "18.2.61",
+    "@types/react-dom": "18.2.19",
+    "typescript": "5.3.3"
   },
   "description": "Plataforma web para visualizar y buscar oportunidades de financiamiento agrícola de FAO, BID y FONTAGRO.",
   "main": "next.config.js",
