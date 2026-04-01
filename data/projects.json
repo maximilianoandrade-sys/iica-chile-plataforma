@@ -33,7 +33,7 @@
     "requiere_cofinanciamiento": false,
     "idioma": "es",
     "faq_disponible": true,
-    "webinar_fecha": "2025-12-15T15:00:00",
+    "webinar_fecha": "2026-12-15T15:00:00",
     "permite_adendas": false,
     "bases_estado": "publicada",
     "requiere_firma": true,
@@ -51,7 +51,7 @@
     "descripcionIICA": "IICA es co-administrador de FONTAGRO junto al BID. El IICA Chile puede liderar o co-liderar consorcios regionales. Contacto directo: fontagro@iica.int. Webinar de presentación disponible en YouTube: https://www.youtube.com/live/sPBkSd5z9JE",
     "requisitos": [
       "Consorcio mínimo 2 países ALC",
-      "Alineación con Programas Insignia FONTAGRO 2025-2030 (1-5)",
+      "Alineación con Programas Insignia FONTAGRO 2026-2030 (1-5)",
       "Envío final Word + Excel antes del 20/04/2026 · 15:00 ET",
       "Email de confirmación a fontagro@iica.int"
     ],
@@ -1526,149 +1526,6 @@
     "complejidad": "Media"
   },
   {
-    "id": 127,
-    "nombre": "GCF – Readiness Programme: Acceso Directo al Fondo Verde para el Clima (Ventana Rolling)",
-    "institucion": "GCF",
-    "monto": 7000000000,
-    "fecha_cierre": "2028-03-31",
-    "estado": "Abierto",
-    "categoria": "Internacional",
-    "url_bases": "https://www.greenclimate.fund/countries/chile",
-    "regiones": [
-      "Todas"
-    ],
-    "beneficiarios": [
-      "Entidades de Acceso Directo acreditadas",
-      "Institución pública",
-      "Organismo internacional acreditado GCF"
-    ],
-    "resumen": {
-      "cofinanciamiento": "Hasta USD 7.000.000 por país en 4 años – sin cofinanciamiento requerido",
-      "requisitos_clave": [
-        "Entidad de Acceso Directo (DAE) acreditada ante GCF",
-        "National Designated Authority (NDA) endorsement",
-        "Propuesta de Readiness alineada a NDC de Chile",
-        "Plan de implementación en 36 meses"
-      ],
-      "plazo_ejecucion": "36 meses (renovable)",
-      "observaciones": "Ventana rolling 2024–2028. Solicitudes en cualquier momento. IICA tiene Acuerdo Marco de Acreditación GCF firmado — es Entidad de Acceso Directo elegible directamente, ventaja única frente a otras instituciones chilenas."
-    },
-    "monto_min": 500000000,
-    "monto_max": 7000000000,
-    "plazo_meses": 36,
-    "requiere_cofinanciamiento": false,
-    "idioma": "multi",
-    "faq_disponible": true,
-    "webinar_fecha": null,
-    "permite_adendas": true,
-    "bases_estado": "publicada",
-    "requiere_firma": true,
-    "tipos_solicitante": [
-      "Organizacion"
-    ],
-    "ambito": "Internacional",
-    "estadoPostulacion": "Abierta",
-    "viabilidadIICA": "Alta",
-    "porcentajeViabilidad": 85,
-    "responsableIICA": "Patricia Villareal",
-    "region": "Nacional",
-    "rolIICA": "Ejecutor",
-    "objetivo": "Presentar propuesta Readiness GCF para fortalecer capacidades de adaptación climática en el sector agroalimentario chileno",
-    "descripcionIICA": "⭐ VENTAJA ÚNICA: El IICA tiene Acuerdo Marco de Acreditación GCF firmado, lo que lo convierte en Entidad de Acceso Directo (DAE). Puede presentar propuestas Readiness directamente sin intermediarios, algo que la mayoría de instituciones chilenas no puede hacer. Enfocar en agricultura familiar, seguridad hídrica y sistemas agroalimentarios resilientes alineados con la NDC de Chile.",
-    "requisitos": [
-      "Acreditación DAE del IICA ante GCF (verificar vigencia)",
-      "Endorsement de la NDA de Chile (Ministerio de Medio Ambiente)",
-      "Concept Note aprobado por secretaría GCF",
-      "Plan de implementación con indicadores climáticos verificables"
-    ],
-    "fortalezas": [
-      "⭐ IICA tiene Acuerdo Marco de Acreditación GCF — acceso directo exclusivo",
-      "Mandato agrícola-climático perfectamente alineado con GCF",
-      "Ventana rolling sin fecha fija — se puede presentar en cualquier momento",
-      "Hasta USD 7M por ciclo de 4 años"
-    ],
-    "debilidades": [
-      "Proceso de aprobación GCF tarda 6-12 meses",
-      "Requiere endorsement del MMA como NDA de Chile",
-      "Propuesta en inglés obligatoria",
-      "Alta exigencia técnica en indicadores climáticos"
-    ],
-    "notasInternas": "NUEVO 11/03/2026. Prioridad estratégica alta. Patricia Villareal debe verificar vigencia del Acuerdo Marco de Acreditación IICA-GCF y coordinar con MMA para endorsement NDA. Ventana abierta hasta marzo 2028. Articular con proyecto Patagonia (ID 115) como parte de portafolio GCF coherente.",
-    "ejeIICA": "Bioeconomía y cambio climático",
-    "complejidad": "Alta"
-  },
-  {
-    "id": 128,
-    "nombre": "AGCID – Fondo Chile: Cooperación Sur-Sur y Triangular 2027 (Próxima Convocatoria)",
-    "institucion": "AGCID",
-    "monto": 1500000000,
-    "fecha_cierre": "2027-02-20",
-    "estado": "Próximo",
-    "categoria": "Nacional",
-    "url_bases": "https://fondochile.cl/convocatorias/",
-    "regiones": [
-      "Todas"
-    ],
-    "beneficiarios": [
-      "Institución pública chilena",
-      "Organismo internacional con sede en Chile",
-      "Servicio público"
-    ],
-    "resumen": {
-      "cofinanciamiento": "~USD 1.500.000 total convocatoria – subvención directa sin cofinanciamiento",
-      "requisitos_clave": [
-        "Institución pública chilena como postulante principal",
-        "Proyecto de cooperación Sur-Sur o triangular",
-        "Beneficiario en otro país ALC",
-        "Alineación con ODS y política exterior chilena"
-      ],
-      "plazo_ejecucion": "12 meses",
-      "observaciones": "Convocatoria 2026 cerró el 20/02/2026 (~USD 1.5M). Próxima edición: enero 2027. Áreas priorizadas: medioambiente, recursos naturales, desarrollo territorial y cooperación Sur-Sur. IICA es institución pública elegible directamente."
-    },
-    "monto_min": 50000000,
-    "monto_max": 300000000,
-    "plazo_meses": 12,
-    "requiere_cofinanciamiento": false,
-    "idioma": "es",
-    "faq_disponible": true,
-    "webinar_fecha": null,
-    "permite_adendas": false,
-    "bases_estado": "publicada",
-    "requiere_firma": true,
-    "tipos_solicitante": [
-      "Organizacion"
-    ],
-    "ambito": "Nacional",
-    "estadoPostulacion": "Próxima",
-    "viabilidadIICA": "Alta",
-    "porcentajeViabilidad": 82,
-    "responsableIICA": "Hernán Chiriboga",
-    "region": "América Latina y el Caribe",
-    "rolIICA": "Ejecutor",
-    "objetivo": "Formular con anticipación proyecto de cooperación Sur-Sur para el Fondo Chile 2027, alineado con los ejes estratégicos IICA",
-    "descripcionIICA": "El IICA Chile, como institución pública elegible directamente ante AGCID, puede postular al Fondo Chile para transferir capacidades técnicas agrícolas hacia otro país ALC. La convocatoria 2026 ya cerró pero es crítico preparar la postulación 2027 desde ahora. Áreas de alta compatibilidad: riego tecnificado, trazabilidad, agricultura familiar y resiliencia climática.",
-    "requisitos": [
-      "IICA como institución postulante principal (elegible como organismo público)",
-      "País receptor ALC identificado con demanda concreta",
-      "Plan de cooperación técnica detallado",
-      "Alineación con política exterior de Chile"
-    ],
-    "fortalezas": [
-      "IICA es elegible directo — no requiere intermediario",
-      "Alta compatibilidad temática (agricultura, cooperación Sur-Sur)",
-      "Convocatoria predecible — anual en enero/febrero",
-      "Monto total importante (~USD 1.5M distribuido)"
-    ],
-    "debilidades": [
-      "Convocatoria 2026 ya cerró — preparar para 2027",
-      "Plazo de ejecución corto (12 meses)",
-      "Competencia con otras instituciones públicas chilenas"
-    ],
-    "notasInternas": "NUEVO 11/03/2026. Convocatoria 2026 cerró el 20/02/2026. Registrar como PRÓXIMA para planificación anticipada. Hernán Chiriboga debe iniciar contacto con AGCID para explorar temáticas prioritarias 2027. Articular con Fondo Sur-Sur IICA (ID 122) para coherencia de portafolio.",
-    "ejeIICA": "Inclusión social y desarrollo rural",
-    "complejidad": "Media"
-  },
-  {
     "id": 129,
     "nombre": "CNR – Concurso 06-2026: Obras de Riego para Pueblos Indígenas (Nacional)",
     "institucion": "CNR",
@@ -1909,7 +1766,7 @@
         "Propuesta alineada con prioridades FIDA"
       ],
       "plazo_ejecucion": "36 meses",
-      "observaciones": "Iniciativa FO4IMPACT de FIDA verificada (fundsforngos.org). Fecha de referencia diciembre 2025. Verificar estado actual en ifad.org. IICA tiene posición privilegiada como organismo multilateral con mandato en agricultura familiar."
+      "observaciones": "Iniciativa FO4IMPACT de FIDA verificada (fundsforngos.org). Fecha de referencia diciembre 2026. Verificar estado actual en ifad.org. IICA tiene posición privilegiada como organismo multilateral con mandato en agricultura familiar."
     },
     "monto_min": 500000000,
     "monto_max": 1250000000,
@@ -1950,7 +1807,7 @@
       "Propuesta puede requerir inglés",
       "Competencia internacional alta"
     ],
-    "notasInternas": "NUEVO REAL 11/03/2026. Fuente: fundsforngos.org — verificado como iniciativa FIDA activa. Fecha referencia diciembre 2025. Carlos Guajardo debe verificar estado actual en ifad.org y contactar oficina FIDA Santiago. Articular con organizaciones AFC (articulación campesina). Fecha cierre estimada.",
+    "notasInternas": "NUEVO REAL 11/03/2026. Fuente: fundsforngos.org — verificado como iniciativa FIDA activa. Fecha referencia diciembre 2026. Carlos Guajardo debe verificar estado actual en ifad.org y contactar oficina FIDA Santiago. Articular con organizaciones AFC (articulación campesina). Fecha cierre estimada.",
     "ejeIICA": "Inclusión social y desarrollo rural",
     "complejidad": "Alta"
   },
@@ -1975,7 +1832,7 @@
       "cofinanciamiento": "Hasta USD 250.000 — se valoriza aporte de socios (cofinanciamiento al menos doble del solicitado)",
       "requisitos_clave": [
         "Consorcio mínimo 2 países ALC (al menos 1 entidad pública de investigación)",
-        "Alineación con Programas Insignia FONTAGRO 2025-2030",
+        "Alineación con Programas Insignia FONTAGRO 2026-2030",
         "Productores como beneficiarios directos del proyecto",
         "Envío antes del 20 abril 2026 · 15:00 ET Washington D.C."
       ],
@@ -3887,11 +3744,21 @@
     "estado": "Abierto",
     "categoria": "Internacional",
     "url_bases": "https://www.adaptation-fund.org/apply-funding/project-funding/",
-    "regiones": ["Todas"],
-    "beneficiarios": ["Institución pública", "ONG", "Comunidades rurales"],
+    "regiones": [
+      "Todas"
+    ],
+    "beneficiarios": [
+      "Institución pública",
+      "ONG",
+      "Comunidades rurales"
+    ],
     "resumen": {
       "cofinanciamiento": "Grant directo basado en acreditación",
-      "requisitos_clave": ["Acreditación como Agencia de Implementación (IICA está acreditado)", "Propuesta con enfoque en vulnerabilidad climática", "Validación gubernamental"],
+      "requisitos_clave": [
+        "Acreditación como Agencia de Implementación (IICA está acreditado)",
+        "Propuesta con enfoque en vulnerabilidad climática",
+        "Validación gubernamental"
+      ],
       "plazo_ejecucion": "60 meses"
     },
     "ambito": "Internacional",
