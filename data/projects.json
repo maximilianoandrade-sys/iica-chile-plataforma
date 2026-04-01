@@ -7,7 +7,7 @@
     "fecha_cierre": "2026-04-20",
     "estado": "Abierto",
     "categoria": "Internacional",
-    "url_bases": "https://plataforma.fontagro.org/login",
+    "url_bases": "https://fontagro.org/en/iniciativas/convocatorias/convocatoria-2026",
     "regiones": [
       "Todas"
     ],
@@ -421,7 +421,7 @@
     "fecha_cierre": "2026-04-20",
     "estado": "Abierto",
     "categoria": "Internacional",
-    "url_bases": "https://plataforma.fontagro.org/login",
+    "url_bases": "https://fontagro.org/en/iniciativas/convocatorias/convocatoria-2026",
     "regiones": [
       "Todas"
     ],
@@ -625,7 +625,7 @@
     "fecha_cierre": "2026-06-15",
     "estado": "Abierto",
     "categoria": "Nacional",
-    "url_bases": "https://convocatoria.fia.cl",
+    "url_bases": "https://www.fia.cl/convocatorias/",
     "regiones": [
       "La Araucanía",
       "Los Ríos",
@@ -1819,7 +1819,7 @@
     "fecha_cierre": "2026-04-20",
     "estado": "Abierto",
     "categoria": "Internacional",
-    "url_bases": "https://plataforma.fontagro.org/login",
+    "url_bases": "https://fontagro.org/en/iniciativas/convocatorias/convocatoria-2026",
     "regiones": [
       "Todas"
     ],
@@ -2029,7 +2029,7 @@
     "fecha_cierre": "2026-03-31",
     "estado": "Abierto",
     "categoria": "Nacional",
-    "url_bases": "https://convocatoria.fia.cl",
+    "url_bases": "https://www.fia.cl/convocatorias/",
     "regiones": [
       "Todas"
     ],
@@ -2234,7 +2234,7 @@
     "fecha_cierre": "2026-08-15",
     "estado": "Abierto",
     "categoria": "Nacional",
-    "url_bases": "https://www.fia.cl",
+    "url_bases": "https://www.fia.cl/convocatorias/",
     "regiones": [
       "Todas"
     ],
@@ -2257,7 +2257,7 @@
     "fecha_cierre": "2026-05-30",
     "estado": "Abierto",
     "categoria": "Regional",
-    "url_bases": "https://www.indap.gob.cl",
+    "url_bases": "https://www.indap.gob.cl/servicios/fondos-concursables",
     "regiones": [
       "Araucanía",
       "Los Ríos",
@@ -2281,7 +2281,7 @@
     "fecha_cierre": "2026-06-10",
     "estado": "Abierto",
     "categoria": "Nacional",
-    "url_bases": "https://www.corfo.cl",
+    "url_bases": "https://www.corfo.cl/sites/cpp/convocatorias",
     "regiones": [
       "Todas"
     ],
@@ -2417,7 +2417,7 @@
     "fecha_cierre": "2026-11-30",
     "estado": "Abierto",
     "categoria": "Internacional",
-    "url_bases": "https://iica.int",
+    "url_bases": "https://www.iica.int/es/nuestro-trabajo/cooperacion",
     "regiones": [
       "Todas"
     ],
@@ -2439,7 +2439,7 @@
     "fecha_cierre": "2026-04-15",
     "estado": "Abierto",
     "categoria": "Nacional",
-    "url_bases": "https://fondos.mma.gob.cl",
+    "url_bases": "https://fondos.mma.gob.cl/fpa",
     "regiones": [
       "Todas"
     ],
@@ -2574,7 +2574,7 @@
     "fecha_cierre": "2026-05-30",
     "estado": "Abierto",
     "categoria": "Internacional",
-    "url_bases": "https://www.giz.de",
+    "url_bases": "https://www.giz.de/en/worldwide/chile.html",
     "regiones": [
       "Todas"
     ],
@@ -2620,7 +2620,7 @@
     "fecha_cierre": "2026-04-15",
     "estado": "Abierto",
     "categoria": "Internacional",
-    "url_bases": "https://www.undp.org",
+    "url_bases": "https://www.undp.org/es/chile",
     "regiones": [
       "Todas"
     ],

@@ -48,6 +48,13 @@ export function OportunidadCard({ op, query = "" }: OportunidadCardProps) {
     const colorDias = isClosed ? 'text-slate-400' : isImminent ? 'text-rose-600 font-black animate-pulse' :
         op.diasRestantes <= 20 ? 'text-amber-600' : 'text-emerald-600';
 
+    const urgencyBadge = () => {
+        if (isClosed) return <span className="bg-slate-100 text-slate-500 text-[10px] font-bold px-2 py-1 rounded-full">🚫 Cerrada</span>;
+        if (isImminent) return <span className="bg-rose-100 text-rose-700 text-[10px] font-bold px-2 py-1 rounded-full animate-pulse">⚠️ Cierra en {op.diasRestantes}d</span>;
+        if (op.diasRestantes <= 30) return <span className="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-1 rounded-full">🕐 {op.diasRestantes} días</span>;
+        return <span className="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-1 rounded-full">✅ {op.diasRestantes} días</span>;
+    };
+
     const handleCopy = (e: React.MouseEvent) => {
         e.preventDefault();
         const texto = `📋 ${op.nombre}\n🏛️ ${op.institucion}\n📅 Cierre: ${op.cierre}\n🔗 Bases: ${op.url}`;
@@ -111,16 +118,8 @@ export function OportunidadCard({ op, query = "" }: OportunidadCardProps) {
                         </span>
                     )}
                 </div>
-                {isImminent && !isClosed && (
-                    <div className="flex items-center gap-1 text-[9px] font-black text-rose-600 uppercase tracking-[0.2em] animate-pulse">
-                        <Zap className="w-3 h-3" /> Cierre Inminente
-                    </div>
-                )}
-                {isClosed && (
-                    <div className="flex items-center gap-1 text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">
-                        Convocatoria Cerrada
-                    </div>
-                )}
+                    {urgencyBadge()}
+                {/* Badge ya incluido en urgencyBadge */}
             </div>
 
             <div className="flex-1">
@@ -224,10 +223,12 @@ export function OportunidadCard({ op, query = "" }: OportunidadCardProps) {
                         href={op.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="bg-[var(--iica-navy)] text-white text-[11px] font-black uppercase tracking-widest px-5 rounded-xl hover:bg-[var(--iica-blue)] shadow-lg shadow-blue-900/10 active:scale-95 transition-all flex items-center gap-2 group-hover:px-6"
+                        className="bg-emerald-600 text-white text-[11px] font-black uppercase tracking-widest px-5 py-3 rounded-xl hover:bg-emerald-700 shadow-lg shadow-emerald-900/10 active:scale-95 transition-all flex items-center gap-2 group-hover:px-6"
                     >
-                        Bases
-                        <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                        📄 Ver bases oficiales
+                        <svg className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
                     </a>
                 </div>
             </div>

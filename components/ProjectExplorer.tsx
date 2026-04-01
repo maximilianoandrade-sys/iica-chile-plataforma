@@ -22,6 +22,13 @@ const QUICK_FILTERS = [
 export default function ProjectExplorer({ allProjects }: { allProjects: Project[] }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
+    const [filters, setFilters] = useState({
+        category: 'Todas',
+        ambito: 'Todos',
+        viabilidad: 'Todas',
+        rol: 'Todos',
+        soloAbiertos: true
+    });
 
     useEffect(() => {
         const timer = setTimeout(() => setDebouncedSearch(searchTerm), 300);
@@ -65,6 +72,7 @@ export default function ProjectExplorer({ allProjects }: { allProjects: Project[
 
     const clearFilters = () => {
         setSearchTerm("");
+        setFilters({ category: 'Todas', ambito: 'Todos', viabilidad: 'Todas', rol: 'Todos', soloAbiertos: true });
     };
 
     return (
