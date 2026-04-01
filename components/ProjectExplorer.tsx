@@ -4,12 +4,12 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Project, daysUntilClose, formatMontoCLP, rolIICAInfo } from "@/lib/data";
 import { searchAndRankProjects } from "@/lib/searchEngine";
 import { calcProjectKPIs, exportProjectsToCSV } from "@/lib/analyticsEngine";
-import { Search, X, Sparkles, SlidersHorizontal, ChevronDown, Award, TrendingUp, Clock, AlertTriangle, Download, BarChart3, Globe, Zap } from "lucide-react";
+import { Search, X, Sparkles, Award, TrendingUp, Clock, Download, BarChart3, Zap } from "lucide-react";
 import { OportunidadCard } from "./OportunidadCard";
 import { motion, AnimatePresence } from "framer-motion";
 
 const QUICK_FILTERS = [
-    { id: 'all', label: 'Todas', icon: <Globe className="w-3.5 h-3.5" /> },
+    { id: 'all', label: 'Todas', icon: '🌍' },
     { id: 'riego', label: 'Riego', icon: "💧" },
     { id: 'clima', label: 'Clima', icon: "🌱" },
     { id: 'innovacion', label: 'Innovación', icon: "💡" },
@@ -65,11 +65,7 @@ export default function ProjectExplorer({ allProjects }: { allProjects: Project[
 
     const clearFilters = () => {
         setSearchTerm("");
-        setFilters({ category: 'Todas', ambito: 'Todos', viabilidad: 'Todas', rol: 'Todos', soloAbiertos: true });
-        setSortBy('relevance');
     };
-
-    const categories = useMemo(() => ['Todas', ...Array.from(new Set(allProjects.map(p => p.categoria)))], [allProjects]);
 
     return (
         <div className="flex flex-col gap-6">
