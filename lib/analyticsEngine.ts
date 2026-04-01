@@ -122,51 +122,60 @@ export function calcProjectKPIs(projects: Project[]): ProjectKPIs {
 }
 
 // ────────────────────────────────────────────────
-// Exportar proyectos a CSV (para el botón de descarga)
+// Exportar proyectos a CSV (Optimizado para Excel)
 // ────────────────────────────────────────────────
 export function exportProjectsToCSV(projects: Project[]): string {
     const headers = [
-        'Nombre',
-        'Institución',
+        'ID',
+        'Nombre del Proyecto',
+        'Institución Pública/Privada',
         'Categoría',
-        'Monto (CLP)',
-        'Fecha Cierre',
-        'Días Restantes',
-        'Viabilidad IICA',
-        '% Viabilidad',
-        'Rol IICA',
-        'Ámbito',
-        'Estado',
-        'Complejidad',
-        'Responsable IICA',
-        'Eje IICA',
-        'Score Urgencia',
-        'URL Bases',
+        'Presupuesto Est. (CLP)',
+        'Cierre Convocatoria',
+        'Días Disponibles',
+        'Viabilidad Técnica IICA',
+        '% Probabilidad Éxito',
+        'Rol del IICA Chileno',
+        'Ámbito Geográfico',
+        'Estado Postulación',
+        'Complejidad Técnica',
+        'Responsable IICA Asignado',
+        'Eje Estratégico IICA',
+        'Score Prioridad (0-100)',
+        'Enlace Directo Bases',
     ];
 
-    const escape = (v: unknown) => {
-        const s = String(v ?? '').replace(/"/g, '""');
+    const clean = (v: unknown) => {
+        if (v === null || v === undefined) return '""';
+        const s = String(v).replace(/"/g, '""').replace(/\n|\r/g, ' ');
         return `"${s}"`;
     };
 
-    const rows = projects.map(p => [
-        escape(p.nombre),
-        escape(p.institucion),
-        escape(p.categoria),
-        escape(formatMontoCLP(p.monto)),
-        escape(p.fecha_cierre),
-        escape(daysUntilClose(p)),
-        escape(p.viabilidadIICA ?? ''),
-        escape(p.porcentajeViabilidad ?? ''),
-        escape(p.rolIICA ?? ''),
-        escape(p.ambito ?? ''),
-        escape(p.estadoPostulacion ?? ''),
-        escape(p.complejidad ?? ''),
-        escape(p.responsableIICA ?? ''),
-        escape(p.ejeIICA ?? ''),
-        escape(calcUrgencyScore(p)),
-        escape(p.url_bases),
-    ].join(','));
+    // Ordenar por score de urgencia descendente para que el Excel sea más útil
+    const sortedProjects = [...projects].sort((a, b) => calcUrgencyScore(b) - calcUrgencyScore(a));
 
-    return [headers.map(h => `"${h}"`).join(','), ...rows].join('\n');
+    const rows = sortedProjects.map(p => [
+        clean(p.id),
+        clean(p.nombre),
+        clean(p.institucion),
+        clean(p.categoria),
+        clean(formatMontoCLP(p.monto)),
+        clean(p.fecha_cierre),
+        clean(daysUntilClose(p)),
+        clean(p.viabilidadIICA ?? 'No definida'),
+        clean(`${p.porcentajeViabilidad ?? 0}%`),
+        clean(p.rolIICA ?? 'Pendiente'),
+        clean(p.ambito ?? 'Nacional'),
+        clean(p.estadoPostulacion ?? 'Abierta'),
+        clean(p.complejidad ?? 'Media'),
+        clean(p.responsableIICA ?? 'Sin asignar'),
+        clean(p.ejeIICA ?? 'Institucional'),
+        clean(calcUrgencyScore(p)),
+        clean(p.url_bases),
+    ].join(';')); // Usamos punto y coma para que Excel lo abra perfecto en español
+
+    // Encabezados con comillas y punto y coma
+    const headerRow = headers.map(h => `"${h}"`).join(';');
+
+    return [headerRow, ...rows].join('\n');
 }
