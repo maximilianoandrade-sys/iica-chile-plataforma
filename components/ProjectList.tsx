@@ -40,7 +40,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                 body: JSON.stringify({ query, scope, role, use_ai: true }),
             });
             const data = await res.json();
-            
+
             // Map AI responses (English/different keys) to internal Project interface
             const mappedResults = (data.results || []).map((r: any, idx: number) => {
                 let safeDate = r.deadline || r.fecha_cierre || "";
@@ -93,7 +93,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
     const [quickViewProject, setQuickViewProject] = useState<Project | null>(null);
     const [copiedId, setCopiedId] = useState<number | null>(null);
     const [quickFilter, setQuickFilter] = useState<'all' | 'facil' | 'cierre' | 'mujeres' | 'alta_viabilidad'>('all');
-    
+
     // Alertas
     const [alertEmail, setAlertEmail] = useState("");
     const [alertSubscribed, setAlertSubscribed] = useState(false);
@@ -266,85 +266,85 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
 
             {/* BUSCADOR IA */}
             <div className="p-6 bg-white border-b border-gray-100">
-              <div className="flex gap-2 mb-3 text-gray-900">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  onKeyDown={e => e.key === "Enter" && handleSearch(searchQuery)}
-                  placeholder="Buscar proyectos reales... ej: riego, cambio climático, emprendimiento mujeres"
-                  className="flex-1 px-4 py-3 rounded-xl border border-gray-300 text-sm focus:outline-none focus:border-[var(--iica-blue)] focus:ring-1 focus:ring-[var(--iica-blue)] transition-all bg-gray-50/50"
-                  style={{ color: '#111827' }}
-                />
-                <button
-                  onClick={() => handleSearch(searchQuery)}
-                  disabled={searching}
-                  className="px-6 py-3 bg-[var(--iica-blue)] text-white rounded-xl text-sm font-bold hover:bg-[var(--iica-navy)] disabled:opacity-50 transition-colors shadow-sm whitespace-nowrap"
-                >
-                  {searching ? "Buscando..." : "🔍 Buscar con IA"}
-                </button>
-                {searchResults && (
-                  <button
-                    onClick={() => { setSearchResults(null); setSearchMeta(null); setSearchQuery(""); setAlertSubscribed(false); }}
-                    className="px-4 py-3 border border-gray-300 rounded-xl text-sm text-gray-600 font-medium hover:bg-gray-50 transition-colors bg-white whitespace-nowrap"
-                  >
-                    ✕ Limpiar
-                  </button>
-                )}
-              </div>
-              {searchMeta && (
-                <div className="flex flex-col gap-3 mt-4">
-                  <div className="flex items-center gap-2">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold bg-green-50 text-green-700 border border-green-200">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      {searchMeta.total} Resultados Reales
-                    </span>
-                    <p className="text-xs text-gray-500 font-medium ml-1">
-                      {searchMeta.ai_generated ? searchMeta.summary : "📋 Desde Base de Datos Institucional"}
-                    </p>
-                  </div>
-                  
-                  {/* ALERTA DE BÚSQUEDA */}
-                  <div className="bg-blue-50/50 border border-blue-100 rounded-xl p-4 mt-2 mb-2 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div>
-                      <h4 className="font-bold text-sm text-[var(--iica-navy)] flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-blue-500" />
-                        ¿No encontraste lo que buscas? ¡Te avisamos!
-                      </h4>
-                      <p className="text-xs text-gray-600 mt-1 max-w-md">
-                        Nuestra IA monitorea nuevos fondos todos los días a las 3:00 AM. Inscríbete para recibir una alerta cuando se abra un nuevo fondo para <strong>"{searchQuery || 'esta búsqueda'}"</strong>.
-                      </p>
-                    </div>
-                    {alertSubscribed ? (
-                      <div className="bg-green-100 text-green-700 text-xs font-bold px-4 py-2 rounded-lg flex items-center gap-2 w-full sm:w-auto justify-center">
-                        <CheckCircle2 className="w-4 h-4" /> ¡Alerta configurada!
-                      </div>
-                    ) : (
-                      <div className="flex w-full sm:w-auto gap-2">
-                        <input 
-                          type="email" 
-                          placeholder="tu@correo.com" 
-                          value={alertEmail}
-                          onChange={(e) => setAlertEmail(e.target.value)}
-                          className="px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-blue-500 flex-1 sm:w-48 text-gray-800"
-                        />
-                        <button 
-                          onClick={() => { if(alertEmail) setAlertSubscribed(true); }}
-                          className="bg-[var(--iica-blue)] text-white text-xs font-bold px-4 py-2 rounded-lg hover:bg-[var(--iica-navy)] transition-colors whitespace-nowrap"
+                <div className="flex gap-2 mb-3 text-gray-900">
+                    <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={e => setSearchQuery(e.target.value)}
+                        onKeyDown={e => e.key === "Enter" && handleSearch(searchQuery)}
+                        placeholder="Buscar proyectos reales... ej: riego, cambio climático, emprendimiento mujeres"
+                        className="flex-1 px-4 py-3 rounded-xl border border-gray-300 text-sm focus:outline-none focus:border-[var(--iica-blue)] focus:ring-1 focus:ring-[var(--iica-blue)] transition-all bg-gray-50/50"
+                        style={{ color: '#111827' }}
+                    />
+                    <button
+                        onClick={() => handleSearch(searchQuery)}
+                        disabled={searching}
+                        className="px-6 py-3 bg-[var(--iica-blue)] text-white rounded-xl text-sm font-bold hover:bg-[var(--iica-navy)] disabled:opacity-50 transition-colors shadow-sm whitespace-nowrap"
+                    >
+                        {searching ? "Buscando..." : "🔍 Buscar con IA"}
+                    </button>
+                    {searchResults && (
+                        <button
+                            onClick={() => { setSearchResults(null); setSearchMeta(null); setSearchQuery(""); setAlertSubscribed(false); }}
+                            className="px-4 py-3 border border-gray-300 rounded-xl text-sm text-gray-600 font-medium hover:bg-gray-50 transition-colors bg-white whitespace-nowrap"
                         >
-                          Avisarme
+                            ✕ Limpiar
                         </button>
-                      </div>
                     )}
-                  </div>
                 </div>
-              )}
-              {searchError && (
-                 <div className="flex items-center gap-1.5 mt-2 text-xs text-red-600 bg-red-50 p-2 rounded-lg border border-red-100">
-                    <AlertTriangle className="w-4 h-4" />
-                    <span className="font-medium">{searchError}</span>
-                 </div>
-              )}
+                {searchMeta && (
+                    <div className="flex flex-col gap-3 mt-4">
+                        <div className="flex items-center gap-2">
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold bg-green-50 text-green-700 border border-green-200">
+                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                {searchMeta.total} Resultados Reales
+                            </span>
+                            <p className="text-xs text-gray-500 font-medium ml-1">
+                                {searchMeta.ai_generated ? searchMeta.summary : "📋 Desde Base de Datos Institucional"}
+                            </p>
+                        </div>
+
+                        {/* ALERTA DE BÚSQUEDA */}
+                        <div className="bg-blue-50/50 border border-blue-100 rounded-xl p-4 mt-2 mb-2 flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div>
+                                <h4 className="font-bold text-sm text-[var(--iica-navy)] flex items-center gap-2">
+                                    <Sparkles className="w-4 h-4 text-blue-500" />
+                                    ¿No encontraste lo que buscas? ¡Te avisamos!
+                                </h4>
+                                <p className="text-xs text-gray-600 mt-1 max-w-md">
+                                    Nuestra IA monitorea nuevos fondos todos los días a las 3:00 AM. Inscríbete para recibir una alerta cuando se abra un nuevo fondo para <strong>"{searchQuery || 'esta búsqueda'}"</strong>.
+                                </p>
+                            </div>
+                            {alertSubscribed ? (
+                                <div className="bg-green-100 text-green-700 text-xs font-bold px-4 py-2 rounded-lg flex items-center gap-2 w-full sm:w-auto justify-center">
+                                    <CheckCircle2 className="w-4 h-4" /> ¡Alerta configurada!
+                                </div>
+                            ) : (
+                                <div className="flex w-full sm:w-auto gap-2">
+                                    <input
+                                        type="email"
+                                        placeholder="tu@correo.com"
+                                        value={alertEmail}
+                                        onChange={(e) => setAlertEmail(e.target.value)}
+                                        className="px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-blue-500 flex-1 sm:w-48 text-gray-800"
+                                    />
+                                    <button
+                                        onClick={() => { if (alertEmail) setAlertSubscribed(true); }}
+                                        className="bg-[var(--iica-blue)] text-white text-xs font-bold px-4 py-2 rounded-lg hover:bg-[var(--iica-navy)] transition-colors whitespace-nowrap"
+                                    >
+                                        Avisarme
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
+                {searchError && (
+                    <div className="flex items-center gap-1.5 mt-2 text-xs text-red-600 bg-red-50 p-2 rounded-lg border border-red-100">
+                        <AlertTriangle className="w-4 h-4" />
+                        <span className="font-medium">{searchError}</span>
+                    </div>
+                )}
             </div>
 
             {/* HEADER METADATA DASHBOARD */}

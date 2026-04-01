@@ -70,7 +70,7 @@ const METRICS = [
     },
     {
         icon: TrendingUp,
-        value: 48,
+        value: 50,
         suffix: '+',
         label: 'Proyectos Activos 2026',
         description: 'Iniciativas en ejecución en cooperación técnica, innovación y desarrollo rural.',
@@ -87,7 +87,7 @@ const METRICS = [
     },
     {
         icon: Globe,
-        value: 35,
+        value: 34,
         suffix: ' países',
         label: 'Red Hemisférica',
         description: 'Membresía activa en Americas con acceso a alianzas con FAO, BID, FONTAGRO y GEF.',
@@ -95,7 +95,7 @@ const METRICS = [
     },
     {
         icon: Users,
-        value: 4200,
+        value: 5000,
         suffix: '+',
         label: 'Agricultores Beneficiados',
         description: 'Familias rurales alcanzadas por programas de asistencia técnica y transferencia en Chile.',

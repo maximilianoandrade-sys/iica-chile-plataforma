@@ -95,7 +95,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es" dir="ltr" className={outfit.className}>
+    <html lang="es" dir="ltr" className={`${outfit.className} scroll-smooth`}>
       <head>
         {/* Preconnect a dominios externos */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />

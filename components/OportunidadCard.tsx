@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { InstitutionLogo } from "./InstitutionLogo";
+import { addPipelineTask } from "@/lib/pipelineManager";
 import { CheckCircle2, ChevronRight, Clock, MapPin, Zap, Info, Calendar, FileText, Award, LayoutDashboard, Copy, CheckCheck, Globe, Navigation, Search, ChevronDown } from "lucide-react";
 
 export interface Oportunidad {
@@ -57,11 +58,7 @@ export function OportunidadCard({ op, query = "" }: OportunidadCardProps) {
 
     const addToPipeline = (e: React.MouseEvent) => {
         e.preventDefault();
-        const current = JSON.parse(localStorage.getItem('iica-pipeline-v2') || '[]');
-        if (current.some((t: any) => t.id === op.id)) {
-            alert('Este proyecto ya está en tu pipeline institucional.');
-            return;
-        }
+        
         const newTask = {
             id: op.id,
             project: {
@@ -84,8 +81,13 @@ export function OportunidadCard({ op, query = "" }: OportunidadCardProps) {
             ],
             lastUpdate: new Date().toISOString()
         };
-        localStorage.setItem('iica-pipeline-v2', JSON.stringify([...current, newTask]));
-        alert('🚀 Proyecto enviado al Pipeline de Gestión IICA.');
+
+        const success = addPipelineTask(newTask);
+        if (success) {
+            alert('🚀 Proyecto enviado al Pipeline de Gestión IICA.');
+        } else {
+            alert('Este proyecto ya está en tu pipeline institucional.');
+        }
     };
 
     return (
@@ -148,7 +150,7 @@ export function OportunidadCard({ op, query = "" }: OportunidadCardProps) {
                 <div className="mt-4">
                     {/* Resumen compacto siempre visible */}
                     <div className="flex items-center justify-between">
-                        <span className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full ${op.viabilidad === 'Alta' ? 'bg-emerald-100 text-emerald-700' : op.viabilidad === 'Media' ? 'bg-amber-100 text-amber-700' : 'bg-rose-100 text-rose-700'}`}>
+                        <span className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full shadow-sm ${op.viabilidad === 'Alta' ? 'bg-emerald-700 text-white' : op.viabilidad === 'Media' ? 'bg-amber-700 text-white' : 'bg-rose-700 text-white'}`}>
                             Viabilidad {op.viabilidad}
                         </span>
                         <button

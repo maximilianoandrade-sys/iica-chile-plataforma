@@ -19,22 +19,9 @@ const QUICK_FILTERS = [
     { id: 'pasantia', label: 'Pasantías', icon: "🎓" },
 ];
 
-const AMBITO_OPTIONS = ['Todos', 'Internacional', 'Nacional', 'Regional'];
-const VIABILIDAD_OPTIONS = ['Todas', 'Alta', 'Media', 'Baja'];
-const ROL_OPTIONS = ['Todos', 'Ejecutor', 'Implementador', 'Asesor', 'Indirecto'];
-
 export default function ProjectExplorer({ allProjects }: { allProjects: Project[] }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
-    const [filters, setFilters] = useState({
-        category: 'Todas',
-        ambito: 'Todos',
-        viabilidad: 'Todas',
-        rol: 'Todos',
-        soloAbiertos: true // Por defecto solo abiertos para "Menos clicks" y relevancia
-    });
-    const [sortBy, setSortBy] = useState('relevance');
-    const [showAdvanced, setShowAdvanced] = useState(false);
 
     useEffect(() => {
         const timer = setTimeout(() => setDebouncedSearch(searchTerm), 300);
@@ -42,48 +29,25 @@ export default function ProjectExplorer({ allProjects }: { allProjects: Project[
     }, [searchTerm]);
 
     const filteredProjects = useMemo(() => {
-        let results = allProjects;
+        // Lógica de Negocio: Ocultar proyectos con fecha_cierre anterior al 1 de Abril de 2026 (y por tanto, cualquier 2025)
+        const thresholdDate = new Date('2026-04-01T00:00:00');
+        
+        let results = allProjects.filter(p => {
+            const cierre = new Date(p.fecha_cierre);
+            return cierre.getTime() >= thresholdDate.getTime();
+        });
 
         if (debouncedSearch.trim()) {
             results = searchAndRankProjects(debouncedSearch, results);
         }
 
-        if (filters.category !== 'Todas') {
-            results = results.filter(p => p.categoria === filters.category);
-        }
-
-        if (filters.ambito !== 'Todos') {
-            results = results.filter(p => p.ambito === filters.ambito);
-        }
-
-        if (filters.viabilidad !== 'Todas') {
-            results = results.filter(p => p.viabilidadIICA === filters.viabilidad);
-        }
-
-        if (filters.rol !== 'Todos') {
-            results = results.filter(p => p.rolIICA === filters.rol);
-        }
-
-        if (filters.soloAbiertos) {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            results = results.filter(p => new Date(p.fecha_cierre).getTime() >= today.getTime());
-        }
-
-        if (sortBy !== 'relevance' || !debouncedSearch) {
-            const sorted = [...results];
-            if (sortBy === 'date_asc') {
-                sorted.sort((a, b) => new Date(a.fecha_cierre).getTime() - new Date(b.fecha_cierre).getTime());
-            } else if (sortBy === 'amount_desc') {
-                sorted.sort((a, b) => b.monto - a.monto);
-            } else if (sortBy === 'viabilidad_desc') {
-                sorted.sort((a, b) => (b.porcentajeViabilidad || 0) - (a.porcentajeViabilidad || 0));
-            }
-            return sorted;
-        }
+        // Always show ONLY open projects by default (relevance & less clicks)
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        results = results.filter(p => new Date(p.fecha_cierre).getTime() >= today.getTime());
 
         return results;
-    }, [allProjects, debouncedSearch, filters, sortBy]);
+    }, [allProjects, debouncedSearch]);
 
     // Calcular KPIs en tiempo real
     const kpis = useMemo(() => calcProjectKPIs(filteredProjects), [filteredProjects]);
@@ -164,7 +128,12 @@ export default function ProjectExplorer({ allProjects }: { allProjects: Project[
                             </button>
                         )}
                         <div className="absolute -bottom-3 right-10 flex items-center gap-2 px-4 py-2 bg-[var(--iica-navy)] border border-slate-700 rounded-full shadow-xl text-[9px] font-black text-white uppercase tracking-[0.2em] group-hover/search:translate-y-1 transition-transform">
-                            <Sparkles className="h-3 w-3 text-amber-400" /> Motor IA IICA
+                            {searchTerm !== debouncedSearch ? (
+                                <div className="w-3 h-3 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
+                            ) : (
+                                <Sparkles className="h-3 w-3 text-amber-400" />
+                            )}
+                            Buscador Inteligente
                         </div>
                     </div>
 
@@ -235,118 +204,16 @@ export default function ProjectExplorer({ allProjects }: { allProjects: Project[
                         </div>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto justify-end border-t xl:border-t-0 pt-4 xl:pt-0">
-                        {/* Categoría Select */}
-                        <div className="relative group">
-                            <select 
-                                value={filters.category}
-                                onChange={(e) => setFilters({...filters, category: e.target.value})}
-                                className="appearance-none bg-gray-50 border border-gray-100 text-gray-700 font-black text-[10px] uppercase tracking-widest py-2.5 pl-4 pr-10 rounded-xl hover:bg-white hover:border-blue-200 transition-all cursor-pointer outline-none focus:ring-4 focus:ring-blue-50"
-                            >
-                                {categories.map(c => <option key={c} value={c}>📌 {c === 'Todas' ? 'Todas las Áreas' : c}</option>)}
-                            </select>
-                            <ChevronDown className="absolute right-3 top-2.5 h-4 w-4 text-gray-400 pointer-events-none group-hover:text-blue-500 transition-colors" />
-                        </div>
-
-                        <button 
-                            onClick={() => setShowAdvanced(!showAdvanced)}
-                            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${
-                                showAdvanced 
-                                ? 'bg-[var(--iica-navy)] text-white border-[var(--iica-navy)]' 
-                                : 'bg-white text-gray-500 border-gray-100 hover:border-blue-200 hover:text-blue-600'
-                            }`}
-                        >
-                            <SlidersHorizontal className="h-4 w-4" />
-                            Filtros
-                        </button>
-
+                    <div className="flex items-center w-full xl:w-auto mt-4 xl:mt-0 pt-4 xl:pt-0 border-t xl:border-t-0">
                         <button 
                             onClick={handleExport}
-                            className="flex items-center gap-2 px-4 py-2.5 bg-white text-[var(--iica-blue)] border border-blue-100 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-50 transition-colors"
+                            className="w-full xl:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-white text-[var(--iica-blue)] border-2 border-blue-100 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-50 transition-colors shadow-sm"
                         >
                             <Download className="h-4 w-4" />
-                            CSV
+                            Exportar Pipeline CSV
                         </button>
                     </div>
                 </div>
-
-                {/* Advanced Panel */}
-                <AnimatePresence>
-                    {showAdvanced && (
-                        <motion.div 
-                            initial={{ height: 0, opacity: 0, marginTop: 0 }}
-                            animate={{ height: 'auto', opacity: 1, marginTop: 8 }}
-                            exit={{ height: 0, opacity: 0, marginTop: 0 }}
-                            className="overflow-hidden"
-                        >
-                            <div className="bg-white border border-gray-100 rounded-3xl p-6 shadow-xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest flex items-center gap-2 px-1">
-                                        <Globe className="w-3 h-3" /> Ámbito Geográfico
-                                    </label>
-                                    <div className="flex flex-wrap gap-1.5 p-1.5 bg-gray-50 rounded-2xl border border-gray-100">
-                                        {AMBITO_OPTIONS.map(opt => (
-                                            <button
-                                                key={opt}
-                                                onClick={() => setFilters({...filters, ambito: opt})}
-                                                className={`flex-1 px-3 py-2 rounded-xl text-[9px] font-black uppercase tracking-tighter transition-all ${
-                                                    filters.ambito === opt 
-                                                    ? 'bg-white text-[var(--iica-blue)] shadow-md' 
-                                                    : 'text-gray-400 hover:text-gray-600'
-                                                }`}
-                                            >
-                                                {opt}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                                
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest flex items-center gap-2 px-1">
-                                        <AlertTriangle className="w-3 h-3" /> Viabilidad IICA
-                                    </label>
-                                    <select 
-                                        value={filters.viabilidad}
-                                        onChange={(e) => setFilters({...filters, viabilidad: e.target.value})}
-                                        className="w-full bg-gray-50 border border-gray-100 text-gray-700 font-bold text-xs py-3 px-4 rounded-xl outline-none focus:border-blue-300 transition-all font-bold"
-                                    >
-                                        {VIABILIDAD_OPTIONS.map(o => <option key={o} value={o}>{o === 'Todas' ? 'Cualquier Viabilidad' : o}</option>)}
-                                    </select>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest flex items-center gap-2 px-1">
-                                        <Award className="w-3 h-3" /> Rol del IICA
-                                    </label>
-                                    <select 
-                                        value={filters.rol}
-                                        onChange={(e) => setFilters({...filters, rol: e.target.value})}
-                                        className="w-full bg-gray-50 border border-gray-100 text-gray-700 font-bold text-xs py-3 px-4 rounded-xl outline-none focus:border-blue-300 transition-all font-bold"
-                                    >
-                                        {ROL_OPTIONS.map(o => <option key={o} value={o}>{o === 'Todos' ? 'Cualquier Rol' : o}</option>)}
-                                    </select>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-[10px] font-black uppercase text-gray-400 tracking-widest flex items-center gap-2 px-1">
-                                        <Clock className="w-3 h-3" /> Estado Temporal
-                                    </label>
-                                    <button
-                                        onClick={() => setFilters({...filters, soloAbiertos: !filters.soloAbiertos})}
-                                        className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all border ${
-                                            filters.soloAbiertos 
-                                            ? 'bg-emerald-600 text-white border-emerald-600 shadow-lg shadow-emerald-500/20' 
-                                            : 'bg-white text-gray-400 border-gray-100'
-                                        }`}
-                                    >
-                                        Solo Abiertos
-                                        <div className={`w-2 h-2 rounded-full ${filters.soloAbiertos ? 'bg-white animate-pulse' : 'bg-gray-200'}`} />
-                                    </button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
             </div>
 
             {/* ── LISTADO DINÁMICO ── */}

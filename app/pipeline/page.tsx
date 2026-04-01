@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { LayoutDashboard, GripVertical, CheckCircle2, ChevronRight, Briefcase, Play, Inbox, Send, ChevronLeft, User, ListTodo, AlertCircle, Trash2, Plus } from 'lucide-react';
 import projectsData from '@/data/projects.json';
 import { Project } from '@/lib/data';
+import { getPipelineTasks, savePipelineTasks } from '@/lib/pipelineManager';
 import Link from 'next/link';
 
 type ColumnState = 'descubierto' | 'analisis' | 'borrador' | 'enviado';
@@ -39,9 +40,9 @@ export default function PipelinePage() {
 
   useEffect(() => {
     setIsClient(true);
-    const saved = localStorage.getItem('iica-pipeline-v2');
-    if (saved) {
-      setTasks(JSON.parse(saved));
+    const saved = getPipelineTasks();
+    if (saved && saved.length > 0) {
+      setTasks(saved as KanbanTask[]);
     } else {
       const initialTasks: KanbanTask[] = projectsData.slice(0, 6).map((p, idx) => ({
         id: String(p.id),
@@ -53,13 +54,13 @@ export default function PipelinePage() {
         lastUpdate: new Date().toISOString()
       }));
       setTasks(initialTasks);
-      localStorage.setItem('iica-pipeline-v2', JSON.stringify(initialTasks));
+      savePipelineTasks(initialTasks);
     }
   }, []);
 
   useEffect(() => {
     if (isClient && tasks.length >= 0) {
-      localStorage.setItem('iica-pipeline-v2', JSON.stringify(tasks));
+      savePipelineTasks(tasks);
     }
   }, [tasks, isClient]);
 
