@@ -240,8 +240,6 @@ export default function ProjectExplorer({ allProjects }: { allProjects: Project[
                                     institucion: p.institucion,
                                     cierre: p.fecha_cierre,
                                     diasRestantes: daysUntilClose(p),
-                                    viabilidad: p.viabilidadIICA,
-                                    porcentajeViabilidad: p.porcentajeViabilidad,
                                     rolIICA: rolIICAInfo(p.rolIICA).label,
                                     url: p.url_bases,
                                     adenda: p.permite_adendas,
