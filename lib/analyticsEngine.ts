@@ -122,60 +122,90 @@ export function calcProjectKPIs(projects: Project[]): ProjectKPIs {
 }
 
 // ────────────────────────────────────────────────
-// Exportar proyectos a CSV (Optimizado para Excel)
+// Exportar proyectos a CSV (Reporte Ejecutivo para Excel)
 // ────────────────────────────────────────────────
 export function exportProjectsToCSV(projects: Project[]): string {
+    const today = new Date().toLocaleDateString('es-CL');
+    
+    // Títulos de columnas más didácticos y con guías visuales (emojis)
     const headers = [
         'ID',
-        'Nombre del Proyecto',
-        'Institución Pública/Privada',
-        'Categoría',
-        'Presupuesto Est. (CLP)',
-        'Cierre Convocatoria',
-        'Días Disponibles',
-        'Viabilidad Técnica IICA',
-        '% Probabilidad Éxito',
-        'Rol del IICA Chileno',
-        'Ámbito Geográfico',
-        'Estado Postulación',
-        'Complejidad Técnica',
-        'Responsable IICA Asignado',
-        'Eje Estratégico IICA',
-        'Score Prioridad (0-100)',
-        'Enlace Directo Bases',
+        '📌 PRIORIDAD (0-100)',
+        '🚀 NOMBRE DEL PROYECTO',
+        '🏛️ INSTITUCIÓN',
+        '💰 PRESUPUESTO EST. (CLP)',
+        '📅 CIERRE CONVOCATORIA',
+        '⏳ DÍAS RESTANTES',
+        '🚦 VIABILIDAD IICA',
+        '📈 ÉXITO (%)',
+        '🔧 ROL IICA CHILE',
+        '🌎 ÁMBITO',
+        '📝 ESTADO',
+        '🧩 COMPLEJIDAD',
+        '👤 RESPONSABLE ASIGNADO',
+        '💡 EJE ESTRATÉGICO IICA',
+        '🔗 ENLACE DIRECTO BASES',
     ];
 
     const clean = (v: unknown) => {
-        if (v === null || v === undefined) return '""';
-        const s = String(v).replace(/"/g, '""').replace(/\n|\r/g, ' ');
+        if (v === null || v === undefined || v === '') return '"—"';
+        // Limpieza profunda: quitar comas, puntos y coma de dentro del texto, saltos de línea y escapar comillas
+        const s = String(v)
+            .replace(/"/g, '""')
+            .replace(/\n|\r/g, ' ')
+            .replace(/;/g, ','); // Cambiar ; interno por , para no romper el delimitador
         return `"${s}"`;
     };
 
-    // Ordenar por score de urgencia descendente para que el Excel sea más útil
-    const sortedProjects = [...projects].sort((a, b) => calcUrgencyScore(b) - calcUrgencyScore(a));
+    // Ordenar por prioridad real del IICA para el reporte
+    const sortedProjects = [...projects].sort((a, b) => {
+        const scoreA = calcUrgencyScore(a);
+        const scoreB = calcUrgencyScore(b);
+        return scoreB - scoreA;
+    });
 
-    const rows = sortedProjects.map(p => [
-        clean(p.id),
-        clean(p.nombre),
-        clean(p.institucion),
-        clean(p.categoria),
-        clean(formatMontoCLP(p.monto)),
-        clean(p.fecha_cierre),
-        clean(daysUntilClose(p)),
-        clean(p.viabilidadIICA ?? 'No definida'),
-        clean(`${p.porcentajeViabilidad ?? 0}%`),
-        clean(p.rolIICA ?? 'Pendiente'),
-        clean(p.ambito ?? 'Nacional'),
-        clean(p.estadoPostulacion ?? 'Abierta'),
-        clean(p.complejidad ?? 'Media'),
-        clean(p.responsableIICA ?? 'Sin asignar'),
-        clean(p.ejeIICA ?? 'Institucional'),
-        clean(calcUrgencyScore(p)),
-        clean(p.url_bases),
-    ].join(';')); // Usamos punto y coma para que Excel lo abra perfecto en español
+    const rows = sortedProjects.map(p => {
+        const score = calcUrgencyScore(p);
+        const days = daysUntilClose(p);
+        
+        // Agregar indicadores visuales de texto para Excel
+        const priorLabel = score >= 80 ? '🔥 CRÍTICA' : score >= 60 ? '⚡ ALTA' : '⭐ NORMAL';
+        const daysLabel = days < 0 ? '❌ Cerrada' : days <= 7 ? `⚠️ EN 7 DÍAS` : `${days} d`;
 
-    // Encabezados con comillas y punto y coma
+        return [
+            clean(p.id),
+            clean(`${score} (${priorLabel})`),
+            clean(p.nombre.toUpperCase()), // Título en mayúsculas para jerarquía
+            clean(p.institucion),
+            clean(formatMontoCLP(p.monto)),
+            clean(p.fecha_cierre),
+            clean(daysLabel),
+            clean(p.viabilidadIICA?.toUpperCase() || 'NO DEFINIDA'),
+            clean(`${p.porcentajeViabilidad ?? 0}%`),
+            clean(p.rolIICA || 'POR ASIGNAR'),
+            clean(p.ambito || 'NACIONAL'),
+            clean(p.estadoPostulacion || 'ABIERTA'),
+            clean(p.complejidad || 'MEDIA'),
+            clean(p.responsableIICA || 'EQUIPO TÉCNICO IICA'),
+            clean(p.ejeIICA || 'PLAN ESTRATÉGICO 2022-2026'),
+            clean(p.url_bases),
+        ].join(';');
+    });
+
+    // Construcción del reporte con metadatos iniciales para que el usuario sepa qué está leyendo
+    const reportTitle = `"RADAR DE OPORTUNIDADES IICA CHILE - REPORTE EJECUTIVO DE GESTIÓN";;;;;;;;;;;;;;;`;
+    const reportDate = `"Fecha de generación: ${today}";;;;;;;;;;;;;;;`;
+    const reportSummary = `"Total de oportunidades analizadas: ${projects.length}";;;;;;;;;;;;;;;`;
+    const emptyRow = `;;;;;;;;;;;;;;;`;
+    
     const headerRow = headers.map(h => `"${h}"`).join(';');
 
-    return [headerRow, ...rows].join('\n');
+    return [
+        reportTitle,
+        reportDate,
+        reportSummary,
+        emptyRow,
+        headerRow,
+        ...rows
+    ].join('\n');
 }
