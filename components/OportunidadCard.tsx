@@ -124,10 +124,6 @@ export function OportunidadCard({ op, query = "" }: OportunidadCardProps) {
 
             <div className="flex-1">
                 <div className="flex items-start gap-4">
-                    <div className="bg-white p-3 rounded-2xl shrink-0 group-hover:rotate-3 transition-transform border border-slate-100 shadow-sm mt-1 ring-4 ring-slate-50">
-                        <InstitutionLogo nombre={op.institucion} size={42} />
-                    </div>
-
                     <div className="flex-1 min-w-0 flex flex-col pt-1">
                         <h3 className="font-black text-[var(--iica-navy)] text-base leading-tight pr-4 mb-2 group-hover:text-[var(--iica-blue)] transition-colors">
                             <Highlight text={op.nombre} highlight={query} />
