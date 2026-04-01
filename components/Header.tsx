@@ -45,7 +45,6 @@ export function Header() {
                 <nav className="hidden lg:flex gap-6 text-xs font-bold uppercase tracking-widest text-gray-500">
                     <Link href="/#convocatorias" className="hover:text-[var(--iica-blue)] transition-colors">Oportunidades</Link>
                     <Link href="/pipeline" className="hover:text-[var(--iica-blue)] transition-colors">Pipeline</Link>
-                    <Link href="/maletin" className="hover:text-[var(--iica-blue)] transition-colors">Maletín</Link>
                     <Link href="/admin" className="hover:text-[var(--iica-blue)] transition-colors">Admin</Link>
                 </nav>
 
@@ -88,7 +87,6 @@ export function Header() {
                                 { href: '/#inicio', label: '🏠 Inicio' },
                                 { href: '/#convocatorias', label: '🎯 Ver Oportunidades' },
                                 { href: '/#fuentes', label: '🔗 Fuentes Oficiales' },
-                                { href: '/maletin', label: '💼 Mi Maletín' },
                                 { href: '/consultores', label: '👤 Directorio de Consultores' },
                                 { href: '/#impacto', label: '📈 Impacto IICA' },
                                 { href: '/about', label: '🏦 Sobre el IICA' },

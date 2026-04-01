@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { InstitutionLogo } from "./InstitutionLogo";
-import { ProposalGenerator } from "./ProposalGenerator";
-import { CheckCircle2, ChevronRight, Clock, MapPin, Zap, Info, Sparkles, Calendar, FileText, Award, LayoutDashboard, Copy, CheckCheck, Globe, Navigation, Search } from "lucide-react";
+import { CheckCircle2, ChevronRight, Clock, MapPin, Zap, Info, Calendar, FileText, Award, LayoutDashboard, Copy, CheckCheck, Globe, Navigation, Search, ChevronDown } from "lucide-react";
 
 export interface Oportunidad {
     id: string;
@@ -26,8 +25,8 @@ export interface OportunidadCardProps {
 }
 
 export function OportunidadCard({ op, query = "" }: OportunidadCardProps) {
-    const [isGeneratorOpen, setIsGeneratorOpen] = useState(false);
     const [copied, setCopied] = useState(false);
+    const [expanded, setExpanded] = useState(false);
 
     const isImminent = op.diasRestantes <= 7;
     const isClosed = op.diasRestantes < 0;
@@ -141,33 +140,50 @@ export function OportunidadCard({ op, query = "" }: OportunidadCardProps) {
                     </div>
                 </div>
                 
-                {op.descripcion && (
-                    <div className="mt-4 relative">
-                        <p className="text-xs text-slate-500 line-clamp-3 leading-relaxed font-medium pl-3 border-l-2 border-slate-100">
-                             <Highlight text={op.descripcion} highlight={query} />
-                        </p>
-                    </div>
-                )}
+
             </div>
 
-            {/* Viabilidad Didáctica */}
+            {/* Progressive Disclosure: Ver más ↓ */}
             {!isClosed && (
-                <div className="mt-6 p-4 bg-slate-50/50 rounded-2xl border border-slate-100">
-                    <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">
-                        <span>Viabilidad Técnica IICA</span>
-                        <span className={`px-2 py-0.5 rounded-full ${op.viabilidad === 'Alta' ? 'bg-emerald-100 text-emerald-700' : op.viabilidad === 'Media' ? 'bg-amber-100 text-amber-700' : 'bg-rose-100 text-rose-700'}`}>
-                            {op.viabilidad}
+                <div className="mt-4">
+                    {/* Resumen compacto siempre visible */}
+                    <div className="flex items-center justify-between">
+                        <span className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full ${op.viabilidad === 'Alta' ? 'bg-emerald-100 text-emerald-700' : op.viabilidad === 'Media' ? 'bg-amber-100 text-amber-700' : 'bg-rose-100 text-rose-700'}`}>
+                            Viabilidad {op.viabilidad}
                         </span>
+                        <button
+                            onClick={(e) => { e.preventDefault(); setExpanded(!expanded); }}
+                            className="flex items-center gap-1 text-[11px] font-bold text-slate-400 hover:text-[var(--iica-blue)] transition-colors"
+                        >
+                            {expanded ? 'Menos ↑' : 'Ver más ↓'}
+                            <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${expanded ? 'rotate-180' : ''}`} />
+                        </button>
                     </div>
-                    <div className="h-1.5 bg-slate-200/50 rounded-full overflow-hidden flex">
-                        <div
-                            className={`h-full transition-all duration-1000 rounded-full ${op.viabilidad === 'Alta' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]' : op.viabilidad === 'Media' ? 'bg-amber-400' : 'bg-rose-500'}`}
-                            style={{ width: `${op.porcentajeViabilidad || (op.viabilidad === 'Alta' ? 85 : op.viabilidad === 'Media' ? 50 : 25)}%` }}
-                        />
-                    </div>
-                    {op.rolIICA && (
-                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-tight mt-3 italic">
-                             <Navigation className="w-3 h-3 text-slate-300" /> Rol: {op.rolIICA}
+
+                    {/* Contenido expandible */}
+                    {expanded && (
+                        <div className="mt-3 space-y-3 animate-in slide-in-from-top-2 duration-200">
+                            {op.descripcion && (
+                                <p className="text-xs text-slate-500 leading-relaxed font-medium pl-3 border-l-2 border-slate-200">
+                                    <Highlight text={op.descripcion} highlight={query} />
+                                </p>
+                            )}
+                            <div className="p-3 bg-slate-50/50 rounded-xl border border-slate-100">
+                                <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">
+                                    <span>Viabilidad Técnica IICA</span>
+                                </div>
+                                <div className="h-1.5 bg-slate-200/50 rounded-full overflow-hidden flex">
+                                    <div
+                                        className={`h-full transition-all duration-1000 rounded-full ${op.viabilidad === 'Alta' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]' : op.viabilidad === 'Media' ? 'bg-amber-400' : 'bg-rose-500'}`}
+                                        style={{ width: `${op.porcentajeViabilidad || (op.viabilidad === 'Alta' ? 85 : op.viabilidad === 'Media' ? 50 : 25)}%` }}
+                                    />
+                                </div>
+                                {op.rolIICA && (
+                                    <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-tight mt-2 italic">
+                                        <Navigation className="w-3 h-3 text-slate-300" /> Rol: {op.rolIICA}
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     )}
                 </div>
@@ -194,16 +210,6 @@ export function OportunidadCard({ op, query = "" }: OportunidadCardProps) {
                             {copied ? <CheckCheck className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                         </button>
                         <button
-                            onClick={(e) => {
-                                e.preventDefault();
-                                setIsGeneratorOpen(true);
-                            }}
-                            className="p-2 rounded-lg hover:bg-white text-slate-400 hover:text-purple-600 transition-all"
-                            title="Generar borrador IA"
-                        >
-                            <Sparkles className="w-3.5 h-3.5" />
-                        </button>
-                        <button
                             onClick={addToPipeline}
                             className="p-2 rounded-lg hover:bg-white text-slate-400 hover:text-indigo-600 transition-all"
                             title="Gestionar en Pipeline"
@@ -224,11 +230,7 @@ export function OportunidadCard({ op, query = "" }: OportunidadCardProps) {
                 </div>
             </div>
 
-            <ProposalGenerator 
-                project={{ nombre: op.nombre, institucion: op.institucion, monto: op.monto, categoria: op.categoria, descripcion: op.descripcion }} 
-                isOpen={isGeneratorOpen} 
-                onClose={() => setIsGeneratorOpen(false)} 
-            />
+
         </div>
     );
 }
