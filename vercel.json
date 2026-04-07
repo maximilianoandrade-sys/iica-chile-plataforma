@@ -4,5 +4,23 @@
             "path": "/api/cron/check-updates",
             "schedule": "0 2 * * *"
         }
+    ],
+    "buildCommand": "npm run prisma:generate && npm run build",
+    "installCommand": "npm install",
+    "framework": "nextjs",
+    "regions": ["scl1"],
+    "functions": {
+        "app/api/**/*.ts": {
+            "memory": 512,
+            "maxDuration": 10
+        }
+    },
+    "headers": [
+        {
+            "source": "/api/(.*)",
+            "headers": [
+                { "key": "Cache-Control", "value": "no-store, must-revalidate" }
+            ]
+        }
     ]
 }

@@ -12,32 +12,82 @@ model Usuario {
   email         String        @unique
   nombre        String?
   region        String?
-  intereses     String[]      // Array de intereses para personalización
+  intereses     String[]
   fechaRegistro DateTime      @default(now())
   alertas       Alerta[]
   favoritos     Favorito[]
   postulaciones Postulacion[]
 }
 
+model Project {
+  id                        Int      @id @default(autoincrement())
+  nombre                    String
+  institucion               String
+  monto                     Float
+  fecha_cierre              DateTime
+  estado                    String
+  categoria                 String
+  url_bases                 String
+  
+  regiones                  String[]
+  beneficiarios             String[]
+  monto_min                 Float?
+  monto_max                 Float?
+  plazo_meses               Int?
+  requiere_cofinanciamiento Boolean  @default(false)
+  idioma                    String   @default("es")
+  faq_disponible            Boolean  @default(false)
+  webinar_fecha             DateTime?
+  permite_adendas           Boolean  @default(false)
+  bases_estado              String   @default("published")
+  requiere_firma            Boolean  @default(false)
+  tipos_solicitante         String[]
+  checklist                 String[]
+  
+  ambito                    String   @default("Nacional")
+  estadoPostulacion         String   @default("Abierta")
+  viabilidadIICA            String   @default("Media")
+  porcentajeViabilidad      Int?
+  responsableIICA            String?
+  region                    String?
+  objetivo                  String?
+  descripcionIICA           String?
+  requisitos                String[]
+  fortalezas                String[]
+  debilidades               String[]
+  notasInternas             String?
+  ejeIICA                   String?
+  complejidad               String   @default("Media")
+  rolIICA                   String   @default("Indirecto")
+  
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
+  lastCheckedAt             DateTime @default(now())
+  
+  favoritos                 Favorito[]
+  
+  @@index([institucion])
+  @@index([estado])
+  @@index([fecha_cierre])
+  @@index([viabilidadIICA])
+  @@index([rolIICA])
+}
+
 model Fondo {
   id              Int       @id @default(autoincrement())
   nombre          String
   descripcion     String    @db.Text
-  organismo       String    // Organismo Financiador (BID, BM, UE)
-  
-  // Facetas de Búsqueda
-  montoTotal      Float?    // Para búsquedas por rango numérico
-  montoTexto      String?   // "Hasta $50,000 USD"
+  organismo       String
+  montoTotal      Float?
+  montoTexto      String?
   moneda          String    @default("USD")
-  paisDestino     String[]  // Array de códigos ISO o nombres (CL, PE, CR)
-  ods             Int[]     // IDs de Objetivos de Desarrollo Sostenible (1-17)
-  
-  estado          String    // Abierto, Cerrado, Próximamente
+  paisDestino     String[]
+  ods             Int[]
+  estado          String
   fechaApertura   DateTime?
   fechaCierre     DateTime
   fechaScraping   DateTime  @default(now())
-  
-  documentoTexto  String?   @db.Text // Para "Smart Search" (contenido indexado)
+  documentoTexto  String?   @db.Text
   enlaceFuente    String
   
   favoritos       Favorito[]
@@ -51,20 +101,23 @@ model Alerta {
   id         Int      @id @default(autoincrement())
   usuarioId  Int
   usuario    Usuario  @relation(fields: [usuarioId], references: [id])
-  criterios  Json     // { "organismo": "BID", "monto_min": 10000 }
-  frecuencia String   // DIARIA, SEMANAL, INMEDIATA
+  criterios  Json
+  frecuencia String
   activo     Boolean  @default(true)
 }
 
 model Favorito {
   id        Int      @id @default(autoincrement())
   usuarioId Int
-  fondoId   Int
+  proyectoId Int?
+  fondoId   Int?
   usuario   Usuario  @relation(fields: [usuarioId], references: [id])
-  fondo     Fondo    @relation(fields: [fondoId], references: [id])
+  proyecto  Project? @relation(fields: [proyectoId], references: [id])
+  fondo     Fondo?   @relation(fields: [fondoId], references: [id])
   notas     String?
   createdAt DateTime @default(now())
 
+  @@unique([usuarioId, proyectoId])
   @@unique([usuarioId, fondoId])
 }
 
@@ -74,7 +127,50 @@ model Postulacion {
   fondoId   Int
   usuario   Usuario  @relation(fields: [usuarioId], references: [id])
   fondo     Fondo    @relation(fields: [fondoId], references: [id])
-  estado    String   // BORRADOR, ENVIADA, APROBADA, RECHAZADA
+  estado    String
   fecha     DateTime @default(now())
 }
 
+model SearchHistory {
+  id          Int      @id @default(autoincrement())
+  query       String
+  results     Int
+  filters     Json?
+  createdAt   DateTime @default(now())
+  
+  @@index([createdAt])
+}
+
+model Analytics {
+  id          Int      @id @default(autoincrement())
+  event       String
+  properties  Json?
+  userAgent   String?
+  ipHash      String?
+  createdAt   DateTime @default(now())
+  
+  @@index([event])
+  @@index([createdAt])
+}
+
+model LinkCheck {
+  id          Int      @id @default(autoincrement())
+  url         String   @unique
+  status      String
+  statusCode  Int?
+  lastChecked DateTime @default(now())
+  isValid     Boolean  @default(true)
+  
+  @@index([url])
+}
+
+model NewsletterSubscriber {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  verified  Boolean  @default(false)
+  token     String?  @unique
+  createdAt DateTime @default(now())
+  
+  @@index([email])
+}

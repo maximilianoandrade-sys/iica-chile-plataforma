@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Outfit } from 'next/font/google'
 import './globals.css'
+import { ThemeProvider } from '@/components/ThemeProvider'
 import CookieConsent from '@/components/CookieConsent';
 import PWAInstallBanner from '@/components/PWAInstallBanner';
 import OfflineIndicator from '@/components/OfflineIndicator';
@@ -118,22 +119,23 @@ export default function RootLayout({
         <meta httpEquiv="X-XSS-Protection" content="1; mode=block" />
       </head>
 
-      <body className="flex flex-col min-h-screen bg-[#f4f7f9] antialiased">
-        {/* Skip to main content - Accesibilidad */}
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:shadow-lg"
-        >
-          Saltar al contenido principal
-        </a>
+      <body className="flex flex-col min-h-screen bg-[#f4f7f9] dark:bg-gray-900 antialiased transition-colors">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          {/* Skip to main content - Accesibilidad */}
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:shadow-lg"
+          >
+            Saltar al contenido principal
+          </a>
 
-        {/* Indicadores de estado */}
-        <OfflineIndicator />
+          {/* Indicadores de estado */}
+          <OfflineIndicator />
 
-        {/* Contenido principal */}
-        <div id="main-content" role="main">
-          {children}
-        </div>
+          {/* Contenido principal */}
+          <div id="main-content" role="main">
+            {children}
+          </div>
 
         {/* Componentes globales */}
         <CookieConsent />
@@ -190,6 +192,7 @@ export default function RootLayout({
             `,
           }}
         />
+        </ThemeProvider>
       </body>
     </html>
   )
