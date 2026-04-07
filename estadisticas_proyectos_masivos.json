@@ -1,0 +1,32 @@
+{
+  "fecha_actualizacion": "2026-04-06 10:55:21",
+  "total_proyectos": 65,
+  "proyectos_existentes": 50,
+  "nuevos_proyectos_masivos": 15,
+  "proyectos_eliminados_duplicados": 0,
+  "fuentes_incluidas": [
+    "FAO - Organización de las Naciones Unidas",
+    "BID - Banco Interamericano de Desarrollo",
+    "FIA - Fundación para la Innovación Agraria",
+    "CORFO - Corporación de Fomento",
+    "GCF - Fondo Verde para el Clima",
+    "Rockefeller Foundation",
+    "PNUD - Programa de las Naciones Unidas",
+    "GAFSP - Global Agriculture and Food Security Program",
+    "Embajada de Canadá",
+    "Embajada de Alemania",
+    "Kellogg Foundation",
+    "Ford Foundation",
+    "INDAP - Instituto de Desarrollo Agropecuario",
+    "MMA - Ministerio del Medio Ambiente"
+  ],
+  "categorias_proyectos": [
+    "Desarrollo Rural",
+    "Innovación Tecnológica",
+    "Agricultura Sostenible",
+    "Seguridad Alimentaria",
+    "Cooperación Internacional",
+    "Desarrollo Comunitario",
+    "Justicia Social"
+  ]
+}
