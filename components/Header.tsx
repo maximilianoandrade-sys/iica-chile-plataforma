@@ -45,7 +45,6 @@ export function Header() {
                 <nav className="hidden lg:flex gap-6 text-xs font-bold uppercase tracking-widest text-gray-500">
                     <Link href="/#convocatorias" className="hover:text-[var(--iica-blue)] transition-colors">Oportunidades</Link>
                     <Link href="/pipeline" className="hover:text-[var(--iica-blue)] transition-colors">Pipeline</Link>
-                    <Link href="/admin" className="hover:text-[var(--iica-blue)] transition-colors">Admin</Link>
                 </nav>
 
                 <div className="flex items-center gap-2">
