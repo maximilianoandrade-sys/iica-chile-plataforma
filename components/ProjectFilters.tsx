@@ -167,23 +167,29 @@ export default function ProjectFilters({
 
     // Autocompletado — usa sugerencias dinámicas del servidor
     useEffect(() => {
+        // Fuentes principales para sugerencias
+        const FUENTES_TOP = ['FONTAGRO', 'FAO', 'BID', 'FIDA', 'GEF', 'EUROCLIMA'];
         if (searchTerm.length >= 2) {
             const term = searchTerm.toLowerCase();
-            // Combina sugerencias dinámicas (del JSON real) con las estáticas como fallback
-            const allSuggestions = dynamicSuggestions.length > 0
+            // Sugerencias dinámicas o NATURAL_SUGGESTIONS más fuentes
+            let allSuggestions = dynamicSuggestions.length > 0
                 ? dynamicSuggestions
                 : NATURAL_SUGGESTIONS;
-            const matches = allSuggestions.filter(s =>
-                s.toLowerCase().includes(term) ||
-                term.split(' ').some(word => word.length > 2 && s.toLowerCase().includes(word))
+            // Siempre incluir las fuentes principales si empiezan por lo buscado o si lo incluyen
+            const fuenteSuggestions = FUENTES_TOP.filter(fuente => fuente.toLowerCase().includes(term));
+            allSuggestions = [...fuenteSuggestions, ...allSuggestions];
+            // Sugerir también fuentes aunque estén al final (sin duplicados)
+            const matches = allSuggestions.filter((s, idx, arr) =>
+                (s.toLowerCase().includes(term) || term.split(' ').some(word => word.length > 2 && s.toLowerCase().includes(word))) && arr.indexOf(s) === idx
             );
-            setFilteredSuggestions(matches.slice(0, 6));
+            setFilteredSuggestions(matches.slice(0, 8));
         } else if (searchTerm.length === 0) {
-            // Sin query: mostrar recientes, sino sugerir las 5 más útiles
+            // Sin query: incluir fuentes top entre sugerencias recientes o default
             if (recentSearches.length > 0) {
-                setFilteredSuggestions(recentSearches);
+                setFilteredSuggestions([...FUENTES_TOP, ...recentSearches]);
             } else {
                 const topPicks = [
+                    ...FUENTES_TOP,
                     'IICA Ejecutor directo',
                     'Alta viabilidad IICA',
                     'Sin cofinanciamiento requerido',
@@ -514,27 +520,60 @@ export default function ProjectFilters({
             {/* Advanced Filters Panel */}
             {showAdvanced && (
                 <div className="px-4 md:px-6 py-4 bg-gray-50 border-b border-gray-100 flex flex-wrap gap-3 items-center">
-                    <FilterSelect
-                        label="Región"
-                        value={selectedRegion}
-                        options={regions}
-                        onChange={(val) => handleFilterChange('region', val)}
-                        defaultText="Todas las Regiones"
-                    />
-                    <FilterSelect
-                        label="Perfil"
-                        value={selectedBeneficiary}
-                        options={beneficiaries}
-                        onChange={(val) => handleFilterChange('beneficiary', val)}
-                        defaultText="Todos los Perfiles"
-                    />
-                    <FilterSelect
-                        label="Fuente"
-                        value={selectedInstitution}
-                        options={institutions}
-                        onChange={(val) => handleFilterChange('institution', val)}
-                        defaultText="Todas las Fuentes"
-                    />
+<MultiFilterSelect
+    label="Región"
+    values={(() => {
+        // split, filtrar solo opciones válidas
+        if(selectedRegion === 'Todas') return [];
+        const selected = selectedRegion.split(',');
+        // Acepta solo los que existen en options
+        const clean = selected.filter(r => regions.includes(r));
+        // Si hay valores no válidos, los ignora
+        return clean;
+    })()}
+    options={regions}
+    onChange={(vals) => {
+        // filtra siempre sólo los valores válidos
+        const clean = vals.filter(r => regions.includes(r));
+        const value = clean.length ? clean.join(',') : 'Todas';
+        handleFilterChange('region', value);
+    }}
+    placeholder="Todas las Regiones"
+/>
+<MultiFilterSelect
+    label="Perfil"
+    values={(() => {
+        // Split y limpiar valores no válidos
+        if(selectedBeneficiary === 'Todos') return [];
+        const selected = selectedBeneficiary.split(',');
+        const clean = selected.filter(r => beneficiaries.includes(r));
+        return clean;
+    })()}
+    options={beneficiaries}
+    onChange={(vals) => {
+        // Solo los valores válidos
+        const clean = vals.filter(r => beneficiaries.includes(r));
+        const value = clean.length ? clean.join(',') : 'Todos';
+        handleFilterChange('beneficiary', value);
+    }}
+    placeholder="Todos los Perfiles"
+/>
+<MultiFilterSelect
+    label="Fuente"
+    values={(() => {
+        if(selectedInstitution === 'Todas') return [];
+        const selected = selectedInstitution.split(',');
+        const clean = selected.filter(r => institutions.includes(r));
+        return clean;
+    })()}
+    options={institutions}
+    onChange={(vals) => {
+        const clean = vals.filter(r => institutions.includes(r));
+        const value = clean.length ? clean.join(',') : 'Todas';
+        handleFilterChange('institution', value);
+    }}
+    placeholder="Todas las Fuentes"
+/>
 
                     {/* Monto */}
                     <div className="relative">
