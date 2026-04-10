@@ -24,7 +24,7 @@ import { Project, daysUntilClose } from './data';
 
 export const AGRICULTURAL_THESAURUS: Record<string, string[]> = {
     // Agua y Riego
-    'agua': ['riego', 'pozo', 'hidrico', 'hidraulico', 'tecnificacion', 'aspersion', 'goteo', 'drenaje', 'irrigacion', 'embalse', 'recursos hidricos', 'hidrica', 'hidricidad'],
+    'agua': ['riego', 'pozo', 'hidrico', 'hidraulico', 'tecnificacion', 'aspersion', 'goteo', 'drenaje', 'irrigacion', 'embalse', 'recursos hidricos', 'hidrica', 'hidricidad', 'gestión hídrica', 'resiliencia climática'],
     'riego': ['agua', 'pozo', 'tecnificacion', 'aspersion', 'goteo', 'hidrico', 'cnr', 'irrigacion', 'regantes'],
     'sequia': ['seco', 'agua', 'riego', 'emergencia', 'hidrico', 'pozo', 'contingencia', 'escasez'],
     'pozo': ['agua', 'riego', 'hidrico', 'perforacion', 'profundizacion'],
@@ -71,7 +71,7 @@ export const AGRICULTURAL_THESAURUS: Record<string, string[]> = {
     'asociatividad': ['cooperativa', 'organizacion', 'comunidad', 'colectivo'],
 
     // Temáticas
-    'innovacion': ['tecnologia', 'i+d', 'investigacion', 'fia', 'corfo', 'digitalizacion', 'transferencia tecnologica'],
+    'innovacion': ['tecnologia', 'i+d', 'investigacion', 'fia', 'corfo', 'digitalizacion', 'transferencia tecnologica', 'agritech', 'emprendimiento tecnológico'],
     'digitalizacion': ['tecnologia', 'innovacion', 'automatizacion', 'datos', 'software', 'plataforma digital', 'trazabilidad'],
     'exportacion': ['export', 'prochile', 'mercado internacional', 'comercio exterior', 'agroexportacion'],
     'sustentable': ['sostenible', 'ambiental', 'ecologico', 'verde', 'organico', 'limpio', 'sostenibilidad'],
@@ -87,7 +87,7 @@ export const AGRICULTURAL_THESAURUS: Record<string, string[]> = {
     'capacitacion': ['formacion', 'asistencia tecnica', 'educacion', 'consultoria', 'extension rural'],
     'sanidad': ['fitosanitario', 'inocuidad', 'veterinario', 'sag', 'plagas', 'sanidad vegetal'],
     'inocuidad': ['seguridad alimentaria', 'sanidad', 'calidad', 'certificacion', 'inocuidad alimentaria'],
-    'cambio climatico': ['adaptacion', 'mitigacion', 'emisiones', 'gcf', 'clima', 'ndc', 'paris', 'carbono'],
+    'cambio climatico': ['adaptacion', 'mitigacion', 'emisiones', 'gcf', 'clima', 'ndc', 'paris', 'carbono', 'ambiental', 'sostenibilidad'],
     'adaptacion': ['resiliencia', 'clima', 'vulnerabilidad', 'cambio climatico', 'medidas adaptacion'],
     'resiliencia': ['adaptacion', 'recuperacion', 'clima', 'cambio climatico', 'fortalecimiento'],
     'sur sur': ['cooperacion', 'transferencia', 'alc', 'hemisferico', 'iica', 'triangular'],
@@ -552,6 +552,8 @@ export function smartSearch(searchTerm: string, input: Project | string): boolea
 // ============================================================================
 
 const FIELD_WEIGHTS: Record<string, number> = {
+    "impactoIICA": 50, // Prioridad alta para impacto estratégico
+    "viabilidad": 40, // Nueva métrica de viabilidad estratégica
     titulo: 60,       // boost mayor para título
     institucion: 40,
     ejeIICA: 25,
@@ -569,6 +571,10 @@ const FIELD_WEIGHTS: Record<string, number> = {
 };
 
 export function scoreProject(searchTerm: string, project: Project, prebuiltCorpus?: ReturnType<typeof buildProjectCorpus>): number {
+    const impacto = project.impactoIICA ? project.impactoIICA : 0;
+    const viabilidad = project.viabilidad ? project.viabilidad : 0; // Agregar métricas estratégicas
+    score += impacto * 0.4; // Boost proyectos estratégicos al IICA
+    score += viabilidad * 0.3;
     if (!searchTerm.trim()) return 0;
 
     const corpus = prebuiltCorpus || buildProjectCorpus(project);

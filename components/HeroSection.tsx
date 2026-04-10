@@ -35,7 +35,7 @@ export function HeroSection() {
         <section className="relative">
             {/* Hero Section — ítems 2, 4 */}
             <div
-                className="hero-iica relative overflow-hidden bg-[var(--iica-navy)] text-white py-12 md:py-20 text-center"
+                className="hero-iica relative overflow-hidden bg-[var(--iica-navy)] text-white py-20 md:py-28 text-center"
                 style={{
                     backgroundImage: 'linear-gradient(rgba(0, 45, 114, 0.85), rgba(0, 45, 114, 0.7)), url("https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2832&auto=format&fit=crop")',
                     backgroundSize: 'cover',
@@ -128,7 +128,6 @@ export function HeroSection() {
                     className="object-cover object-center"
                     priority
                     quality={90}
-                    sizes="(max-width: 768px) 100vw, 100vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
             </div>

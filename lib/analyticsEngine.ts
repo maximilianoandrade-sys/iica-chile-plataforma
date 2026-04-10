@@ -122,90 +122,51 @@ export function calcProjectKPIs(projects: Project[]): ProjectKPIs {
 }
 
 // ────────────────────────────────────────────────
-// Exportar proyectos a CSV (Reporte Ejecutivo para Excel)
+// Exportar proyectos a CSV (para el botón de descarga)
 // ────────────────────────────────────────────────
 export function exportProjectsToCSV(projects: Project[]): string {
-    const today = new Date().toLocaleDateString('es-CL');
-    
-    // Títulos de columnas más didácticos y con guías visuales (emojis)
     const headers = [
-        'ID',
-        '📌 PRIORIDAD (0-100)',
-        '🚀 NOMBRE DEL PROYECTO',
-        '🏛️ INSTITUCIÓN',
-        '💰 PRESUPUESTO EST. (CLP)',
-        '📅 CIERRE CONVOCATORIA',
-        '⏳ DÍAS RESTANTES',
-        '🚦 VIABILIDAD IICA',
-        '📈 ÉXITO (%)',
-        '🔧 ROL IICA CHILE',
-        '🌎 ÁMBITO',
-        '📝 ESTADO',
-        '🧩 COMPLEJIDAD',
-        '👤 RESPONSABLE ASIGNADO',
-        '💡 EJE ESTRATÉGICO IICA',
-        '🔗 ENLACE DIRECTO BASES',
+        'Nombre',
+        'Institución',
+        'Categoría',
+        'Monto (CLP)',
+        'Fecha Cierre',
+        'Días Restantes',
+        'Viabilidad IICA',
+        '% Viabilidad',
+        'Rol IICA',
+        'Ámbito',
+        'Estado',
+        'Complejidad',
+        'Responsable IICA',
+        'Eje IICA',
+        'Score Urgencia',
+        'URL Bases',
     ];
 
-    const clean = (v: unknown) => {
-        if (v === null || v === undefined || v === '') return '"—"';
-        // Limpieza profunda: quitar comas, puntos y coma de dentro del texto, saltos de línea y escapar comillas
-        const s = String(v)
-            .replace(/"/g, '""')
-            .replace(/\n|\r/g, ' ')
-            .replace(/;/g, ','); // Cambiar ; interno por , para no romper el delimitador
+    const escape = (v: unknown) => {
+        const s = String(v ?? '').replace(/"/g, '""');
         return `"${s}"`;
     };
 
-    // Ordenar por prioridad real del IICA para el reporte
-    const sortedProjects = [...projects].sort((a, b) => {
-        const scoreA = calcUrgencyScore(a);
-        const scoreB = calcUrgencyScore(b);
-        return scoreB - scoreA;
-    });
+    const rows = projects.map(p => [
+        escape(p.nombre),
+        escape(p.institucion),
+        escape(p.categoria),
+        escape(formatMontoCLP(p.monto)),
+        escape(p.fecha_cierre),
+        escape(daysUntilClose(p)),
+        escape(p.viabilidadIICA ?? ''),
+        escape(p.porcentajeViabilidad ?? ''),
+        escape(p.rolIICA ?? ''),
+        escape(p.ambito ?? ''),
+        escape(p.estadoPostulacion ?? ''),
+        escape(p.complejidad ?? ''),
+        escape(p.responsableIICA ?? ''),
+        escape(p.ejeIICA ?? ''),
+        escape(calcUrgencyScore(p)),
+        escape(p.url_bases),
+    ].join(','));
 
-    const rows = sortedProjects.map(p => {
-        const score = calcUrgencyScore(p);
-        const days = daysUntilClose(p);
-        
-        // Agregar indicadores visuales de texto para Excel
-        const priorLabel = score >= 80 ? '🔥 CRÍTICA' : score >= 60 ? '⚡ ALTA' : '⭐ NORMAL';
-        const daysLabel = days < 0 ? '❌ Cerrada' : days <= 7 ? `⚠️ EN 7 DÍAS` : `${days} d`;
-
-        return [
-            clean(p.id),
-            clean(`${score} (${priorLabel})`),
-            clean(p.nombre.toUpperCase()), // Título en mayúsculas para jerarquía
-            clean(p.institucion),
-            clean(formatMontoCLP(p.monto)),
-            clean(p.fecha_cierre),
-            clean(daysLabel),
-            clean(p.viabilidadIICA?.toUpperCase() || 'NO DEFINIDA'),
-            clean(`${p.porcentajeViabilidad ?? 0}%`),
-            clean(p.rolIICA || 'POR ASIGNAR'),
-            clean(p.ambito || 'NACIONAL'),
-            clean(p.estadoPostulacion || 'ABIERTA'),
-            clean(p.complejidad || 'MEDIA'),
-            clean(p.responsableIICA || 'EQUIPO TÉCNICO IICA'),
-            clean(p.ejeIICA || 'PLAN ESTRATÉGICO 2022-2026'),
-            clean(p.url_bases),
-        ].join(';');
-    });
-
-    // Construcción del reporte con metadatos iniciales para que el usuario sepa qué está leyendo
-    const reportTitle = `"RADAR DE OPORTUNIDADES IICA CHILE - REPORTE EJECUTIVO DE GESTIÓN";;;;;;;;;;;;;;;`;
-    const reportDate = `"Fecha de generación: ${today}";;;;;;;;;;;;;;;`;
-    const reportSummary = `"Total de oportunidades analizadas: ${projects.length}";;;;;;;;;;;;;;;`;
-    const emptyRow = `;;;;;;;;;;;;;;;`;
-    
-    const headerRow = headers.map(h => `"${h}"`).join(';');
-
-    return [
-        reportTitle,
-        reportDate,
-        reportSummary,
-        emptyRow,
-        headerRow,
-        ...rows
-    ].join('\n');
+    return [headers.map(h => `"${h}"`).join(','), ...rows].join('\n');
 }

@@ -43,6 +43,7 @@ export function Footer() {
                             <li><Link href="/#inicio" className="hover:text-white transition-colors">Inicio</Link></li>
                             <li><Link href="/#convocatorias" className="hover:text-white transition-colors">Ver Oportunidades</Link></li>
                             <li><Link href="/#fuentes" className="hover:text-white transition-colors">Fuentes Internacionales</Link></li>
+                            <li><Link href="/maletin" className="hover:text-white transition-colors">Mi Maletín de Proyectos</Link></li>
                             <li><Link href="/consultores" className="hover:text-white transition-colors">Directorio de Consultores</Link></li>
 
                         </ul>
@@ -82,7 +83,7 @@ export function Footer() {
                         <ul className="space-y-2 text-sm text-blue-200">
                             <li>📍 Calle Rancagua No.0320, Providencia, Santiago.</li>
                             <li>✉️ <a href="mailto:representacion.chile@iica.int" className="hover:text-white transition-colors">representacion.chile@iica.int</a></li>
-                            <li>📱 <a href="https://wa.me/56222252511" className="hover:text-white transition-colors">WhatsApp: +56 2 2225 2511 (Soporte)</a></li>
+                            <li>📱 <a href="https://wa.me/56912345678" className="hover:text-white transition-colors">WhatsApp: +56 9 1234 5678 (Soporte)</a></li>
                             <li>📞 <a href="tel:+56222252511" className="hover:text-white transition-colors">Fijo: (+56) 2 2225 2511</a></li>
                         </ul>
                         <div className="mt-4 p-3 bg-white/10 rounded-xl border border-white/20">

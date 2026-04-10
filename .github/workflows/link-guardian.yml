@@ -10,7 +10,6 @@ on:
 jobs:
   check-links:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       
@@ -21,11 +20,10 @@ jobs:
           
       - name: Run Link Verification Script
         run: node scripts/check_all_links.js
-
-      - name: Upload Links Report
-        if: always()
+        
+      - name: Upload Broken Links Report
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: links-report
+          name: broken-links-report
           path: scripts/broken_links.json
-          retention-days: 30

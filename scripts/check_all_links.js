@@ -13,47 +13,41 @@ async function checkLink(url) {
 
     try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 15000);
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
 
-        // Try HEAD first
+        // Try HEAD
         let response;
         try {
             response = await fetch(url, {
                 method: 'HEAD',
                 signal: controller.signal,
-                headers: { 'User-Agent': userAgent },
-                redirect: 'follow'
+                headers: { 'User-Agent': userAgent }
             });
         } catch (e) {
+            // If HEAD fails immediately (e.g. ECONNREFUSED), try GET
             response = null;
         }
 
         // Try GET if HEAD failed or returned error
         if (!response || response.status >= 400) {
             try {
-                const controller2 = new AbortController();
-                const timeoutId2 = setTimeout(() => controller2.abort(), 15000);
                 response = await fetch(url, {
                     method: 'GET',
-                    signal: controller2.signal,
+                    signal: controller.signal,
                     headers: {
                         'User-Agent': userAgent,
-                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                        'Accept-Language': 'es-CL,es;q=0.9,en;q=0.8'
-                    },
-                    redirect: 'follow'
+                        'Range': 'bytes=0-0'
+                    }
                 });
-                clearTimeout(timeoutId2);
             } catch (e) {
+                // If both fail
                 clearTimeout(timeoutId);
                 return { isValid: false, error: e.message };
             }
         }
 
         clearTimeout(timeoutId);
-
-        // 403 from institutional sites is normal (they block bots but the URL is valid)
-        const isValid = response.status >= 200 && response.status < 500;
+        const isValid = response.status >= 200 && response.status < 400;
         return { isValid, status: response.status, url };
     } catch (error) {
         return { isValid: false, error: error.message };
@@ -61,86 +55,31 @@ async function checkLink(url) {
 }
 
 async function run() {
-    console.log(`\n🔍 Link Guardian — Checking ${projects.length} project links...\n`);
-
-    const broken = [];
-    const warnings = [];
-    let valid = 0;
+    console.log(`Checking ${projects.length} project links...`);
+    const results = [];
 
     for (const project of projects) {
-        const label = `[${project.id}] ${project.nombre.substring(0, 50)}`;
-        process.stdout.write(`  ${label}... `);
-
+        process.stdout.write(`Checking ID ${project.id}: ${project.nombre.substring(0, 40)}... `);
         const result = await checkLink(project.url_bases);
-
-        if (result.isValid && result.status >= 200 && result.status < 300) {
-            console.log('\x1b[32m✓ OK\x1b[0m');
-            valid++;
-        } else if (result.isValid && result.status >= 300) {
-            // 3xx redirects or 4xx client errors that aren't 404
-            console.log(`\x1b[33m⚠ Warning (${result.status})\x1b[0m`);
-            warnings.push({
-                id: project.id,
-                name: project.nombre,
-                url: project.url_bases,
-                status: result.status
-            });
-            valid++;
+        if (result.isValid) {
+            console.log('\x1b[32mOK\x1b[0m');
         } else {
-            console.log(`\x1b[31m✗ BROKEN (${result.status || result.error})\x1b[0m`);
-            broken.push({
-                id: project.id,
-                name: project.nombre,
-                url: project.url_bases,
-                error: result.error,
-                status: result.status
-            });
+            console.log(`\x1b[31mFAILED (${result.status || result.error})\x1b[0m`);
+            results.push({ id: project.id, name: project.nombre, url: project.url_bases, error: result.error, status: result.status });
         }
-
-        // Small delay to avoid rate limiting
-        await new Promise(r => setTimeout(r, 300));
     }
 
-    // Summary
-    console.log('\n' + '='.repeat(60));
-    console.log('📊 Link Guardian Summary');
-    console.log('='.repeat(60));
-    console.log(`  ✓ Valid:    ${valid}`);
-    console.log(`  ⚠ Warnings: ${warnings.length}`);
-    console.log(`  ✗ Broken:   ${broken.length}`);
-    console.log(`  Total:      ${projects.length}`);
-    console.log('='.repeat(60));
+    console.log('\n--- Summary of Broken Links ---');
+    console.log(JSON.stringify(results, null, 2));
 
-    const report = {
-        timestamp: new Date().toISOString(),
-        total: projects.length,
-        valid,
-        warnings: warnings.length,
-        broken: broken.length,
-        brokenLinks: broken,
-        warningLinks: warnings
-    };
-
-    // Always save report
-    const reportPath = path.join(__dirname, 'broken_links.json');
-    fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
-
-    if (broken.length > 0) {
-        console.log(`\n⚠️  ${broken.length} broken links found. Report saved to scripts/broken_links.json`);
-        console.log('\nBroken links:');
-        broken.forEach(b => console.log(`  - [${b.id}] ${b.url} → ${b.status || b.error}`));
+    if (results.length > 0) {
+        fs.writeFileSync(path.join(__dirname, 'broken_links.json'), JSON.stringify(results, null, 2));
+        console.log(`\nFound ${results.length} broken links. Saved to scripts/broken_links.json`);
+        process.exit(1);
     } else {
-        console.log('\n✅ All links are reachable!');
+        console.log('\nAll links are valid!');
+        process.exit(0);
     }
-
-    if (warnings.length > 0) {
-        console.log(`\n💡 ${warnings.length} links returned non-200 status (may still be valid):`);
-        warnings.forEach(w => console.log(`  - [${w.id}] ${w.url} → ${w.status}`));
-    }
-
-    // Exit 0 always — don't fail the workflow for broken links
-    // The report is uploaded as an artifact for review
-    process.exit(0);
 }
 
 run();
