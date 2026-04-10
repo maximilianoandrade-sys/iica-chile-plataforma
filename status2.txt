@@ -1,0 +1,8 @@
+﻿ m iica-chile-plataforma
+?? git_diff.txt
+?? git_diff_cached.txt
+?? git_log.txt
+?? status.txt
+?? status2.txt
+?? status_full.txt
+?? tmp_log.txt
