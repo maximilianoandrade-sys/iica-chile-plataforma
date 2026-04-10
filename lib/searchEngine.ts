@@ -618,8 +618,8 @@ export function scoreProject(searchTerm: string, project: Project, prebuiltCorpu
     // ── Bonus contextual IICA ──────────────────────────────────────────────
 
     // Viabilidad IICA (máx +25)
-    const viabilidad = project.porcentajeViabilidad || 0;
-    score += Math.round(viabilidad / 4); // 100% → +25, 50% → +12.5
+    const porcentajeViabilidadIICA = project.porcentajeViabilidad || 0;
+    score += Math.round(porcentajeViabilidadIICA / 4); // 100% → +25, 50% → +12.5
 
     // Urgencia de cierre (máx +20)
     const today = new Date();
