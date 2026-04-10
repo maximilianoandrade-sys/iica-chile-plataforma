@@ -53,7 +53,7 @@ export default async function DashboardPage({
 
   return (
     <>
-      <div className="min-h-screen flex flex-col bg-[#f4f7f9]">
+      <div className="min-h-screen flex flex-col bg-[#f4f7f9] selection:bg-blue-100 italic-none">
 
         {/* 1. Header con Hero */}
         <div id="inicio">
@@ -61,8 +61,8 @@ export default async function DashboardPage({
           <HeroSection />
         </div>
 
-        <main className="flex-grow container mx-auto max-w-[1200px] px-4 py-8 -mt-8 relative z-20">
-          <div className="flex flex-col gap-6">
+        <main className="flex-grow container mx-auto max-w-[1200px] px-4 py-8 -mt-12 relative z-20">
+          <div className="flex flex-col gap-10">
 
             {/* Buscador y Proyectos — sección principal */}
             <section id="convocatorias" className="scroll-mt-28">
@@ -85,6 +85,30 @@ export default async function DashboardPage({
               </Suspense>
             </section>
 
+            {/* Información Institucional (Incorporado de la rama secundaria) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 opacity-90">
+              <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
+                  <h3 className="font-bold text-[var(--iica-navy)] mb-4 flex items-center gap-2 text-lg">
+                      <span className="w-2.5 h-2.5 rounded-full bg-[var(--iica-blue)]"></span>
+                      Misión Institucional
+                  </h3>
+                  <p className="text-sm text-gray-500 leading-relaxed">
+                      El IICA Chile trabaja para promover un desarrollo agropecuario competitivo e inclusivo, 
+                      movilizando recursos técnicos y financieros mediante alianzas estratégicas regionales e internacionales.
+                  </p>
+              </div>
+              <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
+                  <h3 className="font-bold text-[var(--iica-navy)] mb-4 flex items-center gap-2 text-lg">
+                      <span className="w-2.5 h-2.5 rounded-full bg-[var(--iica-secondary)]"></span>
+                      Soporte Técnico
+                  </h3>
+                  <p className="text-sm text-gray-500 leading-relaxed">
+                      Si eres consultor o técnico del IICA y necesitas apoyo para la formulación de una propuesta basada en este radar, 
+                      contacta a la unidad de proyectos de la oficina.
+                  </p>
+              </div>
+            </div>
+
           </div>
         </main>
 
@@ -94,7 +118,7 @@ export default async function DashboardPage({
         </div>
 
         {/* Newsletter */}
-        <section className="container mx-auto max-w-[1200px] px-4 py-8">
+        <section id="newsletter" className="container mx-auto max-w-[1200px] px-4 py-8">
           <Newsletter />
         </section>
 
@@ -107,7 +131,9 @@ export default async function DashboardPage({
         </div>
 
         {/* Quiénes Somos */}
-        <AboutSection />
+        <div id="about">
+          <AboutSection />
+        </div>
 
         {/* Footer */}
         <div id="contacto">

@@ -1,0 +1,65 @@
+name: Descubrir nuevas convocatorias
+
+on:
+  schedule:
+    # Cada lunes a las 12:00 UTC (08:00 Chile)
+    - cron: "0 12 * * 1"
+  workflow_dispatch:
+    inputs:
+      query:
+        description: "Query adicional para la búsqueda (opcional)"
+        required: false
+        default: ""
+
+jobs:
+  discover:
+    name: Escanear web con IA
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Ejecutar script de descubrimiento
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          DISCOVERY_QUERY: ${{ github.event.inputs.query }}
+        run: npx tsx scripts/discover-projects.ts
+
+      - name: Verificar si hay cambios
+        id: changes
+        run: |
+          git diff --exit-code data/discovered-projects.json || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit de nuevas convocatorias
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config --global user.name "IICA Radar Bot"
+          git config --global user.email "radar-bot@iica.int"
+          git add data/discovered-projects.json
+          FECHA=$(date +'%d/%m/%Y')
+          COUNT=$(node -e "const d=require('./data/discovered-projects.json');console.log(d.totalFound)")
+          git commit -m "feat: $COUNT nuevas convocatorias descubiertas ($FECHA)"
+          git push
+
+      - name: Notificar resultado
+        if: always()
+        run: |
+          echo "## Resultado del descubrimiento" >> $GITHUB_STEP_SUMMARY
+          if [ -f data/discovered-projects.json ]; then
+            COUNT=$(node -e "const d=require('./data/discovered-projects.json');console.log(d.totalFound)")
+            echo "- Convocatorias activas encontradas: **$COUNT**" >> $GITHUB_STEP_SUMMARY
+            echo "- Ejecutado: $(date)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- No se generó archivo de resultados" >> $GITHUB_STEP_SUMMARY
+          fi

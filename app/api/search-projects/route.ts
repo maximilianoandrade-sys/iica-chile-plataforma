@@ -28,6 +28,11 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
+// ─── Cache en Memoria Global ────────────────────────────────────────────────
+// En serverless environments, esto sobrevive entre iteraciones "calientes"
+const globalCache = new Map<string, { timestamp: number, results: Project[], meta: SearchMeta }>();
+const CACHE_TTL = 1000 * 60 * 60 * 24; // 24 horas de caché (1 día)
+
 // ─── Tipos ───────────────────────────────────────────────────────────────────
 
 type IicaRole = "IICA Ejecutor" | "Implementador" | "Asesor técnico" | "Rol indirecto";
@@ -446,6 +451,23 @@ export async function POST(req: NextRequest) {
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
 
+  // ── CACHÉ INTELIGENTE ───────────────────────────────────────────────────
+  // Prevenir peticiones duplicadas y ahorrar tokens/tiempo
+  const cacheKey = `${query.toLowerCase().trim()}_${scope}_${role}`;
+  if (useAI && apiKey && globalCache.has(cacheKey)) {
+    const cached = globalCache.get(cacheKey)!;
+    const isExpired = Date.now() - cached.timestamp > CACHE_TTL;
+    if (!isExpired) {
+      console.log(`[Cache Hit] Devolviendo resultados cacheados para: "${cacheKey}"`);
+      return NextResponse.json({ 
+        results: cached.results, 
+        meta: { ...cached.meta, summary: cached.meta.summary + ' ⚡ (Instantáneo desde Caché)' } 
+      });
+    } else {
+      globalCache.delete(cacheKey);
+    }
+  }
+
   // ── MODO IA ──────────────────────────────────────────────────────────────
   if (useAI && apiKey) {
     try {
@@ -522,6 +544,9 @@ export async function POST(req: NextRequest) {
         sources: parsed.sources || ["FONTAGRO", "FAO", "BID", "FIA", "IICA", "Mercado Público"],
         summary: parsed.summary || `${combined.length} oportunidades encontradas en tiempo real`,
       };
+
+      // Guardar en caché antes de devolver
+      globalCache.set(cacheKey, { timestamp: Date.now(), results: combined, meta });
 
       return NextResponse.json({ results: combined, meta });
 
