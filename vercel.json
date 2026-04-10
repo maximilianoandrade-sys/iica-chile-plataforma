@@ -8,7 +8,6 @@
     "buildCommand": "npm run prisma:generate && npm run build",
     "installCommand": "npm install",
     "framework": "nextjs",
-    "regions": ["scl1"],
     "functions": {
         "app/api/**/*.ts": {
             "memory": 512,
