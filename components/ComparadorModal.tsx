@@ -180,6 +180,8 @@ function getVal(project: Project, key: string): unknown {
 }
 
 function ComparadorModal() {
+// Asegura export default para soporte con dynamic import
+
     const { selected, isOpen, closeModal, clear, toggle } = useComparador();
     const [collapsed, setCollapsed] = useState(false);
 

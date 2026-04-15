@@ -30,15 +30,33 @@ applyTo: '**'
 - Si algún campo de resumen o links a documentos específicos faltan, se recomienda enriquecer programáticamente en siguientes iteraciones o integrar scraping modularizado en el futuro.
 - Documentación y receta incluida de manera similar a los otros extractores.
 
-## Próximos pasos (recomendados para retomar)
+## Gaps/fuentes internacionales prioritarias pendientes (**Actualizado 10.04.2026**)
 
-1. Implementar extractores para FAO, BID, FIDA, EUROCLIMA, etc. usando receta y formato unificados.
-2. Testear integración con backend y documentar la ingestión/automatización.
-3. Registrar avance y resultados en este archivo de memoria cada vez que se complete un paso importante.
+- Fuentes con extractor y output vigente: GEF, FONTAGRO (ver scripts raíz).
+- Fuentes prioritarias faltantes a cubrir con extractor propio (al menos):
+  - FAO
+  - World Bank
+  - BID (+ BID Lab)
+  - CAF
+  - GAFSP
+  - FIDA
+  - CIAT/CGIAR
+  - USDA NIFA
+  - Fondos UE (CAP, otros)
+  - Fondation FARM, Gates Foundation, Rockefeller, USAID, OEA
+  - **Adaptation Fund (Fondo de Adaptación)**
+  - Otros portales multi-agencia relevantes
+
+> Se detectó que el sitio del Fondo de Adaptación (https://www.adaptation-fund.org/projects-programmes/project-information/projects-table-view/) permite la descarga masiva de proyectos en CSV, lo que asegura máxima robustez en la automatización y adaptación a cambios futuros. Se recomienda crear extractor modular Node.js usando este endpoint como fuente primaria. Se podrá filtrar por país, sector (“Agriculture”, “Food Security”, “Rural Development”, etc.) y estado, y normalizar al formato estándar de GEF/FONTAGRO.
 
 ---
-## Instrucciones para el futuro
-- Si quieres continuar, solo abre esta carpeta y revisa este archivo de memoria para saber el último estado, el camino recorrido y el siguiente paso sugerido, o solicita a la IA “retomar extractor X” y continúa de inmediato.
-- Archivo clave: `.github/instructions/memory.instruction.md` (esta memoria), más todo el código en `components/` y scripts en la raíz.
+## Roadmap inmediato
+
+1. Implementar y documentar extractor para el Fondo de Adaptación (output: `adaptation_fund_projects.json`), usando el CSV exportable oficial.
+2. Documentar y normalizar el output al formato institucional `{ titulo, agencia, categoria, monto, fecha_apertura, fecha_cierre, link, resumen, tags, paises, fuente, links_docs }`.
+3. Investigar estructura del portal de convocatorias FAO y bosquejar/extractar plantilla o endpoint para automatizar su scraper.
+4. Dejar preparado el esqueleto/scripts para World Bank, BID, CAF, y otras fuentes multilaterales clave, siguiendo el mismo patrón modular.
+
+# Si retomas, continua desde aquí siguiendo el orden del roadmap, o contacta a la IA con “retomar roadmap extractor internacional”.
 
 ---

@@ -20,6 +20,8 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.36.0",
     "@prisma/client": "^5.10.0",
+    "@supabase/ssr": "^0.10.2",
+    "@supabase/supabase-js": "^2.103.2",
     "@tailwindcss/line-clamp": "^0.4.4",
     "autoprefixer": "^10.4.0",
     "axios": "^1.7.0",

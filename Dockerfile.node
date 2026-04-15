@@ -1,0 +1,17 @@
+# Imagen base oficial Node.js
+FROM node:18-slim
+
+# Directorio de trabajo
+WORKDIR /app
+
+# Copiar package.json y package-lock.json si existen
+COPY package*.json ./
+
+# Instalar dependencias solo si hay archivos de paquetes
+RUN if [ -f package.json ]; then npm install; fi
+
+# Copiar el resto del código (incluido el script extractor)
+COPY . .
+
+# Comando por defecto
+CMD ["node", "fetch-adaptation-fund-calls.js"]

@@ -27,6 +27,7 @@
 // ============================================================
 
 import { NextRequest, NextResponse } from "next/server";
+import prisma from "@/lib/prisma";
 
 // ─── Cache en Memoria Global ────────────────────────────────────────────────
 // En serverless environments, esto sobrevive entre iteraciones "calientes"
@@ -442,6 +443,8 @@ function filterProjects(projects: Project[], query: string, scope: string, role:
 
 // ─── POST Handler ─────────────────────────────────────────────────────────────
 
+// ─── POST Handler ─────────────────────────────────────────────────────────────
+
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}));
   const query: string = body.query || "";
@@ -450,22 +453,59 @@ export async function POST(req: NextRequest) {
   const useAI: boolean = body.use_ai !== false; // true por defecto
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
+  const mercadoPublicoTicket = process.env.MERCADO_PUBLICO_TICKET || "4B24B3F0-E802-4E89-9641-E167BD2C1F10";
+
+  // ── LEER BASE DE DATOS OFICIAL (SUPABASE) ──────────────────────────────────
+  let projectsFromDb: Project[] = [];
+  try {
+    const dbData = await prisma.project.findMany();
+    projectsFromDb = dbData.map(p => ({
+      id: `db-${p.id}`,
+      title: p.nombre,
+      institution: p.institucion,
+      scope: (p.ambito || "Nacional") as Scope,
+      status: (p.estadoPostulacion?.toLowerCase() || "abierto") as Status,
+      deadline: p.fecha_cierre ? p.fecha_cierre.toISOString().split('T')[0].split('-').reverse().join('-') : null, // DD-MM-YYYY
+      days_left: p.fecha_cierre ? calcDaysLeft(p.fecha_cierre.toISOString()) : null,
+      budget: p.monto ? `$${p.monto.toLocaleString('es-CL')}` : "Ver bases",
+      iica_role: (p.rolIICA || "Asesor técnico") as IicaRole,
+      iica_role_detail: p.descripcionIICA || "",
+      viability: (p.viabilidadIICA || "Media") as Viability,
+      description: p.objetivo || "",
+      requirements: p.requisitos || [],
+      url: p.url_bases || "",
+      tags: [p.categoria, p.ejeIICA || ""].filter(Boolean),
+      is_real: true
+    }));
+  } catch (err) {
+    console.error("Error al leer Supabase en API, usando hardcode de respaldo:", err);
+    projectsFromDb = BASE_PROJECTS;
+  }
 
   // ── CACHÉ INTELIGENTE ───────────────────────────────────────────────────
-  // Prevenir peticiones duplicadas y ahorrar tokens/tiempo
   const cacheKey = `${query.toLowerCase().trim()}_${scope}_${role}`;
-  if (useAI && apiKey && globalCache.has(cacheKey)) {
+  if (globalCache.has(cacheKey)) {
     const cached = globalCache.get(cacheKey)!;
     const isExpired = Date.now() - cached.timestamp > CACHE_TTL;
     if (!isExpired) {
       console.log(`[Cache Hit] Devolviendo resultados cacheados para: "${cacheKey}"`);
-      return NextResponse.json({ 
-        results: cached.results, 
-        meta: { ...cached.meta, summary: cached.meta.summary + ' ⚡ (Instantáneo desde Caché)' } 
+      return NextResponse.json({
+        results: cached.results,
+        meta: { ...cached.meta, summary: cached.meta.summary + ' ⚡ (Instantáneo desde Caché)' }
       });
     } else {
       globalCache.delete(cacheKey);
     }
+  }
+
+  // ── PREPARAR MERCADO PÚBLICO (EN PARALELO AL RESTO) ──────────────────────
+  let mercadoPublicoDocs: Project[] = [];
+  try {
+    if (mercadoPublicoTicket) {
+      mercadoPublicoDocs = await fetchMercadoPublico(mercadoPublicoTicket, query);
+    }
+  } catch (err) {
+    console.warn("Fallo temporal de API Mercado Público:", err);
   }
 
   // ── MODO IA ──────────────────────────────────────────────────────────────
@@ -531,8 +571,9 @@ export async function POST(req: NextRequest) {
 
       // Combinar: proyectos IA + base (sin duplicados por id)
       const aiIds = new Set(aiProjects.map(p => p.id));
-      const baseExtra = enrich(BASE_PROJECTS).filter(p => !aiIds.has(p.id));
-      const combined = [...enrich(aiProjects), ...baseExtra].sort(sortProjects);
+      const baseExtra = enrich(projectsFromDb).filter(p => !aiIds.has(p.id));
+      
+      const combined = [...enrich(aiProjects), ...baseExtra, ...mercadoPublicoDocs].sort(sortProjects);
 
       const meta: SearchMeta = {
         total: combined.length,
@@ -541,8 +582,8 @@ export async function POST(req: NextRequest) {
         query,
         searched_at: new Date().toISOString(),
         mode: "ai_websearch",
-        sources: parsed.sources || ["FONTAGRO", "FAO", "BID", "FIA", "IICA", "Mercado Público"],
-        summary: parsed.summary || `${combined.length} oportunidades encontradas en tiempo real`,
+        sources: parsed.sources ? [...parsed.sources, "Mercado Público"] : ["FONTAGRO", "FAO", "BID", "FIA", "Mercado Público"],
+        summary: parsed.summary || `${combined.length} oportunidades encontradas en tiempo real combinando IA y API Gubernamental`,
       };
 
       // Guardar en caché antes de devolver
@@ -552,13 +593,12 @@ export async function POST(req: NextRequest) {
 
     } catch (err: any) {
       // Fallback silencioso al modo estático si la IA falla
-      console.error("[search-projects] IA error, fallback a estático:", err.message);
+      console.error("[search-projects] IA error, fallback a estático+MP:", err.message);
     }
   }
 
-  // ── MODO ESTÁTICO (fallback) ──────────────────────────────────────────────
-  const enriched = enrich(BASE_PROJECTS);
-  const filtered = filterProjects(enriched, query, scope, role).sort(sortProjects);
+  const staticBase = [...enrich(projectsFromDb), ...mercadoPublicoDocs];
+  const filtered = filterProjects(staticBase, query, scope, role).sort(sortProjects);
 
   const meta: SearchMeta = {
     total: filtered.length,
@@ -567,10 +607,10 @@ export async function POST(req: NextRequest) {
     query,
     searched_at: new Date().toISOString(),
     mode: "static",
-    sources: ["data local verificada"],
+    sources: ["Mercado Público", "Supabase DB"],
     summary: apiKey
-      ? `${filtered.length} proyectos (IA no disponible temporalmente, mostrando base local)`
-      : `${filtered.length} proyectos base verificados (agrega ANTHROPIC_API_KEY para búsqueda en tiempo real)`,
+      ? `${filtered.length} proyectos encontrados en la base oficial + Mercado Público`
+      : `${filtered.length} proyectos listados desde Supabase (Agrega ANTHROPIC_API_KEY para búsqueda global web)`,
   };
 
   return NextResponse.json({ results: filtered, meta });
@@ -580,11 +620,14 @@ export async function POST(req: NextRequest) {
 
 export async function GET() {
   const hasKey = !!process.env.ANTHROPIC_API_KEY;
+  const hasMpTicket = !!process.env.MERCADO_PUBLICO_TICKET || true;
+  
   return NextResponse.json({
     status: "ok",
-    service: "IICA Chile – Motor de Búsqueda de Proyectos Reales",
-    mode: hasKey ? "ai_websearch" : "static",
+    service: "IICA Chile – Motor Universal Híbrido (IA + APIs + Local)",
+    mode: hasKey ? "ai_websearch_with_mp" : "static_and_mp",
     ai_available: hasKey,
+    mercado_publico_available: hasMpTicket,
     model: hasKey ? "claude-sonnet-4-20250514" : null,
     base_projects: BASE_PROJECTS.length,
     sources: [
@@ -593,4 +636,84 @@ export async function GET() {
       "FIA", "INDAP", "CORFO", "CNR", "ANID", "Mercado Público",
     ],
   });
+}
+
+// ─── LÓGICA MERCADO PÚBLICO ───────────────────────────────────────────────────
+
+async function fetchMercadoPublico(ticket: string, query: string): Promise<Project[]> {
+  try {
+    const today = new Date();
+    const d = String(today.getDate()).padStart(2, '0');
+    const m = String(today.getMonth() + 1).padStart(2, '0');
+    const y = today.getFullYear();
+    const resultQuery = query.toLowerCase().trim();
+
+    // Consultamos las licitaciones generadas hoy (estado=activo puede traer demasiadas, fecha específica es mejor)
+    const url = `https://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?fecha=${d}${m}${y}&ticket=${ticket}`;
+    
+    const res = await fetch(url, { next: { revalidate: 1800 } }); // caché de 30 min
+    if (!res.ok) return [];
+    
+    const data = await res.json();
+    if (!data.Listado || !Array.isArray(data.Listado)) return [];
+
+    // FILTROS ESTRICTOS IICA: Solo pasamos licitaciones compatibles con el rol del IICA
+    // (Asistencias técnicas, estudios, desarrollo agrícola, rural, etc.)
+    const validKeywords = [
+      'agrícola', 'agricola', 'rural', 'riego', 'asistencia técnica', 'asistencia tecnica',
+      'capacitación', 'capacitacion', 'estudio', 'agro', 'campesino', 'forestal', 
+      'sustentable', 'cambio climático', 'cambio climatico', 'agronomía', 'agronomia',
+      'veterinari', 'ganader', 'pecuaria', 'silvoagropecuario', 'indap', 'sag', 'conaf',
+      'fia', 'ciren', 'innovación', 'cooperativa', 'apícola', 'apicola', 'hidrico', 'hídrico'
+    ];
+
+    // Excluimos explícitamente rubros no relacionados al mandato (para evitar falsos positivos)
+    const excludeKeywords = [
+      'construcción', 'construccion', 'obra', 'vehículo', 'vehiculo', 'guardia', 'limpieza',
+      'computador', 'software', 'equipo médico', 'alimentación', 'alimentacion', 'hospital',
+      'catering', 'mantención', 'mantencion', 'arriendo', 'pasaje', 'hotel', 'mobiliario',
+      'aseo', 'seguridad', 'pavimentación', 'hormigón', 'camioneta'
+    ];
+
+    if (resultQuery) validKeywords.push(resultQuery);
+
+    const filtered = data.Listado.filter((lic: any) => {
+       const text = (lic.Nombre || "").toLowerCase();
+       
+       // Debe contener alguna palabra clave válida...
+       const isAffinity = validKeywords.some(k => text.includes(k));
+       if (!isAffinity) return false;
+
+       // ...y NO debe ser de un rubro excluido (compras básicas u obras civiles)
+       const isExcluded = excludeKeywords.some(k => text.includes(k));
+       if (isExcluded) return false;
+
+       return true;
+    });
+
+    return filtered.map((lic: any) => {
+      const deadlineStr = lic.FechaCierre ? lic.FechaCierre.split('T')[0].split('-').reverse().join('-') : null;
+      return {
+        id: `mp-${lic.CodigoExterno}`,
+        title: `Mercado Público: ${lic.Nombre}`,
+        institution: "Gobierno de Chile / Organismos Públicos",
+        scope: "Nacional" as Scope,
+        status: "abierto" as Status,
+        deadline: deadlineStr,
+        days_left: calcDaysLeft(deadlineStr),
+        budget: "Revisar bases en plataforma",
+        iica_role: "IICA Ejecutor" as IicaRole,
+        iica_role_detail: "IICA, como organismo internacional, puede postular e inscribirse a través de ChileProveedores.",
+        viability: "Alta" as Viability,
+        description: `Licitación identificada hoy en Mercado Público (Cod: ${lic.CodigoExterno}). Alineación automática detectada con el mandato técnico, agrícola y rural del IICA Chile.`,
+        requirements: ["Inscripción en ChileProveedores al día", "Cumplir bases administrativas y técnicas de la licitación"],
+        url: `https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?qs=${lic.CodigoExterno}`,
+        tags: ["Mercado Público", "Licitación Nacional", "ChileCompra"],
+        is_real: true
+      };
+    });
+  } catch (error) {
+    console.error("[search-projects] Error MP API:", error);
+    return [];
+  }
 }

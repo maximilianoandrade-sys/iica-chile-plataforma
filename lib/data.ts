@@ -173,14 +173,41 @@ export function rolIICAInfo(rol?: string): { text: string; bg: string; border: s
     }
 }
 
+import prisma from './prisma';
+
+// ... (Interface Project se mantiene igual arriba) ...
+
 // ============================================================================
-// CARGA DE DATOS
+// CARGA DE DATOS DESDE SUPABASE
 // ============================================================================
 
 export async function getProjects(): Promise<Project[]> {
-    return projectData as Project[];
+    try {
+        const dbProjects = await prisma.project.findMany({
+            orderBy: {
+                fecha_cierre: 'asc'
+            }
+        });
+
+        // Mapeamos los datos de la DB al formato de la interfaz Project
+        return dbProjects.map(p => ({
+            ...p,
+            fecha_cierre: p.fecha_cierre.toISOString().split('T')[0], // Convertir Date a string YYYY-MM-DD
+            webinar_fecha: p.webinar_fecha ? p.webinar_fecha.toISOString() : null,
+            ambito: p.ambito as any,
+            estadoPostulacion: p.estadoPostulacion as any,
+            viabilityIICA: p.viabilityIICA as any,
+            rolIICA: p.rolIICA as any,
+            complejidad: p.complejidad as any
+        })) as Project[];
+    } catch (error) {
+        console.error("Error cargando proyectos de Supabase, usando backup JSON:", error);
+        // Fallback al JSON si la DB falla
+        const projectData = require('@/data/projects.json');
+        return projectData as Project[];
+    }
 }
 
-export function getAllProjects(): Project[] {
-    return projectData as Project[];
+export async function getAllProjects(): Promise<Project[]> {
+    return getProjects();
 }
