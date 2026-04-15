@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 
 export const LazyComparadorModal = dynamic(
-  () => import('@/components/ComparadorModal').then(mod => mod.default),
+  () => import('@/components/ComparadorModal').then(mod => mod.ComparadorProvider),
   { 
     loading: () => <div className="animate-pulse bg-gray-100 rounded-xl h-96" />,
     ssr: false 
