@@ -1,9 +1,9 @@
 import { MetadataRoute } from 'next'
 import { getAllProjects } from '@/lib/data'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://iica-chile-plataforma.vercel.app'
-    const projects = getAllProjects()
+    const projects = await getAllProjects()
 
     const projectUrls = projects.map((p) => ({
         url: `${baseUrl}/proyecto/${p.id}`,
