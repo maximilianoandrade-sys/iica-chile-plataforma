@@ -369,6 +369,12 @@ export default function ProjectExplorer({ allProjects }: { allProjects: Project[
                                     ambito: (p.ambito ?? 'Nacional') as 'Internacional' | 'Nacional' | 'Regional',
                                     viabilidad: (p.viabilidadIICA ?? 'Media') as 'Alta' | 'Media' | 'Baja',
                                     porcentajeViabilidad: p.porcentajeViabilidad ?? undefined,
+                                    monto: formatMontoCLP(p.monto),
+                                    objetivo: p.objetivo,
+                                    categoria: p.categoria,
+                                    region: p.region,
+                                    requisitos: p.requisitos,
+                                    fortalezas: p.fortalezas,
                                 }}
                             />
                         </motion.div>

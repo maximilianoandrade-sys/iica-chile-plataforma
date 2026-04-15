@@ -85,13 +85,15 @@ function FundCard({ fund }: { fund: LiveFund }) {
     );
 }
 
-export default function LiveFeedSection() {
+export default async function LiveFeedSection() {
     let feeds: LiveFund[] = [];
 
     try {
-        feeds = getVerifiedStaticFeeds();
-    } catch {
-        // Si algo falla no rompe la página, simplemente no renderiza
+        const result = await getLiveFeeds();
+        feeds = result.feeds;
+    } catch (error) {
+        console.error('[LiveFeedSection] Error fetching feeds:', error);
+        // Fallback or empty state
         return null;
     }
 

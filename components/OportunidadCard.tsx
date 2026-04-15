@@ -18,6 +18,13 @@ export interface Oportunidad {
     url: string;
     adenda?: boolean;
     descripcion?: string;
+    // Campos recuperados
+    monto?: string;
+    objetivo?: string;
+    region?: string;
+    categoria?: string;
+    requisitos?: string[];
+    fortalezas?: string[];
 }
 
 export function OportunidadCard({ op }: { op: Oportunidad }) {
@@ -108,6 +115,13 @@ export function OportunidadCard({ op }: { op: Oportunidad }) {
                         <p className="mt-3 text-xs text-gray-500 line-clamp-2 leading-relaxed">
                              <Highlight text={op.descripcion} highlight={query} />
                         </p>
+                    )}
+
+                    {op.monto && (
+                        <div className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-lg w-fit">
+                            <span>💰</span>
+                            {op.monto}
+                        </div>
                     )}
                 </div>
             </div>
