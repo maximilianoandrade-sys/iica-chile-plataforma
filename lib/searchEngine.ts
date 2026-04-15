@@ -571,15 +571,17 @@ const FIELD_WEIGHTS: Record<string, number> = {
 };
 
 export function scoreProject(searchTerm: string, project: Project, prebuiltCorpus?: ReturnType<typeof buildProjectCorpus>): number {
-    const impacto = project.impactoIICA ? project.impactoIICA : 0;
-    const viabilidad = project.viabilidad ? project.viabilidad : 0; // Agregar métricas estratégicas
-    score += impacto * 0.4; // Boost proyectos estratégicos al IICA
-    score += viabilidad * 0.3;
-    if (!searchTerm.trim()) return 0;
+    let score = 0;
+    
+    // Boost proyectos estratégicos según viabilidad si no hay búsqueda
+    if (project.porcentajeViabilidad) {
+        score += project.porcentajeViabilidad * 0.1; 
+    }
+    
+    if (!searchTerm.trim()) return score;
 
     const corpus = prebuiltCorpus || buildProjectCorpus(project);
     const expandedTerms = expandSearchTerms(searchTerm);
-    let score = 0;
 
     for (const term of expandedTerms) {
         for (const [field, weight] of Object.entries(FIELD_WEIGHTS)) {

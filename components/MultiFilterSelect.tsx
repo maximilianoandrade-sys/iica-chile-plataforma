@@ -1,6 +1,4 @@
-import * as React from 'react';
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
+import React from 'react';
 
 interface MultiFilterSelectProps {
   label: string;
@@ -10,18 +8,30 @@ interface MultiFilterSelectProps {
   placeholder?: string;
 }
 
-export default function MultiFilterSelect({ label, values, options, onChange, placeholder }: MultiFilterSelectProps) {
+export default function MultiFilterSelect({ label, values, options, onChange }: MultiFilterSelectProps) {
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selected = Array.from(e.target.selectedOptions).map(o => o.value);
+    onChange(selected);
+  };
+
   return (
-    <Autocomplete
-      multiple
-      limitTags={2}
-      options={options}
-      value={values}
-      onChange={(_event, newValue) => onChange(newValue)}
-      renderInput={(params) => (
-        <TextField {...params} label={label} placeholder={placeholder || label} size="small" />
+    <div className="flex flex-col gap-1">
+      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{label}</label>
+      <select
+        multiple
+        value={values}
+        onChange={handleChange}
+        className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm bg-white text-gray-700 min-w-[220px] focus:outline-none focus:ring-2 focus:ring-blue-300"
+        style={{ minHeight: '80px' }}
+        aria-label={label}
+      >
+        {options.map(opt => (
+          <option key={opt} value={opt}>{opt}</option>
+        ))}
+      </select>
+      {values.length > 0 && (
+        <p className="text-xs text-gray-400">{values.length} seleccionado(s)</p>
       )}
-      sx={{ minWidth: 220, background: '#fff', borderRadius: 2, pr: 1 }}
-    />
+    </div>
   );
 }

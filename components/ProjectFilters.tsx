@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState, useTransition } from 'react';
 import { Search, Filter, ChevronDown, X, Sparkles, SlidersHorizontal, ArrowUpDown } from "lucide-react";
 import { useAnalytics } from '@/hooks/useAnalytics';
+import MultiFilterSelect from '@/components/MultiFilterSelect';
 
 // ─────────────────────────────────────
 // Chips de búsqueda rápida IICA

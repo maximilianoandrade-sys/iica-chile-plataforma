@@ -196,7 +196,7 @@ export async function getProjects(): Promise<Project[]> {
             webinar_fecha: p.webinar_fecha ? p.webinar_fecha.toISOString() : null,
             ambito: p.ambito as any,
             estadoPostulacion: p.estadoPostulacion as any,
-            viabilityIICA: p.viabilityIICA as any,
+            viabilidadIICA: p.viabilidadIICA as any,
             rolIICA: p.rolIICA as any,
             complejidad: p.complejidad as any
         })) as Project[];

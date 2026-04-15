@@ -356,7 +356,6 @@ export default function ProjectExplorer({ allProjects }: { allProjects: Project[
                             transition={{ duration: 0.2 }}
                         >
                             <OportunidadCard
-                                query={debouncedSearch}
                                 op={{
                                     id: String(p.id),
                                     nombre: p.nombre,
@@ -366,23 +365,10 @@ export default function ProjectExplorer({ allProjects }: { allProjects: Project[
                                     rolIICA: rolIICAInfo(p.rolIICA).label,
                                     url: p.url_bases,
                                     adenda: p.permite_adendas,
-                                    descripcion: p.descripcionIICA || (p.resumen?.observaciones),
-                                    monto: formatMontoCLP(p.monto),
-                                    categoria: p.categoria,
-                                    ambito: p.ambito,
-                                    // Datos adicionales para el modal
-                                    objetivo: p.objetivo,
-                                    requisitos: p.requisitos,
-                                    fortalezas: p.fortalezas,
-                                    region: p.region,
-                                    responsable: p.responsableIICA,
-                                    complejidad: p.complejidad,
-                                    viabilidad: p.viabilidadIICA,
-                                    beneficiarios: p.beneficiarios,
-                                    plazoMeses: p.plazo_meses,
-                                    requiereCofinanciamiento: p.requiere_cofinanciamiento,
-                                    requisitosClave: p.resumen?.requisitos_clave,
-                                    cofinanciamiento: p.resumen?.cofinanciamiento,
+                                    descripcion: p.descripcionIICA || p.resumen?.observaciones,
+                                    ambito: (p.ambito ?? 'Nacional') as 'Internacional' | 'Nacional' | 'Regional',
+                                    viabilidad: (p.viabilidadIICA ?? 'Media') as 'Alta' | 'Media' | 'Baja',
+                                    porcentajeViabilidad: p.porcentajeViabilidad ?? undefined,
                                 }}
                             />
                         </motion.div>
