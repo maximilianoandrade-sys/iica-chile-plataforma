@@ -89,7 +89,22 @@ export default async function LiveFeedSection() {
     let feeds: LiveFund[] = [];
 
     try {
-        const result = await getLiveFeeds();
+        // getLiveFeeds solo disponible en ambiente Node/Server.
+        // En build estático (Vercel) usamos solo datos estáticos seguros.
+        let result: { feeds: LiveFund[] } = { feeds: [] };
+        if (typeof window === "undefined") {
+            // Importación dinámica para no romper build estático
+            try {
+                const mod = await import("@/lib/liveFeed");
+                result = await mod.getLiveFeeds();
+            } catch (e) {
+                // fallback a exportación estática
+                result = { feeds: (await import("@/lib/liveFeed")).getVerifiedStaticFeeds() };
+            }
+        } else {
+            // build client/browser nunca hace fetch a fondo.gob.cl directo
+            result = { feeds: [] };
+        }
         feeds = result.feeds;
     } catch (error) {
         console.error('[LiveFeedSection] Error fetching feeds:', error);
