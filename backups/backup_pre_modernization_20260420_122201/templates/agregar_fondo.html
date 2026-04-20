@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Nuevo Fondo - {{ config.nombre_plataforma }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --iica-azul: #0056b3;
+            --iica-verde: #28a745;
+            --iica-naranja: #fd7e14;
+            --iica-gris: #6c757d;
+            --iica-dorado: #ffc107;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #333;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--iica-azul), #003d82);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        
+        .logo-iica {
+            max-height: 50px;
+            margin-right: 15px;
+            filter: brightness(0) invert(1);
+        }
+        
+        .form-container {
+            background: white;
+            border-radius: 25px;
+            padding: 50px;
+            margin: 40px 0;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(135deg, var(--iica-azul), var(--iica-verde));
+        }
+        
+        .form-titulo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--iica-azul);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .form-subtitulo {
+            font-size: 1.2rem;
+            color: var(--iica-gris);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: var(--iica-azul);
+            margin-bottom: 8px;
+        }
+        
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 15px 20px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: var(--iica-azul);
+            box-shadow: 0 0 0 0.2rem rgba(0, 86, 179, 0.25);
+        }
+        
+        .form-select {
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 15px 20px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-select:focus {
+            border-color: var(--iica-azul);
+            box-shadow: 0 0 0 0.2rem rgba(0, 86, 179, 0.25);
+        }
+        
+        .btn-iica {
+            background: linear-gradient(135deg, var(--iica-azul), var(--iica-verde));
+            border: none;
+            border-radius: 25px;
+            padding: 15px 30px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-iica:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            color: white;
+        }
+        
+        .btn-iica-outline {
+            background: transparent;
+            border: 2px solid var(--iica-azul);
+            border-radius: 25px;
+            padding: 12px 25px;
+            color: var(--iica-azul);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-iica-outline:hover {
+            background: var(--iica-azul);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .required {
+            color: #dc3545;
+        }
+        
+        .help-text {
+            font-size: 0.9rem;
+            color: var(--iica-gris);
+            margin-top: 5px;
+        }
+        
+        .section-titulo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--iica-azul);
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--iica-azul);
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, #343a40, #495057);
+            color: white;
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="/static/logos/logo_iica_oficial.svg" alt="IICA Chile" class="logo-iica">
+                {{ config.nombre_plataforma }}
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Fondos Abiertos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/fondos-disponibles">Fondos Disponibles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/agregar-fondo">Agregar Fondo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/exportar">Exportar Excel</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Formulario de Agregar Fondo -->
+    <div class="container">
+        <div class="form-container">
+            <h1 class="form-titulo">
+                <i class="fas fa-plus-circle me-3"></i>
+                Agregar Nuevo Fondo
+            </h1>
+            <p class="form-subtitulo">
+                Complete la información del fondo para agregarlo a la plataforma
+            </p>
+            
+            <form method="POST" action="/agregar-fondo">
+                <!-- Información Básica -->
+                <h3 class="section-titulo">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Información Básica
+                </h3>
+                
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label for="nombre" class="form-label">
+                                Nombre del Fondo <span class="required">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                            <div class="help-text">Nombre completo del fondo o programa</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="fuente" class="form-label">
+                                Fuente <span class="required">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="fuente" name="fuente" required>
+                            <div class="help-text">Ej: CORFO Chile, BID, FAO, etc.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="organizacion" class="form-label">
+                                Organización <span class="required">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="organizacion" name="organizacion" required>
+                            <div class="help-text">Nombre de la organización que ofrece el fondo</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="tipo" class="form-label">
+                                Tipo <span class="required">*</span>
+                            </label>
+                            <select class="form-select" id="tipo" name="tipo" required>
+                                <option value="">Seleccionar...</option>
+                                <option value="Nacional">Nacional</option>
+                                <option value="Internacional">Internacional</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="estado" class="form-label">
+                                Estado <span class="required">*</span>
+                            </label>
+                            <select class="form-select" id="estado" name="estado" required>
+                                <option value="">Seleccionar...</option>
+                                <option value="Abierto">Abierto</option>
+                                <option value="Cerrado">Cerrado</option>
+                                <option value="Ventanilla Abierta">Ventanilla Abierta</option>
+                                <option value="Próximo a Abrir">Próximo a Abrir</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Información Financiera -->
+                <h3 class="section-titulo">
+                    <i class="fas fa-dollar-sign me-2"></i>
+                    Información Financiera
+                </h3>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="monto" class="form-label">
+                                Monto <span class="required">*</span>
+                            </label>
+                            <input type="text" class="form-control" id="monto" name="monto" required>
+                            <div class="help-text">Ej: USD 5,000,000, CLP 500,000,000</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="fecha_cierre" class="form-label">
+                                Fecha de Cierre <span class="required">*</span>
+                            </label>
+                            <input type="date" class="form-control" id="fecha_cierre" name="fecha_cierre" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="tipo_financiamiento" class="form-label">
+                                Tipo de Financiamiento
+                            </label>
+                            <select class="form-select" id="tipo_financiamiento" name="tipo_financiamiento">
+                                <option value="Subsidio">Subsidio</option>
+                                <option value="Grant">Grant</option>
+                                <option value="Préstamo">Préstamo</option>
+                                <option value="Contrato">Contrato</option>
+                                <option value="Beca">Beca</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Información Temática -->
+                <h3 class="section-titulo">
+                    <i class="fas fa-tags me-2"></i>
+                    Información Temática
+                </h3>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="area" class="form-label">
+                                Área <span class="required">*</span>
+                            </label>
+                            <select class="form-select" id="area" name="area" required>
+                                <option value="">Seleccionar...</option>
+                                <option value="Biodiversidad">Biodiversidad</option>
+                                <option value="Innovación Tecnológica">Innovación Tecnológica</option>
+                                <option value="Desarrollo Rural">Desarrollo Rural</option>
+                                <option value="Seguridad Alimentaria">Seguridad Alimentaria</option>
+                                <option value="Cambio Climático">Cambio Climático</option>
+                                <option value="Medio Ambiente">Medio Ambiente</option>
+                                <option value="Ganadería">Ganadería</option>
+                                <option value="Agua">Agua</option>
+                                <option value="Desarrollo Sostenible">Desarrollo Sostenible</option>
+                                <option value="Financiamiento Sostenible">Financiamiento Sostenible</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="prioridad" class="form-label">
+                                Prioridad
+                            </label>
+                            <select class="form-select" id="prioridad" name="prioridad">
+                                <option value="Media">Media</option>
+                                <option value="Alta">Alta</option>
+                                <option value="Baja">Baja</option>
+                                <option value="Crítica">Crítica</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="duracion" class="form-label">
+                                Duración
+                            </label>
+                            <input type="text" class="form-control" id="duracion" name="duracion" value="12 meses">
+                            <div class="help-text">Ej: 12 meses, 24 meses</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Descripción y Requisitos -->
+                <h3 class="section-titulo">
+                    <i class="fas fa-file-alt me-2"></i>
+                    Descripción y Requisitos
+                </h3>
+                
+                <div class="form-group">
+                    <label for="descripcion" class="form-label">
+                        Descripción <span class="required">*</span>
+                    </label>
+                    <textarea class="form-control" id="descripcion" name="descripcion" rows="4" required></textarea>
+                    <div class="help-text">Descripción detallada del fondo y sus objetivos</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="requisitos" class="form-label">
+                        Requisitos de Elegibilidad
+                    </label>
+                    <textarea class="form-control" id="requisitos" name="requisitos" rows="3"></textarea>
+                    <div class="help-text">Quién puede postular a este fondo</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="beneficiarios" class="form-label">
+                        Beneficiarios
+                    </label>
+                    <input type="text" class="form-control" id="beneficiarios" name="beneficiarios" value="Sector agrícola">
+                    <div class="help-text">Quién se beneficia del fondo</div>
+                </div>
+                
+                <!-- Documentos y Enlaces -->
+                <h3 class="section-titulo">
+                    <i class="fas fa-link me-2"></i>
+                    Documentos y Enlaces
+                </h3>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="enlace" class="form-label">
+                                Enlace Principal
+                            </label>
+                            <input type="url" class="form-control" id="enlace" name="enlace">
+                            <div class="help-text">URL del sitio web oficial del fondo</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="contacto" class="form-label">
+                                Contacto
+                            </label>
+                            <input type="email" class="form-control" id="contacto" name="contacto">
+                            <div class="help-text">Email de contacto para consultas</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="documentos_requeridos" class="form-label">
+                        Documentos Requeridos
+                    </label>
+                    <textarea class="form-control" id="documentos_requeridos" name="documentos_requeridos" rows="3"></textarea>
+                    <div class="help-text">Lista de documentos requeridos (uno por línea)</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="formularios" class="form-label">
+                        Formularios de Postulación
+                    </label>
+                    <textarea class="form-control" id="formularios" name="formularios" rows="3"></textarea>
+                    <div class="help-text">URLs de formularios de postulación (uno por línea)</div>
+                </div>
+                
+                <!-- Botones -->
+                <div class="text-center mt-5">
+                    <button type="submit" class="btn btn-iica me-3">
+                        <i class="fas fa-save me-2"></i>Agregar Fondo
+                    </button>
+                    <a href="/" class="btn btn-iica-outline">
+                        <i class="fas fa-arrow-left me-2"></i>Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>IICA Chile</h5>
+                    <p>Portal de Oportunidades de Financiamiento</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <h6>Enlaces Institucionales</h6>
+                    <a href="{{ config.datos_institucionales.sitio_web }}" class="text-light me-3" target="_blank">Sitio Web IICA Chile</a>
+                    <a href="https://iica.int/es/" class="text-light me-3" target="_blank">IICA Global</a>
+                    <a href="mailto:{{ config.datos_institucionales.email }}" class="text-light">Contacto</a>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p>&copy; 2025 IICA Chile. Todos los derechos reservados.</p>
+                <small>Versión {{ config.version }} - Última actualización: {{ config.ultima_actualizacion }}</small>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Validación del formulario
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            
+            form.addEventListener('submit', function(e) {
+                const requiredFields = form.querySelectorAll('[required]');
+                let isValid = true;
+                
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        field.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        field.classList.remove('is-invalid');
+                    }
+                });
+                
+                if (!isValid) {
+                    e.preventDefault();
+                    alert('Por favor complete todos los campos requeridos');
+                }
+            });
+            
+            // Limpiar validación al escribir
+            const inputs = form.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    this.classList.remove('is-invalid');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IICA Chile - Plataforma de Financiamiento</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .nav-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .nav-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .nav-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .nav-card-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+        
+        .nav-card h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .nav-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .quick-actions {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .quick-actions h3 {
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+        
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .action-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .search-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .search-section h3 {
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+        
+        .search-form {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .search-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .quick-search {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        
+        .quick-search-btn {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .quick-search-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .stats-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 1rem;
+        }
+        
+        .projects-preview {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .projects-preview h3 {
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+        
+        .project-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+        
+        .project-card:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .project-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .project-info {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        .project-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-small {
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary-small {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary-small:hover {
+            background: #5a6fd8;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .btn-outline-small {
+            border: 1px solid #667eea;
+            color: #667eea;
+        }
+        
+        .btn-outline-small:hover {
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding: 20px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #000;
+        }
+        
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-form {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="bi bi-house-heart me-3"></i>IICA Chile</h1>
+            <p>Tu plataforma de financiamiento agrícola</p>
+        </div>
+
+        <!-- Navegación Principal -->
+        <div class="nav-cards">
+            <a href="/dashboard" class="nav-card">
+                <div class="nav-card-icon">
+                    <i class="bi bi-speedometer2"></i>
+                </div>
+                <h3>Dashboard</h3>
+                <p>Ve estadísticas y análisis de todos los proyectos disponibles</p>
+            </a>
+            
+            <a href="/ai-search" class="nav-card">
+                <div class="nav-card-icon">
+                    <i class="bi bi-search"></i>
+                </div>
+                <h3>Buscador Inteligente</h3>
+                <p>Busca proyectos usando lenguaje natural con inteligencia artificial</p>
+            </a>
+            
+            <a href="/todos-los-proyectos" class="nav-card">
+                <div class="nav-card-icon">
+                    <i class="bi bi-table"></i>
+                </div>
+                <h3>Todos los Proyectos</h3>
+                <p>Explora todos los proyectos organizados por categorías</p>
+            </a>
+            
+            <a href="/quienes-somos" class="nav-card">
+                <div class="nav-card-icon">
+                    <i class="bi bi-people"></i>
+                </div>
+                <h3>Quiénes Somos</h3>
+                <p>Conoce más sobre IICA Chile y nuestro trabajo</p>
+            </a>
+        </div>
+
+        <!-- Acciones Rápidas -->
+        <div class="quick-actions">
+            <h3><i class="bi bi-lightning me-2"></i>Acciones Rápidas</h3>
+            <div class="action-buttons">
+                <a href="/ai-search" class="action-btn">
+                    <i class="bi bi-search"></i>
+                    Buscar Proyectos
+                </a>
+                <a href="/todos-los-proyectos?area=Juventudes Rurales" class="action-btn">
+                    <i class="bi bi-people"></i>
+                    Juventudes Rurales
+                </a>
+                <a href="/todos-los-proyectos?area=Agricultura Sostenible" class="action-btn">
+                    <i class="bi bi-leaf"></i>
+                    Agricultura Sostenible
+                </a>
+                <a href="/todos-los-proyectos?area=Innovación Tecnológica" class="action-btn">
+                    <i class="bi bi-cpu"></i>
+                    Innovación Tecnológica
+                </a>
+                <a href="/exportar-excel" class="action-btn">
+                    <i class="bi bi-download"></i>
+                    Descargar Datos
+                </a>
+                <a href="/api/proyectos" class="action-btn" target="_blank">
+                    <i class="bi bi-code"></i>
+                    API JSON
+                </a>
+            </div>
+        </div>
+
+        <!-- Búsqueda -->
+        <div class="search-section">
+            <h3><i class="bi bi-search me-2"></i>Buscar Proyectos</h3>
+            <form class="search-form" onsubmit="performSearch(event)">
+                <input type="text" class="search-input" placeholder="¿Qué tipo de proyecto buscas?" id="searchInput">
+                <button type="submit" class="search-btn">
+                    <i class="bi bi-search me-2"></i>Buscar
+                </button>
+            </form>
+            
+            <div class="quick-search">
+                <div class="quick-search-btn" onclick="quickSearch('agricultura sostenible')">
+                    🌱 Agricultura Sostenible
+                </div>
+                <div class="quick-search-btn" onclick="quickSearch('juventudes rurales')">
+                    👥 Juventudes Rurales
+                </div>
+                <div class="quick-search-btn" onclick="quickSearch('innovación tecnológica')">
+                    🚀 Innovación Tecnológica
+                </div>
+                <div class="quick-search-btn" onclick="quickSearch('gestión hídrica')">
+                    💧 Gestión Hídrica
+                </div>
+                <div class="quick-search-btn" onclick="quickSearch('desarrollo rural')">
+                    🏘️ Desarrollo Rural
+                </div>
+                <div class="quick-search-btn" onclick="quickSearch('seguridad alimentaria')">
+                    🍽️ Seguridad Alimentaria
+                </div>
+            </div>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="stats-section">
+            <h3><i class="bi bi-graph-up me-2"></i>Estadísticas de la Plataforma</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">{{ total_proyectos or '90' }}</div>
+                    <div class="stat-label">Proyectos Totales</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ proyectos_abiertos or '75' }}</div>
+                    <div class="stat-label">Proyectos Abiertos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ fuentes_unicas or '25' }}</div>
+                    <div class="stat-label">Fuentes de Financiamiento</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${{ monto_total_formateado or '500M' }}</div>
+                    <div class="stat-label">Monto Total Disponible</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vista Previa de Proyectos -->
+        <div class="projects-preview">
+            <h3><i class="bi bi-list-ul me-2"></i>Proyectos Destacados</h3>
+            {% if proyectos_paginados %}
+                {% for proyecto in proyectos_paginados[:5] %}
+                <div class="project-card">
+                    <div class="project-title">{{ proyecto.Nombre }}</div>
+                    <div class="project-info">
+                        <strong>{{ proyecto.Fuente }}</strong> • {{ proyecto['Área de interés'] }} • {{ proyecto.Monto }}
+                    </div>
+                    <div class="project-actions">
+                        <a href="/proyecto/{{ loop.index }}" class="btn-small btn-primary-small">
+                            <i class="bi bi-eye me-1"></i>Ver Detalles
+                        </a>
+                        <a href="{{ proyecto.Enlace }}" target="_blank" class="btn-small btn-outline-small">
+                            <i class="bi bi-external-link me-1"></i>Fuente Oficial
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="project-card">
+                    <div class="project-title">Programa Juventud Rural Innovadora - ReBrota</div>
+                    <div class="project-info">
+                        <strong>FIA-INJUV</strong> • Juventudes Rurales • USD 8,000,000
+                    </div>
+                    <div class="project-actions">
+                        <a href="/proyecto/1" class="btn-small btn-primary-small">
+                            <i class="bi bi-eye me-1"></i>Ver Detalles
+                        </a>
+                        <a href="#" class="btn-small btn-outline-small">
+                            <i class="bi bi-external-link me-1"></i>Fuente Oficial
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-title">Fondo Verde del Clima</div>
+                    <div class="project-info">
+                        <strong>Banco Mundial</strong> • Agricultura Sostenible • USD 100,000,000
+                    </div>
+                    <div class="project-actions">
+                        <a href="/proyecto/2" class="btn-small btn-primary-small">
+                            <i class="bi bi-eye me-1"></i>Ver Detalles
+                        </a>
+                        <a href="#" class="btn-small btn-outline-small">
+                            <i class="bi bi-external-link me-1"></i>Fuente Oficial
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="/todos-los-proyectos" class="action-btn">
+                    <i class="bi bi-arrow-right me-2"></i>Ver Todos los Proyectos
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>&copy; 2024 IICA Chile. Todos los derechos reservados.</p>
+            <p>Instituto Interamericano de Cooperación para la Agricultura</p>
+        </div>
+    </div>
+
+    <!-- Modal para búsqueda avanzada -->
+    <div id="searchModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>Búsqueda Avanzada</h3>
+            <form id="advancedSearchForm">
+                <div style="margin-bottom: 20px;">
+                    <label>Palabra clave:</label>
+                    <input type="text" class="search-input" name="query" style="width: 100%; margin-top: 5px;">
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label>Área de interés:</label>
+                    <select class="search-input" name="area" style="width: 100%; margin-top: 5px;">
+                        <option value="">Todas las áreas</option>
+                        <option value="Agricultura Sostenible">Agricultura Sostenible</option>
+                        <option value="Juventudes Rurales">Juventudes Rurales</option>
+                        <option value="Innovación Tecnológica">Innovación Tecnológica</option>
+                        <option value="Gestión Hídrica">Gestión Hídrica</option>
+                        <option value="Desarrollo Rural">Desarrollo Rural</option>
+                        <option value="Seguridad Alimentaria">Seguridad Alimentaria</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label>Fuente:</label>
+                    <select class="search-input" name="fuente" style="width: 100%; margin-top: 5px;">
+                        <option value="">Todas las fuentes</option>
+                        <option value="IICA">IICA</option>
+                        <option value="FAO">FAO</option>
+                        <option value="Banco Mundial">Banco Mundial</option>
+                        <option value="BID">BID</option>
+                        <option value="INDAP">INDAP</option>
+                        <option value="Corfo">Corfo</option>
+                    </select>
+                </div>
+                <button type="submit" class="search-btn" style="width: 100%;">
+                    <i class="bi bi-search me-2"></i>Buscar
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Búsqueda rápida
+        function quickSearch(query) {
+            window.location.href = `/todos-los-proyectos?query=${encodeURIComponent(query)}`;
+        }
+        
+        // Búsqueda principal
+        function performSearch(event) {
+            event.preventDefault();
+            const query = document.getElementById('searchInput').value;
+            if (query.trim()) {
+                window.location.href = `/todos-los-proyectos?query=${encodeURIComponent(query)}`;
+            }
+        }
+        
+        // Modal
+        function openModal() {
+            document.getElementById('searchModal').style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('searchModal').style.display = 'none';
+        }
+        
+        // Cerrar modal al hacer clic fuera
+        window.onclick = function(event) {
+            const modal = document.getElementById('searchModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        // Búsqueda avanzada
+        document.getElementById('advancedSearchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const params = new URLSearchParams();
+            
+            for (let [key, value] of formData.entries()) {
+                if (value) params.append(key, value);
+            }
+            
+            window.location.href = `/todos-los-proyectos?${params.toString()}`;
+            closeModal();
+        });
+        
+        // Animaciones suaves
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.nav-card, .project-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>
+

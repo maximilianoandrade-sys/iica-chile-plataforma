@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fondos Abiertos - Plataforma IICA Chile</title>
+    
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #1e3a8a;
+            --secondary-color: #3b82f6;
+            --accent-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --success-color: #10b981;
+            --dark-color: #1f2937;
+            --light-color: #f8fafc;
+            --gradient-primary: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            --gradient-secondary: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-large: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+
+        .header-dinamico {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .logo-iica {
+            height: 60px;
+            width: auto;
+            filter: brightness(0) invert(1);
+        }
+
+        .fondo-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .fondo-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .fondo-card.nacional {
+            border-left-color: var(--accent-color);
+        }
+
+        .fondo-card.internacional {
+            border-left-color: var(--primary-color);
+        }
+
+        .fondo-titulo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .fondo-organizacion {
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .fondo-descripcion {
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .fondo-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--light-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--dark-color);
+        }
+
+        .info-item i {
+            color: var(--secondary-color);
+        }
+
+        .fondo-acciones {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-fondo {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-ver {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn-ver:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+            color: white;
+        }
+
+        .btn-postular {
+            background: var(--gradient-secondary);
+            color: white;
+        }
+
+        .btn-postular:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+            color: white;
+        }
+
+        .estado-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .estado-abierto {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .filtros-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .filtro-select {
+            border-radius: 10px;
+            border: 2px solid #e5e7eb;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .filtro-select:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .stats-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 1rem;
+        }
+
+        .stats-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stats-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #6b7280;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #d1d5db;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .fondo-info {
+                flex-direction: column;
+            }
+            
+            .fondo-acciones {
+                flex-direction: column;
+            }
+            
+            .btn-fondo {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header-dinamico">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center">
+                        <img src="/static/logos/logo_iica_oficial.svg" alt="IICA Chile" class="logo-iica me-3">
+                        <div>
+                            <h2 class="mb-0">Fondos Abiertos</h2>
+                            <p class="mb-0 opacity-75">Oportunidades disponibles para postulación</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <a href="/" class="btn btn-outline-light me-2">
+                        <i class="fas fa-home me-2"></i>Inicio
+                    </a>
+                    <a href="/fondos-disponibles" class="btn btn-light">
+                        <i class="fas fa-list me-2"></i>Todos los Fondos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Filtros -->
+    <section class="container mt-4">
+        <div class="filtros-section" data-aos="fade-up">
+            <div class="row align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Tipo de Fondo</label>
+                    <select class="form-select filtro-select" id="filtro-tipo">
+                        <option value="">Todos</option>
+                        <option value="Nacional">Nacional</option>
+                        <option value="Internacional">Internacional</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Área Temática</label>
+                    <select class="form-select filtro-select" id="filtro-area">
+                        <option value="">Todas</option>
+                        <option value="Innovación">Innovación</option>
+                        <option value="Agricultura">Agricultura</option>
+                        <option value="Sostenibilidad">Sostenibilidad</option>
+                        <option value="Tecnología">Tecnología</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Organización</label>
+                    <select class="form-select filtro-select" id="filtro-organizacion">
+                        <option value="">Todas</option>
+                        <option value="CORFO">CORFO</option>
+                        <option value="INDAP">INDAP</option>
+                        <option value="FIA">FIA</option>
+                        <option value="BID">BID</option>
+                        <option value="FAO">FAO</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary w-100" onclick="aplicarFiltros()">
+                        <i class="fas fa-filter me-2"></i>Filtrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Estadísticas -->
+    <section class="container mt-4">
+        <div class="row" id="stats-container">
+            <div class="col-md-3">
+                <div class="stats-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="stats-number" id="total-fondos">-</div>
+                    <div class="stats-label">Total Fondos</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="stats-number" id="fondos-nacionales">-</div>
+                    <div class="stats-label">Nacionales</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="stats-number" id="fondos-internacionales">-</div>
+                    <div class="stats-label">Internacionales</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="stats-number" id="fondos-abiertos">-</div>
+                    <div class="stats-label">Abiertos</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fondos Nacionales -->
+    <section class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <h3 class="fw-bold text-dark mb-4" data-aos="fade-up">
+                    <i class="fas fa-flag me-2 text-success"></i>Fondos Nacionales
+                </h3>
+            </div>
+        </div>
+        <div class="row" id="fondos-nacionales-container">
+            {% for fondo in fondos_nacionales %}
+            <div class="col-md-6 col-lg-4">
+                <div class="fondo-card nacional" data-aos="fade-up" data-aos-delay="{{ loop.index * 100 }}">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="estado-badge estado-abierto">Abierto</div>
+                        <span class="badge bg-success">{{ fondo.tipo }}</span>
+                    </div>
+                    
+                    <h4 class="fondo-titulo">{{ fondo.nombre }}</h4>
+                    <p class="fondo-organizacion">{{ fondo.organizacion }}</p>
+                    <p class="fondo-descripcion">{{ fondo.descripcion }}</p>
+                    
+                    <div class="fondo-info">
+                        <div class="info-item">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>{{ fondo.monto }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>{{ fondo.fecha_cierre }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-tag"></i>
+                            <span>{{ fondo.area }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="fondo-acciones">
+                        <a href="/detalle-fondo/{{ fondo.id }}" class="btn-fondo btn-ver">
+                            <i class="fas fa-eye me-2"></i>Ver Detalles
+                        </a>
+                        <button class="btn-fondo btn-postular" onclick="postularFondo('{{ fondo.id }}')">
+                            <i class="fas fa-paper-plane me-2"></i>Postular
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Fondos Internacionales -->
+    <section class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <h3 class="fw-bold text-dark mb-4" data-aos="fade-up">
+                    <i class="fas fa-globe me-2 text-primary"></i>Fondos Internacionales
+                </h3>
+            </div>
+        </div>
+        <div class="row" id="fondos-internacionales-container">
+            {% for fondo in fondos_internacionales %}
+            <div class="col-md-6 col-lg-4">
+                <div class="fondo-card internacional" data-aos="fade-up" data-aos-delay="{{ loop.index * 100 }}">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="estado-badge estado-abierto">Abierto</div>
+                        <span class="badge bg-primary">{{ fondo.tipo }}</span>
+                    </div>
+                    
+                    <h4 class="fondo-titulo">{{ fondo.nombre }}</h4>
+                    <p class="fondo-organizacion">{{ fondo.organizacion }}</p>
+                    <p class="fondo-descripcion">{{ fondo.descripcion }}</p>
+                    
+                    <div class="fondo-info">
+                        <div class="info-item">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>{{ fondo.monto }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>{{ fondo.fecha_cierre }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-tag"></i>
+                            <span>{{ fondo.area }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="fondo-acciones">
+                        <a href="/detalle-fondo/{{ fondo.id }}" class="btn-fondo btn-ver">
+                            <i class="fas fa-eye me-2"></i>Ver Detalles
+                        </a>
+                        <button class="btn-fondo btn-postular" onclick="postularFondo('{{ fondo.id }}')">
+                            <i class="fas fa-paper-plane me-2"></i>Postular
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Loading State -->
+    <div id="loading-state" class="text-center py-5" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p class="mt-3 text-muted">Cargando fondos...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="empty-state" style="display: none;">
+        <i class="fas fa-search"></i>
+        <h4>No se encontraron fondos</h4>
+        <p>Intenta ajustar los filtros de búsqueda</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Inicializar AOS
+        AOS.init({
+            duration: 600,
+            easing: 'ease-in-out',
+            once: true
+        });
+
+        // Cargar estadísticas
+        async function cargarEstadisticas() {
+            try {
+                const response = await fetch('/api/estadisticas');
+                const stats = await response.json();
+                
+                document.getElementById('total-fondos').textContent = stats.total_fondos || 0;
+                document.getElementById('fondos-nacionales').textContent = stats.fondos_nacionales || 0;
+                document.getElementById('fondos-internacionales').textContent = stats.fondos_internacionales || 0;
+                document.getElementById('fondos-abiertos').textContent = stats.fondos_abiertos || 0;
+            } catch (error) {
+                console.error('Error cargando estadísticas:', error);
+            }
+        }
+
+        // Aplicar filtros
+        function aplicarFiltros() {
+            const tipo = document.getElementById('filtro-tipo').value;
+            const area = document.getElementById('filtro-area').value;
+            const organizacion = document.getElementById('filtro-organizacion').value;
+            
+            // Aquí implementarías la lógica de filtrado
+            console.log('Filtros aplicados:', { tipo, area, organizacion });
+        }
+
+        // Postular a fondo
+        function postularFondo(fondoId) {
+            if (confirm('¿Deseas postular a este fondo?')) {
+                // Aquí implementarías la lógica de postulación
+                alert('Postulación iniciada para el fondo: ' + fondoId);
+            }
+        }
+
+        // Cargar datos al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarEstadisticas();
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,66 @@
+[
+  {
+    "id": "99b54d38-57cf-4c8b-9019-180649745c05",
+    "user_email": "usuario@ejemplo.com",
+    "project_id": 1,
+    "project_name": "Proyecto de Agricultura Sostenible",
+    "documents": [
+      "Cédula de identidad",
+      "Certificado de antecedentes",
+      "Propuesta técnica"
+    ],
+    "status": "enviada",
+    "created_at": "2025-11-28T11:37:45.657095",
+    "updated_at": "2025-11-28T11:37:45.657113",
+    "timeline": [
+      {
+        "status": "enviada",
+        "date": "2025-11-28T11:37:45.657117",
+        "description": "Aplicación enviada exitosamente"
+      }
+    ]
+  },
+  {
+    "id": "fff61efb-f464-4924-bb4f-7efb87c6adf0",
+    "user_email": "usuario@ejemplo.com",
+    "project_id": 2,
+    "project_name": "Desarrollo Rural Integral",
+    "documents": [
+      "Cédula de identidad",
+      "Certificado de antecedentes",
+      "Propuesta técnica",
+      "Presupuesto detallado"
+    ],
+    "status": "en_revision",
+    "created_at": "2025-11-28T11:37:45.664275",
+    "updated_at": "2025-11-28T11:37:45.664295",
+    "timeline": [
+      {
+        "status": "enviada",
+        "date": "2025-11-28T11:37:45.664299",
+        "description": "Aplicación enviada exitosamente"
+      }
+    ]
+  },
+  {
+    "id": "e9d5935f-941a-4f34-9bc2-abd07c34054d",
+    "user_email": "otro@ejemplo.com",
+    "project_id": 3,
+    "project_name": "Innovación Tecnológica Agrícola",
+    "documents": [
+      "Cédula de identidad",
+      "Certificado de antecedentes",
+      "Propuesta técnica"
+    ],
+    "status": "aprobada",
+    "created_at": "2025-11-28T11:37:45.667308",
+    "updated_at": "2025-11-28T11:37:45.667323",
+    "timeline": [
+      {
+        "status": "enviada",
+        "date": "2025-11-28T11:37:45.667327",
+        "description": "Aplicación enviada exitosamente"
+      }
+    ]
+  }
+]

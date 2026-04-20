@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ fondo.nombre }} - {{ config.nombre_plataforma }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --iica-azul: #0056b3;
+            --iica-verde: #28a745;
+            --iica-naranja: #fd7e14;
+            --iica-gris: #6c757d;
+            --iica-dorado: #ffc107;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #333;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--iica-azul), #003d82);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        
+        .logo-iica {
+            max-height: 50px;
+            margin-right: 15px;
+            filter: brightness(0) invert(1);
+        }
+        
+        .fondo-header {
+            background: linear-gradient(135deg, var(--iica-azul), var(--iica-verde));
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .fondo-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .fondo-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .info-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-left: 6px solid var(--iica-azul);
+            transition: all 0.3s ease;
+        }
+        
+        .info-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+        
+        .info-card.requisitos {
+            border-left-color: var(--iica-verde);
+        }
+        
+        .info-card.documentos {
+            border-left-color: var(--iica-dorado);
+        }
+        
+        .info-card.contacto {
+            border-left-color: var(--iica-naranja);
+        }
+        
+        .btn-iica {
+            background: linear-gradient(135deg, var(--iica-azul), var(--iica-verde));
+            border: none;
+            border-radius: 25px;
+            padding: 15px 30px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-iica:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            color: white;
+        }
+        
+        .btn-iica-outline {
+            background: transparent;
+            border: 2px solid var(--iica-azul);
+            border-radius: 25px;
+            padding: 12px 25px;
+            color: var(--iica-azul);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-iica-outline:hover {
+            background: var(--iica-azul);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .badge-prioridad {
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        
+        .badge-prioridad.alta {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+        }
+        
+        .badge-prioridad.media {
+            background: linear-gradient(135deg, #ffc107, #e0a800);
+            color: #000;
+        }
+        
+        .badge-prioridad.baja {
+            background: linear-gradient(135deg, #6c757d, #5a6268);
+            color: white;
+        }
+        
+        .documento-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--iica-azul);
+            transition: all 0.3s ease;
+        }
+        
+        .documento-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .requisito-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--iica-verde);
+        }
+        
+        .stats-mini {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, #343a40, #495057);
+            color: white;
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--iica-azul);
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -22px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--iica-azul);
+        }
+        
+        .timeline-item.completed::before {
+            background: var(--iica-verde);
+        }
+        
+        .timeline-item.current::before {
+            background: var(--iica-dorado);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 193, 7, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
+        }
+        
+        .accion-principal {
+            background: linear-gradient(135deg, var(--iica-verde), var(--iica-azul));
+            border: none;
+            border-radius: 30px;
+            padding: 20px 40px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .accion-principal:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="/static/logos/logo_iica_oficial.svg" alt="IICA Chile" class="logo-iica">
+                {{ config.nombre_plataforma }}
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Fondos Abiertos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/fondos-disponibles">Fondos Disponibles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/agregar-fondo">Agregar Fondo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/exportar">Exportar Excel</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header del Fondo -->
+    <section class="fondo-header">
+        <div class="container">
+            <div class="fondo-content">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h1 class="display-5 fw-bold mb-3">{{ fondo.nombre }}</h1>
+                        <p class="lead mb-3">
+                            <i class="fas fa-building me-2"></i>{{ fondo.organizacion }}
+                            <span class="badge bg-light text-dark ms-3">{{ fondo.tipo }}</span>
+                        </p>
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="badge-prioridad {{ fondo.prioridad.lower() }} me-3">
+                                {{ fondo.prioridad }}
+                            </span>
+                            <span class="badge bg-success me-2">{{ fondo.estado }}</span>
+                            <span class="badge bg-primary">{{ fondo.area }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <div class="stats-mini">
+                            <h3 class="text-success mb-1">{{ fondo.monto }}</h3>
+                            <p class="mb-0">Monto Disponible</p>
+                        </div>
+                        <div class="stats-mini">
+                            <h5 class="text-warning mb-1">{{ fondo.fecha_cierre }}</h5>
+                            <p class="mb-0">Fecha de Cierre</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contenido Principal -->
+    <div class="container">
+        <div class="row">
+            <!-- Información Principal -->
+            <div class="col-md-8">
+                <!-- Descripción -->
+                <div class="info-card">
+                    <h4 class="mb-3">
+                        <i class="fas fa-info-circle text-primary me-2"></i>
+                        Descripción del Fondo
+                    </h4>
+                    <p class="lead">{{ fondo.descripcion }}</p>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <p><strong><i class="fas fa-tag me-2"></i>Área:</strong> {{ fondo.area }}</p>
+                            <p><strong><i class="fas fa-folder me-2"></i>Categoría:</strong> {{ fondo.categoria }}</p>
+                            <p><strong><i class="fas fa-clock me-2"></i>Duración:</strong> {{ fondo.duracion }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong><i class="fas fa-dollar-sign me-2"></i>Tipo de Financiamiento:</strong> {{ fondo.tipo_financiamiento }}</p>
+                            <p><strong><i class="fas fa-users me-2"></i>Beneficiarios:</strong> {{ fondo.beneficiarios }}</p>
+                            <p><strong><i class="fas fa-globe me-2"></i>País:</strong> {{ fondo.pais }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Requisitos -->
+                <div class="info-card requisitos">
+                    <h4 class="mb-3">
+                        <i class="fas fa-clipboard-check text-success me-2"></i>
+                        Requisitos de Elegibilidad
+                    </h4>
+                    <p class="mb-3">{{ fondo.requisitos }}</p>
+                    
+                    {% if fondo.documentos_requeridos %}
+                    <h5 class="mb-3">Documentos Requeridos:</h5>
+                    <div class="row">
+                        {% for documento in fondo.documentos_requeridos %}
+                        <div class="col-md-6">
+                            <div class="documento-item">
+                                <i class="fas fa-file-alt text-primary me-2"></i>
+                                {{ documento }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Cronograma -->
+                <div class="info-card">
+                    <h4 class="mb-3">
+                        <i class="fas fa-calendar-alt text-info me-2"></i>
+                        Cronograma del Proceso
+                    </h4>
+                    <div class="timeline">
+                        <div class="timeline-item completed">
+                            <h6>Apertura de Convocatoria</h6>
+                            <p class="text-muted">La convocatoria está abierta para recibir postulaciones</p>
+                        </div>
+                        <div class="timeline-item current">
+                            <h6>Período de Postulación</h6>
+                            <p class="text-muted">Hasta el {{ fondo.fecha_cierre }}</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h6>Evaluación de Propuestas</h6>
+                            <p class="text-muted">Revisión y evaluación de las propuestas recibidas</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h6>Comunicación de Resultados</h6>
+                            <p class="text-muted">Notificación a los postulantes seleccionados</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-md-4">
+                <!-- Acción Principal - POSTULAR -->
+                <div class="info-card" style="border-left-color: var(--iica-verde); background: linear-gradient(135deg, #f8fff8, #ffffff);">
+                    <div class="text-center">
+                        <h5 class="mb-3 text-success">
+                            <i class="fas fa-paper-plane me-2"></i>
+                            ¿Listo para Postular?
+                        </h5>
+                        <a href="#" class="accion-principal" onclick="postularFondo()">
+                            <i class="fas fa-rocket me-2"></i>POSTULAR AHORA
+                        </a>
+                        <p class="mt-3 small text-muted">
+                            Accede a toda la información y documentos necesarios
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Información de Contacto -->
+                <div class="info-card contacto">
+                    <h5 class="mb-3">
+                        <i class="fas fa-phone text-orange me-2"></i>
+                        Información de Contacto
+                    </h5>
+                    <p><strong>Email:</strong> {{ fondo.contacto }}</p>
+                    <p><strong>Organización:</strong> {{ fondo.organizacion }}</p>
+                    <p><strong>Fuente:</strong> {{ fondo.fuente }}</p>
+                </div>
+
+                <!-- Formularios de Postulación -->
+                {% if fondo.formularios %}
+                <div class="info-card documentos">
+                    <h5 class="mb-3">
+                        <i class="fas fa-file-alt text-warning me-2"></i>
+                        Formularios de Postulación
+                    </h5>
+                    {% for formulario in fondo.formularios %}
+                    <div class="documento-item">
+                        <a href="{{ formulario }}" target="_blank" class="text-decoration-none">
+                            <i class="fas fa-download text-primary me-2"></i>
+                            Formulario {{ loop.index }}
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Enlaces Externos -->
+                {% if fondo.enlace %}
+                <div class="info-card">
+                    <h5 class="mb-3">
+                        <i class="fas fa-external-link-alt text-info me-2"></i>
+                        Enlaces Oficiales
+                    </h5>
+                    <a href="{{ fondo.enlace }}" target="_blank" class="btn btn-iica-outline w-100 mb-2">
+                        <i class="fas fa-globe me-2"></i>Sitio Web Oficial
+                    </a>
+                </div>
+                {% endif %}
+
+                <!-- Estadísticas -->
+                <div class="info-card">
+                    <h5 class="mb-3">
+                        <i class="fas fa-chart-bar text-info me-2"></i>
+                        Estadísticas
+                    </h5>
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div class="stats-mini">
+                                <h6 class="text-success">{{ fondo.monto }}</h6>
+                                <small>Monto Total</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stats-mini">
+                                <h6 class="text-warning">{{ fondo.duracion }}</h6>
+                                <small>Duración</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navegación -->
+                <div class="info-card">
+                    <h5 class="mb-3">
+                        <i class="fas fa-arrow-left text-secondary me-2"></i>
+                        Navegación
+                    </h5>
+                    <div class="d-grid gap-2">
+                        <a href="/" class="btn btn-iica-outline">
+                            <i class="fas fa-home me-2"></i>Volver a Fondos Abiertos
+                        </a>
+                        <a href="/fondos-disponibles" class="btn btn-iica-outline">
+                            <i class="fas fa-list me-2"></i>Ver Todos los Fondos
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>IICA Chile</h5>
+                    <p>Portal de Oportunidades de Financiamiento</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <h6>Enlaces Institucionales</h6>
+                    <a href="{{ config.datos_institucionales.sitio_web }}" class="text-light me-3" target="_blank">Sitio Web IICA Chile</a>
+                    <a href="https://iica.int/es/" class="text-light me-3" target="_blank">IICA Global</a>
+                    <a href="mailto:{{ config.datos_institucionales.email }}" class="text-light">Contacto</a>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p>&copy; 2025 IICA Chile. Todos los derechos reservados.</p>
+                <small>Versión {{ config.version }} - Última actualización: {{ config.ultima_actualizacion }}</small>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Función para postular fondo
+        function postularFondo() {
+            // Mostrar modal con información de postulación
+            const modal = `
+                <div class="modal fade" id="postularModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Postular a {{ fondo.nombre }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="alert alert-info">
+                                    <h6><i class="fas fa-info-circle me-2"></i>Información de Postulación</h6>
+                                    <p>Para postular a este fondo, siga estos pasos:</p>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>Documentos Requeridos:</h6>
+                                        <ul>
+                                            {% for doc in fondo.documentos_requeridos %}
+                                            <li>{{ doc }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Formularios:</h6>
+                                        {% for form in fondo.formularios %}
+                                        <a href="{{ form }}" target="_blank" class="btn btn-outline-primary btn-sm mb-2 d-block">
+                                            <i class="fas fa-download me-1"></i>Formulario {{ loop.index }}
+                                        </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-3">
+                                    <h6>Contacto:</h6>
+                                    <p><strong>Email:</strong> {{ fondo.contacto }}</p>
+                                    <p><strong>Organización:</strong> {{ fondo.organizacion }}</p>
+                                </div>
+                                
+                                {% if fondo.enlace %}
+                                <div class="mt-3">
+                                    <a href="{{ fondo.enlace }}" target="_blank" class="btn btn-primary">
+                                        <i class="fas fa-external-link-alt me-2"></i>Ir al Sitio Oficial
+                                    </a>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Agregar modal al DOM
+            document.body.insertAdjacentHTML('beforeend', modal);
+            
+            // Mostrar modal
+            const modalElement = new bootstrap.Modal(document.getElementById('postularModal'));
+            modalElement.show();
+            
+            // Limpiar modal después de cerrar
+            document.getElementById('postularModal').addEventListener('hidden.bs.modal', function() {
+                this.remove();
+            });
+        }
+        
+        // Función para compartir fondo
+        function compartirFondo() {
+            if (navigator.share) {
+                navigator.share({
+                    title: '{{ fondo.nombre }}',
+                    text: '{{ fondo.descripcion[:100] }}...',
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                alert('Enlace copiado al portapapeles');
+            }
+        }
+    </script>
+</body>
+</html>
+

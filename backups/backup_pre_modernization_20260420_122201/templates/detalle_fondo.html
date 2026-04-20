@@ -1,0 +1,311 @@
+{% extends "base_mvp.html" %}
+
+{% block title %}{{ fondo.nombre }} - IICA Chile{% endblock %}
+
+{% block extra_css %}
+<style>
+    .detalle-container {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 20px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .fondo-header {
+        border-bottom: 2px solid #e0e0e0;
+        padding-bottom: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .badge-abierto {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+
+    .info-item {
+        padding: 1.5rem;
+        background: #f8f9fa;
+        border-radius: 10px;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: #667eea;
+        margin-bottom: 0.5rem;
+    }
+
+    .info-value {
+        color: #333;
+        font-size: 1.1rem;
+    }
+
+    .section {
+        margin: 2rem 0;
+    }
+
+    .section-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #667eea;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="detalle-container">
+    <div class="fondo-header">
+        <span class="badge {% if fondo.estado == 'Abierto' %}badge-abierto{% else %}badge-cerrado{% endif %}">
+            {{ fondo.estado }}
+        </span>
+
+        <h1 style="font-size: 2rem; color: #333; margin: 1rem 0;">{{ fondo.nombre }}</h1>
+
+        <div style="color: #667eea; font-size: 1.2rem; font-weight: 600;">
+            {{ fondo.fuente }}
+        </div>
+    </div>
+
+    <div class="info-grid">
+        <div class="info-item">
+            <div class="info-label">💰 Monto Disponible</div>
+            <div class="info-value">{{ fondo.monto_texto or 'Consultar bases' }}</div>
+        </div>
+
+        {% if fondo.fecha_cierre %}
+        <div class="info-item">
+            <div class="info-label">📅 Fecha de Cierre</div>
+            <div class="info-value">{{ fondo.fecha_cierre.strftime('%d de %B, %Y') }}</div>
+            {% if fondo.dias_restantes() %}
+            <div style="color: #d32f2f; font-weight: 600; margin-top: 0.5rem;">
+                ⏰ {{ fondo.dias_restantes() }} días restantes
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="info-item">
+            <div class="info-label">🏷️ Área de Interés</div>
+            <div class="info-value">{{ fondo.area_interes }}</div>
+        </div>
+
+        <div class="info-item">
+            <div class="info-label">📍 Región</div>
+            <div class="info-value">{{ fondo.region or 'Nacional' }}</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">
+            <span>📋</span>
+            Descripción
+        </h2>
+        <p style="line-height: 1.8; color: #555;">
+            {{ fondo.descripcion or 'Información disponible en el sitio web oficial.' }}
+        </p>
+    </div>
+
+    {% if fondo.beneficiarios %}
+    <div class="section">
+        <h2 class="section-title">
+            <span>👥</span>
+            Beneficiarios
+        </h2>
+        <p style="line-height: 1.8; color: #555;">{{ fondo.beneficiarios }}</p>
+    </div>
+    {% endif %}
+
+    {% if fondo.get_documentos_list() %}
+    <div class="section">
+        <h2 class="section-title">
+            <span>📄</span>
+            Documentos Requeridos
+        </h2>
+        <ul style="list-style: none; padding: 0;">
+            {% for doc in fondo.get_documentos_list() %}
+            <li style="padding: 0.5rem 0; border-bottom: 1px solid #e0e0e0;">
+                ✓ {{ doc }}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {% if fondo.criterios_elegibilidad %}
+    <div class="section">
+        <h2 class="section-title">
+            <span>✅</span>
+            Criterios de Elegibilidad
+        </h2>
+        <p style="line-height: 1.8; color: #555;">{{ fondo.criterios_elegibilidad }}</p>
+    </div>
+    {% endif %}
+
+    <div class="action-buttons" style="margin-bottom: 2rem;">
+        <button onclick="abrirModal('cedula')" class="btn btn-secondary" style="font-size: 0.9rem;">📋 Requisitos
+            Personales</button>
+        <button onclick="abrirModal('empresa')" class="btn btn-secondary" style="font-size: 0.9rem;">🏢 Requisitos
+            Empresa</button>
+        <button onclick="abrirModal('plantillas')" class="btn btn-secondary" style="font-size: 0.9rem;">📂 Descargar
+            Plantillas</button>
+    </div>
+
+    <div class="action-buttons">
+        {% if fondo.enlace %}
+        <a href="{{ fondo.enlace }}" target="_blank" class="btn btn-primary" style="flex: 1;">
+            🔗 Ver Convocatoria Oficial
+        </a>
+        {% endif %}
+
+        {% if fondo.enlace_postulacion %}
+        <a href="{{ fondo.enlace_postulacion }}" target="_blank" class="btn btn-primary"
+            style="flex: 1; background: #28a745;">
+            📝 Ir a Postulación
+        </a>
+        {% endif %}
+
+        {% if current_user.is_authenticated %}
+        <button onclick="toggleFavorito({{ fondo.id }})" class="btn btn-secondary">
+            {% if es_favorito %}❤️ En Favoritos{% else %}⭐ Agregar a Favoritos{% endif %}
+        </button>
+        {% endif %}
+    </div>
+
+    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #e0e0e0;">
+        <a href="{{ url_for('home') }}" style="color: #667eea; text-decoration: none; font-weight: 600;">
+            ← Volver a la búsqueda
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% endblock %}
+
+{% block extra_js %}
+<!-- Modal Requisitos -->
+<div id="requisitosModal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;">
+    <div
+        style="background: white; padding: 2rem; border-radius: 15px; width: 90%; max-width: 500px; position: relative;">
+        <button onclick="cerrarModal()"
+            style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+        <h3 id="modalTitulo" style="font-size: 1.5rem; margin-bottom: 1.5rem; color: #333;">Requisitos</h3>
+        <ul id="modalLista" style="list-style: none; padding: 0;">
+            <!-- Items dinámicos -->
+        </ul>
+        <button id="modalBtnDescargar" style="display: none; width: 100%; margin-top: 1.5rem;"
+            class="btn btn-primary">Descargar Todo</button>
+    </div>
+</div>
+
+<script>
+    const contenidoModal = {
+        cedula: {
+            titulo: "Documentos Personales",
+            items: [
+                "Cédula de identidad vigente (ambos lados)",
+                "Certificado de RUT actualizado",
+                "Certificado de residencia (no mayor a 3 meses)",
+                "Declaración jurada simple"
+            ]
+        },
+        empresa: {
+            titulo: "Documentos de Empresa",
+            items: [
+                "Escritura de constitución de la empresa",
+                "RUT de la empresa",
+                "Balance general del último año",
+                "Estado de resultados",
+                "Certificado de vigencia de la empresa",
+                "Poder del representante legal"
+            ]
+        },
+        plantillas: {
+            titulo: "Herramientas Técnicas",
+            items: [
+                "Plantilla de presupuesto (.xlsx)",
+                "Carta Gantt (.xlsx)",
+                "Formulario de postulación (.pdf)",
+                "Modelo de plan de negocios (.docx)",
+                "Guía de postulación (.pdf)"
+            ]
+        }
+    };
+
+    function abrirModal(tipo) {
+        const info = contenidoModal[tipo];
+        if (!info) return;
+
+        document.getElementById('modalTitulo').innerText = info.titulo;
+
+        const lista = document.getElementById('modalLista');
+        lista.innerHTML = info.items.map(item => `
+            <li style="display: flex; gap: 10px; margin-bottom: 10px; align-items: start;">
+                <span style="color: #28a745; font-weight: bold;">✓</span>
+                <span>${item}</span>
+            </li>
+        `).join('');
+
+        const btnDescargar = document.getElementById('modalBtnDescargar');
+        if (tipo === 'plantillas') {
+            btnDescargar.style.display = 'block';
+        } else {
+            btnDescargar.style.display = 'none';
+        }
+
+        document.getElementById('requisitosModal').style.display = 'flex';
+    }
+
+    function cerrarModal() {
+        document.getElementById('requisitosModal').style.display = 'none';
+    }
+
+    // Cerrar al click fuera
+    window.onclick = function (event) {
+        const modal = document.getElementById('requisitosModal');
+        if (event.target === modal) {
+            cerrarModal();
+        }
+    }
+
+    function toggleFavorito(fondoId) {
+        fetch(`/api/favorito/toggle/${fondoId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                location.reload();
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
+{% endblock %}

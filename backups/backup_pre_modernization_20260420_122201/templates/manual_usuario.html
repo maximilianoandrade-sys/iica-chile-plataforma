@@ -1,0 +1,297 @@
+{% extends "base_mvp.html" %}
+
+{% block title %}Manual de Usuario - Plataforma IICA Chile{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <!-- Barra Lateral del Manual (Índice) -->
+        <div class="col-lg-3 mb-4">
+            <div class="card shadow-sm border-0 sticky-top" style="top: 100px;">
+                <div class="card-header bg-iica-blue text-white fw-bold">
+                    <i class="bi bi-book me-2"></i>Contenido
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="#introduccion" class="list-group-item list-group-item-action">1. Introducción</a>
+                    <a href="#acceso" class="list-group-item list-group-item-action">2. Acceso y Registro</a>
+                    <a href="#navegacion" class="list-group-item list-group-item-action">3. Navegación Principal</a>
+                    <a href="#gestor-proyectos" class="list-group-item list-group-item-action">4. Gestión de
+                        Proyectos</a>
+                    <a href="#centro-recursos" class="list-group-item list-group-item-action">5. Centro de Recursos</a>
+                    <a href="#dashboard" class="list-group-item list-group-item-action">6. Dashboard</a>
+                    <a href="#soporte" class="list-group-item list-group-item-action">7. Soporte Técnico</a>
+                    <a href="#faq" class="list-group-item list-group-item-action">8. Preguntas Frecuentes</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido Principal -->
+        <div class="col-lg-9">
+            <h1 class="iica-page-title mb-4">Manual de Usuario - Plataforma de Financiamiento Agrícola IICA Chile</h1>
+            <div class="alert alert-light border-start border-4 border-iica-gold">
+                <strong>Versión 1.0 - Enero 2026</strong>
+                <p class="mb-0 text-muted">Esta guía está diseñada para ayudar a los equipos técnicos y extensionistas
+                    del IICA a gestionar oportunidades de financiamiento de manera eficiente.</p>
+            </div>
+
+            <hr class="my-5">
+
+            <!-- 1. Introducción -->
+            <section id="introduccion" class="mb-5">
+                <h3 class="text-primary fw-bold mb-3"><i class="bi bi-info-circle me-2"></i>1. Introducción</h3>
+
+                <h5 class="fw-bold mt-4">1.1 Propósito de la Plataforma</h5>
+                <p>La Plataforma de Financiamiento Agrícola IICA Chile es una herramienta digital diseñada para conectar
+                    a productores agrícolas con oportunidades de financiamiento y recursos clave. Centraliza
+                    convocatorias, fondos disponibles y documentación esencial.</p>
+
+                <h5 class="fw-bold mt-4">1.2 Audiencia</h5>
+                <p>Este manual está dirigido a técnicos del IICA que utilizarán la plataforma para:</p>
+                <ul class="text-secondary">
+                    <li>Asesorar a productores agrícolas.</li>
+                    <li>Gestionar información sobre financiamiento (nacional e internacional).</li>
+                    <li>Facilitar el acceso a recursos técnicos.</li>
+                    <li>Monitorear el estado de las postulaciones.</li>
+                </ul>
+
+                <h5 class="fw-bold mt-4">1.3 Acceso</h5>
+                <div class="bg-light p-3 rounded">
+                    <strong>URL Oficial:</strong> <a href="https://iica-chile-plataforma.onrender.com/"
+                        target="_blank">https://iica-chile-plataforma.onrender.com/</a>
+                </div>
+            </section>
+
+            <!-- 2. Acceso -->
+            <section id="acceso" class="mb-5">
+                <h3 class="text-primary fw-bold mb-3"><i class="bi bi-shield-lock me-2"></i>2. Acceso y Requisitos</h3>
+                <div class="card iica-card p-4">
+                    <h5 class="fw-bold">Requisitos Técnicos</h5>
+                    <ul class="mb-4">
+                        <li><strong>Navegador:</strong> Chrome, Firefox, Safari o Edge (Versiones actualizadas).</li>
+                        <li><strong>Dispositivo:</strong> Optimizado para Escritorio (Mínimo 1366x768 px). Compatible
+                            con móviles.</li>
+                        <li><strong>Conexión:</strong> Internet de banda ancha estable.</li>
+                    </ul>
+                    <h5 class="fw-bold">Idiomas</h5>
+                    <p>Español (Chile), Inglés y Portugués. Seleccionable en la barra superior.</p>
+                </div>
+            </section>
+
+            <!-- 3. Navegación -->
+            <section id="navegacion" class="mb-5">
+                <h3 class="text-primary fw-bold mb-3"><i class="bi bi-compass me-2"></i>3. Navegación Principal</h3>
+                <p>El menú principal permite acceder a las secciones clave:</p>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="border p-3 rounded h-100">
+                            <strong><i class="bi bi-house me-2"></i>Inicio:</strong> Vista general, métricas y
+                            destacados.
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="border p-3 rounded h-100">
+                            <strong><i class="bi bi-people me-2"></i>Quiénes Somos:</strong> Información institucional
+                            IICA.
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="border p-3 rounded h-100">
+                            <strong><i class="bi bi-briefcase me-2"></i>Proyectos:</strong> Catálogo completo con
+                            buscador y filtros.
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="border p-3 rounded h-100">
+                            <strong><i class="bi bi-speedometer2 me-2"></i>Dashboard:</strong> Panel privado de gestión.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Gestión Proyectos -->
+            <section id="gestor-proyectos" class="mb-5">
+                <h3 class="text-primary fw-bold mb-3"><i class="bi bi-folder2-open me-2"></i>4. Gestión de Proyectos
+                </h3>
+                <p>En la sección "Proyectos" encontrará la tabla interactiva de convocatorias.</p>
+
+                <h5 class="fw-bold mt-3">Interpretación de Datos</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Campo</th>
+                                <th>Descripción</th>
+                                <th>Ejemplo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Estado</strong></td>
+                                <td>Situación actual de la convocatoria.</td>
+                                <td><span class="badge bg-success">Abierto</span>, <span
+                                        class="badge bg-warning text-dark">Próximo</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Fuente</strong></td>
+                                <td>Institución financiadora.</td>
+                                <td>FIA, INDAP, CORFO, GORE.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Monto</strong></td>
+                                <td>Financiamiento disponible (Total o por proyecto).</td>
+                                <td>"Hasta CLP 150M", "USD 50,000".</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="alert alert-info mt-3">
+                    <i class="bi bi-lightbulb me-2"></i>
+                    <strong>Tip Técnico:</strong> Utilice los filtros laterales para buscar por "Fuente" (ej: solo FIA)
+                    o "Estado" (ej: solo Abiertos).
+                </div>
+            </section>
+
+            <!-- 5. Centro Recursos -->
+            <section id="centro-recursos" class="mb-5">
+                <h3 class="text-primary fw-bold mb-3"><i class="bi bi-tools me-2"></i>5. Centro de Recursos</h3>
+                <p>Herramientas esenciales para una postulación exitosa.</p>
+
+                <div class="accordion" id="accRecursos">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#colDocPers">
+                                5.1 Documentos Personales y Empresa
+                            </button>
+                        </h2>
+                        <div id="colDocPers" class="accordion-collapse collapse show" data-bs-parent="#accRecursos">
+                            <div class="accordion-body">
+                                <ul>
+                                    <li><strong>Personas Naturales:</strong> Cédula vigente, RUT, Cert. Residencia.</li>
+                                    <li><strong>Personas Jurídicas:</strong> Escritura constitución, Vigencia, Balances
+                                        (últimos 2-3 años), RUT Empresa.</li>
+                                </ul>
+                                <small class="text-muted">* Es vital digitalizar estos documentos en PDF de alta
+                                    resolución.</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#colTools">
+                                5.2 Herramientas Técnicas (Plantillas)
+                            </button>
+                        </h2>
+                        <div id="colTools" class="accordion-collapse collapse" data-bs-parent="#accRecursos">
+                            <div class="accordion-body">
+                                Descargue formatos estandarizados para:
+                                <ul>
+                                    <li>Presupuestos de Proyecto (Excel).</li>
+                                    <li>Cartas Gantt / Cronogramas.</li>
+                                    <li>Formularios Tipo.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. Dashboard -->
+            <section id="dashboard" class="mb-5">
+                <h3 class="text-primary fw-bold mb-3"><i class="bi bi-bar-chart-line me-2"></i>6. Dashboard y
+                    Estadísticas</h3>
+                <p>Herramienta clave para el técnico IICA:</p>
+                <div class="row text-center mt-3">
+                    <div class="col-md-4">
+                        <div class="card p-3 h-100 shadow-sm border-0">
+                            <h5 class="text-primary">Identificar</h5>
+                            <small>Detecte áreas con mayor financiamiento disponible.</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card p-3 h-100 shadow-sm border-0">
+                            <h5 class="text-primary">Planificar</h5>
+                            <small>Priorice productores según fechas de cierre inminentes.</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card p-3 h-100 shadow-sm border-0">
+                            <h5 class="text-primary">Analizar</h5>
+                            <small>Entienda tendencias y fuentes recurrentes.</small>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. Soporte -->
+            <section id="soporte" class="mb-5">
+                <h3 class="text-primary fw-bold mb-3"><i class="bi bi-headset me-2"></i>7. Soporte y Enlaces</h3>
+                <div class="list-group">
+                    <a href="https://iica.int/es" target="_blank" class="list-group-item list-group-item-action">
+                        Portal Principal IICA
+                    </a>
+                    <a href="https://www.iica3d.iica.int/" target="_blank"
+                        class="list-group-item list-group-item-action">IICA 3D (Desarrollo Digital)</a>
+                    <a href="https://agroart.iica.int/" target="_blank"
+                        class="list-group-item list-group-item-action">AgroArt (Recursos Creativos)</a>
+                </div>
+                <div class="alert alert-secondary mt-3">
+                    <strong>¿Problemas Técnicos?</strong> Contacte al soporte interno mediante la sección "Quiénes
+                    Somos" o canales oficiales.
+                </div>
+            </section>
+
+            <!-- 8. FAQ -->
+            <section id="faq" class="mb-5">
+                <h3 class="text-primary fw-bold mb-3"><i class="bi bi-question-circle me-2"></i>8. Preguntas Frecuentes
+                </h3>
+                <div class="accordion accordion-flush" id="faqAccord">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq1">
+                                ¿La plataforma postula automáticamente?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccord">
+                            <div class="accordion-body">No. Es una herramienta de <strong>gestión y búsqueda</strong>.
+                                La postulación oficial es siempre en el sitio de la entidad (ej: fia.cl).</div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq2">
+                                ¿Qué significa "Estado: Próximo"?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccord">
+                            <div class="accordion-body">Indica que la convocatoria abrirá en una fecha futura cercana.
+                                Prepárese con antelación.</div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#faq3">
+                                ¿Qué hago si hay información desactualizada?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccord">
+                            <div class="accordion-body">Reporte discrepancias a través del canal interno institucional.
+                                Verifique siempre las bases oficiales en el enlace provisto.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="text-center mt-5 mb-5 text-muted">
+                <small>Instituto Interamericano de Cooperación para la Agricultura - Oficina Chile <br> © 2026 Todos los
+                    derechos reservados.</small>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

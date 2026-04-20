@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Búsqueda Avanzada - IICA Chile</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Estilos Institucionales -->
+    <link href="{{ url_for('static', filename='css/institucional.css') }}" rel="stylesheet">
+    
+    <style>
+        .search-form {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .result-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+        
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .result-card .card-header {
+            background: linear-gradient(135deg, #0B6F39 0%, #28a745 100%);
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #0066CC 0%, #0B6F39 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .filter-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .suggestion-tag {
+            display: inline-block;
+            background: #e9ecef;
+            color: #495057;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            margin: 0.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .suggestion-tag:hover {
+            background: #0B6F39;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-institucional">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="https://iica.int/sites/default/files/iica_logo_0.png" 
+                     alt="Logo IICA Chile" 
+                     class="logo-institucional me-2">
+                IICA Chile
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/">
+                    <i class="bi bi-arrow-left me-1"></i>Volver a Inicio
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1 class="display-4 fw-bold text-dark mb-3">
+                        <i class="bi bi-search me-2"></i>Búsqueda Avanzada
+                    </h1>
+                    <p class="lead text-muted">
+                        Encuentra proyectos de financiamiento con criterios específicos
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Formulario de Búsqueda -->
+    <section class="py-5">
+        <div class="container">
+            <div class="search-form">
+                <form id="searchForm">
+                    <div class="row">
+                        <!-- Búsqueda por texto -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-search me-1"></i>Texto de búsqueda
+                            </label>
+                            <input type="text" class="form-control" id="texto" 
+                                   placeholder="Ej: agricultura sostenible, innovación, exportación">
+                            <div id="sugerencias" class="mt-2"></div>
+                        </div>
+                        
+                        <!-- Área de interés -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-tag me-1"></i>Área de interés
+                            </label>
+                            <select class="form-select" id="area">
+                                <option value="">Todas las áreas</option>
+                                <option value="Agricultura Sostenible">Agricultura Sostenible</option>
+                                <option value="Desarrollo Rural">Desarrollo Rural</option>
+                                <option value="Innovación Tecnológica">Innovación Tecnológica</option>
+                                <option value="Seguridad Alimentaria">Seguridad Alimentaria</option>
+                                <option value="Juventudes Rurales">Juventudes Rurales</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <!-- Fuente -->
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-building me-1"></i>Fuente
+                            </label>
+                            <select class="form-select" id="fuente">
+                                <option value="">Todas las fuentes</option>
+                                <option value="CORFO">CORFO</option>
+                                <option value="FIA">FIA</option>
+                                <option value="SAG">SAG</option>
+                                <option value="INDAP">INDAP</option>
+                                <option value="IICA">IICA</option>
+                                <option value="Green Climate Fund">Green Climate Fund</option>
+                                <option value="IFAD">IFAD</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Estado -->
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-check-circle me-1"></i>Estado
+                            </label>
+                            <select class="form-select" id="estado">
+                                <option value="">Todos los estados</option>
+                                <option value="Abierto">Abierto</option>
+                                <option value="Cerrado">Cerrado</option>
+                                <option value="En evaluación">En evaluación</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Días hasta cierre -->
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-calendar me-1"></i>Días hasta cierre
+                            </label>
+                            <select class="form-select" id="dias_hasta_cierre">
+                                <option value="">Sin límite</option>
+                                <option value="7">7 días</option>
+                                <option value="15">15 días</option>
+                                <option value="30">30 días</option>
+                                <option value="60">60 días</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <!-- Monto mínimo -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-currency-dollar me-1"></i>Monto mínimo (CLP)
+                            </label>
+                            <input type="number" class="form-control" id="monto_minimo" 
+                                   placeholder="0" min="0">
+                        </div>
+                        
+                        <!-- Monto máximo -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-currency-dollar me-1"></i>Monto máximo (CLP)
+                            </label>
+                            <input type="number" class="form-control" id="monto_maximo" 
+                                   placeholder="Sin límite" min="0">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <!-- Palabras clave -->
+                        <div class="col-12 mb-3">
+                            <label class="form-label">
+                                <i class="bi bi-key me-1"></i>Palabras clave (separadas por comas)
+                            </label>
+                            <input type="text" class="form-control" id="palabras_clave" 
+                                   placeholder="Ej: innovación, tecnología, sostenible, rural">
+                        </div>
+                    </div>
+                    
+                    <!-- Botones -->
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <button type="submit" class="btn btn-iica btn-lg me-3">
+                                <i class="bi bi-search me-2"></i>Buscar
+                            </button>
+                            <button type="button" class="btn btn-iica-outline btn-lg" onclick="limpiarFormulario()">
+                                <i class="bi bi-arrow-clockwise me-2"></i>Limpiar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resultados -->
+    <section class="py-5" id="resultados" style="display: none;">
+        <div class="container">
+            <!-- Estadísticas -->
+            <div class="stats-card" id="estadisticas">
+                <h3 id="total-resultados">0 resultados encontrados</h3>
+                <p id="estadisticas-detalle">Cargando estadísticas...</p>
+            </div>
+            
+            <!-- Lista de resultados -->
+            <div id="lista-resultados">
+                <!-- Los resultados se cargarán aquí dinámicamente -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-institucional">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2024 IICA Chile. Todos los derechos reservados.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="/" class="btn btn-outline-light btn-sm">
+                        <i class="bi bi-arrow-left me-1"></i>Volver a Inicio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Función para realizar búsqueda
+        async function realizarBusqueda() {
+            const formData = new FormData(document.getElementById('searchForm'));
+            const params = new URLSearchParams();
+            
+            // Agregar parámetros
+            for (const [key, value] of formData.entries()) {
+                if (value.trim()) {
+                    params.append(key, value);
+                }
+            }
+            
+            try {
+                const response = await fetch(`/api/busqueda-avanzada?${params.toString()}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    mostrarResultados(data.resultados, data.estadisticas);
+                } else {
+                    alert('Error en la búsqueda: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al realizar la búsqueda');
+            }
+        }
+        
+        // Función para mostrar resultados
+        function mostrarResultados(resultados, estadisticas) {
+            const seccionResultados = document.getElementById('resultados');
+            const totalResultados = document.getElementById('total-resultados');
+            const estadisticasDetalle = document.getElementById('estadisticas-detalle');
+            const listaResultados = document.getElementById('lista-resultados');
+            
+            // Mostrar estadísticas
+            totalResultados.textContent = `${resultados.length} resultados encontrados`;
+            
+            let estadisticasTexto = '';
+            if (estadisticas.por_fuente) {
+                estadisticasTexto += 'Por fuente: ';
+                for (const [fuente, count] of Object.entries(estadisticas.por_fuente)) {
+                    estadisticasTexto += `${fuente} (${count}), `;
+                }
+                estadisticasTexto = estadisticasTexto.slice(0, -2);
+            }
+            estadisticasDetalle.textContent = estadisticasTexto;
+            
+            // Mostrar resultados
+            listaResultados.innerHTML = '';
+            resultados.forEach(proyecto => {
+                const card = crearCardProyecto(proyecto);
+                listaResultados.appendChild(card);
+            });
+            
+            seccionResultados.style.display = 'block';
+        }
+        
+        // Función para crear card de proyecto
+        function crearCardProyecto(proyecto) {
+            const div = document.createElement('div');
+            div.className = 'col-lg-6 col-xl-4 mb-4';
+            div.innerHTML = `
+                <div class="card result-card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">${proyecto.Nombre}</h5>
+                        <span class="badge badge-custom">${proyecto.Fuente}</span>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text text-muted mb-3">
+                            <i class="bi bi-tag me-1"></i>${proyecto['Área de interés']}
+                        </p>
+                        <p class="card-text">
+                            <strong>Monto:</strong> ${proyecto.Monto}<br>
+                            <strong>Estado:</strong> 
+                            <span class="badge bg-${proyecto.Estado === 'Abierto' ? 'success' : 'secondary'}">
+                                ${proyecto.Estado}
+                            </span><br>
+                            <strong>Cierre:</strong> ${proyecto['Fecha cierre']}
+                        </p>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <div class="d-flex gap-2">
+                            <a href="/proyecto/${proyecto.ID - 1}" class="btn btn-iica btn-sm flex-fill">
+                                <i class="bi bi-eye me-1"></i>Ver Detalles
+                            </a>
+                            ${proyecto['Enlace Postulación'] ? 
+                                `<a href="${proyecto['Enlace Postulación']}" target="_blank" class="btn btn-iica-outline btn-sm">
+                                    <i class="bi bi-box-arrow-up-right me-1"></i>Postular
+                                </a>` : ''
+                            }
+                        </div>
+                    </div>
+                </div>
+            `;
+            return div;
+        }
+        
+        // Función para obtener sugerencias
+        async function obtenerSugerencias(texto) {
+            if (texto.length < 2) return;
+            
+            try {
+                const response = await fetch(`/api/sugerencias?texto=${encodeURIComponent(texto)}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    mostrarSugerencias(data.sugerencias);
+                }
+            } catch (error) {
+                console.error('Error obteniendo sugerencias:', error);
+            }
+        }
+        
+        // Función para mostrar sugerencias
+        function mostrarSugerencias(sugerencias) {
+            const contenedor = document.getElementById('sugerencias');
+            contenedor.innerHTML = '';
+            
+            sugerencias.forEach(sugerencia => {
+                const tag = document.createElement('span');
+                tag.className = 'suggestion-tag';
+                tag.textContent = sugerencia;
+                tag.onclick = () => {
+                    document.getElementById('texto').value = sugerencia;
+                    contenedor.innerHTML = '';
+                };
+                contenedor.appendChild(tag);
+            });
+        }
+        
+        // Función para limpiar formulario
+        function limpiarFormulario() {
+            document.getElementById('searchForm').reset();
+            document.getElementById('resultados').style.display = 'none';
+            document.getElementById('sugerencias').innerHTML = '';
+        }
+        
+        // Event listeners
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            realizarBusqueda();
+        });
+        
+        document.getElementById('texto').addEventListener('input', function(e) {
+            obtenerSugerencias(e.target.value);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fondos Disponibles - {{ config.nombre_plataforma }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --iica-azul: #0056b3;
+            --iica-verde: #28a745;
+            --iica-naranja: #fd7e14;
+            --iica-gris: #6c757d;
+            --iica-dorado: #ffc107;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #333;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--iica-azul), #003d82);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        
+        .logo-iica {
+            max-height: 50px;
+            margin-right: 15px;
+            filter: brightness(0) invert(1);
+        }
+        
+        .filtros-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .fondo-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-left: 6px solid var(--iica-verde);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .fondo-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--iica-verde), var(--iica-azul));
+            border-radius: 50%;
+            transform: translate(25px, -25px);
+            opacity: 0.1;
+        }
+        
+        .fondo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+        
+        .fondo-card.nacional {
+            border-left-color: var(--iica-azul);
+        }
+        
+        .fondo-card.internacional {
+            border-left-color: var(--iica-verde);
+        }
+        
+        .fondo-card.alta-prioridad {
+            border-left-color: var(--iica-dorado);
+            background: linear-gradient(135deg, #fff9e6, #ffffff);
+        }
+        
+        .fondo-card.urgente {
+            border-left-color: #dc3545;
+            animation: pulse-urgent 2s infinite;
+        }
+        
+        @keyframes pulse-urgent {
+            0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(220, 53, 69, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+        }
+        
+        .btn-iica {
+            background: linear-gradient(135deg, var(--iica-azul), var(--iica-verde));
+            border: none;
+            border-radius: 25px;
+            padding: 12px 25px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-iica:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            color: white;
+        }
+        
+        .btn-iica-outline {
+            background: transparent;
+            border: 2px solid var(--iica-azul);
+            border-radius: 25px;
+            padding: 10px 20px;
+            color: var(--iica-azul);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-iica-outline:hover {
+            background: var(--iica-azul);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .badge-prioridad {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        
+        .badge-prioridad.alta {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+        }
+        
+        .badge-prioridad.media {
+            background: linear-gradient(135deg, #ffc107, #e0a800);
+            color: #000;
+        }
+        
+        .badge-prioridad.baja {
+            background: linear-gradient(135deg, #6c757d, #5a6268);
+            color: white;
+        }
+        
+        .filtro-select {
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .filtro-select:focus {
+            border-color: var(--iica-azul);
+            box-shadow: 0 0 0 0.2rem rgba(0, 86, 179, 0.25);
+        }
+        
+        .search-input {
+            border: 3px solid #e9ecef;
+            border-radius: 25px;
+            padding: 15px 25px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            border-color: var(--iica-azul);
+            box-shadow: 0 0 0 0.2rem rgba(0, 86, 179, 0.25);
+        }
+        
+        .resultados-info {
+            background: linear-gradient(135deg, var(--iica-azul), var(--iica-verde));
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, #343a40, #495057);
+            color: white;
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="/static/logos/logo_iica_oficial.svg" alt="IICA Chile" class="logo-iica">
+                {{ config.nombre_plataforma }}
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Fondos Abiertos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/fondos-disponibles">Fondos Disponibles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/agregar-fondo">Agregar Fondo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/exportar">Exportar Excel</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>
+                <i class="fas fa-list text-primary me-3"></i>
+                Todos los Fondos Disponibles
+            </h1>
+            <a href="/" class="btn btn-iica-outline">
+                <i class="fas fa-arrow-left me-2"></i>Volver a Fondos Abiertos
+            </a>
+        </div>
+    </div>
+
+    <!-- Filtros Avanzados -->
+    <div class="container">
+        <div class="filtros-container">
+            <h4 class="mb-4">
+                <i class="fas fa-filter text-primary me-2"></i>
+                Filtros de Búsqueda
+            </h4>
+            
+            <form method="GET" action="/fondos-disponibles">
+                <div class="row">
+                    <!-- Búsqueda por texto -->
+                    <div class="col-md-4">
+                        <label for="q" class="form-label">Búsqueda por texto</label>
+                        <input type="text" class="form-control search-input" id="q" name="q" 
+                               placeholder="Nombre, organización, descripción..." value="{{ query }}">
+                    </div>
+                    
+                    <!-- Tipo de fondo -->
+                    <div class="col-md-2">
+                        <label for="tipo" class="form-label">Tipo</label>
+                        <select class="form-select filtro-select" id="tipo" name="tipo">
+                            <option value="">Todos</option>
+                            <option value="Nacional" {% if tipo == 'Nacional' %}selected{% endif %}>Nacional</option>
+                            <option value="Internacional" {% if tipo == 'Internacional' %}selected{% endif %}>Internacional</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Área -->
+                    <div class="col-md-2">
+                        <label for="area" class="form-label">Área</label>
+                        <select class="form-select filtro-select" id="area" name="area">
+                            <option value="">Todas</option>
+                            <option value="Biodiversidad" {% if area == 'Biodiversidad' %}selected{% endif %}>Biodiversidad</option>
+                            <option value="Innovación Tecnológica" {% if area == 'Innovación Tecnológica' %}selected{% endif %}>Innovación</option>
+                            <option value="Desarrollo Rural" {% if area == 'Desarrollo Rural' %}selected{% endif %}>Desarrollo Rural</option>
+                            <option value="Seguridad Alimentaria" {% if area == 'Seguridad Alimentaria' %}selected{% endif %}>Seguridad Alimentaria</option>
+                            <option value="Cambio Climático" {% if area == 'Cambio Climático' %}selected{% endif %}>Cambio Climático</option>
+                            <option value="Medio Ambiente" {% if area == 'Medio Ambiente' %}selected{% endif %}>Medio Ambiente</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Estado -->
+                    <div class="col-md-2">
+                        <label for="estado" class="form-label">Estado</label>
+                        <select class="form-select filtro-select" id="estado" name="estado">
+                            <option value="">Todos</option>
+                            <option value="Abierto" {% if estado == 'Abierto' %}selected{% endif %}>Abierto</option>
+                            <option value="Cerrado" {% if estado == 'Cerrado' %}selected{% endif %}>Cerrado</option>
+                            <option value="Ventanilla Abierta" {% if estado == 'Ventanilla Abierta' %}selected{% endif %}>Ventanilla Abierta</option>
+                            <option value="Próximo a Abrir" {% if estado == 'Próximo a Abrir' %}selected{% endif %}>Próximo a Abrir</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Botones -->
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-iica me-2">
+                            <i class="fas fa-search me-2"></i>Buscar
+                        </button>
+                        <a href="/fondos-disponibles" class="btn btn-iica-outline">
+                            <i class="fas fa-times me-2"></i>Limpiar
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Información de Resultados -->
+    <div class="container">
+        <div class="resultados-info">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list me-2"></i>
+                        {{ fondos|length }} fondos encontrados
+                    </h5>
+                </div>
+                <div class="col-md-6 text-end">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-light" onclick="ordenarPor('fecha')">
+                            <i class="fas fa-calendar me-1"></i>Por Fecha
+                        </button>
+                        <button type="button" class="btn btn-light" onclick="ordenarPor('prioridad')">
+                            <i class="fas fa-star me-1"></i>Por Prioridad
+                        </button>
+                        <button type="button" class="btn btn-light" onclick="ordenarPor('monto')">
+                            <i class="fas fa-dollar-sign me-1"></i>Por Monto
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de Fondos -->
+    <div class="container">
+        {% if fondos %}
+            {% for fondo in fondos %}
+            <div class="fondo-card {{ fondo.tipo.lower() }} {% if fondo.prioridad == 'Alta' %}alta-prioridad{% endif %} {% if fondo.prioridad == 'Crítica' %}urgente{% endif %}">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h4 class="mb-0">{{ fondo.nombre }}</h4>
+                            <span class="badge-prioridad {{ fondo.prioridad.lower() }}">
+                                {{ fondo.prioridad }}
+                            </span>
+                        </div>
+                        
+                        <p class="text-muted mb-2">
+                            <i class="fas fa-building me-2"></i>{{ fondo.organizacion }}
+                            <span class="badge bg-secondary ms-2">{{ fondo.tipo }}</span>
+                        </p>
+                        
+                        <p class="mb-3">{{ fondo.descripcion }}</p>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <p class="mb-1">
+                                    <i class="fas fa-dollar-sign text-success me-2"></i>
+                                    <strong>{{ fondo.monto }}</strong>
+                                </p>
+                                <p class="mb-1">
+                                    <i class="fas fa-clock text-warning me-2"></i>
+                                    <strong>Cierre:</strong> {{ fondo.fecha_cierre }}
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="mb-1">
+                                    <i class="fas fa-tag text-primary me-2"></i>
+                                    <strong>Área:</strong> {{ fondo.area }}
+                                </p>
+                                <p class="mb-1">
+                                    <i class="fas fa-folder text-info me-2"></i>
+                                    <strong>Categoría:</strong> {{ fondo.categoria }}
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <span class="badge bg-primary me-2">{{ fondo.area }}</span>
+                            <span class="badge bg-secondary me-2">{{ fondo.categoria }}</span>
+                            <span class="badge bg-success me-2">{{ fondo.estado }}</span>
+                            <span class="badge bg-info">{{ fondo.fuente }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 text-end">
+                        <div class="d-grid gap-2">
+                            <a href="/fondo/{{ fondo.id }}" class="btn btn-iica">
+                                <i class="fas fa-eye me-2"></i>Ver Detalles
+                            </a>
+                            {% if fondo.estado == 'Abierto' %}
+                            <a href="/fondo/{{ fondo.id }}" class="btn btn-iica-outline">
+                                <i class="fas fa-paper-plane me-2"></i>Postular
+                            </a>
+                            {% endif %}
+                            {% if fondo.enlace %}
+                            <a href="{{ fondo.enlace }}" class="btn btn-iica-outline" target="_blank">
+                                <i class="fas fa-external-link-alt me-2"></i>Sitio Oficial
+                            </a>
+                            {% endif %}
+                        </div>
+                        
+                        {% if fondo.documentos_requeridos %}
+                        <div class="mt-3">
+                            <h6 class="text-muted">Documentos Requeridos:</h6>
+                            <ul class="list-unstyled small">
+                                {% for doc in fondo.documentos_requeridos[:3] %}
+                                <li><i class="fas fa-file me-1"></i>{{ doc }}</li>
+                                {% endfor %}
+                                {% if fondo.documentos_requeridos|length > 3 %}
+                                <li><i class="fas fa-ellipsis-h me-1"></i>Y {{ fondo.documentos_requeridos|length - 3 }} más...</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No se encontraron fondos</h4>
+                <p class="text-muted">Intenta ajustar los filtros de búsqueda</p>
+                <a href="/fondos-disponibles" class="btn btn-iica">
+                    <i class="fas fa-refresh me-2"></i>Ver Todos los Fondos
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>IICA Chile</h5>
+                    <p>Portal de Oportunidades de Financiamiento</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <h6>Enlaces Institucionales</h6>
+                    <a href="{{ config.datos_institucionales.sitio_web }}" class="text-light me-3" target="_blank">Sitio Web IICA Chile</a>
+                    <a href="https://iica.int/es/" class="text-light me-3" target="_blank">IICA Global</a>
+                    <a href="mailto:{{ config.datos_institucionales.email }}" class="text-light">Contacto</a>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p>&copy; 2025 IICA Chile. Todos los derechos reservados.</p>
+                <small>Versión {{ config.version }} - Última actualización: {{ config.ultima_actualizacion }}</small>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Ordenar resultados
+        function ordenarPor(criterio) {
+            const fondos = document.querySelectorAll('.fondo-card');
+            const fondosArray = Array.from(fondos);
+            
+            fondosArray.sort((a, b) => {
+                // Implementar lógica de ordenamiento según criterio
+                // Por simplicidad, solo reordenamos visualmente
+                return Math.random() - 0.5;
+            });
+            
+            // Reorganizar en el DOM
+            const container = document.querySelector('.container');
+            fondosArray.forEach(fondo => {
+                container.appendChild(fondo);
+            });
+        }
+        
+        // Auto-submit del formulario cuando cambian los filtros
+        document.querySelectorAll('.filtro-select').forEach(select => {
+            select.addEventListener('change', function() {
+                // Opcional: auto-submit cuando cambian los filtros
+                // this.form.submit();
+            });
+        });
+    </script>
+</body>
+</html>
+

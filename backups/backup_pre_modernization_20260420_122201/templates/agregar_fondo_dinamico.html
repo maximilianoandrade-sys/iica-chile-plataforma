@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Fondo - Plataforma IICA Chile</title>
+    
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #1e3a8a;
+            --secondary-color: #3b82f6;
+            --accent-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --success-color: #10b981;
+            --dark-color: #1f2937;
+            --light-color: #f8fafc;
+            --gradient-primary: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            --gradient-secondary: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-large: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+
+        .header-dinamico {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .logo-iica {
+            height: 60px;
+            width: auto;
+            filter: brightness(0) invert(1);
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: var(--shadow-large);
+            margin: 2rem 0;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--light-color);
+            border-radius: 15px;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .form-section h4 {
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e5e7eb;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn-submit {
+            background: var(--gradient-primary);
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn-cancel {
+            background: #6b7280;
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel:hover {
+            background: #4b5563;
+            color: white;
+            text-decoration: none;
+        }
+
+        .required {
+            color: var(--danger-color);
+        }
+
+        .help-text {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .success-message {
+            background: #dcfce7;
+            color: #166534;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .form-row .col {
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 2rem 1rem;
+            }
+            
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header-dinamico">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center">
+                        <img src="/static/logos/logo_iica_oficial.svg" alt="IICA Chile" class="logo-iica me-3">
+                        <div>
+                            <h2 class="mb-0">Agregar Nuevo Fondo</h2>
+                            <p class="mb-0 opacity-75">Añade oportunidades de financiamiento a la plataforma</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <a href="/" class="btn btn-outline-light me-2">
+                        <i class="fas fa-home me-2"></i>Inicio
+                    </a>
+                    <a href="/fondos-disponibles" class="btn btn-light">
+                        <i class="fas fa-list me-2"></i>Ver Fondos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Formulario -->
+    <section class="container mt-4">
+        <div class="form-container" data-aos="fade-up">
+            <!-- Mensajes -->
+            <div id="success-message" class="success-message">
+                <i class="fas fa-check-circle me-2"></i>
+                <span id="success-text">Fondo agregado exitosamente</span>
+            </div>
+            
+            <div id="error-message" class="error-message">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <span id="error-text">Error al agregar el fondo</span>
+            </div>
+
+            <form id="fondo-form">
+                <!-- Información Básica -->
+                <div class="form-section" data-aos="fade-up" data-aos-delay="100">
+                    <h4><i class="fas fa-info-circle me-2"></i>Información Básica</h4>
+                    
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label for="nombre" class="form-label">Nombre del Fondo <span class="required">*</span></label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                            <div class="help-text">Nombre oficial del fondo o programa</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="organizacion" class="form-label">Organización <span class="required">*</span></label>
+                            <input type="text" class="form-control" id="organizacion" name="organizacion" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label for="tipo" class="form-label">Tipo de Fondo <span class="required">*</span></label>
+                            <select class="form-select" id="tipo" name="tipo" required>
+                                <option value="">Seleccionar tipo</option>
+                                <option value="Nacional">Nacional</option>
+                                <option value="Internacional">Internacional</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="pais" class="form-label">País/Región</label>
+                            <input type="text" class="form-control" id="pais" name="pais" placeholder="Chile, Regional, Global">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información Financiera -->
+                <div class="form-section" data-aos="fade-up" data-aos-delay="200">
+                    <h4><i class="fas fa-dollar-sign me-2"></i>Información Financiera</h4>
+                    
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="monto" class="form-label">Monto <span class="required">*</span></label>
+                            <input type="text" class="form-control" id="monto" name="monto" required placeholder="CLP 500,000,000">
+                            <div class="help-text">Ejemplo: CLP 500,000,000 o USD 1,000,000</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="tipo_financiamiento" class="form-label">Tipo de Financiamiento</label>
+                            <select class="form-select" id="tipo_financiamiento" name="tipo_financiamiento">
+                                <option value="">Seleccionar tipo</option>
+                                <option value="Subsidio">Subsidio</option>
+                                <option value="Crédito">Crédito</option>
+                                <option value="Subsidio + Crédito">Subsidio + Crédito</option>
+                                <option value="Donación">Donación</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="duracion" class="form-label">Duración</label>
+                            <input type="text" class="form-control" id="duracion" name="duracion" placeholder="24 meses">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fechas y Estado -->
+                <div class="form-section" data-aos="fade-up" data-aos-delay="300">
+                    <h4><i class="fas fa-calendar me-2"></i>Fechas y Estado</h4>
+                    
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="fecha_cierre" class="form-label">Fecha de Cierre <span class="required">*</span></label>
+                            <input type="date" class="form-control" id="fecha_cierre" name="fecha_cierre" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="estado" class="form-label">Estado <span class="required">*</span></label>
+                            <select class="form-select" id="estado" name="estado" required>
+                                <option value="">Seleccionar estado</option>
+                                <option value="Abierto">Abierto</option>
+                                <option value="Cerrado">Cerrado</option>
+                                <option value="Ventanilla Abierta">Ventanilla Abierta</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="prioridad" class="form-label">Prioridad</label>
+                            <select class="form-select" id="prioridad" name="prioridad">
+                                <option value="">Seleccionar prioridad</option>
+                                <option value="Alta">Alta</option>
+                                <option value="Media">Media</option>
+                                <option value="Baja">Baja</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clasificación -->
+                <div class="form-section" data-aos="fade-up" data-aos-delay="400">
+                    <h4><i class="fas fa-tags me-2"></i>Clasificación</h4>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="area" class="form-label">Área Temática <span class="required">*</span></label>
+                            <select class="form-select" id="area" name="area" required>
+                                <option value="">Seleccionar área</option>
+                                <option value="Innovación Tecnológica">Innovación Tecnológica</option>
+                                <option value="Agricultura">Agricultura</option>
+                                <option value="Desarrollo Rural">Desarrollo Rural</option>
+                                <option value="Sostenibilidad">Sostenibilidad</option>
+                                <option value="Tecnología">Tecnología</option>
+                                <option value="Medio Ambiente">Medio Ambiente</option>
+                                <option value="Capacitación">Capacitación</option>
+                                <option value="I+D">I+D</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="categoria" class="form-label">Categoría</label>
+                            <input type="text" class="form-control" id="categoria" name="categoria" placeholder="Agricultura, Innovación, etc.">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Descripción y Requisitos -->
+                <div class="form-section" data-aos="fade-up" data-aos-delay="500">
+                    <h4><i class="fas fa-file-text me-2"></i>Descripción y Requisitos</h4>
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="descripcion" class="form-label">Descripción <span class="required">*</span></label>
+                            <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <label for="requisitos" class="form-label">Requisitos</label>
+                            <textarea class="form-control" id="requisitos" name="requisitos" rows="2" placeholder="Empresas agrícolas, cooperativas, centros de investigación..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <label for="beneficiarios" class="form-label">Beneficiarios</label>
+                            <input type="text" class="form-control" id="beneficiarios" name="beneficiarios" placeholder="Sector agrícola chileno, Pymes, etc.">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enlaces y Contacto -->
+                <div class="form-section" data-aos="fade-up" data-aos-delay="600">
+                    <h4><i class="fas fa-link me-2"></i>Enlaces y Contacto</h4>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="enlace" class="form-label">URL Principal</label>
+                            <input type="url" class="form-control" id="enlace" name="enlace" placeholder="https://ejemplo.com">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="contacto" class="form-label">Contacto</label>
+                            <input type="email" class="form-control" id="contacto" name="contacto" placeholder="contacto@organizacion.com">
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <label for="fuente" class="form-label">Fuente</label>
+                            <input type="text" class="form-control" id="fuente" name="fuente" placeholder="CORFO Chile, BID, FAO, etc.">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Documentos Requeridos -->
+                <div class="form-section" data-aos="fade-up" data-aos-delay="700">
+                    <h4><i class="fas fa-file-alt me-2"></i>Documentos Requeridos</h4>
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="documentos_requeridos" class="form-label">Documentos (uno por línea)</label>
+                            <textarea class="form-control" id="documentos_requeridos" name="documentos_requeridos" rows="3" placeholder="Formulario de postulación&#10;Plan de negocio&#10;Presupuesto desglosado"></textarea>
+                            <div class="help-text">Escribe cada documento en una línea separada</div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <label for="formularios" class="form-label">Enlaces a Formularios (uno por línea)</label>
+                            <textarea class="form-control" id="formularios" name="formularios" rows="2" placeholder="https://ejemplo.com/formulario1&#10;https://ejemplo.com/formulario2"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="form-actions" data-aos="fade-up" data-aos-delay="800">
+                    <button type="submit" class="btn-submit" id="submit-btn">
+                        <i class="fas fa-plus me-2"></i>Agregar Fondo
+                    </button>
+                    <a href="/fondos-disponibles" class="btn-cancel">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Inicializar AOS
+        AOS.init({
+            duration: 600,
+            easing: 'ease-in-out',
+            once: true
+        });
+
+        // Manejar envío del formulario
+        document.getElementById('fondo-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submit-btn');
+            const originalText = submitBtn.innerHTML;
+            
+            // Mostrar loading
+            submitBtn.innerHTML = '<div class="loading-spinner"></div> Agregando...';
+            submitBtn.disabled = true;
+            
+            try {
+                // Recopilar datos del formulario
+                const formData = new FormData(this);
+                const datos = {};
+                
+                // Convertir FormData a objeto
+                for (let [key, value] of formData.entries()) {
+                    if (key === 'documentos_requeridos' || key === 'formularios') {
+                        // Convertir texto a array
+                        datos[key] = value.split('\n').filter(item => item.trim() !== '');
+                    } else {
+                        datos[key] = value;
+                    }
+                }
+                
+                // Enviar datos
+                const response = await fetch('/api/agregar-fondo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(datos)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    mostrarMensaje('success', 'Fondo agregado exitosamente');
+                    this.reset();
+                } else {
+                    mostrarMensaje('error', result.message || 'Error al agregar el fondo');
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarMensaje('error', 'Error de conexión. Intenta nuevamente.');
+            } finally {
+                // Restaurar botón
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Mostrar mensajes
+        function mostrarMensaje(tipo, mensaje) {
+            const successMsg = document.getElementById('success-message');
+            const errorMsg = document.getElementById('error-message');
+            const successText = document.getElementById('success-text');
+            const errorText = document.getElementById('error-text');
+            
+            // Ocultar todos los mensajes
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+            
+            if (tipo === 'success') {
+                successText.textContent = mensaje;
+                successMsg.style.display = 'block';
+                
+                // Ocultar después de 5 segundos
+                setTimeout(() => {
+                    successMsg.style.display = 'none';
+                }, 5000);
+            } else {
+                errorText.textContent = mensaje;
+                errorMsg.style.display = 'block';
+                
+                // Ocultar después de 5 segundos
+                setTimeout(() => {
+                    errorMsg.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // Validación en tiempo real
+        document.querySelectorAll('input[required], select[required], textarea[required]').forEach(input => {
+            input.addEventListener('blur', function() {
+                if (!this.value.trim()) {
+                    this.classList.add('is-invalid');
+                } else {
+                    this.classList.remove('is-invalid');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+

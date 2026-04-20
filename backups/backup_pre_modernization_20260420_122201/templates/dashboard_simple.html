@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma IICA Chile - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            padding: 30px;
+        }
+        
+        .header-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border-radius: 15px;
+            color: white;
+        }
+        
+        .stats-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #28a745;
+        }
+        
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #007bff;
+        }
+        
+        .search-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #6c757d;
+        }
+        
+        .no-projects {
+            text-align: center;
+            padding: 50px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="main-container">
+            <!-- Header Section -->
+            <div class="header-section">
+                <h1><i class="fas fa-seedling me-3"></i>Plataforma IICA Chile</h1>
+                <p class="mb-0">Portal de Financiamiento para el Desarrollo Rural y Agrícola</p>
+            </div>
+            
+            <!-- Statistics Section -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <h3><i class="fas fa-project-diagram text-primary"></i> <span id="total-projects">-</span></h3>
+                        <p class="mb-0">Proyectos Disponibles</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <h3><i class="fas fa-building text-success"></i> <span id="total-sources">-</span></h3>
+                        <p class="mb-0">Fuentes de Financiamiento</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <h3><i class="fas fa-dollar-sign text-warning"></i> <span id="total-amount">-</span></h3>
+                        <p class="mb-0">Monto Total Estimado</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <h3><i class="fas fa-clock text-info"></i> <span id="open-projects">-</span></h3>
+                        <p class="mb-0">Proyectos Abiertos</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Search Section -->
+            <div class="search-section">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                            <input type="text" class="form-control" id="search-input" placeholder="Buscar proyectos por nombre, descripción o fuente...">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-select" id="source-filter">
+                            <option value="">Todas las fuentes</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Projects Section -->
+            <div id="projects-container">
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin fa-2x"></i>
+                    <p>Cargando proyectos...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let allProjects = [];
+        let filteredProjects = [];
+        
+        // Función principal de carga
+        function loadProjects() {
+            console.log('🔄 Iniciando carga de proyectos...');
+            
+            fetch('/api/proyectos')
+                .then(response => {
+                    console.log('📡 Respuesta recibida:', response.status);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('📊 Datos recibidos:', data);
+                    allProjects = data.proyectos || [];
+                    filteredProjects = [...allProjects];
+                    
+                    console.log(`✅ ${allProjects.length} proyectos cargados`);
+                    
+                    updateStatistics();
+                    populateSourceFilter();
+                    displayProjects();
+                    setupEventListeners();
+                })
+                .catch(error => {
+                    console.error('❌ Error cargando proyectos:', error);
+                    showError();
+                });
+        }
+        
+        // Mostrar error
+        function showError() {
+            document.getElementById('projects-container').innerHTML = `
+                <div class="no-projects">
+                    <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
+                    <h4>Error cargando proyectos</h4>
+                    <p>No se pudieron cargar los proyectos. Por favor, intenta nuevamente.</p>
+                    <button class="btn btn-primary" onclick="loadProjects()">Reintentar</button>
+                </div>
+            `;
+        }
+        
+        // Actualizar estadísticas
+        function updateStatistics() {
+            console.log('📈 Actualizando estadísticas...');
+            
+            document.getElementById('total-projects').textContent = allProjects.length;
+            
+            const sources = [...new Set(allProjects.map(p => p.Fuente))];
+            document.getElementById('total-sources').textContent = sources.length;
+            
+            const openProjects = allProjects.filter(p => p.Estado === 'Abierto').length;
+            document.getElementById('open-projects').textContent = openProjects;
+            
+            // Calcular monto total
+            let totalAmount = 0;
+            allProjects.forEach(p => {
+                if (p.Monto && p.Monto !== 'Consultar' && p.Monto !== 'Variable') {
+                    const monto = p.Monto.toString();
+                    if (monto.includes('USD')) {
+                        const value = parseFloat(monto.replace(/[^\d.]/g, ''));
+                        if (!isNaN(value)) totalAmount += value;
+                    }
+                }
+            });
+            document.getElementById('total-amount').textContent = totalAmount > 0 ? `$${totalAmount.toLocaleString()} USD` : 'Variable';
+            
+            console.log('✅ Estadísticas actualizadas');
+        }
+        
+        // Poblar filtro de fuentes
+        function populateSourceFilter() {
+            console.log('🔧 Poblando filtro de fuentes...');
+            
+            const sources = [...new Set(allProjects.map(p => p.Fuente))].sort();
+            const select = document.getElementById('source-filter');
+            select.innerHTML = '<option value="">Todas las fuentes</option>';
+            
+            sources.forEach(source => {
+                const option = document.createElement('option');
+                option.value = source;
+                option.textContent = source;
+                select.appendChild(option);
+            });
+            
+            console.log(`✅ ${sources.length} fuentes agregadas al filtro`);
+        }
+        
+        // Mostrar proyectos
+        function displayProjects() {
+            console.log('📋 Mostrando proyectos...');
+            
+            const container = document.getElementById('projects-container');
+            const projectsToShow = filteredProjects.slice(0, 20); // Mostrar solo los primeros 20
+            
+            if (projectsToShow.length === 0) {
+                container.innerHTML = `
+                    <div class="no-projects">
+                        <i class="fas fa-search fa-3x mb-3"></i>
+                        <h4>No se encontraron proyectos</h4>
+                        <p>Intenta ajustar los filtros de búsqueda.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            projectsToShow.forEach((project, index) => {
+                const statusClass = project.Estado === 'Abierto' ? 'bg-success' : 'bg-secondary';
+                const statusText = project.Estado === 'Abierto' ? 'Abierto' : 'Cerrado';
+                
+                html += `
+                    <div class="project-card">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h5 class="mb-2">${project.Nombre || 'Sin nombre'}</h5>
+                                <p class="text-muted mb-2">
+                                    <i class="fas fa-building me-2"></i>${project.Fuente || 'Sin fuente'}
+                                </p>
+                                <div class="mb-2">
+                                    <span class="badge bg-primary me-2">${project['Área de interés'] || 'General'}</span>
+                                    <span class="badge ${statusClass}">${statusText}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="mb-2">
+                                    <strong class="text-success">${project.Monto || 'Consultar'}</strong>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-muted">Cierre: ${project['Fecha cierre'] || 'N/A'}</small>
+                                </div>
+                                <div>
+                                    <a href="${project.Enlace || '#'}" target="_blank" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-external-link-alt me-1"></i>Ver Proyecto
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            console.log(`✅ ${projectsToShow.length} proyectos mostrados`);
+        }
+        
+        // Filtrar proyectos
+        function filterProjects() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const sourceFilter = document.getElementById('source-filter').value;
+            
+            filteredProjects = allProjects.filter(project => {
+                const matchesSearch = !searchTerm || 
+                    (project.Nombre && project.Nombre.toLowerCase().includes(searchTerm)) ||
+                    (project.Descripción && project.Descripción.toLowerCase().includes(searchTerm)) ||
+                    (project.Fuente && project.Fuente.toLowerCase().includes(searchTerm));
+                
+                const matchesSource = !sourceFilter || project.Fuente === sourceFilter;
+                
+                return matchesSearch && matchesSource;
+            });
+            
+            displayProjects();
+        }
+        
+        // Configurar event listeners
+        function setupEventListeners() {
+            console.log('🔧 Configurando event listeners...');
+            
+            document.getElementById('search-input').addEventListener('input', filterProjects);
+            document.getElementById('source-filter').addEventListener('change', filterProjects);
+            
+            console.log('✅ Event listeners configurados');
+        }
+        
+        // Inicializar cuando se carga la página
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Iniciando aplicación...');
+            loadProjects();
+        });
+    </script>
+</body>
+</html>

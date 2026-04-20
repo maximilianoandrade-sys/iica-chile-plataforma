@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postular a {{ fondo.nombre }} - Plataforma IICA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            padding: 30px;
+        }
+        
+        .fondo-info {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .form-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-custom {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+            font-weight: 600;
+            color: #6c757d;
+        }
+        
+        .step.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .step.completed {
+            background: #28a745;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="main-container">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <a href="/fondo/{{ fondo.id }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>Volver al Fondo
+                </a>
+                <div>
+                    <a href="/" class="btn btn-outline-primary me-2">
+                        <i class="fas fa-home me-1"></i>Inicio
+                    </a>
+                    <a href="/fondos" class="btn btn-outline-info">
+                        <i class="fas fa-search me-1"></i>Buscar Fondos
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Fondo Info -->
+            <div class="fondo-info">
+                <h2 class="mb-3">{{ fondo.nombre }}</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="mb-2">
+                            <i class="fas fa-building me-2"></i>{{ fondo.organizacion }}
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-dollar-sign me-2"></i>{{ fondo.monto }}
+                        </p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <p class="mb-2">
+                            <i class="fas fa-calendar me-2"></i>Cierre: {{ fondo.fecha_cierre }}
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-clock me-2"></i>Duración: {{ fondo.duracion }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step active">1</div>
+                <div class="step">2</div>
+                <div class="step">3</div>
+                <div class="step">4</div>
+            </div>
+            
+            <!-- Formulario de Postulación -->
+            <form id="postulacion-form" method="POST" action="/api/postular">
+                <input type="hidden" name="fondo_id" value="{{ fondo.id }}">
+                
+                <!-- Paso 1: Información de la Organización -->
+                <div class="form-section" id="step-1">
+                    <h4><i class="fas fa-building text-primary me-2"></i>Información de la Organización</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="nombre_organizacion" class="form-label">Nombre de la Organización *</label>
+                                <input type="text" class="form-control" id="nombre_organizacion" name="nombre_organizacion" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="tipo_organizacion" class="form-label">Tipo de Organización *</label>
+                                <select class="form-select" id="tipo_organizacion" name="tipo_organizacion" required>
+                                    <option value="">Seleccionar...</option>
+                                    <option value="Gobierno">Gobierno</option>
+                                    <option value="ONG">ONG</option>
+                                    <option value="Universidad">Universidad</option>
+                                    <option value="Centro de Investigación">Centro de Investigación</option>
+                                    <option value="Cooperativa">Cooperativa</option>
+                                    <option value="Empresa">Empresa</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="pais" class="form-label">País *</label>
+                                <input type="text" class="form-control" id="pais" name="pais" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="ciudad" class="form-label">Ciudad *</label>
+                                <input type="text" class="form-control" id="ciudad" name="ciudad" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion_organizacion" class="form-label">Descripción de la Organización *</label>
+                        <textarea class="form-control" id="descripcion_organizacion" name="descripcion_organizacion" rows="3" required></textarea>
+                    </div>
+                </div>
+                
+                <!-- Paso 2: Información del Proyecto -->
+                <div class="form-section" id="step-2" style="display: none;">
+                    <h4><i class="fas fa-project-diagram text-success me-2"></i>Información del Proyecto</h4>
+                    <div class="mb-3">
+                        <label for="nombre_proyecto" class="form-label">Nombre del Proyecto *</label>
+                        <input type="text" class="form-control" id="nombre_proyecto" name="nombre_proyecto" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion_proyecto" class="form-label">Descripción del Proyecto *</label>
+                        <textarea class="form-control" id="descripcion_proyecto" name="descripcion_proyecto" rows="4" required></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="duracion_proyecto" class="form-label">Duración del Proyecto (meses) *</label>
+                                <input type="number" class="form-control" id="duracion_proyecto" name="duracion_proyecto" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="monto_solicitado" class="form-label">Monto Solicitado *</label>
+                                <input type="text" class="form-control" id="monto_solicitado" name="monto_solicitado" placeholder="Ej: USD 500,000" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="objetivos_proyecto" class="form-label">Objetivos del Proyecto *</label>
+                        <textarea class="form-control" id="objetivos_proyecto" name="objetivos_proyecto" rows="3" required></textarea>
+                    </div>
+                </div>
+                
+                <!-- Paso 3: Información de Contacto -->
+                <div class="form-section" id="step-3" style="display: none;">
+                    <h4><i class="fas fa-user text-info me-2"></i>Información de Contacto</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="nombre_contacto" class="form-label">Nombre del Contacto Principal *</label>
+                                <input type="text" class="form-control" id="nombre_contacto" name="nombre_contacto" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="cargo_contacto" class="form-label">Cargo *</label>
+                                <input type="text" class="form-control" id="cargo_contacto" name="cargo_contacto" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="email_contacto" class="form-label">Email *</label>
+                                <input type="email" class="form-control" id="email_contacto" name="email_contacto" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="telefono_contacto" class="form-label">Teléfono *</label>
+                                <input type="tel" class="form-control" id="telefono_contacto" name="telefono_contacto" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Paso 4: Documentos y Envío -->
+                <div class="form-section" id="step-4" style="display: none;">
+                    <h4><i class="fas fa-file-alt text-warning me-2"></i>Documentos y Envío</h4>
+                    <div class="mb-3">
+                        <label for="documentos_adjuntos" class="form-label">Documentos Adjuntos</label>
+                        <input type="file" class="form-control" id="documentos_adjuntos" name="documentos_adjuntos" multiple>
+                        <div class="form-text">Sube documentos relevantes (PDF, DOC, etc.)</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="comentarios_adicionales" class="form-label">Comentarios Adicionales</label>
+                        <textarea class="form-control" id="comentarios_adicionales" name="comentarios_adicionales" rows="3"></textarea>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="acepto_terminos" name="acepto_terminos" required>
+                        <label class="form-check-label" for="acepto_terminos">
+                            Acepto los términos y condiciones de la postulación *
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Botones de Navegación -->
+                <div class="d-flex justify-content-between">
+                    <button type="button" class="btn btn-outline-secondary" id="btn-anterior" onclick="anteriorPaso()" style="display: none;">
+                        <i class="fas fa-arrow-left me-1"></i>Anterior
+                    </button>
+                    <button type="button" class="btn btn-custom" id="btn-siguiente" onclick="siguientePaso()">
+                        Siguiente <i class="fas fa-arrow-right ms-1"></i>
+                    </button>
+                    <button type="submit" class="btn btn-success" id="btn-enviar" style="display: none;">
+                        <i class="fas fa-paper-plane me-1"></i>Enviar Postulación
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let pasoActual = 1;
+        const totalPasos = 4;
+        
+        function siguientePaso() {
+            if (validarPasoActual()) {
+                if (pasoActual < totalPasos) {
+                    document.getElementById(`step-${pasoActual}`).style.display = 'none';
+                    pasoActual++;
+                    document.getElementById(`step-${pasoActual}`).style.display = 'block';
+                    actualizarIndicadores();
+                    actualizarBotones();
+                }
+            }
+        }
+        
+        function anteriorPaso() {
+            if (pasoActual > 1) {
+                document.getElementById(`step-${pasoActual}`).style.display = 'none';
+                pasoActual--;
+                document.getElementById(`step-${pasoActual}`).style.display = 'block';
+                actualizarIndicadores();
+                actualizarBotones();
+            }
+        }
+        
+        function actualizarIndicadores() {
+            const steps = document.querySelectorAll('.step');
+            steps.forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index + 1 < pasoActual) {
+                    step.classList.add('completed');
+                } else if (index + 1 === pasoActual) {
+                    step.classList.add('active');
+                }
+            });
+        }
+        
+        function actualizarBotones() {
+            const btnAnterior = document.getElementById('btn-anterior');
+            const btnSiguiente = document.getElementById('btn-siguiente');
+            const btnEnviar = document.getElementById('btn-enviar');
+            
+            btnAnterior.style.display = pasoActual > 1 ? 'block' : 'none';
+            
+            if (pasoActual === totalPasos) {
+                btnSiguiente.style.display = 'none';
+                btnEnviar.style.display = 'block';
+            } else {
+                btnSiguiente.style.display = 'block';
+                btnEnviar.style.display = 'none';
+            }
+        }
+        
+        function validarPasoActual() {
+            const step = document.getElementById(`step-${pasoActual}`);
+            const inputs = step.querySelectorAll('input[required], select[required], textarea[required]');
+            
+            for (let input of inputs) {
+                if (!input.value.trim()) {
+                    input.classList.add('is-invalid');
+                    alert(`Por favor, completa el campo: ${input.previousElementSibling.textContent}`);
+                    return false;
+                } else {
+                    input.classList.remove('is-invalid');
+                }
+            }
+            return true;
+        }
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            actualizarIndicadores();
+            actualizarBotones();
+        });
+    </script>
+</body>
+</html>

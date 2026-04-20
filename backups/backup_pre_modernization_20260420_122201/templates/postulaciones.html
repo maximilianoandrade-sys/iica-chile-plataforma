@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Postulaciones - Plataforma IICA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            padding: 30px;
+        }
+        
+        .stats-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #28a745;
+        }
+        
+        .postulacion-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #007bff;
+            transition: all 0.3s ease;
+        }
+        
+        .postulacion-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .postulacion-card.en-proceso {
+            border-left-color: #ffc107;
+        }
+        
+        .postulacion-card.aprobada {
+            border-left-color: #28a745;
+        }
+        
+        .postulacion-card.rechazada {
+            border-left-color: #dc3545;
+        }
+        
+        .btn-custom {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+        
+        .badge-custom {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        
+        .no-postulaciones {
+            text-align: center;
+            padding: 50px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="main-container">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1><i class="fas fa-file-alt text-primary me-3"></i>Mis Postulaciones</h1>
+                <div>
+                    <a href="/" class="btn btn-outline-secondary me-2">
+                        <i class="fas fa-home me-1"></i>Inicio
+                    </a>
+                    <a href="/fondos" class="btn btn-custom">
+                        <i class="fas fa-search me-1"></i>Buscar Fondos
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Statistics -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <h3><i class="fas fa-file-alt text-primary"></i> <span id="total-postulaciones">-</span></h3>
+                        <p class="mb-0">Total Postulaciones</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <h3><i class="fas fa-clock text-warning"></i> <span id="en-proceso">-</span></h3>
+                        <p class="mb-0">En Proceso</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <h3><i class="fas fa-check-circle text-success"></i> <span id="aprobadas">-</span></h3>
+                        <p class="mb-0">Aprobadas</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <h3><i class="fas fa-times-circle text-danger"></i> <span id="rechazadas">-</span></h3>
+                        <p class="mb-0">Rechazadas</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Postulaciones List -->
+            <div id="postulaciones-container">
+                {% if postulaciones %}
+                    {% for postulacion in postulaciones %}
+                    <div class="postulacion-card {{ postulacion.estado.lower().replace(' ', '-') }}">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h4 class="mb-2">{{ postulacion.datos.nombre_proyecto }}</h4>
+                                <p class="text-muted mb-2">
+                                    <i class="fas fa-building me-2"></i>{{ postulacion.datos.nombre_organizacion }}
+                                </p>
+                                <p class="mb-3">{{ postulacion.datos.descripcion_proyecto[:150] }}...</p>
+                                <div class="mb-2">
+                                    <span class="badge badge-custom bg-primary me-2">{{ postulacion.datos.tipo_organizacion }}</span>
+                                    <span class="badge badge-custom bg-{% if postulacion.estado == 'En Proceso' %}warning{% elif postulacion.estado == 'Aprobada' %}success{% else %}danger{% endif %}">
+                                        {{ postulacion.estado }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="mb-2">
+                                    <strong class="text-success fs-5">{{ postulacion.datos.monto_solicitado }}</strong>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar me-1"></i>Creada: {{ postulacion.fecha_creacion[:10] }}
+                                    </small>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-muted">
+                                        <i class="fas fa-clock me-1"></i>Duración: {{ postulacion.datos.duracion_proyecto }} meses
+                                    </small>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-outline-primary btn-sm" onclick="verDetalles('{{ postulacion.id }}')">
+                                        <i class="fas fa-eye me-1"></i>Ver Detalles
+                                    </button>
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="editarPostulacion('{{ postulacion.id }}')">
+                                        <i class="fas fa-edit me-1"></i>Editar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-postulaciones">
+                        <i class="fas fa-file-alt fa-3x mb-3"></i>
+                        <h4>No tienes postulaciones</h4>
+                        <p>Comienza postulando a los fondos disponibles.</p>
+                        <a href="/fondos" class="btn btn-custom">
+                            <i class="fas fa-search me-1"></i>Buscar Fondos
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Detalles -->
+    <div class="modal fade" id="detallesModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalles de la Postulación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="detalles-content">
+                    <!-- Contenido dinámico -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Cargar estadísticas
+        function cargarEstadisticas() {
+            const postulaciones = {{ postulaciones | tojson | safe }};
+            
+            document.getElementById('total-postulaciones').textContent = postulaciones.length;
+            document.getElementById('en-proceso').textContent = postulaciones.filter(p => p.estado === 'En Proceso').length;
+            document.getElementById('aprobadas').textContent = postulaciones.filter(p => p.estado === 'Aprobada').length;
+            document.getElementById('rechazadas').textContent = postulaciones.filter(p => p.estado === 'Rechazada').length;
+        }
+        
+        // Ver detalles de postulación
+        function verDetalles(postulacionId) {
+            const postulaciones = {{ postulaciones | tojson | safe }};
+            const postulacion = postulaciones.find(p => p.id === postulacionId);
+            
+            if (postulacion) {
+                const content = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Información del Proyecto</h6>
+                            <p><strong>Nombre:</strong> ${postulacion.datos.nombre_proyecto}</p>
+                            <p><strong>Descripción:</strong> ${postulacion.datos.descripcion_proyecto}</p>
+                            <p><strong>Duración:</strong> ${postulacion.datos.duracion_proyecto} meses</p>
+                            <p><strong>Monto:</strong> ${postulacion.datos.monto_solicitado}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Información de la Organización</h6>
+                            <p><strong>Organización:</strong> ${postulacion.datos.nombre_organizacion}</p>
+                            <p><strong>Tipo:</strong> ${postulacion.datos.tipo_organizacion}</p>
+                            <p><strong>País:</strong> ${postulacion.datos.pais}</p>
+                            <p><strong>Ciudad:</strong> ${postulacion.datos.ciudad}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h6>Contacto</h6>
+                            <p><strong>Nombre:</strong> ${postulacion.datos.nombre_contacto}</p>
+                            <p><strong>Cargo:</strong> ${postulacion.datos.cargo_contacto}</p>
+                            <p><strong>Email:</strong> ${postulacion.datos.email_contacto}</p>
+                            <p><strong>Teléfono:</strong> ${postulacion.datos.telefono_contacto}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h6>Estado</h6>
+                            <span class="badge bg-${postulacion.estado === 'En Proceso' ? 'warning' : postulacion.estado === 'Aprobada' ? 'success' : 'danger'}">
+                                ${postulacion.estado}
+                            </span>
+                            <p class="mt-2"><strong>Fecha de creación:</strong> ${postulacion.fecha_creacion}</p>
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('detalles-content').innerHTML = content;
+                new bootstrap.Modal(document.getElementById('detallesModal')).show();
+            }
+        }
+        
+        // Editar postulación
+        function editarPostulacion(postulacionId) {
+            alert('Función de edición en desarrollo');
+        }
+        
+        // Cargar al iniciar
+        document.addEventListener('DOMContentLoaded', cargarEstadisticas);
+    </script>
+</body>
+</html>

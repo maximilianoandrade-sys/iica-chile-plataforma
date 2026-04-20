@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Dashboard - IICA Chile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Montserrat:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link href="/static/css/iica-theme-2026.css?v={{ app_version }}" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Top Utility Bar -->
+    <div class="iica-top-bar">
+        <div class="container d-flex justify-content-end">
+            <a href="https://iica.int/es" target="_blank">IICA.int</a>
+            <a href="https://iica.int/en" target="_blank">English</a>
+            <a href="https://iica.int/pt" target="_blank">Português</a>
+        </div>
+    </div>
+
+    <!-- Main Navbar -->
+    <nav class="navbar navbar-expand-lg iica-main-nav">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="https://iica.int/sites/default/files/iica_logo_0.png" alt="IICA" class="iica-logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link iica-nav-link" href="/">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link iica-nav-link" href="/quienes-somos">Quiénes Somos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link iica-nav-link" href="/manual">Manual Técnico</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link iica-nav-link" href="/todos-los-proyectos">Proyectos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link iica-nav-link active" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item ms-lg-3">
+                        <a class="btn btn-outline-danger" href="/logout">Cerrar Sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Header -->
+    <header class="iica-section-header">
+        <div class="container">
+            <div class="iica-breadcrumb mb-2">
+                <a href="/">Inicio</a> / Mi Dashboard
+            </div>
+            <h1 class="iica-page-title mb-3">Panel de Control</h1>
+            <p class="lead" style="font-size: 1.1rem; opacity: 0.9;">
+                ¡Bienvenido, {{ current_user.nombre or current_user.email }}! 👋<br>
+                Gestiona tus postulaciones y descubre fondos personalizados.
+            </p>
+            {% if current_user.region %}
+            <div class="badge bg-light text-dark p-2 mt-2">
+                <i class="bi bi-person-badge me-1"></i> Perfil: {{ current_user.tipo_predio|title if
+                current_user.tipo_predio else 'Agricultor' }} en {{ current_user.region }}
+            </div>
+            {% else %}
+            <div class="alert alert-warning d-inline-block p-2 mt-2 mb-0">
+                <i class="bi bi-exclamation-triangle me-1"></i> Completa tu perfil para mejores recomendaciones
+            </div>
+            {% endif %}
+        </div>
+    </header>
+
+    <div class="container my-5">
+
+        <!-- Recommended Funds Section -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="h3 fw-bold" style="color: var(--iica-blue-deep);">
+                        <i class="bi bi-bullseye me-2"></i>Fondos Recomendados
+                    </h2>
+                    <button onclick="buscarProyectosAuto()" id="btnBuscar" class="btn btn-iica-primary">
+                        <i class="bi bi-arrow-repeat me-2"></i>Actualizar Proyectos
+                    </button>
+                </div>
+
+                {% if fondos_recomendados %}
+                <div class="row g-4">
+                    {% for fondo in fondos_recomendados %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 border-0 shadow-sm iica-card">
+                            <div class="card-body">
+                                <span class="badge bg-light text-primary mb-2 border">{{ fondo.fuente }}</span>
+                                <h5 class="card-title fw-bold text-dark mb-3">{{ fondo.nombre[:70] }}...</h5>
+                                <div class="small text-muted mb-3">
+                                    <div><i class="bi bi-cash me-2"></i>{{ fondo.monto_texto or 'Consultar Bases' }}
+                                    </div>
+                                    {% if fondo.fecha_cierre %}
+                                    <div><i class="bi bi-calendar-event me-2"></i>Cierre: {{
+                                        fondo.fecha_cierre.strftime('%d/%m/%Y') }}</div>
+                                    {% endif %}
+                                </div>
+                                <a href="{{ url_for('detalle_fondo', id=fondo.id) }}"
+                                    class="btn btn-outline-primary w-100 stretched-link">
+                                    Ver Detalles
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="alert alert-light border text-center py-5">
+                    <i class="bi bi-inbox fs-1 text-muted mb-3 d-block"></i>
+                    <p class="text-muted">No encontramos recomendaciones específicas por ahora.</p>
+                    <a href="{{ url_for('home') }}" class="btn btn-primary">Explorar Todo el Catálogo</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Favorites Section -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <h2 class="h3 fw-bold mb-4" style="color: var(--iica-blue-deep);">
+                    <i class="bi bi-star-fill text-warning me-2"></i>Mis Favoritos <span
+                        class="badge bg-secondary fs-6 align-middle">{{ favoritos|length }}</span>
+                </h2>
+
+                {% if favoritos %}
+                <div class="table-responsive bg-white rounded shadow-sm p-3">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Nombre del Fondo</th>
+                                <th>Fuente</th>
+                                <th>Fecha Agregado</th>
+                                <th class="text-end">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for favorito in favoritos %}
+                            <tr>
+                                <td class="fw-bold">{{ favorito.fondo.nombre[:60] }}...</td>
+                                <td><span class="badge bg-light text-dark border">{{ favorito.fondo.fuente }}</span>
+                                </td>
+                                <td class="text-muted small">{{ favorito.fecha_agregado.strftime('%d/%m/%Y') }}</td>
+                                <td class="text-end">
+                                    <a href="{{ url_for('detalle_fondo', id=favorito.fondo.id) }}"
+                                        class="btn btn-sm btn-primary">Ver</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="p-4 bg-light rounded text-center text-muted">
+                    <p class="mb-0">Aún no has guardado favoritos. Usa el ícono ⭐ en los proyectos para guardarlos.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Applications Section -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <h2 class="h3 fw-bold mb-4" style="color: var(--iica-blue-deep);">
+                    <i class="bi bi-folder2-open me-2"></i>Mis Postulaciones <span
+                        class="badge bg-secondary fs-6 align-middle">{{ postulaciones|length }}</span>
+                </h2>
+
+                {% if postulaciones %}
+                <div class="table-responsive bg-white rounded shadow-sm p-3">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Proyecto</th>
+                                <th>Estado</th>
+                                <th>Iniciado</th>
+                                <th class="text-end">Gestión</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for postulacion in postulaciones %}
+                            <tr>
+                                <td class="fw-bold">{{ postulacion.fondo.nombre[:50] }}...</td>
+                                <td>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle">
+                                        {{ postulacion.estado }}
+                                    </span>
+                                </td>
+                                <td class="text-muted small">{{ postulacion.fecha_inicio.strftime('%d/%m/%Y') }}</td>
+                                <td class="text-end">
+                                    <a href="{{ url_for('detalle_fondo', id=postulacion.fondo.id) }}"
+                                        class="btn btn-sm btn-outline-primary">Seguimiento</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="p-4 bg-light rounded text-center text-muted">
+                    <p class="mb-0">No tienes postulaciones activas.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="iica-footer mt-auto">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>IICA</h5>
+                    <ul class="iica-footer-links">
+                        <li><a href="https://iica.int/es/about-us/main/" target="_blank">Sobre el IICA</a></li>
+                        <li><a href="https://iica.int/es/about-us/dg/" target="_blank">Dirección General</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>Enlaces de Interés</h5>
+                    <ul class="iica-footer-links">
+                        <li><a href="/">Plataforma Financiamiento</a></li>
+                        <li><a href="/manual">Manual de Usuario</a></li>
+                    </ul>
+                </div>
+                <!-- ... other footer cols if needed ... -->
+            </div>
+            <div class="footer-bottom">
+                © 2026 Instituto Interamericano de Cooperación para la Agricultura (IICA). Todos los derechos
+                reservados.
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function buscarProyectosAuto() {
+            const btn = document.getElementById('btnBuscar');
+            const originalText = btn.innerHTML;
+
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Buscando...';
+            btn.disabled = true;
+
+            fetch('/api/actualizar-proyectos', { method: 'POST' })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`✅ Búsqueda completada.\n${data.mensaje}`);
+                        window.location.reload();
+                    } else {
+                        alert('❌ Error: ' + data.error);
+                    }
+                })
+                .catch(err => alert('Error de conexión'))
+                .finally(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                });
+        }
+    </script>
+</body>
+
+</html>

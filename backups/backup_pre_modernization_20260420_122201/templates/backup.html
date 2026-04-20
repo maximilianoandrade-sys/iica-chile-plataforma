@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Backups - IICA Chile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .backup-card {
+            transition: all 0.3s ease;
+        }
+        .backup-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .backup-recent {
+            border-left: 4px solid #28a745;
+        }
+        .backup-old {
+            border-left: 4px solid #6c757d;
+        }
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-shield-check me-2"></i>Gestión de Backups
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/">
+                    <i class="bi bi-house me-1"></i>Inicio
+                </a>
+                <a class="nav-link" href="/dashboard-avanzado">
+                    <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2><i class="bi bi-shield-check me-2"></i>Gestión de Backups</h2>
+                <p class="text-muted">Administra y restaura backups del sistema</p>
+            </div>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-archive display-4"></i>
+                        <h3>{{ stats.total_backups if stats else 0 }}</h3>
+                        <p class="mb-0">Total Backups</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-hdd display-4"></i>
+                        <h3>{{ "%.1f"|format(stats.total_size_mb) if stats and stats.total_size_mb else 0 }} MB</h3>
+                        <p class="mb-0">Espacio Usado</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-calendar-check display-4"></i>
+                        <h3>{{ stats.latest_backup[:10] if stats and stats.latest_backup else 'N/A' }}</h3>
+                        <p class="mb-0">Último Backup</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-clock-history display-4"></i>
+                        <h3>{{ stats.oldest_backup[:10] if stats and stats.oldest_backup else 'N/A' }}</h3>
+                        <p class="mb-0">Backup Más Antiguo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Acciones -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="bi bi-gear me-2"></i>Acciones</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <button class="btn btn-primary w-100" onclick="crearBackup()">
+                                    <i class="bi bi-plus-circle me-2"></i>Crear Backup Manual
+                                </button>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-success w-100" onclick="iniciarBackupsAutomaticos()">
+                                    <i class="bi bi-play-circle me-2"></i>Iniciar Backups Automáticos
+                                </button>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-info w-100" onclick="actualizarLista()">
+                                    <i class="bi bi-arrow-clockwise me-2"></i>Actualizar Lista
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Backups -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="bi bi-list me-2"></i>Backups Disponibles</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if backups %}
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Archivo</th>
+                                            <th>Tamaño</th>
+                                            <th>Creado</th>
+                                            <th>Modificado</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for backup in backups %}
+                                        <tr>
+                                            <td>
+                                                <i class="bi bi-file-zip me-2"></i>
+                                                {{ backup.filename }}
+                                            </td>
+                                            <td>{{ backup.size_mb }} MB</td>
+                                            <td>{{ backup.created_at[:19] }}</td>
+                                            <td>{{ backup.modified_at[:19] }}</td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+                                                    <button class="btn btn-sm btn-outline-primary" onclick="descargarBackup('{{ backup.filename }}')">
+                                                        <i class="bi bi-download me-1"></i>Descargar
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-success" onclick="restaurarBackup('{{ backup.path }}')">
+                                                        <i class="bi bi-arrow-clockwise me-1"></i>Restaurar
+                                                    </button>
+                                                    <button class="btn btn-sm btn-outline-danger" onclick="eliminarBackup('{{ backup.filename }}')">
+                                                        <i class="bi bi-trash me-1"></i>Eliminar
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="text-center py-5">
+                                <i class="bi bi-archive display-1 text-muted"></i>
+                                <h3 class="text-muted">No hay backups</h3>
+                                <p class="text-muted">Aún no se han creado backups del sistema.</p>
+                                <button class="btn btn-primary" onclick="crearBackup()">
+                                    <i class="bi bi-plus-circle me-1"></i>Crear Primer Backup
+                                </button>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Información del Sistema -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="bi bi-info-circle me-2"></i>Información del Sistema</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Configuración de Backups</h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="bi bi-check-circle text-success me-2"></i>Backups automáticos cada 24 horas</li>
+                                    <li><i class="bi bi-check-circle text-success me-2"></i>Mantener últimos 30 backups</li>
+                                    <li><i class="bi bi-check-circle text-success me-2"></i>Compresión ZIP para ahorrar espacio</li>
+                                    <li><i class="bi bi-check-circle text-success me-2"></i>Incluye datos, configuraciones y templates</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Recomendaciones</h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="bi bi-lightbulb text-warning me-2"></i>Crear backup antes de actualizaciones importantes</li>
+                                    <li><i class="bi bi-lightbulb text-warning me-2"></i>Descargar backups importantes localmente</li>
+                                    <li><i class="bi bi-lightbulb text-warning me-2"></i>Verificar integridad de backups regularmente</li>
+                                    <li><i class="bi bi-lightbulb text-warning me-2"></i>Mantener backups en ubicaciones seguras</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function crearBackup() {
+            if (confirm('¿Crear un nuevo backup del sistema?')) {
+                fetch('/api/backup/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({type: 'manual'})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('✅ Backup creado exitosamente');
+                        location.reload();
+                    } else {
+                        alert('❌ Error creando backup: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('❌ Error creando backup');
+                });
+            }
+        }
+        
+        function restaurarBackup(backupPath) {
+            if (confirm('¿Restaurar desde este backup? Esta acción reemplazará todos los datos actuales.')) {
+                fetch('/api/backup/restore', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({backup_path: backupPath})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('✅ Backup restaurado exitosamente');
+                        location.reload();
+                    } else {
+                        alert('❌ Error restaurando backup: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('❌ Error restaurando backup');
+                });
+            }
+        }
+        
+        function descargarBackup(filename) {
+            // Implementar descarga de backup
+            alert('Descargando backup: ' + filename);
+        }
+        
+        function eliminarBackup(filename) {
+            if (confirm('¿Eliminar este backup? Esta acción no se puede deshacer.')) {
+                // Implementar eliminación de backup
+                alert('Eliminando backup: ' + filename);
+            }
+        }
+        
+        function iniciarBackupsAutomaticos() {
+            alert('✅ Backups automáticos iniciados');
+        }
+        
+        function actualizarLista() {
+            location.reload();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Postulación - {{ proyecto.get('Nombre', 'Proyecto') }}</title>
+    <style>
+        body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:#f8fafc; margin:0; }
+        .container { max-width: 900px; margin: 0 auto; padding: 24px; }
+        .card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:20px; margin-bottom:16px; }
+        h1,h2,h3 { margin:0 0 12px 0; }
+        label { display:block; margin:10px 0 6px; font-weight:600; }
+        input, textarea, select { width:100%; padding:10px; border:1px solid #d1d5db; border-radius:8px; }
+        .row { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+        .btn { display:inline-block; background:#2563eb; color:#fff; padding:10px 16px; border-radius:8px; text-decoration:none; border:none; cursor:pointer; }
+        .btn.secondary { background:#6b7280; }
+        .muted { color:#64748b; }
+        .alert { background:#ecfeff; color:#0c4a6e; border:1px solid #a5f3fc; border-radius:8px; padding:10px; margin-bottom:12px; }
+        .actions { display:flex; gap:10px; align-items:center; }
+        a { color:#2563eb; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Postulación al Fondo</h1>
+            <p class="muted">{{ proyecto.get('Nombre','Proyecto') }}</p>
+            {% if proyecto.get('Enlace') %}
+                <p class="alert">Visita el proyecto original: <a href="{{ proyecto['Enlace'] }}" target="_blank" rel="noopener">Ir al sitio oficial</a></p>
+            {% endif %}
+            <div class="actions">
+                <a class="btn secondary" href="/proyecto/{{ proyecto.get('id', 0) }}">Ver detalle</a>
+                <a class="btn secondary" href="/">Volver al inicio</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Formulario de Postulación</h2>
+            <form id="formPostulacion">
+                <input type="hidden" name="proyecto_id" value="{{ proyecto.get('id', 0) }}" />
+                <div class="row">
+                    <div>
+                        <label>Nombre de la organización</label>
+                        <input name="nombre_organizacion" required />
+                    </div>
+                    <div>
+                        <label>Tipo de organización</label>
+                        <input name="tipo_organizacion" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div>
+                        <label>País</label>
+                        <input name="pais" />
+                    </div>
+                    <div>
+                        <label>Ciudad</label>
+                        <input name="ciudad" />
+                    </div>
+                </div>
+                <label>Descripción de la organización</label>
+                <textarea name="descripcion_organizacion" rows="3"></textarea>
+
+                <div class="row">
+                    <div>
+                        <label>Nombre de contacto</label>
+                        <input name="nombre_contacto" required />
+                    </div>
+                    <div>
+                        <label>Email de contacto</label>
+                        <input type="email" name="email_contacto" required />
+                    </div>
+                </div>
+                <label>Teléfono de contacto</label>
+                <input name="telefono_contacto" />
+
+                <hr>
+
+                <div class="row">
+                    <div>
+                        <label>Nombre del proyecto</label>
+                        <input name="nombre_proyecto" value="{{ proyecto.get('Nombre','') }}" />
+                    </div>
+                    <div>
+                        <label>Monto solicitado (ej. USD 50,000)</label>
+                        <input name="monto_solicitado" />
+                    </div>
+                </div>
+                <label>Descripción del proyecto</label>
+                <textarea name="descripcion_proyecto" rows="4"></textarea>
+                <label>Objetivos del proyecto</label>
+                <textarea name="objetivos_proyecto" rows="3"></textarea>
+
+                <div style="margin-top:12px;">
+                    <button class="btn" type="submit">Enviar Postulación</button>
+                </div>
+            </form>
+            <div id="msg" class="muted" style="margin-top:10px;"></div>
+        </div>
+    </div>
+
+    <script>
+    const form = document.getElementById('formPostulacion');
+    const msg = document.getElementById('msg');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        msg.textContent = 'Enviando...';
+        const data = Object.fromEntries(new FormData(form).entries());
+        data.proyecto_id = parseInt(data.proyecto_id || '0', 10);
+        try {
+            const res = await fetch('/api/postulacion', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const j = await res.json();
+            if (j.success) {
+                msg.textContent = 'Postulación enviada. Número: ' + j.id;
+                form.reset();
+            } else {
+                msg.textContent = 'Error: ' + (j.message || 'No se pudo enviar');
+            }
+        } catch (err) {
+            msg.textContent = 'Error de red: ' + err.message;
+        }
+    });
+    </script>
+</body>
+</html>

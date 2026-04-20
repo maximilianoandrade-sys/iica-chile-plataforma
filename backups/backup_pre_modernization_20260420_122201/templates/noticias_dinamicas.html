@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noticias - IICA Chile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --iica-green: #2E7D32;
+            --iica-blue: #1976D2;
+            --iica-orange: #FF6F00;
+            --iica-light: #F8F9FA;
+            --iica-dark: #212529;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--iica-dark);
+        }
+        
+        .header-dinamico {
+            background: linear-gradient(135deg, var(--iica-green) 0%, var(--iica-blue) 100%);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo-section img {
+            height: 50px;
+            width: auto;
+        }
+        
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            margin: 0;
+        }
+        
+        .nav-menu li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+        
+        .nav-menu li a:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .hero-noticias {
+            background: linear-gradient(135deg, var(--iica-green), var(--iica-blue));
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        .hero-noticias h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-noticias p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .noticias-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        
+        .filtros-noticias {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+        
+        .filtros-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .filtro-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .filtro-item label {
+            font-weight: 600;
+            color: var(--iica-green);
+        }
+        
+        .filtro-item select,
+        .filtro-item input {
+            padding: 0.75rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .filtro-item select:focus,
+        .filtro-item input:focus {
+            outline: none;
+            border-color: var(--iica-green);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+        }
+        
+        .btn-filtrar {
+            background: var(--iica-green);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-filtrar:hover {
+            background: #1b5e20;
+            transform: translateY(-2px);
+        }
+        
+        .noticias-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .noticia-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .noticia-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .noticia-image {
+            height: 200px;
+            background: linear-gradient(135deg, var(--iica-green), var(--iica-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+        }
+        
+        .noticia-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--iica-orange);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .noticia-content {
+            padding: 2rem;
+        }
+        
+        .noticia-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .noticia-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .noticia-title {
+            color: var(--iica-green);
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+        
+        .noticia-excerpt {
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .noticia-link {
+            color: var(--iica-orange);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .noticia-link:hover {
+            color: #e65100;
+            transform: translateX(5px);
+        }
+        
+        .paginacion {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+        
+        .btn-paginacion {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--iica-green);
+            background: white;
+            color: var(--iica-green);
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-paginacion:hover {
+            background: var(--iica-green);
+            color: white;
+        }
+        
+        .btn-paginacion.active {
+            background: var(--iica-green);
+            color: white;
+        }
+        
+        .sidebar {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .sidebar h4 {
+            color: var(--iica-green);
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .sidebar ul li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar ul li a {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .sidebar ul li a:hover {
+            color: var(--iica-orange);
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-menu {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .filtros-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .noticias-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Dinámico -->
+    <header class="header-dinamico">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="/static/logo_iica_institucional.svg" alt="IICA Chile">
+                <div class="logo-text">
+                    <h1>IICA Chile</h1>
+                    <p>Instituto Interamericano de Cooperación para la Agricultura</p>
+                </div>
+            </div>
+            
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="/">Inicio</a></li>
+                    <li><a href="/dinamico">Sobre Nosotros</a></li>
+                    <li><a href="/busqueda-avanzada">Cooperación Técnica</a></li>
+                    <li><a href="/todos-los-proyectos">Proyectos</a></li>
+                    <li><a href="/noticias" class="active">Noticias</a></li>
+                    <li><a href="#eventos">Eventos</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Noticias -->
+    <section class="hero-noticias">
+        <div class="container">
+            <h2>Noticias y Actualidades</h2>
+            <p>Mantente informado sobre los avances en cooperación técnica agrícola en Chile</p>
+        </div>
+    </section>
+
+    <!-- Contenido Principal -->
+    <div class="noticias-container">
+        <div class="row">
+            <!-- Filtros -->
+            <div class="col-12">
+                <div class="filtros-noticias">
+                    <h4 style="color: var(--iica-green); margin-bottom: 1.5rem;">Filtrar Noticias</h4>
+                    <div class="filtros-grid">
+                        <div class="filtro-item">
+                            <label for="categoria">Categoría</label>
+                            <select id="categoria">
+                                <option value="">Todas las categorías</option>
+                                <option value="agricultura">Agricultura</option>
+                                <option value="cooperacion">Cooperación</option>
+                                <option value="eventos">Eventos</option>
+                                <option value="proyectos">Proyectos</option>
+                            </select>
+                        </div>
+                        <div class="filtro-item">
+                            <label for="fecha">Fecha</label>
+                            <select id="fecha">
+                                <option value="">Todas las fechas</option>
+                                <option value="hoy">Hoy</option>
+                                <option value="semana">Esta semana</option>
+                                <option value="mes">Este mes</option>
+                                <option value="año">Este año</option>
+                            </select>
+                        </div>
+                        <div class="filtro-item">
+                            <label for="busqueda">Buscar</label>
+                            <input type="text" id="busqueda" placeholder="Buscar noticias...">
+                        </div>
+                        <div class="filtro-item">
+                            <label>&nbsp;</label>
+                            <button class="btn-filtrar" onclick="aplicarFiltros()">
+                                <i class="bi bi-funnel"></i> Filtrar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Noticias -->
+            <div class="col-lg-8">
+                <div class="noticias-grid">
+                    <!-- Noticia 1 -->
+                    <div class="noticia-card">
+                        <div class="noticia-image">
+                            <i class="bi bi-newspaper"></i>
+                            <div class="noticia-badge">Agricultura</div>
+                        </div>
+                        <div class="noticia-content">
+                            <div class="noticia-meta">
+                                <span><i class="bi bi-calendar"></i> 13 Oct 2024</span>
+                                <span><i class="bi bi-person"></i> IICA Chile</span>
+                            </div>
+                            <h4 class="noticia-title">Lanzan en Chile proyecto pionero para integrar productores de arroz a los mercados de carbono</h4>
+                            <p class="noticia-excerpt">Iniciativa innovadora que permitirá a los agricultores acceder a nuevos mercados y mejorar sus ingresos a través de prácticas sostenibles.</p>
+                            <a href="#" class="noticia-link">
+                                Leer más <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Noticia 2 -->
+                    <div class="noticia-card">
+                        <div class="noticia-image">
+                            <i class="bi bi-briefcase"></i>
+                            <div class="noticia-badge">Cooperación</div>
+                        </div>
+                        <div class="noticia-content">
+                            <div class="noticia-meta">
+                                <span><i class="bi bi-calendar"></i> 10 Oct 2024</span>
+                                <span><i class="bi bi-person"></i> IICA Chile</span>
+                            </div>
+                            <h4 class="noticia-title">Oferta para Consultor Nacional Chile</h4>
+                            <p class="noticia-excerpt">Nueva oportunidad de trabajo para profesionales especializados en desarrollo rural y cooperación técnica.</p>
+                            <a href="#" class="noticia-link">
+                                Leer más <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Noticia 3 -->
+                    <div class="noticia-card">
+                        <div class="noticia-image">
+                            <i class="bi bi-people"></i>
+                            <div class="noticia-badge">Eventos</div>
+                        </div>
+                        <div class="noticia-content">
+                            <div class="noticia-meta">
+                                <span><i class="bi bi-calendar"></i> 8 Oct 2024</span>
+                                <span><i class="bi bi-person"></i> IICA Chile</span>
+                            </div>
+                            <h4 class="noticia-title">Primer Foro LATAM de Jóvenes Líderes Rurales: Innovación y Sustentabilidad en el Agro del Siglo XXI</h4>
+                            <p class="noticia-excerpt">Evento que reunirá a jóvenes innovadores del sector agrícola de toda América Latina para compartir experiencias y proyectos.</p>
+                            <a href="#" class="noticia-link">
+                                Leer más <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Noticia 4 -->
+                    <div class="noticia-card">
+                        <div class="noticia-image">
+                            <i class="bi bi-droplet"></i>
+                            <div class="noticia-badge">Proyectos</div>
+                        </div>
+                        <div class="noticia-content">
+                            <div class="noticia-meta">
+                                <span><i class="bi bi-calendar"></i> 5 Oct 2024</span>
+                                <span><i class="bi bi-person"></i> IICA Chile</span>
+                            </div>
+                            <h4 class="noticia-title">INDAP, la Municipalidad de Río Ibáñez y el IICA organizan ciclo de talleres sobre agricultura y cambio climático en Aysén</h4>
+                            <p class="noticia-excerpt">Serie de talleres para capacitar a agricultores en técnicas de adaptación al cambio climático.</p>
+                            <a href="#" class="noticia-link">
+                                Leer más <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Noticia 5 -->
+                    <div class="noticia-card">
+                        <div class="noticia-image">
+                            <i class="bi bi-lightbulb"></i>
+                            <div class="noticia-badge">Innovación</div>
+                        </div>
+                        <div class="noticia-content">
+                            <div class="noticia-meta">
+                                <span><i class="bi bi-calendar"></i> 3 Oct 2024</span>
+                                <span><i class="bi bi-person"></i> IICA Chile</span>
+                            </div>
+                            <h4 class="noticia-title">Lanzamiento de Proyecto que impulsará el desarrollo de los mercados de carbono para fomentar la producción Sostenible de Arroz en Latinoamérica</h4>
+                            <p class="noticia-excerpt">Proyecto regional que busca promover prácticas agrícolas sostenibles en el cultivo de arroz.</p>
+                            <a href="#" class="noticia-link">
+                                Leer más <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Noticia 6 -->
+                    <div class="noticia-card">
+                        <div class="noticia-image">
+                            <i class="bi bi-graph-up"></i>
+                            <div class="noticia-badge">Desarrollo</div>
+                        </div>
+                        <div class="noticia-content">
+                            <div class="noticia-meta">
+                                <span><i class="bi bi-calendar"></i> 1 Oct 2024</span>
+                                <span><i class="bi bi-person"></i> IICA Chile</span>
+                            </div>
+                            <h4 class="noticia-title">Taller: Adaptación y Medidas de mitigación al cambio climático</h4>
+                            <p class="noticia-excerpt">Taller especializado en Aysén para capacitar a agricultores en técnicas de adaptación al cambio climático.</p>
+                            <a href="#" class="noticia-link">
+                                Leer más <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paginación -->
+                <div class="paginacion">
+                    <a href="#" class="btn-paginacion">&laquo; Anterior</a>
+                    <a href="#" class="btn-paginacion active">1</a>
+                    <a href="#" class="btn-paginacion">2</a>
+                    <a href="#" class="btn-paginacion">3</a>
+                    <a href="#" class="btn-paginacion">Siguiente &raquo;</a>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <h4>Noticias Destacadas</h4>
+                    <ul>
+                        <li><a href="#">1er Foro LATAM de Jóvenes Líderes Rurales</a></li>
+                        <li><a href="#">DESCARGA: Paso a paso riego con Vasijas de Barro</a></li>
+                        <li><a href="#">DESCARGA: Formando Agrolideres</a></li>
+                        <li><a href="#">Curso Biofertilizante Completo Supermagro</a></li>
+                        <li><a href="#">DESCARGA: Manual Forraje Verde Hidropónico IICA</a></li>
+                        <li><a href="#">DESCARGA: Guía Biofertlizantes Agricultura Familar</a></li>
+                    </ul>
+                </div>
+
+                <div class="sidebar">
+                    <h4>Categorías</h4>
+                    <ul>
+                        <li><a href="#">Agricultura Sostenible</a></li>
+                        <li><a href="#">Desarrollo Rural</a></li>
+                        <li><a href="#">Innovación Tecnológica</a></li>
+                        <li><a href="#">Juventudes Rurales</a></li>
+                        <li><a href="#">Gestión Hídrica</a></li>
+                        <li><a href="#">Seguridad Alimentaria</a></li>
+                    </ul>
+                </div>
+
+                <div class="sidebar">
+                    <h4>Archivo</h4>
+                    <ul>
+                        <li><a href="#">Octubre 2024</a></li>
+                        <li><a href="#">Septiembre 2024</a></li>
+                        <li><a href="#">Agosto 2024</a></li>
+                        <li><a href="#">Julio 2024</a></li>
+                        <li><a href="#">Junio 2024</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function aplicarFiltros() {
+            const categoria = document.getElementById('categoria').value;
+            const fecha = document.getElementById('fecha').value;
+            const busqueda = document.getElementById('busqueda').value;
+            
+            console.log('Filtros aplicados:', { categoria, fecha, busqueda });
+            
+            // Simular filtrado
+            const noticias = document.querySelectorAll('.noticia-card');
+            noticias.forEach(noticia => {
+                noticia.style.display = 'block';
+            });
+            
+            alert('Filtros aplicados correctamente');
+        }
+
+        // Efecto de búsqueda en tiempo real
+        document.getElementById('busqueda').addEventListener('input', function() {
+            const termino = this.value.toLowerCase();
+            const noticias = document.querySelectorAll('.noticia-card');
+            
+            noticias.forEach(noticia => {
+                const titulo = noticia.querySelector('.noticia-title').textContent.toLowerCase();
+                const contenido = noticia.querySelector('.noticia-excerpt').textContent.toLowerCase();
+                
+                if (titulo.includes(termino) || contenido.includes(termino)) {
+                    noticia.style.display = 'block';
+                } else {
+                    noticia.style.display = 'none';
+                }
+            });
+        });
+
+        // Animaciones al scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Aplicar animaciones a las noticias
+        document.querySelectorAll('.noticia-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
