@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Menu, X, Plus, Target, Home, Crosshair, Link2, Users, TrendingUp, Building2, Phone, Globe } from 'lucide-react';
 import projects from '@/data/projects.json';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -35,8 +36,19 @@ export function Header() {
             {/* Navigation */}
             <div className="container mx-auto max-w-[1200px] px-4 py-4 flex justify-between items-center gap-4">
                 <div className="flex items-center gap-3">
-                    <Link href="/" className="font-black text-2xl text-[var(--iica-navy)] dark:text-white tracking-tighter hover:opacity-90 transition-opacity">
-                        IICA <span className="text-[var(--iica-blue)] dark:text-blue-400">Chile</span>
+                    <Link href="/" className="flex items-center gap-2 font-black text-2xl text-[var(--iica-navy)] dark:text-white tracking-tighter hover:opacity-90 transition-opacity" aria-label="Ir a inicio">
+                        {/* Logo PNG oficial IICA */}
+                        <span className="relative h-10 w-auto inline-block">
+                            <Image 
+                                src="/logos/iica-logo.png" 
+                                alt="IICA Chile" 
+                                width={120}
+                                height={64}
+                                className="h-10 w-auto object-contain"
+                                priority
+                            />
+                        </span>
+                        <span className="ml-1">Chile</span>
                     </Link>
                     <div className="h-6 w-[1px] bg-gray-200 dark:bg-gray-700 mx-2 hidden sm:block" />
                     <span className="text-[10px] font-black uppercase text-gray-400 tracking-widest hidden sm:block">Radar 2026</span>
