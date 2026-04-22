@@ -1,9 +1,0 @@
-﻿ D .agent/ACTUALIZACION_ENLACES_FONDOS.md
- D app/api/auth/[...nextauth]/route.ts
- M iica-chile-plataforma
- D middleware.ts
-?? git_diff.txt
-?? git_diff_cached.txt
-?? git_log.txt
-?? status.txt
-?? tmp_log.txt

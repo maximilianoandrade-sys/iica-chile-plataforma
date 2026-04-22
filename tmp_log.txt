@@ -1,5 +1,0 @@
-﻿commit 155d7fc2098fa70febc52c3453808b5532b525d9
-Author: maximilianoandrade-sys <maximiliano.andrade@pregrado.uoh.cl>
-Date:   Wed Apr 8 13:04:35 2026 -0400
-
-    chore: Apply AI generated changes preserving original design

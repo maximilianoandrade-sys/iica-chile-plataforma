@@ -2,61 +2,38 @@
 applyTo: '**'
 ---
 
-# Memoria / Auditoría de Implementación
+# Progreso guardado: Plataforma IICA Chile
 
-**Fecha de actualización:** 10 abril 2026
+## 1. Estado de los trabajos
 
----
-## Avance actual
+- Se está ejecutando una actualización/migración profunda del frontend moderno (Next.js), asegurando que funcione y se construya dentro y fuera de Docker.
+- El backend (Flask/Python) está en lista de auditoría, pero aún no tocado.
+- El flujo de trabajo ha sido estrictamente documentado y es repetible. No hay cambios destructivos en producción.
 
-### Frontend
-- Migrados los filtros de Región, Perfil y Fuente a multiselección usando Material UI Autocomplete, ahora con sincronización robusta Estado ↔ URL (arrays, cadenas, retrocompatible, edge cases).
-- Validación de valores: Solo se aceptan valores válidos en la UI y desde la URL; cualquier error o dato inconsistente es limpiado automáticamente.
-- Sincronización bidireccional totalmente probada y estable.
-- Componente `MultiFilterSelect.tsx` reutilizable y consistente con línea visual institucional.
+## 2. Último estado técnico
 
-### Data/Backend
-- Script extractor modular para FONTAGRO (`fetch-fontagro-calls.js`) listo para recolectar todas las convocatorias abiertas/históricas, scrapeando y normalizando datos clave al formato estándar del proyecto (`fontagro_convocatorias.json`).
-- Documentación de uso y dependencias incluida en el script.
+- node_modules y package-lock.json han sido eliminados para forzar una reinstalación 100% limpia de dependencias.
+- Se limpió a fondo el caché de npm (`npm-cache` borrado manualmente).
+- Se corrigieron problemas graves previos de dependencias huérfanas/faltantes (`es-abstract`, polifills). Se instalaron polifills a mano.
+- El último error detectado era por un binario (`@next/swc-win32-x64-msvc`) corrupto/incompatible tras reinstalación de Next.js. 
+- Se eliminó node_modules y se corrió `npm install` nuevamente para asegurar la descarga limpia de binarios.
 
----
-## Implementación extractor GEF (Global Environment Facility) — 10.04.2026
+## 3. Próximos pasos anotados (para continuar la próxima sesión)
 
-- Se creó el script `fetch-gef-calls.js` con Node.js. Automatiza la descarga y extracción del CSV oficial exportado en https://www.thegef.org/projects-operations/database/export?page&_format=csv
-- El script mapea y normaliza todos los proyectos/llamados del GEF al formato estándar: `{ titulo, agencia, categoria, monto, fecha_apertura, fecha_cierre, link, resumen, tags, paises, fuente, links_docs }`. La compatibilidad con el backend/ingesta está garantizada (usa las mismas llaves y estructura que FONTAGRO).
-- Dependencias: `npm install axios csv-parse`.
-- Instrucciones de uso: ejecutar `node fetch-gef-calls.js`. Genera el archivo `gef_projects.json` listo para importar.
-- Enlaces a proyectos individuales se reconstruyen por ID si no vienen explícitos.
-- Si algún campo de resumen o links a documentos específicos faltan, se recomienda enriquecer programáticamente en siguientes iteraciones o integrar scraping modularizado en el futuro.
-- Documentación y receta incluida de manera similar a los otros extractores.
+- Validar build local (`npm run build`).
+- Si falla, eliminar package-lock.json y repetir el ciclo (reinstalar dependencias desde cero).
+- Si el build es exitoso: probar docker-compose up, validar en navegador.
+- Documentar en bitácora el backlog técnico (errores, advertencias, recomendaciones).
+- Continuar con la auditoría real del backend (pip/requirements, estructura .env, seguridad, modularidad).
+- Consolidar todo en informe técnico y checklist de modernización.
 
-## Gaps/fuentes internacionales prioritarias pendientes (**Actualizado 10.04.2026**)
-
-- Fuentes con extractor y output vigente: GEF, FONTAGRO (ver scripts raíz).
-- Fuentes prioritarias faltantes a cubrir con extractor propio (al menos):
-  - FAO
-  - World Bank
-  - BID (+ BID Lab)
-  - CAF
-  - GAFSP
-  - FIDA
-  - CIAT/CGIAR
-  - USDA NIFA
-  - Fondos UE (CAP, otros)
-  - Fondation FARM, Gates Foundation, Rockefeller, USAID, OEA
-  - **Adaptation Fund (Fondo de Adaptación)**
-  - Otros portales multi-agencia relevantes
-
-> Se detectó que el sitio del Fondo de Adaptación (https://www.adaptation-fund.org/projects-programmes/project-information/projects-table-view/) permite la descarga masiva de proyectos en CSV, lo que asegura máxima robustez en la automatización y adaptación a cambios futuros. Se recomienda crear extractor modular Node.js usando este endpoint como fuente primaria. Se podrá filtrar por país, sector (“Agriculture”, “Food Security”, “Rural Development”, etc.) y estado, y normalizar al formato estándar de GEF/FONTAGRO.
+## 4. Observaciones y recomendaciones 
+- El proyecto muestra signos clásicos de haber sido actualizado muchas veces; es crítico mantener el flujo de reinstalación limpia en futuras iteraciones.
+- Documentar todos los fixes manuales y advertencias para traspaso de conocimiento y futuras migraciones.
+- Valorar seriamente migrar a Next.js 16 o superior (Turbopack) sólo cuando toda la auditoría esté cerrada.
 
 ---
-## Roadmap inmediato
 
-1. Implementar y documentar extractor para el Fondo de Adaptación (output: `adaptation_fund_projects.json`), usando el CSV exportable oficial.
-2. Documentar y normalizar el output al formato institucional `{ titulo, agencia, categoria, monto, fecha_apertura, fecha_cierre, link, resumen, tags, paises, fuente, links_docs }`.
-3. Investigar estructura del portal de convocatorias FAO y bosquejar/extractar plantilla o endpoint para automatizar su scraper.
-4. Dejar preparado el esqueleto/scripts para World Bank, BID, CAF, y otras fuentes multilaterales clave, siguiendo el mismo patrón modular.
+**Puedes pedirme que continúe exactamente desde aquí cuando desees reabrir, sólo di “resume” o “continuar”.**
 
-# Si retomas, continua desde aquí siguiendo el orden del roadmap, o contacta a la IA con “retomar roadmap extractor internacional”.
-
----
+Progreso guardado automáticamente.

@@ -1,0 +1,36 @@
+# ----------- NEXT.JS PRODUCTION (STANDALONE) DOCKERFILE -----------
+# Build Stage
+FROM --platform=linux/amd64 node:20.11.0-slim AS builder
+WORKDIR /app
+
+# Instalar dependencias solo de producción primero, para cachear capas
+COPY package.json package-lock.json* yarn.lock* pnpm-lock.yaml* ./
+RUN npm ci --prefer-offline
+
+# Copiar el resto del código fuente
+COPY . .
+
+# Configurar output standalone en Next.js (si no está en next.config.js)
+# RUN echo "module.exports = { output: 'standalone' }" > next.config.js
+
+# Build de Next.js productivo
+RUN npm run build
+
+# ----------- Production Stage -----------
+FROM --platform=linux/amd64 node:20.11.0-slim AS runner
+WORKDIR /app
+ENV NODE_ENV production
+
+# Copiar archivos necesarios desde builder
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./
+
+# Crear usuario seguro
+USER node
+EXPOSE 3000
+
+# Comando de producción: Next.js standalone
+CMD ["node", "server.js"]

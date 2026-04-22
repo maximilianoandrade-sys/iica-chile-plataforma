@@ -17,6 +17,17 @@ services:
       - redis
     command: python app_new.py
 
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - web
+
   db:
     image: postgres:15
     environment:
@@ -43,6 +54,7 @@ services:
       - ./ssl:/etc/nginx/ssl
     depends_on:
       - web
+      - frontend
 
 volumes:
   postgres_data:
