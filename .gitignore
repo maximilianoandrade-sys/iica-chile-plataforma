@@ -76,3 +76,4 @@ components/FiltersPanel.tsx
 components/TenderCard.tsx
 components/SearchBar.tsx
 lib/tenders.ts
+.env.local.save
