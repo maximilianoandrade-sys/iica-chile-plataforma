@@ -1,11 +1,11 @@
 "use client";
 import Image from "next/image";
-import { getInstitutionalLogo } from "@/lib/logos";
+import { getInstitutionalLogo, getLogoFallback } from "@/lib/logos";
 import { useState } from "react";
 
 export function InstitutionLogo({ nombre, size = 40 }: { nombre: string; size?: number }) {
     const [error, setError] = useState(false);
-    const src = !error ? getInstitutionalLogo(nombre) : `https://placehold.co/${size}x${size}/2E7D32/white?text=${nombre.charAt(0)}`;
+    const src = !error ? getInstitutionalLogo(nombre, size) : getLogoFallback(nombre, size);
 
     return (
         <div
