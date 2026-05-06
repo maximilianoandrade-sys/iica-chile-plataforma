@@ -1,5 +1,6 @@
 import type { Scraper } from "./types";
+import { fiaScraper } from "./scrapers/fia";
 
 export const scrapers: Scraper[] = [
-  // Se irán agregando uno por uno en las próximas tareas
+  fiaScraper,
 ];

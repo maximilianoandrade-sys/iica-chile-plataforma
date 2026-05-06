@@ -1,0 +1,38 @@
+name: Ingesta diaria de proyectos
+
+on:
+  schedule:
+    - cron: "0 6 * * *"  # 06:00 UTC = 03:00 Chile
+  workflow_dispatch:
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Run scrapers
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+        run: npx tsx scripts/run-scrapers.ts
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Resultado de ingesta" >> $GITHUB_STEP_SUMMARY
+          echo "- Ejecutado: $(date -u +%FT%TZ)" >> $GITHUB_STEP_SUMMARY
+          echo "- Disparador: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
