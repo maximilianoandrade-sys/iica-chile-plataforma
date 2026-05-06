@@ -12,6 +12,16 @@
 
 ---
 
+## Reglas para el agente que ejecuta el plan
+
+1. **Pedir verificaciones manuales locales en cada checkpoint marcado** (`> CHECKPOINT con usuaria`). NO avanzar al siguiente step hasta que la usuaria confirme. Cada checkpoint dice exactamente qué hay que verificar y dónde (browser, Supabase Studio, GitHub Actions UI, etc.).
+2. **NO abrir el Pull Request automáticamente.** El Step 11.10 está gateado: antes de correr `gh pr create`, pedir confirmación explícita a la usuaria. Solo se abre el PR si dice "sí, abrir PR" (o equivalente).
+3. **Operaciones que tocan producción** (auditoría --apply, migraciones Prisma sobre Supabase, push a `main` o a la feature branch remota) requieren confirmación de la usuaria aunque no haya un checkpoint explícito.
+4. **Si un test falla por motivo no obvio**, parar y reportar a la usuaria en lugar de "arreglar" el test cambiando expectativas.
+5. **Preservar el orden de tasks**. No reordenar ni saltarse Task 0 (auditoría legacy) — está pensada para correr antes de tocar nada más.
+
+---
+
 ## Estructura de archivos
 
 **Nuevos:**
@@ -49,6 +59,49 @@
 - `app/api/search-projects/route.ts` *(simplificación masiva)*
 - `components/OportunidadCard.tsx` *(badge needsReview)*
 - `components/ProjectFilters.tsx` *(toggle includeUnverified)*
+
+---
+
+## Setup: crear rama de trabajo
+
+Antes de empezar Task 0, aislar el trabajo en una feature branch para mantener `main` limpio durante las 2-3 semanas de implementación. Todos los commits del plan van a esta rama. Al final se mergea vía PR.
+
+- [ ] **Step S.1: Verificar working tree limpio**
+
+```bash
+git status
+```
+
+Esperado: `nothing to commit, working tree clean` o solo cambios sin trackear no relacionados. Si hay cambios pendientes, stashearlos o commitearlos antes.
+
+- [ ] **Step S.2: Sincronizar con remoto**
+
+```bash
+git checkout main
+git pull origin main
+```
+
+- [ ] **Step S.3: Crear y cambiar a feature branch**
+
+```bash
+git checkout -b feat/pipeline-ingesta-busqueda
+```
+
+- [ ] **Step S.4: Push inicial para crear rama remota**
+
+```bash
+git push -u origin feat/pipeline-ingesta-busqueda
+```
+
+A partir de acá, **todos los commits de Tasks 0–11 van a esta rama**. Al terminar Task 11, se abre un PR a `main`.
+
+> **Si preferís worktree en lugar de branch simple** (para tener `main` checkouteado en otra ventana en paralelo), reemplazar Steps S.3-S.4 por:
+> ```bash
+> git worktree add ../iica-pipeline-ingesta -b feat/pipeline-ingesta-busqueda
+> cd ../iica-pipeline-ingesta
+> git push -u origin feat/pipeline-ingesta-busqueda
+> ```
+> Y trabajar dentro de `../iica-pipeline-ingesta/`. Al terminar, `git worktree remove ../iica-pipeline-ingesta` después del merge.
 
 ---
 
@@ -220,7 +273,17 @@ npx tsx scripts/audit-legacy-data.ts -- --apply
 
 Esperado: la consola muestra `Aplicando cierre de N proyectos... Listo.`. Verificar en Supabase que esos proyectos tengan `estadoPostulacion = "Cerrada"` y `notasInternas` con el formato `auditoría legacy YYYY-MM-DD: ...`.
 
-- [ ] **Step 0.5: Commit**
+- [ ] **Step 0.5: CHECKPOINT con usuaria — verificación post-apply**
+
+> Pedir a la usuaria que verifique en **Supabase Studio**:
+> 1. Filtrar `Project` por `notasInternas LIKE '%auditoría legacy%'` → confirmar que aparecen los proyectos esperados con `estadoPostulacion = "Cerrada"`.
+> 2. Hacer una búsqueda en la web del proyecto IICA → confirmar que esos proyectos cerrados ya **no aparecen** en la búsqueda principal (a menos que se filtre por "cerrados").
+>
+> Si algún proyecto se cerró por error (la URL estaba caída temporalmente y debería seguir abierto): revertir manualmente con `UPDATE Project SET estadoPostulacion = 'Abierta', notasInternas = NULL WHERE id = X;`.
+>
+> **NO avanzar a Step 0.6 hasta que la usuaria confirme.**
+
+- [ ] **Step 0.6: Commit**
 
 ```bash
 git add scripts/audit-legacy-data.ts audit-broken-urls.csv
@@ -771,7 +834,16 @@ npm run typecheck
 
 Esperado: sin errores.
 
-- [ ] **Step 1.17: Commit**
+- [ ] **Step 1.17: CHECKPOINT con usuaria — verificación de schema**
+
+> Pedir a la usuaria que verifique en **Supabase Studio**:
+> 1. Tabla `Project` tiene las columnas nuevas: `canonicalUrl` (NOT NULL UNIQUE), `sourceId`, `discoveredBy` (default "manual"), `needsReview` (default false), `firstSeenAt`, `lastSeenAt`.
+> 2. Tabla `Source` existe y contiene 6 filas: indap, fia, corfo, fontagro, iica-hemisferico, ai-discovery.
+> 3. Todos los proyectos legacy tienen `canonicalUrl` no-nulo y `discoveredBy = "manual"`.
+>
+> **NO avanzar a Step 1.18 hasta que la usuaria confirme.**
+
+- [ ] **Step 1.18: Commit**
 
 ```bash
 git add prisma/ lib/ingestion/types.ts lib/ingestion/utils.ts lib/ingestion/validateUrl.ts tests/lib/ingestion/ scripts/seed-sources.ts scripts/backfill-canonical-urls.ts
@@ -1372,9 +1444,19 @@ git push
 
 - [ ] **Step 3.11: Triggerear el workflow manualmente desde GitHub UI**
 
-En GitHub → Actions → "Ingesta diaria de proyectos" → "Run workflow" → branch main → Run.
+En GitHub → Actions → "Ingesta diaria de proyectos" → "Run workflow" → branch `feat/pipeline-ingesta-busqueda` → Run.
 
-Verificar en logs que termina exitoso, y en Supabase que hay proyectos FIA con `lastSeenAt` reciente.
+Verificar en logs que termina exitoso.
+
+- [ ] **Step 3.12: CHECKPOINT con usuaria — verificación end-to-end del primer scraper**
+
+> Pedir a la usuaria que verifique:
+> 1. **En Supabase Studio**: tabla `Project` tiene filas con `sourceId` apuntando a FIA, `discoveredBy = "scraper"`, `lastSeenAt` reciente (hoy).
+> 2. **En `/admin/sources`** (cuando exista, post-Task 10): FIA aparece con `lastRunStatus = "success"` y `projectsCount > 0`. *(Si Task 10 aún no está hecha, saltarse este punto.)*
+> 3. **En la web del proyecto** (ya levantada con `npm run dev` o en preview de Vercel): hacer una búsqueda con un término de FIA — los resultados deben aparecer con datos reales del scraper, no el `BASE_PROJECTS` viejo.
+> 4. **En GitHub Actions UI**: el run del workflow tiene status verde y duración <5 min.
+>
+> Este es el primer momento de "valor visible" del pipeline. Si algo no funciona acá, probablemente está roto el contrato `Scraper` o el runner. NO avanzar a Task 4 sin esta verificación.
 
 ---
 
@@ -1819,7 +1901,16 @@ npx tsx scripts/run-scrapers.ts
 
 Esperado: 5+ tests PASS, runner ingesta de las 5 fuentes.
 
-- [ ] **Step 5.9: Commit**
+- [ ] **Step 5.9: CHECKPOINT con usuaria — verificación de las 5 fuentes**
+
+> Pedir a la usuaria que verifique:
+> 1. **En Supabase**: filtrar `Project` por `source.slug IN (indap, fia, corfo, fontagro, iica-hemisferico)`. Cada slug debe tener al menos 1 proyecto con `lastSeenAt` de hoy.
+> 2. **En `/admin/sources`** (si Task 10 ya está hecha): las 5 fuentes aparecen con `lastRunStatus` = `success` o `partial`. Si alguna está `error`, mostrar el `lastRunError` para diagnosticar.
+> 3. **Buscar en la web** algún término genérico ("agrícola", "innovación") y confirmar que aparecen resultados de las 5 fuentes (mirar el campo `institucion`).
+>
+> Si una fuente no trajo nada o parsea mal, el problema está en su selector CSS — refrescar el fixture con curl, ajustar selectores. NO avanzar a Task 6.
+
+- [ ] **Step 5.10: Commit**
 
 ```bash
 git add lib/ingestion/scrapers/fontagro.ts lib/ingestion/scrapers/iica-hemisferico.ts lib/ingestion/registry.ts tests/lib/ingestion/scrapers/fontagro.test.ts tests/lib/ingestion/scrapers/iica-hemisferico.test.ts tests/fixtures/fontagro.html tests/fixtures/iica-hemisferico.html
@@ -2463,7 +2554,17 @@ curl -X POST http://localhost:3000/api/search-projects -H "content-type: applica
 
 Esperado: respuesta en <1s con resultados de BD.
 
-- [ ] **Step 8.6: Commit**
+- [ ] **Step 8.6: CHECKPOINT con usuaria — verificación de búsqueda**
+
+> Pedir a la usuaria que verifique en local con `npm run dev`:
+> 1. Hacer 3 búsquedas distintas en la página principal. **Cada una debe responder en menos de 2 segundos** (no 10-30s como antes).
+> 2. Ninguna búsqueda debe fallar con error. La rama Claude+web_search ya no existe en runtime.
+> 3. Los resultados que aparecen son los de la BD (todos tienen URL real, no inventados).
+> 4. Si Mercado Público está respondiendo, aparecen mezclados con prefijo "Mercado Público:".
+>
+> Si alguna búsqueda devuelve 0 resultados cuando antes traía algunos, revisar si el problema es la query (filtros muy estrictos) o la BD (vacía para ese término). NO avanzar a Task 9 sin esta verificación.
+
+- [ ] **Step 8.7: Commit**
 
 ```bash
 git add app/api/search-projects/route.ts tests/api/search-projects.test.ts
@@ -2559,7 +2660,17 @@ npm run dev
 
 Buscar algo. Toggle ON → aparecen `needsReview=true` con badge. Toggle OFF → no aparecen.
 
-- [ ] **Step 9.6: Commit**
+- [ ] **Step 9.6: CHECKPOINT con usuaria — verificación visual del badge y toggle**
+
+> Pedir a la usuaria que verifique en local con `npm run dev`:
+> 1. **Badge visible**: hacer una búsqueda. Si hay resultados con `needsReview=true` en BD, deben mostrar la pill dorada "🤖 Sin verificar" al lado del título. (Si no hay descubrimientos IA todavía, marcar manualmente uno desde Supabase Studio para probar el render.)
+> 2. **Tooltip funciona**: pasar el mouse sobre el badge muestra el texto "Encontrado por IA en el scan semanal...".
+> 3. **Toggle funciona**: el checkbox "Incluir descubrimientos sin verificar 🤖" en el panel de filtros está ON por default. Al desactivarlo y buscar de nuevo, los proyectos con badge desaparecen de los resultados.
+> 4. **Estilo institucional**: el badge dorado encaja con la paleta IICA (no rompe el diseño).
+>
+> NO avanzar a Task 10 sin esta verificación.
+
+- [ ] **Step 9.7: Commit**
 
 ```bash
 git add components/OportunidadCard.tsx components/ProjectFilters.tsx components/ProjectExplorer.tsx
@@ -2927,7 +3038,19 @@ En Vercel project settings → Environment Variables:
 - `ADMIN_PASSWORD`
 - `ADMIN_SESSION_SECRET` (generado con `openssl rand -hex 32`)
 
-- [ ] **Step 10.10: Commit y deploy**
+- [ ] **Step 10.10: CHECKPOINT con usuaria — verificación end-to-end del admin**
+
+> Pedir a la usuaria que verifique en local (`npm run dev`):
+> 1. **Login**: ir a `/admin/sources` → debe redirigir a `/admin/login`. Probar password incorrecto → "Contraseña incorrecta". Probar password correcto → redirige a `/admin/sources` y muestra la tabla de fuentes.
+> 2. **Persistencia de sesión**: cerrar la pestaña, volver a abrir `/admin/sources` → debe entrar sin pedir login (cookie de 30 días activa).
+> 3. **`/admin/sources`**: la tabla muestra las 6 fuentes con su estado, último run, conteo, y errores si los hay.
+> 4. **`/admin/discoveries`**: lista los proyectos con `needsReview=true`. Cada uno muestra título, institución, URL, y el snippet IA en notas internas (truncado a 250 chars).
+> 5. **Aprobar funciona**: clic en "Aprobar" en un descubrimiento → la fila desaparece. En Supabase, `needsReview` pasa a `false`. En la búsqueda principal, el badge ya no aparece para ese proyecto.
+> 6. **Descartar funciona**: clic en "Descartar" → la fila desaparece. En Supabase, `estadoPostulacion = "Cerrada"` y `notasInternas` contiene "descartado por revisión IA".
+>
+> NO avanzar a Task 11 sin esta verificación.
+
+- [ ] **Step 10.11: Commit y deploy**
 
 ```bash
 git add middleware.ts app/admin/ app/api/admin/
@@ -3155,6 +3278,54 @@ Esperar al próximo cron (o disparar manualmente desde GitHub Actions UI):
 - ✅ Buscar en la UI: respuesta <1s, resultados con datos verificados
 - ✅ `/admin/discoveries` lista descubrimientos del último run de Capa B
 - ✅ Badge "🤖 Sin verificar" aparece en cards correspondientes
+
+- [ ] **Step 11.10: CHECKPOINT FINAL — pedir permiso explícito para abrir el PR**
+
+> ⛔ **El agente NO ejecuta `gh pr create` automáticamente.** Antes de avanzar al Step 11.11, **pedir confirmación explícita a la usuaria** con el siguiente mensaje:
+>
+> > *"Las 11 tareas del plan están completas. Antes de abrir el PR a `main`, te pido que verifiques manualmente:*
+> > - *Smoke test corrió OK localmente y en GitHub Actions*
+> > - *`/admin/sources` muestra todas las fuentes en verde (o amarillo aceptable)*
+> > - *Búsqueda en la web responde rápido y muestra datos reales*
+> > - *El badge "🤖" aparece donde corresponde y el toggle filtra correctamente*
+> > - *Aprobar/Descartar en `/admin/discoveries` funciona*
+> > - *El último deploy (preview de Vercel sobre la rama) está OK*
+> >
+> > *¿Procedo a abrir el PR a `main`?"*
+>
+> Solo si la usuaria responde "sí" (o equivalente claro), continuar al Step 11.11. Si pide cambios o más checks, hacerlos y volver a preguntar.
+
+- [ ] **Step 11.11: Abrir Pull Request a main**
+
+```bash
+gh pr create --title "feat: pipeline de ingesta diario de proyectos" --body "$(cat <<'EOF'
+## Resumen
+Reemplaza la búsqueda en vivo con Claude+web_search por un pipeline de ingesta diario que mantiene la BD Supabase actualizada con datos verificados.
+
+- 5 scrapers determinísticos (INDAP, FIA, CORFO, FONTAGRO, IICA Hemisférico) corriendo diario vía GitHub Actions
+- AI Discovery semanal con guardrails anti-alucinación (snippet >=15 palabras + URL validation)
+- Páginas /admin/sources y /admin/discoveries para revisión humana
+- Badge "🤖 Sin verificar" + toggle includeUnverified
+- Endpoint /api/search-projects simplificado (700 LOC → ~80, sin Claude runtime)
+- Auditoría legacy ejecutada antes de empezar limpia URLs muertas
+
+Spec: docs/superpowers/specs/2026-05-05-mejorar-busqueda-proyectos-design.md
+Plan: docs/superpowers/plans/2026-05-06-pipeline-ingesta-busqueda.md
+
+## Test plan
+- [ ] npm test pasa
+- [ ] npm run typecheck pasa
+- [ ] npm run build pasa
+- [ ] Workflow ingest-scrapers.yml corrió manualmente con éxito
+- [ ] /admin/sources muestra las 6 fuentes con lastRunStatus="success"
+- [ ] Búsqueda responde <1s
+- [ ] Badge aparece en cards needsReview
+- [ ] /admin/discoveries permite Aprobar/Descartar
+EOF
+)"
+```
+
+Esperar review, mergear, eliminar la rama remota y local. ✅ Pipeline en producción.
 
 ---
 
