@@ -15,7 +15,11 @@
     "prisma:push": "prisma db push",
     "prisma:seed": "tsx prisma/seed.ts",
     "db:setup": "npm run prisma:generate && npm run prisma:push && npm run prisma:seed",
-    "scrape": "tsx lib/scrapers.ts"
+    "scrape": "tsx lib/scrapers.ts",
+    "ingest": "tsx scripts/run-scrapers.ts",
+    "ingest:audit": "tsx scripts/audit-legacy-data.ts",
+    "discover": "tsx scripts/discover-projects.ts",
+    "smoke": "tsx scripts/smoke-test.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.36.0",

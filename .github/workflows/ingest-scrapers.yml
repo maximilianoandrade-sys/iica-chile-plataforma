@@ -30,6 +30,12 @@ jobs:
           DIRECT_URL: ${{ secrets.DIRECT_URL }}
         run: npx tsx scripts/run-scrapers.ts
 
+      - name: Smoke test post-ingesta
+        if: success()
+        env:
+          DEPLOYMENT_URL: ${{ secrets.DEPLOYMENT_URL }}
+        run: npx tsx scripts/smoke-test.ts
+
       - name: Summary
         if: always()
         run: |
