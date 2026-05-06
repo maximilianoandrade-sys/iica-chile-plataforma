@@ -231,8 +231,19 @@ if (failed === scrapers.length) process.exit(1); // si TODO falló, alerta
 ### Persistencia (`lib/ingestion/persistence.ts`)
 
 - `normalizeUrl(rawUrl): string` — lowercase, strip trailing `/`, strip UTM and fragment params.
+- `validateUrl(url): Promise<{ ok: boolean, reason?: string }>` — HEAD request con timeout 10s, sigue redirects. Devuelve `ok: false` si:
+  - HTTP 404 / 410 / 5xx
+  - Timeout o error de red
+  - Redirige a una homepage genérica (heurística: la URL final es solo el dominio raíz cuando la original tenía path)
 - `upsertProject(raw, sourceSlug)`:
   ```typescript
+  // 1. Validar URL antes de tocar la BD
+  const validation = await validateUrl(raw.url);
+  if (!validation.ok) {
+    return { skipped: true, reason: validation.reason };  // se reporta a partialErrors
+  }
+
+  // 2. Upsert solo si la URL resuelve
   await prisma.project.upsert({
     where: { canonicalUrl: normalizeUrl(raw.url) },
     update: { ...mappedFields, lastSeenAt: new Date() },
@@ -243,6 +254,8 @@ if (failed === scrapers.length) process.exit(1); // si TODO falló, alerta
   - Marca `estadoPostulacion = "Cerrada"` los proyectos con `lastSeenAt < hace 7 días` AND `estadoPostulacion = "Abierta"`.
   - Marca `estadoPostulacion = "Cerrada"` los proyectos con `fecha_cierre < hoy` AND `estadoPostulacion = "Abierta"`.
 - `updateSourceStatus(slug, status, count, errorMsg?)` — actualiza `Source.lastRunAt/Status/Error/projectsCount`.
+
+**Por qué validar URL en cada ingesta:** corta la cadena de alucinaciones. Si un scraper rompe y devuelve URLs basura, o si un proyecto cambió su URL, el sistema no las inserta silenciosamente. El costo es un HEAD extra por proyecto (~50-200ms × ~50 proyectos = <10s adicional por scraper) — aceptable para cron diario.
 
 ### Patrones obligatorios para todos los scrapers
 
@@ -283,15 +296,38 @@ jobs:
 
 ## 7. Capa B — AI Discovery (modificación)
 
-`scripts/discover-projects.ts` cambia de "escribir a JSON + commit" a "escribir a BD":
+`scripts/discover-projects.ts` cambia de "escribir a JSON + commit" a "escribir a BD", con guardrails anti-alucinación.
+
+### System prompt más estricto
+
+Reemplazamos el prompt actual por uno que exige evidencia textual:
+
+> *"Solo incluí proyectos donde puedas citar el snippet exacto del web_search que viste (campo `source_snippet`, mínimo 15 palabras). Si no tenés un snippet textual del search result que mencione el proyecto, NO lo incluyas. NO inventes URLs, fechas ni montos. Si un dato no está en los snippets que recibiste, deja el campo vacío en vez de adivinar."*
+
+El response schema del LLM ahora exige `source_snippet: string` por cada resultado. Si viene vacío o <15 palabras, el script descarta el resultado antes de procesar.
+
+### Pipeline modificado
 
 ```typescript
 const aiResults = await callClaudeWithWebSearch(query);
 
 for (const r of aiResults) {
+  // 1. Guardrail: descartar si no hay evidencia textual
+  if (!r.source_snippet || r.source_snippet.split(/\s+/).length < 15) {
+    log.warn(`[ai-discovery] Descartado por falta de snippet: ${r.title}`);
+    continue;
+  }
+
+  // 2. Guardrail: validar que la URL realmente resuelve
+  const validation = await validateUrl(r.url);
+  if (!validation.ok) {
+    log.warn(`[ai-discovery] URL inválida (${validation.reason}): ${r.url}`);
+    continue;
+  }
+
   const canonicalUrl = normalizeUrl(r.url);
 
-  // Si ya existe (Capa A o discovery previo), solo refrescar lastSeenAt
+  // 3. Si ya existe (Capa A o discovery previo), solo refrescar lastSeenAt
   const existing = await prisma.project.findUnique({ where: { canonicalUrl } });
   if (existing) {
     await prisma.project.update({
@@ -301,14 +337,15 @@ for (const r of aiResults) {
     continue;
   }
 
-  // Nuevo descubrimiento → insertar con flag de revisión
+  // 4. Nuevo descubrimiento → insertar con flag de revisión
   await prisma.project.create({
     data: {
       canonicalUrl,
       url_bases: r.url,
       nombre: r.title,
       institucion: r.institution,
-      // ... mapeo de campos ...
+      objetivo: r.description,
+      notasInternas: `AI snippet: "${r.source_snippet.slice(0, 200)}..."`,  // auditoría
       discoveredBy: "ai",
       needsReview: true,
       source: { connect: { slug: "ai-discovery" } },
@@ -316,6 +353,11 @@ for (const r of aiResults) {
   });
 }
 ```
+
+**Tres guardrails encadenados:**
+1. **Evidencia textual obligatoria** — si Claude no puede citar la fuente, descarta.
+2. **Validación de URL** — si la URL no resuelve, descarta.
+3. **Snippet auditable** guardado en `notasInternas` — el equipo IICA puede ver qué fragmento usó la IA cuando aprueba/descarta en `/admin/discoveries`.
 
 El JSON commiteado al repo se mantiene como histórico/auditoría, pero ya no es la fuente de verdad.
 
@@ -476,21 +518,67 @@ Suficiente para uso interno. Si más adelante hay multiusuario o auditoría, se 
 
 | # | Commit / PR | Salida visible |
 |---|---|---|
-| 1 | Schema migration + `Source` model + helpers de normalización (con tests) | BD tiene campos nuevos. Sin scrapers aún. |
-| 2 | Runner + persistence (`upsertProject`, `markStale`) sin scrapers reales | Infra lista. Se puede correr en vacío. |
+| **0** | **Auditoría de datos legacy** (`scripts/audit-legacy-data.ts`) — HEAD a cada `Project.url_bases`, reporte CSV con URLs rotas, marca como `Cerrada` con `notasInternas="auditoría legacy: URL no resuelve"` los que fallan. **Ejecutado una sola vez antes de empezar.** | Reporte de cuántos proyectos legacy son alucinaciones / URLs muertas. BD limpia para empezar. |
+| 1 | Schema migration + `Source` model + helpers de normalización + `validateUrl` (con tests) | BD tiene campos nuevos. Sin scrapers aún. |
+| 2 | Runner + persistence (`upsertProject` con validación URL, `markStale`) sin scrapers reales | Infra lista. Se puede correr en vacío. |
 | 3 | Primer scraper: **FIA** + workflow `ingest-scrapers.yml` | Cron diario corriendo, BD se llena con FIA. ✨ Primera demo real. |
 | 4 | INDAP + CORFO scrapers | 3 fuentes funcionando. |
 | 5 | FONTAGRO + IICA Hemisférico scrapers | 5 fuentes Capa A completas. |
 | 6 | Refactor Mercado Público al nuevo contrato | 6 fuentes consistentes. |
-| 7 | Modificación de `discover-projects.ts` (Capa B → BD) | AI descubre y persiste. |
+| 7 | Modificación de `discover-projects.ts` (Capa B → BD) con guardrails anti-alucinación (snippet obligatorio + URL validation) | AI descubre y persiste, sin alucinaciones. |
 | 8 | Endpoint `/api/search-projects` simplificado + eliminar Claude runtime | Búsqueda <1s, confiable. |
 | 9 | Badge + toggle en UI | UX completa. |
-| 10 | `/admin/sources` y `/admin/discoveries` + middleware auth | Equipo IICA puede operar. |
+| 10 | `/admin/sources` y `/admin/discoveries` + middleware auth (con `source_snippet` visible al revisar) | Equipo IICA puede operar. |
 | 11 | Smoke test + cleanup + README de operación | Listo para producción. |
 
 **Tiempo estimado:** 2–3 semanas de un dev senior dedicado, o 4–6 semanas en paralelo con otras tareas. Cada commit es 1–3 horas.
 
-**Primer valor visible:** commit #3 ya pone proyectos reales de FIA en la BD vía cron diario.
+**Primer valor visible:** commit #0 ya elimina las convocatorias falsas existentes (BD legacy depurada). Commit #3 pone proyectos reales de FIA en la BD vía cron diario.
+
+### Commit #0 detallado: auditoría de datos legacy
+
+```typescript
+// scripts/audit-legacy-data.ts
+const all = await prisma.project.findMany({
+  where: { estadoPostulacion: { not: "Cerrada" } }
+});
+
+const broken: Array<{id, nombre, url, reason}> = [];
+const ok: Array<{id, nombre}> = [];
+
+for (const p of all) {
+  if (!p.url_bases?.trim()) {
+    broken.push({ id: p.id, nombre: p.nombre, url: "", reason: "sin URL" });
+    continue;
+  }
+  const v = await validateUrl(p.url_bases);
+  if (!v.ok) {
+    broken.push({ id: p.id, nombre: p.nombre, url: p.url_bases, reason: v.reason! });
+  } else {
+    ok.push({ id: p.id, nombre: p.nombre });
+  }
+}
+
+// Generar CSV para revisión humana
+fs.writeFileSync("audit-broken-urls.csv", toCsv(broken));
+console.log(`OK: ${ok.length} | Broken: ${broken.length}`);
+console.log("Revisá audit-broken-urls.csv. Para aplicar el cierre automático, corré con --apply.");
+
+if (process.argv.includes("--apply")) {
+  for (const b of broken) {
+    await prisma.project.update({
+      where: { id: b.id },
+      data: {
+        estadoPostulacion: "Cerrada",
+        notasInternas: `auditoría legacy ${new Date().toISOString().slice(0,10)}: ${b.reason}`
+      }
+    });
+  }
+  console.log(`Marcados como Cerrada: ${broken.length}`);
+}
+```
+
+Modo dry-run por default (genera CSV pero no toca BD). Con `--apply` aplica los cierres. **Usuaria revisa el CSV antes de aplicar** — algunos podrían ser falsos positivos (URL temporalmente caída).
 
 ## 13. Variables de entorno requeridas
 
@@ -522,3 +610,5 @@ Suficiente para uso interno. Si más adelante hay multiusuario o auditoría, se 
 2. **Los scrapers se rompen cuando las fuentes cambian.** Mitigación: alerta clara en `/admin/sources` + `Source.lastRunStatus = "partial"` o `"error"` visible. Es trabajo recurrente, no se elimina — solo se hace visible y manejable.
 3. **Migración de datos legacy puede tener duplicados de `canonicalUrl`.** Mitigación: script previo a la migración detecta y reporta colisiones para resolución manual.
 4. **Si `DATABASE_URL` está expuesta en GitHub Secrets, un commit malicioso podría leakearla.** Mitigación estándar: branch protection + review en PRs sobre `main`.
+5. **`validateUrl` puede generar falsos positivos** — una fuente temporalmente caída marca proyectos legítimos como inválidos. Mitigación: la auditoría legacy (commit #0) corre en modo dry-run con CSV revisable antes de aplicar cierres. En la operación diaria, la falla solo evita la actualización de `lastSeenAt` ese día — el proyecto queda con el estado anterior y se reintenta al día siguiente. Solo después de 7 días sin reaparecer entra en stale.
+6. **Claude puede aún alucinar dentro de un `source_snippet` falso** (poco probable pero posible). Mitigación parcial: el equipo IICA ve el snippet en `/admin/discoveries` y descarta si no parece auténtico. Una validación más fuerte (re-fetch del snippet contra el HTML de la URL) sería excesiva para MVP.
