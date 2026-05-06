@@ -58,7 +58,7 @@ describe("iicaHemisfericoScraper", () => {
     await expect(iicaHemisfericoScraper.scrape()).rejects.toThrow();
   });
 
-  it("filtra bids con deadline pasada", async () => {
+  it("incluye TODAS las bids con final_date (markStale cierra las vencidas)", async () => {
     const past = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 19).replace("T", " ");
     const future = new Date(Date.now() + 30 * 86400000).toISOString().slice(0, 19).replace("T", " ");
     (global.fetch as jest.Mock).mockResolvedValue({
@@ -69,11 +69,13 @@ describe("iicaHemisfericoScraper", () => {
       ]),
     });
     const result = await iicaHemisfericoScraper.scrape();
-    expect(result.projects.length).toBe(1);
-    expect(result.projects[0].title).toBe("Vigente");
+    expect(result.projects.length).toBe(2);
+    // Ambas tienen deadline parseada — el runner aplicará markStale()
+    expect(result.projects[0].deadline).toBeInstanceOf(Date);
+    expect(result.projects[1].deadline).toBeInstanceOf(Date);
   });
 
-  it("incluye bids sin final_date como vigentes", async () => {
+  it("incluye bids sin final_date", async () => {
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: () => Promise.resolve([
@@ -82,5 +84,6 @@ describe("iicaHemisfericoScraper", () => {
     });
     const result = await iicaHemisfericoScraper.scrape();
     expect(result.projects.length).toBe(1);
+    expect(result.projects[0].deadline).toBeNull();
   });
 });

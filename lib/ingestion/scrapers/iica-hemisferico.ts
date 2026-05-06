@@ -64,8 +64,6 @@ export const iicaHemisfericoScraper: Scraper = {
       throw new Error(`fetch fallido: ${(err as Error).message}`);
     }
 
-    const now = Date.now();
-
     for (const bid of bids) {
       try {
         const titleRaw = bid.title?.rendered;
@@ -79,12 +77,9 @@ export const iicaHemisfericoScraper: Scraper = {
           continue;
         }
 
+        // Pasamos final_date como deadline; markStale() del runner cierra
+        // automáticamente las bids vencidas en post-procesamiento.
         const deadline = parseFinalDate(bid.acf?.final_date);
-
-        // Filtrar bids vencidas: si tiene final_date en el pasado, descartar
-        if (deadline && deadline.getTime() < now) {
-          continue;
-        }
 
         const title = cleanText(decodeHtmlEntities(titleRaw));
         const budget = bid.acf?.monto_adjudicado_text?.trim() || null;

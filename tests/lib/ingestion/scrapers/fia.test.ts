@@ -1,11 +1,35 @@
 import * as fs from "fs";
 import * as path from "path";
-import { fiaScraper } from "@/lib/ingestion/scrapers/fia";
+import { fiaScraper, parseFiaDeadline } from "@/lib/ingestion/scrapers/fia";
 
 global.fetch = jest.fn();
 
+describe("parseFiaDeadline", () => {
+  it("parsea 'Cierre: 07 de abril de 2026' simple", () => {
+    const html = "<li>Cierre: <strong>07</strong> de abril de 2026 a las 15:00</li>";
+    const d = parseFiaDeadline(html);
+    expect(d?.toISOString().slice(0, 10)).toBe("2026-04-07");
+  });
+
+  it("ignora dates en strikethrough (extensión de plazo)", () => {
+    const html = `<li><s>Cierre: 31 de marzo de 2026</s></li><li>Cierre: 07 de abril de 2026</li>`;
+    const d = parseFiaDeadline(html);
+    expect(d?.toISOString().slice(0, 10)).toBe("2026-04-07");
+  });
+
+  it("devuelve null si no hay 'Cierre:' en el contenido", () => {
+    const html = "<p>Información sobre el programa AgroCoopInnova</p>";
+    expect(parseFiaDeadline(html)).toBeNull();
+  });
+
+  it("devuelve null para contenido vacío", () => {
+    expect(parseFiaDeadline("")).toBeNull();
+    expect(parseFiaDeadline(undefined)).toBeNull();
+  });
+});
+
 describe("fiaScraper", () => {
-  it("parsea WP REST API y extrae proyectos", async () => {
+  it("parsea WP REST API y extrae proyectos con deadlines", async () => {
     const json = JSON.parse(
       fs.readFileSync(path.join(__dirname, "../../../fixtures/fia.json"), "utf-8")
     );
@@ -22,10 +46,14 @@ describe("fiaScraper", () => {
 
     const first = result.projects[0];
     expect(first.title).toBeTruthy();
-    expect(first.title).not.toMatch(/&#\d+;/); // sin entidades HTML
+    expect(first.title).not.toMatch(/&#\d+;/);
     expect(first.url).toMatch(/^https:\/\/(www\.)?fia\.cl\//);
     expect(first.institution).toBe("FIA");
     expect(first.ambito).toBe("Nacional");
+
+    // La mayoría debería tener deadline parseado del content
+    const withDeadline = result.projects.filter((p) => p.deadline !== null);
+    expect(withDeadline.length).toBeGreaterThan(result.projects.length / 2);
   });
 
   it("propaga error si la API responde no-OK", async () => {
