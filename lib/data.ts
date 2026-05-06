@@ -95,6 +95,13 @@ export interface Project {
 
     // ── Campo de checklist (legacy) ──────────────────────────────────────
     checklist?: string[];
+
+    // ── Campos del pipeline de ingesta ────────────────────────────────────
+    /** true cuando el proyecto fue descubierto por IA y aún no fue revisado */
+    needsReview?: boolean;
+
+    /** Origen: 'scraper' | 'ai' | 'manual' */
+    discoveredBy?: string;
 }
 
 // ============================================================================

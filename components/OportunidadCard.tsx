@@ -25,6 +25,8 @@ export interface Oportunidad {
     categoria?: string;
     requisitos?: string[];
     fortalezas?: string[];
+    /** true cuando es un descubrimiento IA pendiente de revisión humana */
+    needsReview?: boolean;
 }
 
 export function OportunidadCard({ op }: { op: Oportunidad }) {
@@ -99,6 +101,14 @@ export function OportunidadCard({ op }: { op: Oportunidad }) {
                     <h3 className="text-base font-bold text-gray-900 leading-tight line-clamp-2 group-hover:text-[var(--iica-blue)] transition-colors">
                         <Highlight text={op.nombre} highlight={query} />
                     </h3>
+                    {op.needsReview && (
+                        <span
+                            title="Encontrado por IA en el scan semanal. Pendiente de verificación por el equipo."
+                            className="inline-flex items-center gap-1 mt-2 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-amber-50 text-amber-700 border border-amber-300"
+                        >
+                            🤖 Sin verificar
+                        </span>
+                    )}
                     <div className="flex flex-col gap-1.5 mt-2">
                         <p className="text-xs font-medium text-gray-500 flex items-center gap-1.5">
                             <span className="w-1.5 h-1.5 rounded-full bg-gray-300" />

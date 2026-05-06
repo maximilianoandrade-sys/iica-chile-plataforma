@@ -53,6 +53,8 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
     const [compareList, setCompareList] = useState<number[]>([]);
     const [showCompareModal, setShowCompareModal] = useState(false);
     const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+    /** Modo ágil por default: true = mostrar descubrimientos IA con badge "🤖 Sin verificar" */
+    const [showUnverified, setShowUnverified] = useState(true);
 
     // Vista Rápida & Copiar
     const [quickViewProject, setQuickViewProject] = useState<Project | null>(null);
@@ -159,6 +161,11 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
         // ── Filtro Favoritos ─────────────────────────────────────────────────
         if (showFavoritesOnly) {
             filtered = filtered.filter((p: any) => favorites.includes(p.id));
+        }
+
+        // ── Filtro Descubrimientos IA sin verificar ──────────────────────────
+        if (!showUnverified) {
+            filtered = filtered.filter((p: any) => !p.needsReview);
         }
 
         // ── Quick Filters (lógica real basada en campos del proyecto) ────────
@@ -419,8 +426,19 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                     )}
                 </div>
 
-                <div className="text-[11px] font-bold text-gray-400 uppercase tracking-widest hidden sm:block">
-                    Resultados: <span className="text-gray-800">{displayedProjects.length}</span>
+                <div className="flex items-center gap-3">
+                    <label className="flex items-center gap-2 text-[11px] font-medium text-gray-500 cursor-pointer hover:text-gray-700 select-none">
+                        <input
+                            type="checkbox"
+                            checked={showUnverified}
+                            onChange={(e) => setShowUnverified(e.target.checked)}
+                            className="w-3.5 h-3.5 rounded border-gray-300 accent-amber-500"
+                        />
+                        Incluir descubrimientos sin verificar 🤖
+                    </label>
+                    <div className="text-[11px] font-bold text-gray-400 uppercase tracking-widest hidden sm:block">
+                        Resultados: <span className="text-gray-800">{displayedProjects.length}</span>
+                    </div>
                 </div>
             </div >
 
@@ -621,7 +639,8 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                 rolIICA: project.rolIICA,
                                                 url: project.url_bases,
                                                 adenda: project.permite_adendas,
-                                                descripcion: project.descripcionIICA || project.resumen?.observaciones || ''
+                                                descripcion: project.descripcionIICA || project.resumen?.observaciones || '',
+                                                needsReview: project.needsReview,
                                             };
                                             return (
                                                 <div key={project.id} className="relative">
@@ -661,7 +680,8 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                 rolIICA: project.rolIICA,
                                                 url: project.url_bases,
                                                 adenda: project.permite_adendas,
-                                                descripcion: project.descripcionIICA || project.resumen?.observaciones || ''
+                                                descripcion: project.descripcionIICA || project.resumen?.observaciones || '',
+                                                needsReview: project.needsReview,
                                             };
                                             {/* @ts-ignore */ }
                                             return <OportunidadCard key={project.id} op={op} />;
