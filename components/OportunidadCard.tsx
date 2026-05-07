@@ -140,20 +140,22 @@ export function OportunidadCard({ op }: { op: Oportunidad }) {
             </div>
 
             {/* Viability Progress Bar */}
+            {op.porcentajeViabilidad != null && (
             <div className="mt-5 space-y-1.5">
                 <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-gray-400">
                     <span>Semáforo de Viabilidad</span>
                     <span className={op.viabilidad === 'Alta' ? 'text-emerald-600' : op.viabilidad === 'Media' ? 'text-amber-600' : 'text-rose-600'}>
-                        {op.porcentajeViabilidad ? `${op.porcentajeViabilidad}%` : op.viabilidad}
+                        {`${op.porcentajeViabilidad}%`}
                     </span>
                 </div>
                 <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden flex">
                     <div
                         className={`h-full transition-all duration-500 rounded-full ${op.viabilidad === 'Alta' ? 'bg-emerald-500' : op.viabilidad === 'Media' ? 'bg-amber-400' : 'bg-rose-500'}`}
-                        style={{ width: `${op.porcentajeViabilidad || (op.viabilidad === 'Alta' ? 85 : op.viabilidad === 'Media' ? 50 : 25)}%` }}
+                        style={{ width: `${op.porcentajeViabilidad}%` }}
                     />
                 </div>
             </div>
+            )}
 
             <div className="flex items-end justify-between mt-6 pt-4 border-t border-gray-50">
                 <div className="space-y-1">
@@ -173,7 +175,7 @@ export function OportunidadCard({ op }: { op: Oportunidad }) {
                         rel="noopener noreferrer"
                         className="bg-[var(--iica-blue)] text-white text-xs font-bold px-5 py-2.5 rounded-xl hover:bg-[var(--iica-navy)] shadow-sm hover:shadow-md active:scale-95 transition-all flex items-center gap-1.5"
                     >
-                        Bases
+                        Ver convocatoria
                         <ChevronRight className="w-3.5 h-3.5" />
                     </a>
                 </div>

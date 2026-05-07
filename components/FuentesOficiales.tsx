@@ -279,9 +279,13 @@ export default function FuentesOficiales() {
                                                 <CheckCircle className="h-3 w-3" /> Verificado
                                             </span>
                                         )}
+                                        {fuente.fondosActivos > 0 ? (
                                         <span className="text-xs font-bold text-gray-500 bg-white px-2 py-0.5 rounded-full border border-gray-200">
                                             {fuente.fondosActivos} fondos activos
                                         </span>
+                                        ) : (
+                                        <span className="text-gray-400 italic text-xs">Próximamente</span>
+                                        )}
                                     </div>
                                     <p className="text-sm font-medium text-gray-700 mb-1">{fuente.nombre}</p>
                                     <p className="text-xs text-gray-500 line-clamp-2">{fuente.descripcion}</p>
