@@ -249,87 +249,148 @@ function ComparadorModal() {
                     </div>
 
                     {!collapsed && (
-                        <div className="overflow-auto flex-1">
-                            <table className="w-full min-w-[600px]">
-                                <thead className="sticky top-0 bg-gray-50 z-10">
-                                    <tr>
-                                        <th className="text-left text-xs font-bold text-gray-500 uppercase tracking-wider px-4 py-3 w-36 border-b border-gray-200">
-                                            Característica
-                                        </th>
-                                        {selected.map((p) => (
-                                            <th key={p.id} className="px-4 py-3 border-b border-gray-200 min-w-[200px]">
-                                                <div className="flex items-start justify-between gap-2">
-                                                    <div className="text-left">
-                                                        <div className="font-black text-[var(--iica-navy)] text-sm leading-snug line-clamp-2">
-                                                            {p.nombre}
+                        <>
+                            {/* Desktop table */}
+                            <div className="overflow-auto flex-1 hidden md:block">
+                                <table className="w-full min-w-[600px]">
+                                    <thead className="sticky top-0 bg-gray-50 z-10">
+                                        <tr>
+                                            <th className="text-left text-xs font-bold text-gray-500 uppercase tracking-wider px-4 py-3 w-36 border-b border-gray-200">
+                                                Característica
+                                            </th>
+                                            {selected.map((p) => (
+                                                <th key={p.id} className="px-4 py-3 border-b border-gray-200 min-w-[200px]">
+                                                    <div className="flex items-start justify-between gap-2">
+                                                        <div className="text-left">
+                                                            <div className="font-black text-[var(--iica-navy)] text-sm leading-snug line-clamp-2">
+                                                                {p.nombre}
+                                                            </div>
+                                                            <div className="text-xs text-gray-500 mt-0.5">{p.institucion}</div>
                                                         </div>
-                                                        <div className="text-xs text-gray-500 mt-0.5">{p.institucion}</div>
-                                                    </div>
-                                                    <button
-                                                        onClick={() => { toggle(p); if (selected.length === 1) closeModal(); }}
-                                                        className="text-gray-300 hover:text-red-500 flex-shrink-0 mt-0.5"
-                                                        aria-label="Quitar"
-                                                    >
-                                                        <X className="h-3.5 w-3.5" />
-                                                    </button>
-                                                </div>
-                                                <div className="flex gap-1 mt-2">
-                                                    <Link
-                                                        href={`/proyecto/${p.id}`}
-                                                        onClick={closeModal}
-                                                        className="flex-1 text-center text-xs font-bold bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg py-1.5 transition-colors"
-                                                    >
-                                                        Detalle
-                                                    </Link>
-                                                    {new Date(p.fecha_cierre) > new Date() && (
-                                                        <a
-                                                            href={p.url_bases}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="flex-1 text-center text-xs font-bold bg-[var(--iica-blue)] text-white rounded-lg py-1.5 transition-colors flex items-center justify-center gap-1"
+                                                        <button
+                                                            onClick={() => { toggle(p); if (selected.length === 1) closeModal(); }}
+                                                            className="text-gray-300 hover:text-red-500 flex-shrink-0 mt-0.5"
+                                                            aria-label="Quitar"
                                                         >
-                                                            Bases <ExternalLink className="h-3 w-3" />
-                                                        </a>
-                                                    )}
-                                                </div>
-                                            </th>
-                                        ))}
-                                        {/* Empty slot indicators */}
-                                        {Array.from({ length: 3 - selected.length }).map((_, i) => (
-                                            <th key={`empty-${i}`} className="px-4 py-3 border-b border-gray-200 min-w-[180px]">
-                                                <div className="h-16 rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center text-xs text-gray-400">
-                                                    + Añadir
-                                                </div>
-                                            </th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {COMPARE_ROWS.map((row, ri) => (
-                                        <tr key={row.key} className={ri % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}>
-                                            <td className="px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wide">
-                                                {row.label}
-                                            </td>
-                                            {selected.map((p) => {
-                                                const val = getVal(p, row.key);
-                                                return (
-                                                    <td key={p.id} className="px-4 py-3 text-sm text-gray-700">
-                                                        {row.render ? row.render(val) : (
-                                                            typeof val === 'boolean'
-                                                                ? (val ? <Check className="h-4 w-4 text-green-500" /> : <X className="h-4 w-4 text-red-400" />)
-                                                                : (val as string) || <Minus className="h-4 w-4 text-gray-300" />
+                                                            <X className="h-3.5 w-3.5" />
+                                                        </button>
+                                                    </div>
+                                                    <div className="flex gap-1 mt-2">
+                                                        <Link
+                                                            href={`/proyecto/${p.id}`}
+                                                            onClick={closeModal}
+                                                            className="flex-1 text-center text-xs font-bold bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg py-1.5 transition-colors"
+                                                        >
+                                                            Detalle
+                                                        </Link>
+                                                        {new Date(p.fecha_cierre) > new Date() && (
+                                                            <a
+                                                                href={p.url_bases}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="flex-1 text-center text-xs font-bold bg-[var(--iica-blue)] text-white rounded-lg py-1.5 transition-colors flex items-center justify-center gap-1"
+                                                            >
+                                                                Bases <ExternalLink className="h-3 w-3" />
+                                                            </a>
                                                         )}
-                                                    </td>
-                                                );
-                                            })}
+                                                    </div>
+                                                </th>
+                                            ))}
                                             {Array.from({ length: 3 - selected.length }).map((_, i) => (
-                                                <td key={`empty-${i}`} className="px-4 py-3" />
+                                                <th key={`empty-${i}`} className="px-4 py-3 border-b border-gray-200 min-w-[180px]">
+                                                    <div className="h-16 rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center text-xs text-gray-400">
+                                                        + Añadir
+                                                    </div>
+                                                </th>
                                             ))}
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody>
+                                        {COMPARE_ROWS.map((row, ri) => (
+                                            <tr key={row.key} className={ri % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}>
+                                                <td className="px-4 py-3 text-xs font-bold text-gray-500 uppercase tracking-wide">
+                                                    {row.label}
+                                                </td>
+                                                {selected.map((p) => {
+                                                    const val = getVal(p, row.key);
+                                                    return (
+                                                        <td key={p.id} className="px-4 py-3 text-sm text-gray-700">
+                                                            {row.render ? row.render(val) : (
+                                                                typeof val === 'boolean'
+                                                                    ? (val ? <Check className="h-4 w-4 text-green-500" /> : <X className="h-4 w-4 text-red-400" />)
+                                                                    : (val as string) || <Minus className="h-4 w-4 text-gray-300" />
+                                                            )}
+                                                        </td>
+                                                    );
+                                                })}
+                                                {Array.from({ length: 3 - selected.length }).map((_, i) => (
+                                                    <td key={`empty-${i}`} className="px-4 py-3" />
+                                                ))}
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* Mobile stacked cards */}
+                            <div className="overflow-auto flex-1 md:hidden p-4 space-y-4">
+                                {selected.map((p) => (
+                                    <div key={p.id} className="border border-gray-200 rounded-2xl p-4 space-y-3">
+                                        <div className="flex items-start justify-between gap-2">
+                                            <div>
+                                                <div className="font-black text-[var(--iica-navy)] text-sm leading-snug line-clamp-2">
+                                                    {p.nombre}
+                                                </div>
+                                                <div className="text-xs text-gray-500 mt-0.5">{p.institucion}</div>
+                                            </div>
+                                            <button
+                                                onClick={() => { toggle(p); if (selected.length === 1) closeModal(); }}
+                                                className="text-gray-300 hover:text-red-500 flex-shrink-0"
+                                                aria-label="Quitar"
+                                            >
+                                                <X className="h-4 w-4" />
+                                            </button>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <Link
+                                                href={`/proyecto/${p.id}`}
+                                                onClick={closeModal}
+                                                className="flex-1 text-center text-xs font-bold bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg py-1.5 transition-colors"
+                                            >
+                                                Detalle
+                                            </Link>
+                                            {new Date(p.fecha_cierre) > new Date() && (
+                                                <a
+                                                    href={p.url_bases}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="flex-1 text-center text-xs font-bold bg-[var(--iica-blue)] text-white rounded-lg py-1.5 transition-colors flex items-center justify-center gap-1"
+                                                >
+                                                    Bases <ExternalLink className="h-3 w-3" />
+                                                </a>
+                                            )}
+                                        </div>
+                                        <div className="divide-y divide-gray-100">
+                                            {COMPARE_ROWS.map((row) => {
+                                                const val = getVal(p, row.key);
+                                                return (
+                                                    <div key={row.key} className="flex items-center justify-between py-2">
+                                                        <span className="text-xs font-bold text-gray-500 uppercase">{row.label}</span>
+                                                        <span className="text-sm text-gray-700 text-right max-w-[60%]">
+                                                            {row.render ? row.render(val) : (
+                                                                typeof val === 'boolean'
+                                                                    ? (val ? <Check className="h-4 w-4 text-green-500" /> : <X className="h-4 w-4 text-red-400" />)
+                                                                    : (val as string) || <Minus className="h-4 w-4 text-gray-300 inline" />
+                                                            )}
+                                                        </span>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </>
                     )}
 
                     <div className="px-6 py-3 border-t border-gray-100 flex items-center justify-between">
