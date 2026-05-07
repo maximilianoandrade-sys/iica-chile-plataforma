@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Target } from 'lucide-react';
 import { motion } from 'framer-motion';
 import projects from '@/data/projects.json';
@@ -119,18 +118,7 @@ export function HeroSection() {
                 </div>
             </div>
 
-            {/* Agricultural Field Image Section */}
-            <div className="relative w-full h-64 md:h-80 overflow-hidden">
-                <Image
-                    src="/agricultural-field.png"
-                    alt="Trabajo institucional del IICA en territorio chileno"
-                    fill
-                    className="object-cover object-center"
-                    priority
-                    quality={90}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
-            </div>
+
         </section>
     );
 }

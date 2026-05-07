@@ -85,29 +85,7 @@ export default async function DashboardPage({
               </Suspense>
             </section>
 
-            {/* Información Institucional (Incorporado de la rama secundaria) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 opacity-90">
-              <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
-                  <h3 className="font-bold text-[var(--iica-navy)] mb-4 flex items-center gap-2 text-lg">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[var(--iica-blue)]"></span>
-                      Misión Institucional
-                  </h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">
-                      El IICA Chile trabaja para promover un desarrollo agropecuario competitivo e inclusivo, 
-                      movilizando recursos técnicos y financieros mediante alianzas estratégicas regionales e internacionales.
-                  </p>
-              </div>
-              <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
-                  <h3 className="font-bold text-[var(--iica-navy)] mb-4 flex items-center gap-2 text-lg">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[var(--iica-secondary)]"></span>
-                      Soporte Técnico
-                  </h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">
-                      Si eres consultor o técnico del IICA y necesitas apoyo para la formulación de una propuesta basada en este radar, 
-                      contacta a la unidad de proyectos de la oficina.
-                  </p>
-              </div>
-            </div>
+
 
           </div>
         </main>
@@ -116,11 +94,6 @@ export default async function DashboardPage({
         <div id="fuentes" className="scroll-mt-20">
           <FuentesOficiales />
         </div>
-
-        {/* Newsletter */}
-        <section id="newsletter" className="container mx-auto max-w-[1200px] px-4 py-8">
-          <Newsletter />
-        </section>
 
         {/* Programas Hemisféricos */}
         <ProgramsSection />
@@ -134,6 +107,11 @@ export default async function DashboardPage({
         <div id="about">
           <AboutSection />
         </div>
+
+        {/* Newsletter */}
+        <section id="newsletter" className="container mx-auto max-w-[1200px] px-4 py-8">
+          <Newsletter />
+        </section>
 
         {/* Footer */}
         <div id="contacto">
