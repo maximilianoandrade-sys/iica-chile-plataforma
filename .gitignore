@@ -79,3 +79,10 @@ lib/tenders.ts
 
 # Audit output
 audit-broken-urls.csv
+
+# Playwright
+playwright-report/
+test-results/
+
+# IICA discovery output
+tmp/iica-discovery/

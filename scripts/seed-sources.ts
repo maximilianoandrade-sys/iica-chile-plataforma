@@ -6,6 +6,7 @@ const SOURCES = [
   { slug: "corfo",            name: "CORFO",                                  type: "scraper",       homepageUrl: "https://www.corfo.cl/" },
   { slug: "fontagro",         name: "FONTAGRO",                               type: "scraper",       homepageUrl: "https://www.fontagro.org/es/iniciativas/convocatorias/" },
   { slug: "iica-hemisferico", name: "IICA Hemisférico",                       type: "scraper",       homepageUrl: "https://iica.int/es/licitaciones/" },
+  { slug: "iica-dashboard",   name: "IICA Dashboard Proyectos (Contrapartes)", type: "scraper_playwright", homepageUrl: "https://apps.iica.int/dashboardproyectos/" },
   { slug: "ai-discovery",     name: "AI Discovery (Claude + web search)",     type: "ai_discovery",  homepageUrl: null },
 ];
 

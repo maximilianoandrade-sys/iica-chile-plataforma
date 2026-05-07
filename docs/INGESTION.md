@@ -71,3 +71,57 @@ npm run smoke
 - Dedup solo por URL canónica (no fuzzy por título)
 - Si una fuente requiere JS para renderizar, Cheerio no alcanza (migrar a Playwright)
 - Capa B puede traer alucinaciones. La revisión humana en `/admin/discoveries` es la última línea de defensa
+
+## IICA Dashboard (Playwright)
+
+Scraper for the IICA projects dashboard that searches by counterpart (partner organization).
+
+### How It Works
+
+1. Uses Playwright (Chromium) to automate `https://apps.iica.int/dashboardproyectos/`
+2. Iterates through ~75 pre-selected counterparts relevant to IICA Chile
+3. For each counterpart: selects it in the dropdown, submits, parses results
+4. Uses adaptive parsing (GridView → Table → Cards → Generic links)
+5. Ingests results via `upsertProject()`
+
+### Running
+
+```bash
+# Discovery mode (saves raw HTML for inspection, headed browser)
+npm run scrape:iica-discover
+
+# Full scrape (dry run - no DB writes)
+npm run scrape:iica-dashboard -- --dry-run
+
+# Full scrape (live - writes to DB)
+npm run scrape:iica-dashboard
+
+# Filter by category
+npm run scrape:iica-dashboard -- --category chilean
+npm run scrape:iica-dashboard -- --category multilateral --dry-run
+```
+
+### Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `IICA_HEADLESS` | `true` | Set to `false` to see the browser |
+| `IICA_DELAY_MS` | `4000` | Milliseconds between counterpart queries |
+
+### Categories
+
+| Category | Count | Description |
+|----------|-------|-------------|
+| chilean | ~15 | Chilean government, academia, private sector |
+| regional | ~6 | PROCISUR, CAS, COSAVE, FONTAGRO |
+| multilateral | ~8 | BID, BM, CAF, GEF, GCF, IFAD |
+| bilateral | ~16 | EU, GIZ, AECID, USAID, JICA, KOICA, NZ |
+| un | ~5 | FAO, UNDP, UNEP, ILO, UN Women |
+| research | ~10 | CIAT, CIP, CIMMYT, CGIAR, CATIE, EMBRAPA |
+| other | ~15 | CEPAL, OEA, WRI, WWF, IUCN |
+
+### Requirements
+
+- Playwright + Chromium: `npm install -D playwright && npx playwright install chromium`
+- Cannot run in Vercel serverless (use GitHub Actions or local)
+- Respects rate limits: 4s delay between queries (~5 min for full run)
