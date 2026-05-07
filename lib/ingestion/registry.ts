@@ -5,6 +5,7 @@ import { corfoScraper } from "./scrapers/corfo";
 import { fontagroScraper } from "./scrapers/fontagro";
 import { iicaHemisfericoScraper } from "./scrapers/iica-hemisferico";
 
+/** Lightweight scrapers (Cheerio-based) suitable for serverless environments */
 export const scrapers: Scraper[] = [
   fiaScraper,
   indapScraper,
@@ -12,3 +13,11 @@ export const scrapers: Scraper[] = [
   fontagroScraper,
   iicaHemisfericoScraper,
 ];
+
+/**
+ * Heavy scraper requiring Playwright (browser automation).
+ * Run separately via: npx tsx scripts/scrape-iica-dashboard.ts
+ * NOT included in the main `scrapers` array because it requires
+ * Chromium binaries not available in serverless/Vercel.
+ */
+export { iicaDashboardScraper } from "./scrapers/iica-dashboard";
