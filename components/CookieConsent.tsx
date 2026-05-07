@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 export default function CookieConsent() {
     const [showConsent, setShowConsent] = useState(false);
@@ -12,8 +13,13 @@ export default function CookieConsent() {
         }
     }, []);
 
-    const acceptCookies = () => {
-        localStorage.setItem('iica_cookie_consent', 'true');
+    const handleAccept = () => {
+        localStorage.setItem('iica_cookie_consent', 'accepted');
+        setShowConsent(false);
+    };
+
+    const handleReject = () => {
+        localStorage.setItem('iica_cookie_consent', 'rejected');
         setShowConsent(false);
     };
 
@@ -24,16 +30,25 @@ export default function CookieConsent() {
             <div className="container mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-between gap-4">
                 <div className="flex-1 text-center md:text-left">
                     <p className="text-white text-sm md:text-base leading-relaxed">
-                        <strong>🍪 Respetamos tu privacidad.</strong> Utilizamos cookies propias y de terceros para analizar el tráfico, mejorar tu experiencia y ofrecerte contenido relevante.
-                        Al continuar navegando, aceptas nuestra <a href="#" className="underline text-[var(--iica-cyan)] hover:text-white">Política de Privacidad</a> y el uso de cookies.
+                        Utilizamos cookies para mejorar tu experiencia y analizar el tráfico.
+                        Consulta nuestra{' '}
+                        <Link href="/legal/privacidad" className="underline text-[var(--iica-cyan)] hover:text-white">
+                            Política de Privacidad
+                        </Link>.
                     </p>
                 </div>
-                <div className="flex items-center gap-4 flex-shrink-0">
+                <div className="flex items-center gap-3 flex-shrink-0">
                     <button
-                        onClick={acceptCookies}
-                        className="bg-[var(--iica-cyan)] hover:bg-[#008ec2] text-white font-bold py-2 px-6 rounded-lg transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-cyan-500"
+                        onClick={handleReject}
+                        className="py-2.5 px-5 text-sm font-medium text-gray-300 border border-gray-500 rounded-lg hover:bg-gray-800 hover:text-white transition-colors min-h-[44px] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-gray-400"
                     >
-                        Aceptar todo
+                        Rechazar
+                    </button>
+                    <button
+                        onClick={handleAccept}
+                        className="py-2.5 px-5 text-sm font-bold text-white bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] rounded-lg transition-colors min-h-[44px] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-blue-500"
+                    >
+                        Aceptar cookies
                     </button>
                 </div>
             </div>
