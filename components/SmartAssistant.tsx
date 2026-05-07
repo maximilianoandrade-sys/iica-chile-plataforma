@@ -93,7 +93,7 @@ export default function SmartAssistant({ projects }: SmartAssistantProps) {
                     </div>
                     <button
                         onClick={skipAssistant}
-                        className="text-blue-200 hover:text-white text-sm font-medium transition-colors hidden md:block"
+                        className="text-blue-200 hover:text-white text-sm font-medium transition-colors min-h-[44px] flex items-center"
                     >
                         Omitir
                     </button>

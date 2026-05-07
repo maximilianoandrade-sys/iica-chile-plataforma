@@ -108,11 +108,26 @@ export default async function LiveFeedSection() {
         feeds = result.feeds;
     } catch (error) {
         console.error('[LiveFeedSection] Error fetching feeds:', error);
-        // Fallback or empty state
-        return null;
+        return (
+            <section className="mt-8 mb-4" aria-label="Fondos concursables - error">
+                <div className="p-6 rounded-xl border border-red-200 bg-red-50/40 text-center">
+                    <p className="text-sm text-red-700 font-medium">No se pudieron cargar los fondos en tiempo real</p>
+                    <p className="text-xs text-gray-500 mt-1">Intenta recargar la página más tarde.</p>
+                </div>
+            </section>
+        );
     }
 
-    if (feeds.length === 0) return null;
+    if (feeds.length === 0) return (
+        <section className="mt-8 mb-4" aria-label="Fondos concursables abiertos">
+            <div className="flex items-center gap-2 mb-4">
+                <h2 className="text-base font-bold text-gray-800">Fondos Abiertos Ahora</h2>
+            </div>
+            <div className="p-6 rounded-xl border border-gray-200 bg-white text-center">
+                <p className="text-sm text-gray-600">No hay fondos abiertos en este momento. Vuelve pronto.</p>
+            </div>
+        </section>
+    );
 
     return (
         <section className="mt-8 mb-4" aria-label="Fondos concursables verificados abiertos">
