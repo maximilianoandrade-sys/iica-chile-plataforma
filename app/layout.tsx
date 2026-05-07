@@ -113,9 +113,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
-        {/* Security Headers (via meta tags) */}
-        <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
-        <meta httpEquiv="X-Frame-Options" content="DENY" />
+        {/* Security Headers */}
         <meta httpEquiv="X-XSS-Protection" content="1; mode=block" />
       </head>
 
@@ -133,9 +131,9 @@ export default function RootLayout({
           <OfflineIndicator />
 
           {/* Contenido principal */}
-          <div id="main-content" role="main">
+          <main id="main-content">
             {children}
-          </div>
+          </main>
 
         {/* Componentes globales */}
         <CookieConsent />

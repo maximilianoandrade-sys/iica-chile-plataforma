@@ -51,7 +51,7 @@ export function HeroSection() {
                         animate={{ opacity: 1, y: 0 }}
                         className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full text-sm font-medium text-blue-100 mb-6"
                     >
-                        <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                        <span className="w-2 h-2 bg-green-400 rounded-full"></span>
                         {abiertas} oportunidades activas · {internacionales} internacionales · FONTAGRO · FAO · BID · FIDA
                     </motion.div>
 
@@ -110,7 +110,7 @@ export function HeroSection() {
                             { label: 'Cierran ≤7 días', value: urgentCount, icon: '⚠️' },
                         ].map(stat => (
                             <div key={stat.label} className="text-center bg-white/10 backdrop-blur-sm rounded-xl px-5 py-3 border border-white/20">
-                                <div className="text-2xl font-black text-white">{stat.icon} {stat.value}</div>
+                                <div className="text-2xl font-black text-white"><span aria-hidden="true">{stat.icon}</span><span className="sr-only">{stat.label}</span> {stat.value}</div>
                                 <div className="text-xs text-blue-200 font-medium">{stat.label}</div>
                             </div>
                         ))}
