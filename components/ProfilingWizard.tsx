@@ -40,7 +40,7 @@ export default function ProfilingWizard() {
     const objectives = [
         { label: "Riego", value: "Riego y Drenaje", icon: "💧" },
         { label: "Suelos", value: "Suelos", icon: "🌱" },
-        { label: "Maquinaria", value: "Inversión", icon: "🚜" },
+        { label: "Maquinaria", value: "Maquinaria", icon: "🚜" },
         { label: "Inversión", value: "Inversión", icon: "💰" }
     ];
 
@@ -118,7 +118,7 @@ export default function ProfilingWizard() {
                 )}
 
                 {step > 0 && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Asistente de perfil">
                         <motion.div
                             key="wizard-modal"
                             initial={{ opacity: 0, scale: 0.9 }}
@@ -168,7 +168,6 @@ export default function ProfilingWizard() {
                                                     key={o.value}
                                                     onClick={() => {
                                                         setSelections({ ...selections, category: o.value });
-                                                        handleNext();
                                                     }}
                                                     className={`p-6 rounded-xl border-2 text-center transition-all hover:shadow-md ${selections.category === o.value ? 'border-[var(--iica-blue)] bg-blue-50' : 'border-gray-100 hover:border-blue-200'}`}
                                                 >
@@ -177,6 +176,14 @@ export default function ProfilingWizard() {
                                                 </button>
                                             ))}
                                         </div>
+
+                                        <button
+                                            onClick={handleNext}
+                                            disabled={!selections.category}
+                                            className="w-full mt-4 px-6 py-3 bg-[var(--iica-blue)] text-white font-bold rounded-full disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[var(--iica-navy)] transition-colors"
+                                        >
+                                            Continuar
+                                        </button>
                                     </div>
                                 )}
 
@@ -197,7 +204,6 @@ export default function ProfilingWizard() {
                                                     key={r}
                                                     onClick={() => {
                                                         setSelections({ ...selections, region: r });
-                                                        handleNext();
                                                     }}
                                                     className={`p-3 rounded-lg border text-sm text-center transition-all ${selections.region === r ? 'border-[var(--iica-blue)] bg-blue-50 font-bold text-[var(--iica-blue)]' : 'border-gray-200 hover:border-blue-200 hover:bg-gray-50'}`}
                                                 >
@@ -205,6 +211,14 @@ export default function ProfilingWizard() {
                                                 </button>
                                             ))}
                                         </div>
+
+                                        <button
+                                            onClick={handleNext}
+                                            disabled={!selections.region}
+                                            className="w-full mt-4 px-6 py-3 bg-[var(--iica-blue)] text-white font-bold rounded-full disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[var(--iica-navy)] transition-colors"
+                                        >
+                                            Continuar
+                                        </button>
                                     </div>
                                 )}
 
@@ -225,7 +239,6 @@ export default function ProfilingWizard() {
                                                     key={p.value}
                                                     onClick={() => {
                                                         setSelections({ ...selections, beneficiary: p.value });
-                                                        applyFilters(p.value);
                                                     }}
                                                     className={`p-4 rounded-xl border-2 text-left transition-all hover:shadow-md flex items-center gap-4 ${selections.beneficiary === p.value ? 'border-[var(--iica-blue)] bg-blue-50' : 'border-gray-100 hover:border-blue-200'}`}
                                                 >
@@ -238,6 +251,14 @@ export default function ProfilingWizard() {
                                                 </button>
                                             ))}
                                         </div>
+
+                                        <button
+                                            onClick={() => applyFilters()}
+                                            disabled={!selections.beneficiary}
+                                            className="w-full mt-4 px-6 py-3 bg-[var(--iica-blue)] text-white font-bold rounded-full disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[var(--iica-navy)] transition-colors"
+                                        >
+                                            Ver resultados
+                                        </button>
                                     </div>
                                 )}
                             </div>
