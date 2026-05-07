@@ -98,6 +98,19 @@ export function OportunidadCard({ op }: { op: Oportunidad }) {
 
                     <h3 className="text-base font-bold text-gray-900 leading-tight line-clamp-2 group-hover:text-[var(--iica-blue)] transition-colors">
                         <Highlight text={op.nombre} highlight={query} />
+                        {(op as any).needsReview && (
+                            <span
+                                className="inline-block px-2 py-0.5 ml-2 text-xs font-semibold rounded-full border align-middle"
+                                style={{
+                                    background: "#FFF8E1",
+                                    color: "#C8A84B",
+                                    borderColor: "#C8A84B",
+                                }}
+                                title="Encontrado por IA en el scan semanal. Pendiente de verificación por el equipo."
+                            >
+                                🤖 Sin verificar
+                            </span>
+                        )}
                     </h3>
                     <div className="flex flex-col gap-1.5 mt-2">
                         <p className="text-xs font-medium text-gray-500 flex items-center gap-1.5">

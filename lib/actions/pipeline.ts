@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 export async function getPipelineMetrics() {
   const projects = await prisma.project.findMany();
   
-  const sources = [...new Set(projects.map(p => p.institucion))];
+  const sources = Array.from(new Set(projects.map(p => p.institucion)));
   
   const stats = sources.map(source => {
     const sourceProjects = projects.filter(p => p.institucion === source);

@@ -3,6 +3,8 @@ import { getPipelineMetrics } from '@/lib/actions/pipeline';
 import { SourceStatsTable } from '@/components/admin/SourceStatsTable';
 import { Activity, AlertCircle, CheckCircle, Database } from 'lucide-react';
 
+export const dynamic = "force-dynamic";
+
 export default async function PipelineDashboard() {
   const { stats, summary } = await getPipelineMetrics();
 
