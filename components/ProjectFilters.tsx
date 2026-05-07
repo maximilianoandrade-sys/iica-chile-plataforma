@@ -13,13 +13,8 @@ const QUICK_SEARCHES = [
     { label: '🌎 FONTAGRO', query: 'FONTAGRO' },
     { label: '🌍 FAO', query: 'FAO' },
     { label: '🏦 BID', query: 'BID' },
-    { label: '🤝 FIDA', query: 'FIDA' },
     { label: '🌿 GEF/GCF', query: 'GEF' },
-    { label: '🇪🇺 EUROCLIMA', query: 'EUROCLIMA' },
-    { label: '💧 Agua', query: 'agua' },
     { label: '🌱 Innovación', query: 'innovación' },
-    { label: '🌡️ Clima', query: 'cambio climático' },
-    { label: '🤝 Cooperación', query: 'cooperación' },
 ];
 
 const NATURAL_SUGGESTIONS = [
@@ -229,6 +224,20 @@ export default function ProjectFilters({
         selectedRol !== 'Todos' ||
         soloAbiertos
     );
+
+    // Count active filters for badge
+    const activeFilterCount = [
+        selectedCategory !== 'Todas',
+        selectedRegion !== 'Todas',
+        selectedBeneficiary !== 'Todos',
+        selectedInstitution !== 'Todas',
+        selectedAmbito !== 'Todos',
+        selectedViabilidad !== 'Todas',
+        selectedEstado !== 'Todos',
+        selectedRol !== 'Todos',
+        soloAbiertos,
+        !!searchTerm,
+    ].filter(Boolean).length;
 
     // Track search
     useEffect(() => {
@@ -475,18 +484,21 @@ export default function ProjectFilters({
                     ))}
                 </div>
 
-                {/* Solo Abiertos toggle */}
-                <button
-                    onClick={toggleSoloAbiertos}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all border flex-shrink-0 ${soloAbiertos
-                        ? 'bg-green-600 text-white border-green-600 shadow-sm'
-                        : 'bg-white text-gray-600 border-gray-200 hover:bg-green-50 hover:border-green-300 hover:text-green-700'
-                        }`}
-                    title={`${counts.open} oportunidades abiertas`}
-                >
-                    <span className={`w-1.5 h-1.5 rounded-full ${soloAbiertos ? 'bg-white' : 'bg-green-500'}`}></span>
-                    Solo Abiertas ({counts.open})
-                </button>
+                {/* Ordenamiento — siempre visible */}
+                <div className="relative flex items-center gap-1.5 ml-auto flex-shrink-0">
+                    <ArrowUpDown className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                    <select
+                        value={sortBy}
+                        onChange={(e) => handleSortChange(e.target.value)}
+                        aria-label="Ordenar resultados"
+                        className="appearance-none bg-white border border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-[var(--iica-blue)] focus:border-[var(--iica-blue)] block pl-3 pr-8 py-2 cursor-pointer hover:border-[var(--iica-blue)] transition-colors shadow-sm"
+                    >
+                        {SORT_OPTIONS.map(opt => (
+                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                        ))}
+                    </select>
+                    <ChevronDown className="absolute right-2.5 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
+                </div>
 
                 {/* Incluir sin verificar toggle */}
                 <label className="flex items-center gap-2 text-xs font-bold text-gray-600 px-3 py-1.5 rounded-full border border-gray-200 bg-white hover:bg-yellow-50 hover:border-yellow-300 transition-all cursor-pointer flex-shrink-0">
@@ -530,6 +542,11 @@ export default function ProjectFilters({
                 >
                     <SlidersHorizontal className="h-3.5 w-3.5" />
                     Filtros avanzados
+                    {activeFilterCount > 0 && (
+                        <span className="bg-rose-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold">
+                            {activeFilterCount}
+                        </span>
+                    )}
                     <ChevronDown className={`h-3.5 w-3.5 transition-transform ${showAdvanced ? 'rotate-180' : ''}`} />
                 </button>
             </div>
@@ -592,9 +609,9 @@ export default function ProjectFilters({
     placeholder="Todas las Fuentes"
 />
 
-                    {/* Monto */}
                     <div className="relative">
                         <select
+                            aria-label="Filtrar por monto"
                             onChange={(e) => {
                                 const val = e.target.value;
                                 const params = new URLSearchParams(searchParams.toString());
@@ -618,26 +635,11 @@ export default function ProjectFilters({
                         </select>
                         <ChevronDown className="absolute right-2.5 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
                     </div>
-
-                    {/* Ordenamiento — ítem 11 */}
-                    <div className="relative flex items-center gap-1.5">
-                        <ArrowUpDown className="h-4 w-4 text-gray-400 flex-shrink-0" />
-                        <select
-                            value={sortBy}
-                            onChange={(e) => handleSortChange(e.target.value)}
-                            className="appearance-none bg-white border border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-[var(--iica-blue)] focus:border-[var(--iica-blue)] block pl-3 pr-8 py-2 cursor-pointer hover:border-[var(--iica-blue)] transition-colors shadow-sm"
-                        >
-                            {SORT_OPTIONS.map(opt => (
-                                <option key={opt.value} value={opt.value}>{opt.label}</option>
-                            ))}
-                        </select>
-                        <ChevronDown className="absolute right-2.5 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
-                    </div>
                 </div>
             )}
 
             {/* Results Counter */}
-            <div className="px-4 md:px-6 py-3 flex items-center justify-between flex-wrap gap-2">
+            <div className="px-4 md:px-6 py-3 flex items-center justify-between flex-wrap gap-2" aria-live="polite" aria-atomic="true">
                 <div className="text-sm text-gray-600 flex items-center gap-2 flex-wrap">
                     Mostrando{' '}
                     <strong className="text-[var(--iica-navy)] text-base">{counts.filtered}</strong>
