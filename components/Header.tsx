@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { Menu, X, Target, Home, Crosshair, Link2, Users, TrendingUp, Building2, Phone } from 'lucide-react';
 import projects from '@/data/projects.json';
@@ -21,6 +21,30 @@ function getUrgentCount(): number {
 export function Header() {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
     const urgentCount = getUrgentCount();
+    const mobileMenuRef = useRef<HTMLElement>(null);
+    const menuToggleRef = useRef<HTMLButtonElement>(null);
+
+    // Focus first link when mobile menu opens
+    useEffect(() => {
+        if (showMobileMenu && mobileMenuRef.current) {
+            const firstLink = mobileMenuRef.current.querySelector('a');
+            if (firstLink) {
+                (firstLink as HTMLElement).focus();
+            }
+        }
+    }, [showMobileMenu]);
+
+    // Escape key closes menu and returns focus to toggle
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && showMobileMenu) {
+                setShowMobileMenu(false);
+                menuToggleRef.current?.focus();
+            }
+        };
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [showMobileMenu]);
 
     return (
         <header className="bg-white dark:bg-gray-900 border-b border-[var(--iica-border)] dark:border-gray-700 sticky top-0 z-50">
@@ -70,6 +94,7 @@ export function Header() {
 
                     {/* Mobile Menu Toggle */}
                     <button
+                        ref={menuToggleRef}
                         className="lg:hidden p-2 text-[var(--iica-navy)] dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
                         onClick={() => setShowMobileMenu(!showMobileMenu)}
                         aria-label={showMobileMenu ? 'Cerrar menu' : 'Abrir menu'}
@@ -89,7 +114,7 @@ export function Header() {
                         exit={{ height: 0, opacity: 0 }}
                         className="lg:hidden overflow-hidden border-t border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900"
                     >
-                        <nav className="flex flex-col p-4 gap-1" role="navigation" aria-label="Menu principal">
+                        <nav ref={mobileMenuRef} className="flex flex-col p-4 gap-1" role="navigation" aria-label="Menu principal">
                             {[
                                 { href: '/#inicio', label: 'Inicio', icon: Home },
                                 { href: '/#convocatorias', label: 'Oportunidades', icon: Crosshair },

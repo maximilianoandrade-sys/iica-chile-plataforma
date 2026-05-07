@@ -24,12 +24,17 @@ const ComparadorContext = createContext<ComparadorContextType | null>(null);
 export function ComparadorProvider({ children }: { children: React.ReactNode }) {
     const [selected, setSelected] = useState<Project[]>([]);
     const [isOpen, setIsOpen] = useState(false);
+    const [showMaxWarning, setShowMaxWarning] = useState(false);
 
     const toggle = useCallback((project: Project) => {
         setSelected(prev => {
             const exists = prev.find(p => p.id === project.id);
             if (exists) return prev.filter(p => p.id !== project.id);
-            if (prev.length >= 3) return prev; // max 3
+            if (prev.length >= 3) {
+                setShowMaxWarning(true);
+                setTimeout(() => setShowMaxWarning(false), 3000);
+                return prev;
+            }
             return [...prev, project];
         });
     }, []);
@@ -44,6 +49,19 @@ export function ComparadorProvider({ children }: { children: React.ReactNode }) 
             {children}
             <ComparadorBar />
             <ComparadorModal />
+            {/* Max selection warning */}
+            <AnimatePresence>
+                {showMaxWarning && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        className="fixed bottom-20 left-1/2 -translate-x-1/2 z-[70] bg-amber-500 text-white text-sm font-bold px-4 py-2 rounded-xl shadow-lg"
+                    >
+                        Máximo 3 oportunidades para comparar
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </ComparadorContext.Provider>
     );
 }

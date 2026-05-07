@@ -17,7 +17,11 @@ export default function Toast({ message, type = "success", onClose, duration = 3
     }, [duration, onClose]);
 
     return (
-        <div className="fixed bottom-4 right-4 z-50 animate-in slide-in-from-bottom-5 fade-in duration-300">
+        <div
+            className="fixed bottom-4 right-4 z-50 animate-in slide-in-from-bottom-5 fade-in duration-300"
+            role={type === "error" ? "alert" : "status"}
+            aria-live={type === "error" ? "assertive" : "polite"}
+        >
             <div className={`flex items-center gap-2 px-4 py-3 rounded-lg shadow-lg border ${type === "success"
                     ? "bg-white border-green-200 text-green-800"
                     : "bg-white border-red-200 text-red-800"
