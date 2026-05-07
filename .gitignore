@@ -76,3 +76,6 @@ components/FiltersPanel.tsx
 components/TenderCard.tsx
 components/SearchBar.tsx
 lib/tenders.ts
+
+# Audit output
+audit-broken-urls.csv

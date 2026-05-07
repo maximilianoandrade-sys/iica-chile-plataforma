@@ -3,6 +3,8 @@ import { getProjectsNeedingReview, approveProject, rejectProject } from '@/lib/a
 import { ReviewProjectCard } from '@/components/admin/ReviewProjectCard';
 import { Inbox, ShieldCheck } from 'lucide-react';
 
+export const dynamic = "force-dynamic";
+
 export default async function NeedsReviewPage() {
   const projects = await getProjectsNeedingReview();
 

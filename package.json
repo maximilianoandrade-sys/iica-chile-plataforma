@@ -15,7 +15,11 @@
     "prisma:push": "prisma db push",
     "prisma:seed": "tsx prisma/seed.ts",
     "db:setup": "npm run prisma:generate && npm run prisma:push && npm run prisma:seed",
-    "scrape": "tsx lib/scrapers.ts"
+    "scrape": "tsx lib/scrapers.ts",
+    "ingest": "tsx scripts/run-scrapers.ts",
+    "ingest:audit": "tsx scripts/audit-legacy-data.ts",
+    "discover": "tsx scripts/discover-projects.ts",
+    "smoke": "tsx scripts/smoke-test.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.36.0",
@@ -75,25 +79,5 @@
   "bugs": {
     "url": "https://github.com/maximilianoandrade-sys/iica-chile-plataforma/issues"
   },
-  "homepage": "https://github.com/maximilianoandrade-sys/iica-chile-plataforma#readme",
-  "jest": {
-    "preset": "next/jest",
-    "testEnvironment": "jest-environment-jsdom",
-    "setupFilesAfterEnv": [
-      "<rootDir>/tests/setup.ts"
-    ],
-    "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/$1"
-    },
-    "testPathIgnorePatterns": [
-      "<rootDir>/node_modules/",
-      "<rootDir>/.next/"
-    ],
-    "collectCoverageFrom": [
-      "components/**/*.tsx",
-      "lib/**/*.ts",
-      "app/**/*.tsx",
-      "!**/*.d.ts"
-    ]
-  }
+  "homepage": "https://github.com/maximilianoandrade-sys/iica-chile-plataforma#readme"
 }

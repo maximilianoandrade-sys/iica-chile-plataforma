@@ -1,169 +1,146 @@
-/**
- * Auto-Discovery de Nuevas Convocatorias
- * Coloca en: scripts/discover-projects.ts
- *
- * Uso: npx tsx scripts/discover-projects.ts
- * O como cron job en Vercel/GitHub Actions cada semana.
- *
- * Genera: data/discovered-projects.json
- */
-
 import Anthropic from "@anthropic-ai/sdk";
-import fs from "fs";
-import path from "path";
+import prisma from "../lib/prisma";
+import { passesGuardrails, type AiResult } from "./discover-projects-lib";
+import { normalizeUrl, parseSpanishDate } from "../lib/ingestion/utils";
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY!,
-});
+const SYSTEM_PROMPT = `Sos el motor de descubrimiento de oportunidades de financiamiento agrícola del IICA Chile.
 
-// Fuentes donde buscar nuevas convocatorias
-const SOURCES_TO_SCAN = [
-  "https://developmentaid.org/grants/list?keywords=agriculture+chile",
-  "https://www.fontagro.org/convocatorias",
-  "https://fondos.gob.cl/buscador/?categoria=agricultura-y-desarrollo-rural&estado=abierto",
-  "https://ec.europa.eu/info/funding-tenders/opportunities",
-  "https://grants.gov/search-grants?cfda=10",
-  "https://www.ifad.org/en/opportunities",
-  "https://www.greenclimate.fund/projects/funding-proposals",
-];
+Buscás proyectos REALES Y VIGENTES donde el IICA Chile pueda participar institucionalmente.
 
-const SYSTEM_PROMPT = `Eres un experto en identificar convocatorias de fondos para proyectos agrícolas y de cooperación internacional relevantes para el IICA Chile. 
+REGLA CRÍTICA: Solo incluí proyectos donde puedas citar el snippet exacto del web_search que viste (campo source_snippet, mínimo 15 palabras). Si no tenés un snippet textual del search result que mencione el proyecto, NO lo incluyas. NO inventes URLs, fechas ni montos. Si un dato no está en los snippets que recibiste, dejá el campo vacío en vez de adivinar.
 
-Usa web_search para buscar activamente en las fuentes indicadas.
+FUENTES preferidas (pero podés explorar otras):
+- fontagro.org/convocatorias
+- fao.org/chile y fao.org/americas/tcp
+- iadb.org (BID asistencia técnica)
+- ifad.org (FIDA)
+- thegef.org y greenclimate.fund
+- euroclima.org
+- fia.cl, indap.gob.cl, corfo.cl
+- mercadopublico.cl
 
-Devuelve SOLO JSON válido (sin markdown):
+Respondé SOLO con JSON válido (sin markdown, sin backticks):
 {
-  "projects": [
+  "results": [
     {
-      "title": "Nombre completo y descriptivo de la convocatoria",
-      "fuente": "Nombre de la institución convocante",
-      "ambito": "Internacional|Nacional|Regional",
-      "viabilidad": "Alta|Media|Baja",
-      "rol": "Ejecutor|Implementador|Asesor|Indirecto",
-      "cierre": "YYYY-MM-DD",
-      "monto": "Monto máximo o rango, o 'Consultar'",
-      "url": "URL directa a las bases",
-      "keywords": "5-10 palabras clave separadas por espacios",
-      "_reason": "Por qué es relevante para IICA Chile en máximo 25 palabras",
-      "discoveredAt": "${new Date().toISOString()}"
+      "url": "URL real (no homepage genérica)",
+      "title": "Título del proyecto",
+      "institution": "Institución",
+      "description": "1-2 oraciones",
+      "deadline": "DD-MM-YYYY o vacío",
+      "source_snippet": "TEXTO LITERAL del search result, >= 15 palabras"
     }
-  ],
-  "scannedAt": "${new Date().toISOString()}",
-  "totalFound": 0
+  ]
+}`;
+
+async function callClaudeWithWebSearch(query: string): Promise<AiResult[]> {
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! });
+
+  const response = await client.messages.create({
+    model: "claude-sonnet-4-20250514",
+    max_tokens: 4000,
+    system: SYSTEM_PROMPT,
+    tools: [{ type: "web_search_20250305", name: "web_search" } as any],
+    messages: [{
+      role: "user",
+      content: query
+        ? `Buscá oportunidades nuevas de financiamiento agrícola para IICA Chile sobre: ${query}`
+        : "Buscá oportunidades nuevas de financiamiento agrícola para IICA Chile, vigentes a hoy.",
+    }],
+  });
+
+  const text = response.content
+    .filter((b: any) => b.type === "text")
+    .map((b: any) => b.text)
+    .join("\n");
+
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) return [];
+  try {
+    const parsed = JSON.parse(jsonMatch[0]);
+    return Array.isArray(parsed.results) ? parsed.results : [];
+  } catch {
+    return [];
+  }
 }
 
-Criterios de calidad:
-- Solo convocatorias con fecha de cierre futura (después de hoy)
-- URL verificable y oficial
-- Relevancia directa para agricultura, desarrollo rural, o cooperación técnica
-- Alta viabilidad: IICA puede ser ejecutor directo
-- Media: IICA puede ser socio técnico
-- Baja: rol indirecto o marginal`;
+async function main() {
+  const query = process.env.DISCOVERY_QUERY || "";
+  console.log(`[discover] query: "${query || '(general)'}"`);
 
-async function discoverProjects(): Promise<void> {
-  console.log("🔍 Iniciando descubrimiento de nuevas convocatorias...\n");
+  const results = await callClaudeWithWebSearch(query);
+  console.log(`[discover] Claude devolvió ${results.length} resultados crudos`);
 
-  const allProjects: unknown[] = [];
-  const errors: string[] = [];
+  const aiSource = await prisma.source.findUnique({ where: { slug: "ai-discovery" } });
+  if (!aiSource) {
+    console.error("[discover] Source 'ai-discovery' no existe. Corré seed-sources.ts.");
+    process.exit(1);
+  }
 
-  // Búsquedas temáticas paralelas
-  const searchQueries = [
-    "convocatorias fondos cooperacion agricola chile 2026 abiertas",
-    "agricultural development grants latin america 2026 open call",
-    "IICA FAO FIDA BID convocatorias nuevas 2026",
-    "climate finance agriculture adaptation latin america 2026",
-    "horizonte europa agroalimentario convocatoria 2026 chile",
-    "GEF GCF biodiversity food systems chile 2026",
-    "USAID JICA KOICA agriculture latin america grants 2026",
-    "EUROCLIMA+ convocatoria agua riego sostenible 2026",
-  ];
+  let inserted = 0;
+  let updated = 0;
+  let discarded = 0;
+  const discardReasons: string[] = [];
 
-  for (const searchQuery of searchQueries) {
-    try {
-      console.log(`  Buscando: "${searchQuery}"`);
+  for (const r of results) {
+    const guard = await passesGuardrails(r);
+    if (!guard.ok) {
+      discarded++;
+      discardReasons.push(`${r.url || "(sin url)"}: ${guard.reason}`);
+      continue;
+    }
 
-      const message = await anthropic.messages.create({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 2048,
-        // @ts-expect-error — web_search_20250305 es una tool beta de Anthropic
-        tools: [{ type: "web_search_20250305", name: "web_search" }],
-        system: SYSTEM_PROMPT,
-        messages: [
-          {
-            role: "user",
-            content: `Busca: "${searchQuery}". 
-Identifica 2-4 convocatorias nuevas, concretas y verificables. 
-Prioriza: ${SOURCES_TO_SCAN.join(", ")}`,
-          },
-        ],
+    const canonicalUrl = normalizeUrl(r.url);
+    if (!canonicalUrl) { discarded++; continue; }
+
+    const existing = await prisma.project.findUnique({ where: { canonicalUrl } });
+    if (existing) {
+      await prisma.project.update({
+        where: { canonicalUrl },
+        data: { lastSeenAt: new Date() },
       });
-
-      const textBlock = message.content
-        .filter((b) => b.type === "text")
-        .map((b) => (b.type === "text" ? b.text : ""))
-        .join("");
-
-      if (textBlock) {
-        const cleaned = textBlock.replace(/```json|```/g, "").trim();
-        const parsed = JSON.parse(cleaned);
-        if (parsed.projects?.length > 0) {
-          allProjects.push(...parsed.projects);
-          console.log(
-            `  ✅ Encontradas ${parsed.projects.length} convocatorias`
-          );
-        }
-      }
-
-      // Esperar entre requests para no saturar la API
-      await new Promise((r) => setTimeout(r, 2000));
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      errors.push(`Query "${searchQuery}": ${msg}`);
-      console.log(`  ⚠️  Error: ${msg}`);
+      updated++;
+      continue;
     }
+
+    const deadline = r.deadline ? parseSpanishDate(r.deadline) : null;
+    await prisma.project.create({
+      data: {
+        canonicalUrl,
+        url_bases: r.url,
+        nombre: r.title,
+        institucion: r.institution || "Por confirmar",
+        objetivo: r.description || "",
+        fecha_cierre: deadline ?? new Date("2099-12-31"),
+        monto: 0,
+        estado: "Activo",
+        categoria: "AI Discovery",
+        notasInternas: `AI snippet: "${r.source_snippet.slice(0, 200)}..."`,
+        discoveredBy: "ai",
+        needsReview: true,
+        sourceId: aiSource.id,
+        estadoPostulacion: "Abierta",
+        ambito: "Internacional",
+      },
+    });
+    inserted++;
   }
 
-  // Deduplicar por URL
-  const seen = new Set<string>();
-  const unique = allProjects.filter((p) => {
-    const proj = p as { url?: string };
-    if (!proj.url || seen.has(proj.url)) return false;
-    seen.add(proj.url);
-    return true;
+  await prisma.source.update({
+    where: { slug: "ai-discovery" },
+    data: {
+      lastRunAt: new Date(),
+      lastRunStatus: discarded === results.length && results.length > 0 ? "error" : "success",
+      lastRunError: discardReasons.slice(0, 5).join("\n") || null,
+      projectsCount: inserted + updated,
+    },
   });
 
-  // Filtrar solo convocatorias con cierre futuro
-  const today = new Date();
-  const active = unique.filter((p) => {
-    const proj = p as { cierre?: string };
-    if (!proj.cierre) return false;
-    return new Date(proj.cierre) > today;
-  });
-
-  const output = {
-    projects: active,
-    totalFound: active.length,
-    scannedAt: new Date().toISOString(),
-    errors: errors.length > 0 ? errors : undefined,
-  };
-
-  // Guardar resultados
-  const outputPath = path.join(
-    process.cwd(),
-    "data",
-    "discovered-projects.json"
-  );
-  fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-  fs.writeFileSync(outputPath, JSON.stringify(output, null, 2));
-
-  console.log(`\n✅ Descubrimiento completado:`);
-  console.log(`   - Convocatorias activas encontradas: ${active.length}`);
-  console.log(`   - Guardado en: ${outputPath}`);
-
-  if (errors.length > 0) {
-    console.log(`\n⚠️  Errores (${errors.length}):`);
-    errors.forEach((e) => console.log(`   - ${e}`));
-  }
+  console.log(`[discover] Insertados: ${inserted}, Actualizados: ${updated}, Descartados: ${discarded}`);
+  await prisma.$disconnect();
 }
 
-discoverProjects().catch(console.error);
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

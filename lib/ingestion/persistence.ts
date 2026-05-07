@@ -1,0 +1,98 @@
+import prisma from "../prisma";
+import { normalizeUrl } from "./utils";
+import { validateUrl } from "./validateUrl";
+import type { RawProject } from "./types";
+
+const STALE_DAYS = 7;
+
+export async function upsertProject(
+  raw: RawProject,
+  sourceSlug: string
+): Promise<{ skipped?: boolean; reason?: string }> {
+  const validation = await validateUrl(raw.url);
+  if (!validation.ok) {
+    return { skipped: true, reason: validation.reason };
+  }
+  const canonicalUrl = normalizeUrl(raw.url);
+  if (!canonicalUrl) {
+    return { skipped: true, reason: "URL no normalizable" };
+  }
+
+  const source = await prisma.source.findUnique({ where: { slug: sourceSlug } });
+  if (!source) {
+    return { skipped: true, reason: `Source '${sourceSlug}' no existe` };
+  }
+
+  const now = new Date();
+  const baseFields = {
+    nombre: raw.title,
+    institucion: raw.institution,
+    url_bases: raw.url,
+    fecha_cierre: raw.deadline ?? new Date("2099-12-31"),
+    monto: 0,
+    estado: "Activo",
+    categoria: raw.tags?.[0] ?? "General",
+    objetivo: raw.description ?? "",
+    ambito: raw.ambito ?? "Nacional",
+    region: raw.region ?? null,
+    lastSeenAt: now,
+  };
+
+  await prisma.project.upsert({
+    where: { canonicalUrl },
+    update: baseFields,
+    create: {
+      ...baseFields,
+      canonicalUrl,
+      firstSeenAt: now,
+      discoveredBy: "scraper",
+      needsReview: false,
+      sourceId: source.id,
+      estadoPostulacion: "Abierta",
+    },
+  });
+
+  return {};
+}
+
+export async function markStale(): Promise<{ markedByLastSeen: number; markedByDeadline: number }> {
+  const staleCutoff = new Date(Date.now() - STALE_DAYS * 24 * 60 * 60 * 1000);
+
+  const byLastSeen = await prisma.project.updateMany({
+    where: {
+      lastSeenAt: { lt: staleCutoff },
+      estadoPostulacion: "Abierta",
+      discoveredBy: { not: "manual" },
+    },
+    data: { estadoPostulacion: "Cerrada" },
+  });
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const byDeadline = await prisma.project.updateMany({
+    where: {
+      fecha_cierre: { lt: today },
+      estadoPostulacion: "Abierta",
+    },
+    data: { estadoPostulacion: "Cerrada" },
+  });
+
+  return { markedByLastSeen: byLastSeen.count, markedByDeadline: byDeadline.count };
+}
+
+export async function updateSourceStatus(
+  slug: string,
+  status: "success" | "error" | "partial",
+  count: number,
+  errorMsg?: string
+): Promise<void> {
+  await prisma.source.update({
+    where: { slug },
+    data: {
+      lastRunAt: new Date(),
+      lastRunStatus: status,
+      lastRunError: errorMsg ?? null,
+      projectsCount: count,
+    },
+  });
+}

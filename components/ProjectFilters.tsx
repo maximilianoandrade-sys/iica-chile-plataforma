@@ -214,6 +214,7 @@ export default function ProjectFilters({
     const selectedEstado = searchParams.get('estado') || 'Todos';        // ítem 10
     const selectedRol = searchParams.get('rol') || 'Todos';              // Rol IICA
     const soloAbiertos = searchParams.get('open') === '1';
+    const includeUnverified = searchParams.get('unverified') !== '0'; // default true
     const sortBy = searchParams.get('sort') || 'relevance';
 
     const hasActiveFilters = !!(
@@ -486,6 +487,21 @@ export default function ProjectFilters({
                     <span className={`w-1.5 h-1.5 rounded-full ${soloAbiertos ? 'bg-white' : 'bg-green-500'}`}></span>
                     Solo Abiertas ({counts.open})
                 </button>
+
+                {/* Incluir sin verificar toggle */}
+                <label className="flex items-center gap-2 text-xs font-bold text-gray-600 px-3 py-1.5 rounded-full border border-gray-200 bg-white hover:bg-yellow-50 hover:border-yellow-300 transition-all cursor-pointer flex-shrink-0">
+                    <input
+                        type="checkbox"
+                        checked={includeUnverified}
+                        onChange={(e) => {
+                            const params = new URLSearchParams(searchParams.toString());
+                            if (e.target.checked) { params.delete('unverified'); } else { params.set('unverified', '0'); }
+                            startTransition(() => { router.push(`?${params.toString()}`, { scroll: false }); });
+                        }}
+                        className="rounded border-gray-300"
+                    />
+                    Incluir descubrimientos sin verificar 🤖
+                </label>
 
                 {/* Categoría chips */}
                 <div className="flex overflow-x-auto md:flex-wrap gap-2 md:gap-1.5 pb-2 md:pb-0 scrollbar-hide snap-x">

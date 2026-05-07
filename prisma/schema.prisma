@@ -65,6 +65,15 @@ model Project {
   updatedAt                 DateTime @updatedAt
   lastCheckedAt             DateTime @default(now())
   
+  // Pipeline de ingesta
+  canonicalUrl              String?  @unique
+  sourceId                  Int?
+  source                    Source?  @relation(fields: [sourceId], references: [id])
+  discoveredBy              String   @default("manual")
+  needsReview               Boolean  @default(false)
+  firstSeenAt               DateTime @default(now())
+  lastSeenAt                DateTime @default(now())
+  
   favoritos                 Favorito[]
   
   @@index([institucion])
@@ -72,6 +81,27 @@ model Project {
   @@index([fecha_cierre])
   @@index([viabilidadIICA])
   @@index([rolIICA])
+  @@index([sourceId])
+  @@index([needsReview])
+  @@index([lastSeenAt])
+}
+
+model Source {
+  id             Int       @id @default(autoincrement())
+  slug           String    @unique
+  name           String
+  type           String
+  enabled        Boolean   @default(true)
+  lastRunAt      DateTime?
+  lastRunStatus  String?
+  lastRunError   String?
+  projectsCount  Int       @default(0)
+  homepageUrl    String?
+
+  projects       Project[]
+
+  @@index([slug])
+  @@index([enabled])
 }
 
 model Fondo {
