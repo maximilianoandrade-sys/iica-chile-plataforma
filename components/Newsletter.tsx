@@ -113,7 +113,7 @@ export default function Newsletter() {
                                     <>Suscribirme Gratis <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" /></>
                                 )}
                             </button>
-                            <p className="text-[10px] text-center text-blue-200 opacity-70">
+                            <p className="text-xs text-center text-blue-200 opacity-70">
                                 Al suscribirte aceptas recibir boletines informativos del IICA.
                             </p>
                         </form>
