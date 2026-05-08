@@ -5,18 +5,16 @@
  * Tier gratuito: 1500 requests/día en Gemini 2.5 Flash → más que suficiente
  * para nuestro cron semanal.
  *
- * Corre semanalmente vía GitHub Actions (.github/workflows/discover-projects.yml).
+ * Estrategia en DOS PASOS para mejor calidad:
+ *  1. Primer call CON googleSearch: pedir investigación en lenguaje natural
+ *     (este paso encuentra info real y trae groundingMetadata)
+ *  2. Segundo call SIN tools: convertir esa investigación a JSON estructurado
+ *     (este paso es determinístico, no alucina URLs)
  *
- * Guardrails anti-alucinación (idénticos al original con Claude):
+ * Guardrails anti-alucinación (idénticos al original):
  *   - source_snippet textual obligatorio (>= 15 palabras)
  *   - URL debe resolver con HEAD (no 404, no redirect a homepage)
  *   - Snippet se guarda en notasInternas para auditoría humana
- *
- * Los proyectos descubiertos entran a BD con discoveredBy='ai' y needsReview=true.
- * Aparecen en la búsqueda con badge "🤖 Sin verificar".
- * El equipo IICA aprueba/descarta en /admin/discoveries.
- *
- * Migrado de Claude (Anthropic) a Gemini (Google) para evitar costo de API key.
  */
 
 import { GoogleGenAI } from "@google/genai";
@@ -24,70 +22,119 @@ import prisma from "../lib/prisma";
 import { passesGuardrails, type AiResult } from "./discover-projects-lib";
 import { normalizeUrl, parseSpanishDate } from "../lib/ingestion/utils";
 
-const SYSTEM_INSTRUCTION = `Sos el motor de descubrimiento de oportunidades de financiamiento agrícola del IICA Chile.
+const RESEARCH_PROMPT = `Investigá usando Google Search qué convocatorias de financiamiento agrícola están ABIERTAS HOY para el IICA Chile.
 
-Buscás proyectos REALES Y VIGENTES donde el IICA Chile pueda participar institucionalmente.
-
-REGLA CRÍTICA: Solo incluí proyectos donde puedas citar el snippet exacto del search result que viste (campo source_snippet, mínimo 15 palabras textuales tomadas literalmente del search result). Si no tenés un snippet textual del search result que mencione el proyecto, NO lo incluyas. NO inventes URLs, fechas ni montos. Si un dato no está en los snippets que recibiste, dejá el campo vacío en vez de adivinar.
-
-FUENTES preferidas (pero podés explorar otras):
-- fontagro.org/convocatorias
-- fao.org/chile y fao.org/americas/tcp
-- iadb.org (BID asistencia técnica)
+Buscá específicamente en:
+- fontagro.org (convocatorias 2026)
+- fao.org/chile y fao.org/americas (TCP)
+- iadb.org (BID asistencia técnica Chile)
 - ifad.org (FIDA)
 - thegef.org y greenclimate.fund
 - euroclima.org
 - fia.cl, indap.gob.cl, corfo.cl
-- mercadopublico.cl
 - developmentaid.org
 
-Respondé SOLO con un objeto JSON válido (sin markdown, sin bloques de código), exactamente con esta forma:
+Para cada convocatoria que encuentres ABIERTA y vigente, dame:
+- Título exacto
+- Institución
+- URL directa a la convocatoria (no homepage)
+- Fecha de cierre si está disponible
+- Snippet textual (al menos 15 palabras) tomado literalmente del search result
+- Breve descripción
+
+IMPORTANTE: Solo incluí convocatorias que efectivamente encontraste en los search results. Si una convocatoria YA CERRÓ, indicalo claramente (no la incluyas como abierta). Si no encontrás nada abierto, decilo.`;
+
+const STRUCTURE_PROMPT = (research: string) => `A continuación tenés el resultado de una investigación sobre convocatorias agrícolas abiertas:
+
+---
+${research}
+---
+
+Convertí esta información a un JSON con esta forma exacta. Solo incluí las convocatorias que la investigación menciona como ABIERTAS (no las cerradas o vencidas). Si la investigación dice que no hay nada abierto, devolvé {"results": []}.
+
 {
   "results": [
     {
-      "url": "URL real de la convocatoria (no homepage genérica)",
-      "title": "Título del proyecto",
+      "url": "URL completa de la convocatoria",
+      "title": "Título",
       "institution": "Institución",
       "description": "1-2 oraciones",
-      "deadline": "DD-MM-YYYY o vacío",
-      "source_snippet": "TEXTO LITERAL del search result, >= 15 palabras"
+      "deadline": "DD-MM-YYYY si se menciona, vacío si no",
+      "source_snippet": "El snippet textual original, mínimo 15 palabras"
     }
   ]
-}`;
+}
 
-async function callGeminiWithSearch(query: string): Promise<AiResult[]> {
+Respondé SOLO con el JSON, sin markdown, sin backticks, sin texto adicional.`;
+
+function extractJsonObject(text: string): any | null {
+  if (!text) return null;
+  // Quitar markdown fences si existen
+  const cleaned = text.replace(/```json\s*/gi, "").replace(/```\s*/g, "").trim();
+  // Buscar el primer objeto JSON balanceado
+  const start = cleaned.indexOf("{");
+  if (start === -1) return null;
+  let depth = 0;
+  for (let i = start; i < cleaned.length; i++) {
+    if (cleaned[i] === "{") depth++;
+    else if (cleaned[i] === "}") {
+      depth--;
+      if (depth === 0) {
+        try {
+          return JSON.parse(cleaned.slice(start, i + 1));
+        } catch {
+          return null;
+        }
+      }
+    }
+  }
+  return null;
+}
+
+async function discover(query: string): Promise<AiResult[]> {
   const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 
-  const userPrompt = query
-    ? `Buscá oportunidades nuevas de financiamiento agrícola para IICA Chile sobre: ${query}`
-    : `Buscá oportunidades nuevas de financiamiento agrícola para IICA Chile, vigentes a hoy. Prioridad: convocatorias internacionales (FONTAGRO, FAO, BID, FIDA, GEF, GCF, EuroClima) y nacionales que NO estén cubiertas por scrapers de FIA o IICA Hemisférico. Devolvé entre 5 y 12 resultados.`;
+  // Paso 1: investigación con grounding
+  const researchPrompt = query
+    ? `${RESEARCH_PROMPT}\n\nFiltro adicional: enfocate en "${query}".`
+    : RESEARCH_PROMPT;
 
-  const response = await ai.models.generateContent({
+  console.log("[discover] paso 1: investigación con Google Search...");
+  const research = await ai.models.generateContent({
     model: "gemini-2.5-flash",
-    contents: userPrompt,
+    contents: researchPrompt,
     config: {
-      systemInstruction: SYSTEM_INSTRUCTION,
       tools: [{ googleSearch: {} }],
-      temperature: 0.2,
+      temperature: 0.1,
     },
   });
 
-  const text = response.text || "";
-
-  // Limpiar posibles fences ```json ... ```
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) {
-    console.warn("[discover] Gemini no devolvió JSON parseable. Respuesta cruda:", text.slice(0, 500));
+  const researchText = research.text || "";
+  if (!researchText.trim()) {
+    console.warn("[discover] investigación sin texto");
     return [];
   }
 
-  try {
-    const parsed = JSON.parse(jsonMatch[0]);
-    return Array.isArray(parsed.results) ? parsed.results : [];
-  } catch (err) {
-    console.warn("[discover] Error parseando JSON de Gemini:", (err as Error).message);
+  const groundingChunks =
+    (research.candidates as any)?.[0]?.groundingMetadata?.groundingChunks?.length || 0;
+  console.log(`[discover] investigación: ${researchText.length} chars, ${groundingChunks} fuentes citadas`);
+
+  // Paso 2: estructuración a JSON sin tools (más determinístico)
+  console.log("[discover] paso 2: estructurando a JSON...");
+  const structured = await ai.models.generateContent({
+    model: "gemini-2.5-flash",
+    contents: STRUCTURE_PROMPT(researchText),
+    config: {
+      temperature: 0,
+    },
+  });
+
+  const parsed = extractJsonObject(structured.text || "");
+  if (!parsed || !Array.isArray(parsed.results)) {
+    console.warn("[discover] no se pudo parsear JSON. Respuesta:", (structured.text || "").slice(0, 500));
     return [];
   }
+  return parsed.results;
 }
 
 async function main() {
@@ -108,7 +155,7 @@ async function main() {
 
   let results: AiResult[];
   try {
-    results = await callGeminiWithSearch(query);
+    results = await discover(query);
   } catch (err) {
     const msg = (err as Error).message;
     console.error(`[discover] Gemini API error: ${msg}`);
@@ -120,7 +167,7 @@ async function main() {
     process.exit(1);
   }
 
-  console.log(`[discover] Gemini devolvió ${results.length} resultados crudos`);
+  console.log(`[discover] ${results.length} convocatorias estructuradas`);
 
   let inserted = 0;
   let updated = 0;
