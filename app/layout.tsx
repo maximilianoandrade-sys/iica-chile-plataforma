@@ -163,35 +163,7 @@ export default function RootLayout({
           }}
         />
 
-        {/* Web Vitals Reporting */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              if (typeof window !== 'undefined') {
-                // Report Web Vitals
-                function sendToAnalytics(metric) {
-                  const body = JSON.stringify(metric);
-                  const url = '/api/analytics/web-vitals';
-                  
-                  if (navigator.sendBeacon) {
-                    navigator.sendBeacon(url, body);
-                  } else {
-                    fetch(url, { body, method: 'POST', keepalive: true });
-                  }
-                }
-                
-                // Lazy load web-vitals
-                import('https://unpkg.com/web-vitals@3/dist/web-vitals.iife.js').then(({ onCLS, onFID, onFCP, onLCP, onTTFB }) => {
-                  onCLS(sendToAnalytics);
-                  onFID(sendToAnalytics);
-                  onFCP(sendToAnalytics);
-                  onLCP(sendToAnalytics);
-                  onTTFB(sendToAnalytics);
-                });
-              }
-            `,
-          }}
-        />
+
         </ThemeProvider>
       </body>
     </html>

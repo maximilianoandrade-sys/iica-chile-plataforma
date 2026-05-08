@@ -120,18 +120,7 @@ async function sendToServer(eventType: string, data: any) {
         console.log(`📤 [${eventType}]`, data);
     }
 
-    // Ejemplo de implementación futura:
-    /*
-    try {
-        await fetch('/api/analytics', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ type: eventType, data })
-        });
-    } catch (e) {
-        console.error('Error enviando analytics:', e);
-    }
-    */
+
 }
 
 /**
