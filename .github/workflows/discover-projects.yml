@@ -33,7 +33,7 @@ jobs:
 
       - name: Run AI Discovery
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DIRECT_URL: ${{ secrets.DIRECT_URL }}
           DISCOVERY_QUERY: ${{ github.event.inputs.query }}

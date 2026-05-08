@@ -10,9 +10,10 @@ Documentación práctica para mantener el pipeline de búsqueda de proyectos del
   Hace upsert a Supabase via `lib/ingestion/persistence.ts`.
 
 - **Capa B — AI Discovery** (semanal, lunes 12:00 UTC):
-  GitHub Action `discover-projects.yml` corre Claude + web_search con guardrails
-  anti-alucinación (snippet >= 15 palabras + URL validation). Escribe a Supabase
-  con `discoveredBy='ai'` y `needsReview=true`.
+  GitHub Action `discover-projects.yml` corre Gemini 2.5 Flash + Google Search
+  grounding con guardrails anti-alucinación (snippet >= 15 palabras + URL
+  validation). Escribe a Supabase con `discoveredBy='ai'` y `needsReview=true`.
+  Gratis con tier free de Gemini API (1500 req/día).
 
 - **API live de Mercado Público**: en cada búsqueda, `/api/search-projects` consulta
   Mercado Público en tiempo real para captar licitaciones del día (filtradas por
@@ -63,7 +64,7 @@ Documentación práctica para mantener el pipeline de búsqueda de proyectos del
 # Todos los scrapers
 npm run ingest
 
-# Solo discovery IA (necesita ANTHROPIC_API_KEY)
+# Solo discovery IA (necesita GEMINI_API_KEY — gratis en aistudio.google.com)
 npm run discover
 
 # Auditoría legacy (dry-run, genera CSV)
@@ -104,7 +105,7 @@ DEPLOYMENT_URL=https://tu-app.vercel.app npm run smoke
 |---|---|---|---|
 | `DATABASE_URL` | ✅ | ✅ | Prisma → Supabase (pooler) |
 | `DIRECT_URL` | ✅ | ✅ | Prisma migrations |
-| `ANTHROPIC_API_KEY` | — | ✅ | Capa B AI Discovery |
+| `GEMINI_API_KEY` | — | ✅ | Capa B AI Discovery (https://aistudio.google.com) |
 | `MERCADO_PUBLICO_TICKET` | ✅ | — | API Mercado Público |
 | `ADMIN_PASSWORD` | ✅ | — | Auth `/admin/login` |
 | `ADMIN_SESSION_SECRET` | ✅ | — | HMAC cookie firma (`openssl rand -hex 32`) |
