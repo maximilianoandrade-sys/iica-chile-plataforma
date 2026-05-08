@@ -22,6 +22,7 @@ model Usuario {
 
 model Project {
   id                        Int      @id @default(autoincrement())
+  sourceId                  String?  @unique
   nombre                    String
   institucion               String
   monto                     Float
