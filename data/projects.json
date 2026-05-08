@@ -5,7 +5,7 @@
         "institucion": "FONTAGRO",
         "monto": 245000000,
         "fecha_cierre": "2026-04-20",
-        "estado": "Abierto",
+        "estado": "Cerrado",
         "categoria": "Internacional",
         "url_bases": "https://plataforma.fontagro.org/login",
         "regiones": [
@@ -41,7 +41,7 @@
             "Organizacion"
         ],
         "ambito": "Internacional",
-        "estadoPostulacion": "Abierta",
+        "estadoPostulacion": "Cerrada",
         "viabilidadIICA": "Alta",
         "porcentajeViabilidad": 95,
         "responsableIICA": "Carlos Guajardo",
@@ -419,7 +419,7 @@
         "institucion": "FONTAGRO",
         "monto": 180000000,
         "fecha_cierre": "2026-04-20",
-        "estado": "Abierto",
+        "estado": "Cerrado",
         "categoria": "Internacional",
         "url_bases": "https://plataforma.fontagro.org/login",
         "regiones": [
@@ -454,7 +454,7 @@
             "Organizacion"
         ],
         "ambito": "Internacional",
-        "estadoPostulacion": "Abierta",
+        "estadoPostulacion": "Cerrada",
         "viabilidadIICA": "Alta",
         "porcentajeViabilidad": 78,
         "responsableIICA": "Carlos Guajardo",
@@ -553,7 +553,7 @@
         "institucion": "INDAP",
         "monto": 320000000,
         "fecha_cierre": "2026-04-20",
-        "estado": "Abierto",
+        "estado": "Cerrado",
         "categoria": "Nacional",
         "url_bases": "https://www.ventanillaunicasocial.gob.cl/ficha/1070-programa-de-desarrollo-local-prodesal",
         "regiones": [
@@ -591,7 +591,7 @@
             "Organizacion"
         ],
         "ambito": "Nacional",
-        "estadoPostulacion": "Abierta",
+        "estadoPostulacion": "Cerrada",
         "viabilidadIICA": "Media",
         "porcentajeViabilidad": 55,
         "responsableIICA": "Ana Lía Gutiérrez",
@@ -826,7 +826,7 @@
         "institucion": "CNR",
         "monto": 400000000,
         "fecha_cierre": "2026-04-30",
-        "estado": "Abierto",
+        "estado": "Cerrado",
         "categoria": "Nacional",
         "url_bases": "https://www.cnr.gob.cl/agricultores/concursos-de-riego-y-drenaje/bases-de-concurso/",
         "regiones": [
@@ -864,7 +864,7 @@
             "Organizacion"
         ],
         "ambito": "Nacional",
-        "estadoPostulacion": "Abierta",
+        "estadoPostulacion": "Cerrada",
         "viabilidadIICA": "Baja",
         "porcentajeViabilidad": 30,
         "responsableIICA": "",
@@ -1317,7 +1317,7 @@
         "institucion": "CNR",
         "monto": 350000000,
         "fecha_cierre": "2026-04-30",
-        "estado": "Abierto",
+        "estado": "Cerrado",
         "categoria": "Nacional",
         "url_bases": "https://www.cnr.gob.cl/agricultores/concursos-de-riego-y-drenaje/bases-de-concurso/",
         "regiones": [
@@ -1354,7 +1354,7 @@
             "Natural"
         ],
         "ambito": "Nacional",
-        "estadoPostulacion": "Abierta",
+        "estadoPostulacion": "Cerrada",
         "viabilidadIICA": "Media",
         "porcentajeViabilidad": 55,
         "responsableIICA": "Ana Lía Gutiérrez",
@@ -1387,7 +1387,7 @@
         "institucion": "CNR",
         "monto": 400000000,
         "fecha_cierre": "2026-04-30",
-        "estado": "Abierto",
+        "estado": "Cerrado",
         "categoria": "Nacional",
         "url_bases": "https://www.cnr.gob.cl/agricultores/concursos-de-riego-y-drenaje/bases-de-concurso/",
         "regiones": [
@@ -1427,7 +1427,7 @@
             "Natural"
         ],
         "ambito": "Nacional",
-        "estadoPostulacion": "Abierta",
+        "estadoPostulacion": "Cerrada",
         "viabilidadIICA": "Alta",
         "porcentajeViabilidad": 72,
         "responsableIICA": "Ana Lía Gutiérrez",
@@ -1460,7 +1460,7 @@
         "institucion": "GIZ / BMZ (Alemania)",
         "monto": 450000000,
         "fecha_cierre": "2026-04-30",
-        "estado": "Abierto",
+        "estado": "Cerrado",
         "categoria": "Internacional",
         "url_bases": "https://fondo-cooperacion-triangular.net/postulacion-de-proyectos/",
         "regiones": [
@@ -1496,7 +1496,7 @@
             "Organizacion"
         ],
         "ambito": "Internacional",
-        "estadoPostulacion": "Abierta",
+        "estadoPostulacion": "Cerrada",
         "viabilidadIICA": "Alta",
         "porcentajeViabilidad": 80,
         "responsableIICA": "Carlos Guajardo",
@@ -1960,7 +1960,7 @@
         "institucion": "FONTAGRO",
         "monto": 245000000,
         "fecha_cierre": "2026-04-20",
-        "estado": "Abierto",
+        "estado": "Cerrado",
         "categoria": "Internacional",
         "url_bases": "https://plataforma.fontagro.org/login",
         "regiones": [
@@ -1996,7 +1996,7 @@
             "Organizacion"
         ],
         "ambito": "Internacional",
-        "estadoPostulacion": "Abierta",
+        "estadoPostulacion": "Cerrada",
         "viabilidadIICA": "Alta",
         "porcentajeViabilidad": 95,
         "responsableIICA": "Carlos Guajardo",
@@ -2097,7 +2097,7 @@
         "institucion": "Comisión Europea / Horizonte Europa",
         "monto": 2000000000,
         "fecha_cierre": "2026-04-16",
-        "estado": "Abierto",
+        "estado": "Cerrado",
         "categoria": "Internacional",
         "url_bases": "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/search;callCode=null;freeTextSearchKeyword=CL6-2026;matchWholeText=true;typeCodes=1,0;statusCodes=31094501;programmePeriod=2021-2027;programCcm2Id=43108390;programDivisionCode=null;focusAreaCode=null;destination=null;mission=null;geographicalZonesCode=null;programmeDivisionProspect=null;startDateLte=null;startDateGte=null;crossCuttingPriorityCode=null;cpvCode=null;performanceOfDelivery=null;sortQuery=sortStatus;orderBy=asc;onlyPrograms=false;topicListKey=callTopicSearchTableState",
         "regiones": [
@@ -2135,7 +2135,7 @@
             "Organizacion"
         ],
         "ambito": "Internacional",
-        "estadoPostulacion": "Abierta",
+        "estadoPostulacion": "Cerrada",
         "viabilidadIICA": "Media",
         "porcentajeViabilidad": 62,
         "responsableIICA": "Carlos Guajardo",
@@ -2170,7 +2170,7 @@
         "institucion": "FIA",
         "monto": 80000000,
         "fecha_cierre": "2026-03-31",
-        "estado": "Abierto",
+        "estado": "Cerrado",
         "categoria": "Nacional",
         "url_bases": "https://convocatoria.fia.cl",
         "regiones": [
@@ -2205,7 +2205,7 @@
             "Organizacion"
         ],
         "ambito": "Nacional",
-        "estadoPostulacion": "Abierta",
+        "estadoPostulacion": "Cerrada",
         "viabilidadIICA": "Media",
         "porcentajeViabilidad": 65,
         "responsableIICA": "Ana Lía Gutiérrez",
@@ -2580,7 +2580,7 @@
         "institucion": "Ministerio de Medio Ambiente",
         "monto": 6000000,
         "fecha_cierre": "2026-04-15",
-        "estado": "Abierto",
+        "estado": "Cerrado",
         "categoria": "Nacional",
         "url_bases": "https://fondos.mma.gob.cl",
         "regiones": [
@@ -2594,7 +2594,8 @@
             "plazo_ejecucion": "6 meses"
         },
         "viabilidadIICA": "Media",
-        "descripcionIICA": "Apoyo técnico a organizaciones de base."
+        "descripcionIICA": "Apoyo técnico a organizaciones de base.",
+        "estadoPostulacion": "Cerrada"
     },
     {
         "id": 160,
@@ -2761,7 +2762,7 @@
         "institucion": "PNUD",
         "monto": 300000000,
         "fecha_cierre": "2026-04-15",
-        "estado": "Abierto",
+        "estado": "Cerrado",
         "categoria": "Internacional",
         "url_bases": "https://www.undp.org",
         "regiones": [
@@ -2775,7 +2776,8 @@
             "plazo_ejecucion": "12 meses"
         },
         "viabilidadIICA": "Media",
-        "descripcionIICA": "Oportunidad de trabajar la agenda de recambio generacional."
+        "descripcionIICA": "Oportunidad de trabajar la agenda de recambio generacional.",
+        "estadoPostulacion": "Cerrada"
     },
     {
         "id": 168,
@@ -2821,5 +2823,456 @@
         },
         "viabilidadIICA": "Alta",
         "descripcionIICA": "Alineación total con la estrategia transversal de género del IICA."
+    },
+    {
+        "id": 170,
+        "nombre": "CNR – Concurso N° 08-2026: Nacional de Monitoreo de Extracciones Superficiales y Subterráneas",
+        "institucion": "CNR",
+        "monto": 500000000,
+        "fecha_cierre": "2026-07-31",
+        "estado": "Abierto",
+        "categoria": "Nacional",
+        "url_bases": "https://www.cnr.gob.cl",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "Organizaciones de usuarios de aguas",
+            "Juntas de vigilancia",
+            "Comunidades de aguas"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Bonificación según Ley 18.450",
+            "requisitos_clave": [
+                "Ser organización de usuarios de aguas legalmente constituida",
+                "Postulación electrónica vía SEP de CNR"
+            ],
+            "plazo_ejecucion": "24 meses",
+            "observaciones": "Concurso publicado 06/05/2026. Enfocado en monitoreo y gestión eficiente de recursos hídricos."
+        },
+        "ambito": "Nacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Media",
+        "porcentajeViabilidad": 60,
+        "responsableIICA": "Por asignar",
+        "region": "Todas las regiones",
+        "rolIICA": "Asesor",
+        "objetivo": "Monitoreo de extracciones de agua superficial y subterránea para gestión sustentable de recursos hídricos",
+        "ejeIICA": "Resiliencia territorial",
+        "complejidad": "Media"
+    },
+    {
+        "id": 171,
+        "nombre": "CNR – Concurso N° 11-2026: Concurso de Riego para Campesinos INDAP",
+        "institucion": "CNR",
+        "monto": 300000000,
+        "fecha_cierre": "2026-08-15",
+        "estado": "Abierto",
+        "categoria": "Nacional",
+        "url_bases": "https://www.cnr.gob.cl",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "Pequeños agricultores INDAP",
+            "Campesinos"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Bonificación estatal Ley 18.450, sin cofinanciamiento del beneficiario",
+            "requisitos_clave": [
+                "Ser usuario INDAP vigente",
+                "Postulación vía SEP de CNR",
+                "Proyecto de riego tecnificado"
+            ],
+            "plazo_ejecucion": "18 meses",
+            "observaciones": "Bases aprobadas mediante resolución publicada 07/05/2026. Orientado a mejorar acceso a riego para pequeña agricultura."
+        },
+        "ambito": "Nacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Alta",
+        "porcentajeViabilidad": 75,
+        "responsableIICA": "Por asignar",
+        "region": "Todas las regiones",
+        "rolIICA": "Asesor",
+        "objetivo": "Mejorar el acceso a sistemas de riego tecnificado para campesinos usuarios de INDAP",
+        "fortalezas": [
+            "IICA tiene experiencia en riego y gestión hídrica",
+            "Complementa programas INDAP existentes"
+        ],
+        "debilidades": [
+            "Requiere ser usuario INDAP vigente"
+        ],
+        "ejeIICA": "Desarrollo territorial",
+        "complejidad": "Facil"
+    },
+    {
+        "id": 172,
+        "nombre": "INDAP Magallanes – Concurso Regional de Riego 2026",
+        "institucion": "INDAP",
+        "monto": 180000000,
+        "fecha_cierre": "2026-07-30",
+        "estado": "Abierto",
+        "categoria": "Regional",
+        "url_bases": "https://www.indap.gob.cl",
+        "regiones": [
+            "Magallanes y Antártica Chilena"
+        ],
+        "beneficiarios": [
+            "Pequeños agricultores",
+            "Usuarios INDAP Magallanes"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Cofinanciamiento parcial INDAP",
+            "requisitos_clave": [
+                "Ser usuario INDAP en Región de Magallanes",
+                "Proyecto de mejoramiento de riego"
+            ],
+            "plazo_ejecucion": "12 meses",
+            "observaciones": "Publicado 06/05/2026. Inversión de  millones para fortalecer la agricultura regional en Magallanes."
+        },
+        "ambito": "Regional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Baja",
+        "porcentajeViabilidad": 30,
+        "responsableIICA": "Por asignar",
+        "region": "Magallanes",
+        "rolIICA": "Indirecto",
+        "objetivo": "Fortalecer la agricultura regional en Magallanes mediante inversión en riego",
+        "ejeIICA": "Desarrollo territorial",
+        "complejidad": "Facil"
+    },
+    {
+        "id": 173,
+        "nombre": "FIA – Programa Mujer AgroInnovadora 2026",
+        "institucion": "FIA",
+        "monto": 50000000,
+        "fecha_cierre": "2026-12-31",
+        "estado": "Abierto",
+        "categoria": "Nacional",
+        "url_bases": "https://www.fia.cl",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "Mujeres agricultoras",
+            "Emprendedoras rurales",
+            "Organizaciones de mujeres campesinas"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Cofinanciamiento FIA según bases específicas",
+            "requisitos_clave": [
+                "Ser mujer vinculada al sector agropecuario",
+                "Proyecto con componente de innovación"
+            ],
+            "plazo_ejecucion": "12-24 meses",
+            "observaciones": "Programa estratégico FIA vigente 2026. Convocatorias se abren durante el año."
+        },
+        "ambito": "Nacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Alta",
+        "porcentajeViabilidad": 80,
+        "responsableIICA": "Por asignar",
+        "region": "Todas las regiones",
+        "rolIICA": "Implementador",
+        "objetivo": "Fomentar la innovación agraria liderada por mujeres en el sector agroalimentario chileno",
+        "fortalezas": [
+            "IICA tiene línea de trabajo en género y agricultura",
+            "Complementa mandato IICA de equidad"
+        ],
+        "debilidades": [
+            "Competencia con otras ONGs y organizaciones"
+        ],
+        "ejeIICA": "Inclusión y equidad",
+        "complejidad": "Media"
+    },
+    {
+        "id": 174,
+        "nombre": "FIA – Programa Juventud Rural Innovadora 2026",
+        "institucion": "FIA",
+        "monto": 40000000,
+        "fecha_cierre": "2026-12-31",
+        "estado": "Abierto",
+        "categoria": "Nacional",
+        "url_bases": "https://www.fia.cl",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "Jóvenes rurales",
+            "Emprendedores jóvenes agrícolas"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Cofinanciamiento FIA según bases específicas",
+            "requisitos_clave": [
+                "Edad entre 18 y 35 años",
+                "Vinculación con sector agrícola rural",
+                "Proyecto innovador"
+            ],
+            "plazo_ejecucion": "12-18 meses",
+            "observaciones": "Programa estratégico FIA para retención y empoderamiento de jóvenes en zonas rurales."
+        },
+        "ambito": "Nacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Alta",
+        "porcentajeViabilidad": 75,
+        "responsableIICA": "Por asignar",
+        "region": "Todas las regiones",
+        "rolIICA": "Implementador",
+        "objetivo": "Impulsar la innovación y el emprendimiento agrícola juvenil en zonas rurales de Chile",
+        "fortalezas": [
+            "IICA tiene programa hemisférico de juventud rural",
+            "Sinergias con becas y capacitación IICA"
+        ],
+        "ejeIICA": "Inclusión y equidad",
+        "complejidad": "Facil"
+    },
+    {
+        "id": 175,
+        "nombre": "FIA – Programa de Adopción de Innovaciones Agrarias 2026",
+        "institucion": "FIA",
+        "monto": 80000000,
+        "fecha_cierre": "2026-12-31",
+        "estado": "Abierto",
+        "categoria": "Nacional",
+        "url_bases": "https://www.fia.cl",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "Agricultores",
+            "Cooperativas agrícolas",
+            "Organizaciones productoras"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Cofinanciamiento según bases del programa",
+            "requisitos_clave": [
+                "Propuesta de adopción de tecnología o innovación probada",
+                "Vinculación con sector agrícola"
+            ],
+            "plazo_ejecucion": "12-24 meses",
+            "observaciones": "Programa FIA que financia la transferencia y adopción de innovaciones ya validadas en el sector agroalimentario."
+        },
+        "ambito": "Nacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Alta",
+        "porcentajeViabilidad": 80,
+        "responsableIICA": "Por asignar",
+        "region": "Todas las regiones",
+        "rolIICA": "Implementador",
+        "objetivo": "Acelerar la adopción de innovaciones agrarias probadas entre productores agrícolas chilenos",
+        "fortalezas": [
+            "IICA tiene catálogo de innovaciones probadas en ALC",
+            "Capacidad de transferencia tecnológica"
+        ],
+        "ejeIICA": "Innovación para la productividad",
+        "complejidad": "Media"
+    },
+    {
+        "id": 176,
+        "nombre": "FIA – AGRINEXUS: Plataforma de Conexión para Innovación Agraria",
+        "institucion": "FIA",
+        "monto": 60000000,
+        "fecha_cierre": "2026-12-31",
+        "estado": "Abierto",
+        "categoria": "Nacional",
+        "url_bases": "https://www.fia.cl",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "Centros de investigación",
+            "Empresas agrícolas",
+            "Universidades",
+            "Emprendedores"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Según bases específicas de la convocatoria",
+            "requisitos_clave": [
+                "Proyecto con componente de vinculación ciencia-empresa-territorio",
+                "Enfoque en innovación agroalimentaria"
+            ],
+            "plazo_ejecucion": "12-24 meses",
+            "observaciones": "Nueva plataforma FIA que conecta demandas del sector productivo con ofertas del mundo científico-tecnológico."
+        },
+        "ambito": "Nacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Alta",
+        "porcentajeViabilidad": 70,
+        "responsableIICA": "Por asignar",
+        "region": "Todas las regiones",
+        "rolIICA": "Asesor",
+        "objetivo": "Conectar la demanda del sector productivo agrícola con la oferta del sistema de ciencia e innovación",
+        "ejeIICA": "Innovación para la productividad",
+        "complejidad": "Media"
+    },
+    {
+        "id": 177,
+        "nombre": "ANID – Fondecyt Regular 2027: Investigación Científica Agrícola y Ambiental",
+        "institucion": "ANID",
+        "monto": 200000000,
+        "fecha_cierre": "2026-06-24",
+        "estado": "Abierto",
+        "categoria": "Nacional",
+        "url_bases": "https://www.anid.cl/concursos/",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "Investigadores",
+            "Universidades",
+            "Centros de investigación"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Financiamiento completo ANID, no requiere cofinanciamiento",
+            "requisitos_clave": [
+                "Investigador/a con doctorado",
+                "Patrocinio de institución de investigación chilena",
+                "Postulación online vía plataforma ANID"
+            ],
+            "plazo_ejecucion": "24-48 meses",
+            "observaciones": "Convocatoria abierta 22/04/2026, cierre 24/06/2026. Incluye áreas de ciencias agrarias, ambientales, biotecnología. Fallo estimado enero 2027."
+        },
+        "ambito": "Nacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Media",
+        "porcentajeViabilidad": 50,
+        "responsableIICA": "Por asignar",
+        "region": "Todas las regiones",
+        "rolIICA": "Indirecto",
+        "objetivo": "Financiar investigación científica de base en áreas agrícolas, ambientales y de ciencias de la tierra",
+        "fortalezas": [
+            "Financiamiento de largo plazo",
+            "Prestigio académico"
+        ],
+        "debilidades": [
+            "Requiere investigador con doctorado",
+            "IICA no puede postular directamente"
+        ],
+        "ejeIICA": "Innovación para la productividad",
+        "complejidad": "Alta"
+    },
+    {
+        "id": 178,
+        "nombre": "INDAP Coquimbo – Concursos de Mejoramiento de Acceso y Disponibilidad de Agua 2026",
+        "institucion": "INDAP",
+        "monto": 120000000,
+        "fecha_cierre": "2026-07-15",
+        "estado": "Abierto",
+        "categoria": "Regional",
+        "url_bases": "https://www.indap.gob.cl",
+        "regiones": [
+            "Coquimbo"
+        ],
+        "beneficiarios": [
+            "Pequeños agricultores",
+            "Usuarios INDAP Coquimbo"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Cofinanciamiento INDAP",
+            "requisitos_clave": [
+                "Ser usuario INDAP en Región de Coquimbo",
+                "Proyecto de acceso o disponibilidad de agua"
+            ],
+            "plazo_ejecucion": "12 meses",
+            "observaciones": "Publicado 28/04/2026. Enfocado en zonas con escasez hídrica severa en la Región de Coquimbo."
+        },
+        "ambito": "Regional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Media",
+        "porcentajeViabilidad": 40,
+        "responsableIICA": "Por asignar",
+        "region": "Coquimbo",
+        "rolIICA": "Indirecto",
+        "objetivo": "Mejorar acceso y disponibilidad de agua para pequeños agricultores en zonas de escasez hídrica",
+        "ejeIICA": "Resiliencia territorial",
+        "complejidad": "Facil"
+    },
+    {
+        "id": 179,
+        "nombre": "Adaptation Fund – Convocatoria Continua: Proyectos de Adaptación Climática para Chile",
+        "institucion": "Adaptation Fund",
+        "monto": 9000000000,
+        "fecha_cierre": "2026-12-31",
+        "estado": "Abierto",
+        "categoria": "Internacional",
+        "url_bases": "https://www.adaptation-fund.org/apply-funding/",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "Entidades nacionales acreditadas",
+            "Entidades multilaterales",
+            "Gobierno"
+        ],
+        "resumen": {
+            "cofinanciamiento": "No requiere cofinanciamiento obligatorio",
+            "requisitos_clave": [
+                "Acceso a través de Entidad Implementadora acreditada (NIE, RIE o MIE)",
+                "Propuesta alineada con prioridades nacionales de adaptación",
+                "Aprobación de la Autoridad Designada del país"
+            ],
+            "plazo_ejecucion": "36-60 meses",
+            "observaciones": "Submissions aceptadas en forma continua (rolling basis desde Decision B.40/59). IICA podría actuar como Entidad Implementadora Regional. Cap por país ~USD 10M."
+        },
+        "monto_min": 900000000,
+        "monto_max": 9000000000,
+        "plazo_meses": 48,
+        "ambito": "Internacional",
+        "estadoPostulacion": "Abierta",
+        "viabilidadIICA": "Alta",
+        "porcentajeViabilidad": 70,
+        "responsableIICA": "Por asignar",
+        "region": "Chile",
+        "rolIICA": "Ejecutor",
+        "objetivo": "Financiar proyectos de adaptación al cambio climático en sectores vulnerables incluyendo agricultura",
+        "fortalezas": [
+            "IICA tiene experiencia hemisférica en adaptación climática",
+            "Rolling submissions permite planificación flexible",
+            "Montos significativos disponibles"
+        ],
+        "debilidades": [
+            "Requiere Entidad Implementadora acreditada",
+            "Proceso de aprobación largo (12-18 meses)"
+        ],
+        "ejeIICA": "Resiliencia territorial",
+        "complejidad": "Alta"
+    },
+    {
+        "id": 180,
+        "nombre": "ProChile – Concurso Silvoagropecuario 2027: Promoción de Exportaciones",
+        "institucion": "ProChile",
+        "monto": 50000000,
+        "fecha_cierre": "2026-08-14",
+        "estado": "Próximo",
+        "categoria": "Nacional",
+        "url_bases": "https://www.prochile.gob.cl/herramientas/concursos",
+        "regiones": [
+            "Todas"
+        ],
+        "beneficiarios": [
+            "Empresas exportadoras silvoagropecuarias",
+            "Personas jurídicas del sector"
+        ],
+        "resumen": {
+            "cofinanciamiento": "Cofinanciamiento ProChile según bases del concurso",
+            "requisitos_clave": [
+                "Empresa chilena sector silvoagropecuario",
+                "Registro de exportaciones en Aduanas",
+                "Ingresos anuales menores a 100.000 UF",
+                "Postulación online desde 23/07/2025"
+            ],
+            "plazo_ejecucion": "12 meses",
+            "observaciones": "Plataforma de postulación abre 23/07/2026. Concurso 2026 ya adjudicado. Cofinancia ferias, misiones comerciales, e-commerce, branding."
+        },
+        "ambito": "Nacional",
+        "estadoPostulacion": "Proxima",
+        "viabilidadIICA": "Media",
+        "porcentajeViabilidad": 45,
+        "responsableIICA": "Por asignar",
+        "region": "Todas las regiones",
+        "rolIICA": "Indirecto",
+        "objetivo": "Cofinanciar acciones de promoción de exportaciones para empresas del sector silvoagropecuario chileno",
+        "ejeIICA": "Comercio e integración",
+        "complejidad": "Media"
     }
 ]
