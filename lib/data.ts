@@ -7,6 +7,7 @@ import projectData from '@/data/projects.json';
 export interface Project {
     // ── Identificación básica ─────────────────────────────────────────────
     id: number;
+    sourceId?: string;   // Scraper origin key, e.g. "anid:fondecyt-regular-2027"
     nombre: string;
     institucion: string;
     monto: number;
