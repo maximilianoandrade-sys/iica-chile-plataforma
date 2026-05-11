@@ -73,7 +73,7 @@ export function Footer() {
                         </ul>
                         <p className="text-blue-400 text-xs mt-3 flex items-center gap-1">
                             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse inline-block"></span>
-                            Fuentes verificadas: Feb 2026
+                            Fuentes verificadas: May 2026
                         </p>
                     </div>
 
