@@ -98,7 +98,7 @@ export function Footer() {
                 </div>
 
                 <div className="flex flex-col md:flex-row justify-between items-center text-xs text-blue-300 gap-3">
-                    <p>© 2026 Instituto Interamericano de Cooperación para la Agricultura (IICA). Todos los derechos reservados.</p>
+                    <p>© {currentYear} Instituto Interamericano de Cooperación para la Agricultura (IICA). Todos los derechos reservados.</p>
                     <div className="flex gap-4">
                         <a href="/legal/privacidad" className="hover:text-white transition-colors">Política de Privacidad</a>
                         <a href="/legal/terminos" className="hover:text-white transition-colors">Términos de Uso</a>

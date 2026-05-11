@@ -38,7 +38,8 @@ export function AnimatedCounter({ end, suffix = "", prefix = "", duration = 2000
 
     return (
         <span ref={ref}>
-            {prefix}{count.toLocaleString("es-CL")}{suffix}
+            <span className="sr-only">{prefix}{end.toLocaleString("es-CL")}{suffix}</span>
+            <span aria-hidden="true">{prefix}{count.toLocaleString("es-CL")}{suffix}</span>
         </span>
     );
 }

@@ -6,9 +6,6 @@ import { Mail, ArrowRight, CheckCircle } from 'lucide-react';
 export default function Newsletter() {
     const [email, setEmail] = useState('');
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-    const [whatsapp, setWhatsapp] = useState(false);
-    const [phone, setPhone] = useState('');
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setStatus('loading');
@@ -27,8 +24,6 @@ export default function Newsletter() {
 
             setStatus('success');
             setEmail('');
-            setPhone('');
-            setWhatsapp(false);
         } catch (error) {
             console.error('Newsletter error:', error);
             setStatus('error');
@@ -52,7 +47,7 @@ export default function Newsletter() {
                         ¿Quieres saber cuando abren nuevos fondos?
                     </h2>
                     <p className="text-blue-100/90 text-sm md:text-base">
-                        Suscríbete para recibir alertas personalizadas en tu email y whatsapp con las últimas convocatorias. Cero spam.
+                        Suscríbete para recibir alertas personalizadas en tu email con las últimas convocatorias. Cero spam.
                     </p>
                 </div>
 
@@ -84,36 +79,6 @@ export default function Newsletter() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 disabled={status === 'loading'}
                             />
-
-                            <div className="flex flex-col gap-2">
-                                <div className="flex items-center gap-2 mt-1">
-                                    <input
-                                        type="checkbox"
-                                        id="whatsapp-check"
-                                        className="rounded text-[var(--iica-secondary)] focus:ring-[var(--iica-secondary)]"
-                                        checked={whatsapp}
-                                        onChange={(e) => setWhatsapp(e.target.checked)}
-                                    />
-                                    <label htmlFor="whatsapp-check" className="text-xs text-blue-100 cursor-pointer hover:text-white transition-colors flex items-center gap-1 select-none">
-                                        <svg viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3 text-green-400">
-                                            <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.97 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z" />
-                                        </svg>
-                                        Recibir alertas también por WhatsApp
-                                    </label>
-                                </div>
-
-                                {whatsapp && (
-                                    <input
-                                        type="tel"
-                                        placeholder="Tu número (Ej: +56 9 1234 5678)"
-                                        required={whatsapp}
-                                        className="w-full px-4 py-3 rounded-lg text-gray-900 focus:ring-2 focus:ring-[var(--iica-secondary)] outline-none border-none shadow-inner animate-in fade-in slide-in-from-top-2"
-                                        value={phone}
-                                        onChange={(e) => setPhone(e.target.value)}
-                                        disabled={status === 'loading'}
-                                    />
-                                )}
-                            </div>
 
                             <button
                                 type="submit"

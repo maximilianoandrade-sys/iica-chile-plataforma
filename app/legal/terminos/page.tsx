@@ -4,7 +4,7 @@ export default function TermsOfUsePage() {
         <main className="container mx-auto px-4 py-12 max-w-4xl text-gray-700 leading-relaxed space-y-8">
             <div>
                 <h1 className="text-3xl md:text-4xl font-bold text-[var(--iica-navy)] mb-4">Términos y Condiciones de Uso</h1>
-                <p className="text-sm text-gray-500">Última actualización: Febrero 2026</p>
+                <p className="text-sm text-gray-500">Última actualización: Mayo 2026</p>
             </div>
 
             <section className="space-y-4">
@@ -16,7 +16,7 @@ export default function TermsOfUsePage() {
             <section className="space-y-4">
                 <h2 className="text-2xl font-bold text-[var(--iica-blue)]">1. Objeto de la Plataforma</h2>
                 <p>
-                    Esta plataforma tiene un carácter <strong>informativo y facilitador</strong>. Su objetivo principal es centralizar y simplificar el acceso a la información sobre fondos concursables, subsidios y créditos disponibles para el sector agrícola chileno, provenientes de diversas fuentes públicas (INDAP, CORFO, CNR, FIA, Sercotec, GOREs) e internacionales.
+                    Esta plataforma tiene un carácter <strong>informativo y facilitador</strong>. Su objetivo principal es centralizar y simplificar el acceso a la información sobre fondos concursables, subsidios y créditos disponibles para el sector agrícola chileno, provenientes de diversas fuentes públicas (INDAP, CORFO, CNR, FIA, SAG) e internacionales (BID, FIDA, FAO, FONTAGRO, GEF/GCF, EUROCLIMA+).
                 </p>
                 <p className="font-semibold text-red-600">
                     IMPORTANTE: IICA Chile NO es la entidad que otorga estos financiamientos, salvo que se indique explícitamente lo contrario en una convocatoria propia.
@@ -69,7 +69,7 @@ export default function TermsOfUsePage() {
             <section className="space-y-4">
                 <h2 className="text-2xl font-bold text-[var(--iica-blue)]">7. Contacto</h2>
                 <p>
-                    Si tiene alguna duda sobre estos Términos y Condiciones, por favor contáctenos a través de iica.chile@iica.int.
+                    Si tiene alguna duda sobre estos Términos y Condiciones, por favor contáctenos a través de representacion.chile@iica.int.
                 </p>
             </section>
         </main>
