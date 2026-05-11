@@ -9,17 +9,30 @@ export default function Newsletter() {
     const [whatsapp, setWhatsapp] = useState(false);
     const [phone, setPhone] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setStatus('loading');
 
-        // Simula una llamada a API - En el futuro conectar con Mailchimp o DB Local
-        setTimeout(() => {
+        try {
+            const res = await fetch('/api/newsletter', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email }),
+            });
+
+            if (!res.ok) {
+                const data = await res.json();
+                throw new Error(data.error || 'Error al suscribirse');
+            }
+
             setStatus('success');
             setEmail('');
             setPhone('');
             setWhatsapp(false);
-        }, 1500);
+        } catch (error) {
+            console.error('Newsletter error:', error);
+            setStatus('error');
+        }
     };
 
     return (
