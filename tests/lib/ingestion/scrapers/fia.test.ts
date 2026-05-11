@@ -52,11 +52,15 @@ describe("fiaScraper", () => {
     expect(result.sourceSlug).toBe("fia");
   });
 
-  it("lanza error si fetch falla", async () => {
+  it("reporta partialErrors si fetch falla", async () => {
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: false,
       status: 503,
     });
-    await expect(fiaScraper.scrape()).rejects.toThrow("fetch fallido");
+    await expect(fiaScraper.scrape()).resolves.toEqual({
+      sourceSlug: "fia",
+      projects: [],
+      partialErrors: ["HTTP 503"],
+    });
   });
 });
