@@ -1,0 +1,157 @@
+/**
+ * @jest-environment node
+ */
+
+// Mock prisma before importing persistence
+jest.mock("../../../lib/prisma", () => ({
+  __esModule: true,
+  default: {
+    project: {
+      upsert: jest.fn(),
+      findUnique: jest.fn(),
+      create: jest.fn(),
+      update: jest.fn(),
+      updateMany: jest.fn(),
+    },
+    source: {
+      findUnique: jest.fn(),
+      update: jest.fn(),
+    },
+  },
+}));
+
+// Mock validateUrl to always return ok
+jest.mock("../../../lib/ingestion/validateUrl", () => ({
+  validateUrl: jest.fn().mockResolvedValue({ ok: true }),
+}));
+
+import { upsertProject, updateSourceStatus } from "../../../lib/ingestion/persistence";
+const prisma = require("../../../lib/prisma").default;
+
+describe("upsertProject", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    prisma.source.findUnique.mockResolvedValue({ id: 1 });
+    prisma.project.upsert.mockResolvedValue({ id: 99 });
+  });
+
+  it("sets needsReview to true for new projects", async () => {
+    await upsertProject(
+      { url: "https://example.com/project", title: "Test Project", institution: "Test" },
+      "test-source"
+    );
+
+    expect(prisma.project.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        create: expect.objectContaining({ needsReview: true }),
+      })
+    );
+  });
+
+  it("sets estado to 'Abierto' in update and create", async () => {
+    await upsertProject(
+      { url: "https://example.com/project", title: "Test", institution: "Test" },
+      "test-source"
+    );
+
+    const call = prisma.project.upsert.mock.calls[0][0];
+    expect(call.update.estado).toBe("Abierto");
+    expect(call.create.estado).toBe("Abierto");
+  });
+
+  it("parses budget with parseAmount", async () => {
+    await upsertProject(
+      { url: "https://example.com/x", title: "T", institution: "I", budget: "$10.000.000 CLP" },
+      "test-source"
+    );
+
+    const call = prisma.project.upsert.mock.calls[0][0];
+    expect(call.create.monto).toBe(10000000);
+    expect(call.update.monto).toBe(10000000);
+  });
+
+  it("defaults monto to 0 when budget is empty", async () => {
+    await upsertProject(
+      { url: "https://example.com/x", title: "T", institution: "I" },
+      "test-source"
+    );
+
+    const call = prisma.project.upsert.mock.calls[0][0];
+    expect(call.create.monto).toBe(0);
+    expect(call.update.monto).toBe(0);
+  });
+
+  it("uses sourceRefId for FK to Source model", async () => {
+    await upsertProject(
+      { url: "https://example.com/x", title: "T", institution: "I" },
+      "test-source"
+    );
+
+    expect(prisma.project.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        create: expect.objectContaining({ sourceRefId: 1 }),
+      })
+    );
+  });
+
+  it("includes required array fields in create", async () => {
+    await upsertProject(
+      { url: "https://example.com/x", title: "T", institution: "I" },
+      "test-source"
+    );
+
+    const createData = prisma.project.upsert.mock.calls[0][0].create;
+    expect(createData.regiones).toEqual([]);
+    expect(createData.beneficiarios).toEqual([]);
+    expect(createData.checklist).toEqual([]);
+    expect(createData.tipos_solicitante).toEqual([]);
+    expect(createData.requisitos).toEqual([]);
+    expect(createData.fortalezas).toEqual([]);
+    expect(createData.debilidades).toEqual([]);
+  });
+
+  it("upserts by canonicalUrl with lastSeenAt", async () => {
+    await upsertProject(
+      { url: "https://example.com/x", title: "T", institution: "I" },
+      "test-source"
+    );
+
+    const call = prisma.project.upsert.mock.calls[0][0];
+    expect(call.where).toHaveProperty("canonicalUrl");
+    expect(call.update.lastSeenAt).toBeInstanceOf(Date);
+    expect(call.create.lastSeenAt).toBeInstanceOf(Date);
+  });
+
+  it("skips if source not found", async () => {
+    prisma.source.findUnique.mockResolvedValue(null);
+
+    const result = await upsertProject(
+      { url: "https://example.com/x", title: "T", institution: "I" },
+      "nonexistent"
+    );
+
+    expect(result.skipped).toBe(true);
+    expect(result.reason).toContain("no existe");
+    expect(prisma.project.upsert).not.toHaveBeenCalled();
+  });
+});
+
+describe("updateSourceStatus", () => {
+  beforeEach(() => jest.clearAllMocks());
+
+  it("updates source with status and count", async () => {
+    prisma.source.update.mockResolvedValue({});
+
+    await updateSourceStatus("test-slug", "success", 5);
+
+    expect(prisma.source.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { slug: "test-slug" },
+        data: expect.objectContaining({
+          lastRunStatus: "success",
+          projectsCount: 5,
+        }),
+      })
+    );
+  });
+});

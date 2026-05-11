@@ -42,3 +42,16 @@ yarn-error.log*
 prisma/migrations/
 *.db
 *.db-journal
+
+# Archivos antiguos que no se deben subir
+app/search/
+components/FiltersPanel.tsx
+components/TenderCard.tsx
+components/SearchBar.tsx
+lib/tenders.ts
+
+# Audit output
+audit-broken-urls.csv
+
+# Scraper temp
+tmp/

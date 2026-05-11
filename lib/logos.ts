@@ -16,12 +16,13 @@ export const instituciones: Record<string, { logo: string; color: string }> = {
 };
 
 // Fallback si la imagen falla
-export function getLogoFallback(nombre: string) {
-    return `https://placehold.co/40x40/2E7D32/white?text=${nombre.charAt(0)}`;
+export function getLogoFallback(nombre: string | null | undefined, size: number = 40) {
+    const initial = nombre ? nombre.charAt(0).toUpperCase() : '?';
+    return `https://placehold.co/${size}x${size}/2E7D32/white?text=${initial}`;
 }
 
-export function getInstitutionalLogo(nombre: string): string {
+export function getInstitutionalLogo(nombre: string, size: number = 40): string {
     const inst = instituciones[nombre as keyof typeof instituciones];
     if (inst) return inst.logo;
-    return getLogoFallback(nombre);
+    return getLogoFallback(nombre, size);
 }

@@ -29,6 +29,7 @@ export default async function ProjectListContainer({
     const minAmount = typeof searchParams.minAmount === 'string' ? parseInt(searchParams.minAmount) : 0;
     const maxAmount = typeof searchParams.maxAmount === 'string' ? parseInt(searchParams.maxAmount) : Infinity;
     const selectedRol = typeof searchParams.rol === 'string' ? searchParams.rol : 'Todos';
+    const includeUnverified = searchParams.unverified !== '0'; // default true
 
     // 1. Opciones de filtros (calculadas sobre todos los proyectos)
     const categories = ['Todas', ...Array.from(new Set(projects.map(p => p.categoria)))];
@@ -85,10 +86,11 @@ export default async function ProjectListContainer({
         }
 
         const matchesRol = selectedRol === 'Todos' || project.rolIICA === selectedRol;
+        const matchesUnverified = includeUnverified || !(project as any).needsReview;
 
         return matchesCategory && matchesRegion && matchesBeneficiary && matchesInstitution
             && matchesAmount && matchesOpen
-            && matchesAmbito && matchesViabilidad && matchesEstado && matchesRol;
+            && matchesAmbito && matchesViabilidad && matchesEstado && matchesRol && matchesUnverified;
     });
 
     // 4. Ordenamiento secundario
