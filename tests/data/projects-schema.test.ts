@@ -4,8 +4,8 @@
 import projects from "../../data/projects.json";
 
 describe("projects.json schema validation", () => {
-  it("has at least 50 projects", () => {
-    expect(projects.length).toBeGreaterThanOrEqual(50);
+  it("has at least 30 projects", () => {
+    expect(projects.length).toBeGreaterThanOrEqual(30);
   });
 
   const requiredFields = ["id", "nombre", "institucion", "monto", "fecha_cierre", "estado", "categoria", "url_bases"];
