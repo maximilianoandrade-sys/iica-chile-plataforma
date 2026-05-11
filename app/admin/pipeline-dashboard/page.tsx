@@ -6,7 +6,7 @@ import { Activity, AlertCircle, CheckCircle, Database } from 'lucide-react';
 export const dynamic = "force-dynamic";
 
 export default async function PipelineDashboard() {
-  const { stats, summary } = await getPipelineMetrics();
+  const { total, active, needsReview, sources } = await getPipelineMetrics();
 
   return (
     <div className="space-y-8">
@@ -23,7 +23,7 @@ export default async function PipelineDashboard() {
           </div>
           <div>
             <p className="text-xs font-semibold text-gray-400 uppercase">Total Proyectos</p>
-            <p className="text-2xl font-bold text-gray-900">{summary.total}</p>
+            <p className="text-2xl font-bold text-gray-900">{total}</p>
           </div>
         </div>
 
@@ -33,7 +33,7 @@ export default async function PipelineDashboard() {
           </div>
           <div>
             <p className="text-xs font-semibold text-gray-400 uppercase">Activos</p>
-            <p className="text-2xl font-bold text-gray-900">{summary.active}</p>
+            <p className="text-2xl font-bold text-gray-900">{active}</p>
           </div>
         </div>
 
@@ -42,8 +42,8 @@ export default async function PipelineDashboard() {
             <AlertCircle size={24} />
           </div>
           <div>
-            <p className="text-xs font-semibold text-gray-400 uppercase">Pendientes AI</p>
-            <p className="text-2xl font-bold text-gray-900">{summary.pendingReview}</p>
+            <p className="text-xs font-semibold text-gray-400 uppercase">Pendientes Review</p>
+            <p className="text-2xl font-bold text-gray-900">{needsReview}</p>
           </div>
         </div>
 
@@ -53,7 +53,7 @@ export default async function PipelineDashboard() {
           </div>
           <div>
             <p className="text-xs font-semibold text-gray-400 uppercase">Fuentes Activas</p>
-            <p className="text-2xl font-bold text-gray-900">{stats.length}</p>
+            <p className="text-2xl font-bold text-gray-900">{sources.length}</p>
           </div>
         </div>
       </div>
@@ -62,11 +62,8 @@ export default async function PipelineDashboard() {
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <h3 className="text-lg font-semibold text-gray-900">Estadísticas por Fuente</h3>
-          <button className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
-            Ejecutar Pipeline Completo
-          </button>
         </div>
-        <SourceStatsTable stats={stats} />
+        <SourceStatsTable stats={sources} />
       </div>
     </div>
   );

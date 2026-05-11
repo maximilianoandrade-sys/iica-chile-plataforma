@@ -15,10 +15,10 @@ jest.mock("../../../lib/prisma", () => ({
   },
 }));
 
-import { getPipelineStats } from "../../../lib/actions/pipeline";
+import { getPipelineMetrics } from "../../../lib/actions/pipeline";
 const prisma = require("../../../lib/prisma").default;
 
-describe("getPipelineStats", () => {
+describe("getPipelineMetrics", () => {
   beforeEach(() => jest.clearAllMocks());
 
   it("returns correct stats from Prisma queries", async () => {
@@ -32,7 +32,7 @@ describe("getPipelineStats", () => {
       { slug: "fia", name: "FIA", lastRunStatus: "success", projectsCount: 10 },
     ]);
 
-    const stats = await getPipelineStats();
+    const stats = await getPipelineMetrics();
 
     expect(stats.total).toBe(100);
     expect(stats.active).toBe(30);

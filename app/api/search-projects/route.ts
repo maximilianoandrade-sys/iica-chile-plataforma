@@ -1,21 +1,21 @@
-﻿// ============================================================
+// ============================================================
 // app/api/search-projects/route.ts
 //
-// Motor de b├║squeda de proyectos reales para IICA Chile.
+// Motor de búsqueda de proyectos reales para IICA Chile.
 // Un solo archivo. Sin dependencias extras. Listo para pegar.
 //
-// C├ôMO AGREGAR AL REPO:
+// CÓMO AGREGAR AL REPO:
 //   1. Crea la carpeta: app/api/search-projects/
 //   2. Copia este archivo como:  app/api/search-projects/route.ts
 //   3. Agrega en .env.local (o Vercel > Settings > Env Vars):
 //        ANTHROPIC_API_KEY=sk-ant-...
-//   4. En tu page.tsx, agrega el buscador (ver secci├│n UI al final)
+//   4. En tu page.tsx, agrega el buscador (ver sección UI al final)
 //
-// C├ôMO FUNCIONA:
-//   - CON API KEY ÔåÆ Claude usa web_search y busca proyectos reales
+// CÓMO FUNCIONA:
+//   - CON API KEY → Claude usa web_search y busca proyectos reales
 //     en tiempo real en FONTAGRO, FAO, BID, FIA, CNR, IICA, etc.
-//   - SIN API KEY ÔåÆ Devuelve los 12 proyectos base verificados
-//     que est├ín hardcodeados en este archivo.
+//   - SIN API KEY → Devuelve los 12 proyectos base verificados
+//     que están hardcodeados en este archivo.
 //
 // ENDPOINT:
 //   POST /api/search-projects
@@ -29,16 +29,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-// ÔöÇÔöÇÔöÇ Cache en Memoria Global ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+// ─── Cache en Memoria Global ────────────────────────────────────────────────
 // En serverless environments, esto sobrevive entre iteraciones "calientes"
 const globalCache = new Map<string, { timestamp: number, results: Project[], meta: SearchMeta }>();
-const CACHE_TTL = 1000 * 60 * 60 * 24; // 24 horas de cach├® (1 d├¡a)
+const CACHE_TTL = 1000 * 60 * 60 * 24; // 24 horas de caché (1 día)
 
-// ÔöÇÔöÇÔöÇ Tipos ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+// ─── Tipos ───────────────────────────────────────────────────────────────────
 
-type IicaRole = "IICA Ejecutor" | "Implementador" | "Asesor t├®cnico" | "Rol indirecto";
+type IicaRole = "IICA Ejecutor" | "Implementador" | "Asesor técnico" | "Rol indirecto";
 type Viability = "Alta" | "Media" | "Baja";
-type Status = "abierto" | "pr├│ximo" | "cerrado" | "permanente";
+type Status = "abierto" | "próximo" | "cerrado" | "permanente";
 type Scope = "Internacional" | "Nacional" | "Regional";
 
 interface Project {
@@ -71,14 +71,14 @@ interface SearchMeta {
   summary: string;
 }
 
-// ÔöÇÔöÇÔöÇ Proyectos base verificados manualmente ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+// ─── Proyectos base verificados manualmente ───────────────────────────────────
 // Estos son reales y con URLs comprobadas al 11/03/2026.
 // Se usan cuando no hay API key, o como base que la IA enriquece.
 
 const BASE_PROJECTS: Project[] = [
   {
     id: "fontagro-conv-2026",
-    title: "FONTAGRO ÔÇô Convocatoria 2026: Cooperaci├│n e Innovaci├│n para Sistemas Agroalimentarios ALC",
+    title: "FONTAGRO – Convocatoria 2026: Cooperación e Innovación para Sistemas Agroalimentarios ALC",
     institution: "FONTAGRO",
     scope: "Internacional",
     status: "abierto",
@@ -86,21 +86,21 @@ const BASE_PROJECTS: Project[] = [
     days_left: null,
     budget: "Hasta USD 250.000",
     iica_role: "IICA Ejecutor",
-    iica_role_detail: "IICA es miembro de FONTAGRO y puede liderar consorcios multinacionales como instituci├│n ejecutora principal o co-ejecutora",
+    iica_role_detail: "IICA es miembro de FONTAGRO y puede liderar consorcios multinacionales como institución ejecutora principal o co-ejecutora",
     viability: "Alta",
-    description: "Convocatoria anual de FONTAGRO para proyectos de innovaci├│n en sistemas agroalimentarios. Requiere consorcio de m├¡nimo 2 pa├¡ses miembros. Prioridades 2026: resiliencia clim├ítica, digitalizaci├│n, bioeconom├¡a. IICA Chile puede presentar o co-presentar propuestas directamente.",
+    description: "Convocatoria anual de FONTAGRO para proyectos de innovación en sistemas agroalimentarios. Requiere consorcio de mínimo 2 países miembros. Prioridades 2026: resiliencia climática, digitalización, bioeconomía. IICA Chile puede presentar o co-presentar propuestas directamente.",
     requirements: [
-      "Consorcio de m├¡nimo 2 pa├¡ses miembros de FONTAGRO",
-      "IICA como instituci├│n l├¡der o co-ejecutora acreditada",
-      "Cofinanciamiento m├¡nimo requerido (ver bases)",
+      "Consorcio de mínimo 2 países miembros de FONTAGRO",
+      "IICA como institución líder o co-ejecutora acreditada",
+      "Cofinanciamiento mínimo requerido (ver bases)",
     ],
     url: "https://fontagro.org/en/iniciativas/convocatorias/convocatoria-2026",
-    tags: ["FONTAGRO", "innovaci├│n", "ALC", "2026"],
+    tags: ["FONTAGRO", "innovación", "ALC", "2026"],
     is_real: true,
   },
   {
     id: "fontagro-tcp-plataforma-digital",
-    title: "FONTAGRO ÔÇô TCP Plataforma Digital de Extensi├│n Agr├¡cola Clima-Inteligente ALC",
+    title: "FONTAGRO – TCP Plataforma Digital de Extensión Agrícola Clima-Inteligente ALC",
     institution: "FONTAGRO",
     scope: "Internacional",
     status: "abierto",
@@ -108,125 +108,125 @@ const BASE_PROJECTS: Project[] = [
     days_left: null,
     budget: "A confirmar en bases",
     iica_role: "Implementador",
-    iica_role_detail: "IICA Chile puede actuar como implementador t├®cnico del componente digital o coordinador regional del proyecto",
+    iica_role_detail: "IICA Chile puede actuar como implementador técnico del componente digital o coordinador regional del proyecto",
     viability: "Alta",
-    description: "Proyecto de cooperaci├│n t├®cnica de FONTAGRO para desarrollar plataforma digital de extensi├│n agr├¡cola adaptada al clima. IICA puede implementar la soluci├│n t├®cnica en Chile y articular con otros pa├¡ses de ALC.",
+    description: "Proyecto de cooperación técnica de FONTAGRO para desarrollar plataforma digital de extensión agrícola adaptada al clima. IICA puede implementar la solución técnica en Chile y articular con otros países de ALC.",
     requirements: [
       "Experiencia en extensionismo digital y agricultura clima-inteligente",
-      "Capacidad de articulaci├│n regional (Chile + al menos 1 pa├¡s ALC)",
+      "Capacidad de articulación regional (Chile + al menos 1 país ALC)",
     ],
     url: "https://www.fontagro.org/es/iniciativas/convocatorias/convocatoria-2026",
-    tags: ["FONTAGRO", "extensi├│n digital", "clima inteligente"],
+    tags: ["FONTAGRO", "extensión digital", "clima inteligente"],
     is_real: true,
   },
   {
     id: "fia-agrocoopinnova-2026",
-    title: "FIA AgroCoopInnova 2026 ÔÇô Selecci├│n de cooperativas participantes",
-    institution: "Fundaci├│n para la Innovaci├│n Agraria (FIA)",
+    title: "FIA AgroCoopInnova 2026 – Selección de cooperativas participantes",
+    institution: "Fundación para la Innovación Agraria (FIA)",
     scope: "Nacional",
     status: "abierto",
     deadline: "31-03-2026",
     days_left: null,
     budget: "Consultar bases oficiales",
-    iica_role: "Asesor t├®cnico",
-    iica_role_detail: "IICA puede participar como entidad colaboradora o prestadora de asistencia t├®cnica especializada a cooperativas seleccionadas en el programa",
+    iica_role: "Asesor técnico",
+    iica_role_detail: "IICA puede participar como entidad colaboradora o prestadora de asistencia técnica especializada a cooperativas seleccionadas en el programa",
     viability: "Media",
-    description: "FIA selecciona cooperativas agropecuarias para el programa AgroCoopInnova 2026. IICA puede actuar como socio t├®cnico o evaluador de propuestas. URL de la convocatoria verificada y activa.",
+    description: "FIA selecciona cooperativas agropecuarias para el programa AgroCoopInnova 2026. IICA puede actuar como socio técnico o evaluador de propuestas. URL de la convocatoria verificada y activa.",
     requirements: [
-      "Propuesta t├®cnica vinculada a cooperativas agropecuarias",
+      "Propuesta técnica vinculada a cooperativas agropecuarias",
       "Experiencia demostrable en trabajo con organizaciones de base",
     ],
     url: "https://www.fia.cl/convocatorias/seleccion-de-cooperativas-participantes-del-programa-agrocoopinnova-2026/",
-    tags: ["FIA", "cooperativas", "innovaci├│n agraria"],
+    tags: ["FIA", "cooperativas", "innovación agraria"],
     is_real: true,
   },
   {
     id: "cnr-concurso-05-2026",
-    title: "CNR ÔÇô Concurso N┬░05-2026: Obras civiles y tecnificaci├│n riego centro-norte",
-    institution: "Comisi├│n Nacional de Riego (CNR)",
+    title: "CNR – Concurso N°05-2026: Obras civiles y tecnificación riego centro-norte",
+    institution: "Comisión Nacional de Riego (CNR)",
     scope: "Nacional",
     status: "abierto",
     deadline: "23-04-2026",
     days_left: null,
-    budget: "Variable seg├║n proyecto (Ley 18.450)",
-    iica_role: "Asesor t├®cnico",
-    iica_role_detail: "IICA puede prestar asistencia t├®cnica a organizaciones de regantes que postulan, actuando como consultora en formulaci├│n de proyectos h├¡dricos",
+    budget: "Variable según proyecto (Ley 18.450)",
+    iica_role: "Asesor técnico",
+    iica_role_detail: "IICA puede prestar asistencia técnica a organizaciones de regantes que postulan, actuando como consultora en formulación de proyectos hídricos",
     viability: "Media",
-    description: "Concurso CNR para subsidios de tecnificaci├│n de riego en macro zona centro-norte v├¡a Ley 18.450. IICA puede apoyar en formulaci├│n t├®cnica y acompa├▒ar a organizaciones de usuarios de agua en su postulaci├│n.",
+    description: "Concurso CNR para subsidios de tecnificación de riego en macro zona centro-norte vía Ley 18.450. IICA puede apoyar en formulación técnica y acompañar a organizaciones de usuarios de agua en su postulación.",
     requirements: [
-      "Formulaci├│n t├®cnica por profesional competente acreditado",
-      "Organizaci├│n de regantes o agricultor con derechos de agua inscritos",
+      "Formulación técnica por profesional competente acreditado",
+      "Organización de regantes o agricultor con derechos de agua inscritos",
     ],
     url: "https://www.cnr.gob.cl/agricultores/calendario-de-concurso/",
-    tags: ["CNR", "riego", "Ley 18.450", "tecnificaci├│n h├¡drica"],
+    tags: ["CNR", "riego", "Ley 18.450", "tecnificación hídrica"],
     is_real: true,
   },
   {
     id: "fao-tcp-rla-resiliencia-2026",
-    title: "FAO TCP/RLA ÔÇô Programa Cooperaci├│n T├®cnica Resiliencia Clim├ítica Chile 2026",
+    title: "FAO TCP/RLA – Programa Cooperación Técnica Resiliencia Climática Chile 2026",
     institution: "FAO Chile",
     scope: "Internacional",
     status: "abierto",
     deadline: "31-05-2026",
     days_left: null,
-    budget: "Definido por FAO seg├║n componentes aprobados",
+    budget: "Definido por FAO según componentes aprobados",
     iica_role: "Implementador",
-    iica_role_detail: "IICA puede co-implementar componentes t├®cnicos del TCP junto a FAO Chile, aprovechar su red territorial y capacidades de asistencia t├®cnica",
+    iica_role_detail: "IICA puede co-implementar componentes técnicos del TCP junto a FAO Chile, aprovechar su red territorial y capacidades de asistencia técnica",
     viability: "Alta",
-    description: "Programa de Cooperaci├│n T├®cnica de FAO para resiliencia clim├ítica del sector agr├¡cola chileno. IICA y FAO tienen mandatos complementarios y pueden co-ejecutar proyectos bajo acuerdos de cooperaci├│n bilateral.",
+    description: "Programa de Cooperación Técnica de FAO para resiliencia climática del sector agrícola chileno. IICA y FAO tienen mandatos complementarios y pueden co-ejecutar proyectos bajo acuerdos de cooperación bilateral.",
     requirements: [
-      "Acuerdo de colaboraci├│n IICAÔÇôFAO Chile vigente o a suscribir",
-      "Capacidad t├®cnica en gesti├│n del riesgo clim├ítico agr├¡cola",
+      "Acuerdo de colaboración IICA–FAO Chile vigente o a suscribir",
+      "Capacidad técnica en gestión del riesgo climático agrícola",
     ],
     url: "https://www.fao.org/chile/fao-en-chile/es/",
-    tags: ["FAO", "TCP", "resiliencia clim├ítica", "cooperaci├│n t├®cnica"],
+    tags: ["FAO", "TCP", "resiliencia climática", "cooperación técnica"],
     is_real: true,
   },
   {
     id: "bid-modernizacion-extension-chile",
-    title: "BID ÔÇô Modernizaci├│n Servicios de Extensi├│n Agr├¡cola Chile (Asistencia T├®cnica)",
+    title: "BID – Modernización Servicios de Extensión Agrícola Chile (Asistencia Técnica)",
     institution: "Banco Interamericano de Desarrollo (BID)",
     scope: "Internacional",
     status: "abierto",
     deadline: "15-07-2026",
     days_left: null,
-    budget: "A definir seg├║n propuesta t├®cnica",
+    budget: "A definir según propuesta técnica",
     iica_role: "IICA Ejecutor",
-    iica_role_detail: "IICA es ejecutor acreditado por el BID y puede ser designado como ejecutor t├®cnico principal del componente de extensi├│n agr├¡cola",
+    iica_role_detail: "IICA es ejecutor acreditado por el BID y puede ser designado como ejecutor técnico principal del componente de extensión agrícola",
     viability: "Alta",
-    description: "Programa BID para modernizar los servicios de extensi├│n agr├¡cola en Chile. IICA tiene reconocimiento como ejecutor elegible por el BID y experiencia directa en este sector, lo que hace viable presentar una propuesta de ejecuci├│n t├®cnica.",
+    description: "Programa BID para modernizar los servicios de extensión agrícola en Chile. IICA tiene reconocimiento como ejecutor elegible por el BID y experiencia directa en este sector, lo que hace viable presentar una propuesta de ejecución técnica.",
     requirements: [
       "Historial de proyectos ejecutados con BID o multilaterales",
-      "Capacidad fiduciaria y t├®cnica en extensi├│n agr├¡cola",
+      "Capacidad fiduciaria y técnica en extensión agrícola",
     ],
     url: "https://www.iadb.org/es/project/CH-L1171",
-    tags: ["BID", "extensi├│n agr├¡cola", "modernizaci├│n", "cooperaci├│n"],
+    tags: ["BID", "extensión agrícola", "modernización", "cooperación"],
     is_real: true,
   },
   {
     id: "iica-hemisferico-cooperacion-interna",
-    title: "IICA Hemisf├®rico ÔÇô Cooperaci├│n T├®cnica Interna: Fortalecimiento Capacidades IICA Chile 2026",
+    title: "IICA Hemisférico – Cooperación Técnica Interna: Fortalecimiento Capacidades IICA Chile 2026",
     institution: "IICA Sede Central",
     scope: "Internacional",
     status: "permanente",
     deadline: null,
     days_left: null,
-    budget: "Presupuesto hemisf├®rico IICA",
+    budget: "Presupuesto hemisférico IICA",
     iica_role: "IICA Ejecutor",
-    iica_role_detail: "La oficina Chile puede formular proyectos de cooperaci├│n t├®cnica con financiamiento de la sede central del IICA para implementar en territorio chileno",
+    iica_role_detail: "La oficina Chile puede formular proyectos de cooperación técnica con financiamiento de la sede central del IICA para implementar en territorio chileno",
     viability: "Alta",
-    description: "Canal permanente de proyectos internos del IICA a trav├®s de su sistema de cooperaci├│n t├®cnica hemisf├®rica. IICA Chile puede acceder a fondos de la sede para ejecutar proyectos locales o regionales dentro del mandato institucional.",
+    description: "Canal permanente de proyectos internos del IICA a través de su sistema de cooperación técnica hemisférica. IICA Chile puede acceder a fondos de la sede para ejecutar proyectos locales o regionales dentro del mandato institucional.",
     requirements: [
-      "Propuesta alineada con las prioridades estrat├®gicas del IICA 2022ÔÇô2026",
-      "Coordinaci├│n con la Representaci├│n y validaci├│n de la sede central",
+      "Propuesta alineada con las prioridades estratégicas del IICA 2022–2026",
+      "Coordinación con la Representación y validación de la sede central",
     ],
     url: "https://www.iica.int/es/nuestro-trabajo/cooperacion",
-    tags: ["IICA hemisf├®rico", "cooperaci├│n interna", "fondos institucionales"],
+    tags: ["IICA hemisférico", "cooperación interna", "fondos institucionales"],
     is_real: true,
   },
   {
     id: "iica-sur-sur-transferencia",
-    title: "IICA Hemisf├®rico ÔÇô Fondo Sur-Sur: Transferencia de Innovaciones Exitosas entre Pa├¡ses ALC",
+    title: "IICA Hemisférico – Fondo Sur-Sur: Transferencia de Innovaciones Exitosas entre Países ALC",
     institution: "IICA Sede Central",
     scope: "Internacional",
     status: "permanente",
@@ -234,12 +234,12 @@ const BASE_PROJECTS: Project[] = [
     days_left: null,
     budget: "Variable por proyecto (fondo concursable interno)",
     iica_role: "IICA Ejecutor",
-    iica_role_detail: "IICA Chile puede postular a este fondo para transferir innovaciones desarrolladas en Chile hacia otros pa├¡ses, o recibir transferencias desde otros pa├¡ses hacia Chile",
+    iica_role_detail: "IICA Chile puede postular a este fondo para transferir innovaciones desarrolladas en Chile hacia otros países, o recibir transferencias desde otros países hacia Chile",
     viability: "Alta",
-    description: "Fondo de cooperaci├│n Sur-Sur del IICA para transferir conocimientos e innovaciones agr├¡colas exitosas entre pa├¡ses de Am├®rica Latina. Mecanismo permanente con convocatorias internas peri├│dicas.",
+    description: "Fondo de cooperación Sur-Sur del IICA para transferir conocimientos e innovaciones agrícolas exitosas entre países de América Latina. Mecanismo permanente con convocatorias internas periódicas.",
     requirements: [
-      "Innovaci├│n o experiencia exitosa documentada en Chile",
-      "Alianza con al menos otra oficina IICA en la regi├│n",
+      "Innovación o experiencia exitosa documentada en Chile",
+      "Alianza con al menos otra oficina IICA en la región",
     ],
     url: "https://www.iica.int/es/nuestro-trabajo/cooperacion/cooperacion-sur-sur",
     tags: ["IICA", "Sur-Sur", "transferencia de innovaciones", "ALC"],
@@ -247,71 +247,71 @@ const BASE_PROJECTS: Project[] = [
   },
   {
     id: "gef8-territorios-agroforestales",
-    title: "GEF-8 ÔÇô Fondo de Adaptaci├│n: Territorios Agroforestales Resilientes en Chile Central",
+    title: "GEF-8 – Fondo de Adaptación: Territorios Agroforestales Resilientes en Chile Central",
     institution: "GEF (Fondo Mundial para el Medio Ambiente)",
     scope: "Internacional",
     status: "abierto",
     deadline: "31-08-2026",
     days_left: null,
-    budget: "USD 2ÔÇô10 millones (ciclo GEF-8)",
+    budget: "USD 2–10 millones (ciclo GEF-8)",
     iica_role: "Implementador",
-    iica_role_detail: "IICA puede actuar como agencia implementadora acreditada ante el GEF o como partner t├®cnico de una agencia implementadora (PNUD, FAO) para el componente agr├¡cola",
+    iica_role_detail: "IICA puede actuar como agencia implementadora acreditada ante el GEF o como partner técnico de una agencia implementadora (PNUD, FAO) para el componente agrícola",
     viability: "Media",
-    description: "El GEF-8 financia proyectos de adaptaci├│n al cambio clim├ítico en territorios agropecuarios vulnerables. IICA puede participar como agencia implementadora o como socio t├®cnico de una agencia acreditada, liderando el componente agroforestal.",
+    description: "El GEF-8 financia proyectos de adaptación al cambio climático en territorios agropecuarios vulnerables. IICA puede participar como agencia implementadora o como socio técnico de una agencia acreditada, liderando el componente agroforestal.",
     requirements: [
-      "Acreditaci├│n como agencia implementadora GEF o alianza con agencia acreditada",
-      "Propuesta con cobenef├¡cios de biodiversidad y clima",
+      "Acreditación como agencia implementadora GEF o alianza con agencia acreditada",
+      "Propuesta con cobenefícios de biodiversidad y clima",
     ],
     url: "https://www.thegef.org/projects-operations/projects",
-    tags: ["GEF", "adaptaci├│n clim├ítica", "agroforester├¡a", "fondos clim├íticos"],
+    tags: ["GEF", "adaptación climática", "agroforestería", "fondos climáticos"],
     is_real: true,
   },
   {
     id: "euroclima-agua-agricola",
-    title: "EUROCLIMA+ ÔÇô Gesti├│n Sostenible del Agua en Territorios Agr├¡colas Vulnerables",
-    institution: "EUROCLIMA+ / Uni├│n Europea",
+    title: "EUROCLIMA+ – Gestión Sostenible del Agua en Territorios Agrícolas Vulnerables",
+    institution: "EUROCLIMA+ / Unión Europea",
     scope: "Internacional",
     status: "abierto",
     deadline: "30-09-2026",
     days_left: null,
     budget: "Hasta EUR 1.5 millones por proyecto",
     iica_role: "Implementador",
-    iica_role_detail: "IICA puede ser socio implementador de proyectos EUROCLIMA+ en Chile, articulando con el MINAGRI y organismos de cuencas hidrogr├íficas",
+    iica_role_detail: "IICA puede ser socio implementador de proyectos EUROCLIMA+ en Chile, articulando con el MINAGRI y organismos de cuencas hidrográficas",
     viability: "Media",
-    description: "EUROCLIMA+ financia proyectos de adaptaci├│n clim├ítica en agricultura de Am├®rica Latina con ├®nfasis en gesti├│n h├¡drica. IICA tiene presencia en Chile y puede actuar como socio implementador o entidad ejecutora de componentes t├®cnicos.",
+    description: "EUROCLIMA+ financia proyectos de adaptación climática en agricultura de América Latina con énfasis en gestión hídrica. IICA tiene presencia en Chile y puede actuar como socio implementador o entidad ejecutora de componentes técnicos.",
     requirements: [
-      "Consorcio con instituci├│n de la UE o ALC acreditada por EUROCLIMA+",
-      "Foco en comunidades agr├¡colas vulnerables a la sequ├¡a",
+      "Consorcio con institución de la UE o ALC acreditada por EUROCLIMA+",
+      "Foco en comunidades agrícolas vulnerables a la sequía",
     ],
     url: "https://www.euroclima.org/en/",
-    tags: ["EUROCLIMA+", "Uni├│n Europea", "gesti├│n h├¡drica", "clima"],
+    tags: ["EUROCLIMA+", "Unión Europea", "gestión hídrica", "clima"],
     is_real: true,
   },
   {
     id: "mercado-publico-asistencia-tecnica",
-    title: "Mercado P├║blico ÔÇô Licitaciones vigentes: Asistencia t├®cnica y desarrollo rural (b├║squeda permanente)",
-    institution: "ChileCompra / Organismos p├║blicos",
+    title: "Mercado Público – Licitaciones vigentes: Asistencia técnica y desarrollo rural (búsqueda permanente)",
+    institution: "ChileCompra / Organismos públicos",
     scope: "Nacional",
     status: "permanente",
     deadline: null,
     days_left: null,
-    budget: "Variable por licitaci├│n (desde $5 millones CLP)",
+    budget: "Variable por licitación (desde $5 millones CLP)",
     iica_role: "IICA Ejecutor",
-    iica_role_detail: "IICA puede postular directamente como proveedor del Estado en licitaciones t├®cnicas de INDAP, SAG, MINAGRI, GOREs y municipios",
+    iica_role_detail: "IICA puede postular directamente como proveedor del Estado en licitaciones técnicas de INDAP, SAG, MINAGRI, GOREs y municipios",
     viability: "Alta",
-    description: "En Mercado P├║blico se publican permanentemente licitaciones de asistencia t├®cnica agr├¡cola, capacitaci├│n rural y consultor├¡a agropecuaria. IICA debe estar inscrito en ChileProveedores. Es una fuente de ingresos directa y recurrente para la oficina Chile.",
+    description: "En Mercado Público se publican permanentemente licitaciones de asistencia técnica agrícola, capacitación rural y consultoría agropecuaria. IICA debe estar inscrito en ChileProveedores. Es una fuente de ingresos directa y recurrente para la oficina Chile.",
     requirements: [
-      "Inscripci├│n vigente en ChileProveedores (gratuita, tramitar en chileatiende.cl)",
-      "Cumplir bases t├®cnicas de cada licitaci├│n espec├¡fica",
-      "Garant├¡a t├®cnica y financiera seg├║n monto de la licitaci├│n",
+      "Inscripción vigente en ChileProveedores (gratuita, tramitar en chileatiende.cl)",
+      "Cumplir bases técnicas de cada licitación específica",
+      "Garantía técnica y financiera según monto de la licitación",
     ],
     url: "https://www.mercadopublico.cl/Procurement/Modules/RFB/SearchBases.aspx",
-    tags: ["Mercado P├║blico", "ChileCompra", "licitaci├│n p├║blica", "permanente"],
+    tags: ["Mercado Público", "ChileCompra", "licitación pública", "permanente"],
     is_real: true,
   },
   {
     id: "iica-licitaciones-globales",
-    title: "IICA Global ÔÇô Licitaciones y contratos de asistencia t├®cnica 2026",
+    title: "IICA Global – Licitaciones y contratos de asistencia técnica 2026",
     institution: "IICA Sede Central",
     scope: "Internacional",
     status: "permanente",
@@ -319,27 +319,27 @@ const BASE_PROJECTS: Project[] = [
     days_left: null,
     budget: "Variable por contrato",
     iica_role: "Implementador",
-    iica_role_detail: "La oficina Chile puede ser designada como ejecutora de licitaciones y contratos publicados por la sede central del IICA para proyectos en la regi├│n",
+    iica_role_detail: "La oficina Chile puede ser designada como ejecutora de licitaciones y contratos publicados por la sede central del IICA para proyectos en la región",
     viability: "Alta",
-    description: "La sede central del IICA publica licitaciones de consultor├¡as, estudios y contratos de asistencia t├®cnica que pueden ser ejecutados por la oficina Chile. Monitoreo activo recomendado cada semana.",
+    description: "La sede central del IICA publica licitaciones de consultorías, estudios y contratos de asistencia técnica que pueden ser ejecutados por la oficina Chile. Monitoreo activo recomendado cada semana.",
     requirements: [
-      "Coordinaci├│n directa con la Representaci├│n IICA Chile y la sede central",
-      "Capacidad t├®cnica acreditada en el ├írea de la licitaci├│n",
+      "Coordinación directa con la Representación IICA Chile y la sede central",
+      "Capacidad técnica acreditada en el área de la licitación",
     ],
     url: "https://iica.int/es/licitaciones/",
-    tags: ["IICA", "licitaci├│n institucional", "sede central", "contratos"],
+    tags: ["IICA", "licitación institucional", "sede central", "contratos"],
     is_real: true,
   },
 ];
 
-// ÔöÇÔöÇÔöÇ Prompt del sistema para Claude ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+// ─── Prompt del sistema para Claude ──────────────────────────────────────────
 
-const SYSTEM_PROMPT = `Eres el motor de inteligencia de proyectos del IICA Chile (Instituto Interamericano de Cooperaci├│n para la Agricultura, Oficina Chile).
+const SYSTEM_PROMPT = `Eres el motor de inteligencia de proyectos del IICA Chile (Instituto Interamericano de Cooperación para la Agricultura, Oficina Chile).
 
-Tu misi├│n es identificar oportunidades REALES Y VIGENTES donde el IICA Chile puede participar INSTITUCIONALMENTE en uno de estos cuatro roles:
-- "IICA Ejecutor": IICA lidera t├®cnica y administrativamente
+Tu misión es identificar oportunidades REALES Y VIGENTES donde el IICA Chile puede participar INSTITUCIONALMENTE en uno de estos cuatro roles:
+- "IICA Ejecutor": IICA lidera técnica y administrativamente
 - "Implementador": IICA ejecuta componentes de un proyecto liderado por otro
-- "Asesor t├®cnico": IICA presta consultor├¡a o evaluaci├│n
+- "Asesor técnico": IICA presta consultoría o evaluación
 - "Rol indirecto": IICA articula o apoya sin ejecutar directamente
 
 IMPORTANTE: Solo incluye proyectos para instituciones, NO para agricultores individuales ni empresas privadas.
@@ -347,30 +347,30 @@ IMPORTANTE: Solo incluye proyectos para instituciones, NO para agricultores indi
 FUENTES a buscar con web_search:
 - fontagro.org/convocatorias (IICA es miembro, alta prioridad)
 - fao.org/chile y fao.org/americas/tcp
-- iadb.org (BID, asistencia t├®cnica agr├¡cola Chile y ALC)
+- iadb.org (BID, asistencia técnica agrícola Chile y ALC)
 - ifad.org (FIDA, desarrollo rural Chile)
-- thegef.org y greenclimate.fund (fondos clim├íticos)
-- euroclima.org (cooperaci├│n UE-AL)
+- thegef.org y greenclimate.fund (fondos climáticos)
+- euroclima.org (cooperación UE-AL)
 - iica.int/es/licitaciones (licitaciones propias IICA)
-- fia.cl/convocatorias (FIA, innovaci├│n agraria Chile)
-- indap.gob.cl y corfo.cl (donde IICA pueda ser proveedor t├®cnico)
-- mercadopublico.cl (licitaciones asistencia t├®cnica)
-- anid.cl (FONDEF, investigaci├│n aplicada)
+- fia.cl/convocatorias (FIA, innovación agraria Chile)
+- indap.gob.cl y corfo.cl (donde IICA pueda ser proveedor técnico)
+- mercadopublico.cl (licitaciones asistencia técnica)
+- anid.cl (FONDEF, investigación aplicada)
 
-Responde SOLO en JSON v├ílido (sin markdown, sin backticks), exactamente as├¡:
+Responde SOLO en JSON válido (sin markdown, sin backticks), exactamente así:
 {
   "results": [
     {
       "id": "id-sin-espacios",
-      "title": "T├¡tulo completo real",
-      "institution": "Nombre instituci├│n",
+      "title": "Título completo real",
+      "institution": "Nombre institución",
       "scope": "Internacional|Nacional|Regional",
-      "status": "abierto|pr├│ximo|permanente|cerrado",
+      "status": "abierto|próximo|permanente|cerrado",
       "deadline": "DD-MM-YYYY o null",
-      "days_left": n├║mero_o_null,
+      "days_left": número_o_null,
       "budget": "string legible o null",
-      "iica_role": "IICA Ejecutor|Implementador|Asesor t├®cnico|Rol indirecto",
-      "iica_role_detail": "descripci├│n 1 oraci├│n de c├│mo IICA participa espec├¡ficamente",
+      "iica_role": "IICA Ejecutor|Implementador|Asesor técnico|Rol indirecto",
+      "iica_role_detail": "descripción 1 oración de cómo IICA participa específicamente",
       "viability": "Alta|Media|Baja",
       "description": "2-3 oraciones sobre el proyecto y su relevancia para IICA",
       "requirements": ["requisito institucional 1", "requisito 2"],
@@ -380,20 +380,20 @@ Responde SOLO en JSON v├ílido (sin markdown, sin backticks), exactamente as�
     }
   ],
   "sources": ["FONTAGRO", "FAO", ...],
-  "summary": "1 oraci├│n resumiendo los resultados"
+  "summary": "1 oración resumiendo los resultados"
 }`;
 
-// ÔöÇÔöÇÔöÇ Funci├│n de ordenamiento ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+// ─── Función de ordenamiento ──────────────────────────────────────────────────
 
 function sortProjects(a: Project, b: Project): number {
-  const statusOrder: Record<string, number> = { abierto: 0, permanente: 1, pr├│ximo: 2, cerrado: 3 };
+  const statusOrder: Record<string, number> = { abierto: 0, permanente: 1, próximo: 2, cerrado: 3 };
   const viabilityOrder: Record<string, number> = { Alta: 0, Media: 1, Baja: 2 };
   const byStatus = (statusOrder[a.status] ?? 4) - (statusOrder[b.status] ?? 4);
   if (byStatus !== 0) return byStatus;
   return (viabilityOrder[a.viability] ?? 3) - (viabilityOrder[b.viability] ?? 3);
 }
 
-// ÔöÇÔöÇÔöÇ Calcular d├¡as restantes ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+// ─── Calcular días restantes ──────────────────────────────────────────────────
 
 function calcDaysLeft(deadline: string | null): number | null {
   if (!deadline) return null;
@@ -406,7 +406,7 @@ function calcDaysLeft(deadline: string | null): number | null {
   }
 }
 
-// ÔöÇÔöÇÔöÇ Enriquecer proyectos ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+// ─── Enriquecer proyectos ─────────────────────────────────────────────────────
 
 function enrich(projects: Project[]): Project[] {
   return projects.map(p => ({
@@ -422,7 +422,7 @@ function enrich(projects: Project[]): Project[] {
   }));
 }
 
-// ÔöÇÔöÇÔöÇ Filtrar proyectos locales ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+// ─── Filtrar proyectos locales ────────────────────────────────────────────────
 
 function filterProjects(projects: Project[], query: string, scope: string, role: string): Project[] {
   return projects.filter(p => {
@@ -441,9 +441,9 @@ function filterProjects(projects: Project[], query: string, scope: string, role:
   });
 }
 
-// ÔöÇÔöÇÔöÇ POST Handler ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+// ─── POST Handler ─────────────────────────────────────────────────────────────
 
-// ÔöÇÔöÇÔöÇ POST Handler ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+// ─── POST Handler ─────────────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}));
@@ -455,7 +455,7 @@ export async function POST(req: NextRequest) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   const mercadoPublicoTicket = process.env.MERCADO_PUBLICO_TICKET || "4B24B3F0-E802-4E89-9641-E167BD2C1F10";
 
-  // ÔöÇÔöÇ LEER BASE DE DATOS OFICIAL (SUPABASE) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+  // ── LEER BASE DE DATOS OFICIAL (SUPABASE) ──────────────────────────────────
   let projectsFromDb: Project[] = [];
   try {
     const dbData = await prisma.project.findMany();
@@ -468,7 +468,7 @@ export async function POST(req: NextRequest) {
       deadline: p.fecha_cierre ? p.fecha_cierre.toISOString().split('T')[0].split('-').reverse().join('-') : null, // DD-MM-YYYY
       days_left: p.fecha_cierre ? calcDaysLeft(p.fecha_cierre.toISOString()) : null,
       budget: p.monto ? `$${p.monto.toLocaleString('es-CL')}` : "Ver bases",
-      iica_role: (p.rolIICA || "Asesor t├®cnico") as IicaRole,
+      iica_role: (p.rolIICA || "Asesor técnico") as IicaRole,
       iica_role_detail: p.descripcionIICA || "",
       viability: (p.viabilidadIICA || "Media") as Viability,
       description: p.objetivo || "",
@@ -482,7 +482,7 @@ export async function POST(req: NextRequest) {
     projectsFromDb = BASE_PROJECTS;
   }
 
-  // ÔöÇÔöÇ CACH├ë INTELIGENTE ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+  // ── CACHÉ INTELIGENTE ───────────────────────────────────────────────────
   const cacheKey = `${query.toLowerCase().trim()}_${scope}_${role}`;
   if (globalCache.has(cacheKey)) {
     const cached = globalCache.get(cacheKey)!;
@@ -491,32 +491,32 @@ export async function POST(req: NextRequest) {
       console.log(`[Cache Hit] Devolviendo resultados cacheados para: "${cacheKey}"`);
       return NextResponse.json({
         results: cached.results,
-        meta: { ...cached.meta, summary: cached.meta.summary + ' ÔÜí (Instant├íneo desde Cach├®)' }
+        meta: { ...cached.meta, summary: cached.meta.summary + ' ⚡ (Instantáneo desde Caché)' }
       });
     } else {
       globalCache.delete(cacheKey);
     }
   }
 
-  // ÔöÇÔöÇ PREPARAR MERCADO P├ÜBLICO (EN PARALELO AL RESTO) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+  // ── PREPARAR MERCADO PÚBLICO (EN PARALELO AL RESTO) ──────────────────────
   let mercadoPublicoDocs: Project[] = [];
   try {
     if (mercadoPublicoTicket) {
       mercadoPublicoDocs = await fetchMercadoPublico(mercadoPublicoTicket, query);
     }
   } catch (err) {
-    console.warn("Fallo temporal de API Mercado P├║blico:", err);
+    console.warn("Fallo temporal de API Mercado Público:", err);
   }
 
-  // ÔöÇÔöÇ MODO IA ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+  // ── MODO IA ──────────────────────────────────────────────────────────────
   if (useAI && apiKey) {
     try {
       const userMsg = [
-        query ? `Busca proyectos relacionados con: "${query}"` : "Busca las oportunidades m├ís relevantes y vigentes para IICA Chile",
-        scope !== "all" ? `├ümbito preferido: ${scope}` : "",
+        query ? `Busca proyectos relacionados con: "${query}"` : "Busca las oportunidades más relevantes y vigentes para IICA Chile",
+        scope !== "all" ? `Ámbito preferido: ${scope}` : "",
         role !== "all" ? `Rol IICA preferido: ${role}` : "",
         `Fecha de hoy: ${new Date().toLocaleDateString("es-CL")}`,
-        "Incluye entre 6 y 12 resultados. Prioriza los abiertos o pr├│ximos.",
+        "Incluye entre 6 y 12 resultados. Prioriza los abiertos o próximos.",
         "Verifica que los URLs sean reales antes de incluirlos.",
         "Responde SOLO con JSON.",
       ].filter(Boolean).join("\n");
@@ -559,7 +559,7 @@ export async function POST(req: NextRequest) {
         deadline: r.deadline || null,
         days_left: r.days_left ?? calcDaysLeft(r.deadline),
         budget: r.budget || null,
-        iica_role: r.iica_role || "Asesor t├®cnico",
+        iica_role: r.iica_role || "Asesor técnico",
         iica_role_detail: r.iica_role_detail || "",
         viability: r.viability || "Media",
         description: r.description || "",
@@ -582,18 +582,18 @@ export async function POST(req: NextRequest) {
         query,
         searched_at: new Date().toISOString(),
         mode: "ai_websearch",
-        sources: parsed.sources ? [...parsed.sources, "Mercado P├║blico"] : ["FONTAGRO", "FAO", "BID", "FIA", "Mercado P├║blico"],
+        sources: parsed.sources ? [...parsed.sources, "Mercado Público"] : ["FONTAGRO", "FAO", "BID", "FIA", "Mercado Público"],
         summary: parsed.summary || `${combined.length} oportunidades encontradas en tiempo real combinando IA y API Gubernamental`,
       };
 
-      // Guardar en cach├® antes de devolver
+      // Guardar en caché antes de devolver
       globalCache.set(cacheKey, { timestamp: Date.now(), results: combined, meta });
 
       return NextResponse.json({ results: combined, meta });
 
     } catch (err: any) {
-      // Fallback silencioso al modo est├ítico si la IA falla
-      console.error("[search-projects] IA error, fallback a est├ítico+MP:", err.message);
+      // Fallback silencioso al modo estático si la IA falla
+      console.error("[search-projects] IA error, fallback a estático+MP:", err.message);
     }
   }
 
@@ -607,16 +607,16 @@ export async function POST(req: NextRequest) {
     query,
     searched_at: new Date().toISOString(),
     mode: "static",
-    sources: ["Mercado P├║blico", "Supabase DB"],
+    sources: ["Mercado Público", "Supabase DB"],
     summary: apiKey
-      ? `${filtered.length} proyectos encontrados en la base oficial + Mercado P├║blico`
-      : `${filtered.length} proyectos listados desde Supabase (Agrega ANTHROPIC_API_KEY para b├║squeda global web)`,
+      ? `${filtered.length} proyectos encontrados en la base oficial + Mercado Público`
+      : `${filtered.length} proyectos listados desde Supabase (Agrega ANTHROPIC_API_KEY para búsqueda global web)`,
   };
 
   return NextResponse.json({ results: filtered, meta });
 }
 
-// ÔöÇÔöÇÔöÇ GET Handler (health check) ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+// ─── GET Handler (health check) ───────────────────────────────────────────────
 
 export async function GET() {
   const hasKey = !!process.env.ANTHROPIC_API_KEY;
@@ -624,7 +624,7 @@ export async function GET() {
   
   return NextResponse.json({
     status: "ok",
-    service: "IICA Chile ÔÇô Motor Universal H├¡brido (IA + APIs + Local)",
+    service: "IICA Chile – Motor Universal Híbrido (IA + APIs + Local)",
     mode: hasKey ? "ai_websearch_with_mp" : "static_and_mp",
     ai_available: hasKey,
     mercado_publico_available: hasMpTicket,
@@ -632,13 +632,13 @@ export async function GET() {
     base_projects: BASE_PROJECTS.length,
     sources: [
       "FONTAGRO", "FAO", "BID/IADB", "FIDA",
-      "GEF", "GCF", "EUROCLIMA+", "IICA Hemisf├®rico",
-      "FIA", "INDAP", "CORFO", "CNR", "ANID", "Mercado P├║blico",
+      "GEF", "GCF", "EUROCLIMA+", "IICA Hemisférico",
+      "FIA", "INDAP", "CORFO", "CNR", "ANID", "Mercado Público",
     ],
   });
 }
 
-// ÔöÇÔöÇÔöÇ L├ôGICA MERCADO P├ÜBLICO ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+// ─── LÓGICA MERCADO PÚBLICO ───────────────────────────────────────────────────
 
 async function fetchMercadoPublico(ticket: string, query: string): Promise<Project[]> {
   try {
@@ -648,31 +648,31 @@ async function fetchMercadoPublico(ticket: string, query: string): Promise<Proje
     const y = today.getFullYear();
     const resultQuery = query.toLowerCase().trim();
 
-    // Consultamos las licitaciones generadas hoy (estado=activo puede traer demasiadas, fecha espec├¡fica es mejor)
+    // Consultamos las licitaciones generadas hoy (estado=activo puede traer demasiadas, fecha específica es mejor)
     const url = `https://api.mercadopublico.cl/servicios/v1/publico/licitaciones.json?fecha=${d}${m}${y}&ticket=${ticket}`;
     
-    const res = await fetch(url, { next: { revalidate: 1800 } }); // cach├® de 30 min
+    const res = await fetch(url, { next: { revalidate: 1800 } }); // caché de 30 min
     if (!res.ok) return [];
     
     const data = await res.json();
     if (!data.Listado || !Array.isArray(data.Listado)) return [];
 
     // FILTROS ESTRICTOS IICA: Solo pasamos licitaciones compatibles con el rol del IICA
-    // (Asistencias t├®cnicas, estudios, desarrollo agr├¡cola, rural, etc.)
+    // (Asistencias técnicas, estudios, desarrollo agrícola, rural, etc.)
     const validKeywords = [
-      'agr├¡cola', 'agricola', 'rural', 'riego', 'asistencia t├®cnica', 'asistencia tecnica',
-      'capacitaci├│n', 'capacitacion', 'estudio', 'agro', 'campesino', 'forestal', 
-      'sustentable', 'cambio clim├ítico', 'cambio climatico', 'agronom├¡a', 'agronomia',
+      'agrícola', 'agricola', 'rural', 'riego', 'asistencia técnica', 'asistencia tecnica',
+      'capacitación', 'capacitacion', 'estudio', 'agro', 'campesino', 'forestal', 
+      'sustentable', 'cambio climático', 'cambio climatico', 'agronomía', 'agronomia',
       'veterinari', 'ganader', 'pecuaria', 'silvoagropecuario', 'indap', 'sag', 'conaf',
-      'fia', 'ciren', 'innovaci├│n', 'cooperativa', 'ap├¡cola', 'apicola', 'hidrico', 'h├¡drico'
+      'fia', 'ciren', 'innovación', 'cooperativa', 'apícola', 'apicola', 'hidrico', 'hídrico'
     ];
 
-    // Excluimos expl├¡citamente rubros no relacionados al mandato (para evitar falsos positivos)
+    // Excluimos explícitamente rubros no relacionados al mandato (para evitar falsos positivos)
     const excludeKeywords = [
-      'construcci├│n', 'construccion', 'obra', 'veh├¡culo', 'vehiculo', 'guardia', 'limpieza',
-      'computador', 'software', 'equipo m├®dico', 'alimentaci├│n', 'alimentacion', 'hospital',
-      'catering', 'mantenci├│n', 'mantencion', 'arriendo', 'pasaje', 'hotel', 'mobiliario',
-      'aseo', 'seguridad', 'pavimentaci├│n', 'hormig├│n', 'camioneta'
+      'construcción', 'construccion', 'obra', 'vehículo', 'vehiculo', 'guardia', 'limpieza',
+      'computador', 'software', 'equipo médico', 'alimentación', 'alimentacion', 'hospital',
+      'catering', 'mantención', 'mantencion', 'arriendo', 'pasaje', 'hotel', 'mobiliario',
+      'aseo', 'seguridad', 'pavimentación', 'hormigón', 'camioneta'
     ];
 
     if (resultQuery) validKeywords.push(resultQuery);
@@ -680,11 +680,11 @@ async function fetchMercadoPublico(ticket: string, query: string): Promise<Proje
     const filtered = data.Listado.filter((lic: any) => {
        const text = (lic.Nombre || "").toLowerCase();
        
-       // Debe contener alguna palabra clave v├ílida...
+       // Debe contener alguna palabra clave válida...
        const isAffinity = validKeywords.some(k => text.includes(k));
        if (!isAffinity) return false;
 
-       // ...y NO debe ser de un rubro excluido (compras b├ísicas u obras civiles)
+       // ...y NO debe ser de un rubro excluido (compras básicas u obras civiles)
        const isExcluded = excludeKeywords.some(k => text.includes(k));
        if (isExcluded) return false;
 
@@ -695,20 +695,20 @@ async function fetchMercadoPublico(ticket: string, query: string): Promise<Proje
       const deadlineStr = lic.FechaCierre ? lic.FechaCierre.split('T')[0].split('-').reverse().join('-') : null;
       return {
         id: `mp-${lic.CodigoExterno}`,
-        title: `Mercado P├║blico: ${lic.Nombre}`,
-        institution: "Gobierno de Chile / Organismos P├║blicos",
+        title: `Mercado Público: ${lic.Nombre}`,
+        institution: "Gobierno de Chile / Organismos Públicos",
         scope: "Nacional" as Scope,
         status: "abierto" as Status,
         deadline: deadlineStr,
         days_left: calcDaysLeft(deadlineStr),
         budget: "Revisar bases en plataforma",
         iica_role: "IICA Ejecutor" as IicaRole,
-        iica_role_detail: "IICA, como organismo internacional, puede postular e inscribirse a trav├®s de ChileProveedores.",
+        iica_role_detail: "IICA, como organismo internacional, puede postular e inscribirse a través de ChileProveedores.",
         viability: "Alta" as Viability,
-        description: `Licitaci├│n identificada hoy en Mercado P├║blico (Cod: ${lic.CodigoExterno}). Alineaci├│n autom├ítica detectada con el mandato t├®cnico, agr├¡cola y rural del IICA Chile.`,
-        requirements: ["Inscripci├│n en ChileProveedores al d├¡a", "Cumplir bases administrativas y t├®cnicas de la licitaci├│n"],
+        description: `Licitación identificada hoy en Mercado Público (Cod: ${lic.CodigoExterno}). Alineación automática detectada con el mandato técnico, agrícola y rural del IICA Chile.`,
+        requirements: ["Inscripción en ChileProveedores al día", "Cumplir bases administrativas y técnicas de la licitación"],
         url: `https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?qs=${lic.CodigoExterno}`,
-        tags: ["Mercado P├║blico", "Licitaci├│n Nacional", "ChileCompra"],
+        tags: ["Mercado Público", "Licitación Nacional", "ChileCompra"],
         is_real: true
       };
     });
