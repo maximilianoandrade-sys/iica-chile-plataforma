@@ -1,5 +1,5 @@
 import prisma from "../prisma";
-import { normalizeUrl } from "./utils";
+import { normalizeUrl, parseAmount } from "./utils";
 import { validateUrl } from "./validateUrl";
 import type { RawProject } from "./types";
 
@@ -29,8 +29,8 @@ export async function upsertProject(
     institucion: raw.institution,
     url_bases: raw.url,
     fecha_cierre: raw.deadline ?? new Date("2099-12-31"),
-    monto: 0,
-    estado: "Activo",
+    monto: parseAmount(raw.budget || "") ?? 0,
+    estado: "Abierto",
     categoria: raw.tags?.[0] ?? "General",
     objetivo: raw.description ?? "",
     ambito: raw.ambito ?? "Nacional",
@@ -46,9 +46,16 @@ export async function upsertProject(
       canonicalUrl,
       firstSeenAt: now,
       discoveredBy: "scraper",
-      needsReview: false,
-      sourceId: source.id,
+      needsReview: true,
+      sourceRefId: source.id,
       estadoPostulacion: "Abierta",
+      regiones: [],
+      beneficiarios: [],
+      checklist: [],
+      tipos_solicitante: [],
+      requisitos: [],
+      fortalezas: [],
+      debilidades: [],
     },
   });
 

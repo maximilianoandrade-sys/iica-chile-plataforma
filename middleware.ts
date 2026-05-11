@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-async function computeExpectedToken(): Promise<string> {
-  const secret = process.env.ADMIN_SESSION_SECRET || "dev-secret";
+async function computeExpectedToken(secret: string): Promise<string> {
   const encoder = new TextEncoder();
   const key = await crypto.subtle.importKey(
     "raw",
@@ -29,13 +28,19 @@ export async function middleware(req: NextRequest) {
   if (!req.nextUrl.pathname.startsWith("/admin")) return NextResponse.next();
   if (req.nextUrl.pathname === "/admin/login") return NextResponse.next();
 
+  const secret = process.env.ADMIN_SESSION_SECRET;
+  if (!secret) {
+    console.error("[middleware] ADMIN_SESSION_SECRET not set");
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
   const cookie = req.cookies.get("admin-token")?.value;
   if (!cookie) {
     return NextResponse.redirect(new URL("/admin/login", req.url));
   }
 
   try {
-    const expected = await computeExpectedToken();
+    const expected = await computeExpectedToken(secret);
     if (!timingSafeCompare(cookie, expected)) {
       return NextResponse.redirect(new URL("/admin/login", req.url));
     }

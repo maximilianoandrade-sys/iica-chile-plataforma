@@ -38,7 +38,6 @@
   ],
   "exclude": [
     "node_modules",
-    "_nested_backup",
-    "ui-ux-pro-max-skill"
+    "_nested_backup"
   ]
 }
