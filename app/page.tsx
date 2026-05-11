@@ -23,7 +23,7 @@ export async function generateMetadata({
   const category = typeof resolvedParams.category === 'string' ? resolvedParams.category : null;
 
   let title = 'Plataforma de Financiamiento Agrícola | IICA Chile';
-  let description = 'Encuentra fondos concursables, subsidios y créditos para el agro chileno. CNR, INDAP, FIA, CORFO, Sercotec y GOREs. Información actualizada 2026.';
+  let description = 'Encuentra fondos concursables, subsidios y créditos para el agro chileno. CNR, INDAP, FIA, CORFO, SAG y fuentes internacionales. Información actualizada 2026.';
 
   if (region) {
     title = `Fondos Concursables en ${region} 2026 | IICA Chile`;
