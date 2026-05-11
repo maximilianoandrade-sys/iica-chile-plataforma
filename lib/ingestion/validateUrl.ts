@@ -2,6 +2,20 @@ import type { ValidationResult } from "./types";
 
 export async function validateUrl(url: string): Promise<ValidationResult> {
   if (!url || !url.trim()) return { ok: false, reason: "URL vacía" };
+
+  // Rechazar URLs que son solo el dominio raíz (sin deep link a una convocatoria).
+  // Util para AI Discovery: a veces el modelo devuelve "https://www.fia.cl/" en
+  // lugar del path específico — eso lleva al usuario a homepage genérica y no
+  // sirve como referencia a una convocatoria.
+  try {
+    const u = new URL(url);
+    if (u.pathname === "/" || u.pathname === "") {
+      return { ok: false, reason: "URL es homepage (sin deep link)" };
+    }
+  } catch {
+    return { ok: false, reason: "URL no parseable" };
+  }
+
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000);
