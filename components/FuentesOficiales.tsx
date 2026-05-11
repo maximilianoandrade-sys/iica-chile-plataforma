@@ -3,6 +3,17 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, CheckCircle, Clock, MapPin, ChevronDown, ChevronUp, Shield, RefreshCw } from 'lucide-react';
+import projectData from '@/data/projects.json';
+
+// Compute fondosActivos dynamically from actual project data
+const countByInst: Record<string, number> = {};
+(projectData as Array<{ institucion: string }>).forEach(p => {
+    countByInst[p.institucion] = (countByInst[p.institucion] || 0) + 1;
+});
+
+function getFondosActivos(sigla: string): number {
+    return countByInst[sigla] || 0;
+}
 
 interface FuenteOficial {
     id: string;
@@ -96,42 +107,7 @@ const FUENTES: FuenteOficial[] = [
         fondosActivos: 4,
         regiones: 'Nacional'
     },
-    {
-        id: 'sercotec',
-        nombre: 'Servicio de Cooperación Técnica',
-        sigla: 'Sercotec',
-        descripcion: 'Portal de fondos para micro y pequeñas empresas agrícolas. Capital Semilla, Capital Abeja (mujeres) y Fondo de Desarrollo de Negocios.',
-        url: 'https://www.sercotec.cl',
-        urlConcursos: 'https://www.sercotec.cl/fondos-concursables/',
-        color: 'text-red-700',
-        bgColor: 'bg-red-50 border-red-200',
-        emoji: '🌻',
-        tipoFondos: ['Capital Semilla Emprende', 'Capital Abeja (Mujeres)', 'Fondo de Desarrollo', 'Asociatividad Empresarial'],
-        beneficiarios: ['Microempresa', 'Emprendedor', 'Mujer Emprendedora', 'Cooperativa Agrícola'],
-        montoRango: 'Desde $3,5M hasta $15M (subsidio no reembolsable)',
-        verificado: true,
-        ultimaVerificacion: '11 May 2026',
-        fondosActivos: 4,
-        regiones: 'Nacional (con oficinas regionales)'
-    },
-    {
-        id: 'gore',
-        nombre: 'Gobiernos Regionales (GOREs)',
-        sigla: 'GOREs',
-        descripcion: 'Cada región publica fondos FIC-R específicos para problemas locales. Coquimbo (riego), Maule (vitivinicultura), Araucanía (pueblos originarios), Los Lagos (acuicultura).',
-        url: 'https://www.subdere.gov.cl/gore',
-        urlConcursos: 'https://www.subdere.gov.cl/gore',
-        color: 'text-teal-700',
-        bgColor: 'bg-teal-50 border-teal-200',
-        emoji: '🗺️',
-        tipoFondos: ['FIC-R Innovación Regional', 'Fondos Sectoriales Regionales', 'Desarrollo Local', 'Pueblos Originarios'],
-        beneficiarios: ['Empresa Regional', 'Cooperativa Local', 'Universidad Regional', 'Comunidad Indígena'],
-        montoRango: 'Hasta $120M por proyecto (según región)',
-        verificado: true,
-        ultimaVerificacion: '11 May 2026',
-        fondosActivos: 5,
-        regiones: 'Específico por región (Coquimbo, Maule, Araucanía, Biobío, Los Lagos, Valparaíso)'
-    },
+
     {
         id: 'pnud',
         nombre: 'Programa de las Naciones Unidas para el Desarrollo',
@@ -206,18 +182,13 @@ const FUENTES: FuenteOficial[] = [
     }
 ];
 
-const GORES_DETALLE = [
-    { region: 'Coquimbo', foco: 'Riego eficiente y fruticultura', url: 'https://www.gorecoquimbo.cl/fondo-de-innovacion-para-la-competitividad/', monto: '$100M' },
-    { region: 'Valparaíso', foco: 'Vitivinicultura y exportación', url: 'https://www.gorevalparaiso.cl/fondos-concursables/', monto: '$70M' },
-    { region: 'Maule', foco: 'Agricultura y ganadería', url: 'https://www.goremaule.cl/gore/fondos-concursables/', monto: '$80M' },
-    { region: 'Biobío', foco: 'Forestal y biomasa', url: 'https://www.gorebio.cl/fondos-concursables/', monto: '$90M' },
-    { region: 'La Araucanía', foco: 'Agricultura mapuche y pueblos originarios', url: 'https://www.gorearaucania.cl/fondos-concursables/', monto: '$60M' },
-    { region: 'Los Lagos', foco: 'Acuicultura y pesca artesanal', url: 'https://www.goreloslagos.cl/fondos-concursables/', monto: '$120M' },
-];
+// Patch fondosActivos with real counts from projects.json
+FUENTES.forEach(f => {
+    f.fondosActivos = getFondosActivos(f.sigla);
+});
 
 export default function FuentesOficiales() {
     const [expandedId, setExpandedId] = useState<string | null>(null);
-    const [showGores, setShowGores] = useState(false);
 
     const totalFondos = FUENTES.reduce((sum, f) => sum + f.fondosActivos, 0);
 
@@ -336,49 +307,6 @@ export default function FuentesOficiales() {
                                                     <p className="text-sm font-bold text-gray-800">{fuente.regiones}</p>
                                                 </div>
                                             </div>
-
-                                            {/* GOREs Detalle */}
-                                            {fuente.id === 'gore' && (
-                                                <div>
-                                                    <button
-                                                        onClick={() => setShowGores(!showGores)}
-                                                        className="text-xs font-bold text-teal-700 underline mb-2 flex items-center gap-1"
-                                                    >
-                                                        {showGores ? '▲' : '▼'} Ver GOREs con fondos activos
-                                                    </button>
-                                                    <AnimatePresence>
-                                                        {showGores && (
-                                                            <motion.div
-                                                                initial={{ height: 0, opacity: 0 }}
-                                                                animate={{ height: 'auto', opacity: 1 }}
-                                                                exit={{ height: 0, opacity: 0 }}
-                                                                className="overflow-hidden"
-                                                            >
-                                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                                                    {GORES_DETALLE.map(gore => (
-                                                                        <a
-                                                                            key={gore.region}
-                                                                            href={gore.url}
-                                                                            target="_blank"
-                                                                            rel="noopener noreferrer"
-                                                                            className="flex items-center justify-between bg-white rounded-xl p-3 border border-teal-200 hover:border-teal-400 hover:shadow-md transition-all group"
-                                                                        >
-                                                                            <div>
-                                                                                <p className="text-xs font-bold text-teal-700">{gore.region}</p>
-                                                                                <p className="text-xs text-gray-500">{gore.foco}</p>
-                                                                            </div>
-                                                                            <div className="text-right">
-                                                                                <p className="text-xs font-bold text-green-600">{gore.monto}</p>
-                                                                                <ExternalLink className="h-3 w-3 text-gray-400 group-hover:text-teal-600 ml-auto mt-0.5" />
-                                                                            </div>
-                                                                        </a>
-                                                                    ))}
-                                                                </div>
-                                                            </motion.div>
-                                                        )}
-                                                    </AnimatePresence>
-                                                </div>
-                                            )}
 
                                             {/* CTA Buttons */}
                                             <div className="flex gap-3 pt-1">
