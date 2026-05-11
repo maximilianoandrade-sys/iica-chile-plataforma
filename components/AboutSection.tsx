@@ -25,7 +25,7 @@ export default function AboutSection() {
                             <p className="text-xs font-bold text-blue-900 mt-2">— Hernán Chiriboga, Representante IICA Chile</p>
                         </div>
 
-                        {/* Enlaces a Redes (RSS Simulado) */}
+                        {/* Enlaces a Redes */}
                         <div className="flex gap-4 items-center">
                             <a
                                 href="https://twitter.com/IICAChile"
@@ -44,7 +44,7 @@ export default function AboutSection() {
                                 rel="noopener noreferrer"
                                 className="flex items-center text-blue-600 font-bold hover:underline"
                             >
-                                Ver Noticias Recientes (RSS) →
+                                Ver Noticias IICA →
                             </a>
                         </div>
                     </div>
