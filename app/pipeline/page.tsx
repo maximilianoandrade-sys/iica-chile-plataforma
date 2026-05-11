@@ -38,6 +38,27 @@ export default function PipelinePage() {
   const [isClient, setIsClient] = useState(false);
   const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null);
 
+  if (!isClient) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
+        <div className="w-full max-w-xl rounded-2xl border border-slate-200 bg-white shadow-sm p-6">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 rounded-lg bg-slate-100 animate-pulse" aria-hidden="true" />
+            <div>
+              <p className="text-sm font-bold text-slate-800">Cargando pipeline institucional...</p>
+              <p className="text-xs text-slate-500">Estamos preparando su tablero de seguimiento.</p>
+            </div>
+          </div>
+          <div className="space-y-2" aria-hidden="true">
+            <div className="h-3 rounded bg-slate-100 animate-pulse" />
+            <div className="h-3 rounded bg-slate-100 animate-pulse w-11/12" />
+            <div className="h-3 rounded bg-slate-100 animate-pulse w-4/5" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   useEffect(() => {
     setIsClient(true);
     const saved = getPipelineTasks();
@@ -93,8 +114,6 @@ export default function PipelinePage() {
       setTasks(prev => prev.filter(t => t.id !== id));
     }
   };
-
-  if (!isClient) return null;
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
