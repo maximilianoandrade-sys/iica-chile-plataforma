@@ -1323,32 +1323,54 @@
     "categoria": "Nacional",
     "url_bases": "https://www.fia.cl/programas-estrategicos/agrocoopinnova/",
     "regiones": [
-      "Todas"
+      "Arica y Parinacota",
+      "Tarapacá",
+      "Antofagasta",
+      "Atacama",
+      "Coquimbo",
+      "Valparaíso",
+      "Metropolitana",
+      "O'Higgins",
+      "Maule",
+      "Ñuble",
+      "Biobío",
+      "La Araucanía",
+      "Los Ríos",
+      "Los Lagos",
+      "Aysén",
+      "Magallanes"
     ],
     "beneficiarios": [
-      "Agricultores",
-      "Emprendedores rurales",
-      "Centros de investigación"
+      "Cooperativa agroalimentaria",
+      "Cooperativa agrícola"
     ],
-    "objetivo": "Programa estratégico FIA: Programa AgrocoopInnova"
+    "objetivo": "Programa estratégico FIA: Programa AgrocoopInnova",
+    "resumen": {
+      "observaciones": "Modelo innovador de apoyo integral a la gestión de cooperativas agroalimentarias. Conecta desafíos de cooperativas con actores del ecosistema I+D+i. Articulado con Ministerios de Ciencias, Economía y Agricultura.",
+      "requisitos_clave": [
+        "Ser cooperativa agroalimentaria",
+        "Estar asociada a CAMPOCOOP o UNAF COOP"
+      ],
+      "plazo_ejecucion": "Permanente"
+    }
   },
   {
     "id": 187,
     "sourceId": "corfo:viraliza-formacion-2026",
     "nombre": "CORFO – Viraliza: Formación y Aceleración para Emprendimientos de Alto Impacto",
     "institucion": "CORFO",
-    "monto": 0,
+    "monto": 50000000,
     "fecha_cierre": "2026-12-31",
     "estado": "Abierto",
     "categoria": "Nacional",
     "url_bases": "https://www.corfo.gob.cl/sites/cpp/programa/viraliza/",
     "regiones": [
-      "Todas"
+      "Nacional"
     ],
     "beneficiarios": [
-      "Emprendedores",
-      "Startups",
-      "Pymes agroindustriales"
+      "Persona jurídica",
+      "Organismo de fomento",
+      "Incubadora"
     ],
     "objetivo": "Programa de formación y aceleración para emprendimientos innovadores con potencial de escalamiento, incluyendo agroindustria y tecnología agrícola.",
     "ambito": "Nacional",
@@ -1357,63 +1379,18 @@
     "porcentajeViabilidad": 55,
     "rolIICA": "Asesor",
     "ejeIICA": "Innovación para la productividad",
-    "complejidad": "Media"
-  },
-  {
-    "id": 188,
-    "sourceId": "corfo:financiamiento-mipymes-2026",
-    "nombre": "CORFO – Programas de Financiamiento MiPymes: Créditos, Garantías y Fondos",
-    "institucion": "CORFO",
-    "monto": 0,
-    "fecha_cierre": "2026-12-31",
-    "estado": "Abierto",
-    "categoria": "Nacional",
-    "url_bases": "https://www.corfo.gob.cl/sites/cpp/buscasfinanciamiento/",
-    "regiones": [
-      "Todas"
-    ],
-    "beneficiarios": [
-      "Micro empresas",
-      "Pequeñas empresas",
-      "Medianas empresas",
-      "Cooperativas agrícolas"
-    ],
-    "objetivo": "Líneas de financiamiento CORFO para MiPymes incluyendo créditos, garantías estatales y fondos concursables para empresas del sector agropecuario.",
-    "ambito": "Nacional",
-    "estadoPostulacion": "Abierta",
-    "viabilidadIICA": "Media",
-    "porcentajeViabilidad": 50,
-    "rolIICA": "Indirecto",
-    "ejeIICA": "Desarrollo territorial",
-    "complejidad": "Media"
-  },
-  {
-    "id": 189,
-    "sourceId": "corfo:innovacion-id-2026",
-    "nombre": "CORFO – Convocatorias I+D+i: Innovación Empresarial y Desarrollo Tecnológico",
-    "institucion": "CORFO",
-    "monto": 0,
-    "fecha_cierre": "2026-12-31",
-    "estado": "Abierto",
-    "categoria": "Nacional",
-    "url_bases": "https://www.corfo.gob.cl/sites/cpp/convocatorias_programas_innovacion/",
-    "regiones": [
-      "Todas"
-    ],
-    "beneficiarios": [
-      "Centros de investigación",
-      "Universidades",
-      "Empresas innovadoras",
-      "Startups AgTech"
-    ],
-    "objetivo": "Programas CORFO de I+D+i que fomentan investigación, desarrollo e innovación empresarial. Incluye incentivo tributario I+D (Ley 20.241) y programas de transferencia tecnológica aplicables al sector agroalimentario.",
-    "ambito": "Nacional",
-    "estadoPostulacion": "Abierta",
-    "viabilidadIICA": "Alta",
-    "porcentajeViabilidad": 70,
-    "rolIICA": "Asesor",
-    "ejeIICA": "Innovación para la productividad",
-    "complejidad": "Alta"
+    "complejidad": "Media",
+    "monto_max": 50000000,
+    "monto_min": 30000000,
+    "requiere_cofinanciamiento": true,
+    "resumen": {
+      "cofinanciamiento": "Hasta 70% del costo total del proyecto",
+      "observaciones": "Refuerza el entorno y cultura de emprendimiento e innovación. Líneas: Difusión (eventos/medios, hasta $50M) y Formación (hasta $30M).",
+      "requisitos_clave": [
+        "Persona jurídica constituida en Chile",
+        "Proyecto de difusión o formación en emprendimiento"
+      ]
+    }
   },
   {
     "id": 190,
@@ -1426,12 +1403,15 @@
     "categoria": "Nacional",
     "url_bases": "https://www.corfo.gob.cl/sites/fortalecepyme/home",
     "regiones": [
-      "Todas"
+      "Valparaíso",
+      "O'Higgins",
+      "Ñuble",
+      "La Araucanía",
+      "Los Ríos"
     ],
     "beneficiarios": [
-      "Pequeñas empresas agrícolas",
-      "Medianas empresas agrícolas",
-      "Cooperativas"
+      "PYME Agrícola",
+      "PYME con ventas 2.400-100.000 UF"
     ],
     "objetivo": "Red de asistencia digital que apoya a pymes del sector agropecuario en su proceso de digitalización y mejora de productividad en todo Chile.",
     "ambito": "Nacional",
@@ -1440,7 +1420,14 @@
     "porcentajeViabilidad": 45,
     "rolIICA": "Indirecto",
     "ejeIICA": "Innovación para la productividad",
-    "complejidad": "Fácil"
+    "complejidad": "Fácil",
+    "resumen": {
+      "observaciones": "Programa territorial que brinda herramientas y servicios a Pymes para aumentar ingresos y mejorar productividad mediante adopción de tecnologías digitales. Incluye diagnósticos, asistencia técnica, formación y vinculación.",
+      "requisitos_clave": [
+        "Pyme con ventas anuales entre 2.400 UF y 100.000 UF",
+        "Estar en regiones con operación activa del programa"
+      ]
+    }
   },
   {
     "id": 191,
@@ -1453,12 +1440,12 @@
     "categoria": "Nacional",
     "url_bases": "https://www.indap.gob.cl/plataforma-de-servicios/programa-de-desarrollo-local-prodesal",
     "regiones": [
-      "Todas"
+      "Nacional"
     ],
     "beneficiarios": [
-      "Pequeños agricultores",
-      "Campesinos",
-      "Agricultores familiares"
+      "Microproductor",
+      "Agricultor Familiar Campesino",
+      "Microproductor de Transición"
     ],
     "objetivo": "Programa permanente de extensión agrícola para pequeños productores, con asesoría técnica municipal para mejorar producción y comercialización. Cobertura nacional con presencia en todas las regiones.",
     "ambito": "Nacional",
@@ -1467,24 +1454,34 @@
     "porcentajeViabilidad": 75,
     "rolIICA": "Asesor",
     "ejeIICA": "Desarrollo territorial",
-    "complejidad": "Media"
+    "complejidad": "Media",
+    "resumen": {
+      "observaciones": "Asesoría técnica y extensión rural para microproductores. Fortalece desarrollo productivo, tecnológico y sostenible, articulando oferta público-privada. Componentes: Asesoría Técnica, Capital de Trabajo, Inversiones en activos productivos.",
+      "requisitos_clave": [
+        "Usuario INDAP acreditado",
+        "Perfil de Microproductor o Microproductor de Transición",
+        "No estar en otro programa de asesoría similar",
+        "Firmar carta de compromiso"
+      ]
+    }
   },
   {
     "id": 192,
     "sourceId": "indap:pdi-inversiones-2026",
     "nombre": "INDAP – Programa de Desarrollo de Inversiones PDI 2026",
     "institucion": "INDAP",
-    "monto": 0,
+    "monto": 7500000,
     "fecha_cierre": "2026-12-31",
     "estado": "Abierto",
     "categoria": "Nacional",
     "url_bases": "https://www.indap.gob.cl/plataforma-de-servicios/programa-desarrollo-de-inversiones-pdi",
     "regiones": [
-      "Todas"
+      "Nacional"
     ],
     "beneficiarios": [
-      "Pequeños agricultores",
-      "Usuarios INDAP"
+      "Pequeño Agricultor",
+      "Organización campesina",
+      "Cooperativa agrícola"
     ],
     "objetivo": "Incentivos económicos no reembolsables para cofinanciar inversiones de pequeños agricultores. Permite desarrollar y potenciar emprendimientos silvoagropecuarios.",
     "ambito": "Nacional",
@@ -1493,24 +1490,36 @@
     "porcentajeViabilidad": 70,
     "rolIICA": "Asesor",
     "ejeIICA": "Desarrollo territorial",
-    "complejidad": "Media"
+    "complejidad": "Media",
+    "monto_min": 7500000,
+    "monto_max": 50000000,
+    "requiere_cofinanciamiento": true,
+    "resumen": {
+      "cofinanciamiento": "INDAP financia hasta 70% (hasta 90% en proyectos de sustentabilidad, jóvenes o mujeres)",
+      "observaciones": "Subsidios no reembolsables para inversiones en infraestructura y equipamiento. Individual hasta $7,5M/año; Asociativo informal hasta $35M; Asociativo formal hasta $50M.",
+      "requisitos_clave": [
+        "Usuario INDAP acreditado",
+        "Sin deudas morosas con INDAP",
+        "Comprometerse con aporte propio (30% mínimo)"
+      ]
+    }
   },
   {
     "id": 193,
     "sourceId": "indap:sat-asesoria-tecnica-2026",
     "nombre": "INDAP – Servicio de Asesoría Técnica SAT 2026",
     "institucion": "INDAP",
-    "monto": 0,
+    "monto": 3500000,
     "fecha_cierre": "2026-12-31",
     "estado": "Abierto",
     "categoria": "Nacional",
     "url_bases": "https://www.indap.gob.cl/plataforma-de-servicios/servicio-de-asesoria-tecnica-sat",
     "regiones": [
-      "Todas"
+      "Nacional"
     ],
     "beneficiarios": [
-      "Pequeños agricultores",
-      "Productores articulados al mercado"
+      "Pequeño Agricultor",
+      "Productor articulado al mercado"
     ],
     "objetivo": "Servicio de asesoría técnica especializada para aumentar el margen bruto de negocios silvoagropecuarios de productores articulados al mercado.",
     "ambito": "Nacional",
@@ -1519,7 +1528,20 @@
     "porcentajeViabilidad": 60,
     "rolIICA": "Asesor",
     "ejeIICA": "Desarrollo territorial",
-    "complejidad": "Media"
+    "complejidad": "Media",
+    "monto_max": 3500000,
+    "requiere_cofinanciamiento": true,
+    "plazo_meses": 18,
+    "resumen": {
+      "cofinanciamiento": "Copago usuario 20% en asesoría; en inversión saldo no cubierto por subsidio del 70%",
+      "observaciones": "Asesoría técnica orientada a aumentar margen bruto del negocio principal. Subsidio a inversión hasta 70% del costo (tope $3,5M/usuario/año). Contratos de 18 meses.",
+      "requisitos_clave": [
+        "Usuario INDAP acreditado",
+        "Productor articulado al mercado",
+        "No estar en otro programa de asesoría similar"
+      ],
+      "plazo_ejecucion": "18 meses"
+    }
   },
   {
     "id": 194,
@@ -1532,12 +1554,12 @@
     "categoria": "Nacional",
     "url_bases": "https://www.indap.gob.cl/plataforma-de-servicios/programa-de-alianzas-productivas-pap",
     "regiones": [
-      "Todas"
+      "Nacional"
     ],
     "beneficiarios": [
-      "Pequeños productores",
-      "Campesinos INDAP",
-      "Poderes compradores"
+      "Pequeño Agricultor",
+      "Productor articulado al mercado",
+      "Empresa compradora (ventas >2.400 UF)"
     ],
     "objetivo": "Generar condiciones para que pequeños productores accedan a mejores alternativas comerciales, nuevos mercados y relaciones comerciales sostenibles con poderes compradores.",
     "ambito": "Nacional",
@@ -1546,7 +1568,18 @@
     "porcentajeViabilidad": 65,
     "rolIICA": "Asesor",
     "ejeIICA": "Comercio e integración regional",
-    "complejidad": "Media"
+    "complejidad": "Media",
+    "requiere_cofinanciamiento": true,
+    "resumen": {
+      "cofinanciamiento": "INDAP financia hasta 70% del servicio de asesoría; poder comprador aporta 30-100% restante",
+      "observaciones": "Servicio integral de asesoría que articula encadenamiento productivo entre pequeños productores y empresas compradoras para relaciones comerciales sostenibles.",
+      "requisitos_clave": [
+        "Usuario INDAP acreditado",
+        "Sin deudas morosas",
+        "Contar con negocio demandado por poder comprador",
+        "Compromiso de ser proveedor estable"
+      ]
+    }
   },
   {
     "id": 195,
@@ -1559,15 +1592,12 @@
     "categoria": "Nacional",
     "url_bases": "https://www.indap.gob.cl/plataforma-de-servicios/programa-de-desarrollo-territorial-indigena-indap-conadi-pdti",
     "regiones": [
-      "Araucanía",
-      "Los Ríos",
-      "Los Lagos",
-      "Biobío",
-      "Arica y Parinacota"
+      "Nacional"
     ],
     "beneficiarios": [
-      "Comunidades indígenas",
-      "Pequeños agricultores indígenas"
+      "Pueblos originarios",
+      "Familias indígenas",
+      "Comunidad indígena"
     ],
     "objetivo": "Programa INDAP-CONADI para el desarrollo territorial de comunidades indígenas con enfoque agropecuario, fortaleciendo producción y comercialización.",
     "ambito": "Nacional",
@@ -1576,7 +1606,15 @@
     "porcentajeViabilidad": 72,
     "rolIICA": "Asesor",
     "ejeIICA": "Desarrollo territorial",
-    "complejidad": "Alta"
+    "complejidad": "Alta",
+    "resumen": {
+      "observaciones": "Programa INDAP-CONADI para fortalecer estrategias económicas de pueblos originarios en actividades silvoagropecuarias. Ejecutado preferentemente a través de municipalidades con equipos de extensión y facilitadores interculturales.",
+      "requisitos_clave": [
+        "Pertenecer a pueblos originarios (acreditable por apellido, organización, Ley 19.253 o Registro Indígenas)",
+        "Usuario INDAP acreditado",
+        "Desarrollar actividades silvoagropecuarias"
+      ]
+    }
   },
   {
     "id": 196,
@@ -1615,11 +1653,11 @@
     "categoria": "Nacional",
     "url_bases": "https://www.indap.gob.cl/plataforma-de-servicios/credito-corto-plazo",
     "regiones": [
-      "Todas"
+      "Nacional"
     ],
     "beneficiarios": [
-      "Pequeños agricultores",
-      "Usuarios INDAP"
+      "Pequeño Agricultor",
+      "Persona natural o jurídica usuario INDAP"
     ],
     "objetivo": "Créditos para financiar capital de trabajo agrícola en plazo máximo de 359 días. INDAP Ñuble entregó $1.500 millones a 7.500 agricultores en mayo 2026.",
     "ambito": "Nacional",
@@ -1628,7 +1666,16 @@
     "porcentajeViabilidad": 30,
     "rolIICA": "Indirecto",
     "ejeIICA": "Desarrollo territorial",
-    "complejidad": "Fácil"
+    "complejidad": "Fácil",
+    "resumen": {
+      "observaciones": "Créditos para financiar total o parcialmente capital de trabajo para actividades silvoagropecuarias, con plazo máximo de 359 días. Pago en cuota única anual o cuotas según flujo de ingresos.",
+      "requisitos_clave": [
+        "Usuario INDAP acreditado",
+        "Sin deudas morosas con INDAP",
+        "Apicultores deben estar registrados en SAG"
+      ],
+      "plazo_ejecucion": "Hasta 359 días"
+    }
   },
   {
     "id": 198,
@@ -1641,12 +1688,11 @@
     "categoria": "Nacional",
     "url_bases": "https://www.indap.gob.cl/seguros",
     "regiones": [
-      "Todas"
+      "Nacional"
     ],
     "beneficiarios": [
-      "Agricultores",
-      "Ganaderos",
-      "Apicultores"
+      "Pequeño Agricultor",
+      "Usuario INDAP con explotación agropecuaria"
     ],
     "objetivo": "MINAGRI llama a agricultores y ganaderos a contratar a tiempo los seguros agropecuarios para resguardar la producción del sector. Incluye seguro apícola y agrícola.",
     "ambito": "Nacional",
@@ -1655,7 +1701,16 @@
     "porcentajeViabilidad": 25,
     "rolIICA": "Indirecto",
     "ejeIICA": "Bioeconomía y desarrollo productivo",
-    "complejidad": "Fácil"
+    "complejidad": "Fácil",
+    "requiere_cofinanciamiento": true,
+    "resumen": {
+      "cofinanciamiento": "INDAP subsidia hasta 95% de la prima neta. Copago agricultor: 5% (cultivos/bovinos/ovinos/apícola) o 10% (frutales) + IVA",
+      "observaciones": "Programa PACSA que subsidia pólizas de seguro agropecuario para proteger frente a eventos climáticos adversos y muerte animal. Seguros: cultivos anuales, frutales, bovinos, ovinos, apícola.",
+      "requisitos_clave": [
+        "Usuario INDAP acreditado y habilitado",
+        "Explotación agropecuaria en zona asegurable"
+      ]
+    }
   },
   {
     "id": 208,
@@ -1668,12 +1723,12 @@
     "categoria": "Nacional",
     "url_bases": "https://www.indap.gob.cl/plataforma-de-servicios/programa-de-asociatividad-economica-pae",
     "regiones": [
-      "Todas"
+      "Nacional"
     ],
     "beneficiarios": [
-      "Organizaciones campesinas",
-      "Cooperativas",
-      "Asociaciones de productores"
+      "Grupo pre-asociativo",
+      "Empresa Asociativa Campesina",
+      "Cooperativa agrícola"
     ],
     "objetivo": "Programa para fortalecer la asociatividad económica de pequeños productores agrícolas, mejorando su capacidad de negociación y acceso a mercados.",
     "ambito": "Nacional",
@@ -1682,7 +1737,16 @@
     "porcentajeViabilidad": 68,
     "rolIICA": "Asesor",
     "ejeIICA": "Comercio e integración regional",
-    "complejidad": "Media"
+    "complejidad": "Media",
+    "resumen": {
+      "observaciones": "Incentivos no reembolsables para cofinanciar servicios de gestión empresarial, desarrollo organizacional y asesoría técnica a empresas asociativas campesinas y grupos pre-asociativos.",
+      "requisitos_clave": [
+        "Usuario INDAP acreditado",
+        "Cumplir requisitos del Reglamento General de Incentivos",
+        "Grupos: presentar nómina y carta de compromiso",
+        "EAC: tener iniciación de actividades y certificado de vigencia"
+      ]
+    }
   },
   {
     "id": 209,
@@ -1695,13 +1759,12 @@
     "categoria": "Internacional",
     "url_bases": "https://www.corfo.gob.cl/sites/cpp/landing-eureka",
     "regiones": [
-      "Todas"
+      "Nacional"
     ],
     "beneficiarios": [
-      "Empresas innovadoras",
-      "Centros de investigación",
-      "Universidades",
-      "Consorcios tecnológicos"
+      "Empresa innovadora",
+      "Centro de investigación",
+      "Universidad"
     ],
     "objetivo": "Convocatorias internacionales a través de la Red Eureka para proyectos colaborativos de innovación y desarrollo tecnológico. Incluye oportunidades para agroindustria y tecnología agropecuaria.",
     "ambito": "Internacional",
@@ -1710,6 +1773,13 @@
     "porcentajeViabilidad": 50,
     "rolIICA": "Asesor",
     "ejeIICA": "Innovación para la productividad",
-    "complejidad": "Alta"
+    "complejidad": "Alta",
+    "resumen": {
+      "observaciones": "Membresía de Chile en Red Eureka (45+ países). Promueve proyectos colaborativos de I+D+i con socios internacionales orientados a soluciones innovadoras de mercado. Sub-programas: Network Projects, Clusters, GlobalStars.",
+      "requisitos_clave": [
+        "Empresa chilena buscando colaboración internacional I+D+i",
+        "Socio internacional de país miembro Eureka"
+      ]
+    }
   }
 ]
