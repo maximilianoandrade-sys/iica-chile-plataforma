@@ -801,14 +801,14 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                             </div>
 
                                             <div className="mt-4 pt-4 border-t border-gray-200">
-                                                <a
-                                                    href={project.url_bases}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="block w-full text-center bg-[var(--iica-blue)] text-white font-bold py-2 rounded hover:bg-[var(--iica-navy)] transition-colors"
-                                                >
-                                                    Ver Bases
-                                                </a>
+                                                <div className="flex justify-center">
+                                                    <ActionButton
+                                                        url={project.url_bases}
+                                                        date={project.fecha_cierre}
+                                                        projectName={project.nombre}
+                                                        institution={project.institucion}
+                                                    />
+                                                </div>
                                                 <button
                                                     onClick={() => toggleCompare(project.id)}
                                                     className="block w-full text-center text-red-500 text-xs mt-2 hover:underline"
@@ -976,14 +976,14 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                         ? <><CheckCheck className="h-4 w-4" /> ¡Copiado!</>
                                         : <><Copy className="h-4 w-4" /> Copiar Ficha</>}
                                 </button>
-                                <a
-                                    href={quickViewProject.url_bases}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-bold text-sm bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] text-white transition-colors"
-                                >
-                                    <ExternalLink className="h-4 w-4" /> Ver Bases
-                                </a>
+                                <div className="flex-1 flex justify-center">
+                                    <ActionButton
+                                        url={quickViewProject.url_bases}
+                                        date={quickViewProject.fecha_cierre}
+                                        projectName={quickViewProject.nombre}
+                                        institution={quickViewProject.institucion}
+                                    />
+                                </div>
                             </div>
                         </motion.div>
                     </>

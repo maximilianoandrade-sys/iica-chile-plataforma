@@ -5,6 +5,7 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import Link from 'next/link';
 import { ExternalLink, ArrowLeft, Calendar, CheckCircle, Info, MapPin, Users, DollarSign } from 'lucide-react';
+import { ActionButton } from '@/components/ProjectItem';
 
 interface Props {
     params: Promise<{ id: string }>;
@@ -233,15 +234,12 @@ export default async function ProyectoDetallePage({ params }: Props) {
                                 ⚠️ Verifica siempre las fechas y requisitos en el sitio oficial antes de postular.
                             </div>
                             {!isClosed && (
-                                <a
-                                    href={project.url_bases}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 bg-[var(--iica-secondary)] hover:bg-green-600 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl min-h-[52px] text-base"
-                                >
-                                    Ver Bases Oficiales
-                                    <ExternalLink className="h-5 w-5" />
-                                </a>
+                                <ActionButton
+                                    url={project.url_bases}
+                                    date={project.fecha_cierre}
+                                    projectName={project.nombre}
+                                    institution={project.institucion}
+                                />
                             )}
                         </div>
                     </div>
