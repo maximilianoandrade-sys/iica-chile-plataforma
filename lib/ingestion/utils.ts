@@ -91,3 +91,62 @@ export function absoluteUrl(href: string, base: string): string {
     return href;
   }
 }
+
+/**
+ * Dominios de acortadores de URL conocidos. Si una URL viene de uno de
+ * estos, conviene seguir el redirect para almacenar la URL real
+ * (mejor UX, mejor stale detection, mejor dedup).
+ */
+const URL_SHORTENERS = new Set([
+  "bit.ly",
+  "t.co",
+  "goo.gl",
+  "ow.ly",
+  "tinyurl.com",
+  "buff.ly",
+  "shorturl.at",
+  "lnkd.in",
+  "is.gd",
+  "rebrand.ly",
+  "rb.gy",
+  "cutt.ly",
+]);
+
+/**
+ * Si la URL viene de un acortador conocido, sigue el redirect y devuelve
+ * la URL real de destino. Si no es un acortador o el redirect falla,
+ * devuelve la URL original sin tocar.
+ *
+ * Útil principalmente en AI Discovery (Gemini a veces devuelve bit.ly).
+ * Los scrapers de sitios oficiales casi nunca van a hitar este código.
+ *
+ * Timeout 8s para no bloquear la ingesta si el resolver es lento.
+ */
+export async function resolveShortUrl(url: string): Promise<string> {
+  if (!url) return url;
+  let host: string;
+  try {
+    host = new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+  if (!URL_SHORTENERS.has(host)) return url;
+
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
+    const res = await fetch(url, {
+      method: "HEAD",
+      redirect: "follow",
+      signal: controller.signal,
+      headers: {
+        "User-Agent": "IICA-Chile-Bot/1.0 (+contacto@iica.cl)",
+      },
+    });
+    clearTimeout(timeoutId);
+    // res.url contiene la URL final tras seguir redirects
+    return res.url || url;
+  } catch {
+    return url;
+  }
+}

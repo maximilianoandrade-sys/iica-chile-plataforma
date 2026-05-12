@@ -28,7 +28,7 @@
 import { GoogleGenAI } from "@google/genai";
 import prisma from "../lib/prisma";
 import { passesGuardrails, type AiResult } from "./discover-projects-lib";
-import { normalizeUrl, parseSpanishDate } from "../lib/ingestion/utils";
+import { normalizeUrl, parseSpanishDate, resolveShortUrl } from "../lib/ingestion/utils";
 
 const RESEARCH_PROMPT = `Investigá usando Google Search qué convocatorias de financiamiento agrícola están ABIERTAS HOY para el IICA Chile.
 
@@ -182,6 +182,13 @@ async function main() {
     // arrancan con www/dominio.
     if (r.url && !/^https?:\/\//i.test(r.url) && /^[\w-]+\./.test(r.url)) {
       r.url = "https://" + r.url;
+    }
+
+    // Si vino con acortador (bit.ly, t.co, etc.), resolvemos al destino real
+    // para que (a) el guardrail valide la URL final, (b) el dedup funcione
+    // por URL canónica y (c) el usuario vea la URL real en el botón.
+    if (r.url) {
+      r.url = await resolveShortUrl(r.url);
     }
 
     const guard = await passesGuardrails(r);
