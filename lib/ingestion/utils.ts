@@ -110,6 +110,9 @@ const URL_SHORTENERS = new Set([
   "rebrand.ly",
   "rb.gy",
   "cutt.ly",
+  // Vertex AI Search redirects (Gemini grounding devuelve estas URLs intermedias
+  // en lugar de la URL real de la fuente — hay que seguir el redirect HTTP).
+  "vertexaisearch.cloud.google.com",
 ]);
 
 /**
