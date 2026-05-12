@@ -20,7 +20,10 @@
     "ingest": "tsx scripts/run-scrapers.ts",
     "ingest:audit": "tsx scripts/audit-legacy-data.ts",
     "discover": "tsx scripts/discover-projects.ts",
-    "smoke": "tsx scripts/smoke-test.ts"
+    "smoke": "tsx scripts/smoke-test.ts",
+    "e2e": "playwright test",
+    "e2e:install": "playwright install chromium",
+    "e2e:headed": "playwright test --headed"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.36.0",
@@ -41,6 +44,7 @@
     "zod": "^4.3.5"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@testing-library/jest-dom": "^6.4.0",
     "@testing-library/react": "^14.2.0",
     "@types/jest": "^29.5.12",
