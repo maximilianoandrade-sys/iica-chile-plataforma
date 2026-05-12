@@ -144,7 +144,7 @@ describe('data utilities', () => {
 
   describe('complejidadColors', () => {
     it('debe retornar colores correctos para cada complejidad', () => {
-      expect(complejidadColors('Facil')).toEqual({
+      expect(complejidadColors('Fácil')).toEqual({
         text: 'text-green-700',
         bg: 'bg-green-50',
       });
