@@ -12,6 +12,7 @@ export default function SearchableSelect({ options, value, onChange, placeholder
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const wrapperRef = useRef<HTMLDivElement>(null);
+    const listboxId = 'searchable-select-listbox';
 
     // Filter options based on search term
     const filteredOptions = options.filter(option =>
@@ -31,11 +32,27 @@ export default function SearchableSelect({ options, value, onChange, placeholder
         };
     }, [wrapperRef]);
 
+    const handleKeyDown: React.KeyboardEventHandler<HTMLButtonElement> = (event) => {
+        if (event.key === 'Escape') {
+            setIsOpen(false);
+            return;
+        }
+
+        if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            setIsOpen(true);
+        }
+    };
+
     return (
         <div className="relative w-full md:w-auto" ref={wrapperRef} style={{ minWidth: '250px' }}>
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
+                onKeyDown={handleKeyDown}
+                aria-haspopup="listbox"
+                aria-expanded={isOpen}
+                aria-controls={listboxId}
                 className="w-full bg-white border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-left text-sm text-gray-700 hover:border-[var(--iica-blue)] focus:outline-none focus:ring-2 focus:ring-[var(--iica-blue)] focus:border-transparent cursor-pointer shadow-sm flex items-center justify-between"
             >
                 <span className="block truncate">{value}</span>
@@ -62,7 +79,7 @@ export default function SearchableSelect({ options, value, onChange, placeholder
                     </div>
 
                     {/* Options List */}
-                    <ul className="max-h-56 overflow-y-auto">
+                    <ul id={listboxId} role="listbox" className="max-h-56 overflow-y-auto" aria-label="Opciones disponibles">
                         {filteredOptions.length === 0 ? (
                             <li className="text-gray-500 select-none relative py-2 pl-3 pr-9 text-xs italic p-2 text-center">
                                 No se encontraron resultados
@@ -71,6 +88,8 @@ export default function SearchableSelect({ options, value, onChange, placeholder
                             filteredOptions.map((option) => (
                                 <li
                                     key={option}
+                                    role="option"
+                                    aria-selected={value === option}
                                     className={`cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-blue-50 transition-colors ${value === option ? 'text-[var(--iica-blue)] font-bold bg-blue-50/50' : 'text-gray-900'
                                         }`}
                                     onClick={() => {

@@ -75,6 +75,31 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
         setSortConfig({ key, direction });
     };
 
+    const getAriaSort = (key: keyof Project | 'dificultad'): 'ascending' | 'descending' | 'none' => {
+        if (!sortConfig || sortConfig.key !== key) return 'none';
+        return sortConfig.direction === 'asc' ? 'ascending' : 'descending';
+    };
+
+    useEffect(() => {
+        const onKeyDown = (event: KeyboardEvent) => {
+            if (event.key !== 'Escape') return;
+            if (quickViewProject) {
+                setQuickViewProject(null);
+                return;
+            }
+            if (showCompareModal) {
+                setShowCompareModal(false);
+                return;
+            }
+            if (showRequirements) {
+                setShowRequirements(false);
+            }
+        };
+
+        window.addEventListener('keydown', onKeyDown);
+        return () => window.removeEventListener('keydown', onKeyDown);
+    }, [quickViewProject, showCompareModal, showRequirements]);
+
     // Helper for Closing Soon (Moved here to be used in filtering)
     const isClosingSoon = (dateStr: string) => {
         if (!dateStr) return false;
@@ -468,23 +493,35 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                     <th className="py-5 px-6 w-12 text-center">
                                                         <span className="sr-only">Comparar</span>
                                                     </th>
-                                                    <th className="py-5 px-6 cursor-pointer hover:bg-gray-100 transition-colors group" onClick={() => handleSort('nombre')}>
-                                                        <div className="flex items-center gap-2">
+                                                    <th className="py-5 px-6" scope="col" aria-sort={getAriaSort('nombre')}>
+                                                        <button
+                                                            type="button"
+                                                            className="w-full flex items-center gap-2 hover:text-[var(--iica-blue)] transition-colors group"
+                                                            onClick={() => handleSort('nombre')}
+                                                        >
                                                             Proyecto
                                                             <ArrowUpDown className={`h-4 w-4 text-gray-400 group-hover:text-[var(--iica-blue)] ${sortConfig?.key === 'nombre' ? 'text-[var(--iica-blue)]' : ''}`} />
-                                                        </div>
+                                                        </button>
                                                     </th>
-                                                    <th className="py-5 px-6 cursor-pointer hover:bg-gray-100 transition-colors group" onClick={() => handleSort('institucion')}>
-                                                        <div className="flex items-center gap-2">
+                                                    <th className="py-5 px-6" scope="col" aria-sort={getAriaSort('institucion')}>
+                                                        <button
+                                                            type="button"
+                                                            className="w-full flex items-center gap-2 hover:text-[var(--iica-blue)] transition-colors group"
+                                                            onClick={() => handleSort('institucion')}
+                                                        >
                                                             Institución
                                                             <ArrowUpDown className={`h-4 w-4 text-gray-400 group-hover:text-[var(--iica-blue)] ${sortConfig?.key === 'institucion' ? 'text-[var(--iica-blue)]' : ''}`} />
-                                                        </div>
+                                                        </button>
                                                     </th>
-                                                    <th className="py-5 px-6 cursor-pointer hover:bg-gray-100 transition-colors group" onClick={() => handleSort('fecha_cierre')}>
-                                                        <div className="flex items-center gap-2">
+                                                    <th className="py-5 px-6" scope="col" aria-sort={getAriaSort('fecha_cierre')}>
+                                                        <button
+                                                            type="button"
+                                                            className="w-full flex items-center gap-2 hover:text-[var(--iica-blue)] transition-colors group"
+                                                            onClick={() => handleSort('fecha_cierre')}
+                                                        >
                                                             Cierre
                                                             <ArrowUpDown className={`h-4 w-4 text-gray-400 group-hover:text-[var(--iica-blue)] ${sortConfig?.key === 'fecha_cierre' ? 'text-[var(--iica-blue)]' : ''}`} />
-                                                        </div>
+                                                        </button>
                                                     </th>
                                                     <th className="py-5 px-6 text-right">Acciones</th>
                                                 </tr>
@@ -743,15 +780,16 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
             {
                 showCompareModal && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-                        <div className="bg-white rounded-xl shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col max-h-[90vh]">
+                        <div className="bg-white rounded-xl shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col max-h-[90vh]" role="dialog" aria-modal="true" aria-labelledby="compare-modal-title">
                             <div className="bg-[var(--iica-navy)] text-white px-6 py-4 flex justify-between items-center flex-shrink-0">
-                                <h3 className="font-bold text-lg flex items-center gap-2">
+                                <h3 id="compare-modal-title" className="font-bold text-lg flex items-center gap-2">
                                     <Calendar className="h-5 w-5" />
                                     Comparar Convocatorias
                                 </h3>
                                 <button
                                     onClick={() => setShowCompareModal(false)}
                                     className="hover:bg-white/10 rounded-full p-1 transition-colors"
+                                    aria-label="Cerrar comparación"
                                 >
                                     <X className="h-6 w-6" />
                                 </button>
@@ -842,6 +880,10 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                             animate={{ x: 0 }}
                             exit={{ x: '100%' }}
                             transition={{ type: 'spring', damping: 28, stiffness: 300 }}
+                            role="dialog"
+                            aria-modal="true"
+                            aria-labelledby="quick-view-title"
+                            aria-label="Vista rápida de convocatoria"
                             className="fixed right-0 top-0 bottom-0 z-50 w-full max-w-md bg-white shadow-2xl flex flex-col overflow-hidden"
                         >
                             {/* Header */}
@@ -855,13 +897,14 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                             {quickViewProject.institucion}
                                         </span>
                                     </div>
-                                    <h3 className="text-white font-bold text-base leading-snug line-clamp-3">
+                                    <h3 id="quick-view-title" className="text-white font-bold text-base leading-snug line-clamp-3">
                                         {quickViewProject.nombre}
                                     </h3>
                                 </div>
                                 <button
                                     onClick={() => setQuickViewProject(null)}
                                     className="text-white/70 hover:text-white transition-colors flex-shrink-0 mt-0.5"
+                                    aria-label="Cerrar vista rápida"
                                 >
                                     <X className="h-5 w-5" />
                                 </button>

@@ -12,11 +12,13 @@ export default function AdminLayout({
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-xl font-bold flex items-center gap-2">
             <span className="bg-white text-[#003366] p-1 rounded font-black text-sm">IICA</span>
-            Admin Panel — Pipeline 2026
+            Panel de Administracion - Pipeline 2026
           </h1>
-          <nav className="flex gap-6 text-sm">
+          <nav className="flex flex-wrap gap-6 text-sm" aria-label="Navegacion de administracion">
             <Link href="/admin/pipeline-dashboard" className="hover:text-blue-200 transition-colors">Dashboard</Link>
             <Link href="/admin/projects/needsReview" className="hover:text-blue-200 transition-colors">Bandeja de Revisión</Link>
+            <Link href="/admin/discoveries" className="hover:text-blue-200 transition-colors">Descubrimientos</Link>
+            <Link href="/admin/sources" className="hover:text-blue-200 transition-colors">Fuentes</Link>
             <Link href="/" className="hover:text-blue-200 transition-colors">Ver Sitio Público</Link>
           </nav>
         </div>

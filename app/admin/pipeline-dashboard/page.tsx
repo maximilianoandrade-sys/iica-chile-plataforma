@@ -11,8 +11,8 @@ export default async function PipelineDashboard() {
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-2">
-        <h2 className="text-2xl font-bold text-gray-900">Pipeline Monitoring</h2>
-        <p className="text-gray-500">Estado de la ingesta automática y validación AI de proyectos.</p>
+        <h2 className="text-2xl font-bold text-gray-900">Monitoreo del Pipeline</h2>
+        <p className="text-gray-500">Estado de la ingesta automática y validación IA de proyectos.</p>
       </div>
 
       {/* Summary Cards */}
@@ -42,7 +42,7 @@ export default async function PipelineDashboard() {
             <AlertCircle size={24} />
           </div>
           <div>
-            <p className="text-xs font-semibold text-gray-400 uppercase">Pendientes Review</p>
+            <p className="text-xs font-semibold text-gray-400 uppercase">Pendientes de Revisión</p>
             <p className="text-2xl font-bold text-gray-900">{needsReview}</p>
           </div>
         </div>
