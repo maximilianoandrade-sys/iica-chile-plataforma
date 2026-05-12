@@ -11,6 +11,7 @@ export interface Project {
     nombre: string;
     institucion: string;
     monto: number;
+    montoTexto?: string | null;   // Monto tal cual viene de la fuente (con unidad)
     fecha_cierre: string;   // YYYY-MM-DD
     estado: string;
     categoria: string;
@@ -169,6 +170,17 @@ export function formatMontoCLP(monto: number): string {
     if (monto >= 1_000_000_000) return `$${(monto / 1_000_000_000).toFixed(1)}B`;
     if (monto >= 1_000_000) return `$${(monto / 1_000_000).toFixed(0)}M`;
     return `$${monto.toLocaleString('es-CL')}`;
+}
+
+/**
+ * Monto listo para mostrar al usuario. Prefiere `montoTexto` (string crudo
+ * de la fuente con su unidad, ej. "8.500 UF" o "USD 50,000") cuando está
+ * presente, porque el monto numérico chileno suele estar en UF/USD y la
+ * conversión a CLP pierde la unidad real.
+ */
+export function displayMonto(project: Project): string {
+    if (project.montoTexto && project.montoTexto.trim()) return project.montoTexto.trim();
+    return formatMontoCLP(project.monto);
 }
 
 /** Devuelve color semáforo para viabilidad IICA */

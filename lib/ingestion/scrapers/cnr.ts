@@ -103,10 +103,15 @@ export const cnrScraper: Scraper = {
         // del concurso (cell[5]). Antes de eso devuelve un shell vacío
         // que parece "página rota". En ese caso apuntamos al listado del
         // calendario donde el usuario ve la fila con código y fechas.
+        // `canonicalKey` se usa SOLO para deduplicar en DB; la `url` es
+        // la que ve el usuario.
         const stillFuture = publicacionBases && publicacionBases.getTime() > today.getTime();
         const url = stillFuture ? this.homepageUrl : detailUrl;
+        const canonicalKey = stillFuture
+          ? `${this.homepageUrl}?concurso=${code}`
+          : detailUrl;
 
-        const montoText = montoUf ? `Monto: ${montoUf} mil UF.` : "";
+        const montoText = montoUf ? `Monto: ${montoUf} UF.` : "";
         const regionesText = regiones ? `Regiones: ${regiones.slice(0, 200)}.` : "";
         const futureNote = stillFuture
           ? ` (Aún no abierto — link al calendario; el detalle estará disponible desde la fecha de apertura)`
@@ -116,8 +121,12 @@ export const cnrScraper: Scraper = {
           title: `Concurso CNR ${code}: ${title}`,
           institution: "Comisión Nacional de Riego (CNR)",
           url,
+          canonicalKey,
           deadline,
-          budget: montoUf || null,
+          // CNR publica el monto en miles de UF (ej. "8.500" = 8.500 UF).
+          // Agregamos " UF" como unidad para que el UI lo muestre completo
+          // sin necesidad de parsear a CLP (lo que pierde la unidad).
+          budget: montoUf ? `${montoUf} UF` : null,
           description: cleanText(`${montoText} ${regionesText} Ley 18.450 — subsidios para obras de riego.`),
           ambito: "Nacional",
           tags: ["CNR", "Ley 18.450", "Riego"],

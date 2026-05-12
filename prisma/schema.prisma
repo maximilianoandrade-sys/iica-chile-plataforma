@@ -26,6 +26,7 @@ model Project {
   nombre                    String
   institucion               String
   monto                     Float
+  montoTexto                String?
   fecha_cierre              DateTime
   estado                    String
   categoria                 String

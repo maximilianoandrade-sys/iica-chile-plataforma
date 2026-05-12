@@ -2,6 +2,14 @@ export interface RawProject {
   title: string;
   institution: string;
   url: string;
+  /**
+   * URL alternativa que el scraper usa SOLO para identificar el proyecto
+   * unívocamente en DB (canonical key). Se usa cuando `url` (la que ve el
+   * usuario) puede repetirse entre proyectos — por ejemplo, CNR apunta
+   * varios concursos futuros al mismo listing URL. Si no se setea, se
+   * usa `url` para el canonical.
+   */
+  canonicalKey?: string;
   deadline?: Date | null;
   budget?: string | null;
   description?: string;

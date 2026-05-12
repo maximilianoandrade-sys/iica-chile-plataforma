@@ -14,7 +14,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info, Sparkles, Copy, Eye, CheckCheck, MapPin, Users, Banknote, Clock, ChevronRight, ArrowUpDown, FileText, HelpCircle, MonitorPlay, PenTool, CheckCircle2, XCircle, AlertTriangle, Zap } from "lucide-react";
 import { ActionButton, UrgencyBadge } from "@/components/ProjectItem";
 import { OportunidadCard, Oportunidad } from "./OportunidadCard";
-import { daysUntilClose, formatDeadline, isDeadlineUnknown } from "@/lib/data";
+import { daysUntilClose, formatDeadline, isDeadlineUnknown, displayMonto } from "@/lib/data";
 
 export default function ProjectList({ projects }: { projects: Project[] }) {
     // State for client-side interactions
@@ -91,9 +91,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
         const closeDate = new Date(project.fecha_cierre);
         const diffDays = Math.ceil((closeDate.getTime() - today.getTime()) / 86400000);
         const estado = diffDays < 0 ? 'CERRADO' : `Abierto – cierra en ${diffDays} días`;
-        const monto = project.monto > 0
-            ? `$${(project.monto / 1000000).toFixed(0)}M`
-            : 'Ver bases';
+        const monto = displayMonto(project);
         const texto = [
             `📋 ${project.nombre}`,
             `🏛️ Institución: ${project.institucion}`,
@@ -883,9 +881,9 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                             <Banknote className="h-3 w-3" /> Monto Máximo
                                         </p>
                                         <p className="font-bold text-[var(--iica-navy)] text-lg">
-                                            {quickViewProject.monto > 0
-                                                ? `$${(quickViewProject.monto / 1000000).toFixed(0)}M`
-                                                : <span className="text-sm text-gray-500">Ver bases</span>}
+                                            {displayMonto(quickViewProject) === 'Ver bases'
+                                                ? <span className="text-sm text-gray-500">Ver bases</span>
+                                                : displayMonto(quickViewProject)}
                                         </p>
                                     </div>
                                 </div>
