@@ -15,6 +15,51 @@ function parseCorfoDate(s: string): Date | null {
   return isNaN(date.getTime()) ? null : date;
 }
 
+/**
+ * Fetch página de detalle CORFO y extrae monto del primer párrafo que
+ * mencione "$X.XXX.XXX". CORFO escribe el monto en lenguaje natural
+ * como "InnovaChile cofinanciará... hasta $150.000.000.- (ciento cincuenta
+ * millones de pesos)". Devolvemos un string compacto como "Hasta $150M".
+ */
+async function fetchCorfoMonto(url: string): Promise<string | null> {
+  try {
+    const res = await fetch(url, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/605.1.15",
+      },
+      signal: AbortSignal.timeout(15000),
+    });
+    if (!res.ok) return null;
+    const html = await res.text();
+    const $ = load(html);
+
+    // Buscar el primer <p> que contenga "$X.XXX.XXX"
+    let raw: string | null = null;
+    $("p, li").each((_, el) => {
+      if (raw) return;
+      const txt = $(el).text().trim().replace(/\s+/g, " ");
+      // CLP con miles separados por punto: $150.000.000 (8+ dígitos esperados)
+      if (/\$\s*\d{1,3}(?:\.\d{3}){2,}/.test(txt) && txt.length < 400) {
+        raw = txt;
+      }
+    });
+    if (!raw) return null;
+
+    // Extraer el monto y formatear corto.
+    const m = raw.match(/\$\s*(\d{1,3}(?:\.\d{3}){2,})/);
+    if (!m) return null;
+    const value = Number(m[1].replace(/\./g, ""));
+    if (!value) return null;
+
+    const prefix = /hasta/i.test(raw) ? "Hasta " : "";
+    if (value >= 1_000_000_000) return `${prefix}$${(value / 1_000_000_000).toFixed(1)}B`;
+    if (value >= 1_000_000) return `${prefix}$${Math.round(value / 1_000_000)}M`;
+    return `${prefix}$${value.toLocaleString("es-CL")}`;
+  } catch {
+    return null;
+  }
+}
+
 export const corfoScraper: Scraper = {
   slug: "corfo",
   name: "CORFO",
@@ -94,6 +139,17 @@ export const corfoScraper: Scraper = {
       }
     } catch (err) {
       return { sourceSlug, projects: [], partialErrors: [(err as Error).message] };
+    }
+
+    // Enriquecer cada proyecto con el monto extraído del detalle.
+    // Concurrencia 4 — CORFO normalmente lista <15 convocatorias.
+    const CONCURRENCY = 4;
+    for (let i = 0; i < projects.length; i += CONCURRENCY) {
+      const slice = projects.slice(i, i + CONCURRENCY);
+      const montos = await Promise.all(slice.map((p) => fetchCorfoMonto(p.url)));
+      slice.forEach((p, idx) => {
+        if (montos[idx]) p.budget = montos[idx];
+      });
     }
 
     return { sourceSlug, projects, partialErrors };
