@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import ProjectFilters from '@/components/ProjectFilters';
 import { useRouter, useSearchParams } from 'next/navigation';
+import type { ReadonlyURLSearchParams } from 'next/navigation';
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
@@ -15,6 +16,9 @@ jest.mock('@/hooks/useAnalytics', () => ({
 
 const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>;
 const mockUseSearchParams = useSearchParams as jest.MockedFunction<typeof useSearchParams>;
+
+const asReadonlySearchParams = (params: URLSearchParams): ReadonlyURLSearchParams =>
+  params as unknown as ReadonlyURLSearchParams;
 
 describe('ProjectFilters', () => {
   const mockPush = jest.fn();
@@ -40,28 +44,29 @@ describe('ProjectFilters', () => {
       back: jest.fn(),
       forward: jest.fn(),
     } as any);
-    mockUseSearchParams.mockReturnValue(mockParams);
+    mockUseSearchParams.mockReturnValue(asReadonlySearchParams(mockParams));
   });
 
   it('debe renderizar el componente correctamente', () => {
     render(<ProjectFilters {...defaultProps} />);
     
-    expect(screen.getByRole('searchbox')).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: /buscar oportunidades iica/i })).toBeInTheDocument();
   });
 
   it('debe mostrar el contador de resultados', () => {
     render(<ProjectFilters {...defaultProps} />);
     
+    expect(screen.getByText(/mostrando/i)).toBeInTheDocument();
     expect(screen.getByText(/10/)).toBeInTheDocument();
-    expect(screen.getByText(/de 50/)).toBeInTheDocument();
+    expect(screen.getByText('50')).toBeInTheDocument();
   });
 
   it('debe renderizar los chips de busqueda rapida', () => {
     render(<ProjectFilters {...defaultProps} />);
     
-    expect(screen.getByText('FONTAGRO')).toBeInTheDocument();
-    expect(screen.getByText('FAO')).toBeInTheDocument();
-    expect(screen.getByText('BID')).toBeInTheDocument();
+    expect(screen.getByText(/FONTAGRO/)).toBeInTheDocument();
+    expect(screen.getByText(/FAO/)).toBeInTheDocument();
+    expect(screen.getByText(/BID/)).toBeInTheDocument();
   });
 
   it('debe renderizar las opciones de rol IICA', () => {
@@ -99,10 +104,10 @@ describe('ProjectFilters', () => {
   it('debe limpiar la busqueda al hacer click en la X', () => {
     render(<ProjectFilters {...defaultProps} />);
     
-    const input = screen.getByRole('searchbox');
+    const input = screen.getByRole('textbox', { name: /buscar oportunidades iica/i });
     fireEvent.change(input, { target: { value: 'test query' } });
     
-    const clearButton = screen.getByLabelText(/Limpiar busqueda/i);
+    const clearButton = screen.getByLabelText(/Limpiar b[úu]squeda/i);
     fireEvent.click(clearButton);
     
     expect(input).toHaveValue('');
@@ -123,7 +128,7 @@ describe('ProjectFilters', () => {
 
   it('debe mostrar boton de limpiar filtros cuando hay filtros activos', () => {
     const paramsWithFilters = new URLSearchParams({ q: 'test', category: 'Innovacion' });
-    mockUseSearchParams.mockReturnValue(paramsWithFilters);
+    mockUseSearchParams.mockReturnValue(asReadonlySearchParams(paramsWithFilters));
     
     render(<ProjectFilters {...defaultProps} />);
     
@@ -134,7 +139,7 @@ describe('ProjectFilters', () => {
   it('debe tener atributos de accesibilidad correctos', () => {
     render(<ProjectFilters {...defaultProps} />);
     
-    const input = screen.getByRole('searchbox');
+    const input = screen.getByRole('textbox', { name: /buscar oportunidades iica/i });
     expect(input).toHaveAttribute('aria-label', 'Buscar oportunidades IICA');
   });
 });

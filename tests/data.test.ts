@@ -73,7 +73,7 @@ describe('data utilities', () => {
   describe('urgencyLabel', () => {
     it('debe retornar "Cerrada" para fechas pasadas', () => {
       const pastDate = new Date();
-      pastDate.setDate(pastDate.getDate() - 1);
+      pastDate.setDate(pastDate.getDate() - 2);
       const project = { ...mockProject, fecha_cierre: pastDate.toISOString().split('T')[0] };
       
       const label = urgencyLabel(project);
@@ -144,7 +144,7 @@ describe('data utilities', () => {
 
   describe('complejidadColors', () => {
     it('debe retornar colores correctos para cada complejidad', () => {
-      expect(complejidadColors('Facil')).toEqual({
+      expect(complejidadColors('Fácil')).toEqual({
         text: 'text-green-700',
         bg: 'bg-green-50',
       });

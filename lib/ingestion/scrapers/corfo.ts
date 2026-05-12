@@ -33,16 +33,11 @@ async function fetchCorfoMonto(url: string): Promise<string | null> {
     const html = await res.text();
     const $ = load(html);
 
-    // Buscar el primer <p> que contenga "$X.XXX.XXX"
-    let raw: string | null = null;
-    $("p, li").each((_, el) => {
-      if (raw) return;
-      const txt = $(el).text().trim().replace(/\s+/g, " ");
-      // CLP con miles separados por punto: $150.000.000 (8+ dígitos esperados)
-      if (/\$\s*\d{1,3}(?:\.\d{3}){2,}/.test(txt) && txt.length < 400) {
-        raw = txt;
-      }
-    });
+    // Buscar el primer <p>/<li> que contenga "$X.XXX.XXX"
+    const raw = $("p, li")
+      .toArray()
+      .map((el) => $(el).text().trim().replace(/\s+/g, " "))
+      .find((txt) => /\$\s*\d{1,3}(?:\.\d{3}){2,}/.test(txt) && txt.length < 400);
     if (!raw) return null;
 
     // Extraer el monto y formatear corto.

@@ -164,7 +164,7 @@ export default function ProjectFilters({
             }
         }, 300);
         return () => clearTimeout(timer);
-    }, [searchTerm, router, searchParams]);
+    }, [searchTerm, router, searchParams, saveRecentSearch]);
 
     // Autocompletado — usa sugerencias dinámicas del servidor
     useEffect(() => {

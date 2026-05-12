@@ -11,11 +11,13 @@ export default async function DiscoveriesPage() {
   });
 
   return (
-    <div style={{ maxWidth: 1100, margin: "40px auto", padding: 20, fontFamily: "system-ui" }}>
-      <h1>Bandeja de Descubrimientos IA</h1>
-      <p style={{ color: "#666", marginBottom: 20 }}>
-        {items.length} proyecto(s) pendientes de revisión.
-      </p>
+    <div className="mx-auto max-w-6xl p-4 md:p-6 space-y-6">
+      <div className="space-y-2">
+        <h1 className="text-2xl md:text-3xl font-black text-gray-900 tracking-tight">Bandeja de Descubrimientos IA</h1>
+        <p className="text-sm text-gray-600">
+          {items.length} proyecto(s) pendientes de revisión por el equipo técnico.
+        </p>
+      </div>
       <DiscoveriesClient initial={JSON.parse(JSON.stringify(items))} />
     </div>
   );

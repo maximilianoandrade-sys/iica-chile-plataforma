@@ -5,6 +5,7 @@
 .env.development.local
 .env.test.local
 .env.production.local
+.env.production
 
 # IDE
 .vscode/
@@ -23,6 +24,7 @@ node_modules/
 /.next
 /out
 .next
+.worktrees/
 .vercel
 .swc
 

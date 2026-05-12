@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Menu, X, Plus, Target, Home, Crosshair, Link2, Users, TrendingUp, Building2, Phone, Globe } from 'lucide-react';
+import { Menu, X, Target, Home, Crosshair, Link2, Users, TrendingUp, Building2, Phone, Briefcase } from 'lucide-react';
 import projects from '@/data/projects.json';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -43,10 +43,13 @@ export function Header() {
                 </div>
 
                 {/* Desktop Nav */}
-                <nav className="hidden lg:flex gap-6 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">
+                <nav className="hidden lg:flex gap-5 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400" aria-label="Navegacion principal">
                     <Link href="/#convocatorias" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Oportunidades</Link>
                     <Link href="/pipeline" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Pipeline</Link>
-                    <Link href="/admin" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Admin</Link>
+                    <Link href="/consultores" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Consultores</Link>
+                    <Link href="/about" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Sobre IICA</Link>
+                    <Link href="/#fuentes" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Fuentes</Link>
+                    <Link href="/admin/login" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Admin</Link>
                 </nav>
 
                 <div className="flex items-center gap-2">
@@ -95,7 +98,9 @@ export function Header() {
                                 { href: '/#fuentes', label: 'Fuentes Oficiales', icon: Link2 },
                                 { href: '/consultores', label: 'Directorio de Consultores', icon: Users },
                                 { href: '/#impacto', label: 'Impacto IICA', icon: TrendingUp },
+                                { href: '/maletin', label: 'Maletin Tecnico', icon: Briefcase },
                                 { href: '/about', label: 'Sobre el IICA', icon: Building2 },
+                                { href: '/admin/login', label: 'Acceso Admin', icon: Users },
                                 { href: '/#contacto', label: 'Contacto', icon: Phone },
                             ].map((item) => (
                                 <Link

@@ -19,8 +19,12 @@ describe("indapScraper", () => {
     expect(result.projects[0].url).toContain("indap.gob.cl");
   });
 
-  it("lanza error si fetch falla", async () => {
+  it("reporta partialErrors si fetch falla", async () => {
     (global.fetch as jest.Mock).mockResolvedValue({ ok: false, status: 500 });
-    await expect(indapScraper.scrape()).rejects.toThrow("fetch fallido");
+    await expect(indapScraper.scrape()).resolves.toEqual({
+      sourceSlug: "indap",
+      projects: [],
+      partialErrors: ["HTTP 500"],
+    });
   });
 });

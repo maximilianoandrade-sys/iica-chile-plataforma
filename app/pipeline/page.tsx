@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { LayoutDashboard, GripVertical, CheckCircle2, ChevronRight, Briefcase, Play, Inbox, Send, ChevronLeft, User, ListTodo, AlertCircle, Trash2, Plus } from 'lucide-react';
 import projectsData from '@/data/projects.json';
 import { Project } from '@/lib/data';
@@ -34,11 +34,11 @@ const INITIAL_CHECKLIST = [
 ];
 
 export default function PipelinePage() {
-  const [tasks, setTasks] = useState<KanbanTask[]>([]);
-  const [isClient, setIsClient] = useState(false);
-  const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null);
+  const [tasks, setTasks] = React.useState<KanbanTask[]>([]);
+  const [isClient, setIsClient] = React.useState(false);
+  const [draggedTaskId, setDraggedTaskId] = React.useState<string | null>(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     setIsClient(true);
     const saved = getPipelineTasks();
     if (saved && saved.length > 0) {
@@ -58,11 +58,32 @@ export default function PipelinePage() {
     }
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (isClient && tasks.length >= 0) {
       savePipelineTasks(tasks);
     }
   }, [tasks, isClient]);
+
+  if (!isClient) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
+        <div className="w-full max-w-xl rounded-2xl border border-slate-200 bg-white shadow-sm p-6">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 rounded-lg bg-slate-100 animate-pulse" aria-hidden="true" />
+            <div>
+              <p className="text-sm font-bold text-slate-800">Cargando pipeline institucional...</p>
+              <p className="text-xs text-slate-500">Estamos preparando su tablero de seguimiento.</p>
+            </div>
+          </div>
+          <div className="space-y-2" aria-hidden="true">
+            <div className="h-3 rounded bg-slate-100 animate-pulse" />
+            <div className="h-3 rounded bg-slate-100 animate-pulse w-11/12" />
+            <div className="h-3 rounded bg-slate-100 animate-pulse w-4/5" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const handleDragStart = (id: string) => {
     setDraggedTaskId(id);
@@ -93,8 +114,6 @@ export default function PipelinePage() {
       setTasks(prev => prev.filter(t => t.id !== id));
     }
   };
-
-  if (!isClient) return null;
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
