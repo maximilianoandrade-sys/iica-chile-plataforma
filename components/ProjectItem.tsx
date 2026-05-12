@@ -142,15 +142,6 @@ export default function ProjectItem({ project, viewMode }: ProjectItemProps) {
                     </td>
                     <td className="py-5 px-6">
                         <div className="flex items-center gap-3">
-                            <div className="relative w-8 h-8 rounded bg-white shadow-sm p-0.5 border border-gray-100 overflow-hidden">
-                                <Image
-                                    src={getLogoUrl(project.institucion)}
-                                    alt={project.institucion}
-                                    fill
-                                    className="object-contain"
-                                    sizes="32px"
-                                />
-                            </div>
                             <div>
                                 <span className="font-bold text-gray-700 block">{project.institucion}</span>
                                 {project.responsableIICA ? (
@@ -231,15 +222,6 @@ export default function ProjectItem({ project, viewMode }: ProjectItemProps) {
                 <div className="p-5 flex flex-col gap-4 active:bg-blue-50/50 transition-colors">
                     <div className="flex justify-between items-start">
                         <div className="flex items-center gap-2 flex-wrap">
-                            <div className="relative w-6 h-6 rounded bg-white overflow-hidden border border-gray-100">
-                                <Image
-                                    src={getLogoUrl(project.institucion)}
-                                    alt={project.institucion}
-                                    fill
-                                    className="object-contain"
-                                    sizes="24px"
-                                />
-                            </div>
                             <span className="text-xs font-bold text-[var(--iica-secondary)] bg-green-50 px-2 py-1 rounded border border-green-100">
                                 {project.institucion}
                             </span>

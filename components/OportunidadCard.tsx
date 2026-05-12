@@ -74,10 +74,6 @@ export function OportunidadCard({ op }: { op: Oportunidad }) {
             <div className="absolute -right-8 -top-8 w-24 h-24 bg-blue-50/50 rounded-full blur-3xl group-hover:bg-blue-100/50 transition-colors" />
 
             <div className="flex items-start gap-4">
-                <div className="relative z-10 p-2 bg-gray-50 rounded-xl border border-gray-100 group-hover:border-blue-100 transition-colors">
-                    <InstitutionLogo nombre={op.institucion} size={48} />
-                </div>
-
                 <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap gap-2 mb-2">
                         <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600 rounded-full px-2.5 py-1">
