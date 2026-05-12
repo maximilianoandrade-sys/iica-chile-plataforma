@@ -65,7 +65,8 @@ export function parseFiaDeadline(html: string | undefined): Date | null {
   const [, day, monthName, year] = match;
   const month = MONTHS_ES[monthName.toLowerCase()];
   if (month === undefined) return null;
-  const date = new Date(Number(year), month, Number(day));
+  // Mediodía UTC para evitar bugs de TZ.
+  const date = new Date(Date.UTC(Number(year), month, Number(day), 12, 0, 0));
   return isNaN(date.getTime()) ? null : date;
 }
 

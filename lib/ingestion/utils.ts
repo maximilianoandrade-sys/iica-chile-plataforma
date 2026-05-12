@@ -31,7 +31,9 @@ export function parseSpanishDate(input: string): Date | null {
   const numeric = s.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/);
   if (numeric) {
     const [, d, m, y] = numeric;
-    const date = new Date(Number(y), Number(m) - 1, Number(d));
+    // Mediodía UTC para evitar bugs de timezone (un local UTC-X o UTC+X
+    // mostraría el mismo día sin shift).
+    const date = new Date(Date.UTC(Number(y), Number(m) - 1, Number(d), 12, 0, 0));
     return isNaN(date.getTime()) ? null : date;
   }
 
@@ -41,7 +43,7 @@ export function parseSpanishDate(input: string): Date | null {
     const [, d, monthName, y] = written;
     const month = MONTHS_ES[monthName];
     if (!month) return null;
-    const date = new Date(Number(y), month - 1, Number(d));
+    const date = new Date(Date.UTC(Number(y), month - 1, Number(d), 12, 0, 0));
     return isNaN(date.getTime()) ? null : date;
   }
 

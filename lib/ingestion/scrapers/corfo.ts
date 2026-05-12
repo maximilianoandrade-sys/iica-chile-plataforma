@@ -10,7 +10,8 @@ function parseCorfoDate(s: string): Date | null {
   const m = s.trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
   if (!m) return null;
   const [, d, mo, y] = m;
-  const date = new Date(Number(y), Number(mo) - 1, Number(d));
+  // Mediodía UTC para evitar bugs de TZ.
+  const date = new Date(Date.UTC(Number(y), Number(mo) - 1, Number(d), 12, 0, 0));
   return isNaN(date.getTime()) ? null : date;
 }
 

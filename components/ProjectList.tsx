@@ -14,7 +14,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info, Sparkles, Copy, Eye, CheckCheck, MapPin, Users, Banknote, Clock, ChevronRight, ArrowUpDown, FileText, HelpCircle, MonitorPlay, PenTool, CheckCircle2, XCircle, AlertTriangle, Zap } from "lucide-react";
 import { ActionButton, UrgencyBadge } from "@/components/ProjectItem";
 import { OportunidadCard, Oportunidad } from "./OportunidadCard";
-import { daysUntilClose } from "@/lib/data";
+import { daysUntilClose, formatDeadline, isDeadlineUnknown } from "@/lib/data";
 
 export default function ProjectList({ projects }: { projects: Project[] }) {
     // State for client-side interactions
@@ -99,7 +99,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
             `🏛️ Institución: ${project.institucion}`,
             `📂 Categoría: ${project.categoria}`,
             `💰 Monto máximo: ${monto}`,
-            `📅 Cierre: ${new Date(project.fecha_cierre).toLocaleDateString('es-CL')} (${estado})`,
+            `📅 Cierre: ${formatDeadline(project.fecha_cierre)} (${estado})`,
             project.resumen?.cofinanciamiento ? `🤝 Cofinanciamiento: ${project.resumen.cofinanciamiento}` : '',
             `🔗 Bases: ${project.url_bases}`,
         ].filter(Boolean).join('\n');
@@ -613,7 +613,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                 id: String(project.id),
                                                 nombre: project.nombre,
                                                 institucion: project.institucion,
-                                                cierre: new Date(project.fecha_cierre).toLocaleDateString('es-CL'),
+                                                cierre: formatDeadline(project.fecha_cierre),
                                                 diasRestantes: daysUntilClose(project),
                                                 ambito: (project.ambito as "Internacional" | "Nacional" | "Regional") || "Nacional",
                                                 viabilidad: (project.viabilidadIICA as "Alta" | "Media" | "Baja") || "Media",
@@ -653,7 +653,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                 id: String(project.id),
                                                 nombre: project.nombre,
                                                 institucion: project.institucion,
-                                                cierre: new Date(project.fecha_cierre).toLocaleDateString('es-CL'),
+                                                cierre: formatDeadline(project.fecha_cierre),
                                                 diasRestantes: daysUntilClose(project),
                                                 ambito: (project.ambito as "Internacional" | "Nacional" | "Regional") || "Nacional",
                                                 viabilidad: (project.viabilidadIICA as "Alta" | "Media" | "Baja") || "Media",
