@@ -62,12 +62,15 @@ export const cnrScraper: Scraper = {
 
     const $ = load(html);
 
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+
     $("tr").each((_, el) => {
       try {
         const $tr = $(el);
         const $link = $tr.find('a[href*="ley18450.cnr.gob.cl"]').first();
-        const url = $link.attr("href");
-        if (!url) return;
+        const detailUrl = $link.attr("href");
+        if (!detailUrl) return;
 
         // children("td") = solo cells directos (no recursivo en nested tables)
         const $cells = $tr.children("td");
@@ -83,7 +86,9 @@ export const cnrScraper: Scraper = {
           return;
         }
 
-        // Fechas: la última cell con DD-MM-YYYY es el cierre
+        // Fechas: cells[4] = apertura, cells[5] = publicación bases,
+        // última cell con DD-MM-YYYY = cierre.
+        const publicacionBases = parseCnrDate(cleanText($cells.eq(5).text()));
         let deadline: Date | null = null;
         for (let i = $cells.length - 1; i >= 4; i--) {
           const d = parseCnrDate(cleanText($cells.eq(i).text()));
@@ -93,8 +98,19 @@ export const cnrScraper: Scraper = {
           }
         }
 
+        // El sitio de detalle (ley18450.cnr.gob.cl) es una SPA Java que
+        // solo muestra contenido REAL una vez que se PUBLICARON LAS BASES
+        // del concurso (cell[5]). Antes de eso devuelve un shell vacío
+        // que parece "página rota". En ese caso apuntamos al listado del
+        // calendario donde el usuario ve la fila con código y fechas.
+        const stillFuture = publicacionBases && publicacionBases.getTime() > today.getTime();
+        const url = stillFuture ? this.homepageUrl : detailUrl;
+
         const montoText = montoUf ? `Monto: ${montoUf} mil UF.` : "";
         const regionesText = regiones ? `Regiones: ${regiones.slice(0, 200)}.` : "";
+        const futureNote = stillFuture
+          ? ` (Aún no abierto — link al calendario; el detalle estará disponible desde la fecha de apertura)`
+          : "";
 
         projects.push({
           title: `Concurso CNR ${code}: ${title}`,
