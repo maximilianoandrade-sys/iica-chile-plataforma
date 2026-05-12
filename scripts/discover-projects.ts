@@ -32,15 +32,34 @@ import { normalizeUrl, parseSpanishDate, resolveShortUrl } from "../lib/ingestio
 
 const RESEARCH_PROMPT = `Investigá usando Google Search qué convocatorias de financiamiento agrícola están ABIERTAS HOY para el IICA Chile.
 
-Buscá específicamente en:
-- fontagro.org (convocatorias 2026)
-- fao.org/chile y fao.org/americas (TCP)
-- iadb.org (BID asistencia técnica Chile)
-- ifad.org (FIDA)
-- thegef.org y greenclimate.fund
-- euroclima.org
-- fia.cl, indap.gob.cl, corfo.cl
-- developmentaid.org
+FUENTES PRIORITARIAS (cobertura del scraper determinístico es PARCIAL en
+estas, así que tu rol es fundamental):
+- fontagro.org/iniciativas/convocatorias (Fondo Regional Tecnología
+  Agropecuaria — convocatorias 2026, IICA es miembro y puede liderar)
+- ifad.org / fida (operations/country/chile + en fondos como FO4IMPACT,
+  Rural Poverty Reduction Trust, oportunidades para Chile)
+- undp.org / pnud.cl (calls, funding opportunities Chile, especialmente
+  cambio climático, agricultura familiar y desarrollo rural)
+- fao.org/chile, fao.org/in-action/tcp (Programa Cooperación Técnica),
+  fao.org/agronoticias (convocatorias agrícolas LAC)
+- indap.gob.cl/convocatorias y indap.gob.cl/plataforma-de-servicios
+  (programas continuos: PRODESAL, PAP, PDI, PDTI — buscar postulaciones
+  vigentes y plazos por región)
+
+FUENTES SECUNDARIAS (ya cubiertas por scrapers determinísticos, evitá
+duplicar a menos que encuentres algo NUEVO que no esté listado):
+- fia.cl/convocatorias (ya scrapeado)
+- corfo.gob.cl/sites/cpp/convocatoria/ (ya scrapeado, solo Innovación)
+- cnr.gob.cl/agricultores/calendario-de-concurso/ (ya scrapeado)
+- iica.int/es/licitaciones (ya scrapeado)
+
+FUENTES COMPLEMENTARIAS:
+- iadb.org / BID (asistencia técnica agrícola, sector agropecuario Chile)
+- thegef.org / greenclimate.fund (adaptación climática, agricultura
+  resiliente Chile)
+- euroclima.org (cooperación UE-AL en cambio climático agrícola)
+- developmentaid.org (agregador de oportunidades de desarrollo)
+- agci.cl (Agencia Chilena de Cooperación Internacional al Desarrollo)
 
 Para cada convocatoria que encuentres ABIERTA y vigente, dame:
 - Título exacto

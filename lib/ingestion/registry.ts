@@ -1,6 +1,7 @@
 import type { Scraper } from "./types";
 import { fiaScraper } from "./scrapers/fia";
 import { corfoScraper } from "./scrapers/corfo";
+import { cnrScraper } from "./scrapers/cnr";
 import { iicaHemisfericoScraper } from "./scrapers/iica-hemisferico";
 
 /**
@@ -26,6 +27,7 @@ import { iicaHemisfericoScraper } from "./scrapers/iica-hemisferico";
 export const scrapers: Scraper[] = [
   fiaScraper,
   corfoScraper,
+  cnrScraper,
   iicaHemisfericoScraper,
 ];
 
