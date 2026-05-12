@@ -74,6 +74,13 @@ model Project {
   needsReview               Boolean  @default(false)
   firstSeenAt               DateTime @default(now())
   lastSeenAt                DateTime @default(now())
+
+  // Búsqueda híbrida (gestionadas por SQL raw, NO por Prisma)
+  // embedding: vector(768) — Gemini text-embedding-004
+  // search_vector: tsvector GENERATED desde nombre+institucion+objetivo+descripcionIICA
+  // Ambas columnas se crean/mantienen via migración SQL, no via prisma migrate.
+  embedding                 Unsupported("vector(768)")?
+  search_vector             Unsupported("tsvector")?
   
   favoritos                 Favorito[]
   
