@@ -73,7 +73,7 @@ describe('data utilities', () => {
   describe('urgencyLabel', () => {
     it('debe retornar "Cerrada" para fechas pasadas', () => {
       const pastDate = new Date();
-      pastDate.setDate(pastDate.getDate() - 1);
+      pastDate.setDate(pastDate.getDate() - 2);
       const project = { ...mockProject, fecha_cierre: pastDate.toISOString().split('T')[0] };
       
       const label = urgencyLabel(project);

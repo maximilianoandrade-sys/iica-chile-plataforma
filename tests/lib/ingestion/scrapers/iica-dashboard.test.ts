@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 // Use cheerio/slim to avoid undici's ReadableStream requirement in jsdom
+// @ts-expect-error cheerio/slim types are not resolved under current moduleResolution
 import { load } from "cheerio/slim";
 import { COUNTERPARTS_IICA_CHILE, getByCategory, TOTAL_COUNTERPARTS } from "../../../../lib/ingestion/counterparts-iica";
 import { parseSpanishDate, cleanText } from "../../../../lib/ingestion/utils";
@@ -21,7 +22,7 @@ function parseHtmlListaProgramas(html: string): ParsedProject[] {
   const items: ParsedProject[] = [];
   const detailBase = "https://apps.iica.int/dashboardproyectos/";
 
-  $("li.item.row").each((_i, li) => {
+  $("li.item.row").each((_i: number, li: unknown) => {
     const link = $(li).find("h3 a");
     if (!link.length) return;
     const title = link.text().trim();
@@ -35,7 +36,7 @@ function parseHtmlListaProgramas(html: string): ParsedProject[] {
     let startDate: string | null = null;
     let endDate: string | null = null;
 
-    $(li).find(".add-data").each((_j, div) => {
+    $(li).find(".add-data").each((_j: number, div: unknown) => {
       const strong = $(div).find("strong").text().trim().toLowerCase();
       const value = $(div).text().replace($(div).find("strong").text(), "").trim();
 
