@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import ProjectFilters from '@/components/ProjectFilters';
 import { useRouter, useSearchParams } from 'next/navigation';
+import type { ReadonlyURLSearchParams } from 'next/navigation';
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
@@ -15,6 +16,9 @@ jest.mock('@/hooks/useAnalytics', () => ({
 
 const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>;
 const mockUseSearchParams = useSearchParams as jest.MockedFunction<typeof useSearchParams>;
+
+const asReadonlySearchParams = (params: URLSearchParams): ReadonlyURLSearchParams =>
+  params as unknown as ReadonlyURLSearchParams;
 
 describe('ProjectFilters', () => {
   const mockPush = jest.fn();
@@ -40,7 +44,7 @@ describe('ProjectFilters', () => {
       back: jest.fn(),
       forward: jest.fn(),
     } as any);
-    mockUseSearchParams.mockReturnValue(mockParams);
+    mockUseSearchParams.mockReturnValue(asReadonlySearchParams(mockParams));
   });
 
   it('debe renderizar el componente correctamente', () => {
@@ -124,7 +128,7 @@ describe('ProjectFilters', () => {
 
   it('debe mostrar boton de limpiar filtros cuando hay filtros activos', () => {
     const paramsWithFilters = new URLSearchParams({ q: 'test', category: 'Innovacion' });
-    mockUseSearchParams.mockReturnValue(paramsWithFilters);
+    mockUseSearchParams.mockReturnValue(asReadonlySearchParams(paramsWithFilters));
     
     render(<ProjectFilters {...defaultProps} />);
     

@@ -203,7 +203,6 @@ export async function getLiveFeeds(): Promise<{
 
     try {
         const res = await fetch('https://fondos.gob.cl', {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             next: { revalidate: 3600 }, // ISR Next.js: revalidar cada hora
             headers: {
                 'Accept': 'text/html',

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { LayoutDashboard, GripVertical, CheckCircle2, ChevronRight, Briefcase, Play, Inbox, Send, ChevronLeft, User, ListTodo, AlertCircle, Trash2, Plus } from 'lucide-react';
 import projectsData from '@/data/projects.json';
 import { Project } from '@/lib/data';
@@ -34,9 +34,35 @@ const INITIAL_CHECKLIST = [
 ];
 
 export default function PipelinePage() {
-  const [tasks, setTasks] = useState<KanbanTask[]>([]);
-  const [isClient, setIsClient] = useState(false);
-  const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null);
+  const [tasks, setTasks] = React.useState<KanbanTask[]>([]);
+  const [isClient, setIsClient] = React.useState(false);
+  const [draggedTaskId, setDraggedTaskId] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    setIsClient(true);
+    const saved = getPipelineTasks();
+    if (saved && saved.length > 0) {
+      setTasks(saved as KanbanTask[]);
+    } else {
+      const initialTasks: KanbanTask[] = projectsData.slice(0, 6).map((p, idx) => ({
+        id: String(p.id),
+        project: p as Project,
+        column: idx === 0 ? 'borrador' : idx < 3 ? 'analisis' : 'descubierto',
+        priority: idx % 3 === 0 ? 'Alta' : 'Media',
+        responsible: idx % 2 === 0 ? 'Maximiliano Andrade' : 'Unidad Técnica IICA',
+        checklist: [...INITIAL_CHECKLIST],
+        lastUpdate: new Date().toISOString()
+      }));
+      setTasks(initialTasks);
+      savePipelineTasks(initialTasks);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (isClient && tasks.length >= 0) {
+      savePipelineTasks(tasks);
+    }
+  }, [tasks, isClient]);
 
   if (!isClient) {
     return (
@@ -58,32 +84,6 @@ export default function PipelinePage() {
       </div>
     );
   }
-
-  useEffect(() => {
-    setIsClient(true);
-    const saved = getPipelineTasks();
-    if (saved && saved.length > 0) {
-      setTasks(saved as KanbanTask[]);
-    } else {
-      const initialTasks: KanbanTask[] = projectsData.slice(0, 6).map((p, idx) => ({
-        id: String(p.id),
-        project: p as Project,
-        column: idx === 0 ? 'borrador' : idx < 3 ? 'analisis' : 'descubierto',
-        priority: idx % 3 === 0 ? 'Alta' : 'Media',
-        responsible: idx % 2 === 0 ? 'Maximiliano Andrade' : 'Unidad Técnica IICA',
-        checklist: [...INITIAL_CHECKLIST],
-        lastUpdate: new Date().toISOString()
-      }));
-      setTasks(initialTasks);
-      savePipelineTasks(initialTasks);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isClient && tasks.length >= 0) {
-      savePipelineTasks(tasks);
-    }
-  }, [tasks, isClient]);
 
   const handleDragStart = (id: string) => {
     setDraggedTaskId(id);
