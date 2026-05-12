@@ -1,10 +1,11 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { getProjects } from '@/lib/data';
+import { getProjects, displayMonto } from '@/lib/data';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import Link from 'next/link';
 import { ExternalLink, ArrowLeft, Calendar, CheckCircle, Info, MapPin, Users, DollarSign } from 'lucide-react';
+import { ActionButton } from '@/components/ProjectItem';
 
 interface Props {
     params: Promise<{ id: string }>;
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         description: `${project.institucion} · ${project.categoria} · Cierre: ${new Date(project.fecha_cierre).toLocaleDateString('es-CL')}. ${project.resumen?.observaciones || ''}`,
         openGraph: {
             title: project.nombre,
-            description: `Fondo de ${project.institucion}. Monto: ${project.monto > 0 ? `$${(project.monto / 1000000).toFixed(0)}M` : 'Consultar'}. Cierre: ${new Date(project.fecha_cierre).toLocaleDateString('es-CL')}`,
+            description: `Fondo de ${project.institucion}. Monto: ${displayMonto(project)}. Cierre: ${new Date(project.fecha_cierre).toLocaleDateString('es-CL')}`,
         }
     };
 }
@@ -48,11 +49,10 @@ export default async function ProyectoDetallePage({ params }: Props) {
     const diffDays = Math.ceil((closingDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
     const isUrgent = diffDays <= 7 && diffDays >= 0;
 
-    const montoFormatted = project.monto > 0
-        ? project.monto >= 1_000_000_000
-            ? `$${(project.monto / 1_000_000_000).toFixed(1)} mil millones`
-            : `$${(project.monto / 1_000_000).toFixed(0)} millones`
-        : 'Consultar institución';
+    // Prefiere montoTexto (string crudo con unidad: "8.500 UF", "USD 50,000")
+    // sobre el numérico, que asume CLP y pierde la unidad real.
+    const montoDisplay = displayMonto(project);
+    const montoFormatted = montoDisplay === 'Ver bases' ? 'Consultar institución' : montoDisplay;
 
     return (
         <div className="min-h-screen flex flex-col bg-[#f4f7f9]">
@@ -233,15 +233,12 @@ export default async function ProyectoDetallePage({ params }: Props) {
                                 ⚠️ Verifica siempre las fechas y requisitos en el sitio oficial antes de postular.
                             </div>
                             {!isClosed && (
-                                <a
-                                    href={project.url_bases}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 bg-[var(--iica-secondary)] hover:bg-green-600 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl min-h-[52px] text-base"
-                                >
-                                    Ver Bases Oficiales
-                                    <ExternalLink className="h-5 w-5" />
-                                </a>
+                                <ActionButton
+                                    url={project.url_bases}
+                                    date={project.fecha_cierre}
+                                    projectName={project.nombre}
+                                    institution={project.institucion}
+                                />
                             )}
                         </div>
                     </div>

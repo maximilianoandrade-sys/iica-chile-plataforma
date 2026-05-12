@@ -1,0 +1,47 @@
+name: AI Discovery — Capa B (semanal)
+
+on:
+  schedule:
+    # Cada lunes a las 12:00 UTC (08:00 Chile)
+    - cron: "0 12 * * 1"
+  workflow_dispatch:
+    inputs:
+      query:
+        description: "Query adicional para guiar el scan (opcional)"
+        required: false
+        default: ""
+
+jobs:
+  discover:
+    name: Escanear web con Gemini + Google Search
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Run AI Discovery
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+          DISCOVERY_QUERY: ${{ github.event.inputs.query }}
+        run: npx tsx scripts/discover-projects.ts
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Resultado del descubrimiento" >> $GITHUB_STEP_SUMMARY
+          echo "- Ejecutado: $(date -u +%FT%TZ)" >> $GITHUB_STEP_SUMMARY
+          echo "- Disparador: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY

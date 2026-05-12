@@ -9,10 +9,19 @@ const VALID_KEYWORDS = [
 ];
 
 const EXCLUDE_KEYWORDS = [
+  // Construcción / obras / mantenimiento
   "construcción", "construccion", "obra", "vehículo", "vehiculo", "guardia", "limpieza",
-  "computador", "software", "equipo médico", "alimentación", "alimentacion", "hospital",
   "catering", "mantención", "mantencion", "arriendo", "pasaje", "hotel", "mobiliario",
-  "aseo", "seguridad", "pavimentación", "hormigón", "camioneta",
+  "aseo", "seguridad", "pavimentación", "hormigón", "camioneta", "carpintería",
+  // Tecnología no agrícola
+  "computador", "software", "licencia office", "impresora", "telefonía", "telefonia",
+  // Médico / salud (no aplica al mandato IICA)
+  "equipo médico", "equipo medico", "hospital", "mamograf", "ecograf", "radiograf",
+  "tomograf", "examen médico", "examen medico", "examen de ", "médico clínico",
+  "medico clinico", "clínico", "clinico", "dental", "odontolog", "quirúrgic", "quirurgic",
+  "ambulancia", "fármaco", "farmaco", "medicamento", "atención de salud", "atencion de salud",
+  // Alimentación institucional (no agrícola)
+  "alimentación", "alimentacion", "raciones", "almuerzo escolar", "minuta alimenticia",
 ];
 
 export interface MercadoPublicoResult extends RawProject {

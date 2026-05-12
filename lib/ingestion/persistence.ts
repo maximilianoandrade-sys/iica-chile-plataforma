@@ -13,7 +13,10 @@ export async function upsertProject(
   if (!validation.ok) {
     return { skipped: true, reason: validation.reason };
   }
-  const canonicalUrl = normalizeUrl(raw.url);
+  // canonicalKey permite a scrapers usar una llave única distinta a la URL
+  // que se muestra al usuario (ej. CNR apunta múltiples concursos al mismo
+  // listing URL pero los distingue por código de concurso).
+  const canonicalUrl = normalizeUrl(raw.canonicalKey || raw.url);
   if (!canonicalUrl) {
     return { skipped: true, reason: "URL no normalizable" };
   }
@@ -30,6 +33,10 @@ export async function upsertProject(
     url_bases: raw.url,
     fecha_cierre: raw.deadline ?? new Date("2099-12-31"),
     monto: parseAmount(raw.budget || "") ?? 0,
+    // Guardamos el monto tal cual viene de la fuente (con unidad: "8.500 UF",
+    // "USD 50,000", "$100M") para que el UI pueda mostrarlo sin perder la
+    // unidad. El campo numérico `monto` se conserva para filtros y orden.
+    montoTexto: raw.budget?.trim() || null,
     estado: "Abierto",
     categoria: raw.tags?.[0] ?? "General",
     objetivo: raw.description ?? "",

@@ -1,4 +1,6 @@
-import { normalizeUrl, parseSpanishDate, parseAmount, cleanText, absoluteUrl } from "../../../lib/ingestion/utils";
+import { normalizeUrl, parseSpanishDate, parseAmount, cleanText, absoluteUrl, resolveShortUrl } from "../../../lib/ingestion/utils";
+
+global.fetch = jest.fn();
 
 describe("normalizeUrl", () => {
   it("baja a minúsculas", () => {
@@ -64,5 +66,46 @@ describe("absoluteUrl", () => {
   });
   it("absoluta se conserva", () => {
     expect(absoluteUrl("https://b.com/y", "https://a.com/")).toBe("https://b.com/y");
+  });
+});
+
+describe("resolveShortUrl", () => {
+  beforeEach(() => {
+    (global.fetch as jest.Mock).mockReset();
+  });
+
+  it("sigue redirect en bit.ly y devuelve URL final", async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      url: "https://www.corfo.gob.cl/sites/cpp/convocatoria/pdt-tarapaca-2026/",
+    });
+    const r = await resolveShortUrl("https://bit.ly/48BnjcK");
+    expect(r).toBe("https://www.corfo.gob.cl/sites/cpp/convocatoria/pdt-tarapaca-2026/");
+    expect(global.fetch).toHaveBeenCalled();
+  });
+
+  it("no toca URLs que no son shorteners", async () => {
+    const r = await resolveShortUrl("https://www.corfo.gob.cl/sites/cpp/convocatoria/algo/");
+    expect(r).toBe("https://www.corfo.gob.cl/sites/cpp/convocatoria/algo/");
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+
+  it("devuelve URL original si el redirect falla", async () => {
+    (global.fetch as jest.Mock).mockRejectedValue(new Error("timeout"));
+    const r = await resolveShortUrl("https://bit.ly/dead");
+    expect(r).toBe("https://bit.ly/dead");
+  });
+
+  it("acepta varios dominios de shorteners conocidos", async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({ url: "https://example.com/real" });
+    for (const sho of ["t.co", "goo.gl", "tinyurl.com", "lnkd.in"]) {
+      const r = await resolveShortUrl(`https://${sho}/abc`);
+      expect(r).toBe("https://example.com/real");
+    }
+  });
+
+  it("devuelve input sin tocar si no es URL parseable", async () => {
+    const r = await resolveShortUrl("not a url");
+    expect(r).toBe("not a url");
+    expect(global.fetch).not.toHaveBeenCalled();
   });
 });

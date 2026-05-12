@@ -14,7 +14,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info, Sparkles, Copy, Eye, CheckCheck, MapPin, Users, Banknote, Clock, ChevronRight, ArrowUpDown, FileText, HelpCircle, MonitorPlay, PenTool, CheckCircle2, XCircle, AlertTriangle, Zap } from "lucide-react";
 import { ActionButton, UrgencyBadge } from "@/components/ProjectItem";
 import { OportunidadCard, Oportunidad } from "./OportunidadCard";
-import { daysUntilClose } from "@/lib/data";
+import { daysUntilClose, formatDeadline, isDeadlineUnknown, displayMonto } from "@/lib/data";
 
 export default function ProjectList({ projects }: { projects: Project[] }) {
     // State for client-side interactions
@@ -116,15 +116,13 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
         const closeDate = new Date(project.fecha_cierre);
         const diffDays = Math.ceil((closeDate.getTime() - today.getTime()) / 86400000);
         const estado = diffDays < 0 ? 'CERRADO' : `Abierto – cierra en ${diffDays} días`;
-        const monto = project.monto > 0
-            ? `$${(project.monto / 1000000).toFixed(0)}M`
-            : 'Ver bases';
+        const monto = displayMonto(project);
         const texto = [
             `📋 ${project.nombre}`,
             `🏛️ Institución: ${project.institucion}`,
             `📂 Categoría: ${project.categoria}`,
             `💰 Monto máximo: ${monto}`,
-            `📅 Cierre: ${new Date(project.fecha_cierre).toLocaleDateString('es-CL')} (${estado})`,
+            `📅 Cierre: ${formatDeadline(project.fecha_cierre)} (${estado})`,
             project.resumen?.cofinanciamiento ? `🤝 Cofinanciamiento: ${project.resumen.cofinanciamiento}` : '',
             `🔗 Bases: ${project.url_bases}`,
         ].filter(Boolean).join('\n');
@@ -650,7 +648,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                 id: String(project.id),
                                                 nombre: project.nombre,
                                                 institucion: project.institucion,
-                                                cierre: new Date(project.fecha_cierre).toLocaleDateString('es-CL'),
+                                                cierre: formatDeadline(project.fecha_cierre),
                                                 diasRestantes: daysUntilClose(project),
                                                 ambito: (project.ambito as "Internacional" | "Nacional" | "Regional") || "Nacional",
                                                 viabilidad: (project.viabilidadIICA as "Alta" | "Media" | "Baja") || "Media",
@@ -690,7 +688,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                 id: String(project.id),
                                                 nombre: project.nombre,
                                                 institucion: project.institucion,
-                                                cierre: new Date(project.fecha_cierre).toLocaleDateString('es-CL'),
+                                                cierre: formatDeadline(project.fecha_cierre),
                                                 diasRestantes: daysUntilClose(project),
                                                 ambito: (project.ambito as "Internacional" | "Nacional" | "Regional") || "Nacional",
                                                 viabilidad: (project.viabilidadIICA as "Alta" | "Media" | "Baja") || "Media",
@@ -839,14 +837,14 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                             </div>
 
                                             <div className="mt-4 pt-4 border-t border-gray-200">
-                                                <a
-                                                    href={project.url_bases}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="block w-full text-center bg-[var(--iica-blue)] text-white font-bold py-2 rounded hover:bg-[var(--iica-navy)] transition-colors"
-                                                >
-                                                    Ver Bases
-                                                </a>
+                                                <div className="flex justify-center">
+                                                    <ActionButton
+                                                        url={project.url_bases}
+                                                        date={project.fecha_cierre}
+                                                        projectName={project.nombre}
+                                                        institution={project.institucion}
+                                                    />
+                                                </div>
                                                 <button
                                                     onClick={() => toggleCompare(project.id)}
                                                     className="block w-full text-center text-red-500 text-xs mt-2 hover:underline"
@@ -926,9 +924,9 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                             <Banknote className="h-3 w-3" /> Monto Máximo
                                         </p>
                                         <p className="font-bold text-[var(--iica-navy)] text-lg">
-                                            {quickViewProject.monto > 0
-                                                ? `$${(quickViewProject.monto / 1000000).toFixed(0)}M`
-                                                : <span className="text-sm text-gray-500">Ver bases</span>}
+                                            {displayMonto(quickViewProject) === 'Ver bases'
+                                                ? <span className="text-sm text-gray-500">Ver bases</span>
+                                                : displayMonto(quickViewProject)}
                                         </p>
                                     </div>
                                 </div>
@@ -1019,14 +1017,14 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                         ? <><CheckCheck className="h-4 w-4" /> ¡Copiado!</>
                                         : <><Copy className="h-4 w-4" /> Copiar Ficha</>}
                                 </button>
-                                <a
-                                    href={quickViewProject.url_bases}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-bold text-sm bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] text-white transition-colors"
-                                >
-                                    <ExternalLink className="h-4 w-4" /> Ver Bases
-                                </a>
+                                <div className="flex-1 flex justify-center">
+                                    <ActionButton
+                                        url={quickViewProject.url_bases}
+                                        date={quickViewProject.fecha_cierre}
+                                        projectName={quickViewProject.nombre}
+                                        institution={quickViewProject.institucion}
+                                    />
+                                </div>
                             </div>
                         </motion.div>
                     </>

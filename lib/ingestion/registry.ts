@@ -1,16 +1,33 @@
 import type { Scraper } from "./types";
 import { fiaScraper } from "./scrapers/fia";
-import { indapScraper } from "./scrapers/indap";
 import { corfoScraper } from "./scrapers/corfo";
-import { fontagroScraper } from "./scrapers/fontagro";
+import { cnrScraper } from "./scrapers/cnr";
 import { iicaHemisfericoScraper } from "./scrapers/iica-hemisferico";
 
-/** Lightweight scrapers (Cheerio-based) suitable for serverless environments */
+/**
+ * Scrapers de Capa A (determinísticos, corren diario vía GitHub Actions).
+ *
+ * QUÉ NO ESTÁ ACÁ Y POR QUÉ:
+ * ─────────────────────────
+ * - INDAP: opera con programas continuos (PRODESAL, PAP, PDI...) no
+ *   convocatorias time-bound. La plata pública concreta va a Mercado
+ *   Público (capturado en runtime por /api/search-projects). AI Discovery
+ *   semanal cubre lo demás. El scraper inicial devolvía 0 hits.
+ *
+ * - FONTAGRO: el sitio no expone WP REST ni API pública. El scraper
+ *   genérico de Cheerio devolvía 0 hits porque sus clases CSS no eran
+ *   estándar. AI Discovery semanal lo captura mejor que un scraper
+ *   roto. Los archivos lib/ingestion/scrapers/indap.ts y fontagro.ts
+ *   se mantienen como referencia/punto de partida para reescribirlos
+ *   con Playwright en el futuro si se invierte el tiempo.
+ *
+ * - IICA Dashboard (Playwright): requiere browser headless + cookie
+ *   Cloudflare persistente. Se corre separadamente (ver export más abajo).
+ */
 export const scrapers: Scraper[] = [
   fiaScraper,
-  indapScraper,
   corfoScraper,
-  fontagroScraper,
+  cnrScraper,
   iicaHemisfericoScraper,
 ];
 

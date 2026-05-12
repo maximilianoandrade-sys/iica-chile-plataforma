@@ -11,6 +11,7 @@ export interface Project {
     nombre: string;
     institucion: string;
     monto: number;
+    montoTexto?: string | null;   // Monto tal cual viene de la fuente (con unidad)
     fecha_cierre: string;   // YYYY-MM-DD
     estado: string;
     categoria: string;
@@ -102,8 +103,36 @@ export interface Project {
 // HELPERS DE DATOS
 // ============================================================================
 
-/** Calcula días hasta cierre (negativo = ya cerró) */
+/**
+ * "Fecha desconocida": el pipeline de ingesta usa 2099-12-31 como placeholder
+ * cuando un scraper o AI Discovery no pudo extraer la fecha de cierre real.
+ * Esta función detecta ese caso para que el UI muestre "Sin fecha definida"
+ * en lugar de "31/12/2099".
+ */
+export function isDeadlineUnknown(date: Date | string | null | undefined): boolean {
+    if (!date) return true;
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return true;
+    return d.getUTCFullYear() >= 2099;
+}
+
+/**
+ * Formato user-friendly de fecha de cierre:
+ *  - "Sin fecha definida" si el placeholder 2099 o null
+ *  - "31/05/2026" en formato chileno si tiene fecha real
+ */
+export function formatDeadline(date: Date | string | null | undefined): string {
+    if (isDeadlineUnknown(date)) return "Sin fecha definida";
+    return new Date(date!).toLocaleDateString('es-CL', {
+        timeZone: 'UTC',  // Las fechas se almacenan a mediodía UTC para
+                          // estabilidad cross-timezone. Forzar UTC al
+                          // formatear evita off-by-one en otras TZ.
+    });
+}
+
+/** Calcula días hasta cierre (negativo = ya cerró, null = sin fecha) */
 export function daysUntilClose(project: Project): number {
+    if (isDeadlineUnknown(project.fecha_cierre)) return 999; // tratado como "indefinido"
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const close = new Date(project.fecha_cierre);
@@ -141,6 +170,17 @@ export function formatMontoCLP(monto: number): string {
     if (monto >= 1_000_000_000) return `$${(monto / 1_000_000_000).toFixed(1)}B`;
     if (monto >= 1_000_000) return `$${(monto / 1_000_000).toFixed(0)}M`;
     return `$${monto.toLocaleString('es-CL')}`;
+}
+
+/**
+ * Monto listo para mostrar al usuario. Prefiere `montoTexto` (string crudo
+ * de la fuente con su unidad, ej. "8.500 UF" o "USD 50,000") cuando está
+ * presente, porque el monto numérico chileno suele estar en UF/USD y la
+ * conversión a CLP pierde la unidad real.
+ */
+export function displayMonto(project: Project): string {
+    if (project.montoTexto && project.montoTexto.trim()) return project.montoTexto.trim();
+    return formatMontoCLP(project.monto);
 }
 
 /** Devuelve color semáforo para viabilidad IICA */

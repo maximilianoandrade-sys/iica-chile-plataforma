@@ -36,6 +36,12 @@ interface LinkCacheEntry {
 
 const linkCache = new Map<string, LinkCacheEntry>();
 const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 horas
+// Versión del schema de caché. Bumpear cuando cambia la lógica de check-link
+// para invalidar resultados cacheados anteriores (ej v2 agregó detección de
+// redirect-to-homepage y originalIsHomepage, que daban falsos "valid" antes).
+const CACHE_VERSION = 'v2';
+const CACHE_KEY = `iica_link_cache_${CACHE_VERSION}`;
+const LEGACY_CACHE_KEY = 'iica_link_cache';
 
 /**
  * Obtiene el estado del link desde caché
@@ -67,7 +73,7 @@ function cacheLinkStatus(url: string, status: LinkStatus): void {
     // Guardar en localStorage para persistencia
     try {
         const cacheData = Array.from(linkCache.entries());
-        localStorage.setItem('iica_link_cache', JSON.stringify(cacheData));
+        localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
     } catch (error) {
         console.warn('No se pudo guardar caché de enlaces:', error);
     }
@@ -78,7 +84,13 @@ function cacheLinkStatus(url: string, status: LinkStatus): void {
  */
 function loadLinkCache(): void {
     try {
-        const cached = localStorage.getItem('iica_link_cache');
+        // Eliminar caché viejo (v1) si todavía existe para liberar espacio
+        if (localStorage.getItem(LEGACY_CACHE_KEY)) {
+            localStorage.removeItem(LEGACY_CACHE_KEY);
+            console.info('[linkGuardian] Caché v1 eliminado tras actualización a v2');
+        }
+
+        const cached = localStorage.getItem(CACHE_KEY);
         if (cached) {
             const entries = JSON.parse(cached);
             const now = Date.now();

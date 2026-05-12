@@ -31,7 +31,9 @@ export function parseSpanishDate(input: string): Date | null {
   const numeric = s.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/);
   if (numeric) {
     const [, d, m, y] = numeric;
-    const date = new Date(Number(y), Number(m) - 1, Number(d));
+    // Mediodía UTC para evitar bugs de timezone (un local UTC-X o UTC+X
+    // mostraría el mismo día sin shift).
+    const date = new Date(Date.UTC(Number(y), Number(m) - 1, Number(d), 12, 0, 0));
     return isNaN(date.getTime()) ? null : date;
   }
 
@@ -41,7 +43,7 @@ export function parseSpanishDate(input: string): Date | null {
     const [, d, monthName, y] = written;
     const month = MONTHS_ES[monthName];
     if (!month) return null;
-    const date = new Date(Number(y), month - 1, Number(d));
+    const date = new Date(Date.UTC(Number(y), month - 1, Number(d), 12, 0, 0));
     return isNaN(date.getTime()) ? null : date;
   }
 
@@ -89,5 +91,67 @@ export function absoluteUrl(href: string, base: string): string {
     return new URL(href, base).toString();
   } catch {
     return href;
+  }
+}
+
+/**
+ * Dominios de acortadores de URL conocidos. Si una URL viene de uno de
+ * estos, conviene seguir el redirect para almacenar la URL real
+ * (mejor UX, mejor stale detection, mejor dedup).
+ */
+const URL_SHORTENERS = new Set([
+  "bit.ly",
+  "t.co",
+  "goo.gl",
+  "ow.ly",
+  "tinyurl.com",
+  "buff.ly",
+  "shorturl.at",
+  "lnkd.in",
+  "is.gd",
+  "rebrand.ly",
+  "rb.gy",
+  "cutt.ly",
+  // Vertex AI Search redirects (Gemini grounding devuelve estas URLs intermedias
+  // en lugar de la URL real de la fuente — hay que seguir el redirect HTTP).
+  "vertexaisearch.cloud.google.com",
+]);
+
+/**
+ * Si la URL viene de un acortador conocido, sigue el redirect y devuelve
+ * la URL real de destino. Si no es un acortador o el redirect falla,
+ * devuelve la URL original sin tocar.
+ *
+ * Útil principalmente en AI Discovery (Gemini a veces devuelve bit.ly).
+ * Los scrapers de sitios oficiales casi nunca van a hitar este código.
+ *
+ * Timeout 8s para no bloquear la ingesta si el resolver es lento.
+ */
+export async function resolveShortUrl(url: string): Promise<string> {
+  if (!url) return url;
+  let host: string;
+  try {
+    host = new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+  if (!URL_SHORTENERS.has(host)) return url;
+
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
+    const res = await fetch(url, {
+      method: "HEAD",
+      redirect: "follow",
+      signal: controller.signal,
+      headers: {
+        "User-Agent": "IICA-Chile-Bot/1.0 (+contacto@iica.cl)",
+      },
+    });
+    clearTimeout(timeoutId);
+    // res.url contiene la URL final tras seguir redirects
+    return res.url || url;
+  } catch {
+    return url;
   }
 }

@@ -52,6 +52,20 @@ describe("validateUrl", () => {
     expect((await validateUrl("")).ok).toBe(false);
   });
 
+  it("rechaza URL que es solo el dominio raíz (sin deep link)", async () => {
+    const r = await validateUrl("https://www.fia.cl/");
+    expect(r.ok).toBe(false);
+    expect(r.reason).toContain("homepage");
+    // No debería haber tocado fetch — el check es previo
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+
+  it("rechaza URL sin path después del dominio", async () => {
+    const r = await validateUrl("https://www.fia.cl");
+    expect(r.ok).toBe(false);
+    expect(r.reason).toContain("homepage");
+  });
+
   it("captura errores de red", async () => {
     (global.fetch as jest.Mock).mockRejectedValue(new Error("ETIMEDOUT"));
     const r = await validateUrl("https://example.com/x");
