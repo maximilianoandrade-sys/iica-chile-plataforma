@@ -1,5 +1,3 @@
-import projectData from '@/data/projects.json';
-
 // ============================================================================
 // TIPO PROJECT — Definición completa de todos los campos del JSON
 // ============================================================================
@@ -223,19 +221,23 @@ import prisma from './prisma';
 // ============================================================================
 
 export async function getProjects(): Promise<Project[]> {
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+
     try {
         const dbProjects = await prisma.project.findMany({
-            orderBy: {
-                fecha_cierre: 'asc'
-            }
+            where: {
+                fecha_cierre: { gte: today },
+                NOT: { estadoPostulacion: 'Cerrada' },
+            },
+            orderBy: { fecha_cierre: 'asc' },
         });
 
-        console.log(`[getProjects] Prisma OK: ${dbProjects.length} proyectos cargados desde DB`);
+        console.log(`[getProjects] Prisma OK: ${dbProjects.length} proyectos vigentes (fecha_cierre >= hoy, estado != Cerrada)`);
 
-        // Mapeamos los datos de la DB al formato de la interfaz Project
         return dbProjects.map(p => ({
             ...p,
-            fecha_cierre: p.fecha_cierre.toISOString().split('T')[0], // Convertir Date a string YYYY-MM-DD
+            fecha_cierre: p.fecha_cierre.toISOString().split('T')[0],
             webinar_fecha: p.webinar_fecha ? p.webinar_fecha.toISOString() : null,
             ambito: p.ambito as any,
             estadoPostulacion: p.estadoPostulacion as any,
@@ -244,11 +246,11 @@ export async function getProjects(): Promise<Project[]> {
             complejidad: p.complejidad as any
         })) as Project[];
     } catch (error) {
-        console.error("[getProjects] ERROR Prisma - cayendo al JSON de fallback:", error);
-        // Fallback al JSON si la DB falla
-        const projectData = require('@/data/projects.json');
-        console.error(`[getProjects] Fallback JSON cargado: ${projectData.length} proyectos`);
-        return projectData as Project[];
+        // Antes caíamos a data/projects.json (34 placeholders), lo que ocultaba la
+        // falla de DB y mostraba convocatorias ficticias al usuario. Mejor devolver
+        // vacío y que la UI muestre "sin resultados" hasta diagnosticar.
+        console.error("[getProjects] Prisma/Supabase falló — devolviendo lista vacía:", error);
+        return [];
     }
 }
 
