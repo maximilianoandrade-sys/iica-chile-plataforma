@@ -5328,6 +5328,73 @@
     "lastSeenAt": "2026-05-13T02:48:24.394Z"
   },
   {
+    "id": 134,
+    "nombre": "SIRSD-S 2026 – Sistema de Incentivos para la Sustentabilidad Agroambiental (SAG)",
+    "institucion": "SAG / MINAGRI",
+    "monto": 300000000,
+    "fecha_cierre": "2026-06-30",
+    "estado": "Abierto",
+    "categoria": "Nacional",
+    "url_bases": "https://www.sag.gob.cl/ambitos-de-accion/programa-de-recuperacion-de-suelos-degradados",
+    "regiones": [
+      "Todas"
+    ],
+    "beneficiarios": [
+      "Agricultor",
+      "Pequeño Agricultor",
+      "Agricultor familiar campesino"
+    ],
+    "monto_min": 10000000,
+    "monto_max": 300000000,
+    "plazo_meses": 24,
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "publicada",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Natural",
+      "Organizacion"
+    ],
+    "checklist": [],
+    "ambito": "Nacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 60,
+    "responsableIICA": "Ana Lía Gutiérrez",
+    "region": "Nacional",
+    "objetivo": "Posicionar al IICA como asesor técnico en formulación de planes SIRSD-S para agricultores",
+    "descripcionIICA": "El SIRSD-S es un programa REAL y verificado del SAG con concursos anuales por provincia. El IICA puede ofrecer asesoría técnica en formulación de planes de manejo agroambiental, especialmente en prácticas de conservación de suelos, materia orgánica y biodiversidad. Programa con presupuesto fijo anual significativo.",
+    "requisitos": [
+      "Alianza con agricultores o asociaciones que deseen postular",
+      "Expertise técnico en prácticas agroambientales",
+      "Conocimiento de normativa SAG SIRSD-S"
+    ],
+    "fortalezas": [
+      "Programa REAL verificado en sag.gob.cl — existe hace más de 10 años",
+      "Convocatoria permanente con fechas por provincia",
+      "Mandato IICA en agricultura sostenible perfectamente alineado",
+      "Bajo umbral de entrada como asesor técnico"
+    ],
+    "debilidades": [
+      "IICA no puede ser receptor directo del incentivo",
+      "Montos por agricultor relativamente pequeños",
+      "Alta carga de trabajo para asesorar múltiples postulantes"
+    ],
+    "notasInternas": "NUEVO REAL 11/03/2026. Fuente verificada: sag.gob.cl — Concursos SIRSD-S Temporada 2026 abiertos con calendarios provinciales. Programa emblemático SAG de sustentabilidad. Ana Lía debe mapear fechas por región prioritaria (Maule, Biobío, La Araucanía). Articular con INIA como socio técnico.",
+    "ejeIICA": "Bioeconomía y cambio climático",
+    "complejidad": "Fácil",
+    "rolIICA": "Asesor",
+    "createdAt": "2026-05-11T20:43:28.133Z",
+    "updatedAt": "2026-05-11T20:43:28.133Z",
+    "lastCheckedAt": "2026-05-11T20:43:28.133Z",
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "firstSeenAt": "2026-05-11T20:43:28.133Z",
+    "lastSeenAt": "2026-05-11T20:43:28.133Z"
+  },
+  {
     "id": 103,
     "nombre": "FIDA – Proyecto de Inclusión Financiera para Pequeños Agricultores Andinos",
     "institucion": "FIDA",
@@ -5393,73 +5460,6 @@
     "needsReview": false,
     "firstSeenAt": "2026-05-11T20:43:21.813Z",
     "lastSeenAt": "2026-05-11T20:43:21.813Z"
-  },
-  {
-    "id": 134,
-    "nombre": "SIRSD-S 2026 – Sistema de Incentivos para la Sustentabilidad Agroambiental (SAG)",
-    "institucion": "SAG / MINAGRI",
-    "monto": 300000000,
-    "fecha_cierre": "2026-06-30",
-    "estado": "Abierto",
-    "categoria": "Nacional",
-    "url_bases": "https://www.sag.gob.cl/ambitos-de-accion/sirsd-s-sistema-de-incentivos-para-la-sustentabilidad-agroambiental-de-los-suelos",
-    "regiones": [
-      "Todas"
-    ],
-    "beneficiarios": [
-      "Agricultor",
-      "Pequeño Agricultor",
-      "Agricultor familiar campesino"
-    ],
-    "monto_min": 10000000,
-    "monto_max": 300000000,
-    "plazo_meses": 24,
-    "requiere_cofinanciamiento": false,
-    "idioma": "es",
-    "faq_disponible": true,
-    "permite_adendas": false,
-    "bases_estado": "publicada",
-    "requiere_firma": true,
-    "tipos_solicitante": [
-      "Natural",
-      "Organizacion"
-    ],
-    "checklist": [],
-    "ambito": "Nacional",
-    "estadoPostulacion": "Abierta",
-    "viabilidadIICA": "Media",
-    "porcentajeViabilidad": 60,
-    "responsableIICA": "Ana Lía Gutiérrez",
-    "region": "Nacional",
-    "objetivo": "Posicionar al IICA como asesor técnico en formulación de planes SIRSD-S para agricultores",
-    "descripcionIICA": "El SIRSD-S es un programa REAL y verificado del SAG con concursos anuales por provincia. El IICA puede ofrecer asesoría técnica en formulación de planes de manejo agroambiental, especialmente en prácticas de conservación de suelos, materia orgánica y biodiversidad. Programa con presupuesto fijo anual significativo.",
-    "requisitos": [
-      "Alianza con agricultores o asociaciones que deseen postular",
-      "Expertise técnico en prácticas agroambientales",
-      "Conocimiento de normativa SAG SIRSD-S"
-    ],
-    "fortalezas": [
-      "Programa REAL verificado en sag.gob.cl — existe hace más de 10 años",
-      "Convocatoria permanente con fechas por provincia",
-      "Mandato IICA en agricultura sostenible perfectamente alineado",
-      "Bajo umbral de entrada como asesor técnico"
-    ],
-    "debilidades": [
-      "IICA no puede ser receptor directo del incentivo",
-      "Montos por agricultor relativamente pequeños",
-      "Alta carga de trabajo para asesorar múltiples postulantes"
-    ],
-    "notasInternas": "NUEVO REAL 11/03/2026. Fuente verificada: sag.gob.cl — Concursos SIRSD-S Temporada 2026 abiertos con calendarios provinciales. Programa emblemático SAG de sustentabilidad. Ana Lía debe mapear fechas por región prioritaria (Maule, Biobío, La Araucanía). Articular con INIA como socio técnico.",
-    "ejeIICA": "Bioeconomía y cambio climático",
-    "complejidad": "Fácil",
-    "rolIICA": "Asesor",
-    "createdAt": "2026-05-11T20:43:28.133Z",
-    "updatedAt": "2026-05-11T20:43:28.133Z",
-    "lastCheckedAt": "2026-05-11T20:43:28.133Z",
-    "discoveredBy": "manual",
-    "needsReview": false,
-    "firstSeenAt": "2026-05-11T20:43:28.133Z",
-    "lastSeenAt": "2026-05-11T20:43:28.133Z"
   },
   {
     "id": 57,
