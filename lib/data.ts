@@ -220,20 +220,50 @@ import prisma from './prisma';
 // CARGA DE DATOS DESDE SUPABASE
 // ============================================================================
 
+// ── Limpieza de proyectos ficticios ────────────────────────────────────
+// IDs insertados por prisma/seed.ts que NO corresponden a convocatorias
+// reales: FIDA(103), BID(104), EUROCLIMA+(106), FIA-Silvoagro(110),
+// CNR-Ley18450(113). Ya eliminados de data/projects.json; esta rutina
+// borra las filas residuales de la DB en el primer request del deploy.
+const FAKE_PROJECT_IDS = [103, 104, 106, 110, 113];
+let _fakesCleaned = false;
+
+async function purgeFakeProjects(): Promise<void> {
+    if (_fakesCleaned) return;
+    _fakesCleaned = true;
+    try {
+        const { count } = await prisma.project.deleteMany({
+            where: { id: { in: FAKE_PROJECT_IDS } },
+        });
+        if (count > 0) {
+            console.log(`[purgeFakeProjects] Eliminados ${count} proyectos ficticios de la DB (IDs: ${FAKE_PROJECT_IDS.join(',')})`);
+        }
+    } catch (err) {
+        // No crítico: el filtro notIn los excluye de todas formas.
+        _fakesCleaned = false; // reintentar en el siguiente request
+        console.error("[purgeFakeProjects] Error (no crítico):", err);
+    }
+}
+
 export async function getProjects(): Promise<Project[]> {
     const today = new Date();
     today.setUTCHours(0, 0, 0, 0);
+
+    // Limpieza one-shot de filas ficticias en la DB
+    await purgeFakeProjects();
 
     try {
         const dbProjects = await prisma.project.findMany({
             where: {
                 fecha_cierre: { gte: today },
                 NOT: { estadoPostulacion: 'Cerrada' },
+                // Defensa redundante: si purgeFakeProjects falló, esto los excluye
+                id: { notIn: FAKE_PROJECT_IDS },
             },
             orderBy: { fecha_cierre: 'asc' },
         });
 
-        console.log(`[getProjects] Prisma OK: ${dbProjects.length} proyectos vigentes (fecha_cierre >= hoy, estado != Cerrada)`);
+        console.log(`[getProjects] Prisma OK: ${dbProjects.length} proyectos vigentes`);
 
         return dbProjects.map(p => ({
             ...p,
@@ -246,9 +276,6 @@ export async function getProjects(): Promise<Project[]> {
             complejidad: p.complejidad as any
         })) as Project[];
     } catch (error) {
-        // Antes caíamos a data/projects.json (34 placeholders), lo que ocultaba la
-        // falla de DB y mostraba convocatorias ficticias al usuario. Mejor devolver
-        // vacío y que la UI muestre "sin resultados" hasta diagnosticar.
         console.error("[getProjects] Prisma/Supabase falló — devolviendo lista vacía:", error);
         return [];
     }
