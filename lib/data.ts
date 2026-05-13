@@ -230,6 +230,8 @@ export async function getProjects(): Promise<Project[]> {
             }
         });
 
+        console.log(`[getProjects] Prisma OK: ${dbProjects.length} proyectos cargados desde DB`);
+
         // Mapeamos los datos de la DB al formato de la interfaz Project
         return dbProjects.map(p => ({
             ...p,
@@ -242,9 +244,10 @@ export async function getProjects(): Promise<Project[]> {
             complejidad: p.complejidad as any
         })) as Project[];
     } catch (error) {
-        console.error("Error cargando proyectos de Supabase, usando backup JSON:", error);
+        console.error("[getProjects] ERROR Prisma - cayendo al JSON de fallback:", error);
         // Fallback al JSON si la DB falla
         const projectData = require('@/data/projects.json');
+        console.error(`[getProjects] Fallback JSON cargado: ${projectData.length} proyectos`);
         return projectData as Project[];
     }
 }

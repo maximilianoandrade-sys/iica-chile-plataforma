@@ -126,8 +126,50 @@ const withPWA = require('next-pwa')({
   dest: 'public',
   register: true,
   skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development', // Disable in development
-  buildExcludes: [/middleware-manifest\.json$/]
+  disable: process.env.NODE_ENV === 'development',
+  buildExcludes: [/middleware-manifest\.json$/],
+  // Excluir páginas HTML del precache — los datos vienen de la DB y cambian
+  // con cada scraper. Sin esto el SW sirve HTML estático del build anterior.
+  publicExcludes: ['!sw.js'],
+  runtimeCaching: [
+    {
+      // Páginas HTML: siempre ir a la red primero
+      urlPattern: /^https?:\/\/.*\/(?:(?!_next|api|sw\.js|manifest\.json|icon).)*$/,
+      handler: 'NetworkFirst',
+      options: {
+        cacheName: 'pages',
+        networkTimeoutSeconds: 10,
+        expiration: {
+          maxEntries: 32,
+          maxAgeSeconds: 60 * 5, // 5 minutos máximo
+        },
+      },
+    },
+    {
+      // Assets estáticos (_next/static): cache first (inmutables)
+      urlPattern: /\/_next\/static\/.*/,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'static-assets',
+        expiration: {
+          maxEntries: 64,
+          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 días
+        },
+      },
+    },
+    {
+      // Imágenes: cache first
+      urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp|avif|ico)$/,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'images',
+        expiration: {
+          maxEntries: 64,
+          maxAgeSeconds: 60 * 60 * 24 * 30,
+        },
+      },
+    },
+  ],
 });
 
 module.exports = withPWA(nextConfig);
