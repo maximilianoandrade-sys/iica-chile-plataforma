@@ -12,6 +12,10 @@ import FuentesOficiales from "@/components/FuentesOficiales";
 import ImpactSection from "@/components/ImpactSection";
 import LiveFeedSection from "@/components/LiveFeedSection";
 
+// Forzar renderizado dinámico: los proyectos vienen de la DB y cambian con scrapers.
+// Sin esto, Vercel puede cachear la página estática con datos viejos.
+export const dynamic = 'force-dynamic';
+
 // Dynamic Metadata for SEO
 export async function generateMetadata({
   searchParams,
