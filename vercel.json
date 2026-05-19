@@ -9,6 +9,18 @@
     "installCommand": "npm install",
     "framework": "nextjs",
     "functions": {
+        "app/api/ai-search/route.ts": {
+            "memory": 512,
+            "maxDuration": 30
+        },
+        "app/api/generate-proposal/route.ts": {
+            "memory": 512,
+            "maxDuration": 30
+        },
+        "app/api/cron/check-updates/route.ts": {
+            "memory": 512,
+            "maxDuration": 60
+        },
         "app/api/**/*.ts": {
             "memory": 512,
             "maxDuration": 10
