@@ -15,9 +15,9 @@ export const AiSearchSchema = z.object({
 
 export const GenerateProposalSchema = z.object({
   projectId: z
-    .number({ required_error: 'projectId es requerido', invalid_type_error: 'projectId debe ser un número' })
-    .int('projectId debe ser un entero')
-    .positive('projectId debe ser positivo'),
+    .number({ error: 'projectId es requerido y debe ser un número' })
+    .int({ error: 'projectId debe ser un entero' })
+    .positive({ error: 'projectId debe ser positivo' }),
   applicantInfo: z
     .object({
       name: z.string().max(200, 'Máximo 200 caracteres').optional(),
