@@ -29,17 +29,15 @@ const NOTIFICATION_WEBHOOK = process.env.NOTIFICATION_WEBHOOK;
 // ============================================================================
 
 function isAuthorized(request: NextRequest): boolean {
-    const authHeader = request.headers.get('authorization');
     const cronSecret = process.env.CRON_SECRET;
-
-    // Verificar si viene de Vercel Cron
-    if (authHeader === `Bearer ${cronSecret}`) {
-        return true;
+    if (!cronSecret) {
+        logger.error('CRON_SECRET no configurado', new Error('Env faltante'));
+        return false;
     }
 
-    // Verificar si es una request de Vercel Cron
-    const vercelCronHeader = request.headers.get('x-vercel-cron');
-    if (vercelCronHeader) {
+    // Vercel Cron sets Authorization: Bearer <CRON_SECRET> automatically
+    const authHeader = request.headers.get('authorization');
+    if (authHeader === `Bearer ${cronSecret}`) {
         return true;
     }
 
