@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 
-async function computeExpectedToken(secret: string): Promise<string> {
+const MAX_AGE_MS = 8 * 60 * 60 * 1000; // 8 hours
+
+async function computeHmac(secret: string, payload: string): Promise<string> {
   const encoder = new TextEncoder();
   const key = await crypto.subtle.importKey(
     "raw",
@@ -9,7 +11,7 @@ async function computeExpectedToken(secret: string): Promise<string> {
     false,
     ["sign"]
   );
-  const sig = await crypto.subtle.sign("HMAC", key, encoder.encode("admin-session"));
+  const sig = await crypto.subtle.sign("HMAC", key, encoder.encode(payload));
   return Array.from(new Uint8Array(sig))
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
@@ -29,16 +31,12 @@ export async function middleware(req: NextRequest) {
   const isAdminPage = path.startsWith("/admin");
   const isAdminApi = path.startsWith("/api/admin");
 
-  // Only protect admin pages and admin API routes
   if (!isAdminPage && !isAdminApi) return NextResponse.next();
-  // Allow the login page through
   if (path === "/admin/login") return NextResponse.next();
-  // Allow the login API through (it validates credentials itself)
   if (path === "/api/admin/login") return NextResponse.next();
 
   const secret = process.env.ADMIN_SESSION_SECRET;
   if (!secret) {
-    console.error("[middleware] ADMIN_SESSION_SECRET not set");
     return NextResponse.redirect(new URL("/", req.url));
   }
 
@@ -49,8 +47,29 @@ export async function middleware(req: NextRequest) {
   }
 
   try {
-    const expected = await computeExpectedToken(secret);
-    if (!timingSafeCompare(cookie, expected)) {
+    const dotIndex = cookie.lastIndexOf(".");
+    if (dotIndex === -1) {
+      if (isAdminApi) return NextResponse.json({ error: "no autorizado" }, { status: 401 });
+      return NextResponse.redirect(new URL("/admin/login", req.url));
+    }
+
+    const sig = cookie.substring(0, dotIndex);
+    const timestamp = cookie.substring(dotIndex + 1);
+    const ts = Number(timestamp);
+
+    if (!ts || isNaN(ts)) {
+      if (isAdminApi) return NextResponse.json({ error: "no autorizado" }, { status: 401 });
+      return NextResponse.redirect(new URL("/admin/login", req.url));
+    }
+
+    // Check expiry
+    if (Date.now() - ts > MAX_AGE_MS) {
+      if (isAdminApi) return NextResponse.json({ error: "no autorizado" }, { status: 401 });
+      return NextResponse.redirect(new URL("/admin/login", req.url));
+    }
+
+    const expected = await computeHmac(secret, `admin-session:${timestamp}`);
+    if (!timingSafeCompare(sig, expected)) {
       if (isAdminApi) return NextResponse.json({ error: "no autorizado" }, { status: 401 });
       return NextResponse.redirect(new URL("/admin/login", req.url));
     }

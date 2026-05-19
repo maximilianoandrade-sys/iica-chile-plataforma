@@ -31,16 +31,18 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "server config error" }, { status: 500 });
   }
 
-  const token = createHmac("sha256", sessionSecret)
-    .update("admin-session")
+  const timestamp = Date.now().toString();
+  const sig = createHmac("sha256", sessionSecret)
+    .update(`admin-session:${timestamp}`)
     .digest("hex");
+  const token = `${sig}.${timestamp}`;
 
   const res = NextResponse.json({ ok: true });
   res.cookies.set("admin-token", token, {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
-    maxAge: 60 * 60 * 24 * 30,
+    maxAge: 28800,
     path: "/",
   });
   return res;
