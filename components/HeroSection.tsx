@@ -35,7 +35,7 @@ export function HeroSection() {
         <section className="relative">
             {/* Hero Section — ítems 2, 4 */}
             <div
-                className="hero-iica relative overflow-hidden bg-[var(--iica-navy)] text-white py-20 md:py-28 text-center"
+                className="hero-iica relative overflow-hidden bg-[var(--iica-navy)] text-white py-10 md:py-28 text-center"
                 style={{
                     backgroundImage: 'linear-gradient(rgba(0, 45, 114, 0.85), rgba(0, 45, 114, 0.7)), url("https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2832&auto=format&fit=crop")',
                     backgroundSize: 'cover',
@@ -61,7 +61,7 @@ export function HeroSection() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="text-3xl md:text-5xl font-extrabold mb-6 leading-tight drop-shadow-lg"
+                        className="text-2xl md:text-5xl font-extrabold mb-6 leading-tight drop-shadow-lg"
                     >
                         Oportunidades de Proyectos para el{' '}
                         <span className="text-[var(--iica-yellow)]">IICA Chile 2026</span>
@@ -120,7 +120,7 @@ export function HeroSection() {
             </div>
 
             {/* Agricultural Field Image Section */}
-            <div className="relative w-full h-64 md:h-80 overflow-hidden">
+            <div className="relative w-full h-40 md:h-80 overflow-hidden">
                 <Image
                     src="/agricultural-field.png"
                     alt="Trabajo institucional del IICA en territorio chileno"

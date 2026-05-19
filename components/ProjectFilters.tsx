@@ -275,7 +275,7 @@ export default function ProjectFilters({
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
 
             {/* Search Bar — ítem 7 */}
-            <div className="p-4 md:p-6 border-b border-gray-100">
+            <div className="sticky top-0 z-30 bg-white p-4 md:p-6 border-b border-gray-100">
                 <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                         <Search className="h-5 w-5 text-gray-400" />
