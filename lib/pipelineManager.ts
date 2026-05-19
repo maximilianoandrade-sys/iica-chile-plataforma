@@ -1,6 +1,9 @@
+import { getLogger } from '@/lib/utils/logger';
+const logger = getLogger('PipelineManager');
+
 export interface KanbanTask {
     id: string;
-    project: any;
+    project: { id: number; nombre: string; institucion?: string; estado?: string };
     column: string;
     priority: string;
     responsible: string;
@@ -16,7 +19,7 @@ export function getPipelineTasks(): KanbanTask[] {
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) return JSON.parse(saved);
     } catch (e) {
-        console.error("Error al leer pipeline", e);
+        logger.error('Error al leer pipeline', e as Error);
     }
     return [];
 }
@@ -26,7 +29,7 @@ export function savePipelineTasks(tasks: KanbanTask[]) {
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
     } catch (e) {
-        console.error("Error al guardar pipeline", e);
+        logger.error('Error al guardar pipeline', e as Error);
     }
 }
 

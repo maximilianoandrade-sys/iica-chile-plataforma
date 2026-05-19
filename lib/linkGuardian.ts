@@ -11,6 +11,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { getLogger } from '@/lib/utils/logger';
+const logger = getLogger('LinkGuardian');
 
 // ============================================================================
 // TIPOS
@@ -75,7 +77,7 @@ function cacheLinkStatus(url: string, status: LinkStatus): void {
         const cacheData = Array.from(linkCache.entries());
         localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
     } catch (error) {
-        console.warn('No se pudo guardar caché de enlaces:', error);
+        logger.warn('No se pudo guardar caché de enlaces', { error });
     }
 }
 
@@ -87,7 +89,7 @@ function loadLinkCache(): void {
         // Eliminar caché viejo (v1) si todavía existe para liberar espacio
         if (localStorage.getItem(LEGACY_CACHE_KEY)) {
             localStorage.removeItem(LEGACY_CACHE_KEY);
-            console.info('[linkGuardian] Caché v1 eliminado tras actualización a v2');
+            logger.info('Caché v1 eliminado tras actualización a v2');
         }
 
         const cached = localStorage.getItem(CACHE_KEY);
@@ -103,7 +105,7 @@ function loadLinkCache(): void {
             });
         }
     } catch (error) {
-        console.warn('No se pudo cargar caché de enlaces:', error);
+        logger.warn('No se pudo cargar caché de enlaces', { error });
     }
 }
 
@@ -130,7 +132,7 @@ async function checkLinkStatus(url: string): Promise<boolean> {
         const data = await response.json();
         return data.isValid === true;
     } catch (error) {
-        console.warn('Error verificando enlace:', url, error);
+        logger.warn('Error verificando enlace', { url, error });
         return false;
     }
 }
@@ -299,7 +301,7 @@ export function clearLinkCache(): void {
     try {
         localStorage.removeItem('iica_link_cache');
     } catch (error) {
-        console.warn('No se pudo limpiar caché de enlaces:', error);
+        logger.warn('No se pudo limpiar caché de enlaces', { error });
     }
 }
 

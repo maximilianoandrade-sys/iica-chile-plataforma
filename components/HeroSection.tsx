@@ -6,20 +6,22 @@ import Image from 'next/image';
 import { Target } from 'lucide-react';
 import { motion } from 'framer-motion';
 import projects from '@/data/projects.json';
+import type { Project } from '@/lib/data';
 
 // Calcular estadísticas para el hero
 function getStats() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const totalOportunidades = projects.length;
-    const internacionales = projects.filter((p: any) =>
+    const typedProjects = projects as unknown as Project[];
+    const totalOportunidades = typedProjects.length;
+    const internacionales = typedProjects.filter((p) =>
         ['FONTAGRO', 'FAO', 'FIDA', 'BID', 'PNUD', 'GEF', 'GCF', 'UE', 'UE (EUROCLIMA+)', 'UE (AECID)', 'IICA Hemisférico'].includes(p.institucion)
     ).length;
-    const abiertas = projects.filter((p: any) => {
+    const abiertas = typedProjects.filter((p) => {
         return new Date(p.fecha_cierre) >= today;
     }).length;
-    const urgentCount = projects.filter((p: any) => {
+    const urgentCount = typedProjects.filter((p) => {
         const closing = new Date(p.fecha_cierre);
         const diff = Math.ceil((closing.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
         return diff >= 0 && diff <= 7;

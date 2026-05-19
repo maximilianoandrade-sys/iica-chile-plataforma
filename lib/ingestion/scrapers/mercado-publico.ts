@@ -1,4 +1,7 @@
+import { getLogger } from '@/lib/utils/logger';
 import type { RawProject } from "../types";
+
+const logger = getLogger('MercadoPublico');
 
 const VALID_KEYWORDS = [
   "agrícola", "agricola", "rural", "riego", "asistencia técnica", "asistencia tecnica",
@@ -50,7 +53,13 @@ export async function fetchMercadoPublicoLive(
     const queryLower = query.toLowerCase().trim();
     const allowed = queryLower ? [...VALID_KEYWORDS, queryLower] : VALID_KEYWORDS;
 
-    const filtered = data.Listado.filter((lic: any) => {
+    interface Licitacion {
+      Nombre: string;
+      CodigoExterno: string;
+      FechaCierre?: string;
+    }
+
+    const filtered = (data.Listado as Licitacion[]).filter((lic: Licitacion) => {
       const text = (lic.Nombre || "").toLowerCase();
       const isAffinity = allowed.some((k) => text.includes(k));
       if (!isAffinity) return false;
@@ -58,7 +67,7 @@ export async function fetchMercadoPublicoLive(
       return !isExcluded;
     });
 
-    return filtered.map((lic: any) => {
+    return filtered.map((lic: Licitacion) => {
       const deadlineISO = lic.FechaCierre ? lic.FechaCierre.split("T")[0] : null;
       const deadline = deadlineISO ? new Date(deadlineISO) : null;
       return {
@@ -74,7 +83,7 @@ export async function fetchMercadoPublicoLive(
       };
     });
   } catch (err) {
-    console.error("[mercado-publico] error:", err);
+    logger.error('Fetch error', err as Error);
     return [];
   }
 }

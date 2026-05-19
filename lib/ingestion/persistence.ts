@@ -1,4 +1,7 @@
+import { getLogger } from '@/lib/utils/logger';
 import prisma from "../prisma";
+
+const logger = getLogger('Persistence');
 import { normalizeUrl, parseAmount } from "./utils";
 import { validateUrl } from "./validateUrl";
 import { embedText, projectToEmbeddingText, toPgVector } from "./embeddings";
@@ -85,7 +88,7 @@ export async function upsertProject(
         );
       }
     } catch (err) {
-      console.warn(`[persistence] embedding failed for ${canonicalUrl}:`, err);
+      logger.warn('Embedding failed', { canonicalUrl, error: err });
     }
   }
 

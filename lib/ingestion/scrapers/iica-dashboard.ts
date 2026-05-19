@@ -16,7 +16,10 @@
  * Pagination uses ASP.NET __doPostBack (ProgramasDataPager).
  * Cloudflare is bypassed via a persistent browser profile stored in USER_DATA_DIR.
  */
+import { getLogger } from '@/lib/utils/logger';
 import { chromium, type Page, type BrowserContext } from "playwright";
+
+const logger = getLogger('IICADashboard');
 import path from "path";
 import { COUNTERPARTS_IICA_CHILE, type Counterpart } from "../counterparts-iica";
 import { cleanText, parseSpanishDate } from "../utils";
@@ -203,13 +206,13 @@ export const iicaDashboardScraper: Scraper = {
     });
 
     try {
-      console.log("[iica-dashboard] Navigating to dashboard...");
+      logger.info('Navigating to dashboard...');
       await page.goto(DASHBOARD_URL, { waitUntil: "domcontentloaded", timeout: 60_000 });
 
       // Wait for Cloudflare to pass
-      console.log("[iica-dashboard] Waiting for Cloudflare...");
+      logger.info('Waiting for Cloudflare...');
       await waitForCloudflare(page);
-      console.log("[iica-dashboard] Dashboard loaded. Starting scrape.");
+      logger.info('Dashboard loaded. Starting scrape.');
 
       for (let i = 0; i < total; i++) {
         const cp = COUNTERPARTS_IICA_CHILE[i];
@@ -234,7 +237,7 @@ export const iicaDashboardScraper: Scraper = {
           const blocked = await page.$("div.cf-error-details, #challenge-running");
           if (blocked) {
             partialErrors.push(`Cloudflare blocked on ${cp.abbrev}`);
-            console.warn(`[iica-dashboard] Cloudflare blocked on ${cp.abbrev}, waiting...`);
+            logger.warn('Cloudflare blocked, waiting...', { counterpart: cp.abbrev });
             await waitForCloudflare(page);
           }
 
@@ -259,13 +262,16 @@ export const iicaDashboardScraper: Scraper = {
           const rawProjects = toRawProjects(projects, cp);
           allProjects.push(...rawProjects);
 
-          console.log(
-            `[iica-dashboard] (${i + 1}/${total}) ${cp.abbrev}: ${projects.length} projects (expected ${resultCount})`
-          );
+          logger.info('Counterpart scraped', {
+            progress: `${i + 1}/${total}`,
+            counterpart: cp.abbrev,
+            found: projects.length,
+            expected: resultCount,
+          });
         } catch (err: unknown) {
           const msg = `Error on ${cp.abbrev} (${cp.id}): ${err instanceof Error ? err.message : String(err)}`;
           partialErrors.push(msg);
-          console.warn(`[iica-dashboard] ${msg}`);
+          logger.warn(msg);
         }
 
         // Delay between queries to avoid rate-limiting

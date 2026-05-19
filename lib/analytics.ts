@@ -3,6 +3,9 @@
  * Rastrea búsquedas sin resultados, clics salientes y comportamiento del usuario
  */
 
+import { getLogger } from '@/lib/utils/logger';
+const logger = getLogger('Analytics');
+
 export interface AnalyticsEvent {
     action: string;
     category: string;
@@ -27,7 +30,7 @@ const analyticsQueue: SearchAnalytics[] = [];
 /**
  * Rastrea un evento de búsqueda
  */
-export function trackSearch(searchTerm: string, resultsCount: number, filters?: any) {
+export function trackSearch(searchTerm: string, resultsCount: number, filters?: SearchAnalytics['filters']) {
     const event: SearchAnalytics = {
         searchTerm: searchTerm.trim(),
         resultsCount,
@@ -39,7 +42,7 @@ export function trackSearch(searchTerm: string, resultsCount: number, filters?: 
 
     // Si no hay resultados, registrar en consola para debugging
     if (resultsCount === 0) {
-        console.warn('🔍 Búsqueda sin resultados:', {
+        logger.warn('Búsqueda sin resultados', {
             término: searchTerm,
             filtros: filters
         });
@@ -61,7 +64,7 @@ export function trackSearch(searchTerm: string, resultsCount: number, filters?: 
         if (stored.length > 50) stored.shift();
         localStorage.setItem('iica_analytics', JSON.stringify(stored));
     } catch (e) {
-        console.error('Error guardando analytics:', e);
+        logger.error('Error guardando analytics', e as Error);
     }
 }
 
@@ -69,7 +72,7 @@ export function trackSearch(searchTerm: string, resultsCount: number, filters?: 
  * Rastrea eventos generales
  */
 export function trackEvent(event: AnalyticsEvent) {
-    console.log('📊 Evento:', event);
+    logger.info('Evento', { event });
 
     // Google Analytics (si está configurado)
     if (typeof window !== 'undefined' && (window as any).gtag) {
@@ -110,17 +113,22 @@ export function getNoResultsStats(): { term: string; count: number }[] {
 }
 
 /**
- * Envía datos al servidor (implementación futura)
+ * Envía datos al backend de analytics
  */
-async function sendToServer(eventType: string, data: any) {
-    // TODO: Implementar endpoint en el backend
-    // Por ahora, solo registramos en consola
-
-    if (process.env.NODE_ENV === 'development') {
-        console.log(`📤 [${eventType}]`, data);
+async function sendToServer(eventType: string, data: object) {
+    try {
+        await fetch('/api/analytics', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                event: eventType,
+                properties: { ...data },
+                timestamp: new Date().toISOString(),
+            }),
+        });
+    } catch {
+        // Silently fail - analytics should never break the app
     }
-
-
 }
 
 /**

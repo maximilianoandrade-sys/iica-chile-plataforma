@@ -4,6 +4,8 @@
  */
 
 import { Project } from './data';
+import { getLogger } from '@/lib/utils/logger';
+const logger = getLogger('RuralTools');
 
 // ============================================================================
 // WHATSAPP
@@ -161,7 +163,7 @@ export async function copyToClipboard(project: Project): Promise<boolean> {
         await navigator.clipboard.writeText(text);
         return true;
     } catch (error) {
-        console.error('Error copiando al portapapeles:', error);
+        logger.error('Error copiando al portapapeles', error as Error);
         return false;
     }
 }

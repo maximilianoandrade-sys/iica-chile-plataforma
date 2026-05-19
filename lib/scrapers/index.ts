@@ -31,11 +31,11 @@ export async function runAllScrapers(): Promise<ScrapeResult[]> {
           errors: [],
           durationMs: Date.now() - start,
         };
-      } catch (err: any) {
+      } catch (err: unknown) {
         return {
           source: s.id,
           projects: [],
-          errors: [err.message || String(err)],
+          errors: [err instanceof Error ? err.message : String(err)],
           durationMs: Date.now() - start,
         };
       }

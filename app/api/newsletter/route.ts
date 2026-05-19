@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { getLogger } from '@/lib/utils/logger';
+const logger = getLogger('Newsletter');
 
 export async function POST(req: NextRequest) {
     try {
@@ -30,7 +32,7 @@ export async function POST(req: NextRequest) {
             { status: 200 }
         );
     } catch (error) {
-        console.error('Newsletter subscription error:', error);
+        logger.error('Newsletter subscription error', error as Error);
         return NextResponse.json(
             { error: 'Error interno del servidor' },
             { status: 500 }

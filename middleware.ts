@@ -25,8 +25,16 @@ function timingSafeCompare(a: string, b: string): boolean {
 }
 
 export async function middleware(req: NextRequest) {
-  if (!req.nextUrl.pathname.startsWith("/admin")) return NextResponse.next();
-  if (req.nextUrl.pathname === "/admin/login") return NextResponse.next();
+  const path = req.nextUrl.pathname;
+  const isAdminPage = path.startsWith("/admin");
+  const isAdminApi = path.startsWith("/api/admin");
+
+  // Only protect admin pages and admin API routes
+  if (!isAdminPage && !isAdminApi) return NextResponse.next();
+  // Allow the login page through
+  if (path === "/admin/login") return NextResponse.next();
+  // Allow the login API through (it validates credentials itself)
+  if (path === "/api/admin/login") return NextResponse.next();
 
   const secret = process.env.ADMIN_SESSION_SECRET;
   if (!secret) {
@@ -36,20 +44,23 @@ export async function middleware(req: NextRequest) {
 
   const cookie = req.cookies.get("admin-token")?.value;
   if (!cookie) {
+    if (isAdminApi) return NextResponse.json({ error: "no autorizado" }, { status: 401 });
     return NextResponse.redirect(new URL("/admin/login", req.url));
   }
 
   try {
     const expected = await computeExpectedToken(secret);
     if (!timingSafeCompare(cookie, expected)) {
+      if (isAdminApi) return NextResponse.json({ error: "no autorizado" }, { status: 401 });
       return NextResponse.redirect(new URL("/admin/login", req.url));
     }
   } catch {
+    if (isAdminApi) return NextResponse.json({ error: "no autorizado" }, { status: 401 });
     return NextResponse.redirect(new URL("/admin/login", req.url));
   }
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: "/admin/:path*",
+  matcher: ["/admin/:path*", "/api/admin/:path*"],
 };

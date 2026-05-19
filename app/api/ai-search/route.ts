@@ -15,6 +15,11 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
+import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
+import { getLogger } from "@/lib/utils/logger";
+
+const logger = getLogger("AiSearch");
+const AI_SEARCH_RATE_LIMIT = { maxRequests: 10, windowSizeSeconds: 60 };
 
 const SYSTEM_PROMPT = `Eres un asistente experto en oportunidades de financiamiento, fondos concursables, subsidios y programas de apoyo para el sector agrícola y agroalimentario en Chile.
 
@@ -43,6 +48,22 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting
+    const clientIp = getClientIp(request);
+    const rateCheck = checkRateLimit(`ai-search:${clientIp}`, AI_SEARCH_RATE_LIMIT);
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        { error: "Demasiadas solicitudes. Intente de nuevo en un momento." },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(Math.ceil((rateCheck.resetAt - Date.now()) / 1000)),
+            "X-RateLimit-Remaining": "0",
+          },
+        }
+      );
+    }
+
     if (!process.env.GEMINI_API_KEY) {
       return NextResponse.json(
         { error: "GEMINI_API_KEY no está configurada en el servidor." },
@@ -60,12 +81,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (query.trim().length > 500) {
+      return NextResponse.json(
+        { error: "La consulta no puede exceder 500 caracteres." },
+        { status: 400 }
+      );
+    }
+
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-lite",
-      contents: `${SYSTEM_PROMPT}\n\nPregunta del usuario: ${query.trim()}`,
+      contents: [{ role: "user", parts: [{ text: query.trim() }] }],
       config: {
+        systemInstruction: SYSTEM_PROMPT,
         tools: [{ googleSearch: {} }],
         temperature: 0.2,
       },
@@ -90,7 +119,7 @@ export async function POST(request: NextRequest) {
       searchedAt: new Date().toISOString(),
     });
   } catch (err: unknown) {
-    console.error("[ai-search] Error:", err);
+    logger.error("AI search failed", err);
     const message =
       err instanceof Error ? err.message : "Error interno del servidor";
     return NextResponse.json({ error: message }, { status: 500 });

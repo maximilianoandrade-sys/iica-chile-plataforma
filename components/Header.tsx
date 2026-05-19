@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Menu, X, Target, Home, Crosshair, Link2, Users, TrendingUp, Building2, Phone, Briefcase } from 'lucide-react';
 import projects from '@/data/projects.json';
+import type { Project } from '@/lib/data';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
@@ -11,7 +12,7 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 function getUrgentCount(): number {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    return projects.filter((p: any) => {
+    return (projects as unknown as Project[]).filter((p) => {
         const closing = new Date(p.fecha_cierre);
         const diff = Math.ceil((closing.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
         return diff >= 0 && diff <= 7;

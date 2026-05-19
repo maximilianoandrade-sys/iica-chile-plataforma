@@ -16,6 +16,47 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export const runtime = 'nodejs';
 
+/** Blocked IP ranges: private, loopback, link-local, metadata endpoints */
+const BLOCKED_HOSTNAMES = new Set([
+    'localhost',
+    '127.0.0.1',
+    '0.0.0.0',
+    '[::1]',
+    '169.254.169.254', // AWS/GCP metadata
+    'metadata.google.internal',
+]);
+
+function isBlockedHost(hostname: string): boolean {
+    if (BLOCKED_HOSTNAMES.has(hostname)) return true;
+
+    // Block private IPv4 ranges
+    const ipv4Match = hostname.match(/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/);
+    if (ipv4Match) {
+        const [, a, b] = ipv4Match.map(Number);
+        if (a === 10) return true;                    // 10.0.0.0/8
+        if (a === 172 && b >= 16 && b <= 31) return true; // 172.16.0.0/12
+        if (a === 192 && b === 168) return true;      // 192.168.0.0/16
+        if (a === 127) return true;                   // 127.0.0.0/8
+        if (a === 0) return true;                     // 0.0.0.0/8
+        if (a === 169 && b === 254) return true;      // 169.254.0.0/16 link-local
+    }
+
+    return false;
+}
+
+function isAllowedUrl(urlString: string): boolean {
+    try {
+        const parsed = new URL(urlString);
+        // Only allow http and https
+        if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return false;
+        // Block private/internal hosts
+        if (isBlockedHost(parsed.hostname)) return false;
+        return true;
+    } catch {
+        return false;
+    }
+}
+
 function isHomepageRedirect(originalUrl: string, finalUrl: string): boolean {
     try {
         const original = new URL(originalUrl);
@@ -49,11 +90,9 @@ export async function GET(request: NextRequest) {
             );
         }
 
-        try {
-            new URL(url);
-        } catch {
+        if (!isAllowedUrl(url)) {
             return NextResponse.json(
-                { error: 'Invalid URL format', isValid: false },
+                { error: 'URL not allowed: must be a public HTTP/HTTPS URL', isValid: false },
                 { status: 400 }
             );
         }
@@ -102,16 +141,16 @@ export async function GET(request: NextRequest) {
                 redirectedToHome,
                 originalIsHomepage,
             });
-        } catch (error: any) {
+        } catch (error: unknown) {
             return NextResponse.json({
                 isValid: false,
-                error: error.message || 'Network error',
+                error: error instanceof Error ? error.message : 'Network error',
                 url,
             });
         }
-    } catch (error: any) {
+    } catch (error: unknown) {
         return NextResponse.json(
-            { error: error.message || 'Internal server error', isValid: false },
+            { error: error instanceof Error ? error.message : 'Internal server error', isValid: false },
             { status: 500 }
         );
     }

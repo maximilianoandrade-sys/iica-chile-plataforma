@@ -8,6 +8,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getProjects } from '@/lib/data';
 import prisma from '@/lib/prisma';
 import { embedText, projectToEmbeddingText, toPgVector } from '@/lib/ingestion/embeddings';
+import { getKVStore } from '@/lib/kvStore';
+import { sendEmail } from '@/lib/email';
+import { getLogger } from '@/lib/utils/logger';
+
+const logger = getLogger('CronCheckUpdates');
 
 export const runtime = 'nodejs';
 
@@ -102,33 +107,30 @@ async function checkLinkForUpdates(url: string, projectName: string): Promise<Li
             hasChanged
         };
 
-    } catch (error: any) {
+    } catch (error: unknown) {
         return {
             url,
             projectName,
             status: 0,
             hasChanged: false,
-            error: error.message || 'Network error'
+            error: error instanceof Error ? error.message : 'Network error'
         };
     }
 }
 
 // ============================================================================
-// CACHE SIMPLE (KV Store o similar)
+// CACHE CON KV STORE
 // ============================================================================
 
-// En producción, usar Vercel KV, Redis, o similar
-// Por ahora, simulamos con un Map en memoria
-const memoryCache = new Map<string, any>();
-
-async function getFromCache(key: string): Promise<any> {
-    // TODO: Implementar con Vercel KV en producción
-    return memoryCache.get(key);
+async function getFromCache(key: string): Promise<Record<string, string> | null> {
+    const kv = getKVStore();
+    return kv.get<Record<string, string>>(key);
 }
 
-async function saveToCache(key: string, value: any): Promise<void> {
-    // TODO: Implementar con Vercel KV en producción
-    memoryCache.set(key, value);
+async function saveToCache(key: string, value: Record<string, string | null>): Promise<void> {
+    const kv = getKVStore();
+    // TTL 7 days - entries older than that are stale anyway
+    await kv.set(key, value, { ttlSeconds: 7 * 24 * 60 * 60 });
 }
 
 // ============================================================================
@@ -157,16 +159,22 @@ async function sendNotification(notification: UpdateNotification): Promise<void>
                 })
             });
         } catch (error) {
-            console.error('Error enviando webhook:', error);
+            logger.error('Webhook notification failed', error as Error);
         }
     }
 
-    // Log para Vercel
-    console.log('📧 NOTIFICACIÓN DE ACTUALIZACIÓN:');
-    console.log(message);
+    // Enviar email de notificación
+    await sendEmail({
+        to: ADMIN_EMAIL,
+        subject: `[IICA] Actualización de Convocatorias - ${notification.changedProjects.length} cambios, ${notification.brokenLinks.length} enlaces rotos`,
+        text: message,
+        html: `<pre style="font-family: monospace; white-space: pre-wrap;">${message}</pre>`,
+    });
 
-    // TODO: Implementar envío de email en producción
-    // await sendEmail(ADMIN_EMAIL, 'Actualización de Convocatorias', message);
+    logger.info('Update notification sent', {
+        changedCount: notification.changedProjects.length,
+        brokenCount: notification.brokenLinks.length,
+    });
 }
 
 function formatNotificationMessage(notification: UpdateNotification): string {
@@ -214,7 +222,7 @@ export async function GET(request: NextRequest) {
             );
         }
 
-        console.log('🔍 Iniciando verificación de actualizaciones...');
+        logger.info('Starting update check...');
 
         const results: LinkCheckResult[] = [];
         const changedProjects: LinkCheckResult[] = [];
@@ -271,11 +279,11 @@ export async function GET(request: NextRequest) {
                             embeddingsBackfilled++;
                         }
                     } catch (err) {
-                        console.warn(`[cron] embedding backfill failed for ${p.id}:`, err);
+                        logger.warn('Embedding backfill failed for project', { projectId: p.id, error: (err as Error).message });
                     }
                 }
             } catch (err) {
-                console.error('[cron] embedding backfill query failed:', err);
+                logger.error('Embedding backfill query failed', err as Error);
             }
         }
 
@@ -292,7 +300,7 @@ export async function GET(request: NextRequest) {
             await sendNotification(notification);
         }
 
-        console.log('✅ Verificación completada');
+        logger.info('Update check completed', { totalChecked: results.length, embeddingsBackfilled });
 
         return NextResponse.json({
             success: true,
@@ -301,13 +309,13 @@ export async function GET(request: NextRequest) {
             message: 'Verificación completada exitosamente'
         });
 
-    } catch (error: any) {
-        console.error('❌ Error en verificación:', error);
+    } catch (error: unknown) {
+        logger.error('Update check failed', error as Error);
 
         return NextResponse.json(
             {
                 error: 'Internal server error',
-                message: error.message
+                message: error instanceof Error ? error.message : 'Unknown error'
             },
             { status: 500 }
         );

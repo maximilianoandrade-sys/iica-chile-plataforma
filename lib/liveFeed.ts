@@ -5,6 +5,9 @@
  * ISR: revalida cada hora.
  */
 
+import { getLogger } from '@/lib/utils/logger';
+const logger = getLogger('LiveFeed');
+
 export interface LiveFund {
     nombre: string;
     institucion: string;
@@ -229,7 +232,7 @@ export async function getLiveFeeds(): Promise<{
             source: 'live',
         };
     } catch (err) {
-        console.warn('[liveFeed] fondos.gob.cl no disponible, usando datos estáticos:', err);
+        logger.warn('fondos.gob.cl no disponible, usando datos estáticos', { error: err });
         return {
             feeds: staticFeeds,
             lastUpdated: new Date().toISOString(),

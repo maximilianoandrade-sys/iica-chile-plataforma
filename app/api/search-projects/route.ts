@@ -39,7 +39,15 @@ function calcDaysLeft(deadline: Date | null): number | null {
 }
 
 export async function POST(req: NextRequest) {
-  const body: SearchBody = await req.json().catch(() => ({}));
+  let body: SearchBody;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json(
+      { error: "Invalid JSON body" },
+      { status: 400 }
+    );
+  }
   const query = body.query?.trim() || "";
   const ambito = body.ambito || body.scope || "all";
   const includeUnverified = body.includeUnverified !== false;
@@ -51,7 +59,7 @@ export async function POST(req: NextRequest) {
     fetchMercadoPublicoLive(ticket, query),
   ]);
 
-  const enriched = hybrid.projects.map((p: any) => ({
+  const enriched = hybrid.projects.map((p) => ({
     ...p,
     days_left: calcDaysLeft(p.fecha_cierre),
   }));

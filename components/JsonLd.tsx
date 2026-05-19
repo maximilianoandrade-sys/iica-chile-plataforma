@@ -1,5 +1,12 @@
 import { Project } from "@/lib/data";
 
+/** Escape sequences that could break out of a script tag */
+function safeJsonStringify(data: unknown): string {
+    return JSON.stringify(data)
+        .replace(/<\//g, "<\\/")      // Prevent </script> breakout
+        .replace(/<!--/g, "<\\!--");   // Prevent HTML comment injection
+}
+
 export default function JsonLd({ projects }: { projects: Project[] }) {
     const jsonLd = {
         "@context": "https://schema.org",
@@ -24,7 +31,7 @@ export default function JsonLd({ projects }: { projects: Project[] }) {
     return (
         <script
             type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            dangerouslySetInnerHTML={{ __html: safeJsonStringify(jsonLd) }}
         />
     );
 }

@@ -98,8 +98,8 @@ export async function embedBatch(texts: string[]): Promise<(number[] | null)[]> 
       config: { outputDimensionality: DIMS },
     });
 
-    const anyResult = result as any;
-    const embeddings: any[] = anyResult.embeddings ?? [anyResult.embedding];
+    const anyResult = result as Record<string, unknown>;
+    const embeddings: Array<{ values?: number[] }> = (anyResult.embeddings as Array<{ values?: number[] }>) ?? [anyResult.embedding as { values?: number[] }];
 
     for (let i = 0; i < chunk.length; i++) {
       const values = embeddings[i]?.values;

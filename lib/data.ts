@@ -212,7 +212,10 @@ export function rolIICAInfo(rol?: string): { text: string; bg: string; border: s
     }
 }
 
+import { getLogger } from '@/lib/utils/logger';
 import prisma from './prisma';
+
+const logger = getLogger('Data');
 
 // ... (Interface Project se mantiene igual arriba) ...
 
@@ -236,12 +239,12 @@ async function purgeFakeProjects(): Promise<void> {
             where: { id: { in: FAKE_PROJECT_IDS } },
         });
         if (count > 0) {
-            console.log(`[purgeFakeProjects] Eliminados ${count} proyectos ficticios de la DB (IDs: ${FAKE_PROJECT_IDS.join(',')})`);
+            logger.info('Eliminados proyectos ficticios de la DB', { count, ids: FAKE_PROJECT_IDS });
         }
     } catch (err) {
         // No crítico: el filtro notIn los excluye de todas formas.
         _fakesCleaned = false; // reintentar en el siguiente request
-        console.error("[purgeFakeProjects] Error (no crítico):", err);
+        logger.error('purgeFakeProjects error (no crítico)', err as Error);
     }
 }
 
@@ -263,7 +266,7 @@ export async function getProjects(): Promise<Project[]> {
             orderBy: { fecha_cierre: 'asc' },
         });
 
-        console.log(`[getProjects] Prisma OK: ${dbProjects.length} proyectos vigentes`);
+        logger.info('Prisma OK: proyectos vigentes', { count: dbProjects.length });
 
         return dbProjects.map(p => ({
             ...p,
@@ -276,7 +279,7 @@ export async function getProjects(): Promise<Project[]> {
             complejidad: p.complejidad as any
         })) as Project[];
     } catch (error) {
-        console.error("[getProjects] Prisma/Supabase falló — devolviendo lista vacía:", error);
+        logger.error('getProjects Prisma/Supabase falló — devolviendo lista vacía', error as Error);
         return [];
     }
 }

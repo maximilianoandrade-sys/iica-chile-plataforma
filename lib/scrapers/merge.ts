@@ -18,7 +18,7 @@ interface ProjectRecord {
   regiones?: string[];
   beneficiarios?: string[];
   objetivo?: string;
-  [key: string]: any; // preserva campos extra del JSON original
+  [key: string]: string | number | string[] | undefined; // preserva campos extra del JSON original
 }
 
 /**

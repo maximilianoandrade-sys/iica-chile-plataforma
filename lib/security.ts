@@ -4,6 +4,8 @@
  */
 
 import { z } from 'zod';
+import { getLogger } from '@/lib/utils/logger';
+const logger = getLogger('Security');
 
 // ============================================================================
 // 1. XSS PROTECTION - Sanitización de Inputs
@@ -85,7 +87,7 @@ export function validateSearchParams(params: Record<string, any>): Partial<SafeS
     try {
         return SearchSchema.parse(params);
     } catch (error) {
-        console.warn('⚠️ Parámetros de búsqueda inválidos:', error);
+        logger.warn('Parámetros de búsqueda inválidos', { error });
         return {};
     }
 }
@@ -223,20 +225,20 @@ export function generateCSPHeader(): string {
 /**
  * Guarda datos de forma segura en localStorage
  */
-export function secureStorageSet(key: string, value: any): void {
+export function secureStorageSet(key: string, value: unknown): void {
     try {
         const sanitizedKey = sanitizeInput(key);
         const data = JSON.stringify(value);
 
         // Validar tamaño (max 5MB)
         if (data.length > 5 * 1024 * 1024) {
-            console.warn('⚠️ Datos demasiado grandes para localStorage');
+            logger.warn('Datos demasiado grandes para localStorage');
             return;
         }
 
         localStorage.setItem(`iica_${sanitizedKey}`, data);
     } catch (error) {
-        console.error('❌ Error guardando en localStorage:', error);
+        logger.error('Error guardando en localStorage', error as Error);
     }
 }
 
@@ -252,7 +254,7 @@ export function secureStorageGet<T>(key: string, defaultValue: T): T {
 
         return JSON.parse(data) as T;
     } catch (error) {
-        console.error('❌ Error leyendo de localStorage:', error);
+        logger.error('Error leyendo de localStorage', error as Error);
         return defaultValue;
     }
 }
@@ -265,7 +267,7 @@ export function secureStorageRemove(key: string): void {
         const sanitizedKey = sanitizeInput(key);
         localStorage.removeItem(`iica_${sanitizedKey}`);
     } catch (error) {
-        console.error('❌ Error eliminando de localStorage:', error);
+        logger.error('Error eliminando de localStorage', error as Error);
     }
 }
 
@@ -318,7 +320,7 @@ export function sanitizeURL(url: string): string {
 
     // Validar
     if (!isValidURL(cleaned)) {
-        console.warn('⚠️ URL inválida:', url);
+        logger.warn('URL inválida', { url });
         return '';
     }
 
@@ -375,7 +377,7 @@ interface AuditLogEntry {
     timestamp: string;
     action: string;
     user?: string;
-    details?: any;
+    details?: Record<string, unknown>;
     severity: 'info' | 'warning' | 'error';
 }
 
@@ -387,7 +389,7 @@ const auditLog: AuditLogEntry[] = [];
 export function logSecurityEvent(
     action: string,
     severity: 'info' | 'warning' | 'error' = 'info',
-    details?: any
+    details?: Record<string, unknown>
 ) {
     const entry: AuditLogEntry = {
         timestamp: new Date().toISOString(),
@@ -405,11 +407,11 @@ export function logSecurityEvent(
 
     // Log en consola según severidad
     if (severity === 'error') {
-        console.error('🔒 Security Event:', entry);
+        logger.error('Security Event', undefined, { entry });
     } else if (severity === 'warning') {
-        console.warn('⚠️ Security Warning:', entry);
+        logger.warn('Security Warning', { entry });
     } else if (process.env.NODE_ENV === 'development') {
-        console.log('ℹ️ Security Info:', entry);
+        logger.info('Security Info', { entry });
     }
 }
 

@@ -9,7 +9,11 @@
  * Ver migration: prisma/migrations/manual/2026-05-11-hybrid-search.sql
  */
 import prisma from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import { embedText, toPgVector } from "@/lib/ingestion/embeddings";
+import { getLogger } from "@/lib/utils/logger";
+
+const logger = getLogger("HybridSearch");
 
 export interface HybridSearchOptions {
   query: string;
@@ -21,7 +25,7 @@ export interface HybridSearchOptions {
 }
 
 export interface HybridSearchResult {
-  projects: any[];
+  projects: Awaited<ReturnType<typeof prisma.project.findMany>>;
   mode: "hybrid" | "lexical_only" | "all";
   rankings?: Map<number, { rrf: number; lex: number; sem: number }>;
 }
@@ -40,7 +44,7 @@ export async function hybridSearch(opts: HybridSearchOptions): Promise<HybridSea
 
   // ── Caso sin query: top N más recientes ─────────────────────────────────
   if (!query || !query.trim()) {
-    const where: any = {};
+    const where: Prisma.ProjectWhereInput = {};
     if (ambito && ambito !== "all") where.ambito = ambito;
     if (!includeUnverified) where.needsReview = false;
 
@@ -60,7 +64,7 @@ export async function hybridSearch(opts: HybridSearchOptions): Promise<HybridSea
       queryEmbedding = await embedText(query.trim());
     }
   } catch (err) {
-    console.warn("[hybridSearch] embedding falló, fallback a lexical:", (err as Error).message);
+    logger.warn("Embedding failed, falling back to lexical search", { error: (err as Error).message });
   }
 
   // Si tenemos embedding: hybrid. Si no: solo full-text.
@@ -97,7 +101,7 @@ async function runFullHybrid(
   }
 
   const ids = rankings.map((r) => r.id);
-  const where: any = { id: { in: ids } };
+  const where: Prisma.ProjectWhereInput = { id: { in: ids } };
   if (ambito && ambito !== "all") where.ambito = ambito;
 
   const projectsRaw = await prisma.project.findMany({
@@ -129,17 +133,33 @@ async function runLexicalOnly(
   limit: number
 ): Promise<HybridSearchResult> {
   // Solo full-text con tsvector — sigue siendo mucho mejor que ILIKE %x%
-  const ambitoClause = ambito && ambito !== "all" ? `AND ambito = '${ambito.replace(/'/g, "''")}'` : "";
-  const unverifiedClause = !includeUnverified ? `AND "needsReview" = FALSE` : "";
+  // Build parameterized query to avoid SQL injection
+  const hasAmbito = ambito && ambito !== "all";
+  const hasUnverifiedFilter = !includeUnverified;
+
+  let sql = `SELECT id, ts_rank(search_vector, plainto_tsquery('spanish', $1)) AS rank
+     FROM "Project"
+     WHERE search_vector @@ plainto_tsquery('spanish', $1)`;
+
+  const params: (string | number | boolean)[] = [query];
+  let paramIdx = 2;
+
+  if (hasAmbito) {
+    sql += ` AND ambito = $${paramIdx}`;
+    params.push(ambito);
+    paramIdx++;
+  }
+
+  if (hasUnverifiedFilter) {
+    sql += ` AND "needsReview" = FALSE`;
+  }
+
+  sql += ` ORDER BY rank DESC LIMIT $${paramIdx}`;
+  params.push(limit);
 
   const rows = await prisma.$queryRawUnsafe<Array<{ id: number; rank: number }>>(
-    `SELECT id, ts_rank(search_vector, plainto_tsquery('spanish', $1)) AS rank
-     FROM "Project"
-     WHERE search_vector @@ plainto_tsquery('spanish', $1) ${ambitoClause} ${unverifiedClause}
-     ORDER BY rank DESC
-     LIMIT $2`,
-    query,
-    limit
+    sql,
+    ...params
   );
 
   if (rows.length === 0) return { projects: [], mode: "lexical_only" };
@@ -151,7 +171,7 @@ async function runLexicalOnly(
   });
 
   const projMap = new Map(projectsRaw.map((p) => [p.id, p]));
-  const projects = ids.map((id) => projMap.get(id)).filter(Boolean);
+  const projects = ids.map((id) => projMap.get(id)).filter((p): p is NonNullable<typeof p> => Boolean(p));
 
   return { projects, mode: "lexical_only" };
 }

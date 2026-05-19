@@ -1,9 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHmac, timingSafeEqual } from "crypto";
+import { getLogger } from '@/lib/utils/logger';
+const logger = getLogger('AdminLogin');
 
 export async function POST(req: NextRequest) {
-  const body = await req.json().catch(() => ({}));
-  const password = body.password || "";
+  let body: Record<string, unknown>;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ ok: false, error: "Invalid JSON body" }, { status: 400 });
+  }
+  const password = (body.password as string) || "";
   const expected = process.env.ADMIN_PASSWORD || "";
   
   if (!expected || !password) {
@@ -18,7 +25,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false }, { status: 401 });
   }
 
-  const token = createHmac("sha256", process.env.ADMIN_SESSION_SECRET || "dev-secret")
+  const sessionSecret = process.env.ADMIN_SESSION_SECRET;
+  if (!sessionSecret) {
+    logger.error('ADMIN_SESSION_SECRET not set');
+    return NextResponse.json({ ok: false, error: "server config error" }, { status: 500 });
+  }
+
+  const token = createHmac("sha256", sessionSecret)
     .update("admin-session")
     .digest("hex");
 
