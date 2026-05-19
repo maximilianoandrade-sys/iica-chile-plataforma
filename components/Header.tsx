@@ -28,7 +28,7 @@ export function Header() {
             {/* Top Bar Institutional */}
             <div className="bg-[var(--iica-navy)] dark:bg-gray-800 text-white text-xs py-1 px-4">
                 <div className="container mx-auto max-w-[1200px] flex justify-between items-center">
-                    <span>Instituto Interamericano de Cooperacion para la Agricultura - Oficina Chile</span>
+                    <span>Instituto Interamericano de Cooperación para la Agricultura - Oficina Chile</span>
                     <span className="opacity-80 hidden sm:block">Radar de Oportunidades 2026</span>
                 </div>
             </div>
@@ -44,7 +44,7 @@ export function Header() {
                 </div>
 
                 {/* Desktop Nav */}
-                <nav className="hidden lg:flex gap-5 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400" aria-label="Navegacion principal">
+                <nav className="hidden lg:flex gap-5 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400" aria-label="Navegación principal">
                     <Link href="/#convocatorias" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Oportunidades</Link>
                     <Link href="/pipeline" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Pipeline</Link>
                     <Link href="/consultores" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Consultores</Link>
@@ -75,7 +75,7 @@ export function Header() {
                     <button
                         className="lg:hidden p-2 text-[var(--iica-navy)] dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
                         onClick={() => setShowMobileMenu(!showMobileMenu)}
-                        aria-label={showMobileMenu ? 'Cerrar menu' : 'Abrir menu'}
+                        aria-label={showMobileMenu ? 'Cerrar menú' : 'Abrir menú'}
                         aria-expanded={showMobileMenu}
                     >
                         {showMobileMenu ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -99,7 +99,7 @@ export function Header() {
                                 { href: '/#fuentes', label: 'Fuentes Oficiales', icon: Link2 },
                                 { href: '/consultores', label: 'Directorio de Consultores', icon: Users },
                                 { href: '/#impacto', label: 'Impacto IICA', icon: TrendingUp },
-                                { href: '/maletin', label: 'Maletin Tecnico', icon: Briefcase },
+                                { href: '/maletin', label: 'Maletín Técnico', icon: Briefcase },
                                 { href: '/about', label: 'Sobre el IICA', icon: Building2 },
                                 { href: '/admin/login', label: 'Acceso Admin', icon: Users },
                                 { href: '/#contacto', label: 'Contacto', icon: Phone },
