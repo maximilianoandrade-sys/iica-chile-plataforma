@@ -14,7 +14,12 @@ export default function CookieConsent() {
     }, []);
 
     const acceptCookies = () => {
-        localStorage.setItem('iica_cookie_consent', 'true');
+        localStorage.setItem('iica_cookie_consent', 'accepted');
+        setShowConsent(false);
+    };
+
+    const rejectOptionalCookies = () => {
+        localStorage.setItem('iica_cookie_consent', 'rejected');
         setShowConsent(false);
     };
 
@@ -30,6 +35,12 @@ export default function CookieConsent() {
                     </p>
                 </div>
                 <div className="flex items-center gap-4 flex-shrink-0">
+                    <button
+                        onClick={rejectOptionalCookies}
+                        className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors min-h-[44px]"
+                    >
+                        Rechazar opcionales
+                    </button>
                     <button
                         onClick={acceptCookies}
                         className="bg-[var(--iica-cyan)] hover:bg-[#008ec2] text-white font-bold py-2 px-6 rounded-lg transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-cyan-500"
