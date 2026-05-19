@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { Project } from "@/lib/data";
 import { trackEvent, trackSearch } from "@/lib/analytics";
-import { smartSearch, buildInvertedIndex, searchAndRankProjects, InvertedIndex } from "@/lib/searchEngine";
+import type { InvertedIndex } from "@/lib/searchEngine";
 import counterparts from '@/lib/counterparts_raw.json';
 import { getInstitutionalLogo } from "@/lib/logos";
 import { AGROVOC_KEYWORDS } from "@/lib/agrovoc";
@@ -62,9 +62,12 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
 
     // Índice invertido pre-computado para búsqueda O(1)
     const [invertedIndex, setInvertedIndex] = useState<InvertedIndex | null>(null);
+    const searchEngineRef = useRef<typeof import('@/lib/searchEngine') | null>(null);
     useEffect(() => {
-        const idx = buildInvertedIndex(projects);
-        setInvertedIndex(idx);
+        import('@/lib/searchEngine').then(mod => {
+            searchEngineRef.current = mod;
+            setInvertedIndex(mod.buildInvertedIndex(projects));
+        });
     }, [projects]);
 
     const handleSort = (key: keyof Project | 'dificultad') => {
@@ -176,7 +179,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
 
         // ── Filtro Agrovoc (usa el nuevo motor de búsqueda completo) ──────────
         if (selectedAgrovoc !== 'Cualquiera') {
-            filtered = filtered.filter((p: any) => smartSearch(selectedAgrovoc, p as any));
+            filtered = filtered.filter((p: any) => searchEngineRef.current?.smartSearch(selectedAgrovoc, p as any));
         }
 
         // ── Filtro Favoritos ─────────────────────────────────────────────────
