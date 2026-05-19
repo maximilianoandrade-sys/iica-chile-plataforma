@@ -280,7 +280,7 @@ export default function ProjectFilters({
             <div className="sticky top-0 z-30 bg-white p-4 md:p-6 border-b border-gray-100">
                 <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <Search className="h-5 w-5 text-gray-400" />
+                        <Search className="h-5 w-5 text-gray-600" />
                     </div>
                     <input
                         type="text"
@@ -301,7 +301,7 @@ export default function ProjectFilters({
                     {searchTerm && (
                         <button
                             onClick={() => setSearchTerm('')}
-                            className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600"
+                            className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-600 hover:text-gray-600"
                             aria-label="Limpiar búsqueda"
                         >
                             <X className="h-4 w-4" />
@@ -310,7 +310,7 @@ export default function ProjectFilters({
                     {/* Autocomplete */}
                     {showSuggestions && filteredSuggestions.length > 0 && (
                         <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl z-30 overflow-hidden">
-                            <div className="flex items-center justify-between px-3 py-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100">
+                            <div className="flex items-center justify-between px-3 py-2 text-[10px] font-bold text-gray-600 uppercase tracking-wider border-b border-gray-100">
                                 <span>{searchTerm.length === 0 && recentSearches.length > 0 ? 'Búsquedas Recientes' : 'Sugerencias'}</span>
                                 {searchTerm.length === 0 && recentSearches.length > 0 && (
                                     <button 
@@ -319,7 +319,7 @@ export default function ProjectFilters({
                                             setRecentSearches([]); 
                                             localStorage.removeItem('iica_recent_searches'); 
                                         }} 
-                                        className="text-[10px] text-gray-400 hover:text-red-500 lowercase font-normal"
+                                        className="text-[10px] text-gray-600 hover:text-red-500 lowercase font-normal"
                                     >
                                         Limpiar
                                     </button>
@@ -341,7 +341,7 @@ export default function ProjectFilters({
 
                 {/* Tip: búsqueda por frase exacta */}
                 {searchTerm && !searchTerm.includes('"') && (
-                    <p className="mt-2 text-[11px] text-gray-400 flex items-center gap-1">
+                    <p className="mt-2 text-[11px] text-gray-600 flex items-center gap-1">
                         <span>💡</span>
                         <span>Frase exacta:</span>
                         <button
@@ -428,7 +428,7 @@ export default function ProjectFilters({
                             {opt.label}
                         </button>
                     ))}
-                    <span className="ml-auto text-[10px] text-gray-400 italic hidden md:block">
+                    <span className="ml-auto text-[10px] text-gray-600 italic hidden md:block">
                         Filtra por cómo puede participar el IICA Chile
                     </span>
                 </div>
@@ -635,12 +635,12 @@ export default function ProjectFilters({
                             <option value="300000000-600000000">$300M – $600M</option>
                             <option value="600000000-999999999999">Más de $600M</option>
                         </select>
-                        <ChevronDown className="absolute right-2.5 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
+                        <ChevronDown className="absolute right-2.5 top-2.5 h-4 w-4 text-gray-600 pointer-events-none" />
                     </div>
 
                     {/* Ordenamiento — ítem 11 */}
                     <div className="relative flex items-center gap-1.5">
-                        <ArrowUpDown className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                        <ArrowUpDown className="h-4 w-4 text-gray-600 flex-shrink-0" />
                         <select
                             value={sortBy}
                             onChange={(e) => handleSortChange(e.target.value)}
@@ -650,14 +650,14 @@ export default function ProjectFilters({
                                 <option key={opt.value} value={opt.value}>{opt.label}</option>
                             ))}
                         </select>
-                        <ChevronDown className="absolute right-2.5 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
+                        <ChevronDown className="absolute right-2.5 top-2.5 h-4 w-4 text-gray-600 pointer-events-none" />
                     </div>
                 </div>
             )}
 
             {/* Results Counter */}
             <div className="px-4 md:px-6 py-3 flex items-center justify-between flex-wrap gap-2">
-                <div className="text-sm text-gray-600 flex items-center gap-2 flex-wrap">
+                <div aria-live="polite" aria-atomic="true" className="text-sm text-gray-600 flex items-center gap-2 flex-wrap">
                     Mostrando{' '}
                     <strong className="text-[var(--iica-navy)] text-base">{counts.filtered}</strong>
                     {' '}de{' '}
@@ -728,7 +728,7 @@ function FilterSelect({ label, value, options, onChange, defaultText }: FilterSe
                     <option key={opt} value={opt}>{opt}</option>
                 ))}
             </select>
-            <ChevronDown className="absolute right-2.5 top-2.5 h-4 w-4 text-gray-400 pointer-events-none" />
+            <ChevronDown className="absolute right-2.5 top-2.5 h-4 w-4 text-gray-600 pointer-events-none" />
         </div>
     )
 }
