@@ -152,26 +152,26 @@ export default function MobileFilterDrawer({ isOpen, onClose }: MobileFilterDraw
                         animate={{ y: 0 }}
                         exit={{ y: '100%' }}
                         transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-                        className="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl max-h-[80vh] flex flex-col shadow-2xl"
+                        className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 rounded-t-2xl max-h-[80vh] flex flex-col shadow-2xl"
                         role="dialog"
                         aria-modal="true"
                         aria-label="Filtros"
                     >
                         {/* Drag handle */}
                         <div className="flex justify-center pt-3 pb-1">
-                            <div className="w-10 h-1 bg-gray-300 rounded-full" />
+                            <div className="w-10 h-1 bg-gray-300 dark:bg-gray-600 rounded-full" />
                         </div>
 
                         {/* Header */}
-                        <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100">
+                        <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100 dark:border-gray-700">
                             <button
                                 onClick={onClose}
                                 className="p-2 -ml-2 rounded-full hover:bg-gray-100 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                                 aria-label="Cerrar filtros"
                             >
-                                <X className="h-5 w-5 text-gray-600" />
+                                <X className="h-5 w-5 text-gray-600 dark:text-gray-400" />
                             </button>
-                            <h2 className="text-base font-bold text-gray-900">Filtros</h2>
+                            <h2 className="text-base font-bold text-gray-900 dark:text-gray-100">Filtros</h2>
                             <button
                                 onClick={clearAllFilters}
                                 className="text-sm font-medium text-red-500 hover:text-red-700 min-w-[44px] min-h-[44px] flex items-center justify-center"
@@ -240,12 +240,12 @@ export default function MobileFilterDrawer({ isOpen, onClose }: MobileFilterDraw
 
                             {/* Solo abiertos */}
                             <div className="flex items-center justify-between py-2">
-                                <span className="text-sm font-medium text-gray-700">Solo oportunidades abiertas</span>
+                                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Solo oportunidades abiertas</span>
                                 <button
                                     onClick={toggleSoloAbiertos}
                                     role="switch"
                                     aria-checked={soloAbiertos}
-                                    className={`relative w-12 h-7 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center ${soloAbiertos ? 'bg-green-600' : 'bg-gray-300'}`}
+                                    className={`relative w-12 h-7 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center ${soloAbiertos ? 'bg-green-600' : 'bg-gray-300 dark:bg-gray-600'}`}
                                 >
                                     <span className={`absolute top-1 w-5 h-5 bg-white rounded-full shadow transition-transform ${soloAbiertos ? 'translate-x-6' : 'translate-x-1'}`} />
                                 </button>
@@ -253,7 +253,7 @@ export default function MobileFilterDrawer({ isOpen, onClose }: MobileFilterDraw
                         </div>
 
                         {/* Footer */}
-                        <div className="px-5 py-4 border-t border-gray-100 bg-white">
+                        <div className="px-5 py-4 border-t border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900">
                             <button
                                 onClick={onClose}
                                 className="w-full py-3.5 bg-[var(--iica-navy)] text-white font-bold text-sm rounded-xl hover:bg-[var(--iica-navy)]/90 transition-colors min-h-[44px]"
@@ -271,7 +271,7 @@ export default function MobileFilterDrawer({ isOpen, onClose }: MobileFilterDraw
 function FilterSection({ label, children }: { label: string; children: React.ReactNode }) {
     return (
         <div>
-            <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{label}</h3>
+            <h3 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">{label}</h3>
             {children}
         </div>
     );
@@ -284,7 +284,7 @@ function PillButton({ label, active, onClick }: { label: string; active: boolean
             aria-pressed={active}
             className={`px-4 py-2.5 rounded-full text-sm font-bold transition-all border min-h-[44px] ${active
                 ? 'bg-[var(--iica-navy)] text-white border-[var(--iica-navy)] shadow-sm'
-                : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
             }`}
         >
             {label}
