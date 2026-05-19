@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { GoogleGenAI } from "@google/genai";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { getLogger } from "@/lib/utils/logger";
+import { GenerateProposalSchema, formatZodError } from "@/lib/utils/validation";
 
 const logger = getLogger("GenerateProposal");
 const PROPOSAL_RATE_LIMIT = { maxRequests: 5, windowSizeSeconds: 60 };
@@ -43,30 +44,14 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { projectId, applicantInfo } = body;
-
-    if (!projectId || typeof projectId !== "number") {
+    const parsed = GenerateProposalSchema.safeParse(body);
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: "projectId es requerido y debe ser un número" },
+        { error: formatZodError(parsed.error) },
         { status: 400 }
       );
     }
-
-    // Validate applicantInfo fields
-    if (applicantInfo) {
-      const fields = ["name", "organization", "region"] as const;
-      for (const field of fields) {
-        const value = applicantInfo[field];
-        if (value !== undefined && value !== null) {
-          if (typeof value !== "string" || value.length > 200) {
-            return NextResponse.json(
-              { error: `applicantInfo.${field} debe ser un texto de máximo 200 caracteres.` },
-              { status: 400 }
-            );
-          }
-        }
-      }
-    }
+    const { projectId, applicantInfo } = parsed.data;
 
     if (!process.env.GEMINI_API_KEY) {
       return NextResponse.json(

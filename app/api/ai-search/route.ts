@@ -17,6 +17,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { getLogger } from "@/lib/utils/logger";
+import { AiSearchSchema, formatZodError } from "@/lib/utils/validation";
 
 const logger = getLogger("AiSearch");
 const AI_SEARCH_RATE_LIMIT = { maxRequests: 10, windowSizeSeconds: 60 };
@@ -72,27 +73,20 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { query } = body as { query?: string };
-
-    if (!query || typeof query !== "string" || query.trim().length === 0) {
+    const parsed = AiSearchSchema.safeParse(body);
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: "El campo 'query' es requerido y debe ser un texto válido." },
+        { error: formatZodError(parsed.error) },
         { status: 400 }
       );
     }
-
-    if (query.trim().length > 500) {
-      return NextResponse.json(
-        { error: "La consulta no puede exceder 500 caracteres." },
-        { status: 400 }
-      );
-    }
+    const { query } = parsed.data;
 
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-lite",
-      contents: [{ role: "user", parts: [{ text: query.trim() }] }],
+      contents: [{ role: "user", parts: [{ text: query }] }],
       config: {
         systemInstruction: SYSTEM_PROMPT,
         tools: [{ googleSearch: {} }],
