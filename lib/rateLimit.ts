@@ -1,6 +1,18 @@
 /**
- * In-memory rate limiter using sliding window.
- * For production with multiple instances, replace with Upstash/Vercel KV.
+ * Rate limiter en memoria usando ventana fija.
+ *
+ * ⚠️  ADVERTENCIA SERVERLESS: En Vercel, cada invocación de función puede
+ * correr en un isolate diferente. El Map en memoria NO se comparte entre
+ * instancias. Esto provee rate limiting "best-effort" por instancia.
+ * Para enforcement estricto entre todas las instancias, migrar a Upstash Redis
+ * o Vercel KV:
+ *   - npm install @upstash/ratelimit @upstash/redis
+ *   - Ver: https://upstash.com/docs/redis/sdks/ratelimit-ts/overview
+ *
+ * El enfoque actual es aceptable porque:
+ *   1. Los endpoints AI son costosos pero no críticos de seguridad
+ *   2. Vercel hobby tiene pocas instancias concurrentes (~1-3)
+ *   3. El límite es por-IP por-instancia, peor caso = 3x el max configurado
  */
 
 interface RateLimitEntry {

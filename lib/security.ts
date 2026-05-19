@@ -93,85 +93,8 @@ export function validateSearchParams(params: Record<string, any>): Partial<SafeS
 }
 
 // ============================================================================
-// 3. RATE LIMITING - Protección contra Abuso
+// 3. RATE LIMITING - use lib/rateLimit.ts (consolidado)
 // ============================================================================
-
-interface RateLimitEntry {
-    count: number;
-    resetTime: number;
-}
-
-const rateLimitStore = new Map<string, RateLimitEntry>();
-
-/**
- * Implementa rate limiting por IP/usuario
- * @param key - Identificador único (IP, sessionId, etc)
- * @param maxRequests - Máximo de requests permitidos
- * @param windowMs - Ventana de tiempo en milisegundos
- */
-export function checkRateLimit(
-    key: string,
-    maxRequests: number = 100,
-    windowMs: number = 60000 // 1 minuto
-): { allowed: boolean; remaining: number; resetIn: number } {
-    const now = Date.now();
-    const entry = rateLimitStore.get(key);
-
-    // Limpiar entradas expiradas
-    if (entry && now > entry.resetTime) {
-        rateLimitStore.delete(key);
-    }
-
-    const current = rateLimitStore.get(key);
-
-    if (!current) {
-        // Primera request
-        rateLimitStore.set(key, {
-            count: 1,
-            resetTime: now + windowMs
-        });
-        return {
-            allowed: true,
-            remaining: maxRequests - 1,
-            resetIn: windowMs
-        };
-    }
-
-    if (current.count >= maxRequests) {
-        // Límite excedido
-        return {
-            allowed: false,
-            remaining: 0,
-            resetIn: current.resetTime - now
-        };
-    }
-
-    // Incrementar contador
-    current.count++;
-    return {
-        allowed: true,
-        remaining: maxRequests - current.count,
-        resetIn: current.resetTime - now
-    };
-}
-
-/**
- * Limpia el rate limit store periódicamente
- */
-export function cleanupRateLimitStore() {
-    const now = Date.now();
-    const entries = Array.from(rateLimitStore.entries());
-    for (const [key, entry] of entries) {
-        if (now > entry.resetTime) {
-            rateLimitStore.delete(key);
-        }
-    }
-}
-
-// Limpiar cada 5 minutos
-if (typeof window !== 'undefined') {
-    setInterval(cleanupRateLimitStore, 5 * 60 * 1000);
-}
 
 // ============================================================================
 // 4. CSRF PROTECTION
