@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -86,6 +86,50 @@ export default function MobileFilterDrawer({ isOpen, onClose }: MobileFilterDraw
         router.replace(`?${params.toString()}`, { scroll: false });
     }, [searchParams, router]);
 
+    const drawerRef = useRef<HTMLDivElement>(null);
+
+    // Close on Escape key
+    useEffect(() => {
+        if (!isOpen) return;
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') onClose();
+        };
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [isOpen, onClose]);
+
+    // Focus trap: cycle focus within the drawer
+    useEffect(() => {
+        if (!isOpen || !drawerRef.current) return;
+
+        const drawer = drawerRef.current;
+        const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
+        // Auto-focus the first focusable element
+        const firstFocusable = drawer.querySelector<HTMLElement>(focusableSelector);
+        firstFocusable?.focus();
+
+        const handleTab = (e: KeyboardEvent) => {
+            if (e.key !== 'Tab') return;
+            const focusables = drawer.querySelectorAll<HTMLElement>(focusableSelector);
+            if (focusables.length === 0) return;
+
+            const first = focusables[0];
+            const last = focusables[focusables.length - 1];
+
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
+        };
+
+        document.addEventListener('keydown', handleTab);
+        return () => document.removeEventListener('keydown', handleTab);
+    }, [isOpen]);
+
     return (
         <AnimatePresence>
             {isOpen && (
@@ -103,6 +147,7 @@ export default function MobileFilterDrawer({ isOpen, onClose }: MobileFilterDraw
 
                     {/* Drawer */}
                     <motion.div
+                        ref={drawerRef}
                         initial={{ y: '100%' }}
                         animate={{ y: 0 }}
                         exit={{ y: '100%' }}
