@@ -11,6 +11,7 @@ import { embedText, projectToEmbeddingText, toPgVector } from '@/lib/ingestion/e
 import { getKVStore } from '@/lib/kvStore';
 import { sendEmail } from '@/lib/email';
 import { getLogger } from '@/lib/utils/logger';
+import { sendAlert } from '@/lib/utils/alerts';
 
 const logger = getLogger('CronCheckUpdates');
 
@@ -292,6 +293,21 @@ export async function GET(request: NextRequest) {
             totalChecked: results.length,
             timestamp: new Date().toISOString()
         };
+
+        // Enviar alerta webhook si hay enlaces caídos
+        const failedChecks = results.filter((r: LinkCheckResult) => r.error || r.status >= 400);
+        if (failedChecks.length > 0) {
+            await sendAlert({
+                title: 'Scraper: enlaces caídos detectados',
+                message: `${failedChecks.length} enlace(s) fallaron en la verificación diaria.`,
+                severity: failedChecks.length > 5 ? 'error' : 'warning',
+                context: {
+                    total: String(results.length),
+                    failed: String(failedChecks.length),
+                    urls: failedChecks.slice(0, 3).map((r: LinkCheckResult) => r.url).join(', '),
+                },
+            });
+        }
 
         // Enviar notificación si hay cambios o problemas
         if (changedProjects.length > 0 || brokenLinks.length > 0) {
