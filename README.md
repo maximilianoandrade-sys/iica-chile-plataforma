@@ -315,7 +315,7 @@ npm run dev
 3. **Notificaciones Slack/email** cuando un scraper falla 3 días seguidos.
 4. **Dedup fuzzy por (institucion + nombre)** para casos donde la misma convocatoria llega de scraper y de AI Discovery con URLs distintas.
 5. **Activar billing de Gemini** si se llega al límite del free tier (`gemini-2.5-flash-lite` con grounding tiene cuota más alta pero no infinita).
-6. **Migrar las 3 rutas legacy de Anthropic** (`/api/ai-search`, `/api/ai-web-search`, `/api/generate-proposal`) a Gemini para consolidar dependencias.
+6. ~~**Migrar las 3 rutas legacy de Anthropic**~~ ✅ HECHO — `@anthropic-ai/sdk` eliminado. Nuevas rutas `/api/ai-search` y `/api/generate-proposal` creadas con Gemini.
 
 ---
 
