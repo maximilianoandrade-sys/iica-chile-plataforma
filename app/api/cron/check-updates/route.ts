@@ -248,14 +248,19 @@ export async function GET(request: NextRequest) {
         let embeddingsBackfilled = 0;
         if (process.env.GEMINI_API_KEY) {
             try {
-                const missing = await prisma.project.findMany({
-                    where: { embedding: null },
-                    select: { id: true, nombre: true, institucion: true, objetivo: true, categoria: true },
-                    take: 20,
-                });
+                const missing = await prisma.$queryRawUnsafe<
+                    Array<{ id: number; nombre: string; institucion: string | null; objetivo: string | null; categoria: string | null }>
+                >(
+                    `SELECT id, nombre, institucion, objetivo, categoria FROM "Project" WHERE embedding IS NULL LIMIT 20`
+                );
                 for (const p of missing) {
                     try {
-                        const text = projectToEmbeddingText(p);
+                        const text = projectToEmbeddingText({
+                            nombre: p.nombre,
+                            institucion: p.institucion || "",
+                            objetivo: p.objetivo,
+                            categoria: p.categoria,
+                        });
                         const embedding = await embedText(text);
                         if (embedding) {
                             await prisma.$executeRawUnsafe(
