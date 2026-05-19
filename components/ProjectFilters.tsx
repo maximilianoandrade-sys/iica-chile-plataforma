@@ -301,7 +301,7 @@ export default function ProjectFilters({
                     {searchTerm && (
                         <button
                             onClick={() => setSearchTerm('')}
-                            className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-600 hover:text-gray-600"
+                            className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-600 hover:text-gray-800"
                             aria-label="Limpiar búsqueda"
                         >
                             <X className="h-4 w-4" />
