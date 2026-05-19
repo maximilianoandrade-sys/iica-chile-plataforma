@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState, useTransition } from 'react';
 import { Search, Filter, ChevronDown, X, Sparkles, SlidersHorizontal, ArrowUpDown } from "lucide-react";
 import { useAnalytics } from '@/hooks/useAnalytics';
 import MultiFilterSelect from '@/components/MultiFilterSelect';
+import MobileFilterDrawer from '@/components/MobileFilterDrawer';
 
 // ─────────────────────────────────────
 // Chips de búsqueda rápida IICA
@@ -108,6 +109,7 @@ export default function ProjectFilters({
     const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
     const [recentSearches, setRecentSearches] = useState<string[]>([]);
     const [showAdvanced, setShowAdvanced] = useState(false);
+    const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
     // Cargar búsquedas recientes
     useEffect(() => {
@@ -389,8 +391,25 @@ export default function ProjectFilters({
                 </div>
             </div>
 
+            {/* Mobile filter button */}
+            <div className="px-4 py-3 border-b border-gray-100 flex items-center gap-2 lg:hidden">
+                <button
+                    onClick={() => setMobileDrawerOpen(true)}
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm font-bold text-gray-700 hover:bg-gray-50 transition-colors min-h-[44px]"
+                >
+                    <SlidersHorizontal className="h-4 w-4" />
+                    Filtros
+                    {hasActiveFilters && (
+                        <span className="ml-1 w-5 h-5 flex items-center justify-center bg-[var(--iica-navy)] text-white text-[10px] font-bold rounded-full">
+                            {[selectedRol !== 'Todos', selectedAmbito !== 'Todos', selectedViabilidad !== 'Todas', selectedEstado !== 'Todos', soloAbiertos].filter(Boolean).length}
+                        </span>
+                    )}
+                </button>
+            </div>
+            <MobileFilterDrawer isOpen={mobileDrawerOpen} onClose={() => setMobileDrawerOpen(false)} />
+
             {/* ── PILLS de Rol IICA ── */}
-            <div className="px-4 md:px-6 py-3 border-b border-gray-100 bg-blue-50/30">
+            <div className="hidden lg:block px-4 md:px-6 py-3 border-b border-gray-100 bg-blue-50/30">
                 <div className="flex flex-wrap gap-2 items-center">
                     <span className="text-xs font-bold text-[var(--iica-navy)] uppercase tracking-wider flex-shrink-0">Rol IICA:</span>
                     {ROL_IICA_OPTIONS.map(opt => (
@@ -416,7 +435,7 @@ export default function ProjectFilters({
             </div>
 
             {/* ── PILLS de Ámbito (ítem 8) ── */}
-            <div className="px-4 md:px-6 py-3 border-b border-gray-100 bg-gray-50/50">
+            <div className="hidden lg:block px-4 md:px-6 py-3 border-b border-gray-100 bg-gray-50/50">
                 <div className="flex flex-wrap gap-2 items-center">
                     <span className="text-xs font-bold text-gray-500 uppercase tracking-wider flex-shrink-0">Ámbito:</span>
                     {AMBITO_OPTIONS.map(opt => (
@@ -452,7 +471,7 @@ export default function ProjectFilters({
             </div>
 
             {/* ── PILLS de Estado de Postulación (ítem 10) ── */}
-            <div className="px-4 md:px-6 py-3 bg-gray-50/30 flex flex-col md:flex-row gap-3 items-start md:items-center flex-wrap border-b border-gray-100">
+            <div className="hidden lg:flex px-4 md:px-6 py-3 bg-gray-50/30 flex-col md:flex-row gap-3 items-start md:items-center flex-wrap border-b border-gray-100">
                 <div className="flex items-center gap-1.5 text-sm font-bold text-gray-600 flex-shrink-0">
                     <Filter className="h-4 w-4" />
                     Más filtros:
