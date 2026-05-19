@@ -1,6 +1,7 @@
 import prisma from "../prisma";
 import { normalizeUrl, parseAmount } from "./utils";
 import { validateUrl } from "./validateUrl";
+import { embedText, projectToEmbeddingText, toPgVector } from "./embeddings";
 import type { RawProject } from "./types";
 
 const STALE_DAYS = 7;
@@ -45,7 +46,7 @@ export async function upsertProject(
     lastSeenAt: now,
   };
 
-  await prisma.project.upsert({
+  const upserted = await prisma.project.upsert({
     where: { canonicalUrl },
     update: baseFields,
     create: {
@@ -66,7 +67,51 @@ export async function upsertProject(
     },
   });
 
+  // Auto-embed (best-effort)
+  if (process.env.GEMINI_API_KEY) {
+    try {
+      const text = projectToEmbeddingText({
+        nombre: baseFields.nombre,
+        institucion: baseFields.institucion,
+        objetivo: baseFields.objetivo,
+        categoria: baseFields.categoria,
+      });
+      const embedding = await embedText(text);
+      if (embedding) {
+        await prisma.$executeRawUnsafe(
+          `UPDATE "Project" SET embedding = $1::vector WHERE id = $2`,
+          toPgVector(embedding),
+          upserted.id
+        );
+      }
+    } catch (err) {
+      console.warn(`[persistence] embedding failed for ${canonicalUrl}:`, err);
+    }
+  }
+
   return {};
+}
+
+/**
+ * Find projects semantically similar to the given text.
+ * Uses pgvector cosine distance (<=>). Lower = more similar.
+ */
+export async function findSemanticDuplicates(
+  text: string,
+  threshold = 0.15
+): Promise<{ id: string; nombre: string; canonicalUrl: string }[]> {
+  const embedding = await embedText(text);
+  if (!embedding) return [];
+
+  const rows = await prisma.$queryRawUnsafe<
+    { id: string; nombre: string; canonicalUrl: string }[]
+  >(
+    `SELECT id, nombre, "canonicalUrl" FROM "Project" WHERE embedding <=> $1::vector < $2 LIMIT 5`,
+    toPgVector(embedding),
+    threshold
+  );
+
+  return rows;
 }
 
 export async function markStale(): Promise<{ markedByLastSeen: number; markedByDeadline: number }> {
