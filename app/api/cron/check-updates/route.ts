@@ -6,6 +6,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getProjects } from '@/lib/data';
+import prisma from '@/lib/prisma';
+import { embedText, projectToEmbeddingText, toPgVector } from '@/lib/ingestion/embeddings';
 
 export const runtime = 'nodejs';
 
@@ -240,6 +242,38 @@ export async function GET(request: NextRequest) {
             await new Promise(resolve => setTimeout(resolve, 100));
         }
 
+        // ==================================================================
+        // EMBEDDING BACKFILL — fill up to 20 projects missing embeddings
+        // ==================================================================
+        let embeddingsBackfilled = 0;
+        if (process.env.GEMINI_API_KEY) {
+            try {
+                const missing = await prisma.project.findMany({
+                    where: { embedding: null },
+                    select: { id: true, nombre: true, institucion: true, objetivo: true, categoria: true },
+                    take: 20,
+                });
+                for (const p of missing) {
+                    try {
+                        const text = projectToEmbeddingText(p);
+                        const embedding = await embedText(text);
+                        if (embedding) {
+                            await prisma.$executeRawUnsafe(
+                                `UPDATE "Project" SET embedding = $1::vector WHERE id = $2`,
+                                toPgVector(embedding),
+                                p.id
+                            );
+                            embeddingsBackfilled++;
+                        }
+                    } catch (err) {
+                        console.warn(`[cron] embedding backfill failed for ${p.id}:`, err);
+                    }
+                }
+            } catch (err) {
+                console.error('[cron] embedding backfill query failed:', err);
+            }
+        }
+
         // Crear notificación
         const notification: UpdateNotification = {
             changedProjects,
@@ -258,6 +292,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({
             success: true,
             ...notification,
+            embeddingsBackfilled,
             message: 'Verificación completada exitosamente'
         });
 
