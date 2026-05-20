@@ -12,6 +12,7 @@ import { getKVStore } from '@/lib/kvStore';
 import { sendEmail } from '@/lib/email';
 import { getLogger } from '@/lib/utils/logger';
 import { sendAlert } from '@/lib/utils/alerts';
+import { createSuccessResponse, createErrorResponse } from '@/lib/utils/api-response';
 
 const logger = getLogger('CronCheckUpdates');
 
@@ -215,10 +216,7 @@ export async function GET(request: NextRequest) {
     try {
         // Verificar autorización
         if (!isAuthorized(request)) {
-            return NextResponse.json(
-                { error: 'Unauthorized' },
-                { status: 401 }
-            );
+            return createErrorResponse('Unauthorized', 401);
         }
 
         logger.info('Starting update check...');
@@ -316,8 +314,7 @@ export async function GET(request: NextRequest) {
 
         logger.info('Update check completed', { totalChecked: results.length, embeddingsBackfilled });
 
-        return NextResponse.json({
-            success: true,
+        return createSuccessResponse({
             ...notification,
             embeddingsBackfilled,
             message: 'Verificación completada exitosamente'
@@ -326,13 +323,8 @@ export async function GET(request: NextRequest) {
     } catch (error: unknown) {
         logger.error('Update check failed', error as Error);
 
-        return NextResponse.json(
-            {
-                error: 'Internal server error',
-                message: error instanceof Error ? error.message : 'Unknown error'
-            },
-            { status: 500 }
-        );
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        return createErrorResponse(message, 500);
     }
 }
 

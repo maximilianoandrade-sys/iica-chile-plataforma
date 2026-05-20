@@ -12,6 +12,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { getLogger } from "@/lib/utils/logger";
+import { createSuccessResponse, createErrorResponse } from "@/lib/utils/api-response";
 
 const logger = getLogger("Analytics");
 
@@ -44,42 +45,30 @@ export async function POST(request: NextRequest) {
     const clientIp = getClientIp(request);
     const rateCheck = checkRateLimit(`analytics:${clientIp}`, ANALYTICS_RATE_LIMIT);
     if (!rateCheck.allowed) {
-      return NextResponse.json({ ok: false }, { status: 429 });
+      return createErrorResponse("Demasiadas solicitudes", 429);
     }
 
     let body: AnalyticsEvent;
     try {
       body = await request.json();
     } catch {
-      return NextResponse.json(
-        { error: "Invalid JSON body" },
-        { status: 400 }
-      );
+      return createErrorResponse("Invalid JSON body", 400);
     }
 
     // Validate event name
     if (!body.event || typeof body.event !== "string") {
-      return NextResponse.json(
-        { error: "Field 'event' is required and must be a string" },
-        { status: 400 }
-      );
+      return createErrorResponse("Field 'event' is required and must be a string", 400);
     }
 
     if (!ALLOWED_EVENTS.has(body.event)) {
-      return NextResponse.json(
-        { error: `Unknown event type: ${body.event}` },
-        { status: 400 }
-      );
+      return createErrorResponse(`Unknown event type: ${body.event}`, 400);
     }
 
     // Sanitize properties - limit size
     const properties = body.properties || {};
     const propsJson = JSON.stringify(properties);
     if (propsJson.length > 2048) {
-      return NextResponse.json(
-        { error: "Properties too large (max 2KB)" },
-        { status: 400 }
-      );
+      return createErrorResponse("Properties too large (max 2KB)", 400);
     }
 
     // Log the analytics event (structured logging for collection by external services)
@@ -91,10 +80,10 @@ export async function POST(request: NextRequest) {
       timestamp: body.timestamp || new Date().toISOString(),
     });
 
-    return NextResponse.json({ ok: true });
+    return createSuccessResponse(null);
   } catch (error) {
     logger.error("Analytics endpoint error", error as Error);
-    return NextResponse.json({ ok: false }, { status: 500 });
+    return createErrorResponse("Internal server error", 500);
   }
 }
 

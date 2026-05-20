@@ -25,6 +25,7 @@ import { hybridSearch } from "@/lib/searchHybrid";
 import { fetchMercadoPublicoLive } from "@/lib/ingestion/scrapers/mercado-publico";
 import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
 import { getLogger } from '@/lib/utils/logger';
+import { createSuccessResponse, createErrorResponse } from '@/lib/utils/api-response';
 const logger = getLogger('SearchProjects');
 
 interface SearchBody {
@@ -45,10 +46,7 @@ export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
   const rateLimit = checkRateLimit(`search-projects:${ip}`, { maxRequests: 30, windowSizeSeconds: 60 });
   if (!rateLimit.allowed) {
-    return NextResponse.json(
-      { error: 'Demasiadas solicitudes. Intente nuevamente más tarde.' },
-      { status: 429, headers: { 'Retry-After': String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)) } }
-    );
+    return createErrorResponse('Demasiadas solicitudes. Intente nuevamente más tarde.', 429, { 'Retry-After': String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)) });
   }
 
   try {
@@ -56,10 +54,7 @@ export async function POST(req: NextRequest) {
     try {
       body = await req.json();
     } catch {
-      return NextResponse.json(
-        { error: "Invalid JSON body" },
-        { status: 400 }
-      );
+      return createErrorResponse("Invalid JSON body", 400);
     }
     const query = body.query?.trim() || "";
     const ambito = body.ambito || body.scope || "all";
@@ -77,7 +72,7 @@ export async function POST(req: NextRequest) {
       days_left: calcDaysLeft(p.fecha_cierre),
     }));
 
-    return NextResponse.json({
+    return createSuccessResponse({
       results: [...enriched, ...mpDocs],
       meta: {
         total: enriched.length + mpDocs.length,
@@ -90,10 +85,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     logger.error('Search projects error', error as Error);
-    return NextResponse.json(
-      { error: 'Error interno del servidor' },
-      { status: 500 }
-    );
+    return createErrorResponse('Error interno del servidor', 500);
   }
 }
 

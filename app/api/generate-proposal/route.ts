@@ -4,6 +4,7 @@ import { GoogleGenAI } from "@google/genai";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { getLogger } from "@/lib/utils/logger";
 import { GenerateProposalSchema, formatZodError } from "@/lib/utils/validation";
+import { createSuccessResponse, createErrorResponse } from "@/lib/utils/api-response";
 
 const logger = getLogger("GenerateProposal");
 const PROPOSAL_RATE_LIMIT = { maxRequests: 5, windowSizeSeconds: 60 };
@@ -31,14 +32,12 @@ export async function POST(request: Request) {
     const clientIp = getClientIp(request);
     const rateCheck = checkRateLimit(`generate-proposal:${clientIp}`, PROPOSAL_RATE_LIMIT);
     if (!rateCheck.allowed) {
-      return NextResponse.json(
-        { error: "Demasiadas solicitudes. Intente de nuevo en un momento." },
+      return createErrorResponse(
+        "Demasiadas solicitudes. Intente de nuevo en un momento.",
+        429,
         {
-          status: 429,
-          headers: {
-            "Retry-After": String(Math.ceil((rateCheck.resetAt - Date.now()) / 1000)),
-            "X-RateLimit-Remaining": "0",
-          },
+          "Retry-After": String(Math.ceil((rateCheck.resetAt - Date.now()) / 1000)),
+          "X-RateLimit-Remaining": "0",
         }
       );
     }
@@ -46,18 +45,12 @@ export async function POST(request: Request) {
     const body = await request.json();
     const parsed = GenerateProposalSchema.safeParse(body);
     if (!parsed.success) {
-      return NextResponse.json(
-        { error: formatZodError(parsed.error) },
-        { status: 400 }
-      );
+      return createErrorResponse(formatZodError(parsed.error), 400);
     }
     const { projectId, applicantInfo } = parsed.data;
 
     if (!process.env.GEMINI_API_KEY) {
-      return NextResponse.json(
-        { error: "Servicio de generación no disponible. GEMINI_API_KEY no configurada." },
-        { status: 503 }
-      );
+      return createErrorResponse("Servicio de generación no disponible. GEMINI_API_KEY no configurada.", 503);
     }
 
     const project = await prisma.project.findUnique({
@@ -65,10 +58,7 @@ export async function POST(request: Request) {
     });
 
     if (!project) {
-      return NextResponse.json(
-        { error: `Proyecto con id ${projectId} no encontrado` },
-        { status: 404 }
-      );
+      return createErrorResponse(`Proyecto con id ${projectId} no encontrado`, 404);
     }
 
     const SYSTEM_INSTRUCTION = `Eres un experto en redacción de propuestas de financiamiento para proyectos agrícolas en Chile. Genera un borrador de propuesta en español para el proyecto proporcionado. La propuesta debe ser profesional, clara y no exceder 1500 palabras.
@@ -112,22 +102,16 @@ ${applicantContext}`;
     const proposal = response.text;
 
     if (!proposal) {
-      return NextResponse.json(
-        { error: "No se pudo generar la propuesta" },
-        { status: 500 }
-      );
+      return createErrorResponse("No se pudo generar la propuesta", 500);
     }
 
-    return NextResponse.json({
+    return createSuccessResponse({
       proposal,
       projectName: project.nombre,
       generatedAt: new Date().toISOString(),
     });
   } catch (error) {
     logger.error("Proposal generation failed", error as Error);
-    return NextResponse.json(
-      { error: "Error interno al generar la propuesta" },
-      { status: 500 }
-    );
+    return createErrorResponse("Error interno al generar la propuesta", 500);
   }
 }

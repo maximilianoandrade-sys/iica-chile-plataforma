@@ -3,6 +3,7 @@ import { createHmac, timingSafeEqual } from "crypto";
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
 import { getLogger } from "@/lib/utils/logger";
+import { createSuccessResponse, createErrorResponse } from "@/lib/utils/api-response";
 
 const logger = getLogger("AdminDiscoveryAction");
 
@@ -49,21 +50,21 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   if (!isAuthenticated(req)) {
-    return NextResponse.json({ error: "no autorizado" }, { status: 401 });
+    return createErrorResponse("no autorizado", 401);
   }
 
   const id = Number(params.id);
-  if (isNaN(id)) return NextResponse.json({ error: "id inválido" }, { status: 400 });
+  if (isNaN(id)) return createErrorResponse("id inválido", 400);
 
   let body: Record<string, unknown>;
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ error: "JSON body inválido" }, { status: 400 });
+    return createErrorResponse("JSON body inválido", 400);
   }
   const action = body.action as string;
   if (!action || !["approve", "discard"].includes(action)) {
-    return NextResponse.json({ error: "action inválida" }, { status: 400 });
+    return createErrorResponse("action inválida", 400);
   }
 
   if (action === "approve") {
@@ -87,5 +88,5 @@ export async function POST(
   revalidatePath("/admin/discoveries");
   revalidatePath("/admin/projects/needsReview");
   revalidatePath("/");
-  return NextResponse.json({ ok: true });
+  return createSuccessResponse(null);
 }

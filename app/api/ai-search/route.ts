@@ -18,6 +18,7 @@ import { GoogleGenAI } from "@google/genai";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { getLogger } from "@/lib/utils/logger";
 import { AiSearchSchema, formatZodError } from "@/lib/utils/validation";
+import { createSuccessResponse, createErrorResponse } from "@/lib/utils/api-response";
 
 const logger = getLogger("AiSearch");
 const AI_SEARCH_RATE_LIMIT = { maxRequests: 10, windowSizeSeconds: 60 };
@@ -53,32 +54,24 @@ export async function POST(request: NextRequest) {
     const clientIp = getClientIp(request);
     const rateCheck = checkRateLimit(`ai-search:${clientIp}`, AI_SEARCH_RATE_LIMIT);
     if (!rateCheck.allowed) {
-      return NextResponse.json(
-        { error: "Demasiadas solicitudes. Intente de nuevo en un momento." },
+      return createErrorResponse(
+        "Demasiadas solicitudes. Intente de nuevo en un momento.",
+        429,
         {
-          status: 429,
-          headers: {
-            "Retry-After": String(Math.ceil((rateCheck.resetAt - Date.now()) / 1000)),
-            "X-RateLimit-Remaining": "0",
-          },
+          "Retry-After": String(Math.ceil((rateCheck.resetAt - Date.now()) / 1000)),
+          "X-RateLimit-Remaining": "0",
         }
       );
     }
 
     if (!process.env.GEMINI_API_KEY) {
-      return NextResponse.json(
-        { error: "GEMINI_API_KEY no está configurada en el servidor." },
-        { status: 503 }
-      );
+      return createErrorResponse("GEMINI_API_KEY no está configurada en el servidor.", 503);
     }
 
     const body = await request.json();
     const parsed = AiSearchSchema.safeParse(body);
     if (!parsed.success) {
-      return NextResponse.json(
-        { error: formatZodError(parsed.error) },
-        { status: 400 }
-      );
+      return createErrorResponse(formatZodError(parsed.error), 400);
     }
     const { query } = parsed.data;
 
@@ -107,7 +100,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({
+    return createSuccessResponse({
       answer,
       sources,
       searchedAt: new Date().toISOString(),
@@ -116,6 +109,6 @@ export async function POST(request: NextRequest) {
     logger.error("AI search failed", err);
     const message =
       err instanceof Error ? err.message : "Error interno del servidor";
-    return NextResponse.json({ error: message }, { status: 500 });
+    return createErrorResponse(message, 500);
   }
 }

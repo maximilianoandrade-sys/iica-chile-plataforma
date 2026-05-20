@@ -17,12 +17,12 @@ export async function POST(req: NextRequest) {
         const { email, name } = body;
 
         if (!email || typeof email !== 'string') {
-            return NextResponse.json({ error: 'Email es requerido' }, { status: 400 });
+            return createErrorResponse('Email es requerido', 400);
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            return NextResponse.json({ error: 'Email no válido' }, { status: 400 });
+            return createErrorResponse('Email no válido', 400);
         }
 
         await prisma.newsletterSubscriber.upsert({
@@ -35,15 +35,9 @@ export async function POST(req: NextRequest) {
             },
         });
 
-        return NextResponse.json(
-            { success: true, message: 'Suscripción registrada exitosamente' },
-            { status: 200 }
-        );
+        return createSuccessResponse({ message: 'Suscripción registrada exitosamente' });
     } catch (error) {
         logger.error('Newsletter subscription error', error as Error);
-        return NextResponse.json(
-            { error: 'Error interno del servidor' },
-            { status: 500 }
-        );
+        return createErrorResponse('Error interno del servidor', 500);
     }
 }

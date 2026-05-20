@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHmac, timingSafeEqual } from "crypto";
 import { getLogger } from '@/lib/utils/logger';
+import { createSuccessResponse, createErrorResponse } from '@/lib/utils/api-response';
 const logger = getLogger('AdminLogin');
 
 export async function POST(req: NextRequest) {
@@ -8,27 +9,27 @@ export async function POST(req: NextRequest) {
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ ok: false, error: "Invalid JSON body" }, { status: 400 });
+    return createErrorResponse("Invalid JSON body", 400);
   }
   const password = (body.password as string) || "";
   const expected = process.env.ADMIN_PASSWORD || "";
   
   if (!expected || !password) {
-    return NextResponse.json({ ok: false }, { status: 401 });
+    return createErrorResponse("no autorizado", 401);
   }
 
   try {
     const match = password.length === expected.length &&
       timingSafeEqual(Buffer.from(password), Buffer.from(expected));
-    if (!match) return NextResponse.json({ ok: false }, { status: 401 });
+    if (!match) return createErrorResponse("no autorizado", 401);
   } catch {
-    return NextResponse.json({ ok: false }, { status: 401 });
+    return createErrorResponse("no autorizado", 401);
   }
 
   const sessionSecret = process.env.ADMIN_SESSION_SECRET;
   if (!sessionSecret) {
     logger.error('ADMIN_SESSION_SECRET not set');
-    return NextResponse.json({ ok: false, error: "server config error" }, { status: 500 });
+    return createErrorResponse("server config error", 500);
   }
 
   const timestamp = Date.now().toString();
@@ -37,7 +38,7 @@ export async function POST(req: NextRequest) {
     .digest("hex");
   const token = `${sig}.${timestamp}`;
 
-  const res = NextResponse.json({ ok: true });
+  const res = createSuccessResponse(null);
   res.cookies.set("admin-token", token, {
     httpOnly: true,
     sameSite: "lax",
