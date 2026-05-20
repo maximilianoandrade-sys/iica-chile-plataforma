@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
-import { Project } from "@/lib/data";
+import { Project, pluralizeDias } from "@/lib/data";
 import { trackEvent, trackSearch } from "@/lib/analytics";
 import type { InvertedIndex } from "@/lib/searchEngine";
 import counterparts from '@/lib/counterparts_raw.json';
@@ -111,7 +111,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
         const today = new Date();
         const closeDate = new Date(project.fecha_cierre);
         const diffDays = Math.ceil((closeDate.getTime() - today.getTime()) / 86400000);
-        const estado = diffDays < 0 ? 'CERRADO' : `Abierto – cierra en ${diffDays} días`;
+        const estado = diffDays < 0 ? 'CERRADO' : `Abierto – cierra en ${pluralizeDias(diffDays)}`;
         const monto = displayMonto(project);
         const texto = [
             `📋 ${project.nombre}`,

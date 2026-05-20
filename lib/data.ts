@@ -148,6 +148,11 @@ export function isOpen(project: Project): boolean {
     return daysUntilClose(project) > 0;
 }
 
+/** Pluraliza correctamente: 1 día vs N días */
+export function pluralizeDias(n: number): string {
+    return n === 1 ? '1 día' : `${n} días`;
+}
+
 /** Devuelve la etiqueta de urgencia con color para UI */
 export function urgencyLabel(project: Project): {
     label: string;
@@ -157,8 +162,8 @@ export function urgencyLabel(project: Project): {
     const d = daysUntilClose(project);
     if (d < 0) return { label: 'Cerrada', color: 'text-gray-500', bgColor: 'bg-gray-100' };
     if (d <= 3) return { label: `¡${d}d!`, color: 'text-red-700', bgColor: 'bg-red-100' };
-    if (d <= 7) return { label: `${d} días`, color: 'text-orange-700', bgColor: 'bg-orange-100' };
-    if (d <= 30) return { label: `${d} días`, color: 'text-yellow-700', bgColor: 'bg-yellow-100' };
+    if (d <= 7) return { label: pluralizeDias(d), color: 'text-orange-700', bgColor: 'bg-orange-100' };
+    if (d <= 30) return { label: pluralizeDias(d), color: 'text-yellow-700', bgColor: 'bg-yellow-100' };
     return { label: 'Abierta', color: 'text-green-700', bgColor: 'bg-green-100' };
 }
 
@@ -248,6 +253,22 @@ async function purgeFakeProjects(): Promise<void> {
     }
 }
 
+/** Deduplica proyectos por url_bases para evitar entradas duplicadas (ej: CNR) */
+function deduplicateByUrl(projects: Project[]): Project[] {
+    const seen = new Map<string, Project>();
+    for (const p of projects) {
+        const key = p.url_bases?.toLowerCase().trim();
+        if (!key) {
+            // Sin URL, siempre incluir (usar id como key única)
+            seen.set(`__no_url_${p.id}`, p);
+        } else if (!seen.has(key)) {
+            seen.set(key, p);
+        }
+        // Si ya existe esa URL, se descarta el duplicado
+    }
+    return Array.from(seen.values());
+}
+
 export async function getProjects(): Promise<Project[]> {
     const today = new Date();
     today.setUTCHours(0, 0, 0, 0);
@@ -268,7 +289,7 @@ export async function getProjects(): Promise<Project[]> {
 
         logger.info('Prisma OK: proyectos vigentes', { count: dbProjects.length });
 
-        return dbProjects.map(p => ({
+        const mapped = dbProjects.map(p => ({
             ...p,
             fecha_cierre: p.fecha_cierre.toISOString().split('T')[0],
             webinar_fecha: p.webinar_fecha ? p.webinar_fecha.toISOString() : null,
@@ -278,6 +299,8 @@ export async function getProjects(): Promise<Project[]> {
             rolIICA: p.rolIICA as any,
             complejidad: p.complejidad as any
         })) as Project[];
+
+        return deduplicateByUrl(mapped);
     } catch (error) {
         logger.error('getProjects Prisma/Supabase falló — devolviendo lista vacía', error as Error);
         return [];

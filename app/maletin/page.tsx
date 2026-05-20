@@ -223,7 +223,7 @@ export default function MaletinPage() {
         const d = new Date(iso), now = new Date();
         const diff = Math.floor((now.getTime() - d.getTime()) / 86400000);
         if (diff === 0) return 'Hoy'; if (diff === 1) return 'Ayer';
-        if (diff < 7) return `Hace ${diff} días`;
+        if (diff < 7) return `Hace ${diff === 1 ? '1 día' : `${diff} días`}`;
         return d.toLocaleDateString('es-CL');
     };
 

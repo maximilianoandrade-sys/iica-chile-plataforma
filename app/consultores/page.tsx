@@ -329,14 +329,14 @@ export default function ConsultoresPage() {
                                     {/* CTA Buttons */}
                                     <div className="grid grid-cols-2 gap-2">
                                         <a
-                                            href={`mailto:chile@iica.int?subject=Consulta sobre ${consultor.name}&body=Hola, vi el perfil de ${consultor.name} en la plataforma IICA Chile y me gustaría contactarle para recibir asesoría en fondos concursables.`}
+                                            href={`mailto:representacion.chile@iica.int?subject=Consulta sobre ${consultor.name}&body=Hola, vi el perfil de ${consultor.name} en la plataforma IICA Chile y me gustaría contactarle para recibir asesoría en fondos concursables.`}
                                             className="flex items-center justify-center gap-1.5 py-3 px-3 bg-[#25D366] text-white text-sm font-bold rounded-xl hover:brightness-110 transition-all min-h-[48px]"
                                         >
                                             <MessageCircle className="h-4 w-4" />
                                             Contactar
                                         </a>
                                         <a
-                                            href={`mailto:chile@iica.int?subject=Solicitud de contacto con ${consultor.name}&body=Hola, deseo contactar a ${consultor.name} (${consultor.specialty}) para recibir asesoría.`}
+                                            href={`mailto:representacion.chile@iica.int?subject=Solicitud de contacto con ${consultor.name}&body=Hola, deseo contactar a ${consultor.name} (${consultor.specialty}) para recibir asesoría.`}
                                             className="flex items-center justify-center gap-1.5 py-3 px-3 border-2 border-gray-200 text-gray-700 text-sm font-bold rounded-xl hover:border-[var(--iica-blue)] hover:text-[var(--iica-blue)] transition-all min-h-[48px]"
                                         >
                                             <Phone className="h-4 w-4" /> Solicitar
@@ -369,7 +369,7 @@ export default function ConsultoresPage() {
                             Únete a nuestra red de formuladores validados por IICA y conecta con agricultores que necesitan tu experiencia.
                         </p>
                         <a
-                            href="mailto:chile@iica.int?subject=Solicitud de ingreso al Directorio de Consultores"
+                            href="mailto:representacion.chile@iica.int?subject=Solicitud de ingreso al Directorio de Consultores"
                             className="inline-flex items-center gap-2 bg-[var(--iica-yellow)] text-[var(--iica-navy)] font-bold px-8 py-4 rounded-xl hover:brightness-110 transition-all min-h-[56px]"
                         >
                             Solicitar Validación IICA →

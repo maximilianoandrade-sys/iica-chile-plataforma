@@ -1,20 +1,21 @@
 import Link from 'next/link';
 import { getVerifiedStaticFeeds, LiveFund } from '@/lib/liveFeed';
+import { pluralizeDias } from '@/lib/data';
 
 function UrgencyBadge({ dias }: { dias: number }) {
     if (dias <= 7) return (
         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-700 border border-red-200">
-            🔴 Cierra en {dias}d
+            🔴 Cierra en {pluralizeDias(dias)}
         </span>
     );
     if (dias <= 21) return (
         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700 border border-amber-200">
-            🟡 {dias} días
+            🟡 {pluralizeDias(dias)}
         </span>
     );
     return (
         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-200">
-            🟢 {dias} días
+            🟢 {pluralizeDias(dias)}
         </span>
     );
 }

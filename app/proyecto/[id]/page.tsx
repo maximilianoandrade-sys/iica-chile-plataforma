@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { getProjects, displayMonto } from '@/lib/data';
+import { getProjects, displayMonto, pluralizeDias } from '@/lib/data';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import Link from 'next/link';
@@ -86,7 +86,7 @@ export default async function ProyectoDetallePage({ params }: Props) {
                                         ? 'bg-amber-500/20 border-amber-300/30 text-amber-100'
                                         : 'bg-green-500/20 border-green-300/30 text-green-100'
                                 }`}>
-                                {isClosed ? '🔴 Cerrado' : isUrgent ? `⚠️ Cierra en ${diffDays} días` : '🟢 Abierto'}
+                                {isClosed ? '🔴 Cerrado' : isUrgent ? `⚠️ Cierra en ${pluralizeDias(diffDays)}` : '🟢 Abierto'}
                             </span>
                         </div>
                         <h1 className="text-2xl md:text-3xl font-extrabold leading-tight mb-3">

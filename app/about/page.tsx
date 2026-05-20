@@ -238,7 +238,7 @@ export default function AboutPage() {
                                 Explorar Convocatorias
                             </Link>
                             <a
-                                href="mailto:chile@iica.int"
+                                href="mailto:representacion.chile@iica.int"
                                 className="inline-flex items-center gap-2 bg-white/10 border border-white/30 text-white font-bold px-8 py-4 rounded-xl hover:bg-white/20 transition-colors"
                             >
                                 <MapPin className="h-5 w-5" />

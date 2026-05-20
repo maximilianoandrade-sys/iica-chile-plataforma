@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Info, ExternalLink, Calendar, AlertCircle, X, Check, MessageCircle, Share2, ArrowRight, AlertTriangle, User, History, Search } from "lucide-react";
 import Image from 'next/image';
 import Link from 'next/link';
-import { Project, formatDeadline } from "@/lib/data";
+import { Project, formatDeadline, pluralizeDias } from "@/lib/data";
 import { getInstitutionalLogo } from "@/lib/logos";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLinkGuardian } from "@/lib/linkGuardian";
@@ -486,7 +486,7 @@ export function UrgencyBadge({ date, mobile = false }: { date: string; mobile?: 
             <div className={`flex items-center gap-1.5 ${isUrgent ? 'text-red-600 font-bold' : 'text-gray-600'}`}>
                 {!mobile && <Calendar className="h-4 w-4 text-gray-400" />}
                 <span className="text-sm">
-                    {isUrgent ? `¡Cierra en ${diffDays} días!` : formatDeadline(date)}
+                    {isUrgent ? `¡Cierra en ${pluralizeDias(diffDays)}!` : formatDeadline(date)}
                 </span>
             </div>
             <span className="text-[10px] font-bold uppercase tracking-wider text-green-600 bg-green-50 px-1.5 py-0.5 rounded border border-green-100">
