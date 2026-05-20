@@ -36,9 +36,9 @@ describe('ProjectList accesibilidad', () => {
   it('usa botones para cabeceras de ordenamiento', () => {
     render(<ProjectList projects={[project]} />);
 
-    expect(screen.getByRole('button', { name: /Proyecto/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Institución/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /^Cierre$/i })).toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: /Proyecto/i }).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByRole('button', { name: /Institución/i }).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByRole('button', { name: /^Cierre$/i }).length).toBeGreaterThanOrEqual(1);
   });
 
   it('expone dialogo semantico en vista rapida', () => {

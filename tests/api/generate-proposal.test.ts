@@ -71,9 +71,10 @@ describe("/api/generate-proposal", () => {
     const json = await res.json();
 
     expect(res.status).toBe(200);
-    expect(json.proposal).toContain("Resumen Ejecutivo");
-    expect(json.projectName).toBe("Fondo Riego CNR");
-    expect(json.generatedAt).toBeDefined();
+    expect(json.ok).toBe(true);
+    expect(json.data.proposal).toContain("Resumen Ejecutivo");
+    expect(json.data.projectName).toBe("Fondo Riego CNR");
+    expect(json.data.generatedAt).toBeDefined();
   });
 
   it("POST with missing projectId returns 400", async () => {

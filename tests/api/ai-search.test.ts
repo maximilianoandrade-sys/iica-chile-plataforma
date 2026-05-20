@@ -55,9 +55,10 @@ describe("/api/ai-search", () => {
     const json = await res.json();
 
     expect(res.status).toBe(200);
-    expect(json.answer).toBe("Respuesta sobre fondos agrícolas");
-    expect(json.sources).toHaveLength(2);
-    expect(json.searchedAt).toBeDefined();
+    expect(json.ok).toBe(true);
+    expect(json.data.answer).toBe("Respuesta sobre fondos agrícolas");
+    expect(json.data.sources).toHaveLength(2);
+    expect(json.data.searchedAt).toBeDefined();
   });
 
   it("POST with missing query returns 400", async () => {

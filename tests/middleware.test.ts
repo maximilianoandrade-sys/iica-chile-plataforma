@@ -1,13 +1,18 @@
 import { createHmac } from "crypto";
 
 // Mock Next.js modules before importing middleware
-const mockRedirect = jest.fn((..._args: any[]) => ({ type: "redirect" }));
+function mockHeaders() {
+  const store = new Map<string, string>();
+  return { set: (k: string, v: string) => store.set(k, v), get: (k: string) => store.get(k), entries: () => store.entries() };
+}
+const mockRedirect = jest.fn((..._args: any[]) => ({ type: "redirect", headers: mockHeaders() }));
 const mockJson = jest.fn((..._args: any[]) => ({
   type: "json",
   body: _args[0],
   status: _args[1]?.status,
+  headers: mockHeaders(),
 }));
-const mockNext = jest.fn((..._args: any[]) => ({ type: "next" }));
+const mockNext = jest.fn((..._args: any[]) => ({ type: "next", headers: mockHeaders() }));
 
 jest.mock("next/server", () => ({
   NextRequest: jest.fn(),
