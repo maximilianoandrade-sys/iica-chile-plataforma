@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export default function AboutSection() {
     return (
         <section id="nosotros" className="py-16 bg-white border-t border-gray-200">
@@ -7,10 +9,13 @@ export default function AboutSection() {
                     {/* Columna 1: Identidad Institucional */}
                     <div>
                         <div className="flex items-center gap-3 mb-4">
-                            <img
+                            <Image
                                 src="https://iica.int/sites/default/files/2023-04/IICA_Logo_Color_1.png"
                                 alt="Logo IICA"
-                                className="h-16"
+                                width={120}
+                                height={64}
+                                className="h-16 w-auto"
+                                unoptimized
                             />
                             <span className="text-sm font-bold text-gray-500 tracking-widest uppercase">Oficina Chile</span>
                         </div>

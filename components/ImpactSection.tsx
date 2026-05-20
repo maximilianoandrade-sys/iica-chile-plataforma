@@ -90,7 +90,7 @@ const METRICS = [
         value: 35,
         suffix: ' países',
         label: 'Red Hemisférica',
-        description: 'Membresía activa en Americas con acceso a alianzas con FAO, BID, FONTAGRO y GEF.',
+        description: 'Membresía activa en Américas con acceso a alianzas con FAO, BID, FONTAGRO y GEF.',
         color: 'bg-purple-600',
     },
     {

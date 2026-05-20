@@ -34,7 +34,7 @@ export function Header({ urgentCount = 0 }: HeaderProps) {
                 </div>
 
                 {/* Desktop Nav */}
-                <nav className="hidden lg:flex gap-5 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400" aria-label="Navegación principal">
+                <nav className="hidden md:flex gap-5 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400" aria-label="Navegación principal">
                     <Link href="/#convocatorias" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Oportunidades</Link>
                     <Link href="/pipeline" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Pipeline</Link>
                     <Link href="/consultores" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Consultores</Link>
@@ -63,7 +63,7 @@ export function Header({ urgentCount = 0 }: HeaderProps) {
 
                     {/* Mobile Menu Toggle */}
                     <button
-                        className="lg:hidden p-2 text-[var(--iica-navy)] dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                        className="md:hidden p-2 text-[var(--iica-navy)] dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
                         onClick={() => setShowMobileMenu(!showMobileMenu)}
                         aria-label={showMobileMenu ? 'Cerrar menú' : 'Abrir menú'}
                         aria-expanded={showMobileMenu}
@@ -80,7 +80,7 @@ export function Header({ urgentCount = 0 }: HeaderProps) {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        className="md:hidden overflow-hidden border-t border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900"
+                        className="overflow-hidden md:hidden border-t border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900"
                     >
                         <nav className="flex flex-col p-4 gap-1" role="navigation" aria-label="Menu principal">
                             {[

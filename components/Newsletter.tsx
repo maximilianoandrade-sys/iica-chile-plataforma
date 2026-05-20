@@ -44,7 +44,7 @@ export default function Newsletter() {
                         <span>Boletín IICA Informa</span>
                     </div>
                     <h2 className="text-2xl md:text-3xl font-bold mb-3">
-                        ¿Quieres saber cuando abren nuevos fondos?
+                        ¿Quieres saber cuándo abren nuevos fondos?
                     </h2>
                     <p className="text-blue-100/90 text-sm md:text-base">
                         Suscríbete para recibir alertas personalizadas en tu email con las últimas convocatorias. Cero spam.

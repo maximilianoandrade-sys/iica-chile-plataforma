@@ -148,7 +148,34 @@ export default function PipelinePage() {
         </div>
       </header>
 
-      <main className="flex-1 p-8 overflow-x-auto bg-[#f8fafc]">
+      <main className="flex-1 p-4 lg:p-8 overflow-x-auto bg-[#f8fafc]">
+        {/* Mobile: simplified list view */}
+        <div className="lg:hidden space-y-4">
+          {COLUMNS.map(col => {
+            const columnTasks = tasks.filter(t => t.column === col.id);
+            return (
+              <div key={col.id} className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
+                <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
+                  <span className={`w-3 h-3 rounded-full ${col.bgColor}`}></span>
+                  {col.name} <span className="text-gray-500 text-sm">({columnTasks.length})</span>
+                </h3>
+                <ul className="space-y-2">
+                  {columnTasks.map(task => (
+                    <li key={task.id} className="p-3 border rounded-md text-sm bg-gray-50 dark:bg-gray-700">
+                      {task.project.nombre}
+                    </li>
+                  ))}
+                  {columnTasks.length === 0 && (
+                    <li className="p-3 text-sm text-gray-400 italic">Sin proyectos</li>
+                  )}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Desktop: Kanban board */}
+        <div className="hidden lg:block">
         <div className="flex gap-8 h-full items-start min-w-[1400px]">
           {COLUMNS.map(col => {
             const columnTasks = tasks.filter(t => t.column === col.id);
@@ -268,6 +295,7 @@ export default function PipelinePage() {
               </div>
             );
           })}
+        </div>
         </div>
       </main>
     </div>

@@ -9,8 +9,12 @@ export default {
         iica: {
           navy: 'var(--iica-navy)',
           blue: 'var(--iica-blue)',
+          cyan: 'var(--iica-cyan)',
           yellow: 'var(--iica-yellow)',
           secondary: 'var(--iica-secondary)',
+          dark: 'var(--iica-dark)',
+          gray: 'var(--iica-gray)',
+          border: 'var(--iica-border)',
         },
       },
       fontFamily: {

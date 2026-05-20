@@ -37,7 +37,7 @@ export default function CookieConsent() {
                 <div className="flex items-center gap-4 flex-shrink-0">
                     <button
                         onClick={rejectOptionalCookies}
-                        className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors min-h-[44px]"
+                        className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors min-h-[44px]"
                     >
                         Rechazar opcionales
                     </button>

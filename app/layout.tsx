@@ -133,7 +133,7 @@ export default function RootLayout({
           <OfflineIndicator />
 
           {/* Contenido principal */}
-          <div id="main-content" role="main">
+          <div id="main-content">
             {children}
           </div>
 
