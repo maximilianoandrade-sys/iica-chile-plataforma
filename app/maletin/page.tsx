@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { Dialog } from '@/components/ui/Dialog';
 
 // ─── Tipos ───────────────────────────────────────────────────────────────────
 
@@ -514,92 +515,75 @@ export default function MaletinPage() {
             {/* ══════════════════════════════════════════════════════════════
                 MODAL DE SUBIDA
             ══════════════════════════════════════════════════════════════ */}
-            <AnimatePresence>
-                {showUploadModal && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-                        <motion.div initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.92 }}
-                            className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
-
-                            <div className="bg-gradient-to-r from-[var(--iica-navy)] to-[var(--iica-blue)] px-6 py-5 flex justify-between items-center rounded-t-2xl sticky top-0">
-                                <div className="flex items-center gap-3">
-                                    <div className="bg-white/20 p-2 rounded-lg"><Upload className="h-5 w-5 text-white" /></div>
-                                    <h3 className="text-lg font-bold text-white">Subir Documento</h3>
-                                </div>
-                                <button onClick={() => { setShowUploadModal(false); setSelectedFile(null); setNewDocName(''); setNewDocDesc(''); setNewDocTags(''); }}
-                                    className="text-white/70 hover:text-white transition-colors"><X className="h-5 w-5" /></button>
-                            </div>
-
-                            <div className="p-6 space-y-4">
-                                <div>
-                                    <label className="block text-sm font-bold text-gray-700 mb-1.5">Técnico / Área *</label>
-                                    <input type="text" value={uploaderName} onChange={e => setUploaderName(e.target.value)}
-                                        placeholder="Ej: María González – Área de Desarrollo Rural"
-                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--iica-blue)] focus:border-transparent text-sm" />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-bold text-gray-700 mb-1.5">Nombre del Documento *</label>
-                                    <input type="text" value={newDocName} onChange={e => setNewDocName(e.target.value)}
-                                        placeholder="Ej: Plantilla Informe de Terreno Q1 2026"
-                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--iica-blue)] focus:border-transparent text-sm" />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-bold text-gray-700 mb-1.5">Descripción (opcional)</label>
-                                    <textarea value={newDocDesc} onChange={e => setNewDocDesc(e.target.value)} rows={2}
-                                        placeholder="Breve descripción del contenido o uso del documento..."
-                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--iica-blue)] focus:border-transparent text-sm resize-none" />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-bold text-gray-700 mb-1.5">Categoría</label>
-                                    <div className="flex flex-wrap gap-2">
-                                        {CATEGORIES.filter(c => c.id !== 'todos').map(cat => (
-                                            <button key={cat.id} onClick={() => setSelectedCategory(cat.id as DocCategory)}
-                                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${selectedCategory === cat.id
-                                                    ? 'bg-[var(--iica-navy)] text-white border-[var(--iica-navy)]'
-                                                    : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'}`}>
-                                                {cat.icon} {cat.label}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-bold text-gray-700 mb-1.5">Etiquetas (separadas por coma)</label>
-                                    <input type="text" value={newDocTags} onChange={e => setNewDocTags(e.target.value)}
-                                        placeholder="Ej: CNR, riego, 2026, postulación"
-                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--iica-blue)] focus:border-transparent text-sm" />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-bold text-gray-700 mb-1.5">Archivo *</label>
-                                    <input ref={fileInputRef} type="file" onChange={e => { const f = e.target.files?.[0]; if (f) handleFileSelect(f); }}
-                                        accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx,.ppt,.pptx"
-                                        className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-blue-50 file:text-[var(--iica-blue)] hover:file:bg-blue-100 cursor-pointer" />
-                                    <p className="text-xs text-gray-400 mt-1">PDF, DOC, DOCX, XLS, PPT, JPG, PNG — Máx. 10MB</p>
-                                </div>
-                                {selectedFile && (
-                                    <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center gap-3">
-                                        {getFileIcon(selectedFile.name)}
-                                        <div>
-                                            <p className="text-sm font-bold text-gray-700">{selectedFile.name}</p>
-                                            <p className="text-xs text-gray-500">{formatSize(selectedFile.size)}</p>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-
-                            <div className="bg-gray-50 px-6 py-4 border-t border-gray-200 flex justify-end gap-3 rounded-b-2xl">
-                                <button onClick={() => { setShowUploadModal(false); setSelectedFile(null); setNewDocName(''); setNewDocDesc(''); setNewDocTags(''); }}
-                                    className="px-4 py-2 text-gray-700 hover:bg-gray-200 rounded-lg font-medium text-sm transition-colors">
-                                    Cancelar
-                                </button>
-                                <button onClick={handleUpload}
-                                    disabled={!selectedFile || !newDocName.trim() || !uploaderName.trim() || isSaving}
-                                    className="px-6 py-2 bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] text-white font-bold rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2 text-sm">
-                                    {isSaving ? <><RefreshCw className="h-4 w-4 animate-spin" /> Guardando...</> : <><Upload className="h-4 w-4" /> Subir Documento</>}
-                                </button>
-                            </div>
-                        </motion.div>
+            <Dialog open={showUploadModal} onClose={() => { setShowUploadModal(false); setSelectedFile(null); setNewDocName(''); setNewDocDesc(''); setNewDocTags(''); }} title="Subir Documento" className="max-w-md">
+                <div className="space-y-4">
+                    <div>
+                        <label className="block text-sm font-bold text-gray-700 mb-1.5">Técnico / Área *</label>
+                        <input type="text" value={uploaderName} onChange={e => setUploaderName(e.target.value)}
+                            placeholder="Ej: María González – Área de Desarrollo Rural"
+                            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--iica-blue)] focus:border-transparent text-sm" />
                     </div>
-                )}
-            </AnimatePresence>
+                    <div>
+                        <label className="block text-sm font-bold text-gray-700 mb-1.5">Nombre del Documento *</label>
+                        <input type="text" value={newDocName} onChange={e => setNewDocName(e.target.value)}
+                            placeholder="Ej: Plantilla Informe de Terreno Q1 2026"
+                            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--iica-blue)] focus:border-transparent text-sm" />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-bold text-gray-700 mb-1.5">Descripción (opcional)</label>
+                        <textarea value={newDocDesc} onChange={e => setNewDocDesc(e.target.value)} rows={2}
+                            placeholder="Breve descripción del contenido o uso del documento..."
+                            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--iica-blue)] focus:border-transparent text-sm resize-none" />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-bold text-gray-700 mb-1.5">Categoría</label>
+                        <div className="flex flex-wrap gap-2">
+                            {CATEGORIES.filter(c => c.id !== 'todos').map(cat => (
+                                <button key={cat.id} onClick={() => setSelectedCategory(cat.id as DocCategory)}
+                                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${selectedCategory === cat.id
+                                        ? 'bg-[var(--iica-navy)] text-white border-[var(--iica-navy)]'
+                                        : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'}`}>
+                                    {cat.icon} {cat.label}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-bold text-gray-700 mb-1.5">Etiquetas (separadas por coma)</label>
+                        <input type="text" value={newDocTags} onChange={e => setNewDocTags(e.target.value)}
+                            placeholder="Ej: CNR, riego, 2026, postulación"
+                            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--iica-blue)] focus:border-transparent text-sm" />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-bold text-gray-700 mb-1.5">Archivo *</label>
+                        <input ref={fileInputRef} type="file" onChange={e => { const f = e.target.files?.[0]; if (f) handleFileSelect(f); }}
+                            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx,.ppt,.pptx"
+                            className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-blue-50 file:text-[var(--iica-blue)] hover:file:bg-blue-100 cursor-pointer" />
+                        <p className="text-xs text-gray-400 mt-1">PDF, DOC, DOCX, XLS, PPT, JPG, PNG — Máx. 10MB</p>
+                    </div>
+                    {selectedFile && (
+                        <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center gap-3">
+                            {getFileIcon(selectedFile.name)}
+                            <div>
+                                <p className="text-sm font-bold text-gray-700">{selectedFile.name}</p>
+                                <p className="text-xs text-gray-500">{formatSize(selectedFile.size)}</p>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                <div className="mt-6 flex justify-end gap-3">
+                    <button onClick={() => { setShowUploadModal(false); setSelectedFile(null); setNewDocName(''); setNewDocDesc(''); setNewDocTags(''); }}
+                        className="px-4 py-2 text-gray-700 hover:bg-gray-200 rounded-lg font-medium text-sm transition-colors">
+                        Cancelar
+                    </button>
+                    <button onClick={handleUpload}
+                        disabled={!selectedFile || !newDocName.trim() || !uploaderName.trim() || isSaving}
+                        className="px-6 py-2 bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] text-white font-bold rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2 text-sm">
+                        {isSaving ? <><RefreshCw className="h-4 w-4 animate-spin" /> Guardando...</> : <><Upload className="h-4 w-4" /> Subir Documento</>}
+                    </button>
+                </div>
+            </Dialog>
         </div>
     );
 }
