@@ -1,3 +1,4 @@
+/** @deprecated This module is unused. The thesaurus is integrated into searchEngine.ts. */
 export const AGROVOC_KEYWORDS = [
     "Abastecimiento de agua",
     "Acceso a la información",

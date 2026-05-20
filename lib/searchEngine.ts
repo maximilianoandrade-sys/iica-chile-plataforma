@@ -552,8 +552,6 @@ export function smartSearch(searchTerm: string, input: Project | string): boolea
 // ============================================================================
 
 const FIELD_WEIGHTS: Record<string, number> = {
-    "impactoIICA": 50, // Prioridad alta para impacto estratégico
-    "viabilidad": 40, // Nueva métrica de viabilidad estratégica
     titulo: 60,       // boost mayor para título
     institucion: 40,
     ejeIICA: 25,
@@ -756,11 +754,18 @@ export function lookupIndex(query: string, invertedIndex: InvertedIndex): Set<nu
 
         // Búsqueda difusa (solo si el exacto no tuvo hits)
         if (!hits && term.length >= 4) {
-            invertedIndex.index.forEach((ids, indexedTerm) => {
+            let checked = 0;
+            const MAX_FUZZY_CHECKS = 500;
+            const entries = Array.from(invertedIndex.index.entries());
+            for (let i = 0; i < entries.length; i++) {
+                if (checked >= MAX_FUZZY_CHECKS) break;
+                const [indexedTerm, ids] = entries[i];
+                if (Math.abs(term.length - indexedTerm.length) > 2) continue;
+                checked++;
                 if (isSimilar(term, indexedTerm)) {
-                    ids.forEach(id => candidates.add(id));
+                    ids.forEach((id: number) => candidates.add(id));
                 }
-            });
+            }
         }
     });
 
