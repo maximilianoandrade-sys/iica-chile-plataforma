@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Outfit } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/ThemeProvider'
+import { ToastProvider } from '@/components/ui/ToastProvider'
 import CookieConsent from '@/components/CookieConsent';
 import PWAInstallBanner from '@/components/PWAInstallBanner';
 import OfflineIndicator from '@/components/OfflineIndicator';
@@ -133,9 +134,11 @@ export default function RootLayout({
           <OfflineIndicator />
 
           {/* Contenido principal */}
+          <ToastProvider>
           <div id="main-content">
             {children}
           </div>
+          </ToastProvider>
 
         {/* Componentes globales */}
         <CookieConsent />
