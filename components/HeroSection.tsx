@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Target } from 'lucide-react';
+import { Target, ClipboardList, CircleDot, Globe, AlertTriangle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface HeroStats {
@@ -96,14 +96,14 @@ export function HeroSection({ stats }: HeroSectionProps) {
                         transition={{ delay: 0.5 }}
                         className="mt-10 flex gap-6 justify-center flex-wrap"
                     >
-                        {[
-                            { label: 'Oportunidades', value: totalOportunidades, icon: '📋' },
-                            { label: 'Abiertas Ahora', value: abiertas, icon: '🟢' },
-                            { label: 'Internacionales', value: internacionales, icon: '🌎' },
-                            { label: 'Cierran ≤7 días', value: urgentCount, icon: '⚠️' },
-                        ].map(stat => (
+                        {([
+                            { label: 'Oportunidades', value: totalOportunidades, icon: <ClipboardList className="h-5 w-5" /> },
+                            { label: 'Abiertas Ahora', value: abiertas, icon: <CircleDot className="h-5 w-5 text-green-400" /> },
+                            { label: 'Internacionales', value: internacionales, icon: <Globe className="h-5 w-5" /> },
+                            { label: 'Cierran ≤7 días', value: urgentCount, icon: <AlertTriangle className="h-5 w-5 text-amber-400" /> },
+                        ] as { label: string; value: number; icon: React.ReactNode }[]).map(stat => (
                             <div key={stat.label} className="text-center bg-white/10 backdrop-blur-sm rounded-xl px-5 py-3 border border-white/20">
-                                <div className="text-2xl font-black text-white">{stat.icon} {stat.value}</div>
+                                <div className="text-2xl font-black text-white flex items-center justify-center gap-2">{stat.icon} {stat.value}</div>
                                 <div className="text-xs text-blue-200 font-medium">{stat.label}</div>
                             </div>
                         ))}
