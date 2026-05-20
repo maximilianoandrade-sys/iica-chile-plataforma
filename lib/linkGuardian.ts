@@ -122,11 +122,15 @@ if (typeof window !== 'undefined') {
  * Verifica si un enlace está activo usando HEAD request
  */
 async function checkLinkStatus(url: string): Promise<boolean> {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+
     try {
         // Usar API route para evitar CORS
         const response = await fetch(`/api/check-link?url=${encodeURIComponent(url)}`, {
             method: 'GET',
-            cache: 'no-cache'
+            cache: 'no-cache',
+            signal: controller.signal
         });
 
         const data = await response.json();
@@ -134,6 +138,8 @@ async function checkLinkStatus(url: string): Promise<boolean> {
     } catch (error) {
         logger.warn('Error verificando enlace', { url, error });
         return false;
+    } finally {
+        clearTimeout(timeoutId);
     }
 }
 
@@ -264,11 +270,24 @@ export function useLinkGuardian(url: string, projectName: string, institution?: 
         async function checkLink() {
             setIsLoading(true);
 
-            const status = await getLinkStatus(url, projectName, institution);
+            try {
+                const status = await getLinkStatus(url, projectName, institution);
 
-            if (mounted) {
-                setLinkStatus(status);
-                setIsLoading(false);
+                if (mounted) {
+                    setLinkStatus(status);
+                }
+            } catch (error) {
+                if (mounted) {
+                    setLinkStatus({
+                        url,
+                        status: 'valid',
+                        checked: false
+                    });
+                }
+            } finally {
+                if (mounted) {
+                    setIsLoading(false);
+                }
             }
         }
 

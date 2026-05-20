@@ -40,7 +40,6 @@ export function Header({ urgentCount = 0 }: HeaderProps) {
                     <Link href="/consultores" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Consultores</Link>
                     <Link href="/about" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Sobre IICA</Link>
                     <Link href="/#fuentes" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Fuentes</Link>
-                    <Link href="/admin/login" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Admin</Link>
                 </nav>
 
                 <div className="flex items-center gap-2">
@@ -53,7 +52,7 @@ export function Header({ urgentCount = 0 }: HeaderProps) {
                         className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-[var(--iica-navy)] dark:bg-blue-600 hover:bg-[var(--iica-blue)] dark:hover:bg-blue-500 text-white font-black uppercase tracking-widest rounded-xl shadow-lg shadow-blue-900/10 transition-all hover:-translate-y-0.5 text-[10px]"
                     >
                         <Target className="h-4 w-4" aria-hidden="true" />
-                        <span>Explorar</span>
+                        <span>Explorar Oportunidades</span>
                         {urgentCount > 0 && (
                             <span className="bg-rose-500 text-white w-4 h-4 rounded-full flex items-center justify-center text-[8px] animate-pulse" aria-label={`${urgentCount} oportunidades urgentes`}>
                                 {urgentCount}
@@ -91,7 +90,6 @@ export function Header({ urgentCount = 0 }: HeaderProps) {
                                 { href: '/#impacto', label: 'Impacto IICA', icon: TrendingUp },
                                 { href: '/maletin', label: 'Maletín Técnico', icon: Briefcase },
                                 { href: '/about', label: 'Sobre el IICA', icon: Building2 },
-                                { href: '/admin/login', label: 'Acceso Admin', icon: Users },
                                 { href: '/#contacto', label: 'Contacto', icon: Phone },
                             ].map((item) => (
                                 <Link
