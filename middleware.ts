@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
+import { SECURITY_HEADERS } from "@/lib/security";
 
 const MAX_AGE_MS = 8 * 60 * 60 * 1000; // 8 hours
+
+function applySecurityHeaders(response: NextResponse): NextResponse {
+  Object.entries(SECURITY_HEADERS).forEach(([key, value]) => {
+    response.headers.set(key, value);
+  });
+  return response;
+}
 
 async function computeHmac(secret: string, payload: string): Promise<string> {
   const encoder = new TextEncoder();
@@ -31,26 +39,26 @@ export async function middleware(req: NextRequest) {
   const isAdminPage = path.startsWith("/admin");
   const isAdminApi = path.startsWith("/api/admin");
 
-  if (!isAdminPage && !isAdminApi) return NextResponse.next();
-  if (path === "/admin/login") return NextResponse.next();
-  if (path === "/api/admin/login") return NextResponse.next();
+  if (!isAdminPage && !isAdminApi) return applySecurityHeaders(NextResponse.next());
+  if (path === "/admin/login") return applySecurityHeaders(NextResponse.next());
+  if (path === "/api/admin/login") return applySecurityHeaders(NextResponse.next());
 
   const secret = process.env.ADMIN_SESSION_SECRET;
   if (!secret) {
-    return NextResponse.redirect(new URL("/", req.url));
+    return applySecurityHeaders(NextResponse.redirect(new URL("/", req.url)));
   }
 
   const cookie = req.cookies.get("admin-token")?.value;
   if (!cookie) {
-    if (isAdminApi) return NextResponse.json({ error: "no autorizado" }, { status: 401 });
-    return NextResponse.redirect(new URL("/admin/login", req.url));
+    if (isAdminApi) return applySecurityHeaders(NextResponse.json({ error: "no autorizado" }, { status: 401 }));
+    return applySecurityHeaders(NextResponse.redirect(new URL("/admin/login", req.url)));
   }
 
   try {
     const dotIndex = cookie.lastIndexOf(".");
     if (dotIndex === -1) {
-      if (isAdminApi) return NextResponse.json({ error: "no autorizado" }, { status: 401 });
-      return NextResponse.redirect(new URL("/admin/login", req.url));
+      if (isAdminApi) return applySecurityHeaders(NextResponse.json({ error: "no autorizado" }, { status: 401 }));
+      return applySecurityHeaders(NextResponse.redirect(new URL("/admin/login", req.url)));
     }
 
     const sig = cookie.substring(0, dotIndex);
@@ -58,28 +66,30 @@ export async function middleware(req: NextRequest) {
     const ts = Number(timestamp);
 
     if (!ts || isNaN(ts)) {
-      if (isAdminApi) return NextResponse.json({ error: "no autorizado" }, { status: 401 });
-      return NextResponse.redirect(new URL("/admin/login", req.url));
+      if (isAdminApi) return applySecurityHeaders(NextResponse.json({ error: "no autorizado" }, { status: 401 }));
+      return applySecurityHeaders(NextResponse.redirect(new URL("/admin/login", req.url)));
     }
 
     // Check expiry
     if (Date.now() - ts > MAX_AGE_MS) {
-      if (isAdminApi) return NextResponse.json({ error: "no autorizado" }, { status: 401 });
-      return NextResponse.redirect(new URL("/admin/login", req.url));
+      if (isAdminApi) return applySecurityHeaders(NextResponse.json({ error: "no autorizado" }, { status: 401 }));
+      return applySecurityHeaders(NextResponse.redirect(new URL("/admin/login", req.url)));
     }
 
     const expected = await computeHmac(secret, `admin-session:${timestamp}`);
     if (!timingSafeCompare(sig, expected)) {
-      if (isAdminApi) return NextResponse.json({ error: "no autorizado" }, { status: 401 });
-      return NextResponse.redirect(new URL("/admin/login", req.url));
+      if (isAdminApi) return applySecurityHeaders(NextResponse.json({ error: "no autorizado" }, { status: 401 }));
+      return applySecurityHeaders(NextResponse.redirect(new URL("/admin/login", req.url)));
     }
   } catch {
-    if (isAdminApi) return NextResponse.json({ error: "no autorizado" }, { status: 401 });
-    return NextResponse.redirect(new URL("/admin/login", req.url));
+    if (isAdminApi) return applySecurityHeaders(NextResponse.json({ error: "no autorizado" }, { status: 401 }));
+    return applySecurityHeaders(NextResponse.redirect(new URL("/admin/login", req.url)));
   }
-  return NextResponse.next();
+  return applySecurityHeaders(NextResponse.next());
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/admin/:path*"],
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico|icon.svg|.*\\.(?:png|jpg|jpeg|gif|webp|svg|ico)$).*)',
+  ],
 };

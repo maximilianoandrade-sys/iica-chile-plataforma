@@ -13,6 +13,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
 
 export const runtime = 'nodejs';
 
@@ -79,6 +80,15 @@ function isOriginalHomepage(originalUrl: string): boolean {
 }
 
 export async function GET(request: NextRequest) {
+    const ip = getClientIp(request);
+    const rateLimit = checkRateLimit(`check-link:${ip}`, { maxRequests: 20, windowSizeSeconds: 60 });
+    if (!rateLimit.allowed) {
+        return NextResponse.json(
+            { error: 'Demasiadas solicitudes. Intente nuevamente más tarde.' },
+            { status: 429, headers: { 'Retry-After': String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)) } }
+        );
+    }
+
     try {
         const { searchParams } = new URL(request.url);
         const url = searchParams.get('url');

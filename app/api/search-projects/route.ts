@@ -23,6 +23,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { hybridSearch } from "@/lib/searchHybrid";
 import { fetchMercadoPublicoLive } from "@/lib/ingestion/scrapers/mercado-publico";
+import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
+import { getLogger } from '@/lib/utils/logger';
+const logger = getLogger('SearchProjects');
 
 interface SearchBody {
   query?: string;
@@ -39,42 +42,59 @@ function calcDaysLeft(deadline: Date | null): number | null {
 }
 
 export async function POST(req: NextRequest) {
-  let body: SearchBody;
-  try {
-    body = await req.json();
-  } catch {
+  const ip = getClientIp(req);
+  const rateLimit = checkRateLimit(`search-projects:${ip}`, { maxRequests: 30, windowSizeSeconds: 60 });
+  if (!rateLimit.allowed) {
     return NextResponse.json(
-      { error: "Invalid JSON body" },
-      { status: 400 }
+      { error: 'Demasiadas solicitudes. Intente nuevamente más tarde.' },
+      { status: 429, headers: { 'Retry-After': String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)) } }
     );
   }
-  const query = body.query?.trim() || "";
-  const ambito = body.ambito || body.scope || "all";
-  const includeUnverified = body.includeUnverified !== false;
 
-  const ticket = process.env.MERCADO_PUBLICO_TICKET || "";
+  try {
+    let body: SearchBody;
+    try {
+      body = await req.json();
+    } catch {
+      return NextResponse.json(
+        { error: "Invalid JSON body" },
+        { status: 400 }
+      );
+    }
+    const query = body.query?.trim() || "";
+    const ambito = body.ambito || body.scope || "all";
+    const includeUnverified = body.includeUnverified !== false;
 
-  const [hybrid, mpDocs] = await Promise.all([
-    hybridSearch({ query, ambito, includeUnverified, limit: 50 }),
-    fetchMercadoPublicoLive(ticket, query),
-  ]);
+    const ticket = process.env.MERCADO_PUBLICO_TICKET || "";
 
-  const enriched = hybrid.projects.map((p) => ({
-    ...p,
-    days_left: calcDaysLeft(p.fecha_cierre),
-  }));
+    const [hybrid, mpDocs] = await Promise.all([
+      hybridSearch({ query, ambito, includeUnverified, limit: 50 }),
+      fetchMercadoPublicoLive(ticket, query),
+    ]);
 
-  return NextResponse.json({
-    results: [...enriched, ...mpDocs],
-    meta: {
-      total: enriched.length + mpDocs.length,
-      hybrid_count: enriched.length,
-      mercado_publico_count: mpDocs.length,
-      mode: hybrid.mode, // "hybrid" | "lexical_only" | "all"
-      query,
-      searched_at: new Date().toISOString(),
-    },
-  });
+    const enriched = hybrid.projects.map((p) => ({
+      ...p,
+      days_left: calcDaysLeft(p.fecha_cierre),
+    }));
+
+    return NextResponse.json({
+      results: [...enriched, ...mpDocs],
+      meta: {
+        total: enriched.length + mpDocs.length,
+        hybrid_count: enriched.length,
+        mercado_publico_count: mpDocs.length,
+        mode: hybrid.mode, // "hybrid" | "lexical_only" | "all"
+        query,
+        searched_at: new Date().toISOString(),
+      },
+    });
+  } catch (error) {
+    logger.error('Search projects error', error as Error);
+    return NextResponse.json(
+      { error: 'Error interno del servidor' },
+      { status: 500 }
+    );
+  }
 }
 
 export async function GET() {

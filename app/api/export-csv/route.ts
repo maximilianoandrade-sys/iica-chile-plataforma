@@ -1,7 +1,20 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getProjects } from '@/lib/data';
+import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
+import { getLogger } from '@/lib/utils/logger';
+const logger = getLogger('ExportCSV');
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
+    const ip = getClientIp(request);
+    const rateLimit = checkRateLimit(`export-csv:${ip}`, { maxRequests: 10, windowSizeSeconds: 60 });
+    if (!rateLimit.allowed) {
+        return NextResponse.json(
+            { error: 'Demasiadas solicitudes. Intente nuevamente más tarde.' },
+            { status: 429, headers: { 'Retry-After': String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)) } }
+        );
+    }
+
+    try {
     const { searchParams } = new URL(request.url);
     const category = searchParams.get('category') || '';
     const region = searchParams.get('region') || '';
@@ -86,4 +99,11 @@ export async function GET(request: Request) {
             'Cache-Control': 'no-cache'
         }
     });
+    } catch (error) {
+        logger.error('Export CSV error', error as Error);
+        return NextResponse.json(
+            { error: 'Error interno del servidor' },
+            { status: 500 }
+        );
+    }
 }
