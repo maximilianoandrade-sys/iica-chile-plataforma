@@ -1,9 +1,17 @@
+/**
+ * @jest-environment node
+ */
 import { createHmac } from "crypto";
 
 // Mock Next.js modules before importing middleware
 function mockHeaders() {
   const store = new Map<string, string>();
-  return { set: (k: string, v: string) => store.set(k, v), get: (k: string) => store.get(k), entries: () => store.entries() };
+  return {
+    set: (k: string, v: string) => store.set(k, v),
+    get: (k: string) => store.get(k) ?? null,
+    entries: () => store.entries(),
+    forEach: (cb: (v: string, k: string) => void) => store.forEach(cb),
+  };
 }
 const mockRedirect = jest.fn((..._args: any[]) => ({ type: "redirect", headers: mockHeaders() }));
 const mockJson = jest.fn((..._args: any[]) => ({
@@ -20,6 +28,13 @@ jest.mock("next/server", () => ({
     redirect: (...args: any[]) => mockRedirect(...args),
     json: (...args: any[]) => mockJson(...args),
     next: (...args: any[]) => mockNext(...args),
+  },
+}));
+
+jest.mock("@/lib/security", () => ({
+  SECURITY_HEADERS: {
+    "X-Frame-Options": "DENY",
+    "X-Content-Type-Options": "nosniff",
   },
 }));
 
@@ -43,23 +58,7 @@ function makeRequest(path: string, cookie?: string) {
   };
 }
 
-// Mock crypto.subtle for Edge Runtime simulation
-const originalCrypto = global.crypto;
-
-beforeAll(() => {
-  const { webcrypto } = require("crypto");
-  Object.defineProperty(global, "crypto", {
-    value: webcrypto,
-    writable: true,
-  });
-});
-
-afterAll(() => {
-  Object.defineProperty(global, "crypto", {
-    value: originalCrypto,
-    writable: true,
-  });
-});
+// In node environment, crypto.subtle is available natively
 
 // Import middleware once (env is read at runtime, no need for resetModules)
 import { middleware } from "../middleware";
