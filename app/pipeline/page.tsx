@@ -136,7 +136,7 @@ export default function PipelinePage() {
               <LayoutDashboard className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-xl font-black text-slate-900 leading-tight">Gestión de Pipeline IICA</h1>
+              <h1 className="text-xl font-black text-slate-900 leading-tight">Cartera de Proyectos</h1>
               <p className="text-xs text-slate-500 font-medium">Flujo institucional de formulación y postulación</p>
             </div>
           </div>

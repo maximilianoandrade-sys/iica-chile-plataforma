@@ -211,6 +211,20 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                     bValue = b.id % 2;
                 }
 
+                // When sorting by date, push undefined/null/distant dates to end
+                if (sortConfig.key === 'fecha_cierre') {
+                    const aTime = a.fecha_cierre && new Date(a.fecha_cierre).getFullYear() < 9000
+                        ? new Date(a.fecha_cierre).getTime()
+                        : Infinity;
+                    const bTime = b.fecha_cierre && new Date(b.fecha_cierre).getFullYear() < 9000
+                        ? new Date(b.fecha_cierre).getTime()
+                        : Infinity;
+                    if (aTime === Infinity && bTime === Infinity) return 0;
+                    if (aTime === Infinity) return 1;
+                    if (bTime === Infinity) return -1;
+                    return sortConfig.direction === 'asc' ? aTime - bTime : bTime - aTime;
+                }
+
                 if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
                 if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
                 return 0;

@@ -5,7 +5,16 @@ import { Mail, ArrowRight, CheckCircle } from 'lucide-react';
 
 export default function Newsletter() {
     const [email, setEmail] = useState('');
+    const [emailError, setEmailError] = useState('');
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+    const validateEmail = (value: string) => {
+        if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+            setEmailError('Ingresa un correo electrónico válido');
+        } else {
+            setEmailError('');
+        }
+    };
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setStatus('loading');
@@ -77,8 +86,15 @@ export default function Newsletter() {
                                 className="w-full px-4 py-3 rounded-lg text-gray-900 focus:ring-2 focus:ring-[var(--iica-secondary)] outline-none border-none shadow-inner"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
+                                onBlur={(e) => validateEmail(e.target.value)}
                                 disabled={status === 'loading'}
                             />
+                            {emailError && (
+                                <p className="text-red-300 text-xs -mt-1">{emailError}</p>
+                            )}
+                            {status === 'error' && (
+                                <p className="text-red-300 text-xs mt-1">Hubo un error. Inténtalo de nuevo.</p>
+                            )}
 
                             <button
                                 type="submit"

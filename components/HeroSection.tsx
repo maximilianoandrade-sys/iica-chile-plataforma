@@ -83,7 +83,7 @@ export function HeroSection({ stats }: HeroSectionProps) {
                         </Link>
                         <Link
                             href="#fuentes"
-                            className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border-2 border-white/40 text-white font-bold py-4 px-10 rounded-full shadow-xl transition-all hover:-translate-y-1 inline-flex items-center justify-center gap-2 cursor-pointer min-h-[56px]"
+                            className="border-2 border-white/50 text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm font-bold py-4 px-10 rounded-full shadow-xl transition-all hover:-translate-y-1 inline-flex items-center justify-center gap-2 cursor-pointer min-h-[56px]"
                         >
                             🔗 Fuentes Internacionales
                         </Link>
