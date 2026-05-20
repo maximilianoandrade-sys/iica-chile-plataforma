@@ -299,7 +299,7 @@ export function useLinkGuardian(url: string, projectName: string, institution?: 
 export function clearLinkCache(): void {
     linkCache.clear();
     try {
-        localStorage.removeItem('iica_link_cache');
+        localStorage.removeItem(CACHE_KEY);
     } catch (error) {
         logger.warn('No se pudo limpiar caché de enlaces', { error });
     }

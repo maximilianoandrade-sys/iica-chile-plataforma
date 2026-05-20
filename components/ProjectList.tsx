@@ -600,11 +600,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                                         sizes="40px"
                                                                     />
                                                                 </div>
-                                                                <div className="flex flex-col gap-1">
-                                                                    <div className={`inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full border w-fit ${project.id % 2 === 0 ? 'bg-green-50 text-green-700 border-green-200' : 'bg-yellow-50 text-yellow-700 border-yellow-200'}`}>
-                                                                        IA: {project.id % 2 === 0 ? 'Fácil' : 'Media'}
-                                                                    </div>
-                                                                </div>
+
                                                             </div>
                                                         </td>
                                                         <td className="py-6 px-6 align-middle">

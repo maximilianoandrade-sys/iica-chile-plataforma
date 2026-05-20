@@ -134,61 +134,14 @@ function parseFondosHTML(html: string): LiveFund[] {
  * Fuentes adicionales verificadas manualmente (siempre actualizadas).
  * Se combinan con el feed de fondos.gob.cl.
  */
+// NOTA: Los feeds estáticos deben actualizarse periódicamente cuando expiran.
+// Agregar nuevas convocatorias verificadas y eliminar las vencidas.
 export function getVerifiedStaticFeeds(): LiveFund[] {
     const today = new Date();
-    const fontagroCierre = new Date('2026-04-20');
-    const fiaCierre = new Date('2026-03-31');
-    const cnrCierre = new Date('2026-04-23');
 
     const feeds: LiveFund[] = [];
 
-    // FONTAGRO 2026 — verificado 25/02/2026
-    if (fontagroCierre > today) {
-        feeds.push({
-            nombre: 'FONTAGRO 2026: Cooperación e Innovación para Sistemas Agroalimentarios ALC',
-            institucion: 'FONTAGRO / IICA / BID',
-            fechaInicio: '15-12-2025',
-            fechaCierre: '20-04-2026',
-            monto: 'Hasta USD 250.000',
-            beneficiarios: 'Consorcios regionales ALC (mín. 2 países)',
-            url: 'https://fontagro.org/en/iniciativas/convocatorias/convocatoria-2026',
-            ambito: 'Nacional',
-            diasRestantes: Math.ceil((fontagroCierre.getTime() - today.getTime()) / 86400000),
-            relevanciaIICA: 'Alta',
-        });
-    }
-
-    // FIA AgroCoopInnova 2026 — verificado 25/02/2026
-    if (fiaCierre > today) {
-        feeds.push({
-            nombre: 'FIA AgroCoopInnova 2026 – Selección de cooperativas participantes',
-            institucion: 'Fundación para la Innovación Agraria (FIA)',
-            fechaInicio: '01-02-2026',
-            fechaCierre: '31-03-2026',
-            monto: 'Consultar convocatoria',
-            beneficiarios: 'Cooperativas agropecuarias',
-            url: 'https://www.fia.cl/convocatorias/seleccion-de-cooperativas-participantes-del-programa-agrocoopinnova-2026/',
-            ambito: 'Nacional',
-            diasRestantes: Math.ceil((fiaCierre.getTime() - today.getTime()) / 86400000),
-            relevanciaIICA: 'Alta',
-        });
-    }
-
-    // CNR Concurso N° 05-2026 — verificado 25/02/2026
-    if (cnrCierre > today) {
-        feeds.push({
-            nombre: 'CNR – Concurso N°05-2026: Obras civiles y tecnificación centro-norte',
-            institucion: 'Comisión Nacional de Riego (CNR)',
-            fechaInicio: '07-01-2026',
-            fechaCierre: '23-04-2026',
-            monto: 'Variable según proyecto',
-            beneficiarios: 'Agricultores y organizaciones de riego',
-            url: 'https://www.cnr.gob.cl/agricultores/calendario-de-concurso/',
-            ambito: 'Nacional',
-            diasRestantes: Math.ceil((cnrCierre.getTime() - today.getTime()) / 86400000),
-            relevanciaIICA: 'Media',
-        });
-    }
+    // (Convocatorias FONTAGRO, FIA y CNR de abril 2026 eliminadas por vencimiento)
 
     return feeds;
 }
