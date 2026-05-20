@@ -11,6 +11,7 @@ import ProgramsSection from "@/components/ProgramsSection";
 import FuentesOficiales from "@/components/FuentesOficiales";
 import ImpactSection from "@/components/ImpactSection";
 import LiveFeedSection from "@/components/LiveFeedSection";
+import { getProjects } from "@/lib/data";
 
 // Forzar renderizado dinámico: los proyectos vienen de la DB y cambian con scrapers.
 // Sin esto, Vercel puede cachear la página estática con datos viejos.
@@ -55,14 +56,29 @@ export default async function DashboardPage({
 }) {
   const resolvedSearchParams = await searchParams;
 
+  // Compute stats server-side to avoid shipping projects.json to the client
+  const projects = await getProjects();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const internacionales = projects.filter((p) =>
+    ['FONTAGRO', 'FAO', 'FIDA', 'BID', 'PNUD', 'GEF', 'GCF', 'UE', 'UE (EUROCLIMA+)', 'UE (AECID)', 'IICA Hemisférico'].includes(p.institucion)
+  ).length;
+  const abiertas = projects.filter((p) => new Date(p.fecha_cierre) >= today).length;
+  const urgentes = projects.filter((p) => {
+    const closing = new Date(p.fecha_cierre);
+    const diff = Math.ceil((closing.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+    return diff >= 0 && diff <= 7;
+  }).length;
+  const heroStats = { total: projects.length, internacionales, abiertas, urgentes };
+
   return (
     <>
       <div className="min-h-screen flex flex-col bg-[#f4f7f9] selection:bg-blue-100 italic-none">
 
         {/* 1. Header con Hero */}
         <div id="inicio">
-          <Header />
-          <HeroSection />
+          <Header urgentCount={urgentes} />
+          <HeroSection stats={heroStats} />
         </div>
 
         <main className="flex-grow container mx-auto max-w-[1200px] px-4 py-8 -mt-12 relative z-20">

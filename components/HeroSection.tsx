@@ -5,33 +5,23 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Target } from 'lucide-react';
 import { motion } from 'framer-motion';
-import projects from '@/data/projects.json';
-import type { Project } from '@/lib/data';
 
-// Calcular estadísticas para el hero
-function getStats() {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const typedProjects = projects as unknown as Project[];
-    const totalOportunidades = typedProjects.length;
-    const internacionales = typedProjects.filter((p) =>
-        ['FONTAGRO', 'FAO', 'FIDA', 'BID', 'PNUD', 'GEF', 'GCF', 'UE', 'UE (EUROCLIMA+)', 'UE (AECID)', 'IICA Hemisférico'].includes(p.institucion)
-    ).length;
-    const abiertas = typedProjects.filter((p) => {
-        return new Date(p.fecha_cierre) >= today;
-    }).length;
-    const urgentCount = typedProjects.filter((p) => {
-        const closing = new Date(p.fecha_cierre);
-        const diff = Math.ceil((closing.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-        return diff >= 0 && diff <= 7;
-    }).length;
-
-    return { totalOportunidades, internacionales, abiertas, urgentCount };
+interface HeroStats {
+    total: number;
+    internacionales: number;
+    abiertas: number;
+    urgentes: number;
 }
 
-export function HeroSection() {
-    const { totalOportunidades, internacionales, abiertas, urgentCount } = getStats();
+interface HeroSectionProps {
+    stats?: HeroStats;
+}
+
+export function HeroSection({ stats }: HeroSectionProps) {
+    const totalOportunidades = stats?.total ?? 0;
+    const internacionales = stats?.internacionales ?? 0;
+    const abiertas = stats?.abiertas ?? 0;
+    const urgentCount = stats?.urgentes ?? 0;
 
     return (
         <section className="relative">

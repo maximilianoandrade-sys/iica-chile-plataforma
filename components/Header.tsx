@@ -3,25 +3,15 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Menu, X, Target, Home, Crosshair, Link2, Users, TrendingUp, Building2, Phone, Briefcase } from 'lucide-react';
-import projects from '@/data/projects.json';
-import type { Project } from '@/lib/data';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
-// Calcular cuántas oportunidades cierran en ≤7 días
-function getUrgentCount(): number {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return (projects as unknown as Project[]).filter((p) => {
-        const closing = new Date(p.fecha_cierre);
-        const diff = Math.ceil((closing.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-        return diff >= 0 && diff <= 7;
-    }).length;
+interface HeaderProps {
+    urgentCount?: number;
 }
 
-export function Header() {
+export function Header({ urgentCount = 0 }: HeaderProps) {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
-    const urgentCount = getUrgentCount();
 
     return (
         <header className="bg-white dark:bg-gray-900 border-b border-[var(--iica-border)] dark:border-gray-700 sticky top-0 z-50">

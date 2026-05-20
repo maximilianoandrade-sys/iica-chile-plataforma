@@ -15,6 +15,8 @@ import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Ch
 import { ActionButton, UrgencyBadge } from "@/components/ProjectItem";
 import { OportunidadCard, Oportunidad } from "./OportunidadCard";
 import { daysUntilClose, formatDeadline, isDeadlineUnknown, displayMonto } from "@/lib/data";
+import ProjectSearch from "@/components/ProjectSearch";
+import ProjectActions from "@/components/ProjectActions";
 
 export default function ProjectList({ projects }: { projects: Project[] }) {
     // State for client-side interactions
@@ -30,23 +32,14 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
     const [searchError, setSearchError] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
 
-    const handleSearch = useCallback(async (query: string, scope = "all", role = "all") => {
-        setSearching(true);
-        setSearchError(null);
-        try {
-            const res = await fetch("/api/search-projects", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ query, scope, role, use_ai: true }),
-            });
-            const data = await res.json();
-            setSearchResults(data.results);
-            setSearchMeta(data.meta);
-        } catch (e) {
-            setSearchError("Error al buscar proyectos");
-        } finally {
-            setSearching(false);
-        }
+    const handleSearchResults = useCallback((results: any[] | null, meta?: any) => {
+        setSearchResults(results);
+        setSearchMeta(meta || null);
+    }, []);
+
+    const handleSearchClear = useCallback(() => {
+        setSearchResults(null);
+        setSearchMeta(null);
     }, []);
     // New Features State
     const [favorites, setFavorites] = useState<number[]>([]);
@@ -252,51 +245,10 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
             )}
 
             {/* BUSCADOR IA */}
-            <div className="p-6 bg-white border-b border-gray-100">
-              <div className="flex gap-2 mb-3 text-gray-900">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  onKeyDown={e => e.key === "Enter" && handleSearch(searchQuery)}
-                  placeholder="Buscar proyectos reales... ej: riego, cambio climático, emprendimiento mujeres"
-                  className="flex-1 px-4 py-3 rounded-xl border border-gray-300 text-sm focus:outline-none focus:border-[var(--iica-blue)] focus:ring-1 focus:ring-[var(--iica-blue)] transition-all bg-gray-50/50"
-                  style={{ color: '#111827' }}
-                />
-                <button
-                  onClick={() => handleSearch(searchQuery)}
-                  disabled={searching}
-                  className="px-6 py-3 bg-[var(--iica-blue)] text-white rounded-xl text-sm font-bold hover:bg-[var(--iica-navy)] disabled:opacity-50 transition-colors shadow-sm whitespace-nowrap"
-                >
-                  {searching ? "Buscando..." : "🔍 Buscar con IA"}
-                </button>
-                {searchResults && (
-                  <button
-                    onClick={() => { setSearchResults(null); setSearchMeta(null); setSearchQuery(""); }}
-                    className="px-4 py-3 border border-gray-300 rounded-xl text-sm text-gray-600 font-medium hover:bg-gray-50 transition-colors bg-white whitespace-nowrap"
-                  >
-                    ✕ Limpiar
-                  </button>
-                )}
-              </div>
-              {searchMeta && (
-                <div className="flex items-center gap-2 mt-2">
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold bg-green-50 text-green-700 border border-green-200">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    {searchMeta.total} Resultados Reales
-                  </span>
-                  <p className="text-xs text-gray-500 font-medium ml-1">
-                    {searchMeta.ai_generated ? "✨ Potenciado por Inteligencia Artificial y Búsqueda Web" : "📋 Desde Base de Datos Institucional"}
-                  </p>
-                </div>
-              )}
-              {searchError && (
-                 <div className="flex items-center gap-1.5 mt-2 text-xs text-red-600 bg-red-50 p-2 rounded-lg border border-red-100">
-                    <AlertTriangle className="w-4 h-4" />
-                    <span className="font-medium">{searchError}</span>
-                 </div>
-              )}
-            </div>
+            <ProjectSearch
+              onSearchResults={handleSearchResults}
+              onClear={handleSearchClear}
+            />
 
             {/* HEADER METADATA DASHBOARD */}
             <div className="px-6 py-4 bg-white border-b border-gray-100 overflow-x-auto scrollbar-hide">
@@ -608,18 +560,16 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                         </td>
                                                         <td className="py-6 px-6 text-right align-middle">
                                                             <div className="flex items-center gap-2 justify-end">
-                                                                <button
-                                                                    onClick={(e: React.MouseEvent) => copyProjectFicha(project, e)}
-                                                                    className={`p-2.5 rounded-xl border transition-all ${copiedId === project.id ? 'bg-green-50 text-green-600 border-green-200' : 'bg-white text-gray-400 border-gray-200 hover:bg-gray-50'}`}
-                                                                >
-                                                                    {copiedId === project.id ? <CheckCheck className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
-                                                                </button>
-                                                                <button
-                                                                    onClick={() => setQuickViewProject(project)}
-                                                                    className="p-2.5 rounded-xl border bg-white text-gray-400 border-gray-200 hover:bg-gray-50 hover:text-gray-800 transition-all"
-                                                                >
-                                                                    <Eye className="h-5 w-5" />
-                                                                </button>
+                                                                <ProjectActions
+                                                                    projectId={project.id}
+                                                                    isFavorite={favorites.includes(project.id)}
+                                                                    isComparing={compareList.includes(project.id)}
+                                                                    copiedId={copiedId}
+                                                                    onToggleFavorite={toggleFavorite}
+                                                                    onToggleCompare={toggleCompare}
+                                                                    onCopy={(id, e) => copyProjectFicha(projects.find(p => p.id === id) || project, e)}
+                                                                    onQuickView={(id) => setQuickViewProject(projects.find(p => p.id === id) || project)}
+                                                                />
                                                                 <ActionButton
                                                                     url={project.url_bases}
                                                                     date={project.fecha_cierre}
