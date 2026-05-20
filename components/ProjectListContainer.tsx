@@ -1,6 +1,6 @@
 import { getProjects, type Project } from "@/lib/data";
 import ProjectList from "@/components/ProjectList";
-import type { FilterCounts } from "@/components/ProjectFilters";
+import type { FilterCounts } from "@/lib/data";
 import JsonLd from "@/components/JsonLd";
 import { searchAndRankProjects, defaultSortProjects } from "@/lib/searchEngine";
 

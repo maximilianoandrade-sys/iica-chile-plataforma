@@ -1,46 +1,43 @@
 import { render, screen } from '@testing-library/react';
 import ProjectList from '@/components/ProjectList';
-import type { Project } from '@/lib/data';
-import type { FilterCounts } from '@/components/ProjectFilters';
 
 jest.mock('next/navigation', () => ({
-  useRouter: () => ({ push: jest.fn(), replace: jest.fn() }),
-  useSearchParams: () => new URLSearchParams(),
+  useRouter: () => ({ push: jest.fn() }),
+  useSearchParams: () => new URLSearchParams(''),
   usePathname: () => '/',
 }));
 
-jest.mock('next/image', () => {
-  return function MockImage(props: any) {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img alt={props.alt || ''} src={props.src || ''} />;
-  };
-});
-
-const project: Project = {
-  id: 1001,
-  nombre: 'Programa Piloto de Riego',
-  institucion: 'FONTAGRO',
-  monto: 12000000,
-  fecha_cierre: '2026-12-31',
-  estado: 'Abierto',
-  categoria: 'Innovación',
-  url_bases: 'https://example.com/bases',
-  resumen: {
-    observaciones: 'Incluye componente territorial.',
+const projects = [
+  {
+    id: 1, nombre: 'Test Project', institucion: 'CORFO', monto: 100000000,
+    fecha_cierre: '2026-12-01', estado: 'active', categoria: 'Test',
+    url_bases: 'https://example.com', estadoPostulacion: 'Abierta' as const,
   },
+];
+
+const filterCounts = {
+  estado: { Abierta: 1 }, institucion: { CORFO: 1 },
+  region: {}, ambito: { Nacional: 1 },
 };
 
-const filterCounts: FilterCounts = {
-  estado: { Abierta: 1 },
-  institucion: { FONTAGRO: 1 },
-  region: {},
-  ambito: {},
-};
+describe('ProjectList accessibility', () => {
+  it('has search input with label', () => {
+    render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
+    expect(screen.getByRole('searchbox', { name: /Buscar oportunidades/i })).toBeInTheDocument();
+  });
 
-describe('ProjectList accesibilidad', () => {
-  it('renderiza filas de proyecto', () => {
-    render(<ProjectList projects={[project]} filterCounts={filterCounts} totalCount={1} />);
+  it('has sort control with label', () => {
+    render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
+    expect(screen.getByRole('combobox', { name: /Ordenar por/i })).toBeInTheDocument();
+  });
 
-    expect(screen.getByText('Programa Piloto de Riego')).toBeInTheDocument();
+  it('renders project cards as articles', () => {
+    render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
+    expect(screen.getByRole('article')).toBeInTheDocument();
+  });
+
+  it('has live region for result count', () => {
+    render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
+    expect(screen.getByText(/1 de 1 oportunidades/)).toHaveAttribute('aria-live', 'polite');
   });
 });

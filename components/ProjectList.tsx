@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { ProjectCard } from '@/components/ProjectCard';
 import { FilterChips } from '@/components/FilterChips';
-import { type FilterCounts } from '@/components/ProjectFilters';
+import { type FilterCounts } from '@/lib/data';
 import { daysUntilClose } from '@/lib/data';
 import { getLogger } from '@/lib/utils/logger';
 import type { Project } from '@/lib/data';

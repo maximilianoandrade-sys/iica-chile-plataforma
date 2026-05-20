@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { Search, X, SlidersHorizontal } from 'lucide-react';
-import { type FilterCounts } from '@/components/ProjectFilters';
+import { type FilterCounts } from '@/lib/data';
 import { getLogger } from '@/lib/utils/logger';
 
 const logger = getLogger('FilterChips');

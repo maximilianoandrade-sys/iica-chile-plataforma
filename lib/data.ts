@@ -310,3 +310,10 @@ export async function getProjects(): Promise<Project[]> {
 export async function getAllProjects(): Promise<Project[]> {
     return getProjects();
 }
+
+export interface FilterCounts {
+  estado: Record<string, number>;
+  institucion: Record<string, number>;
+  region: Record<string, number>;
+  ambito: Record<string, number>;
+}
