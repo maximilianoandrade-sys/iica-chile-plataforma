@@ -5,7 +5,7 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import Link from 'next/link';
 import { ExternalLink, ArrowLeft, Calendar, CheckCircle, Info, MapPin, Users, DollarSign } from 'lucide-react';
-import { ActionButton } from '@/components/ProjectItem';
+import { ActionButton } from '@/components/ActionButton';
 
 interface Props {
     params: Promise<{ id: string }>;

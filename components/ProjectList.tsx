@@ -12,7 +12,8 @@ import Image from 'next/image';
 import SearchableSelect from "@/components/SearchableSelect"; // Import the new component
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Filter, ExternalLink, Calendar, AlertCircle, X, ChevronDown, Check, Info, Sparkles, Copy, Eye, CheckCheck, MapPin, Users, Banknote, Clock, ChevronRight, ArrowUpDown, FileText, HelpCircle, MonitorPlay, PenTool, CheckCircle2, XCircle, AlertTriangle, Zap } from "lucide-react";
-import { ActionButton, UrgencyBadge } from "@/components/ProjectItem";
+import { ActionButton } from "@/components/ActionButton";
+import { UrgencyBadge } from "@/components/UrgencyBadge";
 import { OportunidadCard, Oportunidad } from "./OportunidadCard";
 import { daysUntilClose, formatDeadline, isDeadlineUnknown, displayMonto } from "@/lib/data";
 import ProjectSearch from "@/components/ProjectSearch";
