@@ -1,10 +1,18 @@
-import { getProjects } from "@/lib/data";
+import { getProjects, type Project } from "@/lib/data";
 import ProjectList from "@/components/ProjectList";
-import ProjectFilters from "@/components/ProjectFilters";
+import type { FilterCounts } from "@/components/ProjectFilters";
 import JsonLd from "@/components/JsonLd";
-import AnalyticsStrip from "@/components/AnalyticsStrip";
-import { searchAndRankProjects, buildDynamicSuggestions, defaultSortProjects, getZeroResultsSuggestions } from "@/lib/searchEngine";
-import counterparts from '@/lib/counterparts_raw.json';
+import { searchAndRankProjects, defaultSortProjects } from "@/lib/searchEngine";
+
+function inferEstado(project: Project): string {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const close = new Date(project.fecha_cierre);
+    const daysLeft = Math.ceil((close.getTime() - today.getTime()) / 86_400_000);
+    if (daysLeft < 0) return 'Cerrada';
+    if (daysLeft <= 30) return 'Próxima';
+    return 'Abierta';
+}
 
 export default async function ProjectListContainer({
     searchParams
@@ -14,150 +22,71 @@ export default async function ProjectListContainer({
     const projects = await getProjects();
 
     const searchTerm = typeof searchParams.q === 'string' ? searchParams.q : '';
-    const selectedCategory = typeof searchParams.category === 'string' ? searchParams.category : 'Todas';
-    const selectedRegion = typeof searchParams.region === 'string' ? searchParams.region : 'Todas';
-    const selectedBeneficiary = typeof searchParams.beneficiary === 'string' ? searchParams.beneficiary : 'Todos';
-    const selectedInstitution = typeof searchParams.institution === 'string' ? searchParams.institution : 'Todas';
-    const soloAbiertos = searchParams.open === '1';
-    const sortBy = typeof searchParams.sort === 'string' ? searchParams.sort : 'relevance';
-
-    // Filtros avanzados
-    const selectedAmbito = typeof searchParams.ambito === 'string' ? searchParams.ambito : 'Todos';
-    const selectedViabilidad = typeof searchParams.viabilidad === 'string' ? searchParams.viabilidad : 'Todas';
-    const selectedEstado = typeof searchParams.estado === 'string' ? searchParams.estado : 'Todos';
-
+    const selectedEstado = typeof searchParams.estado === 'string' ? searchParams.estado : '';
+    const selectedInstitutions = typeof searchParams.institution === 'string' ? searchParams.institution.split(',').filter(Boolean) : [];
+    const selectedRegions = typeof searchParams.region === 'string' ? searchParams.region.split(',').filter(Boolean) : [];
+    const selectedAmbito = typeof searchParams.ambito === 'string' ? searchParams.ambito : '';
     const minAmount = typeof searchParams.minAmount === 'string' ? parseInt(searchParams.minAmount) : 0;
     const maxAmount = typeof searchParams.maxAmount === 'string' ? parseInt(searchParams.maxAmount) : Infinity;
-    const selectedRol = typeof searchParams.rol === 'string' ? searchParams.rol : 'Todos';
-    const includeUnverified = searchParams.unverified !== '0'; // default true
 
-    // 1. Opciones de filtros (calculadas sobre todos los proyectos)
-    const categories = ['Todas', ...Array.from(new Set(projects.map(p => p.categoria)))];
-    const uniqueRegions = Array.from(new Set(projects.flatMap(p => p.regiones || []))).sort();
-    const uniqueBeneficiaries = Array.from(new Set(projects.flatMap(p => p.beneficiarios || []))).sort();
-    const uniqueInstitutions = Array.from(new Set([
-        ...projects.map(p => p.institucion),
-        ...counterparts.slice(0, 20).map(c => c.name)
-    ])).sort();
+    // Compute filterCounts from ALL projects
+    const filterCounts: FilterCounts = {
+        estado: projects.reduce((acc, p) => {
+            const estado = p.estadoPostulacion || inferEstado(p);
+            acc[estado] = (acc[estado] || 0) + 1;
+            return acc;
+        }, {} as Record<string, number>),
+        institucion: projects.reduce((acc, p) => {
+            acc[p.institucion] = (acc[p.institucion] || 0) + 1;
+            return acc;
+        }, {} as Record<string, number>),
+        region: projects.reduce((acc, p) => {
+            (p.regiones || []).forEach(r => { acc[r] = (acc[r] || 0) + 1; });
+            return acc;
+        }, {} as Record<string, number>),
+        ambito: projects.reduce((acc, p) => {
+            if (p.ambito) acc[p.ambito] = (acc[p.ambito] || 0) + 1;
+            return acc;
+        }, {} as Record<string, number>),
+    };
 
-    // 2. Sugerencias dinámicas generadas del contenido real de proyectos
-    const dynamicSuggestions = buildDynamicSuggestions(projects);
-
-    // 3. Filtrar + ordenar por relevancia
+    // Filter projects
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Primero aplicar búsqueda inteligente con ranking
-    let filteredProjects = searchAndRankProjects(searchTerm, projects);
+    let filteredProjects = searchTerm
+        ? searchAndRankProjects(searchTerm, projects)
+        : defaultSortProjects([...projects]);
 
-    // Luego aplicar filtros adicionales
     filteredProjects = filteredProjects.filter(project => {
-        const matchesCategory = selectedCategory === 'Todas' || project.categoria === selectedCategory;
-        const matchesRegion = selectedRegion === 'Todas' || (project.regiones && project.regiones.includes(selectedRegion));
-        const matchesBeneficiary = selectedBeneficiary === 'Todos' || (project.beneficiarios && project.beneficiarios.includes(selectedBeneficiary));
-        const matchesInstitution = selectedInstitution === 'Todas' || project.institucion === selectedInstitution || project.institucion.includes(selectedInstitution);
+        // Estado filter
+        let matchesEstado = true;
+        if (selectedEstado) {
+            if (project.estadoPostulacion) {
+                matchesEstado = project.estadoPostulacion === selectedEstado;
+            } else {
+                matchesEstado = inferEstado(project) === selectedEstado;
+            }
+        }
+
+        const matchesInstitution = selectedInstitutions.length === 0 || selectedInstitutions.includes(project.institucion);
+        const matchesRegion = selectedRegions.length === 0 || (project.regiones || []).some(r => selectedRegions.includes(r));
+        const matchesAmbito = !selectedAmbito || project.ambito === selectedAmbito;
 
         const filterActive = minAmount > 0 || maxAmount < Infinity;
         const matchesAmount = !filterActive || (project.monto >= minAmount && project.monto <= maxAmount);
 
-        // Filtro solo abiertos — usa fecha real como fuente de verdad absoluta
-        const closeDate = new Date(project.fecha_cierre);
-        const daysLeft = Math.ceil((closeDate.getTime() - today.getTime()) / 86_400_000);
-        const isOpen = daysLeft > 0;
-        const matchesOpen = !soloAbiertos || isOpen;
-
-        // Filtros Fase 1
-        const matchesAmbito = selectedAmbito === 'Todos' || project.ambito === selectedAmbito;
-        const matchesViabilidad = selectedViabilidad === 'Todas' || project.viabilidadIICA === selectedViabilidad;
-
-        // Estado: primero usa estadoPostulacion del JSON, si no está disponible infiere por fecha
-        let matchesEstado = true;
-        if (selectedEstado !== 'Todos') {
-            if (project.estadoPostulacion) {
-                matchesEstado = project.estadoPostulacion === selectedEstado;
-            } else {
-                // Inferir estado por fecha cuando el campo no está definido
-                let inferredEstado: string;
-                if (daysLeft < 0) inferredEstado = 'Cerrada';
-                else if (daysLeft <= 30) inferredEstado = 'Próxima';
-                else inferredEstado = 'Abierta';
-                matchesEstado = inferredEstado === selectedEstado;
-            }
-        }
-
-        const matchesRol = selectedRol === 'Todos' || project.rolIICA === selectedRol;
-        const matchesUnverified = includeUnverified || !(project as any).needsReview;
-
-        return matchesCategory && matchesRegion && matchesBeneficiary && matchesInstitution
-            && matchesAmount && matchesOpen
-            && matchesAmbito && matchesViabilidad && matchesEstado && matchesRol && matchesUnverified;
+        return matchesEstado && matchesInstitution && matchesRegion && matchesAmbito && matchesAmount;
     });
-
-    // 4. Ordenamiento secundario
-    if (searchTerm && sortBy !== 'relevance') {
-        // Con búsqueda activa + orden manual elegido por usuario
-        if (sortBy === 'date_asc') {
-            filteredProjects.sort((a, b) => new Date(a.fecha_cierre).getTime() - new Date(b.fecha_cierre).getTime());
-        } else if (sortBy === 'date_desc') {
-            filteredProjects.sort((a, b) => new Date(b.fecha_cierre).getTime() - new Date(a.fecha_cierre).getTime());
-        } else if (sortBy === 'amount_desc') {
-            filteredProjects.sort((a, b) => b.monto - a.monto);
-        } else if (sortBy === 'amount_asc') {
-            filteredProjects.sort((a, b) => a.monto - b.monto);
-        } else if (sortBy === 'viabilidad_desc') {
-            filteredProjects.sort((a, b) => (b.porcentajeViabilidad || 0) - (a.porcentajeViabilidad || 0));
-        }
-        // sortBy === 'relevance' con query → mantiene orden del motor de búsqueda
-    } else if (!searchTerm || sortBy === 'relevance') {
-        // Sin búsqueda: ordenamiento elegido o inteligente por defecto
-        // Con búsqueda y sortBy 'relevance': si no hay resultados de búsqueda, se aplica el ordenamiento por defecto
-        if (sortBy === 'date_asc') {
-            filteredProjects.sort((a, b) => new Date(a.fecha_cierre).getTime() - new Date(b.fecha_cierre).getTime());
-        } else if (sortBy === 'date_desc') {
-            filteredProjects.sort((a, b) => new Date(b.fecha_cierre).getTime() - new Date(a.fecha_cierre).getTime());
-        } else if (sortBy === 'amount_desc') {
-            filteredProjects.sort((a, b) => b.monto - a.monto);
-        } else if (sortBy === 'amount_asc') {
-            filteredProjects.sort((a, b) => a.monto - b.monto);
-        } else if (sortBy === 'viabilidad_desc') {
-            filteredProjects.sort((a, b) => (b.porcentajeViabilidad || 0) - (a.porcentajeViabilidad || 0));
-        } else {
-            // Default: urgencyScore compuesto (urgencia + viabilidad + rol)
-            filteredProjects = defaultSortProjects(filteredProjects);
-        }
-    }
-
-    // 5. Sugerencias para 0 resultados
-    const zeroResultsSuggestions = filteredProjects.length === 0 && searchTerm
-        ? getZeroResultsSuggestions(searchTerm, projects)
-        : [];
-
-    // Contar abiertos para el badge
-    const openCount = projects.filter(p => new Date(p.fecha_cierre).getTime() >= today.getTime()).length;
-
-    const hasActiveFilters = !!(searchTerm || selectedCategory !== 'Todas' || selectedRegion !== 'Todas'
-        || selectedBeneficiary !== 'Todos' || selectedInstitution !== 'Todas' || soloAbiertos
-        || selectedAmbito !== 'Todos' || selectedViabilidad !== 'Todas' || selectedEstado !== 'Todos'
-        || selectedRol !== 'Todos');
 
     return (
         <>
             <JsonLd projects={filteredProjects} />
-            <ProjectFilters
-                categories={categories}
-                regions={uniqueRegions}
-                beneficiaries={uniqueBeneficiaries}
-                institutions={uniqueInstitutions}
-                counts={{ filtered: filteredProjects.length, total: projects.length, open: openCount }}
-                dynamicSuggestions={dynamicSuggestions}
-                zeroResultsSuggestions={zeroResultsSuggestions}
-            />
-            <AnalyticsStrip
+            <ProjectList
                 projects={filteredProjects}
-                totalAll={projects.length}
-                searchActive={hasActiveFilters}
+                filterCounts={filterCounts}
+                totalCount={projects.length}
             />
-            <ProjectList projects={filteredProjects} />
         </>
     );
 }

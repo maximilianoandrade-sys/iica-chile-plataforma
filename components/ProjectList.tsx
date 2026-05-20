@@ -118,7 +118,7 @@ export default function ProjectList({ projects, filterCounts, totalCount }: Proj
     <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
       {/* Left sidebar - filters (desktop only) */}
       <aside className="hidden lg:block lg:w-72 xl:w-80 flex-shrink-0">
-        <ProjectFilters filterCounts={filterCounts} totalCount={totalCount} />
+        <ProjectFilters filterCounts={filterCounts} totalCount={totalCount} filteredCount={projects.length} />
       </aside>
 
       {/* Right main content */}
