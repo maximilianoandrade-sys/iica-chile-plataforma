@@ -107,10 +107,7 @@ const nextConfig = {
         protocol: 'https',
         hostname: '**.worldbank.org',
       },
-      {
-        protocol: 'https',
-        hostname: 'placehold.co',
-      },
+
       {
         protocol: 'https',
         hostname: 'via.placeholder.com',

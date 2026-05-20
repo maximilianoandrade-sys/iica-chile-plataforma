@@ -73,10 +73,6 @@ const ProgramsSection = () => {
                             href={program.deepLink}
                             className="group flex flex-col items-start p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700 cursor-pointer h-full relative overflow-hidden"
                         >
-                            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                                <span className="text-6xl">{program.icon}</span>
-                            </div>
-
                             <div className="flex items-center justify-center w-14 h-14 mb-4 rounded-full bg-blue-50 dark:bg-blue-900/20 text-3xl group-hover:bg-[var(--iica-blue)] group-hover:text-white transition-all duration-300 shadow-sm">
                                 {program.icon}
                             </div>

@@ -9,7 +9,7 @@ interface CounterProps {
 }
 
 export function AnimatedCounter({ end, suffix = "", prefix = "", duration = 2000 }: CounterProps) {
-    const [count, setCount] = useState(0);
+    const [count, setCount] = useState(end);
     const ref = useRef<HTMLSpanElement>(null);
     const started = useRef(false);
 
