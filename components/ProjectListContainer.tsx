@@ -14,6 +14,21 @@ function inferEstado(project: Project): string {
     return 'Abierta';
 }
 
+function getProjectRegions(project: Project): string[] {
+    if (project.regiones && project.regiones.length > 0) {
+        return project.regiones;
+    }
+
+    if (project.region) {
+        return project.region
+            .split(',')
+            .map((r) => r.trim())
+            .filter(Boolean);
+    }
+
+    return [];
+}
+
 export default async function ProjectListContainer({
     searchParams
 }: {
@@ -41,7 +56,7 @@ export default async function ProjectListContainer({
             return acc;
         }, {} as Record<string, number>),
         region: projects.reduce((acc, p) => {
-            (p.regiones || []).forEach(r => { acc[r] = (acc[r] || 0) + 1; });
+            getProjectRegions(p).forEach(r => { acc[r] = (acc[r] || 0) + 1; });
             return acc;
         }, {} as Record<string, number>),
         ambito: projects.reduce((acc, p) => {
@@ -70,7 +85,8 @@ export default async function ProjectListContainer({
         }
 
         const matchesInstitution = selectedInstitutions.length === 0 || selectedInstitutions.includes(project.institucion);
-        const matchesRegion = selectedRegions.length === 0 || (project.regiones || []).some(r => selectedRegions.includes(r));
+        const projectRegions = getProjectRegions(project);
+        const matchesRegion = selectedRegions.length === 0 || projectRegions.some(r => selectedRegions.includes(r));
         const matchesAmbito = !selectedAmbito || project.ambito === selectedAmbito;
 
         const filterActive = minAmount > 0 || maxAmount < Infinity;

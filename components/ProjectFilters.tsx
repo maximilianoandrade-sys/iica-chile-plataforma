@@ -64,6 +64,14 @@ export function ProjectFilters({ filterCounts, totalCount, filteredCount, classN
     router.push(pathname, { scroll: false });
   }
 
+  function normalizeRegionLabel(label: string): string {
+    return label
+      .split(',')
+      .map((part) => part.trim())
+      .filter(Boolean)
+      .join(', ');
+  }
+
   // Top 6 institutions sorted by count
   const topInstitutions = Object.entries(filterCounts.institucion)
     .sort((a, b) => b[1] - a[1])
@@ -89,10 +97,10 @@ export function ProjectFilters({ filterCounts, totalCount, filteredCount, classN
       aria-label="Filtros de búsqueda"
       className={`w-full lg:w-72 lg:shrink-0 ${className ?? ''}`}
     >
-      <div className="space-y-6">
+      <div className="space-y-6 rounded-2xl border border-iica-border bg-white p-4 shadow-sm sm:p-5">
         {/* Header with clear */}
         <div className="flex items-center justify-between">
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-gray-700">
             {filteredCount} de {totalCount} resultados
           </span>
           {hasActiveFilters && (
@@ -107,14 +115,14 @@ export function ProjectFilters({ filterCounts, totalCount, filteredCount, classN
           <legend className="text-sm font-semibold text-gray-900 mb-2">Búsqueda</legend>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <input
-              type="search"
-              aria-label="Buscar oportunidades"
-              placeholder="Buscar..."
-              value={currentQ}
-              onChange={(e) => updateParams({ q: e.target.value })}
-              className="w-full pl-10 pr-10 py-3 border border-iica-border rounded-xl text-sm min-h-[44px] focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none"
-            />
+              <input
+                type="search"
+                aria-label="Buscar oportunidades"
+                placeholder="Buscar..."
+                value={currentQ}
+                onChange={(e) => updateParams({ q: e.target.value })}
+                className="w-full pl-10 pr-10 py-3 border border-iica-border rounded-xl bg-white text-sm text-gray-900 placeholder:text-gray-400 min-h-[44px] focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none"
+              />
             {currentQ && (
               <button
                 type="button"
@@ -141,7 +149,7 @@ export function ProjectFilters({ filterCounts, totalCount, filteredCount, classN
                 onChange={() => updateParams({ estado: '' })}
                 className="w-4 h-4 text-iica-blue focus:ring-iica-yellow"
               />
-              <span className="ml-2 text-sm">Todas</span>
+              <span className="ml-2 text-sm text-gray-900">Todas</span>
             </label>
             {ESTADO_OPTIONS.map((opt) => (
               <label key={opt} className="flex items-center min-h-[44px] py-2 px-2 rounded-lg hover:bg-gray-50 cursor-pointer">
@@ -153,8 +161,8 @@ export function ProjectFilters({ filterCounts, totalCount, filteredCount, classN
                   onChange={() => updateParams({ estado: opt })}
                   className="w-4 h-4 text-iica-blue focus:ring-iica-yellow"
                 />
-                <span className="ml-2 text-sm">{opt}</span>
-                <span className="text-xs text-gray-400 ml-auto">{filterCounts.estado[opt] ?? 0}</span>
+                <span className="ml-2 text-sm text-gray-900">{opt}</span>
+                <span className="text-xs text-gray-400 ml-auto">({filterCounts.estado[opt] ?? 0})</span>
               </label>
             ))}
           </div>
@@ -172,8 +180,8 @@ export function ProjectFilters({ filterCounts, totalCount, filteredCount, classN
                   onChange={() => toggleMultiSelect('institution', selectedInstitutions, name)}
                   className="w-4 h-4 text-iica-blue focus:ring-iica-yellow"
                 />
-                <span className="ml-2 text-sm truncate">{name}</span>
-                <span className="text-xs text-gray-400 ml-auto">{count}</span>
+                <span className="ml-2 text-sm text-gray-900 truncate">{name}</span>
+                <span className="text-xs text-gray-400 ml-auto">({count})</span>
               </label>
             ))}
           </div>
@@ -191,8 +199,8 @@ export function ProjectFilters({ filterCounts, totalCount, filteredCount, classN
                   onChange={() => toggleMultiSelect('region', selectedRegions, name)}
                   className="w-4 h-4 text-iica-blue focus:ring-iica-yellow"
                 />
-                <span className="ml-2 text-sm truncate">{name}</span>
-                <span className="text-xs text-gray-400 ml-auto">{count}</span>
+                <span className="ml-2 text-sm text-gray-900 truncate" title={normalizeRegionLabel(name)}>{normalizeRegionLabel(name)}</span>
+                <span className="text-xs text-gray-400 ml-auto">({count})</span>
               </label>
             ))}
           </div>
@@ -211,7 +219,7 @@ export function ProjectFilters({ filterCounts, totalCount, filteredCount, classN
                   onChange={() => updateParams({ minAmount: opt.min, maxAmount: opt.max })}
                   className="w-4 h-4 text-iica-blue focus:ring-iica-yellow"
                 />
-                <span className="ml-2 text-sm">{opt.label}</span>
+                <span className="ml-2 text-sm text-gray-900">{opt.label}</span>
               </label>
             ))}
           </div>
@@ -230,7 +238,7 @@ export function ProjectFilters({ filterCounts, totalCount, filteredCount, classN
                 onChange={() => updateParams({ ambito: '' })}
                 className="w-4 h-4 text-iica-blue focus:ring-iica-yellow"
               />
-              <span className="ml-2 text-sm">Todos</span>
+              <span className="ml-2 text-sm text-gray-900">Todos</span>
             </label>
             {AMBITO_OPTIONS.map((opt) => (
               <label key={opt} className="flex items-center min-h-[44px] py-2 px-2 rounded-lg hover:bg-gray-50 cursor-pointer">
@@ -242,8 +250,8 @@ export function ProjectFilters({ filterCounts, totalCount, filteredCount, classN
                   onChange={() => updateParams({ ambito: opt })}
                   className="w-4 h-4 text-iica-blue focus:ring-iica-yellow"
                 />
-                <span className="ml-2 text-sm">{opt}</span>
-                <span className="text-xs text-gray-400 ml-auto">{filterCounts.ambito[opt] ?? 0}</span>
+                <span className="ml-2 text-sm text-gray-900">{opt}</span>
+                <span className="text-xs text-gray-400 ml-auto">({filterCounts.ambito[opt] ?? 0})</span>
               </label>
             ))}
           </div>

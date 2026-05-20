@@ -115,9 +115,9 @@ export default function ProjectList({ projects, filterCounts, totalCount }: Proj
   });
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+    <div className="flex flex-col md:flex-row gap-6 md:gap-8">
       {/* Left sidebar - filters (desktop only) */}
-      <aside className="hidden lg:block lg:w-72 xl:w-80 flex-shrink-0">
+      <aside className="hidden sm:block sm:w-72 xl:w-80 flex-shrink-0 sm:sticky sm:top-24 sm:self-start">
         <ProjectFilters filterCounts={filterCounts} totalCount={totalCount} filteredCount={projects.length} />
       </aside>
 
@@ -128,7 +128,7 @@ export default function ProjectList({ projects, filterCounts, totalCount }: Proj
           {/* Mobile filter button */}
           <button
             type="button"
-            className="lg:hidden inline-flex items-center gap-2 px-4 min-h-[44px] rounded-lg border border-iica-border bg-white text-sm font-medium text-iica-navy hover:bg-gray-50 transition-colors"
+            className="sm:hidden inline-flex items-center gap-2 px-4 min-h-[44px] rounded-lg border border-iica-border bg-white text-sm font-medium text-iica-navy hover:bg-gray-50 transition-colors"
             onClick={() => setMobileDrawerOpen(true)}
             aria-label="Abrir filtros"
           >
@@ -138,7 +138,7 @@ export default function ProjectList({ projects, filterCounts, totalCount }: Proj
 
           {/* Desktop result count */}
           <div
-            className="hidden lg:block text-sm text-gray-600"
+            className="hidden sm:block text-sm text-gray-600"
             aria-live="polite"
           >
             Mostrando {projects.length} de {totalCount} oportunidades
@@ -164,7 +164,7 @@ export default function ProjectList({ projects, filterCounts, totalCount }: Proj
 
         {/* Mobile result count */}
         <div
-          className="lg:hidden text-sm text-gray-600 mb-3"
+          className="sm:hidden text-sm text-gray-600 mb-3"
           aria-live="polite"
         >
           Mostrando {projects.length} de {totalCount} oportunidades
