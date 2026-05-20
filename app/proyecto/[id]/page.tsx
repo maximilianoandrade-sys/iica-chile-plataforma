@@ -246,6 +246,37 @@ export default async function ProyectoDetallePage({ params }: Props) {
             </main>
 
             <Footer />
+
+            {/* JSON-LD Structured Data */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "GovernmentService",
+                        name: project.nombre,
+                        provider: {
+                            "@type": "Organization",
+                            name: project.institucion,
+                        },
+                        description: project.resumen?.observaciones || `Convocatoria de ${project.institucion}`,
+                        url: project.url_bases,
+                        areaServed: {
+                            "@type": "Country",
+                            name: "Chile",
+                        },
+                        ...(project.fecha_cierre && {
+                            temporalCoverage: `../${new Date(project.fecha_cierre).toISOString().split("T")[0]}`,
+                        }),
+                        ...(project.monto && {
+                            offers: {
+                                "@type": "Offer",
+                                description: `Hasta ${montoDisplay}`,
+                            },
+                        }),
+                    }),
+                }}
+            />
         </div>
     );
 }
