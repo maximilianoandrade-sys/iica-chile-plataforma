@@ -1,25 +1,22 @@
 import { createHmac } from "crypto";
 
 // Mock Next.js modules before importing middleware
-const mockRedirect = jest.fn(() => ({ type: "redirect" }));
-const mockJson = jest.fn((body: unknown, init?: { status?: number }) => ({
+const mockRedirect = jest.fn((..._args: any[]) => ({ type: "redirect" }));
+const mockJson = jest.fn((..._args: any[]) => ({
   type: "json",
-  body,
-  status: init?.status,
+  body: _args[0],
+  status: _args[1]?.status,
 }));
-const mockNext = jest.fn(() => ({ type: "next" }));
+const mockNext = jest.fn((..._args: any[]) => ({ type: "next" }));
 
 jest.mock("next/server", () => ({
   NextRequest: jest.fn(),
   NextResponse: {
-    redirect: (...args: unknown[]) => mockRedirect(...args),
-    json: (...args: unknown[]) => mockJson(...args),
-    next: (...args: unknown[]) => mockNext(...args),
+    redirect: (...args: any[]) => mockRedirect(...args),
+    json: (...args: any[]) => mockJson(...args),
+    next: (...args: any[]) => mockNext(...args),
   },
 }));
-
-// We need to test the logic directly since middleware uses crypto.subtle
-// which isn't available in Node test env. We'll mock crypto.subtle.
 
 const SECRET = "test-secret";
 
@@ -59,11 +56,11 @@ afterAll(() => {
   });
 });
 
-describe("middleware admin token expiry", () => {
-  let middleware: (req: unknown) => Promise<unknown>;
+// Import middleware once (env is read at runtime, no need for resetModules)
+import { middleware } from "../middleware";
 
+describe("middleware admin token expiry", () => {
   beforeEach(() => {
-    jest.resetModules();
     process.env.ADMIN_SESSION_SECRET = SECRET;
     mockRedirect.mockClear();
     mockJson.mockClear();
@@ -74,13 +71,7 @@ describe("middleware admin token expiry", () => {
     delete process.env.ADMIN_SESSION_SECRET;
   });
 
-  async function loadMiddleware() {
-    const mod = await import("../middleware");
-    return mod.middleware;
-  }
-
   it("accepts a fresh token (< 8h old)", async () => {
-    middleware = await loadMiddleware();
     const now = Date.now();
     const token = generateToken(SECRET, now);
     const req = makeRequest("/admin/dashboard", token);
@@ -90,7 +81,6 @@ describe("middleware admin token expiry", () => {
   });
 
   it("rejects an expired token (> 8h old)", async () => {
-    middleware = await loadMiddleware();
     const nineHoursAgo = Date.now() - 9 * 60 * 60 * 1000;
     const token = generateToken(SECRET, nineHoursAgo);
     const req = makeRequest("/admin/dashboard", token);
@@ -101,7 +91,6 @@ describe("middleware admin token expiry", () => {
   });
 
   it("rejects a tampered token", async () => {
-    middleware = await loadMiddleware();
     const now = Date.now();
     const token = generateToken(SECRET, now);
     // Tamper with the signature
@@ -114,7 +103,6 @@ describe("middleware admin token expiry", () => {
   });
 
   it("rejects token without dot separator (old format)", async () => {
-    middleware = await loadMiddleware();
     const req = makeRequest("/admin/dashboard", "abcdef1234567890".repeat(4));
 
     await middleware(req as any);

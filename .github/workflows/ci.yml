@@ -33,6 +33,7 @@ jobs:
     env:
       DATABASE_URL: postgres://iica:iica@localhost:5432/iica_test
       DIRECT_URL: postgres://iica:iica@localhost:5432/iica_test
+      ADMIN_SESSION_SECRET: ci-test-secret-not-for-production
       # No usamos GEMINI_API_KEY en CI: hybridSearch hace fallback a
       # lexical-only cuando Gemini no responde, lo cual es suficiente
       # para los smoke/E2E (no validan calidad semántica).
@@ -42,7 +43,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "npm"
 
       - name: Install dependencies
@@ -79,7 +80,7 @@ jobs:
         run: npx tsx prisma/seed.ts || true
 
       - name: Jest unit tests (no-fail)
-        run: npm test -- --passWithNoTests --silent
+        run: npm test -- --passWithNoTests --silent --runInBand
         continue-on-error: true   # 12 tests pre-existentes fallan; no bloquea CI
 
       - name: Build Next.js app
