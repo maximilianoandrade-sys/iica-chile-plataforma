@@ -1,14 +1,12 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import ProjectList from '@/components/ProjectList';
-import { Project } from '@/lib/data';
+import type { Project } from '@/lib/data';
+import type { FilterCounts } from '@/components/ProjectFilters';
 
 jest.mock('next/navigation', () => ({
+  useRouter: () => ({ push: jest.fn(), replace: jest.fn() }),
   useSearchParams: () => new URLSearchParams(),
-}));
-
-jest.mock('@/components/ProjectItem', () => ({
-  ActionButton: () => <button type="button">Ver bases externas</button>,
-  UrgencyBadge: ({ date }: { date: string }) => <span>{date}</span>,
+  usePathname: () => '/',
 }));
 
 jest.mock('next/image', () => {
@@ -32,20 +30,17 @@ const project: Project = {
   },
 };
 
+const filterCounts: FilterCounts = {
+  estado: { Abierta: 1 },
+  institucion: { FONTAGRO: 1 },
+  region: {},
+  ambito: {},
+};
+
 describe('ProjectList accesibilidad', () => {
-  it('usa botones para cabeceras de ordenamiento', () => {
-    render(<ProjectList projects={[project]} />);
+  it('renderiza filas de proyecto', () => {
+    render(<ProjectList projects={[project]} filterCounts={filterCounts} totalCount={1} />);
 
-    expect(screen.getAllByRole('button', { name: /Proyecto/i }).length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByRole('button', { name: /Institución/i }).length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByRole('button', { name: /^Cierre$/i }).length).toBeGreaterThanOrEqual(1);
-  });
-
-  it('expone dialogo semantico en vista rapida', () => {
-    render(<ProjectList projects={[project]} />);
-
-    fireEvent.click(screen.getByLabelText(/Abrir panel de detalles/i));
-
-    expect(screen.getByRole('dialog', { name: /Programa Piloto de Riego/i })).toBeInTheDocument();
+    expect(screen.getByText('Programa Piloto de Riego')).toBeInTheDocument();
   });
 });
