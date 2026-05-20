@@ -2,21 +2,43 @@ import { NextRequest, NextResponse } from "next/server";
 import { createHmac, timingSafeEqual } from "crypto";
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
+import { getLogger } from "@/lib/utils/logger";
 
-/** Verify admin-token cookie matches the expected HMAC. */
+const logger = getLogger("AdminDiscoveryAction");
+
+const MAX_AGE_MS = 8 * 60 * 60 * 1000; // 8 hours
+
+/** Verify admin-token cookie matches the expected HMAC (sig.timestamp format). */
 function isAuthenticated(req: NextRequest): boolean {
   const secret = process.env.ADMIN_SESSION_SECRET;
-  if (!secret) return false;
+  if (!secret) {
+    logger.error("ADMIN_SESSION_SECRET not configured");
+    return false;
+  }
 
   const cookie = req.cookies.get("admin-token")?.value;
   if (!cookie) return false;
 
   try {
+    const dotIndex = cookie.lastIndexOf(".");
+    if (dotIndex === -1) return false;
+
+    const sig = cookie.substring(0, dotIndex);
+    const timestamp = cookie.substring(dotIndex + 1);
+    const ts = Number(timestamp);
+    if (isNaN(ts)) return false;
+
+    if (Date.now() - ts > MAX_AGE_MS) {
+      logger.warn("Admin token expired");
+      return false;
+    }
+
     const expected = createHmac("sha256", secret)
-      .update("admin-session")
+      .update(`admin-session:${timestamp}`)
       .digest("hex");
-    if (cookie.length !== expected.length) return false;
-    return timingSafeEqual(Buffer.from(cookie), Buffer.from(expected));
+
+    if (sig.length !== expected.length) return false;
+    return timingSafeEqual(Buffer.from(sig), Buffer.from(expected));
   } catch {
     return false;
   }
