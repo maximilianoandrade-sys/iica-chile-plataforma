@@ -2,6 +2,7 @@
 import React from 'react';
 import { LayoutDashboard, GripVertical, CheckCircle2, ChevronRight, Briefcase, Play, Inbox, Send, ChevronLeft, User, ListTodo, AlertCircle, Trash2, Plus } from 'lucide-react';
 import projectsData from '@/data/projects.json';
+import { PipelineMobileView } from '@/components/PipelineMobileView';
 import { Project } from '@/lib/data';
 import { getPipelineTasks, savePipelineTasks } from '@/lib/pipelineManager';
 import Link from 'next/link';
@@ -115,6 +116,12 @@ export default function PipelinePage() {
     }
   };
 
+  const moveTask = (taskId: string, newColumn: ColumnState) => {
+    setTasks(prev => prev.map(t =>
+      t.id === taskId ? { ...t, column: newColumn, lastUpdate: new Date().toISOString() } : t
+    ));
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
       <header className="bg-white border-b border-slate-200 px-8 py-5 flex items-center justify-between sticky top-0 z-30 shadow-sm">
@@ -149,29 +156,9 @@ export default function PipelinePage() {
       </header>
 
       <main className="flex-1 p-4 lg:p-8 overflow-x-auto bg-[#f8fafc]">
-        {/* Mobile: simplified list view */}
-        <div className="lg:hidden space-y-4">
-          {COLUMNS.map(col => {
-            const columnTasks = tasks.filter(t => t.column === col.id);
-            return (
-              <div key={col.id} className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
-                <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
-                  <span className={`w-3 h-3 rounded-full ${col.bgColor}`}></span>
-                  {col.name} <span className="text-gray-500 text-sm">({columnTasks.length})</span>
-                </h3>
-                <ul className="space-y-2">
-                  {columnTasks.map(task => (
-                    <li key={task.id} className="p-3 border rounded-md text-sm bg-gray-50 dark:bg-gray-700">
-                      {task.project.nombre}
-                    </li>
-                  ))}
-                  {columnTasks.length === 0 && (
-                    <li className="p-3 text-sm text-gray-400 italic">Sin proyectos</li>
-                  )}
-                </ul>
-              </div>
-            );
-          })}
+        {/* Mobile: collapsible sections with move buttons */}
+        <div className="lg:hidden">
+          <PipelineMobileView tasks={tasks} onMoveTask={moveTask} onDeleteTask={(id) => { if (confirm('¿Eliminar esta postulación del pipeline?')) setTasks(prev => prev.filter(t => t.id !== id)); }} />
         </div>
 
         {/* Desktop: Kanban board */}
