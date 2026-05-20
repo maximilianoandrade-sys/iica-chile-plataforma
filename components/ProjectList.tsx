@@ -52,6 +52,8 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
     const [copiedId, setCopiedId] = useState<number | null>(null);
     const [quickFilter, setQuickFilter] = useState<'all' | 'facil' | 'cierre' | 'mujeres' | 'alta_viabilidad'>('all');
     const [sortConfig, setSortConfig] = useState<{ key: keyof Project | 'dificultad', direction: 'asc' | 'desc' } | null>(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const ITEMS_PER_PAGE = 15;
 
     // Índice invertido pre-computado para búsqueda O(1)
     const [invertedIndex, setInvertedIndex] = useState<InvertedIndex | null>(null);
@@ -217,6 +219,18 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
 
         return filtered;
     }, [projects, selectedAgrovoc, showFavoritesOnly, favorites, quickFilter, sortConfig, searchResults]);
+
+    // Reset page when filters change
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [selectedAgrovoc, showFavoritesOnly, quickFilter, sortConfig, searchResults]);
+
+    // Pagination
+    const totalPages = Math.ceil(displayedProjects.length / ITEMS_PER_PAGE);
+    const paginatedProjects = displayedProjects.slice(
+        (currentPage - 1) * ITEMS_PER_PAGE,
+        currentPage * ITEMS_PER_PAGE
+    );
 
     // Dashboard Counters Logic
     const activeFundsByInstitution = useMemo(() => {
@@ -398,7 +412,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                 </div>
 
                 <div className="text-[11px] font-bold text-gray-400 uppercase tracking-widest hidden sm:block">
-                    Resultados: <span className="text-gray-800">{displayedProjects.length}</span>
+                    Mostrando <span className="text-gray-800">{paginatedProjects.length}</span> de <span className="text-gray-800">{displayedProjects.length}</span> oportunidades
                 </div>
             </div >
 
@@ -480,7 +494,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                                 </tr>
                                             </thead>
                                             <tbody className="divide-y divide-gray-100 bg-white">
-                                                {displayedProjects.map((project: Project) => (
+                                                {paginatedProjects.map((project: Project) => (
                                                     <tr
                                                         key={project.id}
                                                         className={`hover:bg-blue-50/60 transition-colors group ${compareList.includes(project.id) ? 'bg-blue-50/40' : ''}`}
@@ -592,7 +606,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                         transition={{ duration: 0.2 }}
                                         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6"
                                     >
-                                        {displayedProjects.map((project: Project) => {
+                                        {paginatedProjects.map((project: Project) => {
                                             const op: Oportunidad = {
                                                 id: String(project.id),
                                                 nombre: project.nombre,
@@ -632,7 +646,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                             <div className="lg:hidden p-4 space-y-4">
                                 {viewMode === 'table' && (
                                     <div className="grid grid-cols-1 gap-4">
-                                        {displayedProjects.map((project: Project) => {
+                                        {paginatedProjects.map((project: Project) => {
                                             const op: Oportunidad = {
                                                 id: String(project.id),
                                                 nombre: project.nombre,
@@ -653,6 +667,29 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                     </div>
                                 )}
                             </div>
+
+                            {/* Pagination Controls */}
+                            {totalPages > 1 && (
+                                <div className="flex items-center justify-center gap-2 py-6 border-t border-gray-100">
+                                    <button
+                                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                        disabled={currentPage === 1}
+                                        className="px-3 py-2 text-sm font-bold rounded-lg border border-gray-200 disabled:opacity-40 hover:bg-gray-50 transition-colors"
+                                    >
+                                        &larr; Anterior
+                                    </button>
+                                    <span className="text-sm text-gray-500 font-medium px-3">
+                                        P&aacute;gina {currentPage} de {totalPages}
+                                    </span>
+                                    <button
+                                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                        disabled={currentPage === totalPages}
+                                        className="px-3 py-2 text-sm font-bold rounded-lg border border-gray-200 disabled:opacity-40 hover:bg-gray-50 transition-colors"
+                                    >
+                                        Siguiente &rarr;
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     )
                 }
