@@ -1,0 +1,48 @@
+name: Ingest — Capa A (scrapers determinísticos)
+
+on:
+  schedule:
+    # Cada día a las 10:00 UTC (06:00 Chile)
+    - cron: "0 10 * * *"
+  workflow_dispatch:
+
+jobs:
+  ingest:
+    name: Ejecutar scrapers (FIA, CORFO, CNR, IICA)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Seed sources (idempotent)
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+          ADMIN_SESSION_SECRET: ${{ secrets.ADMIN_SESSION_SECRET }}
+        run: npx tsx scripts/seed-sources.ts
+
+      - name: Run deterministic scrapers
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+          ADMIN_SESSION_SECRET: ${{ secrets.ADMIN_SESSION_SECRET }}
+        run: npx tsx scripts/run-scrapers.ts
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Resultado de ingesta" >> $GITHUB_STEP_SUMMARY
+          echo "- Ejecutado: $(date -u +%FT%TZ)" >> $GITHUB_STEP_SUMMARY
+          echo "- Disparador: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
