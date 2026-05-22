@@ -80,14 +80,26 @@ export function Footer() {
                     <div>
                         <h4 className="text-lg font-semibold mb-4 text-white">Contacto IICA Chile</h4>
                         <ul className="space-y-2 text-sm text-blue-200">
-                            <li>📍 Calle Rancagua No.0320, Providencia, Santiago.</li>
+                            <li>
+                                <a
+                                    href="https://www.google.com/maps/search/?api=1&query=Calle+Rancagua+320+Providencia+Santiago+Chile"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:text-white transition-colors"
+                                    aria-label="Ver ubicación en Google Maps"
+                                >
+                                    📍 Calle Rancagua No.0320, Providencia, Santiago.
+                                </a>
+                            </li>
                             <li>✉️ <a href="mailto:representacion.chile@iica.int" className="hover:text-white transition-colors">representacion.chile@iica.int</a></li>
-                            <li>📞 <a href="tel:+56222252511" className="hover:text-white transition-colors">Fijo: (+56) 2 2225 2511</a></li>
+                            <li>📞 <a href="tel:+56222252511" className="hover:text-white transition-colors" aria-label="Llamar al IICA Chile">Fijo: (+56) 2 2225 2511</a></li>
                         </ul>
                         <div className="mt-4 p-3 bg-white/10 rounded-xl border border-white/20">
                             <p className="text-xs text-blue-200 font-medium">¿Encontraste una oportunidad relevante?</p>
                             <a
-                                href="mailto:representacion.chile@iica.int?subject=Oportunidad de Proyecto IICA Chile 2026"
+                                href="https://mail.google.com/mail/?view=cm&to=representacion.chile@iica.int&su=Oportunidad+de+Proyecto+IICA+Chile+2026"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="text-[var(--iica-yellow)] text-xs font-bold hover:underline"
                             >
                                 Compártela con el equipo →
