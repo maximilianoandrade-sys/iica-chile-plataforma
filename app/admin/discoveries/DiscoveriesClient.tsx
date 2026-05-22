@@ -52,9 +52,11 @@ export default function DiscoveriesClient({ initial }: { initial: ProjectItem[] 
                 <td className="px-4 py-3">
                   <p className="font-bold text-gray-900">{p.nombre}</p>
                   <p className="text-xs text-gray-500">{p.institucion}</p>
-                  <a href={p.url_bases} target="_blank" rel="noopener" className="text-xs text-blue-700 hover:underline break-all">
-                    {p.url_bases?.slice(0, 60)}...
-                  </a>
+                  {p.url_bases && (
+                    <a href={p.url_bases} target="_blank" rel="noopener" className="text-xs text-blue-700 hover:underline break-all">
+                      {p.url_bases.slice(0, 60)}...
+                    </a>
+                  )}
                 </td>
                 <td className="px-4 py-3 text-xs text-gray-600 max-w-md">
                   {(p.notasInternas || "").slice(0, 250) || "Sin observaciones IA"}
@@ -64,6 +66,7 @@ export default function DiscoveriesClient({ initial }: { initial: ProjectItem[] 
                     <button
                       disabled={busy === p.id}
                       onClick={() => act(p.id, "approve")}
+                      aria-label={`Aprobar ${p.nombre}`}
                       className="px-3 py-1.5 rounded-md bg-green-700 text-white font-semibold hover:bg-green-800 disabled:opacity-60"
                     >
                       Aprobar
@@ -71,6 +74,7 @@ export default function DiscoveriesClient({ initial }: { initial: ProjectItem[] 
                     <button
                       disabled={busy === p.id}
                       onClick={() => act(p.id, "discard")}
+                      aria-label={`Descartar ${p.nombre}`}
                       className="px-3 py-1.5 rounded-md bg-red-700 text-white font-semibold hover:bg-red-800 disabled:opacity-60"
                     >
                       Descartar

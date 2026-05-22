@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { cache } from 'react';
 import type { Metadata } from 'next';
 import { getProjects, displayMonto, pluralizeDias } from '@/lib/data';
 import { Header } from '@/components/Header';
@@ -7,13 +8,15 @@ import Link from 'next/link';
 import { ExternalLink, ArrowLeft, Calendar, CheckCircle, Info, MapPin, Users, DollarSign } from 'lucide-react';
 import { ActionButton } from '@/components/ActionButton';
 
+const getCachedProjects = cache(getProjects);
+
 interface Props {
     params: Promise<{ id: string }>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { id } = await params;
-    const result = await getProjects();
+    const result = await getCachedProjects();
     const projects = result.ok ? result.projects : [];
     const project = projects.find(p => p.id === parseInt(id));
 
@@ -32,14 +35,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-    const result = await getProjects();
+    const result = await getCachedProjects();
     const projects = result.ok ? result.projects : [];
     return projects.map(p => ({ id: String(p.id) }));
 }
 
 export default async function ProyectoDetallePage({ params }: Props) {
     const { id } = await params;
-    const result = await getProjects();
+    const result = await getCachedProjects();
     const projects = result.ok ? result.projects : [];
     const project = projects.find(p => p.id === parseInt(id));
 
