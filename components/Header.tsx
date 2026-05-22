@@ -7,6 +7,8 @@ import { Menu, X, Target, Home, Crosshair, Link2, Building2, Phone } from 'lucid
 
 import { ThemeToggle } from '@/components/ThemeToggle';
 
+const OFFICIAL_IICA_CHILE_URL = 'https://iica.int/es/countries/chile-es/';
+
 interface HeaderProps {
     urgentCount?: number;
 }
@@ -27,7 +29,12 @@ export function Header({ urgentCount = 0 }: HeaderProps) {
             {/* Navigation */}
             <div className="container mx-auto max-w-[1200px] px-4 py-4 flex justify-between items-center gap-4">
                 <div className="flex items-center gap-3">
-                    <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
+                    <a
+                        href={OFFICIAL_IICA_CHILE_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 hover:opacity-90 transition-opacity"
+                    >
                         <Image
                             src="/logos/official/iica.png"
                             alt="Logo oficial IICA Chile"
@@ -39,7 +46,7 @@ export function Header({ urgentCount = 0 }: HeaderProps) {
                         <span className="font-black text-xl sm:text-2xl text-[var(--iica-navy)] dark:text-white tracking-tighter leading-none">
                             IICA <span className="text-[var(--iica-blue)] dark:text-blue-400">Chile</span>
                         </span>
-                    </Link>
+                    </a>
                     <div className="h-6 w-[1px] bg-gray-200 dark:bg-gray-700 mx-2 hidden sm:block" />
                     <span className="text-[10px] font-black uppercase text-gray-400 tracking-widest hidden sm:block">Radar 2026</span>
                 </div>

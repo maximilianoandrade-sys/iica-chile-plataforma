@@ -21,6 +21,10 @@ describe('Header', () => {
     expect(screen.getByRole('link', { name: /Fuentes/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Explorar Oportunidades/i })).toBeInTheDocument();
     expect(screen.getByRole('img', { name: /Logo oficial IICA Chile/i })).toBeInTheDocument();
+    const logoLink = screen.getByRole('link', { name: /Logo oficial IICA Chile/i });
+    expect(logoLink).toHaveAttribute('href', 'https://iica.int/es/countries/chile-es/');
+    expect(logoLink).toHaveAttribute('target', '_blank');
+    expect(logoLink).toHaveAttribute('rel', 'noopener noreferrer');
     // Removed zombie features
     expect(screen.queryByRole('link', { name: /Consultores/i })).not.toBeInTheDocument();
     expect(screen.queryByRole('link', { name: /Mi Maletín/i })).not.toBeInTheDocument();
