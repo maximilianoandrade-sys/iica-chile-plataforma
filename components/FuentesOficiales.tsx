@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ExternalLink, CheckCircle, Clock, ChevronDown, ChevronUp, Shield, RefreshCw, Droplets, Sprout, FlaskConical, Factory, Globe, Wheat, Landmark, AlertTriangle, MapPin, Coins } from 'lucide-react';
+import { ExternalLink, CheckCircle, Clock, ChevronDown, ChevronUp, Shield, RefreshCw, Droplets, Sprout, FlaskConical, Factory, Globe, Wheat, Landmark, AlertTriangle, MapPin, Coins, type LucideIcon } from 'lucide-react';
 import projectData from '@/data/projects.json';
 
 // Compute fondosActivos dynamically from actual project data
@@ -33,7 +33,7 @@ interface FuenteOficial {
     regiones: string;
 }
 
-const ICON_MAP: Record<string, React.ComponentType<{ className?: string; 'aria-hidden'?: boolean }>> = {
+const ICON_MAP: Record<string, LucideIcon> = {
     droplets: Droplets,
     sprout: Sprout,
     flask: FlaskConical,
