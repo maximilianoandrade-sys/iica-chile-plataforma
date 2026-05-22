@@ -55,7 +55,6 @@ describe("worldBankScraper", () => {
     expect(first.title).toBe("Chile Agricultural Modernization Project");
     expect(first.institution).toBe("World Bank");
     expect(first.url).toBe("https://projects.worldbank.org/en/projects-operations/procurement-detail/OP00123456");
-    expect(first.canonicalKey).toBe("worldbank-OP00123456");
     expect(first.deadline).toBeInstanceOf(Date);
     expect(first.deadline!.toISOString()).toBe("2026-07-15T23:59:59.000Z");
     expect(first.ambito).toBe("Internacional");

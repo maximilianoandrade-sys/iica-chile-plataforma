@@ -190,15 +190,11 @@ export const ungmScraper: Scraper = {
         const deadline = parseUngmDeadline(notice.deadline);
         const org = notice.agency || "UN";
         const tags: string[] = ["UNGM", org];
-        const canonicalKey = notice.reference
-          ? `ungm-${notice.reference}`
-          : `ungm-${notice.noticeId}`;
 
         projects.push({
           title: notice.title,
           institution: `${org} (UN)`,
           url,
-          canonicalKey,
           deadline,
           budget: null,
           tags,

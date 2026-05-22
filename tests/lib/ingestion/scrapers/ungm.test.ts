@@ -89,7 +89,6 @@ describe("ungmScraper", () => {
     expect(first.title).toContain("Supervision of Construction");
     expect(first.institution).toBe("FAO (UN)");
     expect(first.url).toBe("https://www.ungm.org/Public/Notice/301877");
-    expect(first.canonicalKey).toBe("ungm-2026/FRURT/FRURT/136955");
     expect(first.deadline).toBeInstanceOf(Date);
     expect(first.ambito).toBe("Internacional");
     expect(first.idioma).toBe("en");

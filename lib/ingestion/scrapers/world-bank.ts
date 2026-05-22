@@ -112,7 +112,6 @@ export const worldBankScraper: Scraper = {
           title: cleanText(title),
           institution: "World Bank",
           url,
-          canonicalKey: `worldbank-${noticeId}`,
           deadline,
           budget: null,
           description,
