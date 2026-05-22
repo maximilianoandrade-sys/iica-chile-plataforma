@@ -8,7 +8,7 @@
 import React, { useState, useEffect } from 'react';
 import { Bell, BellOff, Check, X } from 'lucide-react';
 import { usePushNotifications } from '@/hooks/usePWA';
-import { motion, AnimatePresence } from 'framer-motion';
+
 
 export default function PushNotificationManager() {
     const { permission, subscription, requestPermission, subscribe, unsubscribe } = usePushNotifications();
@@ -83,13 +83,8 @@ export default function PushNotificationManager() {
             </button>
 
             {/* Prompt inicial */}
-            <AnimatePresence>
-                {showPrompt && (
-                    <motion.div
-                        initial={{ scale: 0.9, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0.9, opacity: 0 }}
-                        className="fixed bottom-20 left-4 right-4 md:left-auto md:right-4 md:max-w-md z-50"
+            {showPrompt && (
+                    <div className="fixed bottom-20 left-4 right-4 md:left-auto md:right-4 md:max-w-md z-50 animate-[fadeIn_0.2s_ease-out]"
                     >
                         <div className="bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden">
                             <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-4 text-white">
@@ -152,9 +147,8 @@ export default function PushNotificationManager() {
                                 </p>
                             </div>
                         </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                    </div>
+            )}
         </>
     );
 }

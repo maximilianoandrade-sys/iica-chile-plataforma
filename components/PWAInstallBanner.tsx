@@ -8,7 +8,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Download, Smartphone } from 'lucide-react';
 import { useInstallPrompt } from '@/hooks/usePWA';
-import { motion, AnimatePresence } from 'framer-motion';
+
 
 export default function PWAInstallBanner() {
     const { isInstallable, isInstalled, promptInstall } = useInstallPrompt();
@@ -39,12 +39,7 @@ export default function PWAInstallBanner() {
     }
 
     return (
-        <AnimatePresence>
-            <motion.div
-                initial={{ y: 100, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: 100, opacity: 0 }}
-                className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-md z-50"
+            <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-md z-50 animate-[slideUp_0.3s_ease-out]"
             >
                 <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg shadow-2xl p-4 border border-blue-500">
                     <button
@@ -86,7 +81,6 @@ export default function PWAInstallBanner() {
                         </div>
                     </div>
                 </div>
-            </motion.div>
-        </AnimatePresence>
+            </div>
     );
 }

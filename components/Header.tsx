@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Menu, X, Target, Home, Crosshair, Link2, Users, Building2, Phone, Briefcase } from 'lucide-react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { Menu, X, Target, Home, Crosshair, Link2, Building2, Phone } from 'lucide-react';
+
 import { ThemeToggle } from '@/components/ThemeToggle';
 
 interface HeaderProps {
@@ -36,10 +36,8 @@ export function Header({ urgentCount = 0 }: HeaderProps) {
                 {/* Desktop Nav */}
                 <nav className="hidden md:flex gap-5 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400" aria-label="Navegación principal">
                     <Link href="/#convocatorias" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Oportunidades</Link>
-                    <Link href="/consultores" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Consultores</Link>
                     <Link href="/about" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Sobre IICA</Link>
                     <Link href="/#fuentes" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Fuentes</Link>
-                    <Link href="/maletin" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Mi Maletín</Link>
                 </nav>
 
                 <div className="flex items-center gap-2">
@@ -73,38 +71,29 @@ export function Header({ urgentCount = 0 }: HeaderProps) {
             </div>
 
             {/* Mobile Menu */}
-            <AnimatePresence>
-                {showMobileMenu && (
-                    <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="overflow-hidden md:hidden border-t border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900"
-                    >
-                        <nav className="flex flex-col p-4 gap-1" role="navigation" aria-label="Menu principal">
-                            {[
-                                { href: '/', label: 'Inicio', icon: Home },
-                                { href: '/#convocatorias', label: 'Oportunidades', icon: Crosshair },
-                                { href: '/#fuentes', label: 'Fuentes Oficiales', icon: Link2 },
-                                { href: '/consultores', label: 'Consultores', icon: Users },
-                                { href: '/maletin', label: 'Mi Maletín', icon: Briefcase },
-                                { href: '/about', label: 'Sobre IICA', icon: Building2 },
-                                { href: '/#contacto', label: 'Contacto', icon: Phone },
-                            ].map((item) => (
-                                <Link
-                                    key={item.href}
-                                    href={item.href}
-                                    onClick={() => setShowMobileMenu(false)}
-                                    className="px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-[var(--iica-navy)] dark:hover:text-white rounded-xl font-medium transition-colors min-h-[48px] flex items-center gap-3"
-                                >
-                                    <item.icon className="h-5 w-5" aria-hidden="true" />
-                                    {item.label}
-                                </Link>
-                            ))}
-                        </nav>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            {showMobileMenu && (
+                <div className="overflow-hidden md:hidden border-t border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900 animate-[slideDown_0.2s_ease-out]">
+                    <nav className="flex flex-col p-4 gap-1" role="navigation" aria-label="Menu principal">
+                        {[
+                            { href: '/', label: 'Inicio', icon: Home },
+                            { href: '/#convocatorias', label: 'Oportunidades', icon: Crosshair },
+                            { href: '/#fuentes', label: 'Fuentes Oficiales', icon: Link2 },
+                            { href: '/about', label: 'Sobre IICA', icon: Building2 },
+                            { href: '/#contacto', label: 'Contacto', icon: Phone },
+                        ].map((item) => (
+                            <Link
+                                key={item.href}
+                                href={item.href}
+                                onClick={() => setShowMobileMenu(false)}
+                                className="px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-[var(--iica-navy)] dark:hover:text-white rounded-xl font-medium transition-colors min-h-[48px] flex items-center gap-3"
+                            >
+                                <item.icon className="h-5 w-5" aria-hidden="true" />
+                                {item.label}
+                            </Link>
+                        ))}
+                    </nav>
+                </div>
+            )}
         </header>
     );
 }

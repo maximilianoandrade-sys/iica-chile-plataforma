@@ -7,7 +7,15 @@ import { getLogger } from '@/lib/utils/logger';
 
 const logger = getLogger('ActionButton');
 
-export function ActionButton({ url, date, projectName, institution, onTrack }: { url: string; date: string; projectName: string; institution?: string; onTrack?: () => void }) {
+export interface ActionButtonProps {
+    url: string;
+    date: string;
+    projectName: string;
+    institution?: string;
+    onTrack?: () => void;
+}
+
+export function ActionButton({ url, date, projectName, institution, onTrack }: ActionButtonProps) {
     const { trackEvent } = useAnalytics();
     const { shouldShow, finalUrl, archivedUrl, isFallback, isLoading } = useLinkGuardian(url, projectName, institution);
 
@@ -22,7 +30,7 @@ export function ActionButton({ url, date, projectName, institution, onTrack }: {
 
     if (isClosed) {
         return (
-            <button disabled className="inline-flex items-center gap-1.5 text-sm font-bold text-gray-400 bg-gray-100 px-3 py-1.5 rounded cursor-not-allowed">
+            <button disabled className="inline-flex items-center gap-1.5 text-sm font-bold text-gray-400 bg-gray-100 px-3 py-1.5 rounded cursor-not-allowed min-h-[44px]">
                 Cerrado <X className="h-4 w-4" aria-hidden="true" />
             </button>
         );
@@ -30,7 +38,7 @@ export function ActionButton({ url, date, projectName, institution, onTrack }: {
 
     if (isLoading) {
         return (
-            <button disabled className="inline-flex items-center gap-1.5 text-xs font-bold text-gray-400 bg-gray-50 border border-gray-100 px-3 py-1.5 rounded animate-pulse cursor-wait min-w-[100px] justify-center">
+            <button disabled className="inline-flex items-center gap-1.5 text-xs font-bold text-gray-400 bg-gray-50 border border-gray-100 px-3 py-1.5 rounded animate-pulse cursor-wait min-w-[100px] min-h-[44px] justify-center">
                 Validando...
             </button>
         );
@@ -47,7 +55,7 @@ export function ActionButton({ url, date, projectName, institution, onTrack }: {
                     rel="noopener noreferrer"
                     onClick={handleClick}
                     aria-label={`Buscar bases para ${projectName}`}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 px-3 py-1.5 rounded transition-colors shadow-sm"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 px-3 py-1.5 rounded transition-colors shadow-sm min-h-[44px]"
                     title="Búsqueda Inteligente (PDFs y Bases 2026)"
                 >
                     Buscar Bases <Search className="h-3.5 w-3.5" />
@@ -58,7 +66,7 @@ export function ActionButton({ url, date, projectName, institution, onTrack }: {
                         href={archivedUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-1.5 text-gray-400 hover:text-[var(--iica-blue)] hover:bg-blue-50 rounded transition-colors"
+                        className="p-1.5 text-gray-400 hover:text-[var(--iica-blue)] hover:bg-blue-50 rounded transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                         title="Ver versión histórica (Wayback Machine)"
                     >
                         <History className="h-4 w-4" />
@@ -75,7 +83,7 @@ export function ActionButton({ url, date, projectName, institution, onTrack }: {
             rel="noopener noreferrer"
             onClick={handleClick}
             aria-label={`Ver bases oficiales para ${projectName}`}
-            className="group relative inline-flex items-center gap-1.5 text-sm font-bold text-white bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] px-4 py-2 rounded transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--iica-blue)] hover:-translate-y-0.5"
+            className="group relative inline-flex items-center gap-1.5 text-sm font-bold text-white bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] px-4 py-2 rounded transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--iica-blue)] hover:-translate-y-0.5 min-h-[44px]"
         >
             Sitio Oficial <Check className="h-4 w-4 text-green-300" />
 

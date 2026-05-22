@@ -72,38 +72,6 @@
 }
 
 @layer components {
-  .btn-iica {
-    @apply bg-[var(--iica-navy)] text-white px-6 py-3 rounded font-semibold transition-transform hover:bg-[var(--iica-blue)] hover:-translate-y-[1px] inline-block cursor-pointer border-none min-h-[48px];
-  }
-
-  .btn-iica-primary {
-    @apply bg-[var(--iica-secondary)] text-white px-6 py-4 rounded-xl font-bold transition-all hover:bg-green-600 hover:-translate-y-0.5 inline-flex items-center justify-center gap-2 cursor-pointer border-none min-h-[56px] shadow-lg;
-  }
-
-  .btn-iica-secondary {
-    @apply bg-white border-2 border-[var(--iica-blue)] text-[var(--iica-blue)] px-6 py-4 rounded-xl font-bold transition-all hover:bg-blue-50 inline-flex items-center justify-center gap-2 cursor-pointer min-h-[56px];
-  }
-
-  .mic-btn {
-    background: var(--iica-yellow);
-    border: none;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    font-size: 2rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-    transition: transform 0.2s;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-
-  .mic-btn:hover {
-    transform: scale(1.05);
-  }
-
   .hero-iica {
     background: linear-gradient(rgba(0, 45, 114, 0.85), rgba(0, 45, 114, 0.7)), url('https://img.freepik.com/foto-gratis/campo-trigo-dia-soleado_1112-1416.jpg');
     background-size: cover;
@@ -118,15 +86,6 @@
   /* Card component */
   .card-iica {
     @apply bg-white rounded-2xl shadow-sm border border-[var(--iica-border)] p-6 hover:shadow-md transition-shadow;
-  }
-
-  /* Badge component */
-  .badge-open {
-    @apply inline-flex items-center gap-1 px-2.5 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full border border-green-200;
-  }
-
-  .badge-closed {
-    @apply inline-flex items-center gap-1 px-2.5 py-1 bg-red-100 text-red-600 text-xs font-bold rounded-full border border-red-200;
   }
 
   /* Mobile-first filter pill */
@@ -163,4 +122,12 @@
   .safe-bottom {
     padding-bottom: env(safe-area-inset-bottom);
   }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out both;
 }

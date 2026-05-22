@@ -2,6 +2,9 @@
 
 import React, { useState } from 'react';
 import { Mail, ArrowRight, CheckCircle } from 'lucide-react';
+import { getLogger } from '@/lib/utils/logger';
+
+const logger = getLogger('Newsletter');
 
 export default function Newsletter() {
     const [email, setEmail] = useState('');
@@ -10,7 +13,7 @@ export default function Newsletter() {
 
     const validateEmail = (value: string) => {
         if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-            setEmailError('Ingresa un correo electrónico válido');
+            setEmailError('Ingrese un correo electrónico válido');
         } else {
             setEmailError('');
         }
@@ -34,7 +37,7 @@ export default function Newsletter() {
             setStatus('success');
             setEmail('');
         } catch (error) {
-            console.error('Newsletter error:', error);
+            logger.error('Newsletter subscription failed', { error });
             setStatus('error');
         }
     };
@@ -60,7 +63,7 @@ export default function Newsletter() {
                     </p>
                 </div>
 
-                <div className="w-full md:w-auto min-w-[320px]">
+                <div className="w-full md:w-auto max-w-md">
                     {status === 'success' ? (
                         <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-6 text-center animate-in fade-in zoom-in">
                             <div className="flex justify-center mb-2">
@@ -76,7 +79,7 @@ export default function Newsletter() {
                             </button>
                         </div>
                     ) : (
-                        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+                        <form aria-busy={status === 'loading'} onSubmit={handleSubmit} className="flex flex-col gap-3">
                             <label htmlFor="email-newsletter" className="sr-only">Correo Electrónico</label>
                             <input
                                 id="email-newsletter"
@@ -90,16 +93,16 @@ export default function Newsletter() {
                                 disabled={status === 'loading'}
                             />
                             {emailError && (
-                                <p className="text-red-300 text-xs -mt-1">{emailError}</p>
+                                <p role="alert" aria-live="polite" className="text-red-300 text-sm -mt-1">{emailError}</p>
                             )}
                             {status === 'error' && (
-                                <p className="text-red-300 text-xs mt-1">Hubo un error. Inténtalo de nuevo.</p>
+                                <p role="alert" aria-live="polite" className="text-red-300 text-sm mt-1">Hubo un error. Intente de nuevo.</p>
                             )}
 
                             <button
                                 type="submit"
                                 disabled={status === 'loading'}
-                                className="w-full bg-[var(--iica-secondary)] hover:bg-[#008f45] text-white font-bold py-3 px-6 rounded-lg transition-all shadow-lg flex items-center justify-center gap-2 group disabled:opacity-70 mt-1"
+                                className="w-full min-h-[44px] bg-[var(--iica-secondary)] hover:bg-[#008f45] text-white font-bold py-3 px-6 rounded-lg transition-all shadow-lg flex items-center justify-center gap-2 group disabled:opacity-70 mt-1"
                             >
                                 {status === 'loading' ? (
                                     'Procesando...'
@@ -107,7 +110,7 @@ export default function Newsletter() {
                                     <>Suscribirme Gratis <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" /></>
                                 )}
                             </button>
-                            <p className="text-[10px] text-center text-blue-200 opacity-70">
+                            <p className="text-xs text-center text-blue-200 opacity-70">
                                 Al suscribirte aceptas recibir boletines informativos del IICA.
                             </p>
                         </form>

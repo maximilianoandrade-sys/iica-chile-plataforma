@@ -10,9 +10,8 @@ import { test, expect } from "@playwright/test";
 test.describe("Home & navegación", () => {
   test("home carga y muestra el listado de convocatorias", async ({ page }) => {
     await page.goto("/");
-    // Algún elemento del listado debe aparecer; usamos el input de búsqueda
-    // como ancla porque es el más estable estructuralmente.
-    await expect(page.getByPlaceholder(/Buscar proyectos/i)).toBeVisible();
+    // FilterChips search input is the new anchor
+    await expect(page.getByRole("searchbox", { name: /Buscar oportunidades/i })).toBeVisible();
     // La sección "convocatorias" debería renderizar.
     await expect(page.locator("#convocatorias")).toBeVisible();
   });
@@ -29,21 +28,12 @@ test.describe("Home & navegación", () => {
 });
 
 test.describe("Búsqueda", () => {
-  test("búsqueda con query devuelve resultados sin error", async ({ page }) => {
+  test("búsqueda con texto filtra sin error", async ({ page }) => {
     await page.goto("/");
-    const input = page.getByPlaceholder(/Buscar proyectos/i);
+    const input = page.getByRole("searchbox", { name: /Buscar oportunidades/i });
     await input.fill("riego");
-    // Click en el botón "Buscar con IA" — networkidle no funciona en dev
-    // mode de Next.js porque HMR mantiene conexiones abiertas.
-    const searchButton = page.getByRole("button", { name: /Buscar con IA/i });
-    // Esperar a que la API responda escuchando el POST a /api/search-projects.
-    const responsePromise = page.waitForResponse(
-      (r) => r.url().includes("/api/search-projects") && r.request().method() === "POST"
-    );
-    await searchButton.click();
-    const apiResp = await responsePromise;
-    expect(apiResp.ok()).toBeTruthy();
-    // No esperamos un número exacto, pero NO debe mostrar error visible.
+    // FilterChips filters client-side — no network call needed.
+    // Verify no error is displayed.
     await expect(page.getByText(/^error|falló|fallo en la búsqueda/i)).toHaveCount(0);
   });
 });
@@ -55,8 +45,10 @@ test.describe("API endpoints", () => {
     });
     expect(res.ok()).toBeTruthy();
     const body = await res.json();
-    expect(Array.isArray(body.results)).toBe(true);
-    expect(typeof body.meta?.mode).toBe("string");
+    // API uses createSuccessResponse wrapper: { ok, data: { results, meta } }
+    const payload = body.data ?? body;
+    expect(Array.isArray(payload.results)).toBe(true);
+    expect(typeof payload.meta?.mode).toBe("string");
   });
 
   test("/api/check-link valida URL legítima", async ({ request }) => {
@@ -87,11 +79,12 @@ test.describe("Detalle de proyecto", () => {
       data: { query: "" },
     });
     const body = await res.json();
-    if (!body.results?.length) {
+    const payload = body.data ?? body;
+    if (!payload.results?.length) {
       test.skip(true, "BD sin proyectos — corre `npm run ingest` primero");
       return;
     }
-    const id = body.results[0].id;
+    const id = payload.results[0].id;
     await page.goto(`/proyecto/${id}`);
     // El nombre del proyecto debería aparecer (h1 o similar).
     await expect(page.locator("h1, h2").first()).toBeVisible();

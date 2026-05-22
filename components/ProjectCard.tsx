@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { MapPin } from 'lucide-react';
 import { type Project, daysUntilClose, pluralizeDias } from '@/lib/data';
 import { getInstitutionalLogo } from '@/lib/logos';
+import { Badge } from '@/components/ui/Badge';
 import { getLogger } from '@/lib/utils/logger';
 
 const logger = getLogger('ProjectCard');
@@ -25,12 +26,12 @@ function formatMonto(project: Project): string {
   return 'Monto no definido';
 }
 
-const urgencyStyles = {
-  critical: 'bg-red-50 text-red-700 border-red-200',
-  warning: 'bg-amber-50 text-amber-700 border-amber-200',
-  normal: 'bg-gray-50 text-gray-600 border-gray-200',
-  closed: 'bg-gray-100 text-gray-500 border-gray-200',
-};
+const urgencyVariantMap = {
+  critical: 'urgencyHigh',
+  warning: 'urgencyMedium',
+  normal: 'urgencyLow',
+  closed: 'urgencyNone',
+} as const;
 
 export function ProjectCard({ project }: { project: Project }) {
   const isClosed = project.estadoPostulacion === 'Cerrada';
@@ -66,9 +67,9 @@ export function ProjectCard({ project }: { project: Project }) {
             {project.institucion}
           </span>
         </div>
-        <span className={`text-xs font-medium px-2 py-1 rounded-full border whitespace-nowrap ${urgencyStyles[urgency]}`}>
+        <Badge variant={urgencyVariantMap[urgency]}>
           {deadlineText}
-        </span>
+        </Badge>
       </div>
 
       <Link

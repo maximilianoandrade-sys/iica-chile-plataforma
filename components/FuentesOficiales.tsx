@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, CheckCircle, Clock, MapPin, ChevronDown, ChevronUp, Shield, RefreshCw } from 'lucide-react';
+import { ExternalLink, CheckCircle, Clock, ChevronDown, ChevronUp, Shield, RefreshCw, Droplets, Sprout, FlaskConical, Factory, Globe, Wheat, Landmark, AlertTriangle, MapPin, Coins, type LucideIcon } from 'lucide-react';
 import projectData from '@/data/projects.json';
 
 // Compute fondosActivos dynamically from actual project data
@@ -24,7 +23,7 @@ interface FuenteOficial {
     urlConcursos: string;
     color: string;
     bgColor: string;
-    emoji: string;
+    icon: string;
     tipoFondos: string[];
     beneficiarios: string[];
     montoRango: string;
@@ -33,6 +32,16 @@ interface FuenteOficial {
     fondosActivos: number;
     regiones: string;
 }
+
+const ICON_MAP: Record<string, LucideIcon> = {
+    droplets: Droplets,
+    sprout: Sprout,
+    flask: FlaskConical,
+    factory: Factory,
+    globe: Globe,
+    wheat: Wheat,
+    landmark: Landmark,
+};
 
 const FUENTES: FuenteOficial[] = [
     {
@@ -44,7 +53,7 @@ const FUENTES: FuenteOficial[] = [
         urlConcursos: 'https://www.cnr.gob.cl/agricultores/concursos-de-riego/',
         color: 'text-blue-700',
         bgColor: 'bg-blue-50 border-blue-200',
-        emoji: '💧',
+        icon: 'droplets',
         tipoFondos: ['Tecnificación del riego', 'Obras hidráulicas', 'Drenaje', 'Embalses de acumulación'],
         beneficiarios: ['Pequeño Agricultor', 'Mediano Agricultor', 'Organizaciones de Usuarios de Agua'],
         montoRango: 'Hasta 90% del costo del proyecto',
@@ -62,7 +71,7 @@ const FUENTES: FuenteOficial[] = [
         urlConcursos: 'https://www.indap.gob.cl/programas',
         color: 'text-green-700',
         bgColor: 'bg-green-50 border-green-200',
-        emoji: '🌱',
+        icon: 'sprout',
         tipoFondos: ['SIRSD-S (Suelos)', 'PRODESAL (Asistencia Técnica)', 'SAT', 'Créditos de Enlace', 'Bono Mujer Rural'],
         beneficiarios: ['Pequeño Agricultor', 'Agricultor Familiar Campesino', 'Mujer Rural', 'Usuario INDAP'],
         montoRango: 'Desde $0 (asistencia técnica) hasta $50M (créditos)',
@@ -80,7 +89,7 @@ const FUENTES: FuenteOficial[] = [
         urlConcursos: 'https://www.fia.cl/convocatorias/',
         color: 'text-purple-700',
         bgColor: 'bg-purple-50 border-purple-200',
-        emoji: '🔬',
+        icon: 'flask',
         tipoFondos: ['Proyectos de Innovación', 'Jóvenes Innovadores', 'Agricultura Sustentable', 'Cambio Climático'],
         beneficiarios: ['Empresa Agrícola', 'Startup AgTech', 'Universidad', 'Centro de Investigación', 'Jóvenes 18-35 años'],
         montoRango: 'Hasta $80M por proyecto (80% cofinanciamiento)',
@@ -98,7 +107,7 @@ const FUENTES: FuenteOficial[] = [
         urlConcursos: 'https://www.corfo.cl/sites/cpp/programas-y-convocatorias',
         color: 'text-orange-700',
         bgColor: 'bg-orange-50 border-orange-200',
-        emoji: '🏭',
+        icon: 'factory',
         tipoFondos: ['Activa Inversión Agro', 'Economía Circular', 'Escalamiento Productivo', 'Eficiencia Energética'],
         beneficiarios: ['PYME Agrícola', 'Empresa Mediana', 'Cooperativa Exportadora', 'Agroindustria'],
         montoRango: 'Hasta $100M (50-70% cofinanciamiento)',
@@ -117,7 +126,7 @@ const FUENTES: FuenteOficial[] = [
         urlConcursos: 'https://www.undp.org/es/chile/participa',
         color: 'text-blue-600',
         bgColor: 'bg-blue-50 border-blue-200',
-        emoji: '🇺🇳',
+        icon: 'globe',
         tipoFondos: ['Medio Ambiente (GEF)', 'Energía Sostenible', 'Género', 'Innovación Social'],
         beneficiarios: ['ONGs', 'Comunidades', 'Instituciones Públicas'],
         montoRango: 'Variable según convocatoria internacional',
@@ -135,7 +144,7 @@ const FUENTES: FuenteOficial[] = [
         urlConcursos: 'https://www.fao.org/employment/vacancies/consultants/es/',
         color: 'text-cyan-600',
         bgColor: 'bg-cyan-50 border-cyan-200',
-        emoji: '🌾',
+        icon: 'wheat',
         tipoFondos: ['Seguridad Alimentaria', 'Agricultura Familiar', 'Pesca y Acuicultura'],
         beneficiarios: ['Gobiernos', 'Organizaciones de la Sociedad Civil'],
         montoRango: 'Consultorías y Proyectos Específicos',
@@ -153,7 +162,7 @@ const FUENTES: FuenteOficial[] = [
         urlConcursos: 'https://www.ifad.org/es/calls-for-proposals',
         color: 'text-emerald-600',
         bgColor: 'bg-emerald-50 border-emerald-200',
-        emoji: '🏦',
+        icon: 'landmark',
         tipoFondos: ['Desarrollo Rural', 'Inclusión Financiera', 'Cambio Climático'],
         beneficiarios: ['Pequeños Productores', 'Pueblos Indígenas'],
         montoRango: 'Grandes inversiones programáticas',
@@ -171,7 +180,7 @@ const FUENTES: FuenteOficial[] = [
         urlConcursos: 'https://www.fontagro.org/es/convocatorias/',
         color: 'text-amber-700',
         bgColor: 'bg-amber-50 border-amber-200',
-        emoji: '🌎',
+        icon: 'globe',
         tipoFondos: ['Innovación Tecnológica', 'Adaptación Cambio Climático'],
         beneficiarios: ['Institutos de Investigación (INIA)', 'Universidades'],
         montoRango: 'Hasta $200.000 USD por proyecto',
@@ -193,17 +202,17 @@ export default function FuentesOficiales() {
     const totalFondos = FUENTES.reduce((sum, f) => sum + f.fondosActivos, 0);
 
     return (
-        <section className="py-16 bg-white">
+        <section id="fuentes" aria-labelledby="fuentes-heading" className="py-16 bg-white">
             <div className="container mx-auto max-w-[1200px] px-4">
 
                 {/* Header */}
                 <div className="text-center mb-12">
                     <div className="inline-flex items-center gap-2 bg-blue-100 text-[var(--iica-blue)] px-4 py-2 rounded-full text-sm font-bold mb-4">
-                        <Shield className="h-4 w-4" />
+                        <Shield className="h-4 w-4" aria-hidden={true} />
                         Fuentes Verificadas
                     </div>
-                    <h2 className="text-3xl md:text-4xl font-extrabold text-[var(--iica-navy)] mb-3">
-                        🔗 Fuentes Oficiales de Fondos Chile 2026
+                    <h2 id="fuentes-heading" className="text-3xl md:text-4xl font-extrabold text-[var(--iica-navy)] mb-3">
+                        Fuentes Oficiales de Fondos Chile 2026
                     </h2>
                     <p className="text-gray-600 max-w-2xl mx-auto mb-4">
                         Todos los fondos de esta plataforma provienen directamente de estas instituciones gubernamentales.
@@ -211,15 +220,15 @@ export default function FuentesOficiales() {
                     </p>
                     <div className="flex flex-wrap justify-center gap-4 text-sm">
                         <div className="flex items-center gap-2 bg-green-50 border border-green-200 px-4 py-2 rounded-full">
-                            <CheckCircle className="h-4 w-4 text-green-600" />
+                            <CheckCircle className="h-4 w-4 text-green-600" aria-hidden={true} />
                             <span className="text-green-700 font-bold">{FUENTES.length} fuentes verificadas</span>
                         </div>
                         <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 px-4 py-2 rounded-full">
-                            <RefreshCw className="h-4 w-4 text-blue-600" />
+                            <RefreshCw className="h-4 w-4 text-blue-600" aria-hidden={true} />
                             <span className="text-blue-700 font-bold">{totalFondos} fondos activos</span>
                         </div>
                         <div className="flex items-center gap-2 bg-yellow-50 border border-yellow-200 px-4 py-2 rounded-full">
-                            <Clock className="h-4 w-4 text-yellow-600" />
+                            <Clock className="h-4 w-4 text-yellow-600" aria-hidden={true} />
                             <span className="text-yellow-700 font-bold">Actualizado: 11 May 2026</span>
                         </div>
                     </div>
@@ -227,49 +236,45 @@ export default function FuentesOficiales() {
 
                 {/* Sources Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                    {FUENTES.map((fuente, i) => (
-                        <motion.div
-                            key={fuente.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: i * 0.08 }}
-                            className={`border-2 rounded-2xl overflow-hidden transition-all ${fuente.bgColor} ${expandedId === fuente.id ? 'shadow-lg' : 'shadow-sm hover:shadow-md'}`}
-                        >
-                            {/* Card Header */}
-                            <button
-                                onClick={() => setExpandedId(expandedId === fuente.id ? null : fuente.id)}
-                                className="w-full text-left p-5 flex items-start gap-4"
+                    {FUENTES.map((fuente, i) => {
+                        const IconComponent = ICON_MAP[fuente.icon] || Globe;
+                        const isExpanded = expandedId === fuente.id;
+                        return (
+                            <div
+                                key={fuente.id}
+                                className={`border-2 rounded-2xl overflow-hidden transition-all animate-fade-in-up ${fuente.bgColor} ${isExpanded ? 'shadow-lg' : 'shadow-sm hover:shadow-md'}`}
+                                style={{ animationDelay: `${i * 80}ms` }}
                             >
-                                <div className="text-4xl flex-shrink-0">{fuente.emoji}</div>
-                                <div className="flex-1 min-w-0">
-                                    <div className="flex items-center gap-2 flex-wrap mb-1">
-                                        <span className={`text-xl font-extrabold ${fuente.color}`}>{fuente.sigla}</span>
-                                        {fuente.verificado && (
-                                            <span className="flex items-center gap-1 text-xs font-bold text-green-600 bg-green-100 px-2 py-0.5 rounded-full border border-green-200">
-                                                <CheckCircle className="h-3 w-3" /> Verificado
+                                {/* Card Header */}
+                                <button
+                                    id={`source-btn-${i}`}
+                                    aria-expanded={isExpanded}
+                                    aria-controls={`source-panel-${i}`}
+                                    onClick={() => setExpandedId(isExpanded ? null : fuente.id)}
+                                    className="w-full text-left p-5 flex items-start gap-4 min-h-[48px]"
+                                >
+                                    <IconComponent className={`h-8 w-8 flex-shrink-0 ${fuente.color}`} aria-hidden={true} />
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex items-center gap-2 flex-wrap mb-1">
+                                            <span className={`text-xl font-extrabold ${fuente.color}`}>{fuente.sigla}</span>
+                                            <span className="text-xs font-bold text-gray-500 bg-white px-2 py-0.5 rounded-full border border-gray-200">
+                                                {fuente.fondosActivos} fondos activos
                                             </span>
-                                        )}
-                                        <span className="text-xs font-bold text-gray-500 bg-white px-2 py-0.5 rounded-full border border-gray-200">
-                                            {fuente.fondosActivos} fondos activos
-                                        </span>
+                                        </div>
+                                        <p className="text-sm font-medium text-gray-700 mb-1">{fuente.nombre}</p>
+                                        <p className="text-xs text-gray-500 line-clamp-2">{fuente.descripcion}</p>
                                     </div>
-                                    <p className="text-sm font-medium text-gray-700 mb-1">{fuente.nombre}</p>
-                                    <p className="text-xs text-gray-500 line-clamp-2">{fuente.descripcion}</p>
-                                </div>
-                                <div className="flex-shrink-0 text-gray-400">
-                                    {expandedId === fuente.id ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
-                                </div>
-                            </button>
+                                    <div className="flex-shrink-0 text-gray-400">
+                                        {isExpanded ? <ChevronUp className="h-5 w-5" aria-hidden={true} /> : <ChevronDown className="h-5 w-5" aria-hidden={true} />}
+                                    </div>
+                                </button>
 
-                            {/* Expanded Content */}
-                            <AnimatePresence>
-                                {expandedId === fuente.id && (
-                                    <motion.div
-                                        initial={{ height: 0, opacity: 0 }}
-                                        animate={{ height: 'auto', opacity: 1 }}
-                                        exit={{ height: 0, opacity: 0 }}
-                                        className="overflow-hidden"
+                                {/* Expanded Content */}
+                                {isExpanded && (
+                                    <div
+                                        id={`source-panel-${i}`}
+                                        role="region"
+                                        aria-labelledby={`source-btn-${i}`}
                                     >
                                         <div className="px-5 pb-5 border-t border-white/60 pt-4 space-y-4">
                                             {/* Tipos de Fondos */}
@@ -290,7 +295,7 @@ export default function FuentesOficiales() {
                                                 <div className="flex flex-wrap gap-1.5">
                                                     {fuente.beneficiarios.map(b => (
                                                         <span key={b} className="px-2.5 py-1 bg-white text-gray-700 text-xs font-medium rounded-full border border-gray-200 shadow-sm">
-                                                            👤 {b}
+                                                            {b}
                                                         </span>
                                                     ))}
                                                 </div>
@@ -299,11 +304,15 @@ export default function FuentesOficiales() {
                                             {/* Monto y Región */}
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                                 <div className="bg-white rounded-xl p-3 border border-gray-200">
-                                                    <p className="text-xs font-bold text-gray-500 mb-1">💰 Monto/Cofinanciamiento</p>
+                                                    <p className="text-xs font-bold text-gray-500 mb-1 flex items-center gap-1">
+                                                        <Coins className="h-3 w-3" aria-hidden={true} /> Monto/Cofinanciamiento
+                                                    </p>
                                                     <p className="text-sm font-bold text-gray-800">{fuente.montoRango}</p>
                                                 </div>
                                                 <div className="bg-white rounded-xl p-3 border border-gray-200">
-                                                    <p className="text-xs font-bold text-gray-500 mb-1">📍 Cobertura</p>
+                                                    <p className="text-xs font-bold text-gray-500 mb-1 flex items-center gap-1">
+                                                        <MapPin className="h-3 w-3" aria-hidden={true} /> Cobertura
+                                                    </p>
                                                     <p className="text-sm font-bold text-gray-800">{fuente.regiones}</p>
                                                 </div>
                                             </div>
@@ -316,7 +325,7 @@ export default function FuentesOficiales() {
                                                     rel="noopener noreferrer"
                                                     className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-sm transition-all min-h-[48px] bg-white border-2 ${fuente.color} border-current hover:opacity-80`}
                                                 >
-                                                    <ExternalLink className="h-4 w-4" />
+                                                    <ExternalLink className="h-4 w-4" aria-hidden={true} />
                                                     Ver Convocatorias
                                                 </a>
                                                 <a
@@ -329,16 +338,16 @@ export default function FuentesOficiales() {
                                                 </a>
                                             </div>
                                         </div>
-                                    </motion.div>
+                                    </div>
                                 )}
-                            </AnimatePresence>
-                        </motion.div>
-                    ))}
+                            </div>
+                        );
+                    })}
                 </div>
 
                 {/* Disclaimer */}
                 <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-5 flex gap-4 items-start">
-                    <div className="text-2xl flex-shrink-0">⚠️</div>
+                    <AlertTriangle className="h-6 w-6 text-yellow-600 flex-shrink-0" aria-hidden={true} />
                     <div>
                         <p className="font-bold text-yellow-800 mb-1">Importante sobre los plazos</p>
                         <p className="text-yellow-700 text-sm">

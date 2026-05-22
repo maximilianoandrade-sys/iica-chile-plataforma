@@ -3,24 +3,26 @@ import prisma from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://ciruela-certificada.vercel.app";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const projects = await prisma.project.findMany({
     select: { id: true, updatedAt: true },
   });
 
   const projectUrls: MetadataRoute.Sitemap = projects.map((p) => ({
-    url: `https://radar.iica.cl/proyecto/${p.id}`,
+    url: `${BASE_URL}/proyecto/${p.id}`,
     lastModified: p.updatedAt,
     changeFrequency: "weekly",
     priority: 0.8,
   }));
 
   return [
-    { url: "https://radar.iica.cl", changeFrequency: "daily", priority: 1 },
-    { url: "https://radar.iica.cl/about", changeFrequency: "monthly", priority: 0.5 },
-    { url: "https://radar.iica.cl/consultores", changeFrequency: "weekly", priority: 0.7 },
-    { url: "https://radar.iica.cl/legal/terminos", changeFrequency: "yearly", priority: 0.3 },
-    { url: "https://radar.iica.cl/legal/privacidad", changeFrequency: "yearly", priority: 0.3 },
+    { url: BASE_URL, changeFrequency: "daily", priority: 1 },
+    { url: `${BASE_URL}/about`, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${BASE_URL}/consultores`, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${BASE_URL}/legal/terminos`, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${BASE_URL}/legal/privacidad`, changeFrequency: "yearly", priority: 0.3 },
     ...projectUrls,
   ];
 }
