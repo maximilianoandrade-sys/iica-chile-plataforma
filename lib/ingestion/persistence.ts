@@ -45,6 +45,7 @@ export async function upsertProject(
     categoria: raw.tags?.[0] ?? "General",
     objetivo: raw.description ?? "",
     ambito: raw.ambito ?? "Nacional",
+    idioma: raw.idioma ?? "es",
     region: raw.region ?? null,
     lastSeenAt: now,
   };

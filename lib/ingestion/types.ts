@@ -16,6 +16,7 @@ export interface RawProject {
   tags?: string[];
   region?: string;
   ambito?: "Nacional" | "Internacional" | "Regional";
+  idioma?: "es" | "en" | "pt" | "fr";
 }
 
 export interface ScraperResult {
