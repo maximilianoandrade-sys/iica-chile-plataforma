@@ -69,21 +69,23 @@ async function main() {
       body: JSON.stringify({ query: "" }),
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    if (!Array.isArray(data.results)) {
+    const json = await res.json();
+    // API uses createSuccessResponse wrapper: { ok, data: { results, meta } }
+    const payload = json.data ?? json;
+    if (!Array.isArray(payload.results)) {
       throw new Error("results no es array");
     }
-    if (!data.meta || typeof data.meta.mode !== "string") {
-      throw new Error(`meta.mode falta o no es string: ${JSON.stringify(data.meta)}`);
+    if (!payload.meta || typeof payload.meta.mode !== "string") {
+      throw new Error(`meta.mode falta o no es string: ${JSON.stringify(payload.meta)}`);
     }
-    if (data.results.length > 0) {
-      const sample = data.results[0];
+    if (payload.results.length > 0) {
+      const sample = payload.results[0];
       projectId = sample.id;
       for (const f of ["nombre", "institucion", "url_bases", "fecha_cierre"]) {
         if (!sample[f]) throw new Error(`sample sin campo '${f}'`);
       }
     }
-    return `${data.results.length} resultados, mode=${data.meta.mode}`;
+    return `${payload.results.length} resultados, mode=${payload.meta.mode}`;
   });
 
   await check("/api/check-link valida URL", async () => {
