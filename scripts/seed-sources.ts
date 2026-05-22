@@ -9,6 +9,8 @@ const SOURCES = [
   { slug: "iica-dashboard",   name: "IICA Dashboard Proyectos (Contrapartes)", type: "scraper_playwright", homepageUrl: "https://apps.iica.int/dashboardproyectos/" },
   { slug: "cnr",              name: "CNR — Comisión Nacional de Riego",       type: "scraper",       homepageUrl: "https://www.cnr.gob.cl/agricultores/calendario-de-concurso/" },
   { slug: "ai-discovery",     name: "AI Discovery (Gemini + Google Search)",  type: "ai_discovery",  homepageUrl: null },
+  { slug: "world-bank",       name: "World Bank Procurement",                 type: "scraper",       homepageUrl: "https://projects.worldbank.org/en/projects-operations/procurement" },
+  { slug: "ungm",             name: "UNGM — United Nations Global Marketplace", type: "scraper",     homepageUrl: "https://www.ungm.org/Public/Notice" },
 ];
 
 async function main() {

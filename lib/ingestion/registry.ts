@@ -3,6 +3,8 @@ import { fiaScraper } from "./scrapers/fia";
 import { corfoScraper } from "./scrapers/corfo";
 import { cnrScraper } from "./scrapers/cnr";
 import { iicaHemisfericoScraper } from "./scrapers/iica-hemisferico";
+import { worldBankScraper } from "./scrapers/world-bank";
+import { ungmScraper } from "./scrapers/ungm";
 
 /**
  * Scrapers de Capa A (determinísticos, corren diario vía GitHub Actions).
@@ -29,6 +31,8 @@ export const scrapers: Scraper[] = [
   corfoScraper,
   cnrScraper,
   iicaHemisfericoScraper,
+  worldBankScraper,
+  ungmScraper,
 ];
 
 /**
