@@ -13,7 +13,8 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { id } = await params;
-    const projects = await getProjects();
+    const result = await getProjects();
+    const projects = result.ok ? result.projects : [];
     const project = projects.find(p => p.id === parseInt(id));
 
     if (!project) {
@@ -31,13 +32,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-    const projects = await getProjects();
+    const result = await getProjects();
+    const projects = result.ok ? result.projects : [];
     return projects.map(p => ({ id: String(p.id) }));
 }
 
 export default async function ProyectoDetallePage({ params }: Props) {
     const { id } = await params;
-    const projects = await getProjects();
+    const result = await getProjects();
+    const projects = result.ok ? result.projects : [];
     const project = projects.find(p => p.id === parseInt(id));
 
     if (!project) notFound();

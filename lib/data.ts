@@ -269,7 +269,11 @@ function deduplicateByUrl(projects: Project[]): Project[] {
     return Array.from(seen.values());
 }
 
-export async function getProjects(): Promise<Project[]> {
+export type GetProjectsResult =
+    | { ok: true; projects: Project[] }
+    | { ok: false; error: string };
+
+export async function getProjects(): Promise<GetProjectsResult> {
     const today = new Date();
     today.setUTCHours(0, 0, 0, 0);
 
@@ -300,14 +304,14 @@ export async function getProjects(): Promise<Project[]> {
             complejidad: p.complejidad as any
         })) as Project[];
 
-        return deduplicateByUrl(mapped);
+        return { ok: true, projects: deduplicateByUrl(mapped) };
     } catch (error) {
-        logger.error('getProjects Prisma/Supabase falló — devolviendo lista vacía', error as Error);
-        return [];
+        logger.error('getProjects Prisma/Supabase falló', error as Error);
+        return { ok: false, error: (error as Error).message };
     }
 }
 
-export async function getAllProjects(): Promise<Project[]> {
+export async function getAllProjects(): Promise<GetProjectsResult> {
     return getProjects();
 }
 

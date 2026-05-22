@@ -226,7 +226,8 @@ export async function GET(request: NextRequest) {
         const brokenLinks: LinkCheckResult[] = [];
 
         // Obtener proyectos
-        const projects = await getProjects();
+        const result = await getProjects();
+        const projects = result.ok ? result.projects : [];
 
         // Verificar cada proyecto
         for (const project of projects) {

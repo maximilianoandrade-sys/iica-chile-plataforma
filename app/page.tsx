@@ -53,7 +53,8 @@ export default async function DashboardPage({
   const resolvedSearchParams = await searchParams;
 
   // Compute stats server-side to avoid shipping projects.json to the client
-  const projects = await getProjects();
+  const result = await getProjects();
+  const projects = result.ok ? result.projects : [];
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const internacionales = projects.filter((p) =>

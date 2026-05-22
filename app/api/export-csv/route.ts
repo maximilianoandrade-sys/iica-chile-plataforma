@@ -25,7 +25,8 @@ export async function GET(request: NextRequest) {
     const minAmount = searchParams.get('minAmount');
     const maxAmount = searchParams.get('maxAmount');
 
-    const projects = await getProjects();
+    const result = await getProjects();
+    const projects = result.ok ? result.projects : [];
 
     // Apply filters
     const filtered = projects.filter(p => {

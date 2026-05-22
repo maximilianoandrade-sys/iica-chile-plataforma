@@ -3,6 +3,7 @@ import ProjectList from "@/components/ProjectList";
 import type { FilterCounts } from "@/lib/data";
 import JsonLd from "@/components/JsonLd";
 import { searchAndRankProjects, defaultSortProjects } from "@/lib/searchEngine";
+import DatabaseError from "@/components/DatabaseError";
 
 function inferEstado(project: Project): string {
     const today = new Date();
@@ -34,7 +35,13 @@ export default async function ProjectListContainer({
 }: {
     searchParams: { [key: string]: string | string[] | undefined }
 }) {
-    const projects = await getProjects();
+    const result = await getProjects();
+
+    if (!result.ok) {
+        return <DatabaseError />;
+    }
+
+    const projects = result.projects;
 
     const searchTerm = typeof searchParams.q === 'string' ? searchParams.q : '';
     const selectedEstado = typeof searchParams.estado === 'string' ? searchParams.estado : '';
