@@ -99,10 +99,7 @@ export default function RootLayout({
   return (
     <html lang="es" dir="ltr" className={`${outfit.className} scroll-smooth`}>
       <head>
-        {/* Preconnect a dominios externos */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://images.unsplash.com" />
+
 
         {/* DNS Prefetch */}
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />

@@ -74,7 +74,7 @@ export function ProjectCard({ project }: { project: Project }) {
 
       <Link
         href={`/proyecto/${project.id}`}
-        className="text-base font-semibold text-iica-navy line-clamp-2 hover:underline focus-visible:ring-2 focus-visible:ring-iica-yellow focus-visible:outline-none rounded mb-3"
+        className="stretched-link text-base font-semibold text-iica-navy line-clamp-2 hover:underline focus-visible:ring-2 focus-visible:ring-iica-yellow focus-visible:outline-none rounded mb-3"
       >
         {project.nombre}
       </Link>

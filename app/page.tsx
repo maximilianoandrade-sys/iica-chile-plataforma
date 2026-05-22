@@ -68,6 +68,12 @@ export default async function DashboardPage({
   }).length;
   const heroStats = { total: projects.length, internacionales, abiertas, urgentes };
 
+  // Compute institution counts for FuentesOficiales (avoids shipping 150KB JSON to client)
+  const institutionCounts: Record<string, number> = {};
+  projects.forEach(p => {
+    institutionCounts[p.institucion] = (institutionCounts[p.institucion] || 0) + 1;
+  });
+
   return (
     <>
       <div className="min-h-screen flex flex-col bg-[#f4f7f9] selection:bg-blue-100 italic-none">
@@ -95,7 +101,7 @@ export default async function DashboardPage({
 
         {/* Fuentes Oficiales */}
         <div id="fuentes" className="scroll-mt-20">
-          <FuentesOficiales />
+          <FuentesOficiales institutionCounts={institutionCounts} />
         </div>
 
         {/* Newsletter */}
