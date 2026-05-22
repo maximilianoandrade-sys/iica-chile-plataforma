@@ -8,7 +8,6 @@ import PWAInstallBanner from '@/components/PWAInstallBanner';
 import OfflineIndicator from '@/components/OfflineIndicator';
 import PushNotificationManager from '@/components/PushNotificationManager';
 import ScrollToTop from '@/components/ScrollToTop';
-import { SECURITY_HEADERS } from '@/lib/security';
 
 const outfit = Outfit({ subsets: ['latin'] })
 
@@ -99,12 +98,8 @@ export default function RootLayout({
   return (
     <html lang="es" dir="ltr" className={`${outfit.className} scroll-smooth`}>
       <head>
-
-
         {/* DNS Prefetch */}
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-
-
 
         {/* Theme Color */}
         <meta name="theme-color" content="#0066CC" />
@@ -149,21 +144,12 @@ export default function RootLayout({
             __html: `
               if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js').then(
-                    function(registration) {
-                      console.log('Service Worker registrado:', registration.scope);
-                    },
-                    function(err) {
-                      console.log('Error registrando Service Worker:', err);
-                    }
-                  );
+                  navigator.serviceWorker.register('/sw.js');
                 });
               }
             `,
           }}
         />
-
-
         </ThemeProvider>
       </body>
     </html>

@@ -14,6 +14,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
+import { lookup } from 'dns/promises';
 
 export const runtime = 'nodejs';
 
@@ -55,6 +56,17 @@ function isAllowedUrl(urlString: string): boolean {
         return true;
     } catch {
         return false;
+    }
+}
+
+/** Resolve DNS and verify the resolved IP is not private (prevents DNS rebinding). */
+async function verifyResolvedIp(hostname: string): Promise<boolean> {
+    try {
+        const { address } = await lookup(hostname);
+        return !isBlockedHost(address);
+    } catch {
+        // DNS resolution failed — allow fetch to handle the error
+        return true;
     }
 }
 
@@ -103,6 +115,16 @@ export async function GET(request: NextRequest) {
         if (!isAllowedUrl(url)) {
             return NextResponse.json(
                 { error: 'URL not allowed: must be a public HTTP/HTTPS URL', isValid: false },
+                { status: 400 }
+            );
+        }
+
+        // DNS rebinding protection: resolve hostname and verify IP is public
+        const parsed = new URL(url);
+        const ipSafe = await verifyResolvedIp(parsed.hostname);
+        if (!ipSafe) {
+            return NextResponse.json(
+                { error: 'URL resolves to a private/internal IP address', isValid: false },
                 { status: 400 }
             );
         }

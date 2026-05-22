@@ -297,11 +297,11 @@ export async function getProjects(): Promise<GetProjectsResult> {
             ...p,
             fecha_cierre: p.fecha_cierre.toISOString().split('T')[0],
             webinar_fecha: p.webinar_fecha ? p.webinar_fecha.toISOString() : null,
-            ambito: p.ambito as any,
-            estadoPostulacion: p.estadoPostulacion as any,
-            viabilidadIICA: p.viabilidadIICA as any,
-            rolIICA: p.rolIICA as any,
-            complejidad: p.complejidad as any
+            ambito: p.ambito as Project['ambito'],
+            estadoPostulacion: p.estadoPostulacion as Project['estadoPostulacion'],
+            viabilidadIICA: p.viabilidadIICA as Project['viabilidadIICA'],
+            rolIICA: p.rolIICA as Project['rolIICA'],
+            complejidad: p.complejidad as Project['complejidad']
         })) as Project[];
 
         return { ok: true, projects: deduplicateByUrl(mapped) };

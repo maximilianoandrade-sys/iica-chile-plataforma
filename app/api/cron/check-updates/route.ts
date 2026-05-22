@@ -229,23 +229,24 @@ export async function GET(request: NextRequest) {
         const result = await getProjects();
         const projects = result.ok ? result.projects : [];
 
-        // Verificar cada proyecto
-        for (const project of projects) {
-            if (project.url_bases && project.url_bases.trim() !== '') {
-                const result = await checkLinkForUpdates(project.url_bases, project.nombre);
-                results.push(result);
+        // Verificar proyectos en lotes paralelos de 10
+        const BATCH_SIZE = 10;
+        const projectsWithUrls = projects.filter(p => p.url_bases && p.url_bases.trim() !== '');
 
-                if (result.hasChanged) {
-                    changedProjects.push(result);
-                }
+        for (let i = 0; i < projectsWithUrls.length; i += BATCH_SIZE) {
+            const batch = projectsWithUrls.slice(i, i + BATCH_SIZE);
+            const batchResults = await Promise.allSettled(
+                batch.map(project => checkLinkForUpdates(project.url_bases, project.nombre))
+            );
 
-                if (result.status === 0 || result.status >= 400) {
-                    brokenLinks.push(result);
+            for (const settled of batchResults) {
+                if (settled.status === 'fulfilled') {
+                    const result = settled.value;
+                    results.push(result);
+                    if (result.hasChanged) changedProjects.push(result);
+                    if (result.status === 0 || result.status >= 400) brokenLinks.push(result);
                 }
             }
-
-            // Pequeña pausa para no sobrecargar
-            await new Promise(resolve => setTimeout(resolve, 100));
         }
 
         // ==================================================================

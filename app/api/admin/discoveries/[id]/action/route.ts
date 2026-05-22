@@ -47,13 +47,14 @@ function isAuthenticated(req: NextRequest): boolean {
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   if (!isAuthenticated(req)) {
     return createErrorResponse("no autorizado", 401);
   }
 
-  const id = Number(params.id);
+  const { id: rawId } = await params;
+  const id = Number(rawId);
   if (isNaN(id)) return createErrorResponse("id inválido", 400);
 
   let body: Record<string, unknown>;

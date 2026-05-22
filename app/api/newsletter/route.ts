@@ -20,6 +20,14 @@ export async function POST(req: NextRequest) {
             return createErrorResponse('Email es requerido', 400);
         }
 
+        if (email.length > 254) {
+            return createErrorResponse('Email demasiado largo', 400);
+        }
+
+        if (name && (typeof name !== 'string' || name.length > 200)) {
+            return createErrorResponse('Nombre inválido o demasiado largo', 400);
+        }
+
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             return createErrorResponse('Email no válido', 400);
