@@ -2,17 +2,7 @@
 
 import { useState } from 'react';
 import { ExternalLink, CheckCircle, Clock, ChevronDown, ChevronUp, Shield, RefreshCw, Droplets, Sprout, FlaskConical, Factory, Globe, Wheat, Landmark, AlertTriangle, MapPin, Coins, type LucideIcon } from 'lucide-react';
-import projectData from '@/data/projects.json';
 
-// Compute fondosActivos dynamically from actual project data
-const countByInst: Record<string, number> = {};
-(projectData as Array<{ institucion: string }>).forEach(p => {
-    countByInst[p.institucion] = (countByInst[p.institucion] || 0) + 1;
-});
-
-function getFondosActivos(sigla: string): number {
-    return countByInst[sigla] || 0;
-}
 
 interface FuenteOficial {
     id: string;
@@ -191,15 +181,19 @@ const FUENTES: FuenteOficial[] = [
     }
 ];
 
-// Patch fondosActivos with real counts from projects.json
-FUENTES.forEach(f => {
-    f.fondosActivos = getFondosActivos(f.sigla);
-});
+interface FuentesOficialesProps {
+  institutionCounts?: Record<string, number>;
+}
 
-export default function FuentesOficiales() {
+export default function FuentesOficiales({ institutionCounts = {} }: FuentesOficialesProps) {
+    const fuentesWithCounts = FUENTES.map(f => ({
+        ...f,
+        fondosActivos: institutionCounts[f.sigla] ?? f.fondosActivos,
+    }));
+
+    const totalFondos = fuentesWithCounts.reduce((sum, f) => sum + f.fondosActivos, 0);
+
     const [expandedId, setExpandedId] = useState<string | null>(null);
-
-    const totalFondos = FUENTES.reduce((sum, f) => sum + f.fondosActivos, 0);
 
     return (
         <section id="fuentes" aria-labelledby="fuentes-heading" className="py-16 bg-white">
@@ -236,7 +230,7 @@ export default function FuentesOficiales() {
 
                 {/* Sources Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                    {FUENTES.map((fuente, i) => {
+                    {fuentesWithCounts.map((fuente, i) => {
                         const IconComponent = ICON_MAP[fuente.icon] || Globe;
                         const isExpanded = expandedId === fuente.id;
                         return (
