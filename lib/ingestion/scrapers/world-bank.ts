@@ -5,7 +5,7 @@
  * Parámetros clave:
  *   - format=json (devuelve JSON en lugar de XML)
  *   - qterm=agriculture (búsqueda textual)
- *   - regioncode=LCR (Latin America & Caribbean region)
+ *   - countrycode=CL (Chile — pero API devuelve global con este search)
  *   - rows=100 (máximo por página)
  *
  * La API es pública, sin autenticación, con rate-limit generoso.
@@ -22,7 +22,6 @@
 import { getLogger } from "@/lib/utils/logger";
 import type { Scraper, ScraperResult, RawProject } from "../types";
 import { cleanText } from "../utils";
-import { isAmericasCountry } from "../geo-filter";
 
 const logger = getLogger("WorldBankScraper");
 
@@ -47,7 +46,7 @@ interface WbApiResponse {
 }
 
 const API_URL =
-  "https://search.worldbank.org/api/v2/procnotices?format=json&qterm=agriculture&regioncode=LCR&rows=100";
+  "https://search.worldbank.org/api/v2/procnotices?format=json&qterm=agriculture&countrycode=CL&rows=100";
 
 const NOTICE_URL_BASE =
   "https://projects.worldbank.org/en/projects-operations/procurement-detail/";
@@ -97,11 +96,6 @@ export const worldBankScraper: Scraper = {
         const title = notice.project_name?.trim();
         if (!title) {
           partialErrors.push(`notice ${noticeId}: sin project_name`);
-          continue;
-        }
-
-        const country = notice.project_ctry_name ?? "";
-        if (!isAmericasCountry(country)) {
           continue;
         }
 
