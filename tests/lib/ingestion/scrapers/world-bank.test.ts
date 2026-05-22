@@ -141,4 +141,37 @@ describe("worldBankScraper", () => {
     expect(result.projects).toEqual([]);
     expect(result.partialErrors[0]).toContain("AbortError");
   });
+
+  it("excludes notices from non-Americas countries", async () => {
+    const response = {
+      total: 2,
+      rows: "50",
+      procnotices: {
+        "0": {
+          id: "OP00111111",
+          project_name: "China Agriculture Project",
+          bid_description: "Some bid",
+          submission_deadline_date: "2026-09-01T00:00:00Z",
+          project_ctry_name: "China",
+          project_id: "P300003",
+        },
+        "1": {
+          id: "OP00222222",
+          project_name: "Chile Farming Project",
+          bid_description: "Another bid",
+          submission_deadline_date: "2026-09-01T00:00:00Z",
+          project_ctry_name: "Chile",
+          project_id: "P300004",
+        },
+      },
+    };
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(response),
+    });
+
+    const result = await worldBankScraper.scrape();
+    expect(result.projects).toHaveLength(1);
+    expect(result.projects[0].title).toBe("Chile Farming Project");
+  });
 });
