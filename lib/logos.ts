@@ -31,13 +31,13 @@ const registry: InstitutionEntry[] = [
   { slug: "fida", sigla: "FIDA", path: null, sourceType: null, brandColor: "#6A1B9A" },
   { slug: "gef", sigla: "GEF", path: null, sourceType: null, brandColor: "#00695C" },
   { slug: "minagri", sigla: "MIN", path: null, sourceType: null, brandColor: "#1A237E" },
-  { slug: "iica", sigla: "IICA", path: null, sourceType: null, brandColor: "#4CAF50" },
-  { slug: "iica-hemisferico", sigla: "IICA", path: null, sourceType: null, brandColor: "#4CAF50" },
+  { slug: "iica", sigla: "IICA", path: "/logos/official/iica.png", sourceType: "official", brandColor: "#4CAF50" },
+  { slug: "iica-hemisferico", sigla: "IICA", path: "/logos/official/iica.png", sourceType: "official", brandColor: "#4CAF50" },
   { slug: "ue-euroclima", sigla: "UE", path: null, sourceType: null, brandColor: "#003399" },
   { slug: "ue-aecid", sigla: "AECID", path: null, sourceType: null, brandColor: "#C62828" },
   { slug: "anid", sigla: "ANID", path: null, sourceType: null, brandColor: "#1A237E" },
   { slug: "agcid", sigla: "AGCID", path: null, sourceType: null, brandColor: "#C8102E" },
-  { slug: "pnud", sigla: "PNUD", path: null, sourceType: null, brandColor: "#0468B1" },
+  { slug: "pnud", sigla: "PNUD", path: "/logos/official/pnud.svg", sourceType: "official", brandColor: "#0468B1" },
   { slug: "sag", sigla: "SAG", path: null, sourceType: null, brandColor: "#388E3C" },
 ];
 
