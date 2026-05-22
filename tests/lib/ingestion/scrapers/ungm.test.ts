@@ -65,15 +65,17 @@ describe("ungmScraper", () => {
       expect(notices[0].deadline).toContain("14-Jun-2026");
       expect(notices[0].agency).toBe("FAO");
       expect(notices[0].reference).toBe("2026/FRURT/FRURT/136955");
+      expect(notices[0].country).toBe("Tanzania, United Republic of");
 
       expect(notices[1].noticeId).toBe("301500");
       expect(notices[1].title).toBe("Consultancy for Sustainable Irrigation in Latin America");
       expect(notices[1].agency).toBe("UNDP");
       expect(notices[1].reference).toBe("RFP-2026-005678");
+      expect(notices[1].country).toBe("Chile");
     });
   });
 
-  it("parses UNGM HTML response into RawProject array", async () => {
+  it("parses UNGM HTML response into RawProject array, filtering non-Americas", async () => {
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       text: () => Promise.resolve(MOCK_HTML_FRAGMENT),
@@ -82,18 +84,47 @@ describe("ungmScraper", () => {
     const result = await ungmScraper.scrape();
 
     expect(result.sourceSlug).toBe("ungm");
-    expect(result.projects).toHaveLength(2);
+    // Tanzania is filtered out, only Chile remains
+    expect(result.projects).toHaveLength(1);
     expect(result.partialErrors).toHaveLength(0);
 
     const first = result.projects[0];
-    expect(first.title).toContain("Supervision of Construction");
-    expect(first.institution).toBe("FAO (UN)");
-    expect(first.url).toBe("https://www.ungm.org/Public/Notice/301877");
+    expect(first.title).toContain("Sustainable Irrigation");
+    expect(first.institution).toBe("UNDP (UN)");
+    expect(first.url).toBe("https://www.ungm.org/Public/Notice/301500");
     expect(first.deadline).toBeInstanceOf(Date);
     expect(first.ambito).toBe("Internacional");
     expect(first.idioma).toBe("en");
     expect(first.tags).toContain("UNGM");
-    expect(first.tags).toContain("FAO");
+    expect(first.tags).toContain("UNDP");
+  });
+
+  it("includes notices with no country (err on side of inclusion)", async () => {
+    const htmlNoCountry = `
+<div role="row" tabindex="0" data-noticeid="999999" class="tableRow dataRow notice-table">
+    <div role="cell" class="tableCell resultTitle">
+        <div class="ungm-flex-row ungm-flex-row--space-between">
+            <div class="ungm-flex-row">
+                <span class="ungm-title ungm-title--small">
+                    Agriculture supply unknown location
+                </span>
+            </div>
+        </div>
+    </div>
+    <div role="cell" class="tableCell resultInfo1 deadline" data-description="Deadline">
+        <span>01-Jan-2027 12:00</span>
+    </div>
+    <div role="cell" class="tableCell resultAgency"><span>WFP</span></div>
+    <div role="cell" class="tableCell resultInfo1" data-description="Reference"><span>REF-001</span></div>
+</div>`;
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve(htmlNoCountry),
+    });
+
+    const result = await ungmScraper.scrape();
+    expect(result.projects).toHaveLength(1);
+    expect(result.projects[0].title).toContain("Agriculture supply unknown location");
   });
 
   it("handles empty HTML response", async () => {

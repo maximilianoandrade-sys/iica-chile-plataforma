@@ -23,6 +23,7 @@
 import { getLogger } from "@/lib/utils/logger";
 import type { Scraper, ScraperResult, RawProject } from "../types";
 import { cleanText } from "../utils";
+import { isAmericasCountry } from "../geo-filter";
 
 const logger = getLogger("UNGMScraper");
 
@@ -46,6 +47,7 @@ interface ParsedNotice {
   deadline: string | null;
   agency: string | null;
   reference: string | null;
+  country: string | null;
 }
 
 /**
@@ -103,12 +105,22 @@ export function parseUngmHtml(html: string): ParsedNotice[] {
     const refMatch = rowHtml.match(/data-description="Reference"[^>]*>[\s\S]*?<span[^>]*>\s*([\s\S]*?)\s*<\/span>/);
     const reference = refMatch ? cleanText(refMatch[1]) : null;
 
+    // Extract country from the last plain .tableCell span (after reference)
+    const cellRegex = /<div[^>]*class="tableCell"[^>]*>\s*<span[^>]*>\s*([\s\S]*?)\s*<\/span>/g;
+    let cellMatch: RegExpExecArray | null;
+    let lastCellContent: string | null = null;
+    while ((cellMatch = cellRegex.exec(rowHtml)) !== null) {
+      lastCellContent = cleanText(cellMatch[1].replace(/<[^>]+>/g, ""));
+    }
+    const country = lastCellContent || null;
+
     notices.push({
       noticeId: ids[i].id,
       title,
       deadline: deadlineRaw,
       agency,
       reference,
+      country,
     });
   }
 
@@ -183,6 +195,11 @@ export const ungmScraper: Scraper = {
       try {
         if (!notice.title) {
           partialErrors.push(`notice ${notice.noticeId}: sin title`);
+          continue;
+        }
+
+        // Filter to Americas countries only (IICA scope)
+        if (notice.country && !isAmericasCountry(notice.country)) {
           continue;
         }
 
