@@ -70,7 +70,11 @@ export const IICA_COUNTRIES: Map<string, string> = new Map([
 ])
 
 /** All 34 IICA member state ISO 2-letter codes */
-export const IICA_COUNTRY_CODES: string[] = [...new Set(IICA_COUNTRIES.values())]
+const countryCodeMap: Record<string, true> = {}
+IICA_COUNTRIES.forEach((code) => {
+  countryCodeMap[code] = true
+})
+export const IICA_COUNTRY_CODES: string[] = Object.keys(countryCodeMap)
 
 /**
  * Returns true if the given country name matches an IICA Americas member state.
