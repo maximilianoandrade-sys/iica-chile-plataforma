@@ -1,6 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import { Header } from '@/components/Header';
 
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: ({ priority, ...props }: any) => <img {...props} alt={props.alt} />,
+}));
+
 jest.mock('@/components/ThemeToggle', () => ({
   ThemeToggle: () => <div data-testid="theme-toggle" />,
 }));
@@ -15,6 +20,7 @@ describe('Header', () => {
     expect(screen.getByRole('link', { name: /Sobre IICA/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Fuentes/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Explorar Oportunidades/i })).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: /Logo oficial IICA Chile/i })).toBeInTheDocument();
     // Removed zombie features
     expect(screen.queryByRole('link', { name: /Consultores/i })).not.toBeInTheDocument();
     expect(screen.queryByRole('link', { name: /Mi Maletín/i })).not.toBeInTheDocument();
