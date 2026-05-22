@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Menu, X, Target, Home, Crosshair, Link2, Users, Building2, Phone, Briefcase } from 'lucide-react';
+import { Menu, X, Target, Home, Crosshair, Link2, Building2, Phone } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
@@ -36,10 +36,8 @@ export function Header({ urgentCount = 0 }: HeaderProps) {
                 {/* Desktop Nav */}
                 <nav className="hidden md:flex gap-5 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400" aria-label="Navegación principal">
                     <Link href="/#convocatorias" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Oportunidades</Link>
-                    <Link href="/consultores" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Consultores</Link>
                     <Link href="/about" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Sobre IICA</Link>
                     <Link href="/#fuentes" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Fuentes</Link>
-                    <Link href="/maletin" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Mi Maletín</Link>
                 </nav>
 
                 <div className="flex items-center gap-2">
@@ -86,8 +84,6 @@ export function Header({ urgentCount = 0 }: HeaderProps) {
                                 { href: '/', label: 'Inicio', icon: Home },
                                 { href: '/#convocatorias', label: 'Oportunidades', icon: Crosshair },
                                 { href: '/#fuentes', label: 'Fuentes Oficiales', icon: Link2 },
-                                { href: '/consultores', label: 'Consultores', icon: Users },
-                                { href: '/maletin', label: 'Mi Maletín', icon: Briefcase },
                                 { href: '/about', label: 'Sobre IICA', icon: Building2 },
                                 { href: '/#contacto', label: 'Contacto', icon: Phone },
                             ].map((item) => (
