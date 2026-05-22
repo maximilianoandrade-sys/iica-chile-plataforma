@@ -141,4 +141,37 @@ describe("worldBankScraper", () => {
     expect(result.projects).toEqual([]);
     expect(result.partialErrors[0]).toContain("AbortError");
   });
+
+  it("filters out non-Americas countries", async () => {
+    const response = {
+      total: 2,
+      rows: "50",
+      procnotices: {
+        "0": {
+          id: "OP00111111",
+          project_name: "China Agriculture Project",
+          bid_description: "Equipment supply",
+          submission_deadline_date: "2026-09-01T00:00:00Z",
+          project_ctry_name: "China",
+          project_id: "P300003",
+        },
+        "1": {
+          id: "OP00222222",
+          project_name: "Colombia Coffee Initiative",
+          bid_description: "Consulting services",
+          submission_deadline_date: "2026-09-15T00:00:00Z",
+          project_ctry_name: "Colombia",
+          project_id: "P400004",
+        },
+      },
+    };
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(response),
+    });
+
+    const result = await worldBankScraper.scrape();
+    expect(result.projects).toHaveLength(1);
+    expect(result.projects[0].title).toBe("Colombia Coffee Initiative");
+  });
 });
