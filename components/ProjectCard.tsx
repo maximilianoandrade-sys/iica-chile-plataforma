@@ -1,10 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { MapPin } from 'lucide-react';
 import { type Project, daysUntilClose, pluralizeDias } from '@/lib/data';
-import { getInstitutionalLogo } from '@/lib/logos';
+import { InstitutionLogo } from '@/components/InstitutionLogo';
 import { Badge } from '@/components/ui/Badge';
 import { getLogger } from '@/lib/utils/logger';
 
@@ -37,7 +36,6 @@ export function ProjectCard({ project }: { project: Project }) {
   const isClosed = project.estadoPostulacion === 'Cerrada';
   const { text: deadlineText, urgency } = formatDeadline(project);
   const monto = formatMonto(project);
-  const logo = getInstitutionalLogo(project.institucion, 32);
   const region = project.regiones?.[0] ?? project.region ?? null;
 
   logger.debug('Rendering ProjectCard', { id: project.id });
@@ -48,21 +46,7 @@ export function ProjectCard({ project }: { project: Project }) {
     >
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="flex items-center gap-2.5">
-          {logo.startsWith('<svg') ? (
-            <span
-              className="w-8 h-8 shrink-0 rounded-lg overflow-hidden"
-              dangerouslySetInnerHTML={{ __html: logo }}
-              aria-hidden="true"
-            />
-          ) : (
-            <Image
-              src={logo}
-              alt={`Logo ${project.institucion}`}
-              width={32}
-              height={32}
-              className="w-8 h-8 shrink-0 rounded-lg object-contain"
-            />
-          )}
+          <InstitutionLogo nombre={project.institucion} size={32} />
           <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
             {project.institucion}
           </span>
