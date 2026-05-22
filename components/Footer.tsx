@@ -1,6 +1,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ExternalLink } from 'lucide-react';
 
 const FUENTES_FOOTER = [
@@ -22,7 +23,16 @@ export function Footer() {
 
                     {/* Column 1: Identity */}
                     <div>
-                        <h3 className="text-xl font-bold mb-4">IICA <span className="text-[var(--iica-secondary)]">Chile</span></h3>
+                        <div className="flex items-center gap-3 mb-4">
+                            <Image
+                                src="/logos/official/iica.png"
+                                alt="Logo oficial IICA Chile"
+                                width={48}
+                                height={48}
+                                className="h-11 w-auto"
+                            />
+                            <h3 className="text-xl font-bold">IICA <span className="text-[var(--iica-secondary)]">Chile</span></h3>
+                        </div>
                         <p className="text-blue-200 text-sm leading-relaxed mb-4">
                             Promoviendo el desarrollo agrícola y el bienestar rural en las Américas desde 1942.
                         </p>
