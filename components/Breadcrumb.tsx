@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { ChevronRight, Home } from 'lucide-react';
-import { motion } from 'framer-motion';
+
 
 export interface BreadcrumbItem {
     label: string;
@@ -16,12 +16,9 @@ interface BreadcrumbProps {
 
 export default function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
     return (
-        <motion.nav
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
+        <nav
             aria-label="Breadcrumb"
-            className={`flex items-center gap-1 text-sm ${className}`}
+            className={`flex items-center gap-1 text-sm animate-[fadeIn_0.3s_ease-out] ${className}`}
         >
             {/* Home always first */}
             <Link
@@ -53,6 +50,6 @@ export default function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
                     )}
                 </span>
             ))}
-        </motion.nav>
+        </nav>
     );
 }
