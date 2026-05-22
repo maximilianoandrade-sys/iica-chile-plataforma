@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ExternalLink, CheckCircle, Clock, ChevronDown, ChevronUp, Shield, RefreshCw, Droplets, Sprout, FlaskConical, Factory, Globe, Wheat, Landmark, AlertTriangle, MapPin, Coins, type LucideIcon } from 'lucide-react';
+import { InstitutionLogo } from '@/components/InstitutionLogo';
 
 
 interface FuenteOficial {
@@ -247,7 +248,7 @@ export default function FuentesOficiales({ institutionCounts = {} }: FuentesOfic
                                     onClick={() => setExpandedId(isExpanded ? null : fuente.id)}
                                     className="w-full text-left p-5 flex items-start gap-4 min-h-[48px]"
                                 >
-                                    <IconComponent className={`h-8 w-8 flex-shrink-0 ${fuente.color}`} aria-hidden={true} />
+                                    <InstitutionLogo nombre={fuente.sigla} size={32} />
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2 flex-wrap mb-1">
                                             <span className={`text-xl font-extrabold ${fuente.color}`}>{fuente.sigla}</span>

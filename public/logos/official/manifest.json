@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "lastUpdated": "2026-05-22",
+  "policy": {
+    "allowedSources": ["official", "wikimedia", "google"],
+    "preferSvg": true,
+    "allowPngFallback": true,
+    "allowAiGenerated": false,
+    "allowVectorizedRecreations": false
+  },
+  "institutions": []
+}
