@@ -9,27 +9,27 @@ const MOCK_RESPONSE = {
   total: 2,
   rows: "50",
   procnotices: {
-    "1001": {
-      id: "1001",
+    "0": {
+      id: "OP00123456",
       notice_type: "Request for Expression of Interest",
       project_name: "Chile Agricultural Modernization Project",
       bid_description: "Consulting services for irrigation systems upgrade in the Maule region.",
       submission_deadline_date: "2026-07-15T23:59:59Z",
       procurement_method_name: "Quality and Cost Based Selection",
-      noticeurl: "https://projects.worldbank.org/en/projects-operations/procurement-detail/OP00123456",
+      project_ctry_name: "Chile",
       contact_name: "Juan Perez",
-      borrower_country: "Chile",
+      project_id: "P100001",
     },
-    "1002": {
-      id: "1002",
+    "1": {
+      id: "OP00789012",
       notice_type: "Invitation for Bids",
       project_name: "Sustainable Agriculture & Climate Resilience",
       bid_description: "Supply of precision farming equipment for smallholders.",
       submission_deadline_date: "2026-08-30T23:59:59Z",
       procurement_method_name: "International Competitive Bidding",
-      noticeurl: "https://projects.worldbank.org/en/projects-operations/procurement-detail/OP00789012",
+      project_ctry_name: "Chile",
       contact_name: "Maria Gonzalez",
-      borrower_country: "Chile",
+      project_id: "P200002",
     },
   },
 };
@@ -55,6 +55,7 @@ describe("worldBankScraper", () => {
     expect(first.title).toBe("Chile Agricultural Modernization Project");
     expect(first.institution).toBe("World Bank");
     expect(first.url).toBe("https://projects.worldbank.org/en/projects-operations/procurement-detail/OP00123456");
+    expect(first.canonicalKey).toBe("worldbank-OP00123456");
     expect(first.deadline).toBeInstanceOf(Date);
     expect(first.deadline!.toISOString()).toBe("2026-07-15T23:59:59.000Z");
     expect(first.ambito).toBe("Internacional");
@@ -62,6 +63,7 @@ describe("worldBankScraper", () => {
     expect(first.description).toContain("irrigation systems");
     expect(first.tags).toContain("World Bank");
     expect(first.tags).toContain("Request for Expression of Interest");
+    expect(first.region).toBe("Chile");
   });
 
   it("handles empty procnotices object", async () => {
@@ -75,15 +77,15 @@ describe("worldBankScraper", () => {
     expect(result.partialErrors).toHaveLength(0);
   });
 
-  it("reports partial errors for notices missing noticeurl", async () => {
+  it("reports partial errors for notices missing id", async () => {
     const response = {
       total: 1,
       rows: "50",
       procnotices: {
-        "2001": {
-          id: "2001",
+        "0": {
+          // no id field
           project_name: "Orphan Notice",
-          bid_description: "No URL here",
+          bid_description: "No ID here",
         },
       },
     };
@@ -95,7 +97,31 @@ describe("worldBankScraper", () => {
     const result = await worldBankScraper.scrape();
     expect(result.projects).toHaveLength(0);
     expect(result.partialErrors).toHaveLength(1);
-    expect(result.partialErrors[0]).toContain("2001");
+    expect(result.partialErrors[0]).toContain("sin id");
+  });
+
+  it("reports partial errors for notices missing project_name", async () => {
+    const response = {
+      total: 1,
+      rows: "50",
+      procnotices: {
+        "0": {
+          id: "OP00999",
+          // no project_name
+          bid_description: "Has ID but no title",
+        },
+      },
+    };
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(response),
+    });
+
+    const result = await worldBankScraper.scrape();
+    expect(result.projects).toHaveLength(0);
+    expect(result.partialErrors).toHaveLength(1);
+    expect(result.partialErrors[0]).toContain("OP00999");
+    expect(result.partialErrors[0]).toContain("sin project_name");
   });
 
   it("returns error when API returns non-200", async () => {

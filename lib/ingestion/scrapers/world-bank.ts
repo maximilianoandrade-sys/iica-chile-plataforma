@@ -5,15 +5,19 @@
  * Parámetros clave:
  *   - format=json (devuelve JSON en lugar de XML)
  *   - qterm=agriculture (búsqueda textual)
- *   - countrycode=CL (Chile)
+ *   - countrycode=CL (Chile — pero API devuelve global con este search)
  *   - rows=100 (máximo por página)
  *
  * La API es pública, sin autenticación, con rate-limit generoso.
- * Devuelve un objeto con `procnotices` como dict {id: notice}.
+ * Devuelve un objeto con `procnotices` como dict {index: notice}.
+ * Las claves son índices "0","1","2"... NO IDs.
  *
- * Cada notice tiene: id, project_name, bid_description, notice_type,
- * submission_deadline_date, procurement_method_name, noticeurl,
- * borrower_country, contact_name.
+ * Cada notice tiene: id (ej "OP00446316"), project_name, bid_description,
+ * notice_type, submission_deadline_date, procurement_method_name,
+ * project_ctry_name, contact_name, project_id.
+ *
+ * NO incluye un campo URL directo — se construye como:
+ * https://projects.worldbank.org/en/projects-operations/procurement-detail/{id}
  */
 import { getLogger } from "@/lib/utils/logger";
 import type { Scraper, ScraperResult, RawProject } from "../types";
@@ -22,25 +26,30 @@ import { cleanText } from "../utils";
 const logger = getLogger("WorldBankScraper");
 
 interface WbNotice {
-  id: string;
+  id?: string;
   notice_type?: string;
   project_name?: string;
   bid_description?: string;
   submission_deadline_date?: string;
   procurement_method_name?: string;
-  noticeurl?: string;
+  project_ctry_name?: string;
+  project_id?: string;
   contact_name?: string;
-  borrower_country?: string;
+  contact_web_url?: string;
+  bid_reference_no?: string;
 }
 
 interface WbApiResponse {
-  total: number;
+  total: number | string;
   rows: string;
   procnotices: Record<string, WbNotice>;
 }
 
 const API_URL =
   "https://search.worldbank.org/api/v2/procnotices?format=json&qterm=agriculture&countrycode=CL&rows=100";
+
+const NOTICE_URL_BASE =
+  "https://projects.worldbank.org/en/projects-operations/procurement-detail/";
 
 function parseDeadline(dateStr?: string): Date | null {
   if (!dateStr || !dateStr.trim()) return null;
@@ -76,11 +85,11 @@ export const worldBankScraper: Scraper = {
     }
 
     const notices = data.procnotices ?? {};
-    for (const [noticeId, notice] of Object.entries(notices)) {
+    for (const [, notice] of Object.entries(notices)) {
       try {
-        const url = notice.noticeurl;
-        if (!url || !url.trim()) {
-          partialErrors.push(`notice ${noticeId}: sin noticeurl`);
+        const noticeId = notice.id;
+        if (!noticeId || !noticeId.trim()) {
+          partialErrors.push(`notice sin id`);
           continue;
         }
 
@@ -90,6 +99,7 @@ export const worldBankScraper: Scraper = {
           continue;
         }
 
+        const url = `${NOTICE_URL_BASE}${noticeId}`;
         const deadline = parseDeadline(notice.submission_deadline_date);
         const description = notice.bid_description
           ? cleanText(notice.bid_description).slice(0, 500)
@@ -107,12 +117,13 @@ export const worldBankScraper: Scraper = {
           budget: null,
           description,
           tags,
-          region: notice.borrower_country ?? "Chile",
+          region: notice.project_ctry_name ?? "Chile",
           ambito: "Internacional",
           idioma: "en",
         });
       } catch (err) {
-        partialErrors.push(`notice ${noticeId}: ${(err as Error).message}`);
+        const nid = notice.id || "unknown";
+        partialErrors.push(`notice ${nid}: ${(err as Error).message}`);
       }
     }
 
