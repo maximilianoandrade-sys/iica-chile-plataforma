@@ -52,4 +52,10 @@ describe('ProjectCard', () => {
     render(<ProjectCard project={mockProject} />);
     expect(screen.getByRole('article')).toBeInTheDocument();
   });
+
+  it('makes the entire card clickable via stretched link', () => {
+    render(<ProjectCard project={mockProject} />);
+    const link = screen.getByRole('link', { name: mockProject.nombre });
+    expect(link.className).toContain('stretched-link');
+  });
 });

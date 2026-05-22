@@ -122,6 +122,15 @@
   .safe-bottom {
     padding-bottom: env(safe-area-inset-bottom);
   }
+
+  /* Stretched link: makes parent clickable via ::after overlay */
+  .stretched-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: auto;
+  }
 }
 
 @keyframes fade-in-up {
