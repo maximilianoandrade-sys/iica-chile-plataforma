@@ -4,6 +4,7 @@ import { cleanText } from "../utils";
 import { fetchWithRetry } from "../retry";
 
 const FEED_URL = "https://www.mercadopublico.cl/Portal/FeedOrg.aspx?qs=PxtfJ1QTPW/YcX8fnxQceA==";
+const DETAIL_BASE_URL = "https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx";
 
 function parseMercadoPublicoDate(raw: string): Date | null {
   const match = raw
@@ -33,6 +34,12 @@ function parseMercadoPublicoDate(raw: string): Date | null {
 
   const date = new Date(Date.UTC(year, month, day, 12, 0, 0));
   return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function buildDetailUrl(licId: string): string {
+  const url = new URL(DETAIL_BASE_URL);
+  url.searchParams.set("qs", licId);
+  return url.toString();
 }
 
 export const fiaLicitacionesScraper: Scraper = {
@@ -87,7 +94,7 @@ export const fiaLicitacionesScraper: Scraper = {
       );
       const descrRaw = cleanText($container.find("span.Descripcion").last().text());
 
-      const detailUrl = `https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?qs=${licId}`;
+      const detailUrl = buildDetailUrl(licId);
 
       projects.push({
         title: `[FIA Licitación] ${title}`,

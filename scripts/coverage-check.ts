@@ -5,7 +5,7 @@ const logger = getLogger("CoverageCheck");
 
 const CRITICAL_SOURCES = ["fia", "fia-licitaciones", "corfo", "indap", "fontagro", "cnr"];
 
-async function main() {
+export async function runCoverageCheck() {
   const sources = await prisma.source.findMany({
     where: { slug: { in: CRITICAL_SOURCES } },
     orderBy: { slug: "asc" },
@@ -13,6 +13,13 @@ async function main() {
 
   const now = Date.now();
   const problems: string[] = [];
+
+  const foundSlugs = new Set(sources.map((s) => s.slug));
+  for (const slug of CRITICAL_SOURCES) {
+    if (!foundSlugs.has(slug)) {
+      problems.push(`${slug}: source no sembrada en tabla Source`);
+    }
+  }
 
   for (const source of sources) {
     const ranRecently = source.lastRunAt
@@ -41,8 +48,10 @@ async function main() {
   await prisma.$disconnect();
 }
 
-main().catch(async (err) => {
-  logger.error("Coverage check failed", err as Error);
-  await prisma.$disconnect();
-  process.exit(1);
-});
+if (process.env.NODE_ENV !== "test" && process.argv[1]?.includes("coverage-check")) {
+  runCoverageCheck().catch(async (err) => {
+    logger.error("Coverage check failed", err as Error);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
+}

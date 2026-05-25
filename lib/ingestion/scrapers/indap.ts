@@ -3,6 +3,23 @@ import type { Scraper, ScraperResult, RawProject } from "../types";
 import { cleanText, parseSpanishDate, absoluteUrl } from "../utils";
 import { fetchWithRetry } from "../retry";
 
+const ALLOWED_PATH_HINTS = [
+  "/programas",
+  "/concursos",
+  "/plataforma-de-servicios",
+  "/servicio",
+];
+
+function isLikelyOpportunityUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    const path = parsed.pathname.toLowerCase();
+    return ALLOWED_PATH_HINTS.some((hint) => path.includes(hint));
+  } catch {
+    return false;
+  }
+}
+
 export const indapScraper: Scraper = {
   slug: "indap",
   name: "INDAP",
@@ -50,6 +67,7 @@ export const indapScraper: Scraper = {
           if (!href) return;
           const url = absoluteUrl(href, "https://www.indap.gob.cl/");
           if (!url.includes("indap.gob.cl")) return;
+          if (!isLikelyOpportunityUrl(url)) return;
           const deadline = parseSpanishDate(cleanText($el.find(".fecha, time, .date").text()));
           const description = cleanText($el.find(".descripcion, .resumen, p").first().text());
           projects.push({
