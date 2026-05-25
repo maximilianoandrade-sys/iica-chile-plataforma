@@ -42,7 +42,7 @@ export async function upsertProject(
     // unidad. El campo numérico `monto` se conserva para filtros y orden.
     montoTexto: raw.budget?.trim() || null,
     estado: "Abierto",
-    categoria: raw.tags?.[0] ?? "General",
+    categoria: raw.opportunityType ?? raw.tags?.[0] ?? "General",
     objetivo: raw.description ?? "",
     ambito: raw.ambito ?? "Nacional",
     idioma: raw.idioma ?? "es",

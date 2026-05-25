@@ -14,6 +14,7 @@
  */
 import type { Scraper, ScraperResult, RawProject } from "../types";
 import { cleanText } from "../utils";
+import { fetchWithRetry } from "../retry";
 
 interface WpRestPost {
   id: number;
@@ -81,19 +82,18 @@ export const fiaScraper: Scraper = {
     const partialErrors: string[] = [];
 
     let posts: WpRestPost[];
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 30000);
     try {
-      const res = await fetch(this.homepageUrl, {
-        headers: { "User-Agent": "IICA-Chile-Bot/1.0 (+contacto@iica.cl)" },
-        signal: controller.signal,
-      });
-      clearTimeout(timeoutId);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const res = await fetchWithRetry(
+        this.homepageUrl,
+        {
+          headers: { "User-Agent": "IICA-Chile-Bot/1.0 (+contacto@iica.cl)" },
+        },
+        3,
+        600,
+      );
       posts = await res.json();
       if (!Array.isArray(posts)) throw new Error("respuesta no es array");
     } catch (err) {
-      clearTimeout(timeoutId);
       return {
         sourceSlug: this.slug,
         projects: [],
@@ -127,6 +127,7 @@ export const fiaScraper: Scraper = {
           deadline,
           description,
           ambito: "Nacional",
+          opportunityType: "Convocatoria",
           tags: ["FIA"],
         });
       } catch (err) {

@@ -1,11 +1,12 @@
 import { load } from "cheerio";
 import type { Scraper, ScraperResult, RawProject } from "../types";
 import { cleanText, parseSpanishDate, absoluteUrl } from "../utils";
+import { fetchWithRetry } from "../retry";
 
 export const indapScraper: Scraper = {
   slug: "indap",
   name: "INDAP",
-  homepageUrl: "https://www.indap.gob.cl/programas",
+  homepageUrl: "https://www.indap.gob.cl/concursos",
 
   async scrape(): Promise<ScraperResult> {
     const sourceSlug = this.slug;
@@ -14,31 +15,67 @@ export const indapScraper: Scraper = {
 
     try {
       let html: string;
-      const res = await fetch(this.homepageUrl, {
-        headers: { "User-Agent": "IICA-Chile-Bot/1.0 (+contacto@iica.cl)" },
-        signal: AbortSignal.timeout(30000),
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      html = await res.text();
+      const [concursosRes, serviciosRes] = await Promise.all([
+        fetchWithRetry(
+          this.homepageUrl,
+          {
+            headers: { "User-Agent": "IICA-Chile-Bot/1.0 (+contacto@iica.cl)" },
+          },
+          3,
+          600,
+        ),
+        fetchWithRetry(
+          "https://www.indap.gob.cl/plataforma-de-servicios",
+          {
+            headers: { "User-Agent": "IICA-Chile-Bot/1.0 (+contacto@iica.cl)" },
+          },
+          3,
+          600,
+        ),
+      ]);
+      html = `${await concursosRes.text()}\n${await serviciosRes.text()}`;
 
       const $ = load(html);
-      $(".noticia-card, .programa-item, article.programa, article, .views-row, .card").each((_, el) => {
+      $(".noticia-card, .programa-item, article.programa, article, .views-row, .card, h3, h2").each((_, el) => {
         try {
           const $el = $(el);
-          const $link = $el.find("a").first();
-          const title = cleanText($el.find("h2, h3, .titulo, .card-title").first().text() || $link.text());
+          const $link = $el.is("a") ? $el : $el.find("a").first();
+          const title = cleanText(
+            $el.find("h2, h3, .titulo, .card-title").first().text() ||
+            $link.text() ||
+            $el.text(),
+          );
           if (!title || title.length < 5) return;
           const href = $link.attr("href");
-          if (!href) { partialErrors.push(`sin href: ${title}`); return; }
+          if (!href) return;
           const url = absoluteUrl(href, "https://www.indap.gob.cl/");
           if (!url.includes("indap.gob.cl")) return;
           const deadline = parseSpanishDate(cleanText($el.find(".fecha, time, .date").text()));
           const description = cleanText($el.find(".descripcion, .resumen, p").first().text());
-          projects.push({ title, institution: "INDAP", url, deadline, description, ambito: "Nacional" });
+          projects.push({
+            title,
+            institution: "INDAP",
+            url,
+            canonicalKey: url,
+            deadline,
+            description,
+            ambito: "Nacional",
+            opportunityType: "Programa",
+            tags: ["INDAP", "Programa"],
+          });
         } catch (err) {
           partialErrors.push(`parse: ${(err as Error).message}`);
         }
       });
+
+      const unique = new Map<string, RawProject>();
+      for (const p of projects) {
+        const key = p.canonicalKey || p.url;
+        if (!unique.has(key)) unique.set(key, p);
+      }
+
+      projects.length = 0;
+      projects.push(...Array.from(unique.values()));
 
       if (projects.length === 0) {
         partialErrors.push("No matching elements found on page — CSS selectors may need updating");

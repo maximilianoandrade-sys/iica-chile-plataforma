@@ -36,6 +36,12 @@ jobs:
           ONLY_SCRAPER: ${{ github.event.inputs.only }}
         run: npx tsx scripts/run-scrapers.ts
 
+      - name: Coverage check
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+        run: npx tsx scripts/coverage-check.ts
+
       - name: Resolve smoke target URL
         id: smoke_target
         env:

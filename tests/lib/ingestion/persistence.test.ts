@@ -70,6 +70,22 @@ describe("upsertProject", () => {
     expect(call.update.monto).toBe(10000000);
   });
 
+  it("uses opportunityType as categoria when provided", async () => {
+    await upsertProject(
+      {
+        url: "https://example.com/lic",
+        title: "Licitacion de servicios",
+        institution: "Test",
+        opportunityType: "Licitacion",
+      },
+      "test-source"
+    );
+
+    const call = prisma.project.upsert.mock.calls[0][0];
+    expect(call.create.categoria).toBe("Licitacion");
+    expect(call.update.categoria).toBe("Licitacion");
+  });
+
   it("defaults monto to 0 when budget is empty", async () => {
     await upsertProject(
       { url: "https://example.com/x", title: "T", institution: "I" },

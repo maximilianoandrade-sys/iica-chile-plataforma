@@ -8,7 +8,7 @@ on:
 
 jobs:
   ingest:
-    name: Ejecutar scrapers (FIA, CORFO, CNR, IICA)
+    name: Ejecutar scrapers (FIA, FIA licitaciones, CORFO, INDAP, FONTAGRO, CNR, IICA)
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -39,6 +39,12 @@ jobs:
           DIRECT_URL: ${{ secrets.DIRECT_URL }}
           ADMIN_SESSION_SECRET: ${{ secrets.ADMIN_SESSION_SECRET }}
         run: npx tsx scripts/run-scrapers.ts
+
+      - name: Coverage check
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+        run: npx tsx scripts/coverage-check.ts
 
       - name: Summary
         if: always()

@@ -16,5 +16,17 @@ describe("fontagroScraper", () => {
     expect(result.projects.length).toBe(1);
     expect(result.projects[0].ambito).toBe("Internacional");
     expect(result.projects[0].url).toContain("fontagro.org");
+    expect(result.projects[0].opportunityType).toBe("Convocatoria");
+    expect(result.projects[0].canonicalKey).toBe(result.projects[0].url);
+  });
+
+  it("deduplica links repetidos de convocatoria", async () => {
+    const html = `<html><body>
+      <a href="/es/iniciativas/convocatorias/convocatoria-2026/">Convocatoria 2026</a>
+      <a href="/es/iniciativas/convocatorias/convocatoria-2026/">Ver información</a>
+    </body></html>`;
+    (global.fetch as jest.Mock).mockResolvedValue({ ok: true, text: () => Promise.resolve(html) });
+    const result = await fontagroScraper.scrape();
+    expect(result.projects).toHaveLength(1);
   });
 });
