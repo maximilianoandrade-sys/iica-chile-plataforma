@@ -31,11 +31,13 @@ function getProjectRegions(project: Project): string[] {
 }
 
 export default async function ProjectListContainer({
-    searchParams
+    searchParams,
+    initialProjects,
 }: {
-    searchParams: { [key: string]: string | string[] | undefined }
+    searchParams: { [key: string]: string | string[] | undefined };
+    initialProjects?: Project[];
 }) {
-    const result = await getProjects();
+    const result = initialProjects ? { ok: true as const, projects: initialProjects } : await getProjects();
 
     if (!result.ok) {
         return <DatabaseError />;
@@ -48,8 +50,10 @@ export default async function ProjectListContainer({
     const selectedInstitutions = typeof searchParams.institution === 'string' ? searchParams.institution.split(',').filter(Boolean) : [];
     const selectedRegions = typeof searchParams.region === 'string' ? searchParams.region.split(',').filter(Boolean) : [];
     const selectedAmbito = typeof searchParams.ambito === 'string' ? searchParams.ambito : '';
-    const minAmount = typeof searchParams.minAmount === 'string' ? parseInt(searchParams.minAmount) : 0;
-    const maxAmount = typeof searchParams.maxAmount === 'string' ? parseInt(searchParams.maxAmount) : Infinity;
+    const minAmountRaw = typeof searchParams.minAmount === 'string' ? Number.parseInt(searchParams.minAmount, 10) : 0;
+    const maxAmountRaw = typeof searchParams.maxAmount === 'string' ? Number.parseInt(searchParams.maxAmount, 10) : Infinity;
+    const minAmount = Number.isFinite(minAmountRaw) ? minAmountRaw : 0;
+    const maxAmount = Number.isFinite(maxAmountRaw) ? maxAmountRaw : Infinity;
 
     // Compute filterCounts from ALL projects
     const filterCounts: FilterCounts = {
@@ -73,14 +77,7 @@ export default async function ProjectListContainer({
     };
 
     // Filter projects
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    let filteredProjects = searchTerm
-        ? searchAndRankProjects(searchTerm, projects)
-        : defaultSortProjects([...projects]);
-
-    filteredProjects = filteredProjects.filter(project => {
+    const filteredByFacets = projects.filter(project => {
         // Estado filter
         let matchesEstado = true;
         if (selectedEstado) {
@@ -101,6 +98,10 @@ export default async function ProjectListContainer({
 
         return matchesEstado && matchesInstitution && matchesRegion && matchesAmbito && matchesAmount;
     });
+
+    const filteredProjects = searchTerm
+        ? searchAndRankProjects(searchTerm, filteredByFacets)
+        : defaultSortProjects(filteredByFacets);
 
     return (
         <>

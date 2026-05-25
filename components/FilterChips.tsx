@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { Search, X, SlidersHorizontal } from 'lucide-react';
 import { type FilterCounts } from '@/lib/data';
@@ -31,8 +31,13 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
   const currentMinAmount = searchParams.get('minAmount') ?? '';
   const currentMaxAmount = searchParams.get('maxAmount') ?? '';
   const currentAmbito = searchParams.get('ambito') ?? '';
+  const [searchInput, setSearchInput] = useState(currentQ);
 
-  function updateParams(updates: Record<string, string>) {
+  useEffect(() => {
+    setSearchInput(currentQ);
+  }, [currentQ]);
+
+  function updateParams(updates: Record<string, string>, mode: 'push' | 'replace' = 'push') {
     const params = new URLSearchParams(searchParams.toString());
     for (const [key, value] of Object.entries(updates)) {
       if (value) params.set(key, value);
@@ -40,8 +45,23 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
     }
     params.delete('page');
     const qs = params.toString();
-    router.push(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+    const href = qs ? `${pathname}?${qs}` : pathname;
+    if (mode === 'replace') {
+      router.replace(href, { scroll: false });
+      return;
+    }
+    router.push(href, { scroll: false });
   }
+
+  useEffect(() => {
+    const debounceMs = 350;
+    const timer = setTimeout(() => {
+      if (searchInput === currentQ) return;
+      updateParams({ q: searchInput }, 'replace');
+    }, debounceMs);
+
+    return () => clearTimeout(timer);
+  }, [searchInput, currentQ]);
 
   function toggleChip(key: string, value: string) {
     const current = searchParams.get(key) ?? '';
@@ -92,14 +112,22 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
             role="searchbox"
             aria-label="Buscar oportunidades"
             placeholder="Buscar..."
-            value={currentQ}
-            onChange={(e) => updateParams({ q: e.target.value })}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                updateParams({ q: searchInput }, 'replace');
+              }
+            }}
             className="pl-9 pr-8 py-2 w-48 sm:w-56 border border-iica-border rounded-full text-sm bg-white text-gray-900 placeholder:text-gray-400 min-h-[40px] focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none"
           />
-          {currentQ && (
+          {searchInput && (
             <button
               type="button"
-              onClick={() => updateParams({ q: '' })}
+              onClick={() => {
+                setSearchInput('');
+                updateParams({ q: '' }, 'replace');
+              }}
               className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
               aria-label="Limpiar búsqueda"
             >

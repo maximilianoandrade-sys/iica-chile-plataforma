@@ -1,9 +1,13 @@
-import { render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { FilterChips } from '@/components/FilterChips';
 
+const pushMock = jest.fn();
+const replaceMock = jest.fn();
+let mockSearchParams = new URLSearchParams('');
+
 jest.mock('next/navigation', () => ({
-  useRouter: () => ({ push: jest.fn() }),
-  useSearchParams: () => new URLSearchParams(''),
+  useRouter: () => ({ push: pushMock, replace: replaceMock }),
+  useSearchParams: () => mockSearchParams,
   usePathname: () => '/',
 }));
 
@@ -15,6 +19,18 @@ const mockFilterCounts = {
 };
 
 describe('FilterChips', () => {
+  beforeEach(() => {
+    mockSearchParams = new URLSearchParams('');
+    pushMock.mockReset();
+    replaceMock.mockReset();
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
+  });
+
   it('renders estado chips', () => {
     render(<FilterChips filterCounts={mockFilterCounts} />);
     expect(screen.getByRole('button', { name: /Abiertas/i })).toBeInTheDocument();
@@ -35,5 +51,20 @@ describe('FilterChips', () => {
   it('renders "Más filtros" button', () => {
     render(<FilterChips filterCounts={mockFilterCounts} />);
     expect(screen.getByRole('button', { name: /Más filtros/i })).toBeInTheDocument();
+  });
+
+  it('aplica busqueda en vivo con debounce y replace', () => {
+    render(<FilterChips filterCounts={mockFilterCounts} />);
+
+    const input = screen.getByRole('searchbox');
+    fireEvent.change(input, { target: { value: 'indap' } });
+
+    expect(replaceMock).not.toHaveBeenCalled();
+
+    act(() => {
+      jest.advanceTimersByTime(360);
+    });
+
+    expect(replaceMock).toHaveBeenCalledWith('/?q=indap', { scroll: false });
   });
 });

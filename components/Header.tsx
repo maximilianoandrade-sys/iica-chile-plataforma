@@ -53,6 +53,7 @@ export function Header({ urgentCount = 0 }: HeaderProps) {
 
                 {/* Desktop Nav */}
                 <nav className="hidden md:flex gap-5 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400" aria-label="Navegación principal">
+                    <Link href="/" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Inicio</Link>
                     <Link href="/#convocatorias" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Oportunidades</Link>
                     <Link href="/about" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Sobre IICA</Link>
                     <Link href="/#fuentes" className="hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors">Fuentes</Link>

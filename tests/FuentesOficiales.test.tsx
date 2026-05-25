@@ -28,4 +28,9 @@ describe('FuentesOficiales', () => {
     const corfoSite = screen.getAllByRole('link', { name: /sitio web/i })[0];
     expect(corfoSite).toHaveAttribute('href', 'https://www.corfo.gob.cl');
   });
+
+  it('shows dynamic update label from pipeline timestamp', () => {
+    render(<FuentesOficiales institutionCounts={mockCounts} lastUpdatedAt="2026-05-25T19:45:00.000Z" />);
+    expect(screen.getByText(/Actualizado/i)).toBeInTheDocument();
+  });
 });

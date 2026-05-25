@@ -8,6 +8,7 @@ import SkeletonProjectList from "@/components/SkeletonProjectList";
 import Newsletter from "@/components/Newsletter";
 import FuentesOficiales from "@/components/FuentesOficiales";
 import { getProjects } from "@/lib/data";
+import prisma from "@/lib/prisma";
 
 // Forzar renderizado dinámico: los proyectos vienen de la DB y cambian con scrapers.
 // Sin esto, Vercel puede cachear la página estática con datos viejos.
@@ -74,6 +75,14 @@ export default async function DashboardPage({
     institutionCounts[p.institucion] = (institutionCounts[p.institucion] || 0) + 1;
   });
 
+  const latestSourceRun = await prisma.source.findFirst({
+    where: { lastRunAt: { not: null } },
+    orderBy: { lastRunAt: 'desc' },
+    select: { lastRunAt: true },
+  });
+
+  const lastUpdatedAt = latestSourceRun?.lastRunAt?.toISOString() ?? null;
+
   return (
     <>
       <div className="min-h-screen flex flex-col bg-[#f4f7f9] selection:bg-blue-100 italic-none">
@@ -90,7 +99,7 @@ export default async function DashboardPage({
             {/* Buscador y Proyectos — sección principal */}
             <section id="convocatorias" className="scroll-mt-28">
               <Suspense fallback={<SkeletonProjectList />}>
-                <ProjectListContainer searchParams={resolvedSearchParams} />
+                <ProjectListContainer searchParams={resolvedSearchParams} initialProjects={projects} />
               </Suspense>
             </section>
 
@@ -101,7 +110,7 @@ export default async function DashboardPage({
 
         {/* Fuentes Oficiales */}
         <div id="fuentes" className="scroll-mt-20">
-          <FuentesOficiales institutionCounts={institutionCounts} />
+          <FuentesOficiales institutionCounts={institutionCounts} lastUpdatedAt={lastUpdatedAt} />
         </div>
 
         {/* Newsletter */}

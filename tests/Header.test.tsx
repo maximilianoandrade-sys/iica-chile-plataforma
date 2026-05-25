@@ -16,6 +16,7 @@ describe('Header', () => {
 
     const nav = screen.getByRole('navigation', { name: /Navegación principal/i });
     expect(nav).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Inicio/i })).toBeInTheDocument();
     expect(screen.getAllByRole('link', { name: /Oportunidades/i }).length).toBeGreaterThanOrEqual(1);
     expect(screen.getByRole('link', { name: /Sobre IICA/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Fuentes/i })).toBeInTheDocument();

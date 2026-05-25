@@ -19,7 +19,6 @@ interface FuenteOficial {
     beneficiarios: string[];
     montoRango: string;
     verificado: boolean;
-    ultimaVerificacion: string;
     fondosActivos: number;
     regiones: string;
 }
@@ -49,7 +48,6 @@ const FUENTES: FuenteOficial[] = [
         beneficiarios: ['Pequeño Agricultor', 'Mediano Agricultor', 'Organizaciones de Usuarios de Agua'],
         montoRango: 'Hasta 90% del costo del proyecto',
         verificado: true,
-        ultimaVerificacion: '11 May 2026',
         fondosActivos: 4,
         regiones: 'Nacional (con llamados regionales)'
     },
@@ -67,7 +65,6 @@ const FUENTES: FuenteOficial[] = [
         beneficiarios: ['Pequeño Agricultor', 'Agricultor Familiar Campesino', 'Mujer Rural', 'Usuario INDAP'],
         montoRango: 'Desde $0 (asistencia técnica) hasta $50M (créditos)',
         verificado: true,
-        ultimaVerificacion: '11 May 2026',
         fondosActivos: 6,
         regiones: 'Nacional (todas las regiones)'
     },
@@ -85,7 +82,6 @@ const FUENTES: FuenteOficial[] = [
         beneficiarios: ['Empresa Agrícola', 'Startup AgTech', 'Universidad', 'Centro de Investigación', 'Jóvenes 18-35 años'],
         montoRango: 'Hasta $80M por proyecto (80% cofinanciamiento)',
         verificado: true,
-        ultimaVerificacion: '11 May 2026',
         fondosActivos: 3,
         regiones: 'Nacional'
     },
@@ -103,7 +99,6 @@ const FUENTES: FuenteOficial[] = [
         beneficiarios: ['PYME Agrícola', 'Empresa Mediana', 'Cooperativa Exportadora', 'Agroindustria'],
         montoRango: 'Hasta $100M (50-70% cofinanciamiento)',
         verificado: true,
-        ultimaVerificacion: '11 May 2026',
         fondosActivos: 4,
         regiones: 'Nacional'
     },
@@ -122,7 +117,6 @@ const FUENTES: FuenteOficial[] = [
         beneficiarios: ['ONGs', 'Comunidades', 'Instituciones Públicas'],
         montoRango: 'Variable según convocatoria internacional',
         verificado: true,
-        ultimaVerificacion: '11 May 2026',
         fondosActivos: 0,
         regiones: 'Nacional e Internacional'
     },
@@ -140,7 +134,6 @@ const FUENTES: FuenteOficial[] = [
         beneficiarios: ['Gobiernos', 'Organizaciones de la Sociedad Civil'],
         montoRango: 'Consultorías y Proyectos Específicos',
         verificado: true,
-        ultimaVerificacion: '11 May 2026',
         fondosActivos: 0,
         regiones: 'Latinoamérica y el Caribe'
     },
@@ -158,7 +151,6 @@ const FUENTES: FuenteOficial[] = [
         beneficiarios: ['Pequeños Productores', 'Pueblos Indígenas'],
         montoRango: 'Grandes inversiones programáticas',
         verificado: true,
-        ultimaVerificacion: '11 May 2026',
         fondosActivos: 0,
         regiones: 'Nacional (vía INDAP/Ministerios)'
     },
@@ -176,7 +168,6 @@ const FUENTES: FuenteOficial[] = [
         beneficiarios: ['Institutos de Investigación (INIA)', 'Universidades'],
         montoRango: 'Hasta $200.000 USD por proyecto',
         verificado: true,
-        ultimaVerificacion: '11 May 2026',
         fondosActivos: 0,
         regiones: 'Países miembros (incluye Chile)'
     }
@@ -184,9 +175,31 @@ const FUENTES: FuenteOficial[] = [
 
 interface FuentesOficialesProps {
   institutionCounts?: Record<string, number>;
+  lastUpdatedAt?: string | null;
 }
 
-export default function FuentesOficiales({ institutionCounts = {} }: FuentesOficialesProps) {
+function formatLastUpdatedLabel(lastUpdatedAt?: string | null): string {
+  if (!lastUpdatedAt) return 'Actualización no disponible';
+
+  const date = new Date(lastUpdatedAt);
+  if (Number.isNaN(date.getTime())) return 'Actualización no disponible';
+
+  const now = new Date();
+  const sameDay = now.toDateString() === date.toDateString();
+  const time = date.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+
+  if (sameDay) return `Actualizado hoy, ${time}`;
+
+  const day = date.toLocaleDateString('es-CL', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  });
+
+  return `Actualizado: ${day} ${time}`;
+}
+
+export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt = null }: FuentesOficialesProps) {
     const fuentesWithCounts = FUENTES.map(f => ({
         ...f,
         fondosActivos: institutionCounts[f.sigla] ?? f.fondosActivos,
@@ -211,7 +224,7 @@ export default function FuentesOficiales({ institutionCounts = {} }: FuentesOfic
                     </h2>
                     <p className="text-gray-600 max-w-2xl mx-auto mb-4">
                         Todos los fondos de esta plataforma provienen directamente de estas instituciones gubernamentales.
-                        Links verificados y actualizados al <strong>11 de mayo de 2026</strong>.
+                        El estado se actualiza automaticamente con la ultima ejecucion real del pipeline.
                     </p>
                     <div className="flex flex-wrap justify-center gap-4 text-sm">
                         <div className="flex items-center gap-2 bg-green-50 border border-green-200 px-4 py-2 rounded-full">
@@ -224,7 +237,7 @@ export default function FuentesOficiales({ institutionCounts = {} }: FuentesOfic
                         </div>
                         <div className="flex items-center gap-2 bg-yellow-50 border border-yellow-200 px-4 py-2 rounded-full">
                             <Clock className="h-4 w-4 text-yellow-600" aria-hidden={true} />
-                            <span className="text-yellow-700 font-bold">Actualizado: 11 May 2026</span>
+                            <span className="text-yellow-700 font-bold">{formatLastUpdatedLabel(lastUpdatedAt)}</span>
                         </div>
                     </div>
                 </div>
