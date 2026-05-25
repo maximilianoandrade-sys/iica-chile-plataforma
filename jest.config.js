@@ -21,7 +21,13 @@ const customConfig = {
   transformIgnorePatterns: [
     "/node_modules/(?!(cheerio|undici|htmlparser2|dom-handler|dom-serializer|domhandler|domutils|entities|parse5|parse5-htmlparser2-tree-adapter|css-select|css-what|boolbase|nth-check|cheerio-select)/)",
   ],
-  testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/.next/", "<rootDir>/e2e/", "<rootDir>/.worktrees/"],
+  testPathIgnorePatterns: [
+    "<rootDir>/node_modules/",
+    "<rootDir>/.next/",
+    "<rootDir>/e2e/",
+    "[/\\\\]e2e[/\\\\]",
+    "<rootDir>/.worktrees/",
+  ],
   collectCoverageFrom: [
     "components/**/*.tsx",
     "lib/**/*.ts",

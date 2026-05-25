@@ -29,12 +29,25 @@ jobs:
       - name: Generate Prisma client
         run: npx prisma generate
 
+      - name: Seed sources (idempotent)
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+        run: npx tsx scripts/seed-sources.ts
+
       - name: Run scrapers
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DIRECT_URL: ${{ secrets.DIRECT_URL }}
           ONLY_SCRAPER: ${{ github.event.inputs.only }}
         run: npx tsx scripts/run-scrapers.ts
+
+      - name: Coverage check
+        if: ${{ github.event.inputs.only == '' }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+        run: npx tsx scripts/coverage-check.ts
 
       - name: Resolve smoke target URL
         id: smoke_target

@@ -1,7 +1,10 @@
 import type { Scraper } from "./types";
 import { fiaScraper } from "./scrapers/fia";
+import { fiaLicitacionesScraper } from "./scrapers/fia-licitaciones";
 import { corfoScraper } from "./scrapers/corfo";
 import { cnrScraper } from "./scrapers/cnr";
+import { indapScraper } from "./scrapers/indap";
+import { fontagroScraper } from "./scrapers/fontagro";
 import { iicaHemisfericoScraper } from "./scrapers/iica-hemisferico";
 import { worldBankScraper } from "./scrapers/world-bank";
 import { ungmScraper } from "./scrapers/ungm";
@@ -12,24 +15,19 @@ import { gefScraper } from "./scrapers/gef";
  *
  * QUÉ NO ESTÁ ACÁ Y POR QUÉ:
  * ─────────────────────────
- * - INDAP: opera con programas continuos (PRODESAL, PAP, PDI...) no
- *   convocatorias time-bound. La plata pública concreta va a Mercado
- *   Público (capturado en runtime por /api/search-projects). AI Discovery
- *   semanal cubre lo demás. El scraper inicial devolvía 0 hits.
- *
- * - FONTAGRO: el sitio no expone WP REST ni API pública. El scraper
- *   genérico de Cheerio devolvía 0 hits porque sus clases CSS no eran
- *   estándar. AI Discovery semanal lo captura mejor que un scraper
- *   roto. Los archivos lib/ingestion/scrapers/indap.ts y fontagro.ts
- *   se mantienen como referencia/punto de partida para reescribirlos
- *   con Playwright en el futuro si se invierte el tiempo.
+ * Incluye ahora INDAP, FONTAGRO y FIA licitaciones para cubrir mejor
+ * oportunidades postulables que antes quedaban fuera por cambios de
+ * estructura HTML o fuentes no incluidas en la corrida diaria.
  *
  * - IICA Dashboard (Playwright): requiere browser headless + cookie
  *   Cloudflare persistente. Se corre separadamente (ver export más abajo).
  */
 export const scrapers: Scraper[] = [
   fiaScraper,
+  fiaLicitacionesScraper,
   corfoScraper,
+  indapScraper,
+  fontagroScraper,
   cnrScraper,
   iicaHemisfericoScraper,
   worldBankScraper,

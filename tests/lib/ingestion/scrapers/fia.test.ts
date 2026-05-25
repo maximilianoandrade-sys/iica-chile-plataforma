@@ -43,6 +43,7 @@ describe("fiaScraper", () => {
     expect(result.projects[0].url).toMatch(/^https:\/\/(www\.)?fia\.cl\//);
     expect(result.projects[0].institution).toBe("FIA");
     expect(result.projects[0].deadline).toBeInstanceOf(Date);
+    expect(result.projects[0].opportunityType).toBe("Convocatoria");
   });
 
   it("reporta partialErrors para posts sin link", async () => {

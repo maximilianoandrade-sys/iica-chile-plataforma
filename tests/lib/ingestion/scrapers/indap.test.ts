@@ -17,6 +17,25 @@ describe("indapScraper", () => {
     expect(result.projects.length).toBe(2);
     expect(result.projects[0].institution).toBe("INDAP");
     expect(result.projects[0].url).toContain("indap.gob.cl");
+    expect(result.projects[0].opportunityType).toBe("Programa");
+  });
+
+  it("deduplica entradas repetidas por URL", async () => {
+    const concursosHtml = `<html><body>
+      <article><h3><a href="/programas/pdti-2026">Programa PDTI 2026</a></h3></article>
+      <article><h3><a href="/programas/pdti-2026">Programa PDTI 2026</a></h3></article>
+    </body></html>`;
+    const serviciosHtml = `<html><body>
+      <article><h3><a href="/programas/pdti-2026">Programa PDTI 2026</a></h3></article>
+    </body></html>`;
+
+    (global.fetch as jest.Mock)
+      .mockResolvedValueOnce({ ok: true, text: () => Promise.resolve(concursosHtml) })
+      .mockResolvedValueOnce({ ok: true, text: () => Promise.resolve(serviciosHtml) });
+
+    const result = await indapScraper.scrape();
+    expect(result.projects).toHaveLength(1);
+    expect(result.projects[0].canonicalKey).toBe(result.projects[0].url);
   });
 
   it("reporta partialErrors si fetch falla", async () => {

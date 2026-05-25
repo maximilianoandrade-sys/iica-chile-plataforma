@@ -14,6 +14,7 @@ export interface RawProject {
   budget?: string | null;
   description?: string;
   tags?: string[];
+  opportunityType?: "Convocatoria" | "Licitacion" | "Programa";
   region?: string;
   ambito?: "Nacional" | "Internacional" | "Regional";
   idioma?: "es" | "en" | "pt" | "fr";

@@ -1,6 +1,7 @@
 import { load } from "cheerio";
 import type { Scraper, ScraperResult, RawProject } from "../types";
 import { cleanText, absoluteUrl } from "../utils";
+import { fetchWithRetry } from "../retry";
 
 /**
  * Parsea fechas "DD/MM/YYYY" (formato CORFO en .box-cierre).
@@ -70,62 +71,92 @@ export const corfoScraper: Scraper = {
     const partialErrors: string[] = [];
 
     try {
-      const res = await fetch(this.homepageUrl, {
-        headers: {
-          "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15",
-        },
-        signal: AbortSignal.timeout(30000),
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const html = await res.text();
+      const listingUrls = [
+        this.homepageUrl,
+        "https://www.corfo.gob.cl/sites/cpp/convocatorias_programas_innovacion",
+      ];
 
-      const $ = load(html);
-
-      // Cada convocatoria está en un div.cuadro-completo_fase2
-      $(".cuadro-completo_fase2").each((_, el) => {
+      let pages: string[] = [];
+      for (const listingUrl of listingUrls) {
         try {
-          const $card = $(el);
-
-          // Título: <span class="cuerpo-titulo_fase2">...</span>
-          const title = cleanText($card.find(".cuerpo-titulo_fase2").first().text());
-          if (!title || title.length < 4) {
-            return; // sin título, skip
-          }
-
-          // URL: enlace en .cuadro-completo_fase2-info
-          const $link = $card.find(".cuadro-completo_fase2-info a").first();
-          let href = $link.attr("href");
-          if (!href) {
-            partialErrors.push(`sin href: ${title}`);
-            return;
-          }
-          const url = absoluteUrl(href, "https://www.corfo.gob.cl/");
-          // Aceptamos tanto corfo.cl como corfo.gob.cl (corfo.cl redirige)
-          if (!url.match(/corfo\.(gob\.)?cl/)) return;
-
-          // Fecha de cierre: <div class="box-cierre"><h6>Cierre</h6><p>DD/MM/YYYY</p></div>
-          const deadlineText = cleanText($card.find(".box-cierre p").first().text());
-          const deadline = parseCorfoDate(deadlineText);
-
-          // Descripción: <div class="cuerpo-texto_fase2">...</div>
-          const description = cleanText($card.find(".cuerpo-texto_fase2").first().text()).slice(0, 400);
-
-          // Subtítulo (alcance geográfico): "Alcance: Todo Chile"
-          const subtitle = cleanText($card.find(".cuerpo-titulo_fase2-subtitulo").first().text());
-
-          projects.push({
-            title,
-            institution: "CORFO",
-            url,
-            deadline,
-            description: subtitle ? `${subtitle}. ${description}` : description,
-            ambito: "Nacional",
-            tags: ["CORFO", "Innovación"],
-          });
+          const res = await fetchWithRetry(
+            listingUrl,
+            {
+              headers: {
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15",
+              },
+            },
+            3,
+            600,
+          );
+          pages = [await res.text()];
+          break;
         } catch (err) {
-          partialErrors.push(`parse: ${(err as Error).message}`);
+          partialErrors.push(`listing fetch: ${(err as Error).message}`);
         }
-      });
+      }
+
+      if (pages.length === 0) throw new Error("No CORFO listing pages available");
+
+      const mergedProjects: RawProject[] = [];
+      for (const html of pages) {
+        const $ = load(html);
+
+        // Cada convocatoria está en un div.cuadro-completo_fase2
+        $(".cuadro-completo_fase2").each((_, el) => {
+          try {
+            const $card = $(el);
+
+            // Título: <span class="cuerpo-titulo_fase2">...</span>
+            const title = cleanText($card.find(".cuerpo-titulo_fase2").first().text());
+            if (!title || title.length < 4) {
+              return; // sin título, skip
+            }
+
+            // URL: enlace en .cuadro-completo_fase2-info
+            const $link = $card.find(".cuadro-completo_fase2-info a").first();
+            const href = $link.attr("href");
+            if (!href) {
+              partialErrors.push(`sin href: ${title}`);
+              return;
+            }
+            const url = absoluteUrl(href, "https://www.corfo.gob.cl/");
+            // Aceptamos tanto corfo.cl como corfo.gob.cl (corfo.cl redirige)
+            if (!url.match(/corfo\.(gob\.)?cl/)) return;
+
+            // Fecha de cierre: <div class="box-cierre"><h6>Cierre</h6><p>DD/MM/YYYY</p></div>
+            const deadlineText = cleanText($card.find(".box-cierre p").first().text());
+            const deadline = parseCorfoDate(deadlineText);
+
+            // Descripción: <div class="cuerpo-texto_fase2">...</div>
+            const description = cleanText($card.find(".cuerpo-texto_fase2").first().text()).slice(0, 400);
+
+            // Subtítulo (alcance geográfico): "Alcance: Todo Chile"
+            const subtitle = cleanText($card.find(".cuerpo-titulo_fase2-subtitulo").first().text());
+
+            mergedProjects.push({
+              title,
+              institution: "CORFO",
+              url,
+              canonicalKey: url,
+              deadline,
+              description: subtitle ? `${subtitle}. ${description}` : description,
+              ambito: "Nacional",
+              opportunityType: "Programa",
+              tags: ["CORFO", "Innovación", "Programa"],
+            });
+          } catch (err) {
+            partialErrors.push(`parse: ${(err as Error).message}`);
+          }
+        });
+      }
+
+      const unique = new Map<string, RawProject>();
+      for (const p of mergedProjects) {
+        const key = p.canonicalKey || p.url;
+        if (!unique.has(key)) unique.set(key, p);
+      }
+      projects.push(...Array.from(unique.values()));
 
       if (projects.length === 0) {
         partialErrors.push(

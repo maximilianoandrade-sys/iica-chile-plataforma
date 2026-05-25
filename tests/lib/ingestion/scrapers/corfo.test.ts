@@ -33,8 +33,13 @@ describe("corfoScraper", () => {
 
     expect(result.sourceSlug).toBe("corfo");
     expect(result.projects.length).toBe(2);
-    expect(result.projects[0].institution).toBe("CORFO");
-    expect(result.projects[0].url).toContain("corfo.gob.cl");
-    expect(result.projects[0].budget).toBe("Hasta $150M");
+    for (const project of result.projects) {
+      expect(project.institution).toBe("CORFO");
+      expect(project.url).toContain("corfo.gob.cl");
+      expect(project.opportunityType).toBe("Programa");
+    }
+    const budgets = result.projects.map((p) => p.budget);
+    expect(budgets).toContain("Hasta $150M");
+    expect(budgets).toContain("Hasta $300M");
   });
 });
