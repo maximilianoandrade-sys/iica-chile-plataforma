@@ -36,10 +36,23 @@ jobs:
           ONLY_SCRAPER: ${{ github.event.inputs.only }}
         run: npx tsx scripts/run-scrapers.ts
 
+      - name: Resolve smoke target URL
+        id: smoke_target
+        env:
+          DEPLOYMENT_URL_SECRET: ${{ secrets.DEPLOYMENT_URL }}
+        run: |
+          if [ -n "$DEPLOYMENT_URL_SECRET" ]; then
+            echo "url=$DEPLOYMENT_URL_SECRET" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "::warning::DEPLOYMENT_URL secret missing; using production URL fallback"
+          echo "url=https://iica-chile-plataforma.vercel.app" >> "$GITHUB_OUTPUT"
+
       - name: Smoke test post-ingesta
         if: success()
         env:
-          DEPLOYMENT_URL: ${{ secrets.DEPLOYMENT_URL }}
+          DEPLOYMENT_URL: ${{ steps.smoke_target.outputs.url }}
         run: npx tsx scripts/smoke-test.ts
 
       - name: Summary
