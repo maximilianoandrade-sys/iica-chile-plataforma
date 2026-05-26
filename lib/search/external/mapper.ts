@@ -4,6 +4,7 @@ export interface LinkedInQueryMap {
   query: string;
   limit: number;
   unsupportedFilters: Array<'minAmount' | 'maxAmount'>;
+  languageRegion: string;
 }
 
 export function mapSearchRequestToLinkedInQuery(request: SearchRequest): LinkedInQueryMap {
@@ -25,5 +26,6 @@ export function mapSearchRequestToLinkedInQuery(request: SearchRequest): LinkedI
     query: terms.join(' ').trim(),
     limit: 20,
     unsupportedFilters,
+    languageRegion: 'cl-es',
   };
 }
