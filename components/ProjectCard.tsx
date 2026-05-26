@@ -53,6 +53,13 @@ const urgencyVariantMap = {
   closed: 'urgencyNone',
 } as const;
 
+const urgencyBadgeClassMap = {
+  critical: '!bg-red-600 !text-white !border-red-700',
+  warning: '!bg-amber-500 !text-white !border-amber-600',
+  normal: '!bg-emerald-600 !text-white !border-emerald-700',
+  closed: '!bg-slate-200 !text-slate-700 !border-slate-300',
+} as const;
+
 export function ProjectCard({ project }: { project: Project }) {
   const isClosed = project.estadoPostulacion === 'Cerrada';
   const { text: deadlineText, detail: deadlineDetail, urgency } = formatDeadlineStatus(project);
@@ -75,7 +82,7 @@ export function ProjectCard({ project }: { project: Project }) {
         <div className="flex flex-col items-end gap-1 text-right">
           <Badge
             variant={urgencyVariantMap[urgency]}
-            className="px-3 py-1 text-sm font-extrabold tracking-tight"
+            className={`${urgencyBadgeClassMap[urgency]} px-3 py-1 text-sm font-extrabold tracking-tight whitespace-nowrap shadow-sm`}
           >
             {deadlineText}
           </Badge>
