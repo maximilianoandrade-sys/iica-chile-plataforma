@@ -29,13 +29,30 @@ function makeRequest(body: unknown): NextRequest {
 }
 
 describe('/api/search-projects request contract', () => {
+  const originalEnv = process.env;
+
   beforeEach(() => {
+    process.env = {
+      ...originalEnv,
+      DATABASE_URL: originalEnv.DATABASE_URL || 'postgresql://localhost/test',
+      ADMIN_SESSION_SECRET: originalEnv.ADMIN_SESSION_SECRET || 'secret12345678',
+      MERCADO_PUBLICO_TICKET: 'test-ticket',
+      SEARCH_EXTERNAL_ENABLED: 'true',
+    };
+
     mockHybridSearch.mockResolvedValue({ projects: [], mode: 'all' });
     mockFetchMercadoPublicoLive.mockResolvedValue([]);
     mockRunExternalSearch.mockResolvedValue({
       projects: [],
       providers: ['linkedin_public'],
-      providerStats: [],
+      providerStats: [
+        {
+          provider: 'linkedin_public',
+          success: true,
+          resultCount: 0,
+          durationMs: 20,
+        },
+      ],
       degraded: false,
     });
   });
@@ -45,6 +62,7 @@ describe('/api/search-projects request contract', () => {
     mockHybridSearch.mockReset();
     mockFetchMercadoPublicoLive.mockReset();
     mockRunExternalSearch.mockReset();
+    process.env = originalEnv;
   });
 
   it('accepts legacy payload and returns wrapped success response', async () => {
@@ -88,7 +106,14 @@ describe('/api/search-projects request contract', () => {
         },
       ],
       providers: ['linkedin_public'],
-      providerStats: [],
+      providerStats: [
+        {
+          provider: 'linkedin_public',
+          success: true,
+          resultCount: 1,
+          durationMs: 33,
+        },
+      ],
       degraded: true,
     });
 
@@ -107,6 +132,14 @@ describe('/api/search-projects request contract', () => {
     expect(json.data.meta.mode).toBe('external');
     expect(json.data.meta.external_count).toBe(1);
     expect(json.data.meta.providers).toEqual(['linkedin_public']);
+    expect(json.data.meta.provider_stats).toEqual([
+      {
+        provider: 'linkedin_public',
+        success: true,
+        resultCount: 1,
+        durationMs: 33,
+      },
+    ]);
     expect(json.data.meta.degraded).toBe(true);
     expect(mockHybridSearch).not.toHaveBeenCalled();
     expect(mockRunExternalSearch).toHaveBeenCalled();
@@ -144,7 +177,14 @@ describe('/api/search-projects request contract', () => {
         },
       ],
       providers: ['linkedin_public'],
-      providerStats: [],
+      providerStats: [
+        {
+          provider: 'linkedin_public',
+          success: true,
+          resultCount: 1,
+          durationMs: 40,
+        },
+      ],
       degraded: false,
     });
 
@@ -171,6 +211,104 @@ describe('/api/search-projects request contract', () => {
     expect(json.data.meta.hybrid_count).toBe(1);
     expect(json.data.meta.external_count).toBe(1);
     expect(json.data.meta.mercado_publico_count).toBe(1);
+    expect(json.data.meta.provider_stats).toEqual([
+      {
+        provider: 'linkedin_public',
+        success: true,
+        resultCount: 1,
+        durationMs: 40,
+      },
+    ]);
     expect(json.data.results).toHaveLength(3);
+  });
+
+  it('uses env default source mode when request omits sourceMode', async () => {
+    process.env.SEARCH_SOURCE_MODE_DEFAULT = 'mixed';
+
+    mockHybridSearch.mockResolvedValue({
+      mode: 'hybrid',
+      projects: [],
+    });
+    mockRunExternalSearch.mockResolvedValue({
+      projects: [],
+      providers: ['linkedin_public'],
+      providerStats: [
+        {
+          provider: 'linkedin_public',
+          success: true,
+          resultCount: 0,
+          durationMs: 10,
+        },
+      ],
+      degraded: false,
+    });
+
+    const { POST } = await import('@/app/api/search-projects/route');
+    const res = await POST(makeRequest({ query: 'riego' }));
+    const json = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(json.data.meta.mode).toBe('mixed');
+    expect(json.data.meta.provider_stats).toEqual([
+      {
+        provider: 'linkedin_public',
+        success: true,
+        resultCount: 0,
+        durationMs: 10,
+      },
+    ]);
+    expect(mockRunExternalSearch).toHaveBeenCalled();
+  });
+
+  it('falls back to internal when external search is disabled by feature flag', async () => {
+    process.env.SEARCH_EXTERNAL_ENABLED = 'false';
+
+    mockHybridSearch.mockResolvedValue({
+      mode: 'all',
+      projects: [
+        {
+          id: 7,
+          nombre: 'Solo interno',
+          institucion: 'FIA',
+          monto: 120000,
+          fecha_cierre: new Date('2099-12-31T00:00:00.000Z'),
+          estado: 'Activa',
+          categoria: 'Convocatoria',
+          url_bases: 'https://example.com/internal-only',
+        },
+      ],
+    });
+
+    const { POST } = await import('@/app/api/search-projects/route');
+    const res = await POST(
+      makeRequest({ query: 'riego', sourceMode: 'external', providers: ['linkedin_public'] })
+    );
+    const json = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(json.data.meta.mode).toBe('all');
+    expect(json.data.meta.degraded).toBe(true);
+    expect(json.data.meta.degraded_reason).toContain('SEARCH_EXTERNAL_ENABLED');
+    expect(json.data.meta.provider_stats).toEqual([]);
+    expect(mockRunExternalSearch).not.toHaveBeenCalled();
+  });
+
+  it('falls back to internal when provider is disabled by kill-switch', async () => {
+    process.env.SEARCH_EXTERNAL_DISABLED_PROVIDERS = 'linkedin_public';
+
+    mockHybridSearch.mockResolvedValue({ mode: 'all', projects: [] });
+
+    const { POST } = await import('@/app/api/search-projects/route');
+    const res = await POST(
+      makeRequest({ query: 'riego', sourceMode: 'external', providers: ['linkedin_public'] })
+    );
+    const json = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(json.data.meta.mode).toBe('all');
+    expect(json.data.meta.degraded).toBe(true);
+    expect(json.data.meta.degraded_reason).toContain('disabled');
+    expect(json.data.meta.provider_stats).toEqual([]);
+    expect(mockRunExternalSearch).not.toHaveBeenCalled();
   });
 });
