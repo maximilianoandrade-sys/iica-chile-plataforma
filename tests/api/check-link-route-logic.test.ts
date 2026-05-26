@@ -48,4 +48,65 @@ describe('check-link response rules', () => {
       reason: 'homepage_url_not_specific',
     });
   });
+
+  function fallbackForAbortOnProtectedHost({
+    isAbort,
+    isBotProtectedHost,
+    originalIsHomepage,
+  }: {
+    isAbort: boolean;
+    isBotProtectedHost: boolean;
+    originalIsHomepage: boolean;
+  }) {
+    if (isAbort && isBotProtectedHost && !originalIsHomepage) {
+      return {
+        isValid: true,
+        reason: 'blocked_by_bot_protection',
+      };
+    }
+
+    return {
+      isValid: false,
+      reason: 'network_error',
+    };
+  }
+
+  it('treats timeout abort on bot-protected host as valid', () => {
+    expect(
+      fallbackForAbortOnProtectedHost({
+        isAbort: true,
+        isBotProtectedHost: true,
+        originalIsHomepage: false,
+      }),
+    ).toEqual({
+      isValid: true,
+      reason: 'blocked_by_bot_protection',
+    });
+  });
+
+  it('keeps abort on non-protected host as invalid', () => {
+    expect(
+      fallbackForAbortOnProtectedHost({
+        isAbort: true,
+        isBotProtectedHost: false,
+        originalIsHomepage: false,
+      }),
+    ).toEqual({
+      isValid: false,
+      reason: 'network_error',
+    });
+  });
+
+  it('does not auto-validate homepage URLs even if aborts', () => {
+    expect(
+      fallbackForAbortOnProtectedHost({
+        isAbort: true,
+        isBotProtectedHost: true,
+        originalIsHomepage: true,
+      }),
+    ).toEqual({
+      isValid: false,
+      reason: 'network_error',
+    });
+  });
 });

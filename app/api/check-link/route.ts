@@ -28,6 +28,16 @@ const BLOCKED_HOSTNAMES = new Set([
     'metadata.google.internal',
 ]);
 
+const BOT_PROTECTED_HOST_PATTERNS = [
+    'fia.cl',
+    'iadb.org',
+    'ifad.org',
+    'facebook.com',
+    'linkedin.com',
+    'x.com',
+    'twitter.com',
+];
+
 function isBlockedHost(hostname: string): boolean {
     if (BLOCKED_HOSTNAMES.has(hostname)) return true;
 
@@ -56,6 +66,28 @@ function isAllowedUrl(urlString: string): boolean {
         return true;
     } catch {
         return false;
+    }
+}
+
+function isLikelyBotProtectedHost(hostname: string): boolean {
+    return BOT_PROTECTED_HOST_PATTERNS.some((pattern) => hostname === pattern || hostname.endsWith(`.${pattern}`));
+}
+
+function isAbortError(error: unknown): boolean {
+    return error instanceof Error && (error.name === 'AbortError' || /aborted/i.test(error.message));
+}
+
+async function fetchWithTimeout(url: string, init: RequestInit, timeoutMs: number): Promise<Response> {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+    try {
+        return await fetch(url, {
+            ...init,
+            signal: controller.signal,
+        });
+    } finally {
+        clearTimeout(timeoutId);
     }
 }
 
@@ -130,33 +162,49 @@ export async function GET(request: NextRequest) {
         }
 
         try {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 8000);
+            const baseHeaders = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            };
 
-            // 1. HEAD primero (más rápido)
-            let response = await fetch(url, {
-                method: 'HEAD',
-                redirect: 'follow',
-                signal: controller.signal,
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
-                },
-            });
+            let response: Response | null = null;
 
-            // 2. Si HEAD falla (403, 405, etc), intentar GET con range mínimo
-            if (response.status >= 400) {
-                response = await fetch(url, {
-                    method: 'GET',
+            // 1) HEAD primero (rápido y liviano)
+            try {
+                const headResponse = await fetchWithTimeout(url, {
+                    method: 'HEAD',
                     redirect: 'follow',
-                    signal: controller.signal,
-                    headers: {
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
-                        'Range': 'bytes=0-0',
-                    },
-                });
+                    headers: baseHeaders,
+                }, 9000);
+
+                if (headResponse.status < 400) {
+                    response = headResponse;
+                }
+            } catch (error: unknown) {
             }
 
-            clearTimeout(timeoutId);
+            // 2) Si HEAD no confirmó validez, intentar GET con range mínimo
+            if (!response) {
+                try {
+                    response = await fetchWithTimeout(url, {
+                        method: 'GET',
+                        redirect: 'follow',
+                        headers: {
+                            ...baseHeaders,
+                            Range: 'bytes=0-0',
+                        },
+                    }, 12000);
+                } catch (error: unknown) {
+                }
+            }
+
+            // 3) Fallback final: GET normal (algunos sitios bloquean Range)
+            if (!response) {
+                response = await fetchWithTimeout(url, {
+                    method: 'GET',
+                    redirect: 'follow',
+                    headers: baseHeaders,
+                }, 12000);
+            }
 
             const statusOk = response.status >= 200 && response.status < 400;
             const redirectedToHome = statusOk && response.url ? isHomepageRedirect(url, response.url) : false;
@@ -188,6 +236,20 @@ export async function GET(request: NextRequest) {
                 originalIsHomepage,
             });
         } catch (error: unknown) {
+            const originalIsHomepage = isOriginalHomepage(url);
+            if (isAbortError(error) && isLikelyBotProtectedHost(parsed.hostname) && !originalIsHomepage) {
+                return NextResponse.json({
+                    isValid: true,
+                    status: 0,
+                    statusText: 'Request Timeout',
+                    url,
+                    finalUrl: url,
+                    reason: 'blocked_by_bot_protection',
+                    redirectedToHome: false,
+                    originalIsHomepage,
+                });
+            }
+
             return NextResponse.json({
                 isValid: false,
                 error: error instanceof Error ? error.message : 'Network error',
