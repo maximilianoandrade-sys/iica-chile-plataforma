@@ -30,6 +30,7 @@ import { SearchProjectsRequestSchema, formatZodError } from '@/lib/utils/validat
 import { runExternalSearch } from '@/lib/search/external/orchestrator';
 import { LinkedInPublicProvider } from '@/lib/search/external/providers/linkedinPublic';
 import type { ExternalProviderId } from '@/lib/search/contracts';
+import { getEnv } from '@/lib/utils/env';
 const logger = getLogger('SearchProjects');
 
 function calcDaysLeft(deadline: Date | string | null): number | null {
@@ -46,6 +47,23 @@ function createProviders(providerIds: ExternalProviderId[]) {
     providers.push(new LinkedInPublicProvider());
   }
   return providers;
+}
+
+function parseDisabledProviders(raw: string | undefined): Set<ExternalProviderId> {
+  if (!raw) return new Set<ExternalProviderId>();
+  const values = raw
+    .split(',')
+    .map((p) => p.trim())
+    .filter(Boolean) as ExternalProviderId[];
+  return new Set<ExternalProviderId>(values);
+}
+
+function normalizeSourceMode(
+  requestedMode: 'internal' | 'external' | 'mixed' | undefined,
+  envDefaultMode: 'internal' | 'external' | 'mixed' | undefined
+): 'internal' | 'external' | 'mixed' {
+  if (requestedMode) return requestedMode;
+  return envDefaultMode ?? 'internal';
 }
 
 export async function POST(req: NextRequest) {
@@ -67,19 +85,61 @@ export async function POST(req: NextRequest) {
       return createErrorResponse(formatZodError(parsed.error), 400);
     }
     const requestBody = parsed.data;
+    const env = getEnv();
     const query = requestBody.query?.trim() || "";
     const ambito = requestBody.ambito || requestBody.scope || "all";
     const includeUnverified = requestBody.includeUnverified !== false;
-    const sourceMode = requestBody.sourceMode ?? 'internal';
+    const sourceMode = normalizeSourceMode(
+      requestBody.sourceMode,
+      env.SEARCH_SOURCE_MODE_DEFAULT
+    );
     const providerIds = requestBody.providers?.length
       ? requestBody.providers
       : (['linkedin_public'] as ExternalProviderId[]);
 
-    const ticket = process.env.MERCADO_PUBLICO_TICKET || "";
+    const externalEnabled = env.SEARCH_EXTERNAL_ENABLED !== 'false';
+    const disabledProviders = parseDisabledProviders(env.SEARCH_EXTERNAL_DISABLED_PROVIDERS);
+    const enabledProviderIds = providerIds.filter((providerId) => !disabledProviders.has(providerId));
+    const requestedExternal = sourceMode === 'external' || sourceMode === 'mixed';
+
+    const ticket = env.MERCADO_PUBLICO_TICKET || "";
+
+    if (requestedExternal && (!externalEnabled || enabledProviderIds.length === 0)) {
+      const degradedReason = !externalEnabled
+        ? 'SEARCH_EXTERNAL_ENABLED=false'
+        : 'All requested providers are disabled';
+
+      const [hybrid, mpDocs] = await Promise.all([
+        hybridSearch({ query, ambito, includeUnverified, limit: 50 }),
+        fetchMercadoPublicoLive(ticket, query),
+      ]);
+
+      const enriched = hybrid.projects.map((p) => ({
+        ...p,
+        days_left: calcDaysLeft(p.fecha_cierre),
+      }));
+
+      return createSuccessResponse({
+        results: [...enriched, ...mpDocs],
+        meta: {
+          total: enriched.length + mpDocs.length,
+          hybrid_count: enriched.length,
+          external_count: 0,
+          mercado_publico_count: mpDocs.length,
+          mode: hybrid.mode,
+          degraded: true,
+          degraded_reason: degradedReason,
+          providers: enabledProviderIds,
+          provider_stats: [],
+          query,
+          searched_at: new Date().toISOString(),
+        },
+      });
+    }
 
     if (sourceMode === 'external') {
       const externalResult = await runExternalSearch(
-        createProviders(providerIds),
+        createProviders(enabledProviderIds),
         requestBody
       );
 
@@ -97,6 +157,7 @@ export async function POST(req: NextRequest) {
           hybrid_count: 0,
           mode: 'external',
           providers: externalResult.providers,
+          provider_stats: externalResult.providerStats,
           degraded: externalResult.degraded,
           query,
           searched_at: new Date().toISOString(),
@@ -107,7 +168,7 @@ export async function POST(req: NextRequest) {
     if (sourceMode === 'mixed') {
       const [hybrid, externalResult, mpDocs] = await Promise.all([
         hybridSearch({ query, ambito, includeUnverified, limit: 50 }),
-        runExternalSearch(createProviders(providerIds), requestBody),
+        runExternalSearch(createProviders(enabledProviderIds), requestBody),
         fetchMercadoPublicoLive(ticket, query),
       ]);
 
@@ -130,6 +191,7 @@ export async function POST(req: NextRequest) {
           mercado_publico_count: mpDocs.length,
           mode: 'mixed',
           providers: externalResult.providers,
+          provider_stats: externalResult.providerStats,
           degraded: externalResult.degraded,
           query,
           searched_at: new Date().toISOString(),
@@ -155,6 +217,7 @@ export async function POST(req: NextRequest) {
         external_count: 0,
         mercado_publico_count: mpDocs.length,
         mode: hybrid.mode, // "hybrid" | "lexical_only" | "all"
+        provider_stats: [],
         query,
         searched_at: new Date().toISOString(),
       },
