@@ -2,21 +2,42 @@
 
 import Link from 'next/link';
 import { MapPin } from 'lucide-react';
-import { type Project, daysUntilClose, pluralizeDias } from '@/lib/data';
+import { type Project, daysUntilClose, formatDeadline, pluralizeDias } from '@/lib/data';
 import { InstitutionLogo } from '@/components/InstitutionLogo';
 import { Badge } from '@/components/ui/Badge';
 import { getLogger } from '@/lib/utils/logger';
 
 const logger = getLogger('ProjectCard');
 
-function formatDeadline(project: Project): { text: string; urgency: 'critical' | 'warning' | 'normal' | 'closed' } {
+function formatDeadlineStatus(project: Project): {
+  text: string;
+  detail: string;
+  urgency: 'critical' | 'warning' | 'normal' | 'closed';
+} {
   const days = daysUntilClose(project);
-  if (days === 999) return { text: 'Sin fecha definida', urgency: 'normal' };
-  if (days < 0) return { text: 'Cerrada', urgency: 'closed' };
-  if (days === 0) return { text: 'Cierra hoy', urgency: 'critical' };
-  if (days <= 7) return { text: `Cierra en ${pluralizeDias(days)}`, urgency: 'critical' };
-  if (days <= 21) return { text: `Cierra en ${pluralizeDias(days)}`, urgency: 'warning' };
-  return { text: `Cierra en ${pluralizeDias(days)}`, urgency: 'normal' };
+  const closeDate = formatDeadline(project.fecha_cierre);
+
+  if (days === 999) {
+    return {
+      text: 'Sin fecha definida',
+      detail: 'Cierre por confirmar',
+      urgency: 'normal',
+    };
+  }
+
+  if (days < 0) {
+    return {
+      text: 'Cerrada',
+      detail: `Cerró: ${closeDate}`,
+      urgency: 'closed',
+    };
+  }
+
+  return {
+    text: days === 0 ? 'Cierra hoy' : `Cierra en ${pluralizeDias(days)}`,
+    detail: `Fecha límite: ${closeDate}`,
+    urgency: days <= 7 ? 'critical' : days <= 21 ? 'warning' : 'normal',
+  };
 }
 
 function formatMonto(project: Project): string {
@@ -34,7 +55,7 @@ const urgencyVariantMap = {
 
 export function ProjectCard({ project }: { project: Project }) {
   const isClosed = project.estadoPostulacion === 'Cerrada';
-  const { text: deadlineText, urgency } = formatDeadline(project);
+  const { text: deadlineText, detail: deadlineDetail, urgency } = formatDeadlineStatus(project);
   const monto = formatMonto(project);
   const region = project.regiones?.[0] ?? project.region ?? null;
 
@@ -51,9 +72,17 @@ export function ProjectCard({ project }: { project: Project }) {
             {project.institucion}
           </span>
         </div>
-        <Badge variant={urgencyVariantMap[urgency]}>
-          {deadlineText}
-        </Badge>
+        <div className="flex flex-col items-end gap-1 text-right">
+          <Badge
+            variant={urgencyVariantMap[urgency]}
+            className="px-3 py-1 text-sm font-extrabold tracking-tight"
+          >
+            {deadlineText}
+          </Badge>
+          <span className="text-[11px] font-semibold text-gray-600">
+            {deadlineDetail}
+          </span>
+        </div>
       </div>
 
       <Link

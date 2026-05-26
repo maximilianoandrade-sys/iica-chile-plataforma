@@ -40,6 +40,7 @@ describe('ProjectCard', () => {
   it('renders urgency deadline', () => {
     render(<ProjectCard project={mockProject} />);
     expect(screen.getByText(/Cierra/i)).toBeInTheDocument();
+    expect(screen.getByText(/Fecha límite:/i)).toBeInTheDocument();
   });
 
   it('applies reduced opacity for closed projects', () => {
