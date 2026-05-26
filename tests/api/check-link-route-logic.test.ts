@@ -109,4 +109,22 @@ describe('check-link response rules', () => {
       reason: 'network_error',
     });
   });
+
+  function classifyBotProtection({
+    status,
+    reason,
+  }: {
+    status: number;
+    reason?: string;
+  }) {
+    return reason === 'blocked_by_bot_protection' || status === 403 || status === 429;
+  }
+
+  it('classifies status 0 with blocked reason as bot-protected', () => {
+    expect(classifyBotProtection({ status: 0, reason: 'blocked_by_bot_protection' })).toBe(true);
+  });
+
+  it('does not classify status 0 without reason as bot-protected', () => {
+    expect(classifyBotProtection({ status: 0 })).toBe(false);
+  });
 });

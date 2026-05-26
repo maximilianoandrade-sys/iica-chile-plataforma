@@ -77,20 +77,6 @@ function isAbortError(error: unknown): boolean {
     return error instanceof Error && (error.name === 'AbortError' || /aborted/i.test(error.message));
 }
 
-async function fetchWithTimeout(url: string, init: RequestInit, timeoutMs: number): Promise<Response> {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-
-    try {
-        return await fetch(url, {
-            ...init,
-            signal: controller.signal,
-        });
-    } finally {
-        clearTimeout(timeoutId);
-    }
-}
-
 /** Resolve DNS and verify the resolved IP is not private (prevents DNS rebinding). */
 async function verifyResolvedIp(hostname: string): Promise<boolean> {
     try {
@@ -162,6 +148,8 @@ export async function GET(request: NextRequest) {
         }
 
         try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 8000);
             const baseHeaders = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
             };
@@ -170,41 +158,46 @@ export async function GET(request: NextRequest) {
 
             // 1) HEAD primero (rápido y liviano)
             try {
-                const headResponse = await fetchWithTimeout(url, {
+                const headResponse = await fetch(url, {
                     method: 'HEAD',
                     redirect: 'follow',
                     headers: baseHeaders,
-                }, 9000);
+                    signal: controller.signal,
+                });
 
                 if (headResponse.status < 400) {
                     response = headResponse;
                 }
-            } catch (error: unknown) {
+            } catch {
             }
 
             // 2) Si HEAD no confirmó validez, intentar GET con range mínimo
             if (!response) {
                 try {
-                    response = await fetchWithTimeout(url, {
+                    response = await fetch(url, {
                         method: 'GET',
                         redirect: 'follow',
                         headers: {
                             ...baseHeaders,
                             Range: 'bytes=0-0',
                         },
-                    }, 12000);
-                } catch (error: unknown) {
+                        signal: controller.signal,
+                    });
+                } catch {
                 }
             }
 
             // 3) Fallback final: GET normal (algunos sitios bloquean Range)
             if (!response) {
-                response = await fetchWithTimeout(url, {
+                response = await fetch(url, {
                     method: 'GET',
                     redirect: 'follow',
                     headers: baseHeaders,
-                }, 12000);
+                    signal: controller.signal,
+                });
             }
+
+            clearTimeout(timeoutId);
 
             const statusOk = response.status >= 200 && response.status < 400;
             const redirectedToHome = statusOk && response.url ? isHomepageRedirect(url, response.url) : false;
