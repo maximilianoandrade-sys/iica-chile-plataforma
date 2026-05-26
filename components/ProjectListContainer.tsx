@@ -1,34 +1,12 @@
 import { getProjects, type Project } from "@/lib/data";
 import ProjectList from "@/components/ProjectList";
-import type { FilterCounts } from "@/lib/data";
 import JsonLd from "@/components/JsonLd";
 import { searchAndRankProjects, defaultSortProjects } from "@/lib/searchEngine";
 import DatabaseError from "@/components/DatabaseError";
-
-function inferEstado(project: Project): string {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const close = new Date(project.fecha_cierre);
-    const daysLeft = Math.ceil((close.getTime() - today.getTime()) / 86_400_000);
-    if (daysLeft < 0) return 'Cerrada';
-    if (daysLeft <= 30) return 'Próxima';
-    return 'Abierta';
-}
-
-function getProjectRegions(project: Project): string[] {
-    if (project.regiones && project.regiones.length > 0) {
-        return project.regiones;
-    }
-
-    if (project.region) {
-        return project.region
-            .split(',')
-            .map((r) => r.trim())
-            .filter(Boolean);
-    }
-
-    return [];
-}
+import {
+    buildFilterCounts,
+    filterProjectsByFacets,
+} from "@/lib/search/filtering";
 
 export default async function ProjectListContainer({
     searchParams,
@@ -55,48 +33,15 @@ export default async function ProjectListContainer({
     const minAmount = Number.isFinite(minAmountRaw) ? minAmountRaw : 0;
     const maxAmount = Number.isFinite(maxAmountRaw) ? maxAmountRaw : Infinity;
 
-    // Compute filterCounts from ALL projects
-    const filterCounts: FilterCounts = {
-        estado: projects.reduce((acc, p) => {
-            const estado = p.estadoPostulacion || inferEstado(p);
-            acc[estado] = (acc[estado] || 0) + 1;
-            return acc;
-        }, {} as Record<string, number>),
-        institucion: projects.reduce((acc, p) => {
-            acc[p.institucion] = (acc[p.institucion] || 0) + 1;
-            return acc;
-        }, {} as Record<string, number>),
-        region: projects.reduce((acc, p) => {
-            getProjectRegions(p).forEach(r => { acc[r] = (acc[r] || 0) + 1; });
-            return acc;
-        }, {} as Record<string, number>),
-        ambito: projects.reduce((acc, p) => {
-            if (p.ambito) acc[p.ambito] = (acc[p.ambito] || 0) + 1;
-            return acc;
-        }, {} as Record<string, number>),
-    };
+    const filterCounts = buildFilterCounts(projects);
 
-    // Filter projects
-    const filteredByFacets = projects.filter(project => {
-        // Estado filter
-        let matchesEstado = true;
-        if (selectedEstado) {
-            if (project.estadoPostulacion) {
-                matchesEstado = project.estadoPostulacion === selectedEstado;
-            } else {
-                matchesEstado = inferEstado(project) === selectedEstado;
-            }
-        }
-
-        const matchesInstitution = selectedInstitutions.length === 0 || selectedInstitutions.includes(project.institucion);
-        const projectRegions = getProjectRegions(project);
-        const matchesRegion = selectedRegions.length === 0 || projectRegions.some(r => selectedRegions.includes(r));
-        const matchesAmbito = !selectedAmbito || project.ambito === selectedAmbito;
-
-        const filterActive = minAmount > 0 || maxAmount < Infinity;
-        const matchesAmount = !filterActive || (project.monto >= minAmount && project.monto <= maxAmount);
-
-        return matchesEstado && matchesInstitution && matchesRegion && matchesAmbito && matchesAmount;
+    const filteredByFacets = filterProjectsByFacets(projects, {
+        selectedEstado,
+        selectedInstitutions,
+        selectedRegions,
+        selectedAmbito,
+        minAmount,
+        maxAmount,
     });
 
     const filteredProjects = searchTerm
