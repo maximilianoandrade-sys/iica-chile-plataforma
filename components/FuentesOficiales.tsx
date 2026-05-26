@@ -39,7 +39,7 @@ const FUENTES: FuenteOficial[] = [
         nombre: 'Comisión Nacional de Riego',
         sigla: 'CNR',
         descripcion: 'Principal fuente de subsidios para proyectos de tecnificación del riego y obras hidráulicas. Administra la Ley 18.450 con múltiples llamados anuales.',
-        url: 'https://www.cnr.gob.cl',
+        url: 'https://www.cnr.gob.cl/agricultores/concursos-de-riego/',
         urlConcursos: 'https://www.cnr.gob.cl/agricultores/concursos-de-riego/',
         color: 'text-blue-700',
         bgColor: 'bg-blue-50 border-blue-200',
@@ -56,8 +56,8 @@ const FUENTES: FuenteOficial[] = [
         nombre: 'Instituto de Desarrollo Agropecuario',
         sigla: 'INDAP',
         descripcion: 'Institución clave para la Agricultura Familiar Campesina (AFC). Ofrece bonos, créditos, asistencia técnica y programas de suelos para pequeños agricultores.',
-        url: 'https://www.indap.gob.cl',
-        urlConcursos: 'https://www.indap.gob.cl/programas',
+        url: 'https://www.indap.gob.cl/plataforma-de-servicios/',
+        urlConcursos: 'https://www.indap.gob.cl/plataforma-de-servicios/',
         color: 'text-green-700',
         bgColor: 'bg-green-50 border-green-200',
         icon: 'sprout',
@@ -90,7 +90,7 @@ const FUENTES: FuenteOficial[] = [
         nombre: 'Corporación de Fomento de la Producción',
         sigla: 'CORFO',
         descripcion: 'Fondos de escalamiento productivo, economía circular, eficiencia energética y exportación. Para empresas medianas y grandes que buscan crecer.',
-        url: 'https://www.corfo.gob.cl',
+        url: 'https://www.corfo.gob.cl/sites/cpp/convocatorias_programas_innovacion/',
         urlConcursos: 'https://www.corfo.gob.cl/sites/cpp/convocatorias_programas_innovacion/',
         color: 'text-orange-700',
         bgColor: 'bg-orange-50 border-orange-200',
@@ -142,8 +142,8 @@ const FUENTES: FuenteOficial[] = [
         nombre: 'Fondo Internacional de Desarrollo Agrícola',
         sigla: 'FIDA',
         descripcion: 'Invierte en la población rural para empoderarla y aumentar su seguridad alimentaria. Financia grandes programas nacionales.',
-        url: 'https://www.ifad.org/es/',
-        urlConcursos: 'https://www.ifad.org/es/calls-for-proposals',
+        url: 'https://www.ifad.org/',
+        urlConcursos: 'https://www.ifad.org/en/web/latest',
         color: 'text-emerald-600',
         bgColor: 'bg-emerald-50 border-emerald-200',
         icon: 'landmark',
@@ -159,7 +159,7 @@ const FUENTES: FuenteOficial[] = [
         nombre: 'Fondo Regional de Tecnología Agropecuaria',
         sigla: 'FONTAGRO',
         descripcion: 'Mecanismo de cooperación técnica para la innovación de la agricultura familiar. Convocatorias anuales para consorcios.',
-        url: 'https://www.fontagro.org',
+        url: 'https://www.fontagro.org/es',
         urlConcursos: 'https://www.fontagro.org/es/convocatorias/',
         color: 'text-amber-700',
         bgColor: 'bg-amber-50 border-amber-200',
@@ -225,6 +225,9 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
                     <p className="text-gray-600 max-w-2xl mx-auto mb-4">
                         Todos los fondos de esta plataforma provienen directamente de estas instituciones gubernamentales.
                         El estado se actualiza automaticamente con la ultima ejecucion real del pipeline.
+                    </p>
+                    <p className="text-xs text-gray-500 max-w-2xl mx-auto mb-4">
+                        Nota: algunas instituciones pueden bloquear validaciones automatizadas (403/anti-bot). En esos casos, el enlace igualmente puede abrir correctamente en su navegador.
                     </p>
                     <div className="flex flex-wrap justify-center gap-4 text-sm">
                         <div className="flex items-center gap-2 bg-green-50 border border-green-200 px-4 py-2 rounded-full">

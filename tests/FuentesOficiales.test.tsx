@@ -26,11 +26,20 @@ describe('FuentesOficiales', () => {
     const trigger = screen.getByRole('button', { name: /corfo/i });
     fireEvent.click(trigger);
     const corfoSite = screen.getAllByRole('link', { name: /sitio web/i })[0];
-    expect(corfoSite).toHaveAttribute('href', 'https://www.corfo.gob.cl');
+    expect(corfoSite).toHaveAttribute('href', 'https://www.corfo.gob.cl/sites/cpp/convocatorias_programas_innovacion/');
   });
 
   it('shows dynamic update label from pipeline timestamp', () => {
     render(<FuentesOficiales institutionCounts={mockCounts} lastUpdatedAt="2026-05-25T19:45:00.000Z" />);
     expect(screen.getByText(/Actualizado/i)).toBeInTheDocument();
+  });
+
+  it('uses normalized FONTAGRO url', () => {
+    render(<FuentesOficiales institutionCounts={mockCounts} />);
+    const trigger = screen.getByRole('button', { name: /fontagro/i });
+    fireEvent.click(trigger);
+    const links = screen.getAllByRole('link', { name: /sitio web/i });
+    const fontagroSite = links.find((link) => link.getAttribute('href')?.includes('fontagro'));
+    expect(fontagroSite).toHaveAttribute('href', 'https://www.fontagro.org/es');
   });
 });

@@ -36,12 +36,12 @@ export function HeroSection({ stats }: HeroSectionProps) {
 
                 <div className="relative z-10 container mx-auto px-4">
                     <h1 className="animate-fade-in-up text-2xl md:text-5xl font-extrabold mb-6 leading-tight drop-shadow-lg">
-                        Oportunidades de Proyectos para el{' '}
-                        <span className="text-[var(--iica-yellow)]">IICA Chile 2026</span>
+                        Encuentre financiamiento agrícola{' '}
+                        <span className="text-[var(--iica-yellow)]">verificado para Chile</span>
                     </h1>
 
                     <p className="animate-fade-in-up text-lg md:text-xl font-medium text-blue-50 max-w-2xl mx-auto mb-10 drop-shadow-md">
-                        Radar institucional de convocatorias, fondos y alianzas estratégicas para que el IICA Chile lidere proyectos de alto impacto en la región.
+                        Compare convocatorias vigentes, revise requisitos clave y acceda a fuentes oficiales en minutos.
                     </p>
 
                     <div className="animate-fade-in-up flex justify-center">

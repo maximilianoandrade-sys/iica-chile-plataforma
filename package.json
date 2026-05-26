@@ -21,6 +21,8 @@
     "ingest:audit": "tsx scripts/audit-legacy-data.ts",
     "discover": "tsx scripts/discover-projects.ts",
     "smoke": "tsx scripts/smoke-test.ts",
+    "audit:links": "tsx scripts/audit-links.ts",
+    "audit:links:full": "tsx scripts/audit-links.ts --include-project-pages",
     "e2e": "playwright test",
     "e2e:install": "playwright install chromium",
     "e2e:headed": "playwright test --headed"

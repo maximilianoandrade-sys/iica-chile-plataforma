@@ -23,7 +23,7 @@ export default function PrivacyPolicyPage() {
                 </p>
                 <ul className="list-disc pl-5 space-y-2">
                     <li>Su dirección de correo electrónico al suscribirse a nuestro boletín informativo.</li>
-                    <li>Información sobre su tipo de producción o región al interactuar con nuestro Asistente Inteligente (esta información se utiliza de forma anónima para mejorar el servicio).</li>
+                    <li>Datos de navegación básicos (por ejemplo, páginas visitadas y origen del tráfico) utilizados de forma agregada para mejorar la plataforma.</li>
                 </ul>
             </section>
 

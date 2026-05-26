@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import type { Metadata } from 'next';
-import { getProjects, displayMonto, pluralizeDias } from '@/lib/data';
+import { getProjects, displayMonto, formatDeadline, pluralizeDias } from '@/lib/data';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import Link from 'next/link';
@@ -24,13 +24,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         return { title: 'Fondo no encontrado | IICA Chile' };
     }
 
+    const deadline = formatDeadline(project.fecha_cierre);
+    const shortObs = project.resumen?.observaciones?.slice(0, 120) || 'Revise requisitos, fechas y bases oficiales antes de postular.';
+    const title = `${project.nombre}`;
+    const description = `${project.institucion} · ${project.categoria} · Cierre: ${deadline}. ${shortObs}`;
+
     return {
-        title: `${project.nombre} | IICA Chile`,
-        description: `${project.institucion} · ${project.categoria} · Cierre: ${new Date(project.fecha_cierre).toLocaleDateString('es-CL')}. ${project.resumen?.observaciones || ''}`,
+        title,
+        description,
         openGraph: {
-            title: project.nombre,
-            description: `Fondo de ${project.institucion}. Monto: ${displayMonto(project)}. Cierre: ${new Date(project.fecha_cierre).toLocaleDateString('es-CL')}`,
-        }
+            title,
+            description,
+            images: ['/agricultural-field.png'],
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title,
+            description,
+            images: ['/agricultural-field.png'],
+        },
     };
 }
 

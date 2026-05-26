@@ -161,8 +161,21 @@ export async function GET(request: NextRequest) {
             const statusOk = response.status >= 200 && response.status < 400;
             const redirectedToHome = statusOk && response.url ? isHomepageRedirect(url, response.url) : false;
             const originalIsHomepage = isOriginalHomepage(url);
+            const blockedByBotProtection = response.status === 403 || response.status === 429;
+            const methodNotAllowed = response.status === 405;
 
-            const isValid = statusOk && !redirectedToHome && !originalIsHomepage;
+            const isValid = (statusOk || blockedByBotProtection || methodNotAllowed) && !redirectedToHome && !originalIsHomepage;
+            const reason = !isValid
+                ? (redirectedToHome
+                    ? 'redirected_to_home'
+                    : originalIsHomepage
+                        ? 'homepage_url_not_specific'
+                        : `http_${response.status}`)
+                : blockedByBotProtection
+                    ? 'blocked_by_bot_protection'
+                    : methodNotAllowed
+                        ? 'head_not_allowed'
+                        : 'ok';
 
             return NextResponse.json({
                 isValid,
@@ -170,6 +183,7 @@ export async function GET(request: NextRequest) {
                 statusText: response.statusText,
                 url,
                 finalUrl: response.url,
+                reason,
                 redirectedToHome,
                 originalIsHomepage,
             });

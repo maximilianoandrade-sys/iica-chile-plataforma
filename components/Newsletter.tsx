@@ -59,7 +59,7 @@ export default function Newsletter() {
                         ¿Quieres saber cuándo abren nuevos fondos?
                     </h2>
                     <p className="text-blue-100/90 text-sm md:text-base">
-                        Suscríbete para recibir alertas personalizadas en tu email con las últimas convocatorias. Cero spam.
+                        Suscríbase para recibir un resumen semanal con nuevas convocatorias, fechas de cierre y enlaces oficiales. Sin promociones.
                     </p>
                 </div>
 
@@ -111,7 +111,7 @@ export default function Newsletter() {
                                 )}
                             </button>
                             <p className="text-xs text-center text-blue-200 opacity-70">
-                                Al suscribirte aceptas recibir boletines informativos del IICA.
+                                Frecuencia estimada: 1 correo por semana. Puede darse de baja en cualquier momento.
                             </p>
                         </form>
                     )}

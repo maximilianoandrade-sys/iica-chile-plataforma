@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import { ExternalLink, BookOpen } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
@@ -6,36 +7,45 @@ import { getLogger } from '@/lib/utils/logger';
 
 const logger = getLogger('Maletin');
 
+export const metadata: Metadata = {
+  title: 'Recursos de Referencia',
+  description: 'Acceda a portales oficiales de financiamiento y apoyo técnico para el sector agropecuario chileno.',
+  openGraph: {
+    title: 'Recursos de Referencia | IICA Chile',
+    description: 'Fuentes oficiales para revisar bases, programas y convocatorias del sector agrícola.',
+  },
+};
+
 const RESOURCES = [
   {
     name: 'CNR — Comisión Nacional de Riego',
     description: 'Subsidios y concursos de riego tecnificado para la agricultura.',
-    url: 'https://www.cnr.gob.cl',
+    url: 'https://www.cnr.gob.cl/agricultores/concursos-de-riego/',
   },
   {
     name: 'INDAP — Instituto de Desarrollo Agropecuario',
     description: 'Programas de fomento para la agricultura familiar campesina.',
-    url: 'https://www.indap.gob.cl',
+    url: 'https://www.indap.gob.cl/plataforma-de-servicios/',
   },
   {
     name: 'CORFO — Corporación de Fomento',
     description: 'Instrumentos de escalamiento productivo e innovación empresarial.',
-    url: 'https://www.corfo.cl',
+    url: 'https://www.corfo.gob.cl/sites/cpp/convocatorias_programas_innovacion/',
   },
   {
     name: 'FIA — Fundación para la Innovación Agraria',
     description: 'Proyectos de innovación en el sector silvoagropecuario.',
-    url: 'https://www.fia.cl',
+    url: 'https://www.fia.cl/convocatorias/',
   },
   {
     name: 'SERCOTEC — Servicio de Cooperación Técnica',
     description: 'Capital semilla, digitalización y apoyo a microempresas.',
-    url: 'https://www.sercotec.cl',
+    url: 'https://www.sercotec.cl/programas/capital-semilla-emprende/',
   },
   {
     name: 'GOREs — Gobiernos Regionales',
     description: 'Fondos concursables regionales (FIC-R, FNDR) para desarrollo territorial.',
-    url: 'https://www.subdere.gov.cl',
+    url: 'https://www.subdere.gov.cl/programas/division-desarrollo-regional',
   },
 ];
 

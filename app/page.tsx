@@ -24,8 +24,8 @@ export async function generateMetadata({
   const region = typeof resolvedParams.region === 'string' ? resolvedParams.region : null;
   const category = typeof resolvedParams.category === 'string' ? resolvedParams.category : null;
 
-  let title = 'Plataforma de Financiamiento Agrícola | IICA Chile';
-  let description = 'Encuentra fondos concursables, subsidios y créditos para el agro chileno. CNR, INDAP, FIA, CORFO, SAG y fuentes internacionales. Información actualizada 2026.';
+  let title = 'Radar de Oportunidades IICA Chile 2026';
+  let description = 'Encuentre convocatorias agrícolas vigentes y verificadas por IICA Chile. Incluye fondos nacionales e internacionales con actualización continua.';
 
   if (region) {
     title = `Fondos Concursables en ${region} 2026 | IICA Chile`;
@@ -42,7 +42,12 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-    }
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+    },
   };
 }
 
@@ -58,9 +63,45 @@ export default async function DashboardPage({
   const projects = result.ok ? result.projects : [];
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const internacionales = projects.filter((p) =>
-    ['FONTAGRO', 'FAO', 'FIDA', 'BID', 'PNUD', 'GEF', 'GCF', 'UE', 'UE (EUROCLIMA+)', 'UE (AECID)', 'IICA Hemisférico'].includes(p.institucion)
-  ).length;
+  const NATIONAL_INSTITUTION_KEYS = [
+    'CNR',
+    'INDAP',
+    'FIA',
+    'CORFO',
+    'SAG',
+    'SERCOTEC',
+    'GORE',
+    'SUBDERE',
+    'MINAGRI',
+  ];
+
+  const INTERNATIONAL_INSTITUTION_KEYS = [
+    'FONTAGRO',
+    'FAO',
+    'FIDA',
+    'IFAD',
+    'BID',
+    'IADB',
+    'PNUD',
+    'GEF',
+    'GCF',
+    'WORLD BANK',
+    'IICA',
+    'UE',
+    'EUROCLIMA',
+    'UNGM',
+  ];
+
+  const internacionales = projects.filter((p) => {
+    if (p.ambito === 'Nacional') return false;
+    if (p.ambito === 'Internacional') return true;
+
+    const institution = (p.institucion || '').toUpperCase();
+    if (NATIONAL_INSTITUTION_KEYS.some((key) => institution.includes(key))) return false;
+    if (INTERNATIONAL_INSTITUTION_KEYS.some((key) => institution.includes(key))) return true;
+
+    return false;
+  }).length;
   const abiertas = projects.filter((p) => new Date(p.fecha_cierre) >= today).length;
   const urgentes = projects.filter((p) => {
     const closing = new Date(p.fecha_cierre);

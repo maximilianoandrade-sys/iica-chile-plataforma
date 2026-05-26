@@ -31,13 +31,13 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
     },
   ],
-  // Auto-start dev server cuando no hay PLAYWRIGHT_BASE_URL externo.
+  // Auto-start production server cuando no hay PLAYWRIGHT_BASE_URL externo.
   webServer: process.env.PLAYWRIGHT_BASE_URL
     ? undefined
     : {
-        command: "npm run dev",
+        command: "npm run build && npm run start",
         url: "http://localhost:3000",
         reuseExistingServer: !process.env.CI,
-        timeout: 120_000,
+        timeout: 240_000,
       },
 });

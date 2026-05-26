@@ -38,9 +38,17 @@ export function ActionButton({ url, date, projectName, institution, onTrack }: A
 
     if (isLoading) {
         return (
-            <button disabled className="inline-flex items-center gap-1.5 text-xs font-bold text-gray-400 bg-gray-50 border border-gray-100 px-3 py-1.5 rounded animate-pulse cursor-wait min-w-[100px] min-h-[44px] justify-center">
-                Validando...
-            </button>
+            <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={handleClick}
+                aria-label={`Abrir bases para ${projectName}`}
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-gray-700 bg-gray-50 border border-gray-200 px-3 py-1.5 rounded transition-colors hover:bg-gray-100 min-w-[120px] min-h-[44px] justify-center"
+                title="Abre el enlace oficial mientras se verifica en segundo plano"
+            >
+                Abrir bases
+            </a>
         );
     }
 

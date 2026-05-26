@@ -10,7 +10,7 @@ import { getLogger } from '@/lib/utils/logger';
 import type { Project } from '@/lib/data';
 
 const logger = getLogger('ProjectList');
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 16;
 
 interface ProjectListProps {
   projects: Project[];

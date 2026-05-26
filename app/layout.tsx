@@ -10,17 +10,51 @@ import PushNotificationManager from '@/components/PushNotificationManager';
 import ScrollToTop from '@/components/ScrollToTop';
 
 const outfit = Outfit({ subsets: ['latin'] })
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://iica-chile-plataforma.vercel.app'
+
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'IICA Chile',
+  url: SITE_URL,
+  logo: `${SITE_URL}/logos/official/iica.png`,
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'customer support',
+    email: 'representacion.chile@iica.int',
+    areaServed: 'CL',
+    availableLanguage: 'es',
+  },
+};
+
+const webSiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Radar de Oportunidades IICA Chile',
+  url: SITE_URL,
+  inLanguage: 'es-CL',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: `${SITE_URL}/?q={search_term_string}`,
+    'query-input': 'required name=search_term_string',
+  },
+};
+
+function safeJsonStringify(data: unknown): string {
+  return JSON.stringify(data).replace(/<\//g, '<\\/').replace(/<!--/g, '<\\!--')
+}
 
 // ============================================================================
 // METADATA - SEO & PWA
 // ============================================================================
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: 'Radar de Oportunidades IICA Chile 2026',
     template: '%s | IICA Chile'
   },
-  description: 'Radar de oportunidades de proyectos para el IICA Chile 2026. Convocatorias activas de FONTAGRO, FAO, BID, FIDA, GEF y fuentes nacionales e internacionales.',
+  description: 'Encuentre convocatorias agrícolas vigentes y verificadas por IICA Chile. Incluye fondos nacionales e internacionales con actualización continua.',
   keywords: ['IICA Chile', 'oportunidades proyectos', 'FONTAGRO', 'FAO', 'BID', 'FIDA', 'cooperación agrícola internacional', 'convocatorias 2026'],
   authors: [{ name: 'IICA Chile' }],
   creator: 'IICA Chile',
@@ -37,15 +71,15 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Radar de Oportunidades IICA Chile 2026',
-    description: 'Plataforma institucional del IICA Chile para identificar y gestionar oportunidades de proyectos 2026.',
-    url: 'https://iica-chile-plataforma.vercel.app',
+    description: 'Plataforma oficial de IICA Chile para identificar oportunidades de financiamiento agrícola vigentes.',
+    url: '/',
     siteName: 'IICA Chile',
     images: [
       {
-        url: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200',
+        url: '/agricultural-field.png',
         width: 1200,
         height: 630,
-        alt: 'Campo Chileno - IICA',
+        alt: 'Radar de Oportunidades IICA Chile',
       },
     ],
     locale: 'es_CL',
@@ -54,8 +88,8 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Radar de Oportunidades IICA Chile 2026',
-    description: 'Convocatorias activas de FONTAGRO, FAO, BID, FIDA, GEF para proyectos agrícolas.',
-    images: ['https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1200'],
+    description: 'Oportunidades de financiamiento agrícola verificadas para organizaciones y equipos técnicos en Chile.',
+    images: ['/agricultural-field.png'],
   },
   robots: {
     index: true,
@@ -110,6 +144,14 @@ export default function RootLayout({
         <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
         <meta httpEquiv="X-Frame-Options" content="DENY" />
         <meta httpEquiv="X-XSS-Protection" content="1; mode=block" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: safeJsonStringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: safeJsonStringify(webSiteJsonLd) }}
+        />
       </head>
 
       <body className="flex flex-col min-h-screen bg-[#f4f7f9] dark:bg-gray-900 antialiased transition-colors">

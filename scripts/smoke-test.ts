@@ -127,3 +127,5 @@ main().catch((e) => {
   console.error("[smoke] crash:", e);
   process.exit(1);
 });
+
+export {};

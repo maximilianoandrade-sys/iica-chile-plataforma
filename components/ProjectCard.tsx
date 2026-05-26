@@ -41,9 +41,9 @@ function formatDeadlineStatus(project: Project): {
 }
 
 function formatMonto(project: Project): string {
-  if (project.montoTexto) return project.montoTexto;
+  if (project.montoTexto && project.montoTexto.trim()) return project.montoTexto;
   if (project.monto) return `$${Math.round(project.monto / 1_000_000)}M CLP`;
-  return 'Monto no definido';
+  return 'Ver bases oficiales';
 }
 
 const urgencyVariantMap = {
@@ -65,6 +65,8 @@ export function ProjectCard({ project }: { project: Project }) {
   const { text: deadlineText, detail: deadlineDetail, urgency } = formatDeadlineStatus(project);
   const monto = formatMonto(project);
   const region = project.regiones?.[0] ?? project.region ?? null;
+  const institutionUpper = (project.institucion || '').toUpperCase();
+  const isLikelyInternational = project.ambito === 'Internacional' || ['WORLD BANK', 'FAO', 'FONTAGRO', 'FIDA', 'IFAD', 'BID', 'IADB', 'IICA', 'PNUD', 'GEF', 'GCF', 'UE'].some((k) => institutionUpper.includes(k));
 
   logger.debug('Rendering ProjectCard', { id: project.id });
 
@@ -98,6 +100,12 @@ export function ProjectCard({ project }: { project: Project }) {
       >
         {project.nombre}
       </Link>
+
+      {isLikelyInternational && (
+        <span className="mb-2 inline-flex w-fit items-center rounded-full border border-sky-200 bg-sky-50 px-2.5 py-1 text-[11px] font-bold text-sky-700">
+          Internacional
+        </span>
+      )}
 
       <div className="mt-auto flex items-center justify-between gap-2 pt-2">
         <span className="text-sm font-bold text-gray-900">{monto}</span>

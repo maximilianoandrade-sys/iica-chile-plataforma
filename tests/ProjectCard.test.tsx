@@ -43,6 +43,18 @@ describe('ProjectCard', () => {
     expect(screen.getByText(/Fecha límite:/i)).toBeInTheDocument();
   });
 
+  it('renders fallback text for undefined amount', () => {
+    const withoutAmount = { ...mockProject, monto: 0, montoTexto: null };
+    render(<ProjectCard project={withoutAmount} />);
+    expect(screen.getByText(/Ver bases oficiales/i)).toBeInTheDocument();
+  });
+
+  it('renders international badge for international institutions', () => {
+    const international = { ...mockProject, institucion: 'FONTAGRO', ambito: 'Internacional' as const };
+    render(<ProjectCard project={international} />);
+    expect(screen.getByText(/Internacional/i)).toBeInTheDocument();
+  });
+
   it('applies reduced opacity for closed projects', () => {
     const closed = { ...mockProject, estadoPostulacion: 'Cerrada' as const };
     const { container } = render(<ProjectCard project={closed} />);

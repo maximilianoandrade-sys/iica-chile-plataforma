@@ -6,11 +6,16 @@ import Link from 'next/link';
 import { Globe, Users, Leaf, Award, CheckCircle, ArrowRight, ExternalLink, TrendingUp, Shield, MapPin, BookOpen } from 'lucide-react';
 
 export const metadata: Metadata = {
-    title: 'Sobre el IICA | Instituto Interamericano de Cooperación para la Agricultura',
-    description: 'Conoce el mandato, capacidades y trayectoria del IICA en Chile. 75 años apoyando el desarrollo agrícola con cooperación técnica de excelencia.',
+    title: 'Sobre IICA Chile',
+    description: 'Conozca el mandato, capacidades y trayectoria de IICA Chile en cooperación técnica agrícola y desarrollo rural.',
     openGraph: {
-        title: 'Sobre el IICA | Instituto Interamericano de Cooperación para la Agricultura',
-        description: 'Organismo especializado en agricultura del Sistema Interamericano con 75 años de presencia en Chile.',
+        title: 'Sobre IICA Chile',
+        description: 'Organismo especializado en agricultura del Sistema Interamericano con presencia y cooperación técnica en Chile.',
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Sobre IICA Chile',
+        description: 'Conozca la trayectoria y capacidades de IICA Chile para apoyar iniciativas agrícolas con cooperación técnica.',
     },
 };
 
@@ -85,7 +90,7 @@ export default function AboutPage() {
                                         Ver Convocatorias <ArrowRight className="h-4 w-4" />
                                     </Link>
                                     <a
-                                        href="https://www.iica.int/es/countries/chile-es"
+                                        href="https://iica.int/es/countries/chile-es/"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="inline-flex items-center gap-2 bg-white/10 border border-white/30 text-white font-bold px-6 py-3 rounded-xl hover:bg-white/20 transition-colors"
