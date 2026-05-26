@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { EXTERNAL_PROVIDER_IDS, SEARCH_SOURCE_MODES } from '@/lib/search/contracts';
 
 /**
  * Schemas Zod compartidos para validación de input en APIs.
@@ -26,6 +27,42 @@ export const GenerateProposalSchema = z.object({
     })
     .optional(),
 });
+
+const SearchProviderSchema = z.enum(EXTERNAL_PROVIDER_IDS);
+const SearchSourceModeSchema = z.enum(SEARCH_SOURCE_MODES);
+const SearchAmbitoSchema = z.enum(['all', 'Nacional', 'Regional', 'Internacional']);
+const SearchEstadoSchema = z.enum(['Abierta', 'Próxima', 'Cerrada']);
+
+export const SearchProjectsRequestSchema = z
+  .object({
+    query: z.string().trim().max(500, 'La consulta no puede exceder 500 caracteres').optional(),
+    scope: z.string().trim().max(50, 'scope no puede exceder 50 caracteres').optional(),
+    role: z.string().trim().max(50, 'role no puede exceder 50 caracteres').optional(),
+    ambito: SearchAmbitoSchema.optional(),
+    institution: z.string().trim().max(200, 'institution no puede exceder 200 caracteres').optional(),
+    region: z.string().trim().max(120, 'region no puede exceder 120 caracteres').optional(),
+    estado: SearchEstadoSchema.optional(),
+    minAmount: z
+      .number({ error: 'minAmount debe ser un número' })
+      .int({ error: 'minAmount debe ser entero' })
+      .min(0, 'minAmount no puede ser negativo')
+      .optional(),
+    maxAmount: z
+      .number({ error: 'maxAmount debe ser un número' })
+      .int({ error: 'maxAmount debe ser entero' })
+      .min(0, 'maxAmount no puede ser negativo')
+      .optional(),
+    includeUnverified: z.boolean().optional(),
+    sourceMode: SearchSourceModeSchema.optional(),
+    providers: z.array(SearchProviderSchema).max(5, 'Máximo 5 proveedores').optional(),
+  })
+  .refine(
+    (data) => data.minAmount == null || data.maxAmount == null || data.maxAmount >= data.minAmount,
+    {
+      message: 'maxAmount debe ser mayor o igual a minAmount',
+      path: ['maxAmount'],
+    }
+  );
 
 /** Formatea errores Zod en un mensaje amigable en español */
 export function formatZodError(error: z.ZodError): string {
