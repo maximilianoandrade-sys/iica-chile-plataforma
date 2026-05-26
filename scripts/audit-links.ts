@@ -2,6 +2,8 @@ const args = new Set(process.argv.slice(2));
 const BASE_URL = process.env.DEPLOYMENT_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://iica-chile-plataforma.vercel.app';
 const CHECK_LINK_BASE_URL = process.env.CHECK_LINK_BASE_URL || BASE_URL;
 const INCLUDE_PROJECT_PAGES = process.env.AUDIT_INCLUDE_PROJECT_PAGES === 'true' || args.has('--include-project-pages');
+const CHECK_LINK_MAX_ATTEMPTS = Number(process.env.AUDIT_CHECK_LINK_MAX_ATTEMPTS || '3');
+const CHECK_LINK_RETRY_DELAY_MS = Number(process.env.AUDIT_CHECK_LINK_RETRY_DELAY_MS || '250');
 
 type LinkResult = {
   url: string;
@@ -12,6 +14,13 @@ type LinkResult = {
 };
 
 const SKIP_LINK = /^(#|mailto:|tel:|javascript:|data:)/i;
+
+type CheckExternalOptions = {
+  checkLinkBaseUrl?: string;
+  fetcher?: typeof fetch;
+  maxAttempts?: number;
+  retryDelayMs?: number;
+};
 
 function toAbsoluteUrl(href: string, base: string): string | null {
   try {
@@ -35,14 +44,13 @@ function normalizeSitemapLoc(loc: string, baseUrl: string): string | null {
   }
 }
 
-function parseHrefs(html: string): string[] {
+export function parseHrefs(html: string): string[] {
   return Array.from(html.matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>/gi), (m) => m[1]);
 }
 
-async function getJson(url: string, init?: RequestInit): Promise<any> {
-  const response = await fetch(url, init);
-  if (!response.ok) throw new Error(`HTTP ${response.status} ${url}`);
-  return response.json();
+async function sleep(ms: number): Promise<void> {
+  if (ms <= 0) return;
+  await new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function checkInternal(url: string): Promise<LinkResult> {
@@ -58,30 +66,74 @@ async function checkInternal(url: string): Promise<LinkResult> {
   }
 }
 
-async function checkExternal(url: string): Promise<LinkResult> {
-  try {
-    const check = await getJson(`${CHECK_LINK_BASE_URL}/api/check-link?url=${encodeURIComponent(url)}`);
-    const reason = check.reason as string | undefined;
-    const status = Number(check.status || 0);
-    const isBlocked = reason === 'blocked_by_bot_protection' || status === 403 || status === 429;
-    const needsReview = reason === 'homepage_url_not_specific'
-      || reason === 'redirected_to_home'
-      || reason === 'head_not_allowed'
-      || check.redirectedToHome === true
-      || check.originalIsHomepage === true
-      || status === 405;
-    const ok = check.isValid === true || isBlocked;
+export async function checkExternal(url: string, options: CheckExternalOptions = {}): Promise<LinkResult> {
+  const checkLinkBaseUrl = options.checkLinkBaseUrl || CHECK_LINK_BASE_URL;
+  const fetcher = options.fetcher || fetch;
+  const maxAttempts = Math.max(1, options.maxAttempts ?? CHECK_LINK_MAX_ATTEMPTS);
+  const retryDelayMs = Math.max(0, options.retryDelayMs ?? CHECK_LINK_RETRY_DELAY_MS);
+  const endpoint = `${checkLinkBaseUrl}/api/check-link?url=${encodeURIComponent(url)}`;
 
-    return {
-      url,
-      ok,
-      status,
-      reason,
-      classification: ok ? (isBlocked ? 'blocked' : 'ok') : (needsReview ? 'needs_review' : 'invalid'),
-    };
-  } catch {
-    return { url, ok: false, status: 0, reason: 'check_api_failed', classification: 'invalid' };
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      const response = await fetcher(endpoint);
+
+      if (response.status === 429) {
+        if (attempt < maxAttempts) {
+          await sleep(retryDelayMs * attempt);
+          continue;
+        }
+        return {
+          url,
+          ok: false,
+          status: 429,
+          reason: 'check_api_rate_limited',
+          classification: 'invalid',
+        };
+      }
+
+      if (!response.ok) {
+        if (attempt < maxAttempts) {
+          await sleep(retryDelayMs * attempt);
+          continue;
+        }
+        return {
+          url,
+          ok: false,
+          status: response.status,
+          reason: 'check_api_failed',
+          classification: 'invalid',
+        };
+      }
+
+      const check = await response.json();
+      const reason = check.reason as string | undefined;
+      const status = Number(check.status || 0);
+      const isBlocked = reason === 'blocked_by_bot_protection' || status === 403 || status === 429;
+      const needsReview = reason === 'homepage_url_not_specific'
+        || reason === 'redirected_to_home'
+        || reason === 'head_not_allowed'
+        || check.redirectedToHome === true
+        || check.originalIsHomepage === true
+        || status === 405;
+      const ok = check.isValid === true || isBlocked;
+
+      return {
+        url,
+        ok,
+        status,
+        reason,
+        classification: ok ? (isBlocked ? 'blocked' : 'ok') : (needsReview ? 'needs_review' : 'invalid'),
+      };
+    } catch {
+      if (attempt < maxAttempts) {
+        await sleep(retryDelayMs * attempt);
+        continue;
+      }
+      return { url, ok: false, status: 0, reason: 'check_api_failed', classification: 'invalid' };
+    }
   }
+
+  return { url, ok: false, status: 0, reason: 'check_api_failed', classification: 'invalid' };
 }
 
 async function main() {
@@ -119,7 +171,7 @@ async function main() {
   const external = allLinks.filter((u) => !u.startsWith(origin));
 
   const internalResults = await Promise.all(internal.map(checkInternal));
-  const externalResults = await Promise.all(external.map(checkExternal));
+  const externalResults = await Promise.all(external.map((url) => checkExternal(url)));
 
   const failedInternal = internalResults.filter((r) => !r.ok);
   const failedExternal = externalResults.filter((r) => !r.ok);
@@ -180,9 +232,17 @@ async function main() {
   }
 }
 
-main().catch((error) => {
-  console.error('[audit-links] crash:', error instanceof Error ? error.message : String(error));
-  process.exit(1);
-});
+const isDirectExecution = Boolean(
+  process.argv[1]
+  && /audit-links\.(ts|js)$/.test(process.argv[1])
+  && !process.env.JEST_WORKER_ID,
+);
+
+if (isDirectExecution) {
+  main().catch((error) => {
+    console.error('[audit-links] crash:', error instanceof Error ? error.message : String(error));
+    process.exit(1);
+  });
+}
 
 export {};

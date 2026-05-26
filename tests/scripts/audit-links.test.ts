@@ -2,11 +2,9 @@
  * @jest-environment node
  */
 
-describe('audit-links parser', () => {
-  function parseHrefs(html: string): string[] {
-    return Array.from(html.matchAll(/<a\b[^>]*href=["']([^"']+)["'][^>]*>/gi), (m) => m[1]);
-  }
+import { checkExternal, parseHrefs } from '../../scripts/audit-links';
 
+describe('audit-links parser', () => {
   it('extracts href values only from anchor tags', () => {
     const html = [
       '<html>',
@@ -38,5 +36,66 @@ describe('audit-links parser', () => {
       'https://iica-chile-plataforma.vercel.app/',
       'https://iica-chile-plataforma.vercel.app/about',
     ]);
+  });
+});
+
+describe('audit-links external checker', () => {
+  it('retries check-link api on 429 and eventually succeeds', async () => {
+    const fetchMock = jest
+      .fn<Promise<Response>, [RequestInfo | URL, RequestInit?]>()
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({ error: 'Demasiadas solicitudes. Intente nuevamente más tarde.' }),
+          { status: 429, headers: { 'content-type': 'application/json' } },
+        ),
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            isValid: true,
+            status: 200,
+            reason: 'ok',
+            redirectedToHome: false,
+            originalIsHomepage: false,
+          }),
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        ),
+      );
+
+    const result = await checkExternal('https://iica.int/es/countries/chile-es/', {
+      checkLinkBaseUrl: 'https://example.test',
+      fetcher: fetchMock,
+      maxAttempts: 2,
+      retryDelayMs: 0,
+    });
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(result.ok).toBe(true);
+    expect(result.classification).toBe('ok');
+    expect(result.reason).toBe('ok');
+  });
+
+  it('returns a hard failure after exhausting retries on 429', async () => {
+    const fetchMock = jest
+      .fn<Promise<Response>, [RequestInfo | URL, RequestInit?]>()
+      .mockResolvedValue(
+        new Response(
+          JSON.stringify({ error: 'Demasiadas solicitudes. Intente nuevamente más tarde.' }),
+          { status: 429, headers: { 'content-type': 'application/json' } },
+        ),
+      );
+
+    const result = await checkExternal('https://iica.int/es/countries/chile-es/', {
+      checkLinkBaseUrl: 'https://example.test',
+      fetcher: fetchMock,
+      maxAttempts: 3,
+      retryDelayMs: 0,
+    });
+
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+    expect(result.ok).toBe(false);
+    expect(result.status).toBe(429);
+    expect(result.reason).toBe('check_api_rate_limited');
+    expect(result.classification).toBe('invalid');
   });
 });
