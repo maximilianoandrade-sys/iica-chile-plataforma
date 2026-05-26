@@ -74,21 +74,21 @@ test.describe("API endpoints", () => {
 
 test.describe("Detalle de proyecto", () => {
   test("la página de detalle de un proyecto carga", async ({ page, request }) => {
-    // Obtener un id real desde la API para no hardcodear.
-    const res = await request.post("/api/search-projects", {
-      data: { query: "" },
-    });
-    const body = await res.json();
-    const payload = body.data ?? body;
-    if (!payload.results?.length) {
-      test.skip(true, "BD sin proyectos — corre `npm run ingest` primero");
+    // Obtener un id real desde la home SSR para evitar overlays de APIs externas.
+    const home = await request.get("/");
+    expect(home.ok()).toBeTruthy();
+    const html = await home.text();
+    const match = html.match(/href="\/proyecto\/(\d+)"/);
+
+    if (!match?.[1]) {
+      test.skip(true, "Home sin links de detalle — corre `npm run ingest` primero");
       return;
     }
-    const id = payload.results[0].id;
+    const id = Number(match[1]);
     await page.goto(`/proyecto/${id}`);
-    // El nombre del proyecto debería aparecer (h1 o similar).
-    await expect(page.locator("h1, h2").first()).toBeVisible();
-    // Y debe haber un botón/link a las bases (ActionButton).
-    await expect(page.getByRole("link").first()).toBeVisible();
+
+    await expect(page.getByLabel(/Cargando proyecto/i)).toHaveCount(0, { timeout: 20000 });
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole("link", { name: /Volver a todas las convocatorias/i })).toBeVisible();
   });
 });

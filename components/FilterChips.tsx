@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { Search, X, SlidersHorizontal } from 'lucide-react';
 import { type FilterCounts } from '@/lib/data';
@@ -37,7 +37,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
     setSearchInput(currentQ);
   }, [currentQ]);
 
-  function updateParams(updates: Record<string, string>, mode: 'push' | 'replace' = 'push') {
+  const updateParams = useCallback((updates: Record<string, string>, mode: 'push' | 'replace' = 'push') => {
     const params = new URLSearchParams(searchParams.toString());
     for (const [key, value] of Object.entries(updates)) {
       if (value) params.set(key, value);
@@ -51,7 +51,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
       return;
     }
     router.push(href, { scroll: false });
-  }
+  }, [searchParams, pathname, router]);
 
   useEffect(() => {
     const debounceMs = 350;
@@ -61,7 +61,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
     }, debounceMs);
 
     return () => clearTimeout(timer);
-  }, [searchInput, currentQ]);
+  }, [searchInput, currentQ, updateParams]);
 
   function toggleChip(key: string, value: string) {
     const current = searchParams.get(key) ?? '';
