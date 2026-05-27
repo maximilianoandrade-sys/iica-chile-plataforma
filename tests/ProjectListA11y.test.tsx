@@ -14,17 +14,23 @@ const projects = [
     id: 1, nombre: 'Test Project', institucion: 'CORFO', monto: 100000000,
     fecha_cierre: '2026-12-01', estado: 'active', categoria: 'Test',
     url_bases: 'https://example.com', estadoPostulacion: 'Abierta' as const,
+    region: 'Metropolitana',
   },
 ];
 
 const filterCounts = {
   estado: { Abierta: 1 }, institucion: { CORFO: 1 },
-  region: {}, ambito: { Nacional: 1 },
+  region: { Metropolitana: 1 }, ambito: { Nacional: 1 },
 };
 
 describe('ProjectList accessibility', () => {
   beforeEach(() => {
     pushMock.mockReset();
+  });
+
+  it('renders top region chips as quick filters', () => {
+    render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
+    expect(screen.getByRole('button', { name: /Metropolitana/i })).toBeInTheDocument();
   });
 
   it('has search input with label', () => {

@@ -311,4 +311,51 @@ describe('/api/search-projects request contract', () => {
     expect(json.data.meta.provider_stats).toEqual([]);
     expect(mockRunExternalSearch).not.toHaveBeenCalled();
   });
+
+  it('applies pagination and filters in internal mode', async () => {
+    mockHybridSearch.mockResolvedValue({
+      mode: 'hybrid',
+      total: 87,
+      projects: [],
+    });
+
+    const { POST } = await import('@/app/api/search-projects/route');
+    const res = await POST(
+      makeRequest({
+        query: 'riego',
+        sourceMode: 'internal',
+        page: 2,
+        pageSize: 20,
+        sort: 'amount_desc',
+        institution: 'CORFO,FIA',
+        region: 'Biobío,Metropolitana',
+        estado: 'Abierta',
+        minAmount: 100,
+        maxAmount: 200,
+        includeMercadoPublico: false,
+      })
+    );
+    const json = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(json.ok).toBe(true);
+    expect(json.data.meta.page).toBe(2);
+    expect(json.data.meta.page_size).toBe(20);
+    expect(json.data.meta.filtered_total).toBe(87);
+
+    expect(mockHybridSearch).toHaveBeenCalledWith(
+      expect.objectContaining({
+        query: 'riego',
+        offset: 20,
+        limit: 20,
+        sort: 'amount_desc',
+        selectedInstitutions: ['CORFO', 'FIA'],
+        selectedRegions: ['Biobío', 'Metropolitana'],
+        estado: 'Abierta',
+        minAmount: 100,
+        maxAmount: 200,
+      })
+    );
+    expect(mockFetchMercadoPublicoLive).not.toHaveBeenCalled();
+  });
 });

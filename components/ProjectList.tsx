@@ -1,11 +1,9 @@
 'use client';
 
-import { useMemo } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { ProjectCard } from '@/components/ProjectCard';
 import { FilterChips } from '@/components/FilterChips';
 import { type FilterCounts } from '@/lib/data';
-import { daysUntilClose } from '@/lib/data';
 import { getLogger } from '@/lib/utils/logger';
 import type { Project } from '@/lib/data';
 
@@ -16,10 +14,17 @@ interface ProjectListProps {
   projects: Project[];
   filterCounts: FilterCounts;
   totalCount: number;
+  pageSize?: number;
   activeFilterLabels?: string[];
 }
 
-export default function ProjectList({ projects, filterCounts, totalCount, activeFilterLabels = [] }: ProjectListProps) {
+export default function ProjectList({
+  projects,
+  filterCounts,
+  totalCount,
+  pageSize = ITEMS_PER_PAGE,
+  activeFilterLabels = [],
+}: ProjectListProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -34,31 +39,13 @@ export default function ProjectList({ projects, filterCounts, totalCount, active
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
-  const sorted = useMemo(() => {
-    const items = [...projects];
-    switch (sort) {
-      case 'amount_desc':
-        items.sort((a, b) => (b.monto || 0) - (a.monto || 0));
-        break;
-      case 'newest':
-        items.sort((a, b) => b.id - a.id);
-        break;
-      case 'date_asc':
-      default:
-        items.sort((a, b) => {
-          const dA = daysUntilClose(a);
-          const dB = daysUntilClose(b);
-          if (dA === 999 && dB === 999) return 0;
-          if (dA === 999) return 1;
-          if (dB === 999) return -1;
-          return dA - dB;
-        });
-    }
-    return items;
-  }, [projects, sort]);
+  const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+  const paginated = projects;
 
-  const totalPages = Math.ceil(sorted.length / ITEMS_PER_PAGE);
-  const paginated = sorted.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+  const firstPage = Math.max(1, Math.min(currentPage - 2, totalPages - 4));
+  const visibleStart = Math.max(1, firstPage);
+  const visibleEnd = Math.min(totalPages, visibleStart + 4);
+  const visiblePages = Array.from({ length: visibleEnd - visibleStart + 1 }, (_, index) => visibleStart + index);
 
   const goToPage = (page: number) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -130,8 +117,7 @@ export default function ProjectList({ projects, filterCounts, totalCount, active
       {/* Pagination */}
       {totalPages > 1 && (
         <nav aria-label="Paginación" className="flex justify-center gap-1 pt-4">
-          {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-            const page = i + 1;
+          {visiblePages.map((page) => {
             return (
               <button
                 key={page}
@@ -148,7 +134,7 @@ export default function ProjectList({ projects, filterCounts, totalCount, active
               </button>
             );
           })}
-          {totalPages > 5 && (
+          {visibleEnd < totalPages && (
             <>
               <span className="px-2 self-center text-gray-400">…</span>
               <button
