@@ -2,10 +2,11 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import ProjectList from '@/components/ProjectList';
 
 const pushMock = jest.fn();
+let mockSearchParams = new URLSearchParams('');
 
 jest.mock('next/navigation', () => ({
   useRouter: () => ({ push: pushMock }),
-  useSearchParams: () => new URLSearchParams(''),
+  useSearchParams: () => mockSearchParams,
   usePathname: () => '/',
 }));
 
@@ -25,7 +26,14 @@ const filterCounts = {
 
 describe('ProjectList accessibility', () => {
   beforeEach(() => {
+    mockSearchParams = new URLSearchParams('');
     pushMock.mockReset();
+  });
+
+  it('defaults to relevance sort when query is active', () => {
+    mockSearchParams = new URLSearchParams('q=riego');
+    render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
+    expect(screen.getByRole('combobox', { name: /Ordenar por/i })).toHaveValue('relevance');
   });
 
   it('renders top region chips as quick filters', () => {

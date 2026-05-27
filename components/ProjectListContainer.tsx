@@ -1,4 +1,4 @@
-import { getProjects, type Project } from "@/lib/data";
+import { getProjectFilterSnapshot, type Project } from '@/lib/data';
 import ProjectList from "@/components/ProjectList";
 import JsonLd from "@/components/JsonLd";
 import { hybridSearch } from '@/lib/searchHybrid';
@@ -11,25 +11,25 @@ const DEFAULT_PAGE_SIZE = 16;
 
 export default async function ProjectListContainer({
     searchParams,
-    initialProjects,
 }: {
     searchParams: { [key: string]: string | string[] | undefined };
-    initialProjects?: Project[];
 }) {
-    const result = initialProjects ? { ok: true as const, projects: initialProjects } : await getProjects();
+    const filterSnapshot = await getProjectFilterSnapshot();
 
-    if (!result.ok) {
+    if (!filterSnapshot.ok) {
         return <DatabaseError />;
     }
 
-    const projects = result.projects;
+    const filterProjects = filterSnapshot.projects;
 
     const searchTerm = typeof searchParams.q === 'string' ? searchParams.q : '';
     const selectedEstado = typeof searchParams.estado === 'string' ? searchParams.estado : '';
     const selectedInstitutions = typeof searchParams.institution === 'string' ? searchParams.institution.split(',').filter(Boolean) : [];
     const selectedRegions = typeof searchParams.region === 'string' ? searchParams.region.split(',').filter(Boolean) : [];
     const selectedAmbito = typeof searchParams.ambito === 'string' ? searchParams.ambito : '';
-    const sort = typeof searchParams.sort === 'string' ? searchParams.sort : 'date_asc';
+    const sort = typeof searchParams.sort === 'string'
+        ? searchParams.sort
+        : (searchTerm.trim() ? 'relevance' : 'date_asc');
     const currentPageRaw = typeof searchParams.page === 'string' ? Number.parseInt(searchParams.page, 10) : 1;
     const currentPage = Number.isFinite(currentPageRaw) && currentPageRaw > 0 ? currentPageRaw : 1;
     const minAmountRaw = typeof searchParams.minAmount === 'string' ? Number.parseInt(searchParams.minAmount, 10) : 0;
@@ -37,7 +37,7 @@ export default async function ProjectListContainer({
     const minAmount = Number.isFinite(minAmountRaw) ? minAmountRaw : 0;
     const maxAmount = Number.isFinite(maxAmountRaw) ? maxAmountRaw : Infinity;
 
-    const filterCounts = buildFilterCounts(projects);
+    const filterCounts = buildFilterCounts(filterProjects);
     const searchResult = await hybridSearch({
         query: searchTerm,
         ambito: selectedAmbito || 'all',
@@ -46,7 +46,7 @@ export default async function ProjectListContainer({
         estado: selectedEstado || undefined,
         minAmount,
         maxAmount,
-        sort: sort === 'amount_desc' || sort === 'newest' ? sort : 'date_asc',
+        sort: sort === 'amount_desc' || sort === 'newest' || sort === 'relevance' ? sort : 'date_asc',
         offset: (currentPage - 1) * DEFAULT_PAGE_SIZE,
         limit: DEFAULT_PAGE_SIZE,
         includeUnverified: true,

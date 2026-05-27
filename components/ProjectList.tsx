@@ -29,7 +29,8 @@ export default function ProjectList({
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  const sort = searchParams.get('sort') || 'date_asc';
+  const hasQuery = Boolean(searchParams.get('q')?.trim());
+  const sort = searchParams.get('sort') || (hasQuery ? 'relevance' : 'date_asc');
   const currentPage = Number(searchParams.get('page') || '1');
 
   const updateSort = (newSort: string) => {
@@ -72,6 +73,7 @@ export default function ProjectList({
           className="text-sm border border-iica-border rounded-lg px-3 py-2 bg-white text-gray-700 focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none min-h-[40px]"
           aria-label="Ordenar por"
         >
+          <option value="relevance">Más relevantes</option>
           <option value="date_asc">Cierre más próximo</option>
           <option value="amount_desc">Mayor monto</option>
           <option value="newest">Más recientes</option>
