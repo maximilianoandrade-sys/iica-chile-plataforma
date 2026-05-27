@@ -26,6 +26,23 @@ jest.mock("../../lib/utils/logger", () => ({
 describe("coverage-check script", () => {
   const originalArgv = process.argv;
 
+  function buildCriticalSources(overrides: Partial<{ slug: string; projectsCount: number; lastRunStatus: string | null; lastRunAt: Date | null; }>[] = []) {
+    const now = new Date();
+    const base = [
+      { slug: "fia", lastRunAt: now, projectsCount: 1, lastRunStatus: "success" },
+      { slug: "fia-licitaciones", lastRunAt: now, projectsCount: 1, lastRunStatus: "success" },
+      { slug: "corfo", lastRunAt: now, projectsCount: 1, lastRunStatus: "success" },
+      { slug: "indap", lastRunAt: now, projectsCount: 1, lastRunStatus: "success" },
+      { slug: "fontagro", lastRunAt: now, projectsCount: 1, lastRunStatus: "success" },
+      { slug: "cnr", lastRunAt: now, projectsCount: 1, lastRunStatus: "success" },
+    ];
+
+    return base.map((source) => {
+      const patch = overrides.find((o) => o.slug === source.slug);
+      return patch ? { ...source, ...patch } : source;
+    });
+  }
+
   beforeAll(() => {
     process.argv = ["node", "jest"];
   });
@@ -55,5 +72,27 @@ describe("coverage-check script", () => {
     await expect(runCoverageCheck()).rejects.toThrow(
       /source no sembrada/i,
     );
+  });
+
+  it("no falla cuando una fuente queda en partial con 0 proyectos", async () => {
+    findManyMock.mockResolvedValue(
+      buildCriticalSources([
+        { slug: "fia", projectsCount: 0, lastRunStatus: "partial" },
+      ]),
+    );
+
+    const { runCoverageCheck } = await import("../../scripts/coverage-check");
+    await expect(runCoverageCheck()).resolves.toBeUndefined();
+  });
+
+  it("falla cuando una fuente queda en success con 0 proyectos", async () => {
+    findManyMock.mockResolvedValue(
+      buildCriticalSources([
+        { slug: "fia", projectsCount: 0, lastRunStatus: "success" },
+      ]),
+    );
+
+    const { runCoverageCheck } = await import("../../scripts/coverage-check");
+    await expect(runCoverageCheck()).rejects.toThrow(/fia: 0 proyectos con status success/i);
   });
 });

@@ -12,12 +12,13 @@ export async function runCoverageCheck() {
   });
 
   const now = Date.now();
-  const problems: string[] = [];
+  const blockingProblems: string[] = [];
+  const softWarnings: string[] = [];
 
   const foundSlugs = new Set(sources.map((s) => s.slug));
   for (const slug of CRITICAL_SOURCES) {
     if (!foundSlugs.has(slug)) {
-      problems.push(`${slug}: source no sembrada en tabla Source`);
+      blockingProblems.push(`${slug}: source no sembrada en tabla Source`);
     }
   }
 
@@ -27,18 +28,26 @@ export async function runCoverageCheck() {
       : false;
 
     if (!ranRecently) {
-      problems.push(`${source.slug}: sin corrida reciente (48h)`);
+      blockingProblems.push(`${source.slug}: sin corrida reciente (48h)`);
       continue;
     }
 
-    if (source.projectsCount === 0 && source.lastRunStatus !== "error") {
-      problems.push(`${source.slug}: 0 proyectos con status ${source.lastRunStatus || "desconocido"}`);
+    if (source.projectsCount === 0) {
+      if (source.lastRunStatus === "success" || !source.lastRunStatus) {
+        blockingProblems.push(`${source.slug}: 0 proyectos con status ${source.lastRunStatus || "desconocido"}`);
+      } else {
+        softWarnings.push(`${source.slug}: 0 proyectos con status ${source.lastRunStatus}`);
+      }
     }
   }
 
-  if (problems.length > 0) {
-    logger.warn("Coverage check detected anomalies", { problems });
-    throw new Error(problems.join(" | "));
+  if (softWarnings.length > 0) {
+    logger.warn("Coverage check detected non-blocking anomalies", { warnings: softWarnings });
+  }
+
+  if (blockingProblems.length > 0) {
+    logger.warn("Coverage check detected blocking anomalies", { problems: blockingProblems, warnings: softWarnings });
+    throw new Error(blockingProblems.join(" | "));
   }
 
   logger.info("Coverage check passed", {
