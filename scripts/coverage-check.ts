@@ -4,6 +4,7 @@ import { getLogger } from "../lib/utils/logger";
 const logger = getLogger("CoverageCheck");
 
 const CRITICAL_SOURCES = ["fia", "fia-licitaciones", "corfo", "indap", "fontagro", "cnr"];
+const ZERO_RESULTS_BLOCKING_STATUSES = new Set(["success", "partial", "error"]);
 
 export async function runCoverageCheck() {
   const sources = await prisma.source.findMany({
@@ -33,7 +34,7 @@ export async function runCoverageCheck() {
     }
 
     if (source.projectsCount === 0) {
-      if (source.lastRunStatus === "success" || !source.lastRunStatus) {
+      if (!source.lastRunStatus || ZERO_RESULTS_BLOCKING_STATUSES.has(source.lastRunStatus)) {
         blockingProblems.push(`${source.slug}: 0 proyectos con status ${source.lastRunStatus || "desconocido"}`);
       } else {
         softWarnings.push(`${source.slug}: 0 proyectos con status ${source.lastRunStatus}`);

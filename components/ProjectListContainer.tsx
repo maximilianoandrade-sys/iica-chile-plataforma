@@ -48,6 +48,19 @@ export default async function ProjectListContainer({
         ? searchAndRankProjects(searchTerm, filteredByFacets)
         : defaultSortProjects(filteredByFacets);
 
+    const activeFilterLabels: string[] = [];
+    if (searchTerm.trim()) activeFilterLabels.push(`Busqueda: "${searchTerm.trim()}"`);
+    if (selectedEstado) activeFilterLabels.push(`Estado: ${selectedEstado}`);
+    if (selectedAmbito) activeFilterLabels.push(`Ambito: ${selectedAmbito}`);
+    selectedInstitutions.forEach((inst) => activeFilterLabels.push(`Institucion: ${inst}`));
+    selectedRegions.forEach((region) => activeFilterLabels.push(`Region: ${region}`));
+    if (minAmount > 0 || maxAmount < Infinity) {
+        const amountLabel = maxAmount < Infinity
+            ? `Monto: ${minAmount.toLocaleString('es-CL')} - ${maxAmount.toLocaleString('es-CL')}`
+            : `Monto: desde ${minAmount.toLocaleString('es-CL')}`;
+        activeFilterLabels.push(amountLabel);
+    }
+
     return (
         <>
             <JsonLd projects={filteredProjects} />
@@ -55,6 +68,7 @@ export default async function ProjectListContainer({
                 projects={filteredProjects}
                 filterCounts={filterCounts}
                 totalCount={projects.length}
+                activeFilterLabels={activeFilterLabels}
             />
         </>
     );

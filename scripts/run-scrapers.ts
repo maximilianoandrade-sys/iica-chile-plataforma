@@ -4,6 +4,17 @@ import prisma from "../lib/prisma";
 import { getLogger } from "../lib/utils/logger";
 
 const logger = getLogger("RunScrapers");
+const CRITICAL_SOURCE_SLUGS = new Set(["fia", "fia-licitaciones", "corfo", "indap", "fontagro", "cnr"]);
+
+interface RunOneResult {
+  slug: string;
+  status: "success" | "partial";
+  inserted: number;
+}
+
+interface MainOptions {
+  exitOnAllFailed?: boolean;
+}
 
 export function selectScrapers(onlyScraperRaw: string | undefined): typeof scrapers {
   const onlyScraper = onlyScraperRaw?.trim().toLowerCase();
@@ -12,7 +23,7 @@ export function selectScrapers(onlyScraperRaw: string | undefined): typeof scrap
     : scrapers;
 }
 
-async function runOne(scraper: typeof scrapers[number]) {
+async function runOne(scraper: typeof scrapers[number]): Promise<RunOneResult> {
   logger.info("Scraper started", { scraper: scraper.slug });
   try {
     const result = await scraper.scrape();
@@ -42,6 +53,7 @@ async function runOne(scraper: typeof scrapers[number]) {
       rawCount: result.projects.length,
       status,
     });
+    return { slug: scraper.slug, status, inserted };
   } catch (err) {
     const msg = (err as Error).message;
     await updateSourceStatus(scraper.slug, "error", 0, msg);
@@ -50,9 +62,11 @@ async function runOne(scraper: typeof scrapers[number]) {
   }
 }
 
-async function main() {
+export async function main(options: MainOptions = {}) {
+  const { exitOnAllFailed = true } = options;
   const onlyScraper = process.env.ONLY_SCRAPER?.trim().toLowerCase();
   const selectedScrapers = selectScrapers(process.env.ONLY_SCRAPER);
+  let staleProtectedSourceSlugs: string[] = [];
 
   if (onlyScraper && selectedScrapers.length === 0) {
     logger.warn("Requested scraper not found in registry", { onlyScraper });
@@ -70,22 +84,39 @@ async function main() {
     });
     const results = await Promise.allSettled(selectedScrapers.map(runOne));
     const failed = results.filter((r) => r.status === "rejected").length;
+    staleProtectedSourceSlugs = results.flatMap((result, index) => {
+      const fallbackSlug = selectedScrapers[index].slug;
+      if (result.status === "rejected") return [fallbackSlug];
+
+      const run = result.value;
+      const isCritical = CRITICAL_SOURCE_SLUGS.has(run.slug);
+      if (isCritical && (run.status !== "success" || run.inserted === 0)) {
+        return [run.slug];
+      }
+
+      return [];
+    });
     logger.info("Scraper run finished", {
       failed,
       total: selectedScrapers.length,
+      staleProtectedSourceSlugs,
     });
 
     if (failed === selectedScrapers.length && selectedScrapers.length > 0) {
       await prisma.$disconnect();
-      process.exit(1);
+      if (exitOnAllFailed) {
+        process.exit(1);
+      }
+      return;
     }
   }
 
   logger.info("Marking stale projects");
-  const stale = await markStale();
+  const stale = await markStale({ skipSourceSlugs: staleProtectedSourceSlugs });
   logger.info("Stale projects marked", {
     markedByLastSeen: stale.markedByLastSeen,
     markedByDeadline: stale.markedByDeadline,
+    protectedSources: staleProtectedSourceSlugs,
   });
 
   await prisma.$disconnect();

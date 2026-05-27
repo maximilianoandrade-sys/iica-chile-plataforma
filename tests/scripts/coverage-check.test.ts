@@ -74,10 +74,21 @@ describe("coverage-check script", () => {
     );
   });
 
-  it("no falla cuando una fuente queda en partial con 0 proyectos", async () => {
+  it("falla cuando una fuente crítica queda en partial con 0 proyectos", async () => {
     findManyMock.mockResolvedValue(
       buildCriticalSources([
         { slug: "fia", projectsCount: 0, lastRunStatus: "partial" },
+      ]),
+    );
+
+    const { runCoverageCheck } = await import("../../scripts/coverage-check");
+    await expect(runCoverageCheck()).rejects.toThrow(/fia: 0 proyectos con status partial/i);
+  });
+
+  it("no falla cuando una fuente crítica queda en partial pero con proyectos", async () => {
+    findManyMock.mockResolvedValue(
+      buildCriticalSources([
+        { slug: "fia", projectsCount: 3, lastRunStatus: "partial" },
       ]),
     );
 

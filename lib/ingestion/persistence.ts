@@ -9,6 +9,10 @@ import type { RawProject } from "./types";
 
 const STALE_DAYS = 7;
 
+interface MarkStaleOptions {
+  skipSourceSlugs?: string[];
+}
+
 export async function upsertProject(
   raw: RawProject,
   sourceSlug: string
@@ -118,15 +122,37 @@ export async function findSemanticDuplicates(
   return rows;
 }
 
-export async function markStale(): Promise<{ markedByLastSeen: number; markedByDeadline: number }> {
+export async function markStale(
+  options: MarkStaleOptions = {}
+): Promise<{ markedByLastSeen: number; markedByDeadline: number }> {
+  const { skipSourceSlugs = [] } = options;
   const staleCutoff = new Date(Date.now() - STALE_DAYS * 24 * 60 * 60 * 1000);
 
+  let protectedSourceIds: number[] = [];
+  if (skipSourceSlugs.length > 0) {
+    const protectedSources = await prisma.source.findMany({
+      where: { slug: { in: skipSourceSlugs } },
+      select: { id: true, slug: true },
+    });
+    protectedSourceIds = protectedSources.map((source) => source.id);
+  }
+
+  const lastSeenWhere = {
+    lastSeenAt: { lt: staleCutoff },
+    estadoPostulacion: "Abierta",
+    discoveredBy: { not: "manual" },
+    ...(protectedSourceIds.length > 0
+      ? {
+          OR: [
+            { sourceRefId: null },
+            { sourceRefId: { notIn: protectedSourceIds } },
+          ],
+        }
+      : {}),
+  };
+
   const byLastSeen = await prisma.project.updateMany({
-    where: {
-      lastSeenAt: { lt: staleCutoff },
-      estadoPostulacion: "Abierta",
-      discoveredBy: { not: "manual" },
-    },
+    where: lastSeenWhere,
     data: { estadoPostulacion: "Cerrada" },
   });
 

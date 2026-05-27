@@ -15,6 +15,7 @@ jest.mock("../../../lib/prisma", () => ({
     },
     source: {
       findUnique: jest.fn(),
+      findMany: jest.fn(),
       update: jest.fn(),
     },
   },
@@ -25,7 +26,7 @@ jest.mock("../../../lib/ingestion/validateUrl", () => ({
   validateUrl: jest.fn().mockResolvedValue({ ok: true }),
 }));
 
-import { upsertProject, updateSourceStatus } from "../../../lib/ingestion/persistence";
+import { markStale, upsertProject, updateSourceStatus } from "../../../lib/ingestion/persistence";
 const prisma = require("../../../lib/prisma").default;
 
 describe("upsertProject", () => {
@@ -167,6 +168,46 @@ describe("updateSourceStatus", () => {
           lastRunStatus: "success",
           projectsCount: 5,
         }),
+      })
+    );
+  });
+});
+
+describe("markStale", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    prisma.project.updateMany
+      .mockResolvedValueOnce({ count: 2 })
+      .mockResolvedValueOnce({ count: 1 });
+    prisma.source.findMany.mockResolvedValue([{ id: 7, slug: "fia" }]);
+  });
+
+  it("excludes failing source slugs from lastSeen stale closure", async () => {
+    await markStale({ skipSourceSlugs: ["fia"] });
+
+    expect(prisma.source.findMany).toHaveBeenCalledWith({
+      where: { slug: { in: ["fia"] } },
+      select: { id: true, slug: true },
+    });
+
+    expect(prisma.project.updateMany).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        where: expect.objectContaining({
+          OR: [{ sourceRefId: null }, { sourceRefId: { notIn: [7] } }],
+        }),
+      })
+    );
+  });
+
+  it("marks stale projects without source exclusions by default", async () => {
+    await markStale();
+
+    expect(prisma.source.findMany).not.toHaveBeenCalled();
+    expect(prisma.project.updateMany).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        where: expect.not.objectContaining({ OR: expect.anything() }),
       })
     );
   });

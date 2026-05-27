@@ -16,9 +16,10 @@ interface ProjectListProps {
   projects: Project[];
   filterCounts: FilterCounts;
   totalCount: number;
+  activeFilterLabels?: string[];
 }
 
-export default function ProjectList({ projects, filterCounts, totalCount }: ProjectListProps) {
+export default function ProjectList({ projects, filterCounts, totalCount, activeFilterLabels = [] }: ProjectListProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -98,9 +99,31 @@ export default function ProjectList({ projects, filterCounts, totalCount }: Proj
           ))}
         </div>
       ) : (
-        <div className="text-center py-12 text-gray-500">
+        <div className="text-center py-12 text-gray-500 space-y-3" role="status" aria-live="polite">
           <p className="text-lg font-medium">No se encontraron oportunidades</p>
           <p className="text-sm mt-1">Intenta ajustar los filtros de búsqueda</p>
+          {activeFilterLabels.length > 0 && (
+            <div className="mx-auto max-w-3xl">
+              <p className="text-xs uppercase tracking-wide text-gray-500 mb-2">Filtros activos</p>
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                {activeFilterLabels.map((label) => (
+                  <span
+                    key={label}
+                    className="inline-flex items-center rounded-full border border-iica-border bg-white px-3 py-1 text-xs text-gray-700"
+                  >
+                    {label}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+          <button
+            type="button"
+            onClick={() => router.push(pathname, { scroll: false })}
+            className="inline-flex items-center justify-center rounded-full border border-iica-blue bg-iica-blue px-4 py-2 text-sm font-medium text-white hover:bg-iica-blue/90"
+          >
+            Limpiar filtros
+          </button>
         </div>
       )}
 

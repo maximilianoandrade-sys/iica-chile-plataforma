@@ -36,8 +36,18 @@ const originalArgv = process.argv;
 process.argv = ["node", "jest"]; // evita auto-ejecución al importar
 
 import { selectScrapers } from "../../../scripts/run-scrapers";
+import { markStale } from "../../../lib/ingestion/persistence";
+import { scrapers } from "../../../lib/ingestion/registry";
 
 describe("selectScrapers", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (markStale as jest.Mock).mockResolvedValue({
+      markedByLastSeen: 0,
+      markedByDeadline: 0,
+    });
+  });
+
   afterAll(() => {
     process.argv = originalArgv;
   });
@@ -56,5 +66,29 @@ describe("selectScrapers", () => {
   it("retorna vacío para slug inexistente", () => {
     const result = selectScrapers("does-not-exist");
     expect(result).toHaveLength(0);
+  });
+
+  it("passes failing source slug to markStale exclusions", async () => {
+    const { main } = await import("../../../scripts/run-scrapers");
+
+    (scrapers[0].scrape as jest.Mock).mockResolvedValue({
+      sourceSlug: "fia",
+      projects: [],
+      partialErrors: ["fetch failed"],
+    });
+
+    const originalOnly = process.env.ONLY_SCRAPER;
+    process.env.ONLY_SCRAPER = "fia";
+    try {
+      await main({ exitOnAllFailed: false });
+    } finally {
+      if (originalOnly === undefined) {
+        delete process.env.ONLY_SCRAPER;
+      } else {
+        process.env.ONLY_SCRAPER = originalOnly;
+      }
+    }
+
+    expect(markStale).toHaveBeenCalledWith({ skipSourceSlugs: ["fia"] });
   });
 });

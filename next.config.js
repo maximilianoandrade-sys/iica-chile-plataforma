@@ -139,10 +139,10 @@ const withPWA = require('@ducanh2912/next-pwa').default({
         handler: 'NetworkFirst',
         options: {
           cacheName: 'pages',
-          networkTimeoutSeconds: 10,
+          networkTimeoutSeconds: 3,
           expiration: {
             maxEntries: 32,
-            maxAgeSeconds: 60 * 5, // 5 minutos máximo
+            maxAgeSeconds: 30, // Evita servir HTML viejo por demasiado tiempo
           },
         },
       },

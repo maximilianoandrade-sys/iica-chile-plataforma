@@ -1,8 +1,10 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import ProjectList from '@/components/ProjectList';
 
+const pushMock = jest.fn();
+
 jest.mock('next/navigation', () => ({
-  useRouter: () => ({ push: jest.fn() }),
+  useRouter: () => ({ push: pushMock }),
   useSearchParams: () => new URLSearchParams(''),
   usePathname: () => '/',
 }));
@@ -21,6 +23,10 @@ const filterCounts = {
 };
 
 describe('ProjectList accessibility', () => {
+  beforeEach(() => {
+    pushMock.mockReset();
+  });
+
   it('has search input with label', () => {
     render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
     expect(screen.getByRole('searchbox', { name: /Buscar oportunidades/i })).toBeInTheDocument();
@@ -39,5 +45,24 @@ describe('ProjectList accessibility', () => {
   it('has live region for result count', () => {
     render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
     expect(screen.getByText(/1 de 1 oportunidades/)).toHaveAttribute('aria-live', 'polite');
+  });
+
+  it('shows active filters and clear action in empty state', () => {
+    render(
+      <ProjectList
+        projects={[]}
+        filterCounts={filterCounts}
+        totalCount={1}
+        activeFilterLabels={['Busqueda: "fia"', 'Estado: Abierta']}
+      />
+    );
+
+    expect(screen.getByText(/No se encontraron oportunidades/i)).toBeInTheDocument();
+    expect(screen.getByText(/Filtros activos/i)).toBeInTheDocument();
+    expect(screen.getByText('Busqueda: "fia"')).toBeInTheDocument();
+
+    const clearButton = screen.getByRole('button', { name: /Limpiar filtros/i });
+    fireEvent.click(clearButton);
+    expect(pushMock).toHaveBeenCalledWith('/', { scroll: false });
   });
 });
