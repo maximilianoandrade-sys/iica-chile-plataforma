@@ -23,6 +23,7 @@ describe('mapSearchRequestToLinkedInQuery', () => {
   it('uses safe defaults when optional filters are missing', () => {
     const mapped = mapSearchRequestToLinkedInQuery({ query: 'agricultura' });
     expect(mapped.limit).toBe(20);
+    expect(mapped.languageRegion).toBe('cl-es');
     expect(mapped.query).toContain('agricultura');
   });
 });
