@@ -47,6 +47,12 @@ describe('ProjectList accessibility', () => {
     expect(screen.getByText(/1 de 1 oportunidades/)).toHaveAttribute('aria-live', 'polite');
   });
 
+  it('shows strict relevance badge by default', () => {
+    render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
+    expect(screen.getByText(/Solo Chile \(estricto\)/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Ver todas/i })).toBeInTheDocument();
+  });
+
   it('shows active filters and clear action in empty state', () => {
     render(
       <ProjectList

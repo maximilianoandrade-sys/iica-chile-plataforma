@@ -26,6 +26,7 @@ export default function ProjectList({ projects, filterCounts, totalCount, active
 
   const sort = searchParams.get('sort') || 'date_asc';
   const currentPage = Number(searchParams.get('page') || '1');
+  const relevanceMode = searchParams.get('relevanceMode') || 'chile_strict';
 
   const updateSort = (newSort: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -76,9 +77,48 @@ export default function ProjectList({ projects, filterCounts, totalCount, active
 
       {/* Toolbar: count + sort */}
       <div className="flex items-center justify-between">
-        <span className="text-sm text-gray-600" aria-live="polite">
-          {projects.length} de {totalCount} oportunidades
-        </span>
+        <div className="space-y-1">
+          <span className="block text-sm text-gray-600" aria-live="polite">
+            {projects.length} de {totalCount} oportunidades
+          </span>
+          <div className="flex items-center gap-2">
+            <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${
+              relevanceMode === 'all'
+                ? 'bg-amber-100 text-amber-800'
+                : 'bg-green-100 text-green-800'
+            }`}>
+              {relevanceMode === 'all' ? 'Mostrando internacionales no verificadas' : 'Solo Chile (estricto)'}
+            </span>
+            {relevanceMode === 'all' ? (
+              <button
+                type="button"
+                onClick={() => {
+                  const params = new URLSearchParams(searchParams.toString());
+                  params.delete('relevanceMode');
+                  params.delete('page');
+                  const qs = params.toString();
+                  router.push(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+                }}
+                className="text-xs text-iica-blue hover:underline"
+              >
+                Volver a Solo Chile
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  const params = new URLSearchParams(searchParams.toString());
+                  params.set('relevanceMode', 'all');
+                  params.delete('page');
+                  router.push(`${pathname}?${params.toString()}`, { scroll: false });
+                }}
+                className="text-xs text-iica-blue hover:underline"
+              >
+                Ver todas
+              </button>
+            )}
+          </div>
+        </div>
         <select
           value={sort}
           onChange={(e) => updateSort(e.target.value)}

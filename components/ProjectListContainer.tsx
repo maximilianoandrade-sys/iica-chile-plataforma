@@ -7,6 +7,7 @@ import {
     buildFilterCounts,
     filterProjectsByFacets,
 } from "@/lib/search/filtering";
+import { applyRelevanceAndAmbitoPolicy } from "@/lib/search/relevance";
 
 export default async function ProjectListContainer({
     searchParams,
@@ -28,14 +29,22 @@ export default async function ProjectListContainer({
     const selectedInstitutions = typeof searchParams.institution === 'string' ? searchParams.institution.split(',').filter(Boolean) : [];
     const selectedRegions = typeof searchParams.region === 'string' ? searchParams.region.split(',').filter(Boolean) : [];
     const selectedAmbito = typeof searchParams.ambito === 'string' ? searchParams.ambito : '';
+    const selectedRelevanceMode = typeof searchParams.relevanceMode === 'string' ? searchParams.relevanceMode : '';
     const minAmountRaw = typeof searchParams.minAmount === 'string' ? Number.parseInt(searchParams.minAmount, 10) : 0;
     const maxAmountRaw = typeof searchParams.maxAmount === 'string' ? Number.parseInt(searchParams.maxAmount, 10) : Infinity;
     const minAmount = Number.isFinite(minAmountRaw) ? minAmountRaw : 0;
     const maxAmount = Number.isFinite(maxAmountRaw) ? maxAmountRaw : Infinity;
 
-    const filterCounts = buildFilterCounts(projects);
+    const effectiveRelevanceMode = selectedRelevanceMode === 'all' ? 'all' : 'chile_strict';
+    const relevancePolicy = applyRelevanceAndAmbitoPolicy(projects as unknown as Record<string, unknown>[], {
+        relevanceMode: effectiveRelevanceMode,
+        ambito: 'all',
+    });
+    const visibleProjects = relevancePolicy.results as unknown as Project[];
 
-    const filteredByFacets = filterProjectsByFacets(projects, {
+    const filterCounts = buildFilterCounts(visibleProjects);
+
+    const filteredByFacets = filterProjectsByFacets(visibleProjects, {
         selectedEstado,
         selectedInstitutions,
         selectedRegions,
@@ -52,6 +61,8 @@ export default async function ProjectListContainer({
     if (searchTerm.trim()) activeFilterLabels.push(`Busqueda: "${searchTerm.trim()}"`);
     if (selectedEstado) activeFilterLabels.push(`Estado: ${selectedEstado}`);
     if (selectedAmbito) activeFilterLabels.push(`Ambito: ${selectedAmbito}`);
+    if (selectedRelevanceMode === 'all') activeFilterLabels.push('Modo: Ver todas');
+    if (!selectedRelevanceMode || selectedRelevanceMode === 'chile_strict') activeFilterLabels.push('Modo: Solo Chile');
     selectedInstitutions.forEach((inst) => activeFilterLabels.push(`Institucion: ${inst}`));
     selectedRegions.forEach((region) => activeFilterLabels.push(`Region: ${region}`));
     if (minAmount > 0 || maxAmount < Infinity) {
@@ -67,7 +78,7 @@ export default async function ProjectListContainer({
             <ProjectList
                 projects={filteredProjects}
                 filterCounts={filterCounts}
-                totalCount={projects.length}
+                totalCount={visibleProjects.length}
                 activeFilterLabels={activeFilterLabels}
             />
         </>

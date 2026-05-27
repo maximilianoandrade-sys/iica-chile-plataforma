@@ -1,5 +1,37 @@
 import { daysUntilClose, isOpen, isClosingSoon, urgencyLabel, formatMontoCLP, viabilidadColors, complejidadColors, rolIICAInfo } from '@/lib/data';
 import { Project } from '@/lib/data';
+import { render, screen } from '@testing-library/react';
+import React from 'react';
+
+jest.mock('react', () => {
+  const actual = jest.requireActual('react');
+  return {
+    ...actual,
+    cache: (fn: unknown) => fn,
+  };
+});
+
+jest.mock('@/components/Header', () => ({
+  Header: () => React.createElement('div', { 'data-testid': 'header' }, 'header'),
+}));
+
+jest.mock('@/components/Footer', () => ({
+  Footer: () => React.createElement('div', { 'data-testid': 'footer' }, 'footer'),
+}));
+
+jest.mock('@/components/ActionButton', () => ({
+  ActionButton: () => React.createElement('button', { type: 'button' }, 'Abrir bases'),
+}));
+
+jest.mock('@/lib/data', () => {
+  const actual = jest.requireActual('@/lib/data');
+  return {
+    ...actual,
+    getProjects: jest.fn(),
+  };
+});
+
+const { getProjects } = require('@/lib/data');
 
 describe('data utilities', () => {
   const mockProject: Project = {
@@ -177,6 +209,38 @@ describe('data utilities', () => {
     it('debe retornar valores por defecto para rol undefined', () => {
       const info = rolIICAInfo(undefined);
       expect(info.label).toBe('Sin definir');
+    });
+  });
+
+  describe('proyecto detalle placeholders', () => {
+    it('shows editorial validation text when regions and beneficiaries are missing', async () => {
+      getProjects.mockResolvedValue({
+        ok: true,
+        projects: [
+          {
+            id: 777,
+            nombre: 'Proyecto sin campos completos',
+            institucion: 'FIA',
+            monto: 0,
+            fecha_cierre: '2099-12-31',
+            estado: 'Abierta',
+            categoria: 'Convocatoria',
+            url_bases: 'https://example.com/proyecto',
+            publishable: true,
+            regiones: [],
+            beneficiarios: [],
+          },
+        ],
+      });
+
+      const module = await import('@/app/proyecto/[id]/page');
+      const Page = module.default;
+      const element = await Page({ params: Promise.resolve({ id: '777' }) });
+
+      render(element);
+
+      expect(screen.getByText(/Regiones en validación editorial/i)).toBeInTheDocument();
+      expect(screen.getByText(/Beneficiarios en validación editorial/i)).toBeInTheDocument();
     });
   });
 });

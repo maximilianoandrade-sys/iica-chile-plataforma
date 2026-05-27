@@ -83,7 +83,50 @@ export function parseAmount(input: string): number | null {
 
 export function cleanText(input: string | null | undefined): string {
   if (!input) return "";
-  return input.replace(/\s+/g, " ").trim();
+  return normalizeMojibake(input).replace(/\s+/g, " ").trim();
+}
+
+const COMMON_MOJIBAKE_REPLACEMENTS: Array<[RegExp, string]> = [
+  [/DISE�AR/g, 'DISEÑAR'],
+  [/EJECUCI�N/g, 'EJECUCIÓN'],
+  [/INNOVACI�N/g, 'INNOVACIÓN'],
+  [/POSTULACI�N/g, 'POSTULACIÓN'],
+  [/REGI�N/g, 'REGIÓN'],
+  [/CAPACITACI�N/g, 'CAPACITACIÓN'],
+  [/TECNIFICACI�N/g, 'TECNIFICACIÓN'],
+  [/COOPERACI�N/g, 'COOPERACIÓN'],
+  [/GESTI�N/g, 'GESTIÓN'],
+  [/PRODUCCI�N/g, 'PRODUCCIÓN'],
+  [/EVALUACI�N/g, 'EVALUACIÓN'],
+  [/IMPLEMENTACI�N/g, 'IMPLEMENTACIÓN'],
+  [/A�O/g, 'AÑO'],
+];
+
+export function normalizeMojibake(input: string | null | undefined): string {
+  if (!input) return '';
+
+  let text = input;
+
+  // Secuencias UTF-8 interpretadas como latin1.
+  text = text
+    .replace(/Ã¡/g, 'á')
+    .replace(/Ã©/g, 'é')
+    .replace(/Ã­/g, 'í')
+    .replace(/Ã³/g, 'ó')
+    .replace(/Ãº/g, 'ú')
+    .replace(/Ã±/g, 'ñ')
+    .replace(/Ã/g, 'Á')
+    .replace(/Ã‰/g, 'É')
+    .replace(/Ã/g, 'Í')
+    .replace(/Ã“/g, 'Ó')
+    .replace(/Ãš/g, 'Ú')
+    .replace(/Ã‘/g, 'Ñ');
+
+  for (const [pattern, replacement] of COMMON_MOJIBAKE_REPLACEMENTS) {
+    text = text.replace(pattern, replacement);
+  }
+
+  return text;
 }
 
 export function absoluteUrl(href: string, base: string): string {

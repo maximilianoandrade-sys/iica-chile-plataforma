@@ -105,7 +105,10 @@ export async function checkExternal(url: string, options: CheckExternalOptions =
         };
       }
 
-      const check = await response.json();
+      const responseBody = await response.json();
+      const check = (responseBody && typeof responseBody === 'object' && 'data' in responseBody)
+        ? (responseBody.data as Record<string, unknown>)
+        : (responseBody as Record<string, unknown>);
       const reason = check.reason as string | undefined;
       const status = Number(check.status || 0);
       const isBlocked = reason === 'blocked_by_bot_protection' || status === 403 || status === 429;

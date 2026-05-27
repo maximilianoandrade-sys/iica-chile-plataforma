@@ -58,7 +58,8 @@ test.describe("API endpoints", () => {
     const res = await request.get(`/api/check-link?url=${target}`);
     expect(res.ok()).toBeTruthy();
     const body = await res.json();
-    expect(typeof body.isValid).toBe("boolean");
+    const data = body.data ?? body;
+    expect(typeof data.isValid).toBe("boolean");
   });
 
   test("/api/check-link marca URL inexistente como inválida", async ({ request }) => {
@@ -68,7 +69,8 @@ test.describe("API endpoints", () => {
     // pero con isValid=false (la URL no responde).
     expect(res.ok()).toBeTruthy();
     const body = await res.json();
-    expect(body.isValid).toBe(false);
+    const data = body.data ?? body;
+    expect(data.isValid).toBe(false);
   });
 });
 

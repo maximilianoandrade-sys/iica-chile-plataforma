@@ -31,6 +31,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
   const currentMinAmount = searchParams.get('minAmount') ?? '';
   const currentMaxAmount = searchParams.get('maxAmount') ?? '';
   const currentAmbito = searchParams.get('ambito') ?? '';
+  const currentRelevanceMode = searchParams.get('relevanceMode') ?? '';
   const [searchInput, setSearchInput] = useState(currentQ);
 
   useEffect(() => {
@@ -85,7 +86,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
     router.push(pathname, { scroll: false });
   }
 
-  const hasActiveFilters = currentQ || currentEstado || currentInstitution || currentRegion || currentMinAmount || currentMaxAmount || currentAmbito;
+  const hasActiveFilters = currentQ || currentEstado || currentInstitution || currentRegion || currentMinAmount || currentMaxAmount || currentAmbito || currentRelevanceMode;
 
   const topInstitutions = Object.entries(filterCounts.institucion)
     .sort((a, b) => b[1] - a[1])

@@ -31,6 +31,7 @@ import { runExternalSearch } from '@/lib/search/external/orchestrator';
 import { LinkedInPublicProvider } from '@/lib/search/external/providers/linkedinPublic';
 import type { ExternalProviderId } from '@/lib/search/contracts';
 import { getEnv } from '@/lib/utils/env';
+import { applyRelevanceAndAmbitoPolicy } from '@/lib/search/relevance';
 const logger = getLogger('SearchProjects');
 
 function calcDaysLeft(deadline: Date | string | null): number | null {
@@ -66,6 +67,39 @@ function normalizeSourceMode(
   return envDefaultMode ?? 'internal';
 }
 
+function countBySourcePrefix(projects: Record<string, unknown>[], sourcePrefix: string): number {
+  return projects.filter((project) => {
+    const sourceId = project.sourceId;
+    return typeof sourceId === 'string' && sourceId.startsWith(`${sourcePrefix}:`);
+  }).length;
+}
+
+function normalizeMercadoPublicoDocs(docs: Record<string, unknown>[]): Record<string, unknown>[] {
+  return docs.map((doc, index) => {
+    const codigoExterno = doc.codigoExterno;
+    const sourceSuffix = typeof codigoExterno === 'string' && codigoExterno.trim().length > 0
+      ? codigoExterno.trim()
+      : String(index);
+    return {
+      ...doc,
+      sourceId: `mercado_publico:${sourceSuffix}`,
+    };
+  });
+}
+
+function applyPublishableFilter(projects: Record<string, unknown>[]): { visible: Record<string, unknown>[]; hidden: number } {
+  let hidden = 0;
+  const visible = projects.filter((project) => {
+    const publishable = project.publishable;
+    if (publishable === false) {
+      hidden += 1;
+      return false;
+    }
+    return true;
+  });
+  return { visible, hidden };
+}
+
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
   const rateLimit = checkRateLimit(`search-projects:${ip}`, { maxRequests: 30, windowSizeSeconds: 60 });
@@ -88,6 +122,9 @@ export async function POST(req: NextRequest) {
     const env = getEnv();
     const query = requestBody.query?.trim() || "";
     const ambito = requestBody.ambito || requestBody.scope || "all";
+    const strictQualityEnabled = env.SEARCH_QUALITY_STRICT_ENABLED !== 'false';
+    const requestedRelevanceMode = requestBody.relevanceMode ?? 'chile_strict';
+    const relevanceMode = strictQualityEnabled ? requestedRelevanceMode : 'all';
     const includeUnverified = requestBody.includeUnverified !== false;
     const sourceMode = normalizeSourceMode(
       requestBody.sourceMode,
@@ -118,15 +155,26 @@ export async function POST(req: NextRequest) {
         ...p,
         days_left: calcDaysLeft(p.fecha_cierre),
       }));
+      const { visible: publishableHybrid, hidden: hiddenByQuality } = strictQualityEnabled
+        ? applyPublishableFilter(enriched as Record<string, unknown>[])
+        : { visible: enriched as unknown as Record<string, unknown>[], hidden: 0 };
+
+      const normalizedMpDocs = normalizeMercadoPublicoDocs(mpDocs as unknown as Record<string, unknown>[]);
+      const merged = [...publishableHybrid, ...normalizedMpDocs] as Record<string, unknown>[];
+      const policy = applyRelevanceAndAmbitoPolicy(merged, { relevanceMode, ambito });
 
       return createSuccessResponse({
-        results: [...enriched, ...mpDocs],
+        results: policy.results,
         meta: {
-          total: enriched.length + mpDocs.length,
-          hybrid_count: enriched.length,
+          total: policy.results.length,
+          hybrid_count: policy.results.length - countBySourcePrefix(policy.results, 'mercado_publico'),
           external_count: 0,
-          mercado_publico_count: mpDocs.length,
+          mercado_publico_count: countBySourcePrefix(policy.results, 'mercado_publico'),
           mode: hybrid.mode,
+          relevance_mode: relevanceMode,
+          hidden_by_relevance: policy.hiddenByRelevance,
+          hidden_by_ambito: policy.hiddenByAmbito,
+          hidden_by_quality: hiddenByQuality,
           degraded: true,
           degraded_reason: degradedReason,
           providers: enabledProviderIds,
@@ -148,14 +196,23 @@ export async function POST(req: NextRequest) {
         days_left: calcDaysLeft(p.fecha_cierre),
       }));
 
+      const { visible: publishableExternal, hidden: hiddenByQuality } = strictQualityEnabled
+        ? applyPublishableFilter(enrichedExternal as Record<string, unknown>[])
+        : { visible: enrichedExternal as unknown as Record<string, unknown>[], hidden: 0 };
+      const policy = applyRelevanceAndAmbitoPolicy(publishableExternal as Record<string, unknown>[], { relevanceMode, ambito });
+
       return createSuccessResponse({
-        results: enrichedExternal,
+        results: policy.results,
         meta: {
-          total: enrichedExternal.length,
-          external_count: enrichedExternal.length,
+          total: policy.results.length,
+          external_count: policy.results.length,
           mercado_publico_count: 0,
           hybrid_count: 0,
           mode: 'external',
+          relevance_mode: relevanceMode,
+          hidden_by_relevance: policy.hiddenByRelevance,
+          hidden_by_ambito: policy.hiddenByAmbito,
+          hidden_by_quality: hiddenByQuality,
           providers: externalResult.providers,
           provider_stats: externalResult.providerStats,
           degraded: externalResult.degraded,
@@ -176,20 +233,36 @@ export async function POST(req: NextRequest) {
         ...p,
         days_left: calcDaysLeft(p.fecha_cierre),
       }));
+      const { visible: publishableHybrid, hidden: hiddenHybridByQuality } = strictQualityEnabled
+        ? applyPublishableFilter(enrichedHybrid as Record<string, unknown>[])
+        : { visible: enrichedHybrid as unknown as Record<string, unknown>[], hidden: 0 };
 
       const enrichedExternal = externalResult.projects.map((p) => ({
         ...p,
         days_left: calcDaysLeft(p.fecha_cierre),
       }));
+      const { visible: publishableExternal, hidden: hiddenExternalByQuality } = strictQualityEnabled
+        ? applyPublishableFilter(enrichedExternal as Record<string, unknown>[])
+        : { visible: enrichedExternal as unknown as Record<string, unknown>[], hidden: 0 };
+
+      const normalizedMpDocs = normalizeMercadoPublicoDocs(mpDocs as unknown as Record<string, unknown>[]);
+      const merged = [...publishableHybrid, ...publishableExternal, ...normalizedMpDocs] as Record<string, unknown>[];
+      const policy = applyRelevanceAndAmbitoPolicy(merged, { relevanceMode, ambito });
 
       return createSuccessResponse({
-        results: [...enrichedHybrid, ...enrichedExternal, ...mpDocs],
+        results: policy.results,
         meta: {
-          total: enrichedHybrid.length + enrichedExternal.length + mpDocs.length,
-          hybrid_count: enrichedHybrid.length,
-          external_count: enrichedExternal.length,
-          mercado_publico_count: mpDocs.length,
+          total: policy.results.length,
+          hybrid_count: policy.results.length
+            - countBySourcePrefix(policy.results, 'linkedin_public')
+            - countBySourcePrefix(policy.results, 'mercado_publico'),
+          external_count: countBySourcePrefix(policy.results, 'linkedin_public'),
+          mercado_publico_count: countBySourcePrefix(policy.results, 'mercado_publico'),
           mode: 'mixed',
+          relevance_mode: relevanceMode,
+          hidden_by_relevance: policy.hiddenByRelevance,
+          hidden_by_ambito: policy.hiddenByAmbito,
+          hidden_by_quality: hiddenHybridByQuality + hiddenExternalByQuality,
           providers: externalResult.providers,
           provider_stats: externalResult.providerStats,
           degraded: externalResult.degraded,
@@ -208,15 +281,26 @@ export async function POST(req: NextRequest) {
       ...p,
       days_left: calcDaysLeft(p.fecha_cierre),
     }));
+    const { visible: publishableHybrid, hidden: hiddenByQuality } = strictQualityEnabled
+      ? applyPublishableFilter(enriched as Record<string, unknown>[])
+      : { visible: enriched as unknown as Record<string, unknown>[], hidden: 0 };
+
+    const normalizedMpDocs = normalizeMercadoPublicoDocs(mpDocs as unknown as Record<string, unknown>[]);
+    const merged = [...publishableHybrid, ...normalizedMpDocs] as Record<string, unknown>[];
+    const policy = applyRelevanceAndAmbitoPolicy(merged, { relevanceMode, ambito });
 
     return createSuccessResponse({
-      results: [...enriched, ...mpDocs],
+      results: policy.results,
       meta: {
-        total: enriched.length + mpDocs.length,
-        hybrid_count: enriched.length,
+        total: policy.results.length,
+        hybrid_count: policy.results.length - countBySourcePrefix(policy.results, 'mercado_publico'),
         external_count: 0,
-        mercado_publico_count: mpDocs.length,
+        mercado_publico_count: countBySourcePrefix(policy.results, 'mercado_publico'),
         mode: hybrid.mode, // "hybrid" | "lexical_only" | "all"
+        relevance_mode: relevanceMode,
+        hidden_by_relevance: policy.hiddenByRelevance,
+        hidden_by_ambito: policy.hiddenByAmbito,
+        hidden_by_quality: hiddenByQuality,
         provider_stats: [],
         query,
         searched_at: new Date().toISOString(),

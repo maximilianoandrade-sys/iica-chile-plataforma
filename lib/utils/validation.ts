@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { EXTERNAL_PROVIDER_IDS, SEARCH_SOURCE_MODES } from '@/lib/search/contracts';
+import { EXTERNAL_PROVIDER_IDS, SEARCH_RELEVANCE_MODES, SEARCH_SOURCE_MODES } from '@/lib/search/contracts';
 
 /**
  * Schemas Zod compartidos para validación de input en APIs.
@@ -30,6 +30,7 @@ export const GenerateProposalSchema = z.object({
 
 const SearchProviderSchema = z.enum(EXTERNAL_PROVIDER_IDS);
 const SearchSourceModeSchema = z.enum(SEARCH_SOURCE_MODES);
+const SearchRelevanceModeSchema = z.enum(SEARCH_RELEVANCE_MODES);
 const SearchAmbitoSchema = z.enum(['all', 'Nacional', 'Regional', 'Internacional']);
 const SearchEstadoSchema = z.enum(['Abierta', 'Próxima', 'Cerrada']);
 
@@ -55,6 +56,7 @@ export const SearchProjectsRequestSchema = z
     includeUnverified: z.boolean().optional(),
     sourceMode: SearchSourceModeSchema.optional(),
     providers: z.array(SearchProviderSchema).max(5, 'Máximo 5 proveedores').optional(),
+    relevanceMode: SearchRelevanceModeSchema.optional(),
   })
   .refine(
     (data) => data.minAmount == null || data.maxAmount == null || data.maxAmount >= data.minAmount,

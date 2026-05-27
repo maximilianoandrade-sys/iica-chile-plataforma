@@ -52,11 +52,14 @@ describe('audit-links external checker', () => {
       .mockResolvedValueOnce(
         new Response(
           JSON.stringify({
-            isValid: true,
-            status: 200,
-            reason: 'ok',
-            redirectedToHome: false,
-            originalIsHomepage: false,
+            ok: true,
+            data: {
+              isValid: true,
+              status: 200,
+              reason: 'ok',
+              redirectedToHome: false,
+              originalIsHomepage: false,
+            },
           }),
           { status: 200, headers: { 'content-type': 'application/json' } },
         ),
