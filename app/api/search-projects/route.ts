@@ -31,6 +31,7 @@ import { runExternalSearch } from '@/lib/search/external/orchestrator';
 import { LinkedInPublicProvider } from '@/lib/search/external/providers/linkedinPublic';
 import type { ExternalProviderId } from '@/lib/search/contracts';
 import { getEnv } from '@/lib/utils/env';
+
 const logger = getLogger('SearchProjects');
 
 function calcDaysLeft(deadline: Date | string | null): number | null {
@@ -66,6 +67,21 @@ function normalizeSourceMode(
   return envDefaultMode ?? 'internal';
 }
 
+function parseCsvParam(value: string | undefined): string[] {
+  if (!value) return [];
+  return value
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function resolveHybridTotal(result: { total?: number; projects: Array<unknown> }): number {
+  if (typeof result.total === 'number' && Number.isFinite(result.total)) {
+    return result.total;
+  }
+  return result.projects.length;
+}
+
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
   const rateLimit = checkRateLimit(`search-projects:${ip}`, { maxRequests: 30, windowSizeSeconds: 60 });
@@ -89,6 +105,16 @@ export async function POST(req: NextRequest) {
     const query = requestBody.query?.trim() || "";
     const ambito = requestBody.ambito || requestBody.scope || "all";
     const includeUnverified = requestBody.includeUnverified !== false;
+    const includeMercadoPublico = requestBody.includeMercadoPublico !== false;
+    const page = requestBody.page ?? 1;
+    const pageSize = requestBody.pageSize ?? 50;
+    const safePageSize = Math.max(1, Math.min(pageSize, 100));
+    const offset = (page - 1) * safePageSize;
+    const selectedInstitutions = parseCsvParam(requestBody.institution);
+    const selectedRegions = parseCsvParam(requestBody.region);
+    const minAmount = requestBody.minAmount ?? 0;
+    const maxAmount = requestBody.maxAmount ?? Number.POSITIVE_INFINITY;
+    const sort = requestBody.sort ?? 'relevance';
     const sourceMode = normalizeSourceMode(
       requestBody.sourceMode,
       env.SEARCH_SOURCE_MODE_DEFAULT
@@ -104,31 +130,50 @@ export async function POST(req: NextRequest) {
 
     const ticket = env.MERCADO_PUBLICO_TICKET || "";
 
+    const runMercadoPublico = includeMercadoPublico && Boolean(ticket);
+
     if (requestedExternal && (!externalEnabled || enabledProviderIds.length === 0)) {
       const degradedReason = !externalEnabled
         ? 'SEARCH_EXTERNAL_ENABLED=false'
         : 'All requested providers are disabled';
 
       const [hybrid, mpDocs] = await Promise.all([
-        hybridSearch({ query, ambito, includeUnverified, limit: 50 }),
-        fetchMercadoPublicoLive(ticket, query),
+        hybridSearch({
+          query,
+          ambito,
+          includeUnverified,
+          selectedInstitutions,
+          selectedRegions,
+          estado: requestBody.estado,
+          minAmount,
+          maxAmount,
+          sort,
+          offset,
+          limit: safePageSize,
+        }),
+        runMercadoPublico ? fetchMercadoPublicoLive(ticket, query) : Promise.resolve([]),
       ]);
 
       const enriched = hybrid.projects.map((p) => ({
         ...p,
         days_left: calcDaysLeft(p.fecha_cierre),
       }));
+      const hybridTotal = resolveHybridTotal(hybrid);
 
       return createSuccessResponse({
         results: [...enriched, ...mpDocs],
         meta: {
-          total: enriched.length + mpDocs.length,
+          total: hybridTotal + mpDocs.length,
+          filtered_total: hybridTotal,
           hybrid_count: enriched.length,
           external_count: 0,
           mercado_publico_count: mpDocs.length,
           mode: hybrid.mode,
           degraded: true,
           degraded_reason: degradedReason,
+          page,
+          page_size: safePageSize,
+          has_next: offset + enriched.length < hybridTotal,
           providers: enabledProviderIds,
           provider_stats: [],
           query,
@@ -167,15 +212,28 @@ export async function POST(req: NextRequest) {
 
     if (sourceMode === 'mixed') {
       const [hybrid, externalResult, mpDocs] = await Promise.all([
-        hybridSearch({ query, ambito, includeUnverified, limit: 50 }),
+        hybridSearch({
+          query,
+          ambito,
+          includeUnverified,
+          selectedInstitutions,
+          selectedRegions,
+          estado: requestBody.estado,
+          minAmount,
+          maxAmount,
+          sort,
+          offset,
+          limit: safePageSize,
+        }),
         runExternalSearch(createProviders(enabledProviderIds), requestBody),
-        fetchMercadoPublicoLive(ticket, query),
+        runMercadoPublico ? fetchMercadoPublicoLive(ticket, query) : Promise.resolve([]),
       ]);
 
       const enrichedHybrid = hybrid.projects.map((p) => ({
         ...p,
         days_left: calcDaysLeft(p.fecha_cierre),
       }));
+      const hybridTotal = resolveHybridTotal(hybrid);
 
       const enrichedExternal = externalResult.projects.map((p) => ({
         ...p,
@@ -185,11 +243,15 @@ export async function POST(req: NextRequest) {
       return createSuccessResponse({
         results: [...enrichedHybrid, ...enrichedExternal, ...mpDocs],
         meta: {
-          total: enrichedHybrid.length + enrichedExternal.length + mpDocs.length,
+          total: hybridTotal + enrichedExternal.length + mpDocs.length,
+          filtered_total: hybridTotal,
           hybrid_count: enrichedHybrid.length,
           external_count: enrichedExternal.length,
           mercado_publico_count: mpDocs.length,
           mode: 'mixed',
+          page,
+          page_size: safePageSize,
+          has_next: offset + enrichedHybrid.length < hybridTotal,
           providers: externalResult.providers,
           provider_stats: externalResult.providerStats,
           degraded: externalResult.degraded,
@@ -200,23 +262,40 @@ export async function POST(req: NextRequest) {
     }
 
     const [hybrid, mpDocs] = await Promise.all([
-      hybridSearch({ query, ambito, includeUnverified, limit: 50 }),
-      fetchMercadoPublicoLive(ticket, query),
+      hybridSearch({
+        query,
+        ambito,
+        includeUnverified,
+        selectedInstitutions,
+        selectedRegions,
+        estado: requestBody.estado,
+        minAmount,
+        maxAmount,
+        sort,
+        offset,
+        limit: safePageSize,
+      }),
+      runMercadoPublico ? fetchMercadoPublicoLive(ticket, query) : Promise.resolve([]),
     ]);
 
     const enriched = hybrid.projects.map((p) => ({
       ...p,
       days_left: calcDaysLeft(p.fecha_cierre),
     }));
+    const hybridTotal = resolveHybridTotal(hybrid);
 
     return createSuccessResponse({
       results: [...enriched, ...mpDocs],
       meta: {
-        total: enriched.length + mpDocs.length,
+        total: hybridTotal + mpDocs.length,
+        filtered_total: hybridTotal,
         hybrid_count: enriched.length,
         external_count: 0,
         mercado_publico_count: mpDocs.length,
         mode: hybrid.mode, // "hybrid" | "lexical_only" | "all"
+        page,
+        page_size: safePageSize,
+        has_next: offset + enriched.length < hybridTotal,
         provider_stats: [],
         query,
         searched_at: new Date().toISOString(),

@@ -139,9 +139,13 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
         <Chip label="Abiertas" count={filterCounts.estado['Abierta']} active={currentEstado === 'Abierta'} onClick={() => toggleChip('estado', 'Abierta')} />
         <Chip label="Próximas" count={filterCounts.estado['Próxima']} active={currentEstado === 'Próxima'} onClick={() => toggleChip('estado', 'Próxima')} />
 
-        {topInstitutions.map((name) => (
-          <Chip key={name} label={name} active={selectedInstitutions.includes(name)} onClick={() => toggleMultiChip('institution', name)} />
-        ))}
+          {topInstitutions.map((name) => (
+            <Chip key={name} label={name} active={selectedInstitutions.includes(name)} onClick={() => toggleMultiChip('institution', name)} />
+          ))}
+
+          {topRegions.map((name) => (
+            <Chip key={`region-${name}`} label={name} active={selectedRegions.includes(name)} onClick={() => toggleMultiChip('region', name)} />
+          ))}
 
         <button
           type="button"
@@ -165,10 +169,6 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
 
       {moreOpen && (
         <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-iica-border/50">
-          {topRegions.map((name) => (
-            <Chip key={name} label={name} active={selectedRegions.includes(name)} onClick={() => toggleMultiChip('region', name)} size="sm" />
-          ))}
-          <span className="text-xs text-gray-400 mx-1">|</span>
           {(['Nacional', 'Regional', 'Internacional'] as const).map((opt) => (
             <Chip key={opt} label={opt} active={currentAmbito === opt} onClick={() => toggleChip('ambito', opt)} size="sm" />
           ))}

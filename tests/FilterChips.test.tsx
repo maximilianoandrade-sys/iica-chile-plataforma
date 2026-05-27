@@ -43,6 +43,12 @@ describe('FilterChips', () => {
     expect(screen.getByRole('button', { name: /FIA/i })).toBeInTheDocument();
   });
 
+  it('renders top region chips without opening more filters', () => {
+    render(<FilterChips filterCounts={mockFilterCounts} />);
+    expect(screen.getByRole('button', { name: /Metropolitana/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Biobío/i })).toBeInTheDocument();
+  });
+
   it('renders search input', () => {
     render(<FilterChips filterCounts={mockFilterCounts} />);
     expect(screen.getByRole('searchbox')).toBeInTheDocument();
