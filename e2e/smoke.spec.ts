@@ -97,7 +97,15 @@ test.describe("Detalle de proyecto", () => {
     let selectedId: number | null = null;
     for (const candidateId of candidateIds) {
       const detailResponse = await request.get(`/proyecto/${candidateId}`);
-      if (detailResponse.status() !== 404) {
+      if (!detailResponse.ok()) {
+        continue;
+      }
+
+      const detailHtml = await detailResponse.text();
+      const hasBackLink = /Volver a todas las convocatorias/i.test(detailHtml);
+      const isNotFound = /P[aá]gina no encontrada/i.test(detailHtml);
+
+      if (hasBackLink && !isNotFound) {
         selectedId = candidateId;
         break;
       }
