@@ -94,9 +94,10 @@ async function main() {
     );
     const res = await fetch(`${BASE}/api/check-link?url=${target}`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
+    const body = await res.json();
+    const data = body.data ?? body;
     if (typeof data.isValid !== "boolean") {
-      throw new Error(`isValid no es boolean: ${JSON.stringify(data)}`);
+      throw new Error(`isValid no es boolean: ${JSON.stringify(body)}`);
     }
     return `isValid=${data.isValid}`;
   });

@@ -1,4 +1,4 @@
-import { normalizeUrl, parseSpanishDate, parseAmount, cleanText, absoluteUrl, resolveShortUrl } from "../../../lib/ingestion/utils";
+import { normalizeUrl, parseSpanishDate, parseAmount, cleanText, absoluteUrl, resolveShortUrl, normalizeMojibake } from "../../../lib/ingestion/utils";
 
 global.fetch = jest.fn();
 
@@ -57,6 +57,16 @@ describe("cleanText", () => {
   });
   it("normaliza saltos de línea", () => {
     expect(cleanText("a\n\nb\n\n\nc")).toBe("a b c");
+  });
+});
+
+describe("normalizeMojibake", () => {
+  it("repara caracteres de reemplazo comunes", () => {
+    expect(normalizeMojibake("DISE�AR Y EJECUTAR")).toBe("DISEÑAR Y EJECUTAR");
+  });
+
+  it("mantiene texto correcto sin cambios", () => {
+    expect(normalizeMojibake("Programa de innovación agraria")).toBe("Programa de innovación agraria");
   });
 });
 

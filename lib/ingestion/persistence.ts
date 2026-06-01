@@ -2,12 +2,27 @@ import { getLogger } from '@/lib/utils/logger';
 import prisma from "../prisma";
 
 const logger = getLogger('Persistence');
-import { normalizeUrl, parseAmount } from "./utils";
+import { cleanText, normalizeMojibake, normalizeUrl, parseAmount } from "./utils";
 import { validateUrl } from "./validateUrl";
 import { embedText, projectToEmbeddingText, toPgVector } from "./embeddings";
 import type { RawProject } from "./types";
+import { evaluateIngestionQuality } from "./quality-gate";
 
 const STALE_DAYS = 7;
+
+function normalizeDedupeToken(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^\w\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function looksLikeSameInstitution(a: string, b: string): boolean {
+  return normalizeDedupeToken(a) === normalizeDedupeToken(b);
+}
 
 interface MarkStaleOptions {
   skipSourceSlugs?: string[];
@@ -35,24 +50,92 @@ export async function upsertProject(
   }
 
   const now = new Date();
+  const quality = evaluateIngestionQuality(raw);
   const baseFields = {
-    nombre: raw.title,
-    institucion: raw.institution,
+    nombre: cleanText(raw.title),
+    institucion: cleanText(raw.institution),
     url_bases: raw.url,
     fecha_cierre: raw.deadline ?? new Date("2099-12-31"),
     monto: parseAmount(raw.budget || "") ?? 0,
     // Guardamos el monto tal cual viene de la fuente (con unidad: "8.500 UF",
     // "USD 50,000", "$100M") para que el UI pueda mostrarlo sin perder la
     // unidad. El campo numérico `monto` se conserva para filtros y orden.
-    montoTexto: raw.budget?.trim() || null,
+    montoTexto: raw.budget ? cleanText(raw.budget) : null,
     estado: "Abierto",
-    categoria: raw.opportunityType ?? raw.tags?.[0] ?? "General",
-    objetivo: raw.description ?? "",
+    categoria: raw.opportunityType ? cleanText(raw.opportunityType) : cleanText(raw.tags?.[0] || 'General'),
+    objetivo: cleanText(raw.description ?? ""),
     ambito: raw.ambito ?? "Nacional",
     idioma: raw.idioma ?? "es",
-    region: raw.region ?? null,
+    region: raw.region ? cleanText(normalizeMojibake(raw.region)) : null,
+    publishable: quality.publishable,
+    chileEligibility: quality.chileEligibility,
+    qualityScore: quality.qualityScore,
+    qualityFlags: quality.qualityFlags,
+    qualityReasons: quality.qualityReasons,
+    qualityUpdatedAt: quality.qualityUpdatedAt,
     lastSeenAt: now,
   };
+
+  const textualDuplicate = await prisma.project.findFirst({
+    where: {
+      sourceRefId: source.id,
+      canonicalUrl: { not: canonicalUrl },
+      nombre: { equals: baseFields.nombre, mode: 'insensitive' },
+      institucion: { equals: baseFields.institucion, mode: 'insensitive' },
+    },
+    select: {
+      id: true,
+      qualityFlags: true,
+      qualityReasons: true,
+    },
+  });
+
+  if (textualDuplicate) {
+    await prisma.project.update({
+      where: { id: textualDuplicate.id },
+      data: {
+        ...baseFields,
+        qualityFlags: Array.from(new Set([...(textualDuplicate.qualityFlags || []), ...baseFields.qualityFlags, 'dedupe_textual_merged'])),
+        qualityReasons: Array.from(new Set([
+          ...(textualDuplicate.qualityReasons || []),
+          ...baseFields.qualityReasons,
+          `Merged duplicate textual match from ${sourceSlug}`,
+        ])),
+      },
+    });
+    return { skipped: true, reason: `duplicate_textual:${textualDuplicate.id}` };
+  }
+
+  if (process.env.GEMINI_API_KEY) {
+    const semanticText = projectToEmbeddingText({
+      nombre: baseFields.nombre,
+      institucion: baseFields.institucion,
+      objetivo: baseFields.objetivo,
+      categoria: baseFields.categoria,
+    });
+
+    const semanticCandidates = await findSemanticDuplicates(semanticText, 0.06);
+    const semanticDuplicate = semanticCandidates.find((candidate) => {
+      if (!candidate.canonicalUrl || candidate.canonicalUrl === canonicalUrl) return false;
+      if (!looksLikeSameInstitution(candidate.institucion, baseFields.institucion)) return false;
+      return candidate.distance <= 0.045;
+    });
+
+    if (semanticDuplicate) {
+      await prisma.project.update({
+        where: { id: Number(semanticDuplicate.id) },
+        data: {
+          ...baseFields,
+          qualityFlags: Array.from(new Set([...baseFields.qualityFlags, 'dedupe_semantic_merged'])),
+          qualityReasons: Array.from(new Set([
+            ...baseFields.qualityReasons,
+            `Merged semantic duplicate (${semanticDuplicate.id}) from ${sourceSlug}`,
+          ])),
+        },
+      });
+      return { skipped: true, reason: `duplicate_semantic:${semanticDuplicate.id}` };
+    }
+  }
 
   const upserted = await prisma.project.upsert({
     where: { canonicalUrl },
@@ -107,14 +190,18 @@ export async function upsertProject(
 export async function findSemanticDuplicates(
   text: string,
   threshold = 0.15
-): Promise<{ id: string; nombre: string; canonicalUrl: string }[]> {
+): Promise<{ id: string; nombre: string; institucion: string; canonicalUrl: string; distance: number }[]> {
   const embedding = await embedText(text);
   if (!embedding) return [];
 
   const rows = await prisma.$queryRawUnsafe<
-    { id: string; nombre: string; canonicalUrl: string }[]
+    { id: string; nombre: string; institucion: string; canonicalUrl: string; distance: number }[]
   >(
-    `SELECT id, nombre, "canonicalUrl" FROM "Project" WHERE embedding <=> $1::vector < $2 LIMIT 5`,
+    `SELECT id, nombre, institucion, "canonicalUrl", (embedding <=> $1::vector) AS distance
+     FROM "Project"
+     WHERE embedding <=> $1::vector < $2
+     ORDER BY distance ASC
+     LIMIT 5`,
     toPgVector(embedding),
     threshold
   );

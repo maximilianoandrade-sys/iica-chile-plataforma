@@ -9,6 +9,7 @@ jest.mock("../../../lib/prisma", () => ({
     project: {
       upsert: jest.fn(),
       findUnique: jest.fn(),
+      findFirst: jest.fn(),
       create: jest.fn(),
       update: jest.fn(),
       updateMany: jest.fn(),
@@ -33,6 +34,7 @@ describe("upsertProject", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     prisma.source.findUnique.mockResolvedValue({ id: 1 });
+    prisma.project.findFirst.mockResolvedValue(null);
     prisma.project.upsert.mockResolvedValue({ id: 99 });
   });
 
@@ -58,6 +60,46 @@ describe("upsertProject", () => {
     const call = prisma.project.upsert.mock.calls[0][0];
     expect(call.update.estado).toBe("Abierto");
     expect(call.create.estado).toBe("Abierto");
+  });
+
+  it("persists quality gate fields for eligible national opportunities", async () => {
+    await upsertProject(
+      {
+        url: "https://example.com/eligible",
+        title: "Convocatoria de riego para Chile",
+        institution: "INDAP",
+        ambito: "Nacional",
+      },
+      "test-source"
+    );
+
+    const call = prisma.project.upsert.mock.calls[0][0];
+    expect(call.create.publishable).toBe(true);
+    expect(call.update.publishable).toBe(true);
+    expect(call.create.chileEligibility).toBe("eligible");
+    expect(call.update.chileEligibility).toBe("eligible");
+    expect(Array.isArray(call.create.qualityFlags)).toBe(true);
+    expect(call.create.qualityUpdatedAt).toBeInstanceOf(Date);
+  });
+
+  it("marks non-relevant international opportunities as not publishable", async () => {
+    await upsertProject(
+      {
+        url: "https://example.com/tanzania",
+        title: "Audio devices tender Tanzania",
+        institution: "UNGM",
+        description: "Public procurement for audio equipment in Tanzania.",
+        ambito: "Internacional",
+      },
+      "test-source"
+    );
+
+    const call = prisma.project.upsert.mock.calls[0][0];
+    expect(call.create.publishable).toBe(false);
+    expect(call.update.publishable).toBe(false);
+    expect(call.create.chileEligibility).toBe("ineligible");
+    expect(call.update.chileEligibility).toBe("ineligible");
+    expect(call.create.qualityFlags).toContain("chile_relevance_ineligible");
   });
 
   it("parses budget with parseAmount", async () => {
@@ -125,6 +167,8 @@ describe("upsertProject", () => {
     expect(createData.requisitos).toEqual([]);
     expect(createData.fortalezas).toEqual([]);
     expect(createData.debilidades).toEqual([]);
+    expect(createData.qualityFlags).toEqual(expect.any(Array));
+    expect(createData.qualityReasons).toEqual(expect.any(Array));
   });
 
   it("upserts by canonicalUrl with lastSeenAt", async () => {
@@ -139,6 +183,17 @@ describe("upsertProject", () => {
     expect(call.create.lastSeenAt).toBeInstanceOf(Date);
   });
 
+  it("normalizes mojibake in title before upsert", async () => {
+    await upsertProject(
+      { url: "https://example.com/moji", title: "DISE�AR Y EJECUTAR", institution: "FIA" },
+      "test-source"
+    );
+
+    const call = prisma.project.upsert.mock.calls[0][0];
+    expect(call.create.nombre).toBe("DISEÑAR Y EJECUTAR");
+    expect(call.update.nombre).toBe("DISEÑAR Y EJECUTAR");
+  });
+
   it("skips if source not found", async () => {
     prisma.source.findUnique.mockResolvedValue(null);
 
@@ -149,6 +204,32 @@ describe("upsertProject", () => {
 
     expect(result.skipped).toBe(true);
     expect(result.reason).toContain("no existe");
+    expect(prisma.project.upsert).not.toHaveBeenCalled();
+  });
+
+  it("merges textual duplicates from same source instead of creating a new row", async () => {
+    prisma.project.findFirst.mockResolvedValue({
+      id: 555,
+      qualityFlags: ['existing_flag'],
+      qualityReasons: ['Existing reason'],
+    });
+
+    const result = await upsertProject(
+      {
+        url: "https://example.com/duplicated-url",
+        canonicalKey: "https://example.com/duplicated-url-key",
+        title: "Convocatoria de riego para Chile",
+        institution: "INDAP",
+        ambito: "Nacional",
+      },
+      "test-source"
+    );
+
+    expect(result.skipped).toBe(true);
+    expect(String(result.reason)).toContain('duplicate_textual');
+    expect(prisma.project.update).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { id: 555 } })
+    );
     expect(prisma.project.upsert).not.toHaveBeenCalled();
   });
 });

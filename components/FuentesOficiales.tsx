@@ -226,9 +226,6 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
                         Todos los fondos de esta plataforma provienen directamente de estas instituciones gubernamentales.
                         El estado se actualiza automaticamente con la ultima ejecucion real del pipeline.
                     </p>
-                    <p className="text-xs text-gray-500 max-w-2xl mx-auto mb-4">
-                        Nota: algunas instituciones pueden bloquear validaciones automatizadas (403/anti-bot). En esos casos, el enlace igualmente puede abrir correctamente en su navegador.
-                    </p>
                     <div className="flex flex-wrap justify-center gap-4 text-sm">
                         <div className="flex items-center gap-2 bg-green-50 border border-green-200 px-4 py-2 rounded-full">
                             <CheckCircle className="h-4 w-4 text-green-600" aria-hidden={true} />

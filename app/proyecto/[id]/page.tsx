@@ -71,6 +71,14 @@ export default async function ProyectoDetallePage({ params }: Props) {
     // sobre el numérico, que asume CLP y pierde la unidad real.
     const montoDisplay = displayMonto(project);
     const montoFormatted = montoDisplay === 'Ver bases' ? 'Consultar institución' : montoDisplay;
+    const hasRegions = Array.isArray(project.regiones) && project.regiones.length > 0;
+    const hasBeneficiaries = Array.isArray(project.beneficiarios) && project.beneficiarios.length > 0;
+    const regionPreview = hasRegions
+        ? (project.regiones?.includes('Todas') ? 'Todo Chile' : project.regiones?.slice(0, 2).join(', '))
+        : 'Regiones en validación editorial';
+    const beneficiariesPreview = hasBeneficiaries
+        ? project.beneficiarios?.slice(0, 2).join(', ')
+        : 'Beneficiarios en validación editorial';
 
     return (
         <div className="min-h-screen flex flex-col bg-[#f4f7f9]">
@@ -134,8 +142,8 @@ export default async function ProyectoDetallePage({ params }: Props) {
                                 <MapPin className="h-3.5 w-3.5" /> Regiones
                             </div>
                             <div className="font-bold text-gray-700 text-sm">
-                                {project.regiones?.includes('Todas') ? 'Todo Chile' : project.regiones?.slice(0, 2).join(', ')}
-                                {project.regiones && !project.regiones.includes('Todas') && project.regiones.length > 2 && ` +${project.regiones.length - 2}`}
+                                {regionPreview}
+                                {hasRegions && !project.regiones?.includes('Todas') && project.regiones && project.regiones.length > 2 && ` +${project.regiones.length - 2}`}
                             </div>
                         </div>
                         <div className="p-5 flex flex-col gap-1">
@@ -143,8 +151,8 @@ export default async function ProyectoDetallePage({ params }: Props) {
                                 <Users className="h-3.5 w-3.5" /> Beneficiarios
                             </div>
                             <div className="font-bold text-gray-700 text-sm">
-                                {project.beneficiarios?.slice(0, 2).join(', ')}
-                                {project.beneficiarios && project.beneficiarios.length > 2 && ` +${project.beneficiarios.length - 2}`}
+                                {beneficiariesPreview}
+                                {hasBeneficiaries && project.beneficiarios && project.beneficiarios.length > 2 && ` +${project.beneficiarios.length - 2}`}
                             </div>
                         </div>
                     </div>

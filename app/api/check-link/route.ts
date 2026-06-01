@@ -15,6 +15,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
 import { lookup } from 'dns/promises';
+import { createErrorResponse, createSuccessResponse } from '@/lib/utils/api-response';
 
 export const runtime = 'nodejs';
 
@@ -113,9 +114,10 @@ export async function GET(request: NextRequest) {
     const ip = getClientIp(request);
     const rateLimit = checkRateLimit(`check-link:${ip}`, { maxRequests: 20, windowSizeSeconds: 60 });
     if (!rateLimit.allowed) {
-        return NextResponse.json(
-            { error: 'Demasiadas solicitudes. Intente nuevamente más tarde.' },
-            { status: 429, headers: { 'Retry-After': String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)) } }
+        return createErrorResponse(
+            'Demasiadas solicitudes. Intente nuevamente más tarde.',
+            429,
+            { 'Retry-After': String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)) }
         );
     }
 
@@ -124,27 +126,18 @@ export async function GET(request: NextRequest) {
         const url = searchParams.get('url');
 
         if (!url) {
-            return NextResponse.json(
-                { error: 'URL parameter is required', isValid: false },
-                { status: 400 }
-            );
+            return createErrorResponse('URL parameter is required', 400);
         }
 
         if (!isAllowedUrl(url)) {
-            return NextResponse.json(
-                { error: 'URL not allowed: must be a public HTTP/HTTPS URL', isValid: false },
-                { status: 400 }
-            );
+            return createErrorResponse('URL not allowed: must be a public HTTP/HTTPS URL', 400);
         }
 
         // DNS rebinding protection: resolve hostname and verify IP is public
         const parsed = new URL(url);
         const ipSafe = await verifyResolvedIp(parsed.hostname);
         if (!ipSafe) {
-            return NextResponse.json(
-                { error: 'URL resolves to a private/internal IP address', isValid: false },
-                { status: 400 }
-            );
+            return createErrorResponse('URL resolves to a private/internal IP address', 400);
         }
 
         try {
@@ -218,7 +211,7 @@ export async function GET(request: NextRequest) {
                         ? 'head_not_allowed'
                         : 'ok';
 
-            return NextResponse.json({
+            return createSuccessResponse({
                 isValid,
                 status: response.status,
                 statusText: response.statusText,
@@ -231,7 +224,7 @@ export async function GET(request: NextRequest) {
         } catch (error: unknown) {
             const originalIsHomepage = isOriginalHomepage(url);
             if (isAbortError(error) && isLikelyBotProtectedHost(parsed.hostname) && !originalIsHomepage) {
-                return NextResponse.json({
+                return createSuccessResponse({
                     isValid: true,
                     status: 0,
                     statusText: 'Request Timeout',
@@ -243,16 +236,13 @@ export async function GET(request: NextRequest) {
                 });
             }
 
-            return NextResponse.json({
+            return createSuccessResponse({
                 isValid: false,
                 error: error instanceof Error ? error.message : 'Network error',
                 url,
             });
         }
     } catch (error: unknown) {
-        return NextResponse.json(
-            { error: error instanceof Error ? error.message : 'Internal server error', isValid: false },
-            { status: 500 }
-        );
+        return createErrorResponse(error instanceof Error ? error.message : 'Internal server error', 500);
     }
 }

@@ -133,8 +133,9 @@ async function checkLinkStatus(url: string): Promise<boolean> {
             signal: controller.signal
         });
 
-        const data = await response.json();
-        return data.isValid === true;
+        const body = await response.json();
+        const data = body?.data ?? body;
+        return data?.isValid === true;
     } catch (error) {
         logger.warn('Error verificando enlace', { url, error });
         return false;

@@ -27,6 +27,7 @@ const EnvSchema = z.object({
   SEARCH_EXTERNAL_ENABLED: z.enum(['true', 'false']).optional(),
   SEARCH_SOURCE_MODE_DEFAULT: z.enum(['internal', 'external', 'mixed']).optional(),
   SEARCH_EXTERNAL_DISABLED_PROVIDERS: z.string().optional(),
+  SEARCH_QUALITY_STRICT_ENABLED: z.enum(['true', 'false']).optional(),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).optional(),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 });

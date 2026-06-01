@@ -45,6 +45,24 @@ export interface Project {
     /** Ámbito geográfico: Nacional / Internacional / Regional */
     ambito?: 'Nacional' | 'Internacional' | 'Regional';
 
+    /** Publicación en catálogo público */
+    publishable?: boolean;
+
+    /** Elegibilidad para Chile en policy estricta */
+    chileEligibility?: 'eligible' | 'ineligible';
+
+    /** Puntaje de calidad de ingesta (0-100) */
+    qualityScore?: number;
+
+    /** Flags de calidad detectados en ingestión */
+    qualityFlags?: string[];
+
+    /** Explicaciones de flags de calidad */
+    qualityReasons?: string[];
+
+    /** Timestamp de última evaluación de calidad */
+    qualityUpdatedAt?: Date | string;
+
     /** Estado de la ventana de postulación */
     estadoPostulacion?: 'Abierta' | 'Próxima' | 'Cerrada';
 
@@ -303,6 +321,7 @@ export async function getProjects(): Promise<GetProjectsResult> {
             where: {
                 fecha_cierre: { gte: today },
                 NOT: { estadoPostulacion: 'Cerrada' },
+                publishable: true,
                 // Defensa redundante: si purgeFakeProjects falló, esto los excluye
                 id: { notIn: FAKE_PROJECT_IDS },
             },
@@ -316,6 +335,12 @@ export async function getProjects(): Promise<GetProjectsResult> {
             fecha_cierre: p.fecha_cierre.toISOString().split('T')[0],
             webinar_fecha: p.webinar_fecha ? p.webinar_fecha.toISOString() : null,
             ambito: p.ambito as Project['ambito'],
+            publishable: p.publishable,
+            chileEligibility: p.chileEligibility as 'eligible' | 'ineligible' | undefined,
+            qualityScore: p.qualityScore,
+            qualityFlags: p.qualityFlags,
+            qualityReasons: p.qualityReasons,
+            qualityUpdatedAt: p.qualityUpdatedAt,
             estadoPostulacion: p.estadoPostulacion as Project['estadoPostulacion'],
             viabilidadIICA: p.viabilidadIICA as Project['viabilidadIICA'],
             rolIICA: p.rolIICA as Project['rolIICA'],

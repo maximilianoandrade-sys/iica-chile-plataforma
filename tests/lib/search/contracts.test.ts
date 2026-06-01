@@ -1,7 +1,9 @@
 import {
   EXTERNAL_PROVIDER_IDS,
+  SEARCH_RELEVANCE_MODES,
   SEARCH_SOURCE_MODES,
   isExternalProviderId,
+  isSearchRelevanceMode,
   isSearchSourceMode,
 } from '@/lib/search/contracts';
 
@@ -19,6 +21,16 @@ describe('search contracts', () => {
 
   it('exposes supported external provider ids', () => {
     expect(EXTERNAL_PROVIDER_IDS).toEqual(['linkedin_public']);
+  });
+
+  it('exposes supported relevance modes', () => {
+    expect(SEARCH_RELEVANCE_MODES).toEqual(['chile_strict', 'all']);
+  });
+
+  it('validates relevance mode values', () => {
+    expect(isSearchRelevanceMode('chile_strict')).toBe(true);
+    expect(isSearchRelevanceMode('all')).toBe(true);
+    expect(isSearchRelevanceMode('mixed')).toBe(false);
   });
 
   it('validates external provider ids', () => {
