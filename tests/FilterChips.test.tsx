@@ -120,4 +120,22 @@ describe('FilterChips', () => {
     expect(href).toContain('estado=Pr%C3%B3xima');
     expect(href).not.toContain('q=');
   });
+
+  it('orders region options in Chile official order, not alphabetical', () => {
+    const regionSortedByName = {
+      ...mockFilterCounts,
+      region: {
+        Magallanes: 1,
+        Coquimbo: 1,
+        Atacama: 1,
+        Metropolitana: 1,
+      },
+    };
+
+    render(<FilterChips filterCounts={regionSortedByName} />);
+
+    const regionSelect = screen.getByLabelText(/Ubicaciones/i);
+    const optionTexts = Array.from(regionSelect.querySelectorAll('option')).map((option) => option.textContent);
+    expect(optionTexts).toEqual(['Atacama', 'Coquimbo', 'Metropolitana', 'Magallanes']);
+  });
 });

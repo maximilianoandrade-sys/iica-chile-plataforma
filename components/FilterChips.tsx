@@ -5,6 +5,7 @@ import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { Search, X, SlidersHorizontal } from 'lucide-react';
 import { type FilterCounts } from '@/lib/data';
 import { getLogger } from '@/lib/utils/logger';
+import { sortRegionLabels } from '@/lib/search/region-normalization';
 
 const logger = getLogger('FilterChips');
 
@@ -110,7 +111,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
   }
 
   const institutionOptions = Object.keys(filterCounts.institucion).sort((a, b) => a.localeCompare(b, 'es'));
-  const regionOptions = Object.keys(filterCounts.region).sort((a, b) => a.localeCompare(b, 'es'));
+  const regionOptions = sortRegionLabels(Object.keys(filterCounts.region));
   const categoryOptions = Object.keys(filterCounts.categoria ?? {}).sort((a, b) => a.localeCompare(b, 'es'));
 
   const selectedInstitutions = parseCsvParam(currentInstitution);
