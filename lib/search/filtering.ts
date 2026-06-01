@@ -1,9 +1,16 @@
 import type { FilterCounts } from '@/lib/data';
+import {
+  extractRegionsFromText,
+  getRegionSearchTerms,
+  normalizeRegionTerm,
+  sortRegionLabels,
+} from '@/lib/search/region-normalization';
 
 export interface SearchProjectLike {
   institucion: string;
   monto: number;
   fecha_cierre: string | Date;
+  categoria?: string | null;
   estadoPostulacion?: 'Abierta' | 'Próxima' | 'Cerrada' | null;
   regiones?: string[];
   region?: string | null;
@@ -14,6 +21,7 @@ export interface FacetFilters {
   selectedEstado: string;
   selectedInstitutions: string[];
   selectedRegions: string[];
+  selectedCategories?: string[];
   selectedAmbito: string;
   minAmount: number;
   maxAmount: number;
@@ -32,14 +40,12 @@ export function inferEstado(project: SearchProjectLike, now = new Date()): strin
 
 export function getProjectRegions(project: SearchProjectLike): string[] {
   if (project.regiones && project.regiones.length > 0) {
-    return project.regiones;
+    const normalized = project.regiones.flatMap((region) => extractRegionsFromText(region));
+    if (normalized.length > 0) return sortRegionLabels(normalized);
   }
 
   if (project.region) {
-    return project.region
-      .split(',')
-      .map((r) => r.trim())
-      .filter(Boolean);
+    return extractRegionsFromText(project.region);
   }
 
   return [];
@@ -57,6 +63,10 @@ export function buildFilterCounts<T extends SearchProjectLike>(
     }, {} as Record<string, number>),
     institucion: projects.reduce((acc, p) => {
       acc[p.institucion] = (acc[p.institucion] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>),
+    categoria: projects.reduce((acc, p) => {
+      if (p.categoria) acc[p.categoria] = (acc[p.categoria] || 0) + 1;
       return acc;
     }, {} as Record<string, number>),
     region: projects.reduce((acc, p) => {
@@ -81,6 +91,7 @@ export function filterProjectsByFacets<T extends SearchProjectLike>(
     selectedEstado,
     selectedInstitutions,
     selectedRegions,
+    selectedCategories = [],
     selectedAmbito,
     minAmount,
     maxAmount,
@@ -91,8 +102,11 @@ export function filterProjectsByFacets<T extends SearchProjectLike>(
     const matchesInstitution =
       selectedInstitutions.length === 0 || selectedInstitutions.includes(project.institucion);
     const projectRegions = getProjectRegions(project);
+    const selectedRegionTerms = selectedRegions.flatMap((region) => getRegionSearchTerms(region));
+    const projectRegionTerms = projectRegions.map((region) => normalizeRegionTerm(region));
     const matchesRegion =
-      selectedRegions.length === 0 || projectRegions.some((r) => selectedRegions.includes(r));
+      selectedRegions.length === 0 || projectRegionTerms.some((region) => selectedRegionTerms.includes(region));
+    const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(project.categoria ?? '');
     const matchesAmbito = !selectedAmbito || project.ambito === selectedAmbito;
 
     const filterActive = minAmount > 0 || maxAmount < Infinity;
@@ -103,6 +117,7 @@ export function filterProjectsByFacets<T extends SearchProjectLike>(
       matchesEstado &&
       matchesInstitution &&
       matchesRegion &&
+      matchesCategory &&
       matchesAmbito &&
       matchesAmount
     );

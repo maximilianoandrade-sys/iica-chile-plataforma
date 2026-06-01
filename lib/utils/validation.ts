@@ -33,6 +33,10 @@ const SearchSourceModeSchema = z.enum(SEARCH_SOURCE_MODES);
 const SearchRelevanceModeSchema = z.enum(SEARCH_RELEVANCE_MODES);
 const SearchAmbitoSchema = z.enum(['all', 'Nacional', 'Regional', 'Internacional']);
 const SearchEstadoSchema = z.enum(['Abierta', 'Próxima', 'Cerrada']);
+const SearchSortSchema = z.enum(['date_asc', 'amount_desc', 'newest', 'relevance']);
+const SearchDateParamSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, 'Formato de fecha invalido (YYYY-MM-DD)');
 
 export const SearchProjectsRequestSchema = z
   .object({
@@ -42,7 +46,22 @@ export const SearchProjectsRequestSchema = z
     ambito: SearchAmbitoSchema.optional(),
     institution: z.string().trim().max(200, 'institution no puede exceder 200 caracteres').optional(),
     region: z.string().trim().max(120, 'region no puede exceder 120 caracteres').optional(),
+    category: z.string().trim().max(200, 'category no puede exceder 200 caracteres').optional(),
     estado: SearchEstadoSchema.optional(),
+    sort: SearchSortSchema.optional(),
+    postedFrom: SearchDateParamSchema.optional(),
+    postedTill: SearchDateParamSchema.optional(),
+    page: z
+      .number({ error: 'page debe ser un número' })
+      .int({ error: 'page debe ser entero' })
+      .min(1, 'page debe ser mayor o igual a 1')
+      .optional(),
+    pageSize: z
+      .number({ error: 'pageSize debe ser un número' })
+      .int({ error: 'pageSize debe ser entero' })
+      .min(1, 'pageSize debe ser mayor o igual a 1')
+      .max(100, 'pageSize no puede superar 100')
+      .optional(),
     minAmount: z
       .number({ error: 'minAmount debe ser un número' })
       .int({ error: 'minAmount debe ser entero' })
@@ -57,12 +76,20 @@ export const SearchProjectsRequestSchema = z
     sourceMode: SearchSourceModeSchema.optional(),
     providers: z.array(SearchProviderSchema).max(5, 'Máximo 5 proveedores').optional(),
     relevanceMode: SearchRelevanceModeSchema.optional(),
+    includeMercadoPublico: z.boolean().optional(),
   })
   .refine(
     (data) => data.minAmount == null || data.maxAmount == null || data.maxAmount >= data.minAmount,
     {
       message: 'maxAmount debe ser mayor o igual a minAmount',
       path: ['maxAmount'],
+    }
+  )
+  .refine(
+    (data) => data.postedFrom == null || data.postedTill == null || data.postedTill >= data.postedFrom,
+    {
+      message: 'postedTill debe ser mayor o igual a postedFrom',
+      path: ['postedTill'],
     }
   );
 

@@ -7,7 +7,7 @@ import ProjectListContainer from "@/components/ProjectListContainer";
 import SkeletonProjectList from "@/components/SkeletonProjectList";
 import Newsletter from "@/components/Newsletter";
 import FuentesOficiales from "@/components/FuentesOficiales";
-import { getProjects } from "@/lib/data";
+import { getProjectFilterSnapshot, getProjects } from "@/lib/data";
 import prisma from "@/lib/prisma";
 
 // Forzar renderizado dinámico: los proyectos vienen de la DB y cambian con scrapers.
@@ -58,9 +58,12 @@ export default async function DashboardPage({
 }) {
   const resolvedSearchParams = await searchParams;
 
-  // Compute stats server-side to avoid shipping projects.json to the client
-  const result = await getProjects();
+  const [result, filterSnapshotResult] = await Promise.all([
+    getProjects(),
+    getProjectFilterSnapshot(),
+  ]);
   const projects = result.ok ? result.projects : [];
+  const filterSnapshot = filterSnapshotResult.ok ? filterSnapshotResult.projects : [];
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const NATIONAL_INSTITUTION_KEYS = [
@@ -112,7 +115,7 @@ export default async function DashboardPage({
 
   // Compute institution counts for FuentesOficiales (avoids shipping 150KB JSON to client)
   const institutionCounts: Record<string, number> = {};
-  projects.forEach(p => {
+  filterSnapshot.forEach(p => {
     institutionCounts[p.institucion] = (institutionCounts[p.institucion] || 0) + 1;
   });
 
@@ -140,7 +143,7 @@ export default async function DashboardPage({
             {/* Buscador y Proyectos — sección principal */}
             <section id="convocatorias" className="scroll-mt-28">
               <Suspense fallback={<SkeletonProjectList />}>
-                <ProjectListContainer searchParams={resolvedSearchParams} initialProjects={projects} />
+                <ProjectListContainer searchParams={resolvedSearchParams} />
               </Suspense>
             </section>
 

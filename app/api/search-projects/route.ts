@@ -12,7 +12,7 @@
 //
 // Siempre suma Mercado Público live (API del día).
 //
-// Migración requerida: prisma/migrations/manual/2026-05-11-hybrid-search.sql
+// Migración requerida: scripts/sql/2026-05-11-hybrid-search.sql
 //
 // Body:
 //   { query?, scope?, role?, ambito?, includeUnverified? }
@@ -65,6 +65,21 @@ function normalizeSourceMode(
 ): 'internal' | 'external' | 'mixed' {
   if (requestedMode) return requestedMode;
   return envDefaultMode ?? 'internal';
+}
+
+function parseCsvParam(value: string | undefined): string[] {
+  if (!value) return [];
+  return value
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function resolveHybridTotal(result: { total?: number; projects: Array<unknown> }): number {
+  if (typeof result.total === 'number' && Number.isFinite(result.total)) {
+    return result.total;
+  }
+  return result.projects.length;
 }
 
 function countBySourcePrefix(projects: Record<string, unknown>[], sourcePrefix: string): number {
@@ -126,6 +141,19 @@ export async function POST(req: NextRequest) {
     const requestedRelevanceMode = requestBody.relevanceMode ?? 'chile_strict';
     const relevanceMode = strictQualityEnabled ? requestedRelevanceMode : 'all';
     const includeUnverified = requestBody.includeUnverified !== false;
+    const includeMercadoPublico = requestBody.includeMercadoPublico !== false;
+    const page = requestBody.page ?? 1;
+    const pageSize = requestBody.pageSize ?? 50;
+    const safePageSize = Math.max(1, Math.min(pageSize, 100));
+    const offset = (page - 1) * safePageSize;
+    const selectedInstitutions = parseCsvParam(requestBody.institution);
+    const selectedRegions = parseCsvParam(requestBody.region);
+    const selectedCategories = parseCsvParam(requestBody.category);
+    const minAmount = requestBody.minAmount ?? 0;
+    const maxAmount = requestBody.maxAmount ?? Number.POSITIVE_INFINITY;
+    const postedFrom = requestBody.postedFrom;
+    const postedTill = requestBody.postedTill;
+    const sort = requestBody.sort ?? 'relevance';
     const sourceMode = normalizeSourceMode(
       requestBody.sourceMode,
       env.SEARCH_SOURCE_MODE_DEFAULT
@@ -141,14 +169,31 @@ export async function POST(req: NextRequest) {
 
     const ticket = env.MERCADO_PUBLICO_TICKET || "";
 
+    const runMercadoPublico = includeMercadoPublico && Boolean(ticket);
+
     if (requestedExternal && (!externalEnabled || enabledProviderIds.length === 0)) {
       const degradedReason = !externalEnabled
         ? 'SEARCH_EXTERNAL_ENABLED=false'
         : 'All requested providers are disabled';
 
       const [hybrid, mpDocs] = await Promise.all([
-        hybridSearch({ query, ambito, includeUnverified, limit: 50 }),
-        fetchMercadoPublicoLive(ticket, query),
+        hybridSearch({
+          query,
+          ambito,
+          includeUnverified,
+          selectedInstitutions,
+          selectedRegions,
+          selectedCategories,
+          estado: requestBody.estado,
+          minAmount,
+          maxAmount,
+          postedFrom,
+          postedTill,
+          sort,
+          offset,
+          limit: safePageSize,
+        }),
+        runMercadoPublico ? fetchMercadoPublicoLive(ticket, query) : Promise.resolve([]),
       ]);
 
       const enriched = hybrid.projects.map((p) => ({
@@ -162,11 +207,13 @@ export async function POST(req: NextRequest) {
       const normalizedMpDocs = normalizeMercadoPublicoDocs(mpDocs as unknown as Record<string, unknown>[]);
       const merged = [...publishableHybrid, ...normalizedMpDocs] as Record<string, unknown>[];
       const policy = applyRelevanceAndAmbitoPolicy(merged, { relevanceMode, ambito });
+      const hybridTotal = resolveHybridTotal(hybrid);
 
       return createSuccessResponse({
         results: policy.results,
         meta: {
           total: policy.results.length,
+          filtered_total: hybridTotal,
           hybrid_count: policy.results.length - countBySourcePrefix(policy.results, 'mercado_publico'),
           external_count: 0,
           mercado_publico_count: countBySourcePrefix(policy.results, 'mercado_publico'),
@@ -177,6 +224,9 @@ export async function POST(req: NextRequest) {
           hidden_by_quality: hiddenByQuality,
           degraded: true,
           degraded_reason: degradedReason,
+          page,
+          page_size: safePageSize,
+          has_next: offset + enriched.length < hybridTotal,
           providers: enabledProviderIds,
           provider_stats: [],
           query,
@@ -224,9 +274,24 @@ export async function POST(req: NextRequest) {
 
     if (sourceMode === 'mixed') {
       const [hybrid, externalResult, mpDocs] = await Promise.all([
-        hybridSearch({ query, ambito, includeUnverified, limit: 50 }),
+        hybridSearch({
+          query,
+          ambito,
+          includeUnverified,
+          selectedInstitutions,
+          selectedRegions,
+          selectedCategories,
+          estado: requestBody.estado,
+          minAmount,
+          maxAmount,
+          postedFrom,
+          postedTill,
+          sort,
+          offset,
+          limit: safePageSize,
+        }),
         runExternalSearch(createProviders(enabledProviderIds), requestBody),
-        fetchMercadoPublicoLive(ticket, query),
+        runMercadoPublico ? fetchMercadoPublicoLive(ticket, query) : Promise.resolve([]),
       ]);
 
       const enrichedHybrid = hybrid.projects.map((p) => ({
@@ -236,6 +301,7 @@ export async function POST(req: NextRequest) {
       const { visible: publishableHybrid, hidden: hiddenHybridByQuality } = strictQualityEnabled
         ? applyPublishableFilter(enrichedHybrid as Record<string, unknown>[])
         : { visible: enrichedHybrid as unknown as Record<string, unknown>[], hidden: 0 };
+      const hybridTotal = resolveHybridTotal(hybrid);
 
       const enrichedExternal = externalResult.projects.map((p) => ({
         ...p,
@@ -248,21 +314,26 @@ export async function POST(req: NextRequest) {
       const normalizedMpDocs = normalizeMercadoPublicoDocs(mpDocs as unknown as Record<string, unknown>[]);
       const merged = [...publishableHybrid, ...publishableExternal, ...normalizedMpDocs] as Record<string, unknown>[];
       const policy = applyRelevanceAndAmbitoPolicy(merged, { relevanceMode, ambito });
+      const externalCount = countBySourcePrefix(policy.results, 'linkedin_public');
+      const mercadoPublicoCount = countBySourcePrefix(policy.results, 'mercado_publico');
+      const hybridCount = policy.results.length - externalCount - mercadoPublicoCount;
 
       return createSuccessResponse({
         results: policy.results,
         meta: {
           total: policy.results.length,
-          hybrid_count: policy.results.length
-            - countBySourcePrefix(policy.results, 'linkedin_public')
-            - countBySourcePrefix(policy.results, 'mercado_publico'),
-          external_count: countBySourcePrefix(policy.results, 'linkedin_public'),
-          mercado_publico_count: countBySourcePrefix(policy.results, 'mercado_publico'),
+          filtered_total: hybridTotal,
+          hybrid_count: hybridCount,
+          external_count: externalCount,
+          mercado_publico_count: mercadoPublicoCount,
           mode: 'mixed',
           relevance_mode: relevanceMode,
           hidden_by_relevance: policy.hiddenByRelevance,
           hidden_by_ambito: policy.hiddenByAmbito,
           hidden_by_quality: hiddenHybridByQuality + hiddenExternalByQuality,
+          page,
+          page_size: safePageSize,
+          has_next: offset + enrichedHybrid.length < hybridTotal,
           providers: externalResult.providers,
           provider_stats: externalResult.providerStats,
           degraded: externalResult.degraded,
@@ -273,8 +344,23 @@ export async function POST(req: NextRequest) {
     }
 
     const [hybrid, mpDocs] = await Promise.all([
-      hybridSearch({ query, ambito, includeUnverified, limit: 50 }),
-      fetchMercadoPublicoLive(ticket, query),
+      hybridSearch({
+        query,
+        ambito,
+        includeUnverified,
+        selectedInstitutions,
+        selectedRegions,
+        selectedCategories,
+        estado: requestBody.estado,
+        minAmount,
+        maxAmount,
+        postedFrom,
+        postedTill,
+        sort,
+        offset,
+        limit: safePageSize,
+      }),
+      runMercadoPublico ? fetchMercadoPublicoLive(ticket, query) : Promise.resolve([]),
     ]);
 
     const enriched = hybrid.projects.map((p) => ({
@@ -288,11 +374,13 @@ export async function POST(req: NextRequest) {
     const normalizedMpDocs = normalizeMercadoPublicoDocs(mpDocs as unknown as Record<string, unknown>[]);
     const merged = [...publishableHybrid, ...normalizedMpDocs] as Record<string, unknown>[];
     const policy = applyRelevanceAndAmbitoPolicy(merged, { relevanceMode, ambito });
+    const hybridTotal = resolveHybridTotal(hybrid);
 
     return createSuccessResponse({
       results: policy.results,
       meta: {
         total: policy.results.length,
+        filtered_total: hybridTotal,
         hybrid_count: policy.results.length - countBySourcePrefix(policy.results, 'mercado_publico'),
         external_count: 0,
         mercado_publico_count: countBySourcePrefix(policy.results, 'mercado_publico'),
@@ -301,6 +389,9 @@ export async function POST(req: NextRequest) {
         hidden_by_relevance: policy.hiddenByRelevance,
         hidden_by_ambito: policy.hiddenByAmbito,
         hidden_by_quality: hiddenByQuality,
+        page,
+        page_size: safePageSize,
+        has_next: offset + enriched.length < hybridTotal,
         provider_stats: [],
         query,
         searched_at: new Date().toISOString(),

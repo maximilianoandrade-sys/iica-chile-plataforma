@@ -43,7 +43,47 @@ describe('search filtering helpers', () => {
     const withRegionString = makeProject({ regiones: [], region: 'Coquimbo, Atacama' });
 
     expect(getProjectRegions(withRegiones)).toEqual(['Maule', 'Biobío']);
-    expect(getProjectRegions(withRegionString)).toEqual(['Coquimbo', 'Atacama']);
+    expect(getProjectRegions(withRegionString)).toEqual(['Atacama', 'Coquimbo']);
+  });
+
+  it('extracts and sorts regions from concatenated region text', () => {
+    const withConcatenatedRegionText = makeProject({
+      regiones: [],
+      region: "Arica y Parinacota Tarapaca Antofagasta Atacama Coquimbo Valparaiso Metropolitana O'Higgins Maule Nuble Biobio Araucania Los Rios Los Lagos Aysen Magallanes",
+    });
+
+    expect(getProjectRegions(withConcatenatedRegionText)).toEqual([
+      'Arica y Parinacota',
+      'Tarapacá',
+      'Antofagasta',
+      'Atacama',
+      'Coquimbo',
+      'Valparaíso',
+      'Metropolitana',
+      "O'Higgins",
+      'Maule',
+      'Ñuble',
+      'Biobío',
+      'La Araucanía',
+      'Los Ríos',
+      'Los Lagos',
+      'Aysén',
+      'Magallanes',
+    ]);
+  });
+
+  it('keeps special coverage labels ordered after Chile regions', () => {
+    const withSpecialCoverage = makeProject({
+      regiones: [],
+      region: 'Nacional, Todas las regiones, Macrozona Sur, América Latina y el Caribe',
+    });
+
+    expect(getProjectRegions(withSpecialCoverage)).toEqual([
+      'Nacional',
+      'Todas las regiones',
+      'Macrozona Sur',
+      'América Latina y el Caribe',
+    ]);
   });
 
   it('builds filter counts from all projects', () => {
@@ -58,6 +98,7 @@ describe('search filtering helpers', () => {
     expect(counts.institucion.INDAP).toBe(2);
     expect(counts.region.Maule).toBe(2);
     expect(counts.ambito.Nacional).toBe(2);
+    expect(counts.categoria?.Convocatoria).toBe(3);
     expect(counts.estado.Abierta).toBeGreaterThanOrEqual(1);
   });
 
@@ -87,6 +128,7 @@ describe('search filtering helpers', () => {
         selectedEstado: 'Abierta',
         selectedInstitutions: ['INDAP'],
         selectedRegions: ['Maule'],
+        selectedCategories: ['Convocatoria'],
         selectedAmbito: 'Nacional',
         minAmount: 200000,
         maxAmount: 500000,

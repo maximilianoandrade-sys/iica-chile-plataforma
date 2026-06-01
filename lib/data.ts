@@ -271,9 +271,11 @@ async function purgeFakeProjects(): Promise<void> {
     }
 }
 
+type UrlProject = { id: number; url_bases: string };
+
 /** Deduplica proyectos por url_bases para evitar entradas duplicadas (ej: CNR) */
-function deduplicateByUrl(projects: Project[]): Project[] {
-    const seen = new Map<string, Project>();
+function deduplicateByUrl<T extends UrlProject>(projects: T[]): T[] {
+    const seen = new Map<string, T>();
     for (const p of projects) {
         const key = p.url_bases?.toLowerCase().trim();
         if (!key) {
@@ -289,6 +291,22 @@ function deduplicateByUrl(projects: Project[]): Project[] {
 
 export type GetProjectsResult =
     | { ok: true; projects: Project[] }
+    | { ok: false; error: string };
+
+export interface ProjectFilterSnapshot {
+    id: number;
+    institucion: string;
+    monto: number;
+    fecha_cierre: string;
+    estadoPostulacion: 'Abierta' | 'Próxima' | 'Cerrada' | undefined;
+    regiones: string[];
+    region: string | null;
+    ambito: string | null;
+    url_bases: string;
+}
+
+export type GetProjectFilterSnapshotResult =
+    | { ok: true; projects: ProjectFilterSnapshot[] }
     | { ok: false; error: string };
 
 export async function getProjects(): Promise<GetProjectsResult> {
@@ -336,6 +354,54 @@ export async function getProjects(): Promise<GetProjectsResult> {
     }
 }
 
+export async function getProjectFilterSnapshot(): Promise<GetProjectFilterSnapshotResult> {
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+
+    await purgeFakeProjects();
+
+    try {
+        const dbProjects = await prisma.project.findMany({
+            where: {
+                fecha_cierre: { gte: today },
+                NOT: { estadoPostulacion: 'Cerrada' },
+                id: { notIn: FAKE_PROJECT_IDS },
+            },
+            orderBy: { fecha_cierre: 'asc' },
+            select: {
+                id: true,
+                institucion: true,
+                monto: true,
+                fecha_cierre: true,
+                estadoPostulacion: true,
+                regiones: true,
+                region: true,
+                ambito: true,
+                url_bases: true,
+            },
+        });
+
+        const mapped = dbProjects.map((project) => ({
+            id: project.id,
+            institucion: project.institucion,
+            monto: project.monto,
+            fecha_cierre: project.fecha_cierre.toISOString().split('T')[0],
+            estadoPostulacion: project.estadoPostulacion as ProjectFilterSnapshot['estadoPostulacion'],
+            regiones: project.regiones,
+            region: project.region,
+            ambito: project.ambito,
+            url_bases: project.url_bases,
+        }));
+
+        const deduped = deduplicateByUrl(mapped);
+
+        return { ok: true, projects: deduped };
+    } catch (error) {
+        logger.error('getProjectFilterSnapshot Prisma/Supabase falló', error as Error);
+        return { ok: false, error: (error as Error).message };
+    }
+}
+
 export async function getAllProjects(): Promise<GetProjectsResult> {
     return getProjects();
 }
@@ -344,5 +410,6 @@ export interface FilterCounts {
   estado: Record<string, number>;
   institucion: Record<string, number>;
   region: Record<string, number>;
+  categoria?: Record<string, number>;
   ambito: Record<string, number>;
 }

@@ -598,4 +598,73 @@ describe('/api/search-projects request contract', () => {
     expect(payload.meta.hidden_by_quality).toBe(0);
     expect(payload.meta.relevance_mode).toBe('all');
   });
+
+  it('applies pagination and filters in internal mode', async () => {
+    mockHybridSearch.mockResolvedValue({
+      mode: 'hybrid',
+      total: 87,
+      projects: [],
+    });
+
+    const { POST } = await import('@/app/api/search-projects/route');
+    const res = await POST(
+      makeRequest({
+        query: 'riego',
+        sourceMode: 'internal',
+        page: 2,
+        pageSize: 20,
+        sort: 'amount_desc',
+        institution: 'CORFO,FIA',
+        region: 'Biobío,Metropolitana',
+        category: 'Riego,Innovacion',
+        estado: 'Abierta',
+        minAmount: 100,
+        maxAmount: 200,
+        postedFrom: '2026-01-01',
+        postedTill: '2026-12-31',
+        includeMercadoPublico: false,
+      })
+    );
+    const json = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(json.ok).toBe(true);
+    expect(json.data.meta.page).toBe(2);
+    expect(json.data.meta.page_size).toBe(20);
+    expect(json.data.meta.filtered_total).toBe(87);
+
+    expect(mockHybridSearch).toHaveBeenCalledWith(
+      expect.objectContaining({
+        query: 'riego',
+        offset: 20,
+        limit: 20,
+        sort: 'amount_desc',
+        selectedInstitutions: ['CORFO', 'FIA'],
+        selectedRegions: ['Biobío', 'Metropolitana'],
+        selectedCategories: ['Riego', 'Innovacion'],
+        estado: 'Abierta',
+        minAmount: 100,
+        maxAmount: 200,
+        postedFrom: '2026-01-01',
+        postedTill: '2026-12-31',
+      })
+    );
+    expect(mockFetchMercadoPublicoLive).not.toHaveBeenCalled();
+  });
+
+  it('rejects invalid posted date range with 400', async () => {
+    const { POST } = await import('@/app/api/search-projects/route');
+    const res = await POST(
+      makeRequest({
+        query: 'riego',
+        postedFrom: '2026-12-31',
+        postedTill: '2026-01-01',
+      })
+    );
+    const json = await res.json();
+
+    expect(res.status).toBe(400);
+    expect(json.ok).toBe(false);
+    expect(String(json.error)).toContain('postedTill');
+  });
 });
