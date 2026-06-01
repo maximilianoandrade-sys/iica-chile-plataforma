@@ -23,10 +23,14 @@ export default async function ProjectListContainer({
     const filterProjects = filterSnapshot.projects;
 
     const searchTerm = typeof searchParams.q === 'string' ? searchParams.q : '';
-    const selectedEstado = typeof searchParams.estado === 'string' ? searchParams.estado : '';
+    const selectedEstadoRaw = typeof searchParams.estado === 'string' ? searchParams.estado : 'Abierta';
+    const selectedEstado = selectedEstadoRaw === 'all' ? '' : selectedEstadoRaw;
     const selectedInstitutions = typeof searchParams.institution === 'string' ? searchParams.institution.split(',').filter(Boolean) : [];
     const selectedRegions = typeof searchParams.region === 'string' ? searchParams.region.split(',').filter(Boolean) : [];
+    const selectedCategories = typeof searchParams.category === 'string' ? searchParams.category.split(',').filter(Boolean) : [];
     const selectedAmbito = typeof searchParams.ambito === 'string' ? searchParams.ambito : '';
+    const postedFrom = typeof searchParams.postedFrom === 'string' ? searchParams.postedFrom : undefined;
+    const postedTill = typeof searchParams.postedTill === 'string' ? searchParams.postedTill : undefined;
     const sort = typeof searchParams.sort === 'string'
         ? searchParams.sort
         : (searchTerm.trim() ? 'relevance' : 'date_asc');
@@ -43,9 +47,12 @@ export default async function ProjectListContainer({
         ambito: selectedAmbito || 'all',
         selectedInstitutions,
         selectedRegions,
+        selectedCategories,
         estado: selectedEstado || undefined,
         minAmount,
         maxAmount,
+        postedFrom,
+        postedTill,
         sort: sort === 'amount_desc' || sort === 'newest' || sort === 'relevance' ? sort : 'date_asc',
         offset: (currentPage - 1) * DEFAULT_PAGE_SIZE,
         limit: DEFAULT_PAGE_SIZE,
@@ -71,12 +78,15 @@ export default async function ProjectListContainer({
     if (selectedAmbito) activeFilterLabels.push(`Ambito: ${selectedAmbito}`);
     selectedInstitutions.forEach((inst) => activeFilterLabels.push(`Institucion: ${inst}`));
     selectedRegions.forEach((region) => activeFilterLabels.push(`Region: ${region}`));
+    selectedCategories.forEach((category) => activeFilterLabels.push(`Sector: ${category}`));
     if (minAmount > 0 || maxAmount < Infinity) {
         const amountLabel = maxAmount < Infinity
             ? `Monto: ${minAmount.toLocaleString('es-CL')} - ${maxAmount.toLocaleString('es-CL')}`
             : `Monto: desde ${minAmount.toLocaleString('es-CL')}`;
         activeFilterLabels.push(amountLabel);
     }
+    if (postedFrom) activeFilterLabels.push(`Publicado desde: ${postedFrom}`);
+    if (postedTill) activeFilterLabels.push(`Publicado hasta: ${postedTill}`);
 
     return (
         <>
