@@ -385,5 +385,6 @@ export interface FilterCounts {
   estado: Record<string, number>;
   institucion: Record<string, number>;
   region: Record<string, number>;
+  categoria?: Record<string, number>;
   ambito: Record<string, number>;
 }
