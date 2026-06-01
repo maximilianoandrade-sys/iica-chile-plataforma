@@ -6,7 +6,7 @@
  * Si no hay GEMINI_API_KEY o el embedding falla, hace fallback a sólo
  * full-text con tsvector (que ya está indexado y es muy rápido).
  *
- * Ver migration: prisma/migrations/manual/2026-05-11-hybrid-search.sql
+ * Ver migration: scripts/sql/2026-05-11-hybrid-search.sql
  */
 import prisma from '@/lib/prisma';
 import { Prisma } from '@prisma/client';
@@ -24,9 +24,12 @@ export interface HybridSearchOptions {
   ambito?: string;
   selectedInstitutions?: string[];
   selectedRegions?: string[];
+  selectedCategories?: string[];
   estado?: string;
   minAmount?: number;
   maxAmount?: number;
+  postedFrom?: string;
+  postedTill?: string;
   includeUnverified?: boolean;
   sort?: SortMode;
   offset?: number;
@@ -44,9 +47,12 @@ interface HybridQueryFilters {
   ambito?: string;
   selectedInstitutions: string[];
   selectedRegions: string[];
+  selectedCategories: string[];
   estado?: string;
   minAmount: number;
   maxAmount: number;
+  postedFrom?: string;
+  postedTill?: string;
   includeUnverified: boolean;
 }
 
@@ -60,9 +66,12 @@ function buildHybridFilters(opts: HybridSearchOptions): HybridQueryFilters {
     ambito: opts.ambito,
     selectedInstitutions: opts.selectedInstitutions ?? [],
     selectedRegions: opts.selectedRegions ?? [],
+    selectedCategories: opts.selectedCategories ?? [],
     estado: opts.estado,
     minAmount: Number.isFinite(opts.minAmount) ? Math.max(0, opts.minAmount as number) : 0,
     maxAmount: Number.isFinite(opts.maxAmount) ? (opts.maxAmount as number) : Number.POSITIVE_INFINITY,
+    postedFrom: opts.postedFrom,
+    postedTill: opts.postedTill,
     includeUnverified: opts.includeUnverified !== false,
   };
 }
@@ -93,12 +102,31 @@ function buildProjectWhere(filters: HybridQueryFilters): Prisma.ProjectWhereInpu
     ];
   }
 
+  if (filters.selectedCategories.length > 0) {
+    where.categoria = { in: filters.selectedCategories };
+  }
+
   const amountFilterActive = filters.minAmount > 0 || Number.isFinite(filters.maxAmount);
   if (amountFilterActive) {
     const amountFilter: Prisma.FloatFilter = {};
     if (filters.minAmount > 0) amountFilter.gte = filters.minAmount;
     if (Number.isFinite(filters.maxAmount)) amountFilter.lte = filters.maxAmount;
     where.monto = amountFilter;
+  }
+
+  if (filters.postedFrom || filters.postedTill) {
+    const createdAtFilter: Prisma.DateTimeFilter = {};
+    if (filters.postedFrom) {
+      const parsed = new Date(`${filters.postedFrom}T00:00:00.000Z`);
+      if (!Number.isNaN(parsed.getTime())) createdAtFilter.gte = parsed;
+    }
+    if (filters.postedTill) {
+      const parsed = new Date(`${filters.postedTill}T23:59:59.999Z`);
+      if (!Number.isNaN(parsed.getTime())) createdAtFilter.lte = parsed;
+    }
+    if (Object.keys(createdAtFilter).length > 0) {
+      where.createdAt = createdAtFilter;
+    }
   }
 
   return where;
