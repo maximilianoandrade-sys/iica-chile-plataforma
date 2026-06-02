@@ -13,6 +13,7 @@ import { sendEmail } from '@/lib/email';
 import { getLogger } from '@/lib/utils/logger';
 import { sendAlert } from '@/lib/utils/alerts';
 import { createSuccessResponse, createErrorResponse } from '@/lib/utils/api-response';
+import { isAllowedPublicHttpUrl, verifyHostnameResolvesToPublicIps } from '@/lib/utils/network-security';
 
 const logger = getLogger('CronCheckUpdates');
 
@@ -61,6 +62,28 @@ interface LinkCheckResult {
 
 async function checkLinkForUpdates(url: string, projectName: string): Promise<LinkCheckResult> {
     try {
+        if (!isAllowedPublicHttpUrl(url)) {
+            return {
+                url,
+                projectName,
+                status: 0,
+                hasChanged: false,
+                error: 'URL not allowed: must be a public HTTP/HTTPS URL',
+            };
+        }
+
+        const parsed = new URL(url);
+        const ipSafe = await verifyHostnameResolvesToPublicIps(parsed.hostname);
+        if (!ipSafe) {
+            return {
+                url,
+                projectName,
+                status: 0,
+                hasChanged: false,
+                error: 'URL resolves to a private/internal IP address',
+            };
+        }
+
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 segundos
 

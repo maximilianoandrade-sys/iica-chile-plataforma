@@ -12,22 +12,12 @@
  * búsqueda de Google en lugar del sitio oficial.
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
-import { lookup } from 'dns/promises';
 import { createErrorResponse, createSuccessResponse } from '@/lib/utils/api-response';
+import { isAllowedPublicHttpUrl, verifyHostnameResolvesToPublicIps } from '@/lib/utils/network-security';
 
 export const runtime = 'nodejs';
-
-/** Blocked IP ranges: private, loopback, link-local, metadata endpoints */
-const BLOCKED_HOSTNAMES = new Set([
-    'localhost',
-    '127.0.0.1',
-    '0.0.0.0',
-    '[::1]',
-    '169.254.169.254', // AWS/GCP metadata
-    'metadata.google.internal',
-]);
 
 const BOT_PROTECTED_HOST_PATTERNS = [
     'fia.cl',
@@ -39,37 +29,6 @@ const BOT_PROTECTED_HOST_PATTERNS = [
     'twitter.com',
 ];
 
-function isBlockedHost(hostname: string): boolean {
-    if (BLOCKED_HOSTNAMES.has(hostname)) return true;
-
-    // Block private IPv4 ranges
-    const ipv4Match = hostname.match(/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/);
-    if (ipv4Match) {
-        const [, a, b] = ipv4Match.map(Number);
-        if (a === 10) return true;                    // 10.0.0.0/8
-        if (a === 172 && b >= 16 && b <= 31) return true; // 172.16.0.0/12
-        if (a === 192 && b === 168) return true;      // 192.168.0.0/16
-        if (a === 127) return true;                   // 127.0.0.0/8
-        if (a === 0) return true;                     // 0.0.0.0/8
-        if (a === 169 && b === 254) return true;      // 169.254.0.0/16 link-local
-    }
-
-    return false;
-}
-
-function isAllowedUrl(urlString: string): boolean {
-    try {
-        const parsed = new URL(urlString);
-        // Only allow http and https
-        if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return false;
-        // Block private/internal hosts
-        if (isBlockedHost(parsed.hostname)) return false;
-        return true;
-    } catch {
-        return false;
-    }
-}
-
 function isLikelyBotProtectedHost(hostname: string): boolean {
     return BOT_PROTECTED_HOST_PATTERNS.some((pattern) => hostname === pattern || hostname.endsWith(`.${pattern}`));
 }
@@ -80,13 +39,7 @@ function isAbortError(error: unknown): boolean {
 
 /** Resolve DNS and verify the resolved IP is not private (prevents DNS rebinding). */
 async function verifyResolvedIp(hostname: string): Promise<boolean> {
-    try {
-        const { address } = await lookup(hostname);
-        return !isBlockedHost(address);
-    } catch {
-        // DNS resolution failed — allow fetch to handle the error
-        return true;
-    }
+    return verifyHostnameResolvesToPublicIps(hostname);
 }
 
 function isHomepageRedirect(originalUrl: string, finalUrl: string): boolean {
@@ -129,7 +82,7 @@ export async function GET(request: NextRequest) {
             return createErrorResponse('URL parameter is required', 400);
         }
 
-        if (!isAllowedUrl(url)) {
+        if (!isAllowedPublicHttpUrl(url)) {
             return createErrorResponse('URL not allowed: must be a public HTTP/HTTPS URL', 400);
         }
 
@@ -240,7 +193,7 @@ export async function GET(request: NextRequest) {
                 isValid: false,
                 error: error instanceof Error ? error.message : 'Network error',
                 url,
-            });
+            }, 502);
         }
     } catch (error: unknown) {
         return createErrorResponse(error instanceof Error ? error.message : 'Internal server error', 500);

@@ -61,6 +61,9 @@ audit-broken-urls.csv
 
 # Scraper temp
 tmp/
+scripts/__pycache__/
+iica-chile-plataforma/
+docs/Informe-Plataforma-IICA-Chile-Gobernanza-Presupuesto-2026.docx
 
 # PWA generated files
 public/sw.js

@@ -2,8 +2,7 @@ name: Ingest — Capa A (scrapers determinísticos)
 
 on:
   schedule:
-    # Cada día a las 10:00 UTC (06:00 Chile)
-    - cron: "0 10 * * *"
+    - cron: "0 11 * * *" # 11:00 UTC diario para mantener datos vigentes en producción
   workflow_dispatch:
 
 jobs:
