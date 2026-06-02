@@ -27,6 +27,7 @@ const customConfig = {
     "<rootDir>/e2e/",
     "[/\\\\]e2e[/\\\\]",
     "<rootDir>/.worktrees/",
+    "<rootDir>/iica-chile-plataforma/",
   ],
   collectCoverageFrom: [
     "components/**/*.tsx",

@@ -71,6 +71,15 @@ describe("middleware admin token expiry", () => {
     mockNext.mockClear();
   });
 
+  beforeAll(() => {
+    if (!globalThis.crypto?.subtle) {
+      Object.defineProperty(globalThis, "crypto", {
+        value: require("crypto").webcrypto,
+        configurable: true,
+      });
+    }
+  });
+
   afterEach(() => {
     delete process.env.ADMIN_SESSION_SECRET;
   });

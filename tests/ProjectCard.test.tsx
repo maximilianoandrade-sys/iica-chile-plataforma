@@ -6,7 +6,7 @@ const mockProject = {
   nombre: 'Programa de Riego Tecnificado',
   institucion: 'CORFO',
   monto: 150000000,
-  fecha_cierre: '2026-06-01',
+  fecha_cierre: '2030-06-01',
   estado: 'active',
   categoria: 'Infraestructura',
   url_bases: 'https://example.com',

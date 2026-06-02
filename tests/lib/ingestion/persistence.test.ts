@@ -19,6 +19,8 @@ jest.mock("../../../lib/prisma", () => ({
       findMany: jest.fn(),
       update: jest.fn(),
     },
+    $queryRawUnsafe: jest.fn(),
+    $executeRawUnsafe: jest.fn(),
   },
 }));
 
@@ -27,15 +29,29 @@ jest.mock("../../../lib/ingestion/validateUrl", () => ({
   validateUrl: jest.fn().mockResolvedValue({ ok: true }),
 }));
 
+const mockEmbedText = jest.fn();
+const mockProjectToEmbeddingText = jest.fn(() => "embedding text");
+const mockToPgVector = jest.fn((embedding: number[]) => `[${embedding.join(",")}]`);
+
+jest.mock("../../../lib/ingestion/embeddings", () => ({
+  embedText: (...args: unknown[]) => mockEmbedText(...args),
+  projectToEmbeddingText: (...args: unknown[]) => mockProjectToEmbeddingText(...args),
+  toPgVector: (...args: unknown[]) => mockToPgVector(...args),
+}));
+
 import { markStale, upsertProject, updateSourceStatus } from "../../../lib/ingestion/persistence";
 const prisma = require("../../../lib/prisma").default;
 
 describe("upsertProject", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    delete process.env.GEMINI_API_KEY;
+    mockEmbedText.mockResolvedValue(null);
     prisma.source.findUnique.mockResolvedValue({ id: 1 });
     prisma.project.findFirst.mockResolvedValue(null);
     prisma.project.upsert.mockResolvedValue({ id: 99 });
+    prisma.$queryRawUnsafe.mockResolvedValue([]);
+    prisma.$executeRawUnsafe.mockResolvedValue(undefined);
   });
 
   it("sets needsReview to true for new projects", async () => {
@@ -291,5 +307,41 @@ describe("markStale", () => {
         where: expect.not.objectContaining({ OR: expect.anything() }),
       })
     );
+  });
+
+  it("also closes abiertas y próximas con past deadlines", async () => {
+    await markStale();
+
+    expect(prisma.project.updateMany).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        where: expect.objectContaining({
+          fecha_cierre: expect.objectContaining({ lt: expect.any(Date) }),
+          estadoPostulacion: { in: ["Abierta", "Próxima"] },
+        }),
+        data: { estadoPostulacion: "Cerrada" },
+      })
+    );
+  });
+});
+
+describe("findSemanticDuplicates", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("returns numeric ids aligned with Prisma schema", async () => {
+    mockEmbedText.mockResolvedValue([0.1, 0.2]);
+    prisma.$queryRawUnsafe.mockResolvedValue([
+      { id: 42, nombre: "Proyecto A", canonicalUrl: "https://example.com/a" },
+    ]);
+
+    const { findSemanticDuplicates } = await import("../../../lib/ingestion/persistence");
+    const rows = await findSemanticDuplicates("riego por goteo");
+
+    expect(rows).toEqual([
+      { id: 42, nombre: "Proyecto A", canonicalUrl: "https://example.com/a" },
+    ]);
+    expect(typeof rows[0].id).toBe("number");
   });
 });

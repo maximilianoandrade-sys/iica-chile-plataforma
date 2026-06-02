@@ -4,7 +4,7 @@ Documentación práctica para mantener el pipeline de búsqueda de proyectos.
 
 ## Arquitectura rápida
 
-- **Capa A** (diaria 06:00 UTC): scrapers determinísticos en GitHub Actions → Supabase
+- **Capa A** (diaria 06:00 UTC + 11:00 UTC): scrapers determinísticos en GitHub Actions → Supabase
 - **Capa B** (semanal lunes 12:00 UTC): AI Discovery con guardrails → Supabase con `needsReview=true`
 - **Búsqueda** (`/api/search-projects`): query directa a Supabase + Mercado Público live
 
@@ -54,7 +54,8 @@ npm run smoke
 |---|---|---|---|
 | `DATABASE_URL` | ✅ | ✅ | Prisma connection string |
 | `DIRECT_URL` | ✅ | ✅ | Prisma migrations |
-| `ANTHROPIC_API_KEY` | ✅ | ✅ | Claude para Capa B |
+| `CRON_SECRET` | ✅ | ✅ | Autenticación de `/api/cron/check-updates` |
+| `GEMINI_API_KEY` | ✅ | ✅ | Gemini para Capa B + embeddings |
 | `MERCADO_PUBLICO_TICKET` | ✅ | — | API Mercado Público |
 | `ADMIN_PASSWORD` | ✅ | — | Auth /admin/login |
 | `ADMIN_SESSION_SECRET` | ✅ | — | HMAC cookie firma |
@@ -64,7 +65,18 @@ npm run smoke
 
 `markStale()` corre al final de cada `run-scrapers.ts`:
 - Proyectos con `lastSeenAt > 7 días` (y no `manual`) se marcan `Cerrada`
-- Proyectos con `fecha_cierre < hoy` se marcan `Cerrada`
+- Proyectos con `fecha_cierre < hoy` se marcan `Cerrada` (incluye estados `Abierta` y `Próxima`)
+
+## Limpieza one-shot de expiradas abiertas
+
+Si aparecen oportunidades antiguas como abiertas, ejecutar una limpieza puntual:
+
+```bash
+# En Supabase SQL editor o psql sobre el entorno afectado
+\i scripts/sql/2026-06-01-close-expired-open-projects.sql
+```
+
+Después de la limpieza, correr una ingesta y smoke test para verificar consistencia.
 
 ## Limitaciones conocidas
 
@@ -87,18 +99,15 @@ Scraper for the IICA projects dashboard that searches by counterpart (partner or
 ### Running
 
 ```bash
-# Discovery mode (saves raw HTML for inspection, headed browser)
-npm run scrape:iica-discover
-
 # Full scrape (dry run - no DB writes)
-npm run scrape:iica-dashboard -- --dry-run
+npx tsx scripts/scrape-iica-dashboard.ts --dry-run
 
 # Full scrape (live - writes to DB)
-npm run scrape:iica-dashboard
+npx tsx scripts/scrape-iica-dashboard.ts
 
 # Filter by category
-npm run scrape:iica-dashboard -- --category chilean
-npm run scrape:iica-dashboard -- --category multilateral --dry-run
+npx tsx scripts/scrape-iica-dashboard.ts --category chilean
+npx tsx scripts/scrape-iica-dashboard.ts --category multilateral --dry-run
 ```
 
 ### Environment Variables

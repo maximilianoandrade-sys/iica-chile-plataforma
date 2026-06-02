@@ -65,9 +65,8 @@ test.describe("API endpoints", () => {
   test("/api/check-link marca URL inexistente como inválida", async ({ request }) => {
     const target = encodeURIComponent("https://no-existe-este-dominio-1234567890.cl/");
     const res = await request.get(`/api/check-link?url=${target}`);
-    // El endpoint debería responder ok=true (el endpoint funciona)
-    // pero con isValid=false (la URL no responde).
-    expect(res.ok()).toBeTruthy();
+    // Contrato endurecido: fallas de red devuelven 502 con payload isValid=false.
+    expect(res.status()).toBe(502);
     const body = await res.json();
     const data = body.data ?? body;
     expect(data.isValid).toBe(false);
