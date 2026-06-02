@@ -239,8 +239,8 @@ describe('data utilities', () => {
 
       render(element);
 
-      expect(screen.getByText(/Regiones en validación editorial/i)).toBeInTheDocument();
-      expect(screen.getByText(/Beneficiarios en validación editorial/i)).toBeInTheDocument();
+      expect(screen.getByText(/Ver regiones elegibles en las bases oficiales/i)).toBeInTheDocument();
+      expect(screen.getByText(/Ver beneficiarios elegibles en las bases oficiales/i)).toBeInTheDocument();
     });
   });
 });

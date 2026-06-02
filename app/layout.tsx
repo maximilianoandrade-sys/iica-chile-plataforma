@@ -44,12 +44,32 @@ function safeJsonStringify(data: unknown): string {
   return JSON.stringify(data).replace(/<\//g, '<\\/').replace(/<!--/g, '<\\!--')
 }
 
+function mainFocusScript() {
+  return `
+    (function () {
+      function focusMainIfHashPresent() {
+        if (window.location.hash !== '#main-content') return;
+        var main = document.getElementById('main-content');
+        if (main && typeof main.focus === 'function') {
+          main.focus({ preventScroll: true });
+        }
+      }
+
+      window.addEventListener('hashchange', focusMainIfHashPresent);
+      window.addEventListener('load', focusMainIfHashPresent);
+    })();
+  `;
+}
+
 // ============================================================================
 // METADATA - SEO & PWA
 // ============================================================================
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  alternates: {
+    canonical: '/',
+  },
   title: {
     default: 'Radar de Oportunidades IICA Chile 2026',
     template: '%s | IICA Chile'
@@ -152,24 +172,27 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: safeJsonStringify(webSiteJsonLd) }}
         />
+        <script
+          dangerouslySetInnerHTML={{ __html: mainFocusScript() }}
+        />
       </head>
 
       <body className="flex flex-col min-h-screen bg-[#f4f7f9] dark:bg-gray-900 antialiased transition-colors">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {/* Skip to main content - Accesibilidad */}
-          <a
-            href="#main-content"
-            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:shadow-lg"
-          >
-            Saltar al contenido principal
-          </a>
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:shadow-lg"
+            >
+              Saltar al contenido principal
+            </a>
 
           {/* Indicadores de estado */}
           <OfflineIndicator />
 
           {/* Contenido principal */}
           <ToastProvider>
-          <div id="main-content">
+          <div id="main-content" tabIndex={-1} className="scroll-mt-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-iica-yellow">
             {children}
           </div>
           </ToastProvider>

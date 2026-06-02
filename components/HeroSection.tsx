@@ -62,10 +62,21 @@ export function HeroSection({ stats }: HeroSectionProps) {
                             { label: 'Internacionales', value: internacionales, icon: <Globe className="h-5 w-5" /> },
                             { label: 'Cierran pronto', value: urgentCount, icon: <AlertTriangle className="h-5 w-5 text-amber-400" /> },
                         ] as { label: string; value: number; icon: React.ReactNode }[]).map(stat => (
-                            <div key={stat.label} className="text-center bg-white/10 backdrop-blur-sm rounded-xl px-5 py-3 border border-white/20">
-                                <div className="text-2xl font-black text-white flex items-center justify-center gap-2">{stat.icon} {stat.value}</div>
-                                <div className="text-xs text-blue-200 font-medium">{stat.label}</div>
-                            </div>
+                            stat.label === 'Cierran pronto' ? (
+                                <Link
+                                    key={stat.label}
+                                    href="/#convocatorias?estado=Abierta&sort=date_asc"
+                                    className="text-center bg-white/10 backdrop-blur-sm rounded-xl px-5 py-3 border border-white/20 hover:bg-white/20 transition-colors min-h-[44px] focus-visible:ring-2 focus-visible:ring-iica-yellow"
+                                >
+                                    <div className="text-2xl font-black text-white flex items-center justify-center gap-2">{stat.icon} {stat.value}</div>
+                                    <div className="text-xs text-blue-200 font-medium">{stat.label}</div>
+                                </Link>
+                            ) : (
+                                <div key={stat.label} className="text-center bg-white/10 backdrop-blur-sm rounded-xl px-5 py-3 border border-white/20">
+                                    <div className="text-2xl font-black text-white flex items-center justify-center gap-2">{stat.icon} {stat.value}</div>
+                                    <div className="text-xs text-blue-200 font-medium">{stat.label}</div>
+                                </div>
+                            )
                         ))}
                     </div>
                 </div>

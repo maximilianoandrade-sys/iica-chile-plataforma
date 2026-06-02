@@ -13,6 +13,68 @@ interface FilterChipsProps {
   filterCounts: FilterCounts;
 }
 
+const NATIONAL_INSTITUTION_KEYS = [
+  'CNR',
+  'INDAP',
+  'FIA',
+  'CORFO',
+  'SAG',
+  'SERCOTEC',
+  'GORE',
+  'SUBDERE',
+  'MINAGRI',
+];
+
+const INTERNATIONAL_INSTITUTION_KEYS = [
+  'FONTAGRO',
+  'FAO',
+  'FIDA',
+  'IFAD',
+  'BID',
+  'IADB',
+  'PNUD',
+  'GEF',
+  'GCF',
+  'WORLD BANK',
+  'IICA',
+  'UE',
+  'EUROCLIMA',
+  'UNGM',
+];
+
+const CHILE_REGION_LABELS = new Set([
+  'Arica y Parinacota',
+  'Tarapacá',
+  'Antofagasta',
+  'Atacama',
+  'Coquimbo',
+  'Valparaíso',
+  'Metropolitana',
+  "O'Higgins",
+  'Maule',
+  'Ñuble',
+  'Biobío',
+  'La Araucanía',
+  'Los Ríos',
+  'Los Lagos',
+  'Aysén',
+  'Magallanes',
+  'Nacional',
+  'Todas las regiones',
+  'Macrozona Norte',
+  'Macrozona Centro',
+  'Macrozona Sur',
+  'Macrozona',
+  'Chile',
+]);
+
+function classifyInstitutionCoverage(value: string): 'chile' | 'internacional' | 'unknown' {
+  const upper = value.toUpperCase();
+  if (NATIONAL_INSTITUTION_KEYS.some((key) => upper.includes(key))) return 'chile';
+  if (INTERNATIONAL_INSTITUTION_KEYS.some((key) => upper.includes(key))) return 'internacional';
+  return 'unknown';
+}
+
 function parseCsvParam(value: string): string[] {
   if (!value) return [];
   return value
@@ -43,6 +105,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
   const currentPostedFrom = searchParams.get('postedFrom') ?? '';
   const currentPostedTill = searchParams.get('postedTill') ?? '';
   const [searchInput, setSearchInput] = useState(currentQ);
+  const coverage = currentAmbito === 'Internacional' ? 'internacional' : currentAmbito ? 'chile' : 'all';
 
   useEffect(() => {
     setSearchInput(currentQ);
@@ -112,6 +175,17 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
 
   const institutionOptions = Object.keys(filterCounts.institucion).sort((a, b) => a.localeCompare(b, 'es'));
   const regionOptions = sortRegionLabels(Object.keys(filterCounts.region));
+  const filteredInstitutionOptions = institutionOptions.filter((institution) => {
+    if (coverage === 'all') return true;
+    const detected = classifyInstitutionCoverage(institution);
+    if (detected === 'unknown') return true;
+    return detected === coverage;
+  });
+  const filteredRegionOptions = regionOptions.filter((region) => {
+    if (coverage === 'all') return true;
+    if (coverage === 'chile') return CHILE_REGION_LABELS.has(region);
+    return !CHILE_REGION_LABELS.has(region);
+  });
   const categoryOptions = Object.keys(filterCounts.categoria ?? {}).sort((a, b) => a.localeCompare(b, 'es'));
 
   const selectedInstitutions = parseCsvParam(currentInstitution);
@@ -230,7 +304,32 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
         </label>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+        <Field label="Cobertura" htmlFor="filter-coverage">
+          <select
+            id="filter-coverage"
+            aria-label="Cobertura"
+            value={coverage}
+            onChange={(event) => {
+              const value = event.target.value;
+              if (value === 'internacional') {
+                updateParams({ ambito: 'Internacional', relevanceMode: 'all', region: '' });
+                return;
+              }
+              if (value === 'chile') {
+                updateParams({ ambito: '', relevanceMode: 'chile_strict' });
+                return;
+              }
+              updateParams({ ambito: '', relevanceMode: 'all' });
+            }}
+            className="w-full rounded-xl border border-iica-border bg-white px-3 py-2.5 text-sm text-gray-800 min-h-[44px] focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none"
+          >
+            <option value="all">Chile + Internacional</option>
+            <option value="chile">Solo Chile</option>
+            <option value="internacional">Solo Internacional</option>
+          </select>
+        </Field>
+
         <Field label="Estado" htmlFor="filter-estado">
             <select
               id="filter-estado"
@@ -247,22 +346,27 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
         </Field>
 
         <Field label="Ubicaciones" htmlFor="filter-region">
-          <select
-            id="filter-region"
-            multiple
-            aria-label="Ubicaciones"
-            value={selectedRegions}
+            <select
+              id="filter-region"
+              multiple
+              aria-label="Ubicaciones"
+              value={selectedRegions}
             onChange={(event) => {
               const next = Array.from(event.target.selectedOptions).map((option) => option.value);
               updateParams({ region: stringifyCsv(next) });
             }}
             className="w-full rounded-xl border border-iica-border bg-white px-3 py-2 text-sm text-gray-800 min-h-[88px] focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none"
+            disabled={filteredRegionOptions.length === 0}
           >
-            {regionOptions.map((region) => (
-              <option key={region} value={region}>
-                {region}
-              </option>
-            ))}
+            {filteredRegionOptions.length === 0 ? (
+              <option value="">Sin opciones para esta cobertura</option>
+            ) : (
+              filteredRegionOptions.map((region) => (
+                <option key={region} value={region}>
+                  {region}
+                </option>
+              ))
+            )}
           </select>
         </Field>
 
@@ -277,12 +381,17 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
               updateParams({ institution: stringifyCsv(next) });
             }}
             className="w-full rounded-xl border border-iica-border bg-white px-3 py-2 text-sm text-gray-800 min-h-[88px] focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none"
+            disabled={filteredInstitutionOptions.length === 0}
           >
-            {institutionOptions.map((institution) => (
-              <option key={institution} value={institution}>
-                {institution}
-              </option>
-            ))}
+            {filteredInstitutionOptions.length === 0 ? (
+              <option value="">Sin opciones para esta cobertura</option>
+            ) : (
+              filteredInstitutionOptions.map((institution) => (
+                <option key={institution} value={institution}>
+                  {institution}
+                </option>
+              ))
+            )}
           </select>
         </Field>
 

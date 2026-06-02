@@ -10,9 +10,8 @@ import FuentesOficiales from "@/components/FuentesOficiales";
 import { getProjectFilterSnapshot, getProjects } from "@/lib/data";
 import prisma from "@/lib/prisma";
 
-// Forzar renderizado dinámico: los proyectos vienen de la DB y cambian con scrapers.
-// Sin esto, Vercel puede cachear la página estática con datos viejos.
-export const dynamic = 'force-dynamic';
+// Estrategia híbrida: home cacheada con ISR y búsqueda/filtros dinámicos por query.
+export const revalidate = 3600;
 
 // Dynamic Metadata for SEO
 export async function generateMetadata({
