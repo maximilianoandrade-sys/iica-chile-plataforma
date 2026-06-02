@@ -309,7 +309,7 @@ describe("markStale", () => {
     );
   });
 
-  it("also closes upcoming projects with past deadlines", async () => {
+  it("also closes abiertas y próximas con past deadlines", async () => {
     await markStale();
 
     expect(prisma.project.updateMany).toHaveBeenNthCalledWith(
@@ -317,7 +317,7 @@ describe("markStale", () => {
       expect.objectContaining({
         where: expect.objectContaining({
           fecha_cierre: expect.objectContaining({ lt: expect.any(Date) }),
-          estadoPostulacion: "Abierta",
+          estadoPostulacion: { in: ["Abierta", "Próxima"] },
         }),
         data: { estadoPostulacion: "Cerrada" },
       })
