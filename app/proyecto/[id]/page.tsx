@@ -9,6 +9,7 @@ import { ExternalLink, ArrowLeft, Calendar, CheckCircle, Info, MapPin, Users, Do
 import { ActionButton } from '@/components/ActionButton';
 
 const getCachedProjects = cache(getProjects);
+const SITE_URL = 'https://iica-chile-plataforma.vercel.app';
 
 interface Props {
     params: Promise<{ id: string }>;
@@ -32,9 +33,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
         title,
         description,
+        alternates: {
+            canonical: `/proyecto/${id}`,
+        },
         openGraph: {
             title,
             description,
+            url: `/proyecto/${id}`,
             images: ['/agricultural-field.png'],
         },
         twitter: {
@@ -75,10 +80,65 @@ export default async function ProyectoDetallePage({ params }: Props) {
     const hasBeneficiaries = Array.isArray(project.beneficiarios) && project.beneficiarios.length > 0;
     const regionPreview = hasRegions
         ? (project.regiones?.includes('Todas') ? 'Todo Chile' : project.regiones?.slice(0, 2).join(', '))
-        : 'Regiones en validación editorial';
+        : 'Ver regiones elegibles en las bases oficiales';
     const beneficiariesPreview = hasBeneficiaries
         ? project.beneficiarios?.slice(0, 2).join(', ')
-        : 'Beneficiarios en validación editorial';
+        : 'Ver beneficiarios elegibles en las bases oficiales';
+    const projectUrl = `${SITE_URL}/proyecto/${id}`;
+    const deadlineIso = new Date(project.fecha_cierre).toISOString();
+
+    const governmentGrantJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'GovernmentGrant',
+        name: project.nombre,
+        description: project.resumen?.observaciones || `Convocatoria de ${project.institucion}`,
+        url: projectUrl,
+        funder: {
+            '@type': 'GovernmentOrganization',
+            name: project.institucion,
+        },
+        provider: {
+            '@type': 'Organization',
+            name: 'IICA Chile',
+            url: SITE_URL,
+        },
+        applicationDeadline: deadlineIso,
+        areaServed: {
+            '@type': 'Country',
+            name: 'Chile',
+        },
+    };
+
+    const breadcrumbJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Inicio',
+                item: SITE_URL,
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Oportunidades',
+                item: `${SITE_URL}/#convocatorias`,
+            },
+            {
+                '@type': 'ListItem',
+                position: 3,
+                name: project.institucion,
+                item: `${SITE_URL}/#convocatorias`,
+            },
+            {
+                '@type': 'ListItem',
+                position: 4,
+                name: project.nombre,
+                item: projectUrl,
+            },
+        ],
+    };
 
     return (
         <div className="min-h-screen flex flex-col bg-[#f4f7f9]">
@@ -277,30 +337,13 @@ export default async function ProyectoDetallePage({ params }: Props) {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
-                    __html: JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "GovernmentService",
-                        name: project.nombre,
-                        provider: {
-                            "@type": "Organization",
-                            name: project.institucion,
-                        },
-                        description: project.resumen?.observaciones || `Convocatoria de ${project.institucion}`,
-                        url: project.url_bases,
-                        areaServed: {
-                            "@type": "Country",
-                            name: "Chile",
-                        },
-                        ...(project.fecha_cierre && {
-                            temporalCoverage: `../${new Date(project.fecha_cierre).toISOString().split("T")[0]}`,
-                        }),
-                        ...(project.monto && {
-                            offers: {
-                                "@type": "Offer",
-                                description: `Hasta ${montoDisplay}`,
-                            },
-                        }),
-                    }),
+                    __html: JSON.stringify(governmentGrantJsonLd),
+                }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(breadcrumbJsonLd),
                 }}
             />
         </div>

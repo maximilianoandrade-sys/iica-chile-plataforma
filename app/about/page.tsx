@@ -8,9 +8,13 @@ import { Globe, Users, Leaf, Award, CheckCircle, ArrowRight, ExternalLink, Trend
 export const metadata: Metadata = {
     title: 'Sobre IICA Chile',
     description: 'Conozca el mandato, capacidades y trayectoria de IICA Chile en cooperación técnica agrícola y desarrollo rural.',
+    alternates: {
+        canonical: '/about',
+    },
     openGraph: {
         title: 'Sobre IICA Chile',
         description: 'Organismo especializado en agricultura del Sistema Interamericano con presencia y cooperación técnica en Chile.',
+        url: '/about',
     },
     twitter: {
         card: 'summary_large_image',

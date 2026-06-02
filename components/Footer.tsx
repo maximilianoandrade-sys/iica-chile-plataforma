@@ -122,6 +122,7 @@ export function Footer() {
                     <p>© {currentYear} Instituto Interamericano de Cooperación para la Agricultura (IICA). Todos los derechos reservados.</p>
                     <div className="flex gap-4">
                         <Link href="/legal/privacidad" className="hover:text-white transition-colors">Política de Privacidad</Link>
+                        <Link href="/legal/derechos" className="hover:text-white transition-colors">Derechos ARCO+</Link>
                         <Link href="/legal/terminos" className="hover:text-white transition-colors">Términos de Uso</Link>
                         <Link href="/#fuentes" className="hover:text-white transition-colors">Fuentes de Datos</Link>
                     </div>

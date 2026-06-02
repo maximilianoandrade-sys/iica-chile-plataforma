@@ -1,4 +1,14 @@
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Política de Privacidad | IICA Chile',
+    description: 'Política de privacidad y protección de datos personales de la Plataforma IICA Chile.',
+    alternates: {
+        canonical: '/legal/privacidad',
+    },
+};
+
 export default function PrivacyPolicyPage() {
     return (
         <main className="container mx-auto px-4 py-12 max-w-4xl text-gray-700 leading-relaxed space-y-8">
@@ -12,7 +22,10 @@ export default function PrivacyPolicyPage() {
                     En IICA Chile, nos tomamos muy en serio la privacidad de nuestros usuarios. Esta Política de Privacidad describe cómo recopilamos, utilizamos y protegemos su información personal cuando utiliza nuestra Plataforma de Financiamiento Agrícola.
                 </p>
                 <p>
-                    Al utilizar nuestro sitio web, usted acepta las prácticas descritas en esta política. Nos comprometemos a cumplir con la Ley N° 19.628 sobre Protección de la Vida Privada vigente en Chile.
+                    Al utilizar nuestro sitio web, usted acepta las prácticas descritas en esta política. Nos comprometemos a cumplir con la normativa de protección de datos personales vigente en Chile.
+                </p>
+                <p>
+                    Esta política se interpreta y aplica conforme al marco normativo vigente en Chile, incluyendo la Ley 21.719 sobre protección de datos personales.
                 </p>
             </section>
 
@@ -59,12 +72,24 @@ export default function PrivacyPolicyPage() {
             <section className="space-y-4">
                 <h2 className="text-2xl font-bold text-[var(--iica-blue)]">5. Sus Derechos</h2>
                 <p>
-                    De acuerdo con la legislación chilena, usted tiene derecho a acceder, rectificar o cancelar sus datos personales en cualquier momento. Para ejercer estos derechos, por favor contáctenos a través de los canales oficiales de IICA Chile.
+                    De acuerdo con la legislación chilena vigente, usted puede ejercer derechos de acceso, rectificación, cancelación, oposición y otros derechos aplicables.
+                    Para ejercerlos, revise la sección de derechos de datos y envíe su solicitud por los canales oficiales de IICA Chile.
+                </p>
+                <p>
+                    Puede iniciar su solicitud en <a href="/legal/derechos" className="underline text-[var(--iica-blue)]">Derechos ARCO+</a>.
                 </p>
             </section>
 
             <section className="space-y-4">
-                <h2 className="text-2xl font-bold text-[var(--iica-blue)]">6. Contacto</h2>
+                <h2 className="text-2xl font-bold text-[var(--iica-blue)]">6. Plazos de Respuesta</h2>
+                <p>
+                    Nuestro plazo objetivo de respuesta para solicitudes de derechos es de 5 días hábiles desde la recepción completa de antecedentes.
+                    Si se requiere ampliación de plazo por complejidad, se informará oportunamente por correo electrónico.
+                </p>
+            </section>
+
+            <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-[var(--iica-blue)]">7. Contacto</h2>
                 <p>
                     Si tiene preguntas sobre esta Política de Privacidad, puede contactarnos en:
                 </p>
