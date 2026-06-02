@@ -10,6 +10,7 @@ interface RunOneResult {
   slug: string;
   status: "success" | "partial";
   inserted: number;
+  rawCount: number;
   duplicatesMerged: number;
 }
 
@@ -51,7 +52,7 @@ async function runOne(scraper: typeof scrapers[number]): Promise<RunOneResult> {
       ...skipReasons.slice(0, 5),
     ].join("\n") || undefined;
 
-    await updateSourceStatus(scraper.slug, status, inserted, errorSummary);
+    await updateSourceStatus(scraper.slug, status, result.projects.length, errorSummary);
     logger.info("Scraper completed", {
       scraper: scraper.slug,
       inserted,
@@ -59,7 +60,13 @@ async function runOne(scraper: typeof scrapers[number]): Promise<RunOneResult> {
       rawCount: result.projects.length,
       status,
     });
-    return { slug: scraper.slug, status, inserted, duplicatesMerged };
+    return {
+      slug: scraper.slug,
+      status,
+      inserted,
+      rawCount: result.projects.length,
+      duplicatesMerged,
+    };
   } catch (err) {
     const msg = (err as Error).message;
     await updateSourceStatus(scraper.slug, "error", 0, msg);
@@ -96,7 +103,7 @@ export async function main(options: MainOptions = {}) {
 
       const run = result.value;
       const isCritical = CRITICAL_SOURCE_SLUGS.has(run.slug);
-      if (isCritical && (run.status !== "success" || run.inserted === 0)) {
+      if (isCritical && (run.status !== "success" || run.rawCount === 0)) {
         return [run.slug];
       }
 

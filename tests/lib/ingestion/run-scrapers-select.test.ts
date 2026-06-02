@@ -37,6 +37,7 @@ process.argv = ["node", "jest"]; // evita auto-ejecución al importar
 
 import { selectScrapers } from "../../../scripts/run-scrapers";
 import { markStale } from "../../../lib/ingestion/persistence";
+import { updateSourceStatus } from "../../../lib/ingestion/persistence";
 import { scrapers } from "../../../lib/ingestion/registry";
 const { upsertProject } = require("../../../lib/ingestion/persistence");
 
@@ -124,5 +125,11 @@ describe("selectScrapers", () => {
     }
 
     expect(markStale).toHaveBeenCalledWith({ skipSourceSlugs: ["fia"] });
+    expect(updateSourceStatus).toHaveBeenCalledWith(
+      "fia",
+      "partial",
+      1,
+      expect.stringContaining("duplicate_textual")
+    );
   });
 });
