@@ -15,6 +15,7 @@ const SOURCES = [
   { slug: "gef",              name: "GEF — Global Environment Facility",       type: "scraper",       homepageUrl: "https://www.thegef.org/projects-operations/database" },
   { slug: "ifad-opportunities", name: "IFAD Project Procurement Opportunities", type: "scraper",      homepageUrl: "https://www.ifad.org/en/project-procurement/opportunities" },
   { slug: "ted-notices",      name: "TED Public Notices",                      type: "scraper",       homepageUrl: "https://ted.europa.eu/en/search/expert-search" },
+  { slug: "devex-funding",    name: "Devex Funding Search",                    type: "scraper",       homepageUrl: "https://www.devex.com/funding/r?filter%5Bplaces%5D%5B%5D=Chile&filter%5Bstatuses%5D%5B%5D=forecast&filter%5Bstatuses%5D%5B%5D=open&sorting%5Border%5D=desc&sorting%5Bfield%5D=updated_at" },
 ];
 
 async function main() {
