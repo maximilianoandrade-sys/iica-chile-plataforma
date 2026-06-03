@@ -29,10 +29,14 @@ jest.mock("../../../lib/ingestion/validateUrl", () => ({
   validateUrl: jest.fn().mockResolvedValue({ ok: true }),
 }));
 
+const mockEmbedText = jest.fn();
+const mockProjectToEmbeddingText = jest.fn(() => "embedding text");
+const mockToPgVector = jest.fn((embedding: number[]) => `[${embedding.join(",")}]`);
+
 jest.mock("../../../lib/ingestion/embeddings", () => ({
-  embedText: jest.fn().mockResolvedValue(null),
-  projectToEmbeddingText: jest.fn().mockReturnValue("embedding text"),
-  toPgVector: jest.fn().mockReturnValue("[0.1,0.2,0.3]"),
+  embedText: (...args: unknown[]) => mockEmbedText(...args),
+  projectToEmbeddingText: (...args: unknown[]) => mockProjectToEmbeddingText(...args),
+  toPgVector: (...args: unknown[]) => mockToPgVector(...args),
 }));
 
 import { markStale, upsertProject, updateSourceStatus } from "../../../lib/ingestion/persistence";
@@ -42,11 +46,13 @@ const embeddings = require("../../../lib/ingestion/embeddings");
 describe("upsertProject", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    delete process.env.GEMINI_API_KEY;
+    mockEmbedText.mockResolvedValue(null);
     prisma.source.findUnique.mockResolvedValue({ id: 1 });
     prisma.project.findFirst.mockResolvedValue(null);
     prisma.project.upsert.mockResolvedValue({ id: 99 });
     prisma.$queryRawUnsafe.mockResolvedValue([]);
-    prisma.$executeRawUnsafe.mockResolvedValue(1);
+    prisma.$executeRawUnsafe.mockResolvedValue(undefined);
   });
 
   it("sets needsReview to true for new projects", async () => {
@@ -247,7 +253,7 @@ describe("upsertProject", () => {
   it("continues upsert when semantic duplicate embedding lookup fails", async () => {
     const previousGemini = process.env.GEMINI_API_KEY;
     process.env.GEMINI_API_KEY = "test-key";
-    (embeddings.embedText as jest.Mock).mockRejectedValueOnce(new Error("RESOURCE_EXHAUSTED"));
+    mockEmbedText.mockRejectedValueOnce(new Error("RESOURCE_EXHAUSTED"));
 
     try {
       await expect(
@@ -330,5 +336,41 @@ describe("markStale", () => {
         where: expect.not.objectContaining({ OR: expect.anything() }),
       })
     );
+  });
+
+  it("also closes abiertas y próximas con past deadlines", async () => {
+    await markStale();
+
+    expect(prisma.project.updateMany).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        where: expect.objectContaining({
+          fecha_cierre: expect.objectContaining({ lt: expect.any(Date) }),
+          estadoPostulacion: { in: ["Abierta", "Próxima"] },
+        }),
+        data: { estadoPostulacion: "Cerrada" },
+      })
+    );
+  });
+});
+
+describe("findSemanticDuplicates", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("returns numeric ids aligned with Prisma schema", async () => {
+    mockEmbedText.mockResolvedValue([0.1, 0.2]);
+    prisma.$queryRawUnsafe.mockResolvedValue([
+      { id: 42, nombre: "Proyecto A", canonicalUrl: "https://example.com/a" },
+    ]);
+
+    const { findSemanticDuplicates } = await import("../../../lib/ingestion/persistence");
+    const rows = await findSemanticDuplicates("riego por goteo");
+
+    expect(rows).toEqual([
+      { id: 42, nombre: "Proyecto A", canonicalUrl: "https://example.com/a" },
+    ]);
+    expect(typeof rows[0].id).toBe("number");
   });
 });

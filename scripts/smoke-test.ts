@@ -88,6 +88,36 @@ async function main() {
     return `${payload.results.length} resultados, mode=${payload.meta.mode}`;
   });
 
+  await check("/api/search-projects no expone abiertas vencidas", async () => {
+    const res = await fetch(`${BASE}/api/search-projects`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ query: "", pageSize: 100, sourceMode: "internal" }),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const json = await res.json();
+    const payload = json.data ?? json;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const expiredOpen = (payload.results || []).filter((project: any) => {
+      const status = project?.estadoPostulacion;
+      if (status && status !== "Abierta" && status !== "Próxima") return false;
+
+      const close = new Date(project?.fecha_cierre);
+      if (Number.isNaN(close.getTime())) return false;
+      return close < today;
+    });
+
+    if (expiredOpen.length > 0) {
+      const ids = expiredOpen.slice(0, 5).map((p: any) => p.id).join(", ");
+      throw new Error(`se detectaron ${expiredOpen.length} abiertas vencidas (ids: ${ids})`);
+    }
+
+    return "sin abiertas vencidas";
+  });
+
   await check("/api/check-link valida URL", async () => {
     const target = encodeURIComponent(
       "https://www.cnr.gob.cl/agricultores/calendario-de-concurso/"

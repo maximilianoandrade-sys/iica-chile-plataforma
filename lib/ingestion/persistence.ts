@@ -255,7 +255,7 @@ export async function markStale(
   const byDeadline = await prisma.project.updateMany({
     where: {
       fecha_cierre: { lt: today },
-      estadoPostulacion: "Abierta",
+      estadoPostulacion: { in: ["Abierta", "Próxima"] },
     },
     data: { estadoPostulacion: "Cerrada" },
   });
