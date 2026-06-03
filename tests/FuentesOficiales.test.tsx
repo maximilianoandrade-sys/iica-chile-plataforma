@@ -9,10 +9,14 @@ describe('FuentesOficiales', () => {
     expect(screen.getByRole('heading', { name: /fuentes oficiales/i })).toBeInTheDocument();
   });
 
-  it('shows total fondos activos from counts prop', () => {
+  it('shows total oportunidades activas from dashboard prop', () => {
+    render(<FuentesOficiales institutionCounts={mockCounts} totalActiveOpportunities={72} />);
+    expect(screen.getByText('72 oportunidades activas')).toBeInTheDocument();
+  });
+
+  it('falls back to institution counts when dashboard total is not provided', () => {
     render(<FuentesOficiales institutionCounts={mockCounts} />);
-    // Total = 4+6+3+4 = 17
-    expect(screen.getByText('17 fondos activos')).toBeInTheDocument();
+    expect(screen.getByText('17 oportunidades activas')).toBeInTheDocument();
   });
 
   it('renders without prop (uses defaults)', () => {

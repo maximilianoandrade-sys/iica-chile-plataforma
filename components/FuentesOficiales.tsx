@@ -176,6 +176,7 @@ const FUENTES: FuenteOficial[] = [
 interface FuentesOficialesProps {
   institutionCounts?: Record<string, number>;
   lastUpdatedAt?: string | null;
+  totalActiveOpportunities?: number;
 }
 
 function formatLastUpdatedLabel(lastUpdatedAt?: string | null): string {
@@ -199,13 +200,14 @@ function formatLastUpdatedLabel(lastUpdatedAt?: string | null): string {
   return `Actualizado: ${day} ${time}`;
 }
 
-export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt = null }: FuentesOficialesProps) {
+export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt = null, totalActiveOpportunities }: FuentesOficialesProps) {
     const fuentesWithCounts = FUENTES.map(f => ({
         ...f,
         fondosActivos: institutionCounts[f.sigla] ?? f.fondosActivos,
     }));
 
     const totalFondos = fuentesWithCounts.reduce((sum, f) => sum + f.fondosActivos, 0);
+    const totalOportunidadesActivas = totalActiveOpportunities ?? totalFondos;
 
     const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -233,7 +235,7 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
                         </div>
                         <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 px-4 py-2 rounded-full">
                             <RefreshCw className="h-4 w-4 text-blue-600" aria-hidden={true} />
-                            <span className="text-blue-700 font-bold">{totalFondos} fondos activos</span>
+                            <span className="text-blue-700 font-bold">{totalOportunidadesActivas} oportunidades activas</span>
                         </div>
                         <div className="flex items-center gap-2 bg-yellow-50 border border-yellow-200 px-4 py-2 rounded-full">
                             <Clock className="h-4 w-4 text-yellow-600" aria-hidden={true} />

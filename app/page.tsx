@@ -153,7 +153,7 @@ export default async function DashboardPage({
 
         {/* Fuentes Oficiales */}
         <div id="fuentes" className="scroll-mt-20">
-          <FuentesOficiales institutionCounts={institutionCounts} lastUpdatedAt={lastUpdatedAt} />
+          <FuentesOficiales institutionCounts={institutionCounts} lastUpdatedAt={lastUpdatedAt} totalActiveOpportunities={heroStats.total} />
         </div>
 
         {/* Newsletter */}
