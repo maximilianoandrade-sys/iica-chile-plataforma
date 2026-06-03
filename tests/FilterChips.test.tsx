@@ -70,7 +70,7 @@ describe('FilterChips', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /Filtros avanzados/i }));
 
-    const scopeSelect = screen.getByLabelText(/Ambito/i);
+    const scopeSelect = screen.getByLabelText(/Ámbito/i);
     fireEvent.change(scopeSelect, { target: { value: 'Internacional' } });
 
     expect(pushMock).toHaveBeenCalledWith('/?ambito=Internacional', { scroll: false });
@@ -89,7 +89,7 @@ describe('FilterChips', () => {
     mockSearchParams = new URLSearchParams('minAmount=100&maxAmount=200');
     render(<FilterChips filterCounts={mockFilterCounts} />);
 
-    fireEvent.change(screen.getByLabelText(/Monto minimo/i), { target: { value: '300' } });
+    fireEvent.change(screen.getByLabelText(/Monto mínimo/i), { target: { value: '300' } });
 
     expect(replaceMock).toHaveBeenCalled();
     const [href] = replaceMock.mock.calls[replaceMock.mock.calls.length - 1] as [string, { scroll: boolean }];
@@ -113,7 +113,7 @@ describe('FilterChips', () => {
     mockSearchParams = new URLSearchParams('q=fia&estado=Próxima');
     render(<FilterChips filterCounts={mockFilterCounts} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /Quitar filtro Busqueda: "fia"/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Quitar filtro Búsqueda: "fia"/i }));
 
     expect(pushMock).toHaveBeenCalledTimes(1);
     const [href] = pushMock.mock.calls[0] as [string, { scroll: boolean }];

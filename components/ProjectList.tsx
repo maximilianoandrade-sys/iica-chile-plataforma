@@ -85,21 +85,21 @@ export default function ProjectList({
   logger.debug('Render ProjectList', { total: projects.length, page: currentPage });
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4 md:space-y-5">
       {/* Filter chips */}
       <FilterChips filterCounts={filterCounts} />
 
       {/* Toolbar: count + sort */}
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <span className="block text-sm text-gray-600" aria-live="polite">
-            {projects.length} de {totalCount} oportunidades
+      <div className="flex flex-col gap-3 rounded-xl border border-iica-border bg-white p-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="space-y-1.5">
+          <span className="block text-sm font-medium text-gray-700" aria-live="polite" aria-atomic="true">
+            Mostrando {projects.length} de {totalCount} oportunidades
           </span>
           <div className="flex items-center gap-2">
-            <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${
+            <span className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${
               relevanceMode === 'all'
-                ? 'bg-amber-100 text-amber-800'
-                : 'bg-green-100 text-green-800'
+                ? 'border-amber-200 bg-amber-50 text-amber-900'
+                : 'border-iica-border bg-iica-blue/10 text-iica-navy'
             }`}>
               {relevanceMode === 'all' ? 'Mostrando internacionales no verificadas' : 'Solo Chile (estricto)'}
             </span>
@@ -107,7 +107,7 @@ export default function ProjectList({
               <button
                 type="button"
                 onClick={handleBackToChile}
-                className="text-xs text-iica-blue hover:underline"
+                className="text-xs font-medium text-iica-blue hover:underline"
               >
                 Volver a Solo Chile
               </button>
@@ -115,7 +115,7 @@ export default function ProjectList({
               <button
                 type="button"
                 onClick={handleViewAll}
-                className="text-xs text-iica-blue hover:underline"
+                className="text-xs font-medium text-iica-blue hover:underline"
               >
                 Ver todas
               </button>
@@ -125,7 +125,7 @@ export default function ProjectList({
         <select
           value={sort}
           onChange={(e) => updateSort(e.target.value)}
-          className="text-sm border border-iica-border rounded-lg px-3 py-2 bg-white text-gray-700 focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none min-h-[40px]"
+          className="text-sm border border-iica-border rounded-lg px-3 py-2 bg-white text-gray-700 focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none min-h-[44px]"
           aria-label="Ordenar por"
         >
           <option value="relevance">Más relevantes</option>
@@ -143,9 +143,9 @@ export default function ProjectList({
           ))}
         </div>
       ) : (
-        <div className="text-center py-12 text-gray-500 space-y-3" role="status" aria-live="polite">
-          <p className="text-lg font-medium">No se encontraron oportunidades</p>
-          <p className="text-sm mt-1">Intenta ajustar los filtros de búsqueda</p>
+          <div className="text-center py-12 text-gray-500 space-y-3" role="status" aria-live="polite">
+          <p className="text-lg font-medium text-iica-navy">No encontramos oportunidades con estos filtros</p>
+          <p className="text-sm mt-1">Pruebe ampliar su búsqueda o restablecer los filtros activos.</p>
           {activeFilterLabels.length > 0 && (
             <div className="mx-auto max-w-3xl">
               <p className="text-xs uppercase tracking-wide text-gray-500 mb-2">Filtros activos</p>
@@ -164,7 +164,7 @@ export default function ProjectList({
           <button
             type="button"
             onClick={() => router.push(pathname, { scroll: false })}
-            className="inline-flex items-center justify-center rounded-full border border-iica-blue bg-iica-blue px-4 py-2 text-sm font-medium text-white hover:bg-iica-blue/90"
+            className="inline-flex items-center justify-center rounded-full border border-iica-blue bg-iica-blue px-4 py-2 text-sm font-medium text-white hover:bg-iica-blue/90 min-h-[44px]"
           >
             Limpiar filtros
           </button>
@@ -173,7 +173,7 @@ export default function ProjectList({
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <nav aria-label="Paginación" className="flex justify-center gap-1 pt-4">
+        <nav aria-label="Paginación" className="flex justify-center gap-1 pt-3">
           {visiblePages.map((page) => {
             return (
               <button
@@ -181,7 +181,7 @@ export default function ProjectList({
                 type="button"
                 onClick={() => goToPage(page)}
                 aria-current={page === currentPage ? 'page' : undefined}
-                className={`min-w-[40px] min-h-[40px] rounded-lg text-sm font-medium transition-colors ${
+                className={`min-w-[44px] min-h-[44px] rounded-lg text-sm font-medium transition-colors ${
                   page === currentPage
                     ? 'bg-iica-blue text-white'
                     : 'bg-white border border-iica-border text-gray-700 hover:bg-gray-50'
@@ -197,7 +197,7 @@ export default function ProjectList({
               <button
                 type="button"
                 onClick={() => goToPage(totalPages)}
-                className="min-w-[40px] min-h-[40px] rounded-lg text-sm font-medium bg-white border border-iica-border text-gray-700 hover:bg-gray-50"
+                className="min-w-[44px] min-h-[44px] rounded-lg text-sm font-medium bg-white border border-iica-border text-gray-700 hover:bg-gray-50"
               >
                 {totalPages}
               </button>

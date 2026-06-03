@@ -37,9 +37,9 @@ describe('ProjectCard', () => {
     expect(screen.getByText(/Biobío/)).toBeInTheDocument();
   });
 
-  it('renders urgency deadline', () => {
+  it('renders urgency deadline copy', () => {
     render(<ProjectCard project={mockProject} />);
-    expect(screen.getByText(/Cierra/i)).toBeInTheDocument();
+    expect(screen.getByText(/Cierra en/i)).toBeInTheDocument();
     expect(screen.getByText(/Fecha límite:/i)).toBeInTheDocument();
   });
 

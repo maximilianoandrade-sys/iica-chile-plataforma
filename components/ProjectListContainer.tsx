@@ -73,11 +73,11 @@ export default async function ProjectListContainer({
         : filteredProjects.length;
 
     const activeFilterLabels: string[] = [];
-    if (searchTerm.trim()) activeFilterLabels.push(`Busqueda: "${searchTerm.trim()}"`);
+    if (searchTerm.trim()) activeFilterLabels.push(`Búsqueda: "${searchTerm.trim()}"`);
     if (selectedEstado) activeFilterLabels.push(`Estado: ${selectedEstado}`);
-    if (selectedAmbito) activeFilterLabels.push(`Ambito: ${selectedAmbito}`);
-    selectedInstitutions.forEach((inst) => activeFilterLabels.push(`Institucion: ${inst}`));
-    selectedRegions.forEach((region) => activeFilterLabels.push(`Region: ${region}`));
+    if (selectedAmbito) activeFilterLabels.push(`Ámbito: ${selectedAmbito}`);
+    selectedInstitutions.forEach((inst) => activeFilterLabels.push(`Institución: ${inst}`));
+    selectedRegions.forEach((region) => activeFilterLabels.push(`Región: ${region}`));
     selectedCategories.forEach((category) => activeFilterLabels.push(`Sector: ${category}`));
     if (minAmount > 0 || maxAmount < Infinity) {
         const amountLabel = maxAmount < Infinity

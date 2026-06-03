@@ -195,7 +195,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
   const activeFilterChips: Array<{ key: string; label: string; clear: Record<string, string> }> = [];
 
   if (currentQ.trim()) {
-    activeFilterChips.push({ key: `q:${currentQ.trim()}`, label: `Busqueda: "${currentQ.trim()}"`, clear: { q: '' } });
+    activeFilterChips.push({ key: `q:${currentQ.trim()}`, label: `Búsqueda: "${currentQ.trim()}"`, clear: { q: '' } });
   }
 
   if (estadoParam && estadoParam !== 'all') {
@@ -203,14 +203,14 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
   }
 
   if (currentAmbito) {
-    activeFilterChips.push({ key: `ambito:${currentAmbito}`, label: `Ambito: ${currentAmbito}`, clear: { ambito: '' } });
+    activeFilterChips.push({ key: `ambito:${currentAmbito}`, label: `Ámbito: ${currentAmbito}`, clear: { ambito: '' } });
   }
 
   selectedInstitutions.forEach((institution) => {
     const nextInstitutions = selectedInstitutions.filter((value) => value !== institution);
     activeFilterChips.push({
       key: `institution:${institution}`,
-      label: `Institucion: ${institution}`,
+      label: `Institución: ${institution}`,
       clear: { institution: stringifyCsv(nextInstitutions) },
     });
   });
@@ -219,7 +219,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
     const nextRegions = selectedRegions.filter((value) => value !== region);
     activeFilterChips.push({
       key: `region:${region}`,
-      label: `Region: ${region}`,
+      label: `Región: ${region}`,
       clear: { region: stringifyCsv(nextRegions) },
     });
   });
@@ -449,10 +449,10 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
 
       {advancedOpen ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 border-t border-iica-border pt-3">
-          <Field label="Ambito" htmlFor="filter-ambito">
+          <Field label="Ámbito" htmlFor="filter-ambito">
             <select
               id="filter-ambito"
-              aria-label="Ambito"
+              aria-label="Ámbito"
               value={currentAmbito}
               onChange={(event) => updateParams({ ambito: event.target.value })}
               className="w-full rounded-xl border border-iica-border bg-white px-3 py-2.5 text-sm text-gray-800 min-h-[44px] focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none"
@@ -499,7 +499,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
                 type="number"
                 inputMode="numeric"
                 min={0}
-                aria-label="Monto minimo"
+                aria-label="Monto mínimo"
                 placeholder="Min"
                 value={currentMinAmount}
                 onChange={(event) => {
@@ -515,7 +515,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
                 type="number"
                 inputMode="numeric"
                 min={0}
-                aria-label="Monto maximo"
+                aria-label="Monto máximo"
                 placeholder="Max"
                 value={currentMaxAmount}
                 onChange={(event) => {
@@ -551,7 +551,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
 
       {hasActiveFilters ? (
         <div className="text-xs text-gray-500">
-          Los resultados se actualizan automaticamente mientras ajusta filtros.
+          Los resultados se actualizan automáticamente mientras ajusta filtros.
         </div>
       ) : null}
     </div>

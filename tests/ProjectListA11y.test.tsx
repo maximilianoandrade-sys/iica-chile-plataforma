@@ -56,7 +56,7 @@ describe('ProjectList accessibility', () => {
 
   it('has live region for result count', () => {
     render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
-    expect(screen.getByText(/1 de 1 oportunidades/)).toHaveAttribute('aria-live', 'polite');
+    expect(screen.getByText(/Mostrando 1 de 1 oportunidades/i)).toHaveAttribute('aria-live', 'polite');
   });
 
   it('shows strict relevance badge by default', () => {
@@ -71,13 +71,13 @@ describe('ProjectList accessibility', () => {
         projects={[]}
         filterCounts={filterCounts}
         totalCount={1}
-        activeFilterLabels={['Busqueda: "fia"', 'Estado: Abierta']}
+        activeFilterLabels={['Búsqueda: "fia"', 'Estado: Abierta']}
       />
     );
 
-    expect(screen.getByText(/No se encontraron oportunidades/i)).toBeInTheDocument();
+    expect(screen.getByText(/No encontramos oportunidades con estos filtros/i)).toBeInTheDocument();
     expect(screen.getByText(/^Filtros activos$/i)).toBeInTheDocument();
-    expect(screen.getByText('Busqueda: "fia"')).toBeInTheDocument();
+    expect(screen.getByText('Búsqueda: "fia"')).toBeInTheDocument();
 
     const clearButton = screen.getByRole('button', { name: /Limpiar filtros/i });
     fireEvent.click(clearButton);
