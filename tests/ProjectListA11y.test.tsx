@@ -113,4 +113,32 @@ describe('ProjectList accessibility', () => {
 
     expect(pushMock).toHaveBeenCalledWith('/?relevanceMode=all', { scroll: false });
   });
+
+  it('offers return-to-chile action in empty all mode', () => {
+    mockSearchParams = new URLSearchParams('relevanceMode=all');
+    render(<ProjectList projects={[]} filterCounts={filterCounts} totalCount={0} />);
+
+    const strictButton = screen.getByRole('button', { name: /Volver a Solo Chile/i });
+    fireEvent.click(strictButton);
+
+    expect(pushMock).toHaveBeenCalledWith('/', { scroll: false });
+  });
+
+  it('shows active-filter summary strip with reset action', () => {
+    render(
+      <ProjectList
+        projects={projects}
+        filterCounts={filterCounts}
+        totalCount={1}
+        activeFilterLabels={['Estado: Abierta', 'Región: Metropolitana']}
+      />
+    );
+
+    expect(screen.getByText(/2 filtros activos/i)).toBeInTheDocument();
+
+    const resetButton = screen.getByRole('button', { name: /Restablecer vista/i });
+    fireEvent.click(resetButton);
+
+    expect(pushMock).toHaveBeenCalledWith('/', { scroll: false });
+  });
 });

@@ -92,6 +92,12 @@ export default function ProjectList({
     });
   };
 
+  const handleResetFilters = () => {
+    startTransition(() => {
+      router.push(pathname, { scroll: false });
+    });
+  };
+
   logger.debug('Render ProjectList', { total: projects.length, page: currentPage });
 
   return (
@@ -150,6 +156,29 @@ export default function ProjectList({
         </select>
       </div>
 
+      {activeFilterLabels.length > 0 && paginated.length > 0 ? (
+        <div className="flex flex-col gap-2 rounded-xl border border-iica-border bg-iica-blue/5 px-3 py-2 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-sm font-medium text-iica-navy">{activeFilterLabels.length} filtros activos</span>
+            {activeFilterLabels.map((label) => (
+              <span
+                key={label}
+                className="inline-flex items-center rounded-full border border-iica-border bg-white px-2.5 py-1 text-xs text-gray-700"
+              >
+                {label}
+              </span>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={handleResetFilters}
+            className="text-sm font-medium text-iica-blue hover:underline min-h-[44px]"
+          >
+            Restablecer vista
+          </button>
+        </div>
+      ) : null}
+
       {/* Grid of cards */}
       {paginated.length > 0 ? (
         <div
@@ -196,11 +225,7 @@ export default function ProjectList({
           )}
           <button
             type="button"
-            onClick={() => {
-              startTransition(() => {
-                router.push(pathname, { scroll: false });
-              });
-            }}
+            onClick={handleResetFilters}
             className="inline-flex items-center justify-center rounded-full border border-iica-blue bg-iica-blue px-4 py-2 text-sm font-medium text-white hover:bg-iica-blue/90 min-h-[44px]"
           >
             Limpiar filtros
