@@ -13,6 +13,8 @@ const SOURCES = [
   { slug: "world-bank",       name: "World Bank Procurement",                 type: "scraper",       homepageUrl: "https://projects.worldbank.org/en/projects-operations/procurement" },
   { slug: "ungm",             name: "UNGM — United Nations Global Marketplace", type: "scraper",     homepageUrl: "https://www.ungm.org/Public/Notice" },
   { slug: "gef",              name: "GEF — Global Environment Facility",       type: "scraper",       homepageUrl: "https://www.thegef.org/projects-operations/database" },
+  { slug: "ifad-opportunities", name: "IFAD Project Procurement Opportunities", type: "scraper",      homepageUrl: "https://www.ifad.org/en/project-procurement/opportunities" },
+  { slug: "ted-notices",      name: "TED Public Notices",                      type: "scraper",       homepageUrl: "https://ted.europa.eu/en/search/expert-search" },
 ];
 
 async function main() {
