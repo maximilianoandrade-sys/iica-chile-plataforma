@@ -304,7 +304,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
         </label>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4" role="group" aria-label="Filtros principales">
         <Field label="Cobertura" htmlFor="filter-coverage">
           <select
             id="filter-coverage"

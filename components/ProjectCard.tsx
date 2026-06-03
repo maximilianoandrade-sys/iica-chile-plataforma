@@ -81,6 +81,7 @@ export function ProjectCard({ project }: { project: Project }) {
 
   return (
     <article
+      aria-label={project.nombre}
       className={`group relative flex min-h-[184px] flex-col rounded-xl border border-iica-border bg-white p-4 shadow-sm transition-shadow hover:shadow-md ${isClosed ? 'opacity-60' : ''}`}
     >
       <div className="mb-2.5 flex items-start justify-between gap-2">
@@ -117,15 +118,18 @@ export function ProjectCard({ project }: { project: Project }) {
         </span>
       )}
 
-      <div className="mt-auto flex items-center justify-between gap-2 border-t border-iica-border/70 pt-2">
-        <span className="text-sm font-semibold text-gray-900">{monto}</span>
-        {region && (
-          <span className="inline-flex items-center gap-1 text-xs text-gray-600">
+      <ul
+        aria-label="Metadatos de la oportunidad"
+        className="mt-auto flex items-center justify-between gap-2 border-t border-iica-border/70 pt-2"
+      >
+        <li className="text-sm font-semibold text-gray-900">{monto}</li>
+        {region ? (
+          <li className="inline-flex items-center gap-1 text-xs text-gray-600">
             <MapPin className="h-3.5 w-3.5" />
             {region}
-          </span>
-        )}
-      </div>
+          </li>
+        ) : null}
+      </ul>
     </article>
   );
 }

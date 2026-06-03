@@ -40,6 +40,11 @@ describe('FilterChips', () => {
     expect(screen.getByLabelText(/Instituciones/i)).toBeInTheDocument();
   });
 
+  it('labels filters section for assistive tech', () => {
+    render(<FilterChips filterCounts={mockFilterCounts} />);
+    expect(screen.getByRole('group', { name: /Filtros principales/i })).toBeInTheDocument();
+  });
+
   it('allows choosing all estados explicitly', () => {
     render(<FilterChips filterCounts={mockFilterCounts} />);
 
