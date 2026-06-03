@@ -45,6 +45,16 @@ describe('FilterChips', () => {
     expect(screen.getByRole('group', { name: /Filtros principales/i })).toBeInTheDocument();
   });
 
+  it('allows collapsing and expanding filter controls', () => {
+    render(<FilterChips filterCounts={mockFilterCounts} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /Ocultar filtros/i }));
+    expect(screen.queryByLabelText(/Estado/i)).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /Mostrar filtros/i }));
+    expect(screen.getByLabelText(/Estado/i)).toBeInTheDocument();
+  });
+
   it('allows choosing all estados explicitly', () => {
     render(<FilterChips filterCounts={mockFilterCounts} />);
 

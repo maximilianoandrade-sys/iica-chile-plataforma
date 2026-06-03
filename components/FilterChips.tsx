@@ -92,6 +92,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const [advancedOpen, setAdvancedOpen] = useState(false);
+  const [mainFiltersVisible, setMainFiltersVisible] = useState(true);
 
   const currentQ = searchParams.get('q') ?? '';
   const estadoParam = searchParams.get('estado');
@@ -304,6 +305,19 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
         </label>
       </div>
 
+      <div className="flex items-center justify-between">
+        <p className="text-xs font-semibold uppercase tracking-wide text-gray-600">Filtros principales</p>
+        <button
+          type="button"
+          onClick={() => setMainFiltersVisible((prev) => !prev)}
+          className="text-xs font-medium text-iica-blue hover:underline min-h-[44px]"
+          aria-expanded={mainFiltersVisible}
+        >
+          {mainFiltersVisible ? 'Ocultar filtros' : 'Mostrar filtros'}
+        </button>
+      </div>
+
+      {mainFiltersVisible ? (
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4" role="group" aria-label="Filtros principales">
         <Field label="Cobertura" htmlFor="filter-coverage">
           <select
@@ -420,6 +434,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
           </select>
         </Field>
       </div>
+      ) : null}
 
       <div className="flex flex-wrap items-center gap-3 border-t border-iica-border pt-3">
         <button
