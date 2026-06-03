@@ -7,21 +7,30 @@ const logger = getLogger("TEDNoticesScraper");
 
 const TED_SEARCH_URL = "https://api.ted.europa.eu/v3/notices/search";
 
-const TED_REQUEST_BODY = {
-  query: 'notice-title~"agriculture"',
-  fields: [
-    "notice-title",
-    "publication-number",
-    "publication-date",
-    "place-of-performance-country-proc",
-    "deadline-receipt-tender-date-lot",
-    "buyer-name",
-  ],
-  limit: 100,
-  page: 1,
-  scope: "LATEST",
-  paginationMode: "PAGE_NUMBER",
-};
+const TED_FIELDS = [
+  "notice-title",
+  "publication-number",
+  "publication-date",
+  "place-of-performance-country-proc",
+  "deadline-receipt-tender-date-lot",
+  "buyer-name",
+];
+
+const TED_QUERY_STRINGS = [
+  'notice-title~"agriculture"',
+  'notice-title~"agricultura" OR notice-title~"rural" OR notice-title~"irrigation"',
+];
+
+function buildTedRequestBody(query: string) {
+  return {
+    query,
+    fields: TED_FIELDS,
+    limit: 100,
+    page: 1,
+    scope: "LATEST",
+    paginationMode: "PAGE_NUMBER",
+  };
+}
 
 const IICA_CODE_TO_NAME: Record<string, string> = {
   ARG: "Argentina",
@@ -138,37 +147,52 @@ export const tedNoticesScraper: Scraper = {
   homepageUrl: "https://ted.europa.eu/en/search/expert-search",
 
   async scrape(): Promise<ScraperResult> {
-    let data: TedSearchResponse;
+    const partialErrors: string[] = [];
+    const uniqueNotices = new Map<string, TedNotice>();
 
-    try {
-      const res = await fetchWithRetry(
-        TED_SEARCH_URL,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "User-Agent": "IICA-Chile-Bot/1.0 (+contacto@iica.cl)",
+    for (const query of TED_QUERY_STRINGS) {
+      try {
+        const res = await fetchWithRetry(
+          TED_SEARCH_URL,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "User-Agent": "IICA-Chile-Bot/1.0 (+contacto@iica.cl)",
+            },
+            body: JSON.stringify(buildTedRequestBody(query)),
           },
-          body: JSON.stringify(TED_REQUEST_BODY),
-        },
-        3,
-        600,
-      );
-      data = (await res.json()) as TedSearchResponse;
-    } catch (err) {
-      const message = (err as Error).message;
-      logger.error("TED notice search failed", err as Error, { message });
+          3,
+          600,
+        );
+
+        const data = (await res.json()) as TedSearchResponse;
+        for (const notice of data.notices ?? []) {
+          const key = notice["publication-number"] || pickNoticeUrl(notice) || pickLocalizedText(notice["notice-title"]);
+          if (!key || uniqueNotices.has(key)) continue;
+          uniqueNotices.set(key, notice);
+        }
+      } catch (err) {
+        const message = (err as Error).message;
+        partialErrors.push(message);
+        logger.warn("TED query failed", { query, message });
+      }
+    }
+
+    if (uniqueNotices.size === 0 && partialErrors.length > 0) {
+      logger.error("TED notice search failed", new Error(partialErrors.join(" | ")), {
+        errors: partialErrors,
+      });
       return {
         sourceSlug: this.slug,
         projects: [],
-        partialErrors: [message],
+        partialErrors,
       };
     }
 
     const projects: RawProject[] = [];
-    const partialErrors: string[] = [];
 
-    for (const notice of data.notices ?? []) {
+    for (const notice of uniqueNotices.values()) {
       const title = pickLocalizedText(notice["notice-title"]);
       if (!title) {
         partialErrors.push("notice without title");
@@ -207,6 +231,7 @@ export const tedNoticesScraper: Scraper = {
     }
 
     logger.info("TED notice scrape completed", {
+      noticeCandidates: uniqueNotices.size,
       projects: projects.length,
       errors: partialErrors.length,
     });

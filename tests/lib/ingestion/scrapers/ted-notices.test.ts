@@ -85,4 +85,57 @@ describe("tedNoticesScraper", () => {
     expect(result.projects).toHaveLength(0);
     expect(result.partialErrors[0]).toContain("HTTP 500");
   });
+
+  it("combines multiple TED queries and deduplicates by publication number", async () => {
+    const firstBatch = {
+      notices: [
+        {
+          "publication-number": "123456-2026",
+          "publication-date": "2026-06-03+02:00",
+          "notice-title": { eng: "Chile - Agricultural irrigation modernization" },
+          "buyer-name": { eng: ["Ministry of Agriculture Chile"] },
+          "place-of-performance-country-proc": ["CHL"],
+          "deadline-receipt-tender-date-lot": ["2026-07-20+02:00"],
+          links: { htmlDirect: { ENG: "https://ted.europa.eu/en/notice/123456-2026/html" } },
+        },
+      ],
+    };
+
+    const secondBatch = {
+      notices: [
+        {
+          "publication-number": "123456-2026",
+          "publication-date": "2026-06-03+02:00",
+          "notice-title": { eng: "Chile - Agricultural irrigation modernization" },
+          "buyer-name": { eng: ["Ministry of Agriculture Chile"] },
+          "place-of-performance-country-proc": ["CHL"],
+          "deadline-receipt-tender-date-lot": ["2026-07-20+02:00"],
+          links: { htmlDirect: { ENG: "https://ted.europa.eu/en/notice/123456-2026/html" } },
+        },
+        {
+          "publication-number": "777777-2026",
+          "publication-date": "2026-06-08+02:00",
+          "notice-title": { eng: "Honduras - Rural irrigation channel works" },
+          "buyer-name": { eng: ["Honduras Rural Infrastructure Unit"] },
+          "place-of-performance-country-proc": ["HND"],
+          "deadline-receipt-tender-date-lot": ["2026-07-30+02:00"],
+          links: { htmlDirect: { ENG: "https://ted.europa.eu/en/notice/777777-2026/html" } },
+        },
+      ],
+    };
+
+    (global.fetch as jest.Mock)
+      .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve(firstBatch) })
+      .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve(secondBatch) })
+      .mockResolvedValue({ ok: true, json: () => Promise.resolve({ notices: [] }) });
+
+    const result = await tedNoticesScraper.scrape();
+
+    expect(result.projects).toHaveLength(2);
+    const publicationUrls = result.projects.map((p) => p.url).sort();
+    expect(publicationUrls).toEqual([
+      "https://ted.europa.eu/en/notice/123456-2026/html",
+      "https://ted.europa.eu/en/notice/777777-2026/html",
+    ]);
+  });
 });
