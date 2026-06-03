@@ -16,8 +16,10 @@ import { NextRequest } from 'next/server';
 import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
 import { createErrorResponse, createSuccessResponse } from '@/lib/utils/api-response';
 import { isAllowedPublicHttpUrl, verifyHostnameResolvesToPublicIps } from '@/lib/utils/network-security';
+import { getLogger } from '@/lib/utils/logger';
 
 export const runtime = 'nodejs';
+const logger = getLogger('CheckLinkApi');
 
 const BOT_PROTECTED_HOST_PATTERNS = [
     'fia.cl',
@@ -189,13 +191,39 @@ export async function GET(request: NextRequest) {
                 });
             }
 
-            return createSuccessResponse({
-                isValid: false,
-                error: error instanceof Error ? error.message : 'Network error',
-                url,
-            }, 502);
+            logger.warn('Check-link network verification failed', {
+                url: maskUrlForLogs(url),
+                hostname: parsed.hostname,
+                error: error instanceof Error ? error.message : String(error),
+            });
+
+            return createErrorResponse(
+                'Error de red verificando enlace',
+                502,
+                undefined,
+                {
+                    isValid: false,
+                    status: 0,
+                    statusText: 'Network Error',
+                    url,
+                    finalUrl: url,
+                    reason: 'network_error',
+                    redirectedToHome: false,
+                    originalIsHomepage,
+                },
+            );
         }
     } catch (error: unknown) {
-        return createErrorResponse(error instanceof Error ? error.message : 'Internal server error', 500);
+        logger.error('Check-link request failed', error as Error);
+        return createErrorResponse('Error interno del servidor', 500);
+    }
+}
+
+function maskUrlForLogs(rawUrl: string): string {
+    try {
+        const parsed = new URL(rawUrl);
+        return `${parsed.origin}${parsed.pathname}`;
+    } catch {
+        return '[invalid-url]';
     }
 }

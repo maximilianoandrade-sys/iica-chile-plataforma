@@ -62,4 +62,29 @@ describe('/api/check-link response envelope', () => {
       global.fetch = originalFetch;
     }
   });
+
+  it('returns wrapped error when network fetch fails', async () => {
+    mockLookup.mockResolvedValue({ address: '93.184.216.34' });
+
+    const originalFetch = global.fetch;
+    const fetchMock = jest
+      .fn<Promise<Response>, [RequestInfo | URL, RequestInit?]>()
+      .mockRejectedValue(new Error('socket hang up'));
+    global.fetch = fetchMock as unknown as typeof fetch;
+
+    try {
+      const { GET } = await import('@/app/api/check-link/route');
+      const req = new NextRequest('http://localhost/api/check-link?url=https://example.com/notice/999');
+      const res = await GET(req);
+      const json = await res.json();
+
+      expect(res.status).toBe(502);
+      expect(json.ok).toBe(false);
+      expect(String(json.error)).toContain('Error de red verificando enlace');
+      expect(json.data?.isValid).toBe(false);
+      expect(json.data?.reason).toBe('network_error');
+    } finally {
+      global.fetch = originalFetch;
+    }
+  });
 });

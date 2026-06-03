@@ -152,7 +152,7 @@ export default async function DashboardPage({
         </main>
 
         {/* Fuentes Oficiales */}
-        <div id="fuentes" className="scroll-mt-20">
+        <div className="scroll-mt-20">
           <FuentesOficiales institutionCounts={institutionCounts} lastUpdatedAt={lastUpdatedAt} totalActiveOpportunities={heroStats.total} />
         </div>
 
