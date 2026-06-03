@@ -6,6 +6,8 @@ import { cnrScraper } from "./scrapers/cnr";
 import { indapScraper } from "./scrapers/indap";
 import { fontagroScraper } from "./scrapers/fontagro";
 import { iicaHemisfericoScraper } from "./scrapers/iica-hemisferico";
+import { ifadOpportunitiesScraper } from "./scrapers/ifad-opportunities";
+import { tedNoticesScraper } from "./scrapers/ted-notices";
 import { worldBankScraper } from "./scrapers/world-bank";
 import { ungmScraper } from "./scrapers/ungm";
 import { gefScraper } from "./scrapers/gef";
@@ -30,6 +32,8 @@ export const scrapers: Scraper[] = [
   fontagroScraper,
   cnrScraper,
   iicaHemisfericoScraper,
+  ifadOpportunitiesScraper,
+  tedNoticesScraper,
   worldBankScraper,
   ungmScraper,
   gefScraper,
