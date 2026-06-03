@@ -12,6 +12,7 @@
 
 import { useState, useEffect } from 'react';
 import { getLogger } from '@/lib/utils/logger';
+import { getPreferredProjectUrl } from '@/lib/urlOverrides';
 const logger = getLogger('LinkGuardian');
 
 // ============================================================================
@@ -193,59 +194,61 @@ export async function getLinkStatus(
     projectName: string,
     institution?: string
 ): Promise<LinkStatus> {
+    const preferredUrl = getPreferredProjectUrl(url);
+
     // Verificar caché primero
-    const cached = getCachedLinkStatus(url);
+    const cached = getCachedLinkStatus(preferredUrl);
     if (cached) {
         return cached;
     }
 
     // Si no hay URL, ocultar
-    if (!url || url.trim() === '') {
+    if (!preferredUrl || preferredUrl.trim() === '') {
         const status: LinkStatus = {
             url: '',
             status: 'hidden',
             checked: true
         };
-        cacheLinkStatus(url, status);
+        cacheLinkStatus(preferredUrl, status);
         return status;
     }
 
     // Verificar si el enlace está activo
-    const isValid = await checkLinkStatus(url);
+    const isValid = await checkLinkStatus(preferredUrl);
 
     if (isValid) {
         // Enlace válido, mantener
         const status: LinkStatus = {
-            url,
+            url: preferredUrl,
             status: 'valid',
             checked: true
         };
-        cacheLinkStatus(url, status);
+        cacheLinkStatus(preferredUrl, status);
         return status;
     }
 
     // Enlace inválido, crear fallback inteligente
     if (projectName && projectName.trim() !== '') {
-        const fallbackUrl = generateGoogleSearchUrl(url, projectName, institution);
-        const archivedUrl = generateWaybackUrl(url);
+        const fallbackUrl = generateGoogleSearchUrl(preferredUrl, projectName, institution);
+        const archivedUrl = generateWaybackUrl(preferredUrl);
         const status: LinkStatus = {
-            url,
+            url: preferredUrl,
             status: 'fallback',
             fallbackUrl,
             archivedUrl,
             checked: true
         };
-        cacheLinkStatus(url, status);
+        cacheLinkStatus(preferredUrl, status);
         return status;
     }
 
     // No hay información suficiente, ocultar
     const status: LinkStatus = {
-        url,
+        url: preferredUrl,
         status: 'hidden',
         checked: true
     };
-    cacheLinkStatus(url, status);
+    cacheLinkStatus(preferredUrl, status);
     return status;
 }
 

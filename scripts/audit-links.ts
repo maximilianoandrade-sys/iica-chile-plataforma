@@ -1,3 +1,5 @@
+import { getPreferredProjectUrl } from '../lib/urlOverrides';
+
 const args = new Set(process.argv.slice(2));
 const BASE_URL = process.env.DEPLOYMENT_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://iica-chile-plataforma.vercel.app';
 const CHECK_LINK_BASE_URL = process.env.CHECK_LINK_BASE_URL || BASE_URL;
@@ -107,7 +109,8 @@ async function runDirectExternalCheck(url: string, fetcher: typeof fetch): Promi
 
 function toAbsoluteUrl(href: string, base: string): string | null {
   try {
-    return new URL(href, base).toString();
+    const absoluteUrl = new URL(href, base).toString();
+    return getPreferredProjectUrl(absoluteUrl);
   } catch {
     return null;
   }

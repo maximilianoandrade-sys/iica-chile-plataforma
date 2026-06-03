@@ -143,7 +143,7 @@ const FUENTES: FuenteOficial[] = [
         sigla: 'FIDA',
         descripcion: 'Invierte en la población rural para empoderarla y aumentar su seguridad alimentaria. Financia grandes programas nacionales.',
         url: 'https://www.ifad.org/',
-        urlConcursos: 'https://www.ifad.org/en/web/latest',
+        urlConcursos: 'https://ifad-cofinancing.org/catalogue/',
         color: 'text-emerald-600',
         bgColor: 'bg-emerald-50 border-emerald-200',
         icon: 'landmark',
