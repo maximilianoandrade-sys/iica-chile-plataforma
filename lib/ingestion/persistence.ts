@@ -114,26 +114,33 @@ export async function upsertProject(
       categoria: baseFields.categoria,
     });
 
-    const semanticCandidates = await findSemanticDuplicates(semanticText, 0.06);
-    const semanticDuplicate = semanticCandidates.find((candidate) => {
-      if (!candidate.canonicalUrl || candidate.canonicalUrl === canonicalUrl) return false;
-      if (!looksLikeSameInstitution(candidate.institucion, baseFields.institucion)) return false;
-      return candidate.distance <= 0.045;
-    });
-
-    if (semanticDuplicate) {
-      await prisma.project.update({
-        where: { id: Number(semanticDuplicate.id) },
-        data: {
-          ...baseFields,
-          qualityFlags: Array.from(new Set([...baseFields.qualityFlags, 'dedupe_semantic_merged'])),
-          qualityReasons: Array.from(new Set([
-            ...baseFields.qualityReasons,
-            `Merged semantic duplicate (${semanticDuplicate.id}) from ${sourceSlug}`,
-          ])),
-        },
+    try {
+      const semanticCandidates = await findSemanticDuplicates(semanticText, 0.06);
+      const semanticDuplicate = semanticCandidates.find((candidate) => {
+        if (!candidate.canonicalUrl || candidate.canonicalUrl === canonicalUrl) return false;
+        if (!looksLikeSameInstitution(candidate.institucion, baseFields.institucion)) return false;
+        return candidate.distance <= 0.045;
       });
-      return { skipped: true, reason: `duplicate_semantic:${semanticDuplicate.id}` };
+
+      if (semanticDuplicate) {
+        await prisma.project.update({
+          where: { id: Number(semanticDuplicate.id) },
+          data: {
+            ...baseFields,
+            qualityFlags: Array.from(new Set([...baseFields.qualityFlags, 'dedupe_semantic_merged'])),
+            qualityReasons: Array.from(new Set([
+              ...baseFields.qualityReasons,
+              `Merged semantic duplicate (${semanticDuplicate.id}) from ${sourceSlug}`,
+            ])),
+          },
+        });
+        return { skipped: true, reason: `duplicate_semantic:${semanticDuplicate.id}` };
+      }
+    } catch (err) {
+      logger.warn('Semantic duplicate lookup failed', {
+        canonicalUrl,
+        error: (err as Error).message,
+      });
     }
   }
 

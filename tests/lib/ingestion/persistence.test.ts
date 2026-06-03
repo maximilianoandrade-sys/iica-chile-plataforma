@@ -19,6 +19,8 @@ jest.mock("../../../lib/prisma", () => ({
       findMany: jest.fn(),
       update: jest.fn(),
     },
+    $queryRawUnsafe: jest.fn(),
+    $executeRawUnsafe: jest.fn(),
   },
 }));
 
@@ -27,8 +29,15 @@ jest.mock("../../../lib/ingestion/validateUrl", () => ({
   validateUrl: jest.fn().mockResolvedValue({ ok: true }),
 }));
 
+jest.mock("../../../lib/ingestion/embeddings", () => ({
+  embedText: jest.fn().mockResolvedValue(null),
+  projectToEmbeddingText: jest.fn().mockReturnValue("embedding text"),
+  toPgVector: jest.fn().mockReturnValue("[0.1,0.2,0.3]"),
+}));
+
 import { markStale, upsertProject, updateSourceStatus } from "../../../lib/ingestion/persistence";
 const prisma = require("../../../lib/prisma").default;
+const embeddings = require("../../../lib/ingestion/embeddings");
 
 describe("upsertProject", () => {
   beforeEach(() => {
@@ -36,6 +45,8 @@ describe("upsertProject", () => {
     prisma.source.findUnique.mockResolvedValue({ id: 1 });
     prisma.project.findFirst.mockResolvedValue(null);
     prisma.project.upsert.mockResolvedValue({ id: 99 });
+    prisma.$queryRawUnsafe.mockResolvedValue([]);
+    prisma.$executeRawUnsafe.mockResolvedValue(1);
   });
 
   it("sets needsReview to true for new projects", async () => {
@@ -231,6 +242,34 @@ describe("upsertProject", () => {
       expect.objectContaining({ where: { id: 555 } })
     );
     expect(prisma.project.upsert).not.toHaveBeenCalled();
+  });
+
+  it("continues upsert when semantic duplicate embedding lookup fails", async () => {
+    const previousGemini = process.env.GEMINI_API_KEY;
+    process.env.GEMINI_API_KEY = "test-key";
+    (embeddings.embedText as jest.Mock).mockRejectedValueOnce(new Error("RESOURCE_EXHAUSTED"));
+
+    try {
+      await expect(
+        upsertProject(
+          {
+            url: "https://example.com/semantic",
+            title: "Convocatoria de riego para Chile",
+            institution: "INDAP",
+            ambito: "Nacional",
+          },
+          "test-source"
+        )
+      ).resolves.toEqual({});
+
+      expect(prisma.project.upsert).toHaveBeenCalled();
+    } finally {
+      if (previousGemini === undefined) {
+        delete process.env.GEMINI_API_KEY;
+      } else {
+        process.env.GEMINI_API_KEY = previousGemini;
+      }
+    }
   });
 });
 
