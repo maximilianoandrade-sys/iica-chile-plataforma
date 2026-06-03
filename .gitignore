@@ -65,6 +65,13 @@ scripts/__pycache__/
 iica-chile-plataforma/
 docs/Informe-Plataforma-IICA-Chile-Gobernanza-Presupuesto-2026.docx
 
+# Python cache
+__pycache__/
+*.pyc
+
+# Local nested workspace copy
+iica-chile-plataforma/
+
 # PWA generated files
 public/sw.js
 public/workbox-*.js

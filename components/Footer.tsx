@@ -7,8 +7,8 @@ import { ExternalLink } from 'lucide-react';
 const FUENTES_FOOTER = [
     { sigla: 'FONTAGRO', nombre: 'Fondo Regional de Tecnología Agropecuaria', url: 'https://www.fontagro.org/es/convocatorias/', emoji: '🌱' },
     { sigla: 'FAO', nombre: 'TCP Chile – Programas Técnicos', url: 'https://www.fao.org/chile/', emoji: '🌍' },
-    { sigla: 'BID', nombre: 'Asistencia Técnica Regional', url: 'https://www.iadb.org/es/project-portfolio-search', emoji: '🏦' },
-    { sigla: 'FIDA', nombre: 'Fondo Internacional de Desarrollo Agrícola', url: 'https://www.ifad.org/en/web/latest', emoji: '🤝' },
+    { sigla: 'BID', nombre: 'Asistencia Técnica Regional', url: 'https://idbinvest.org/en/projects', emoji: '🏦' },
+    { sigla: 'FIDA', nombre: 'Fondo Internacional de Desarrollo Agrícola', url: 'https://ifad-cofinancing.org/catalogue/', emoji: '🤝' },
     { sigla: 'GEF/GCF', nombre: 'Financiamiento Climático', url: 'https://www.thegef.org/projects-operations', emoji: '🌿' },
     { sigla: 'UE', nombre: 'EUROCLIMA+ / Cooperación', url: 'https://euroclimaplus.org/areas-de-trabajo/', emoji: '🇪🇺' },
 ];

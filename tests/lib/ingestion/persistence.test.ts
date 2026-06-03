@@ -41,6 +41,7 @@ jest.mock("../../../lib/ingestion/embeddings", () => ({
 
 import { markStale, upsertProject, updateSourceStatus } from "../../../lib/ingestion/persistence";
 const prisma = require("../../../lib/prisma").default;
+const embeddings = require("../../../lib/ingestion/embeddings");
 
 describe("upsertProject", () => {
   beforeEach(() => {
@@ -247,6 +248,34 @@ describe("upsertProject", () => {
       expect.objectContaining({ where: { id: 555 } })
     );
     expect(prisma.project.upsert).not.toHaveBeenCalled();
+  });
+
+  it("continues upsert when semantic duplicate embedding lookup fails", async () => {
+    const previousGemini = process.env.GEMINI_API_KEY;
+    process.env.GEMINI_API_KEY = "test-key";
+    mockEmbedText.mockRejectedValueOnce(new Error("RESOURCE_EXHAUSTED"));
+
+    try {
+      await expect(
+        upsertProject(
+          {
+            url: "https://example.com/semantic",
+            title: "Convocatoria de riego para Chile",
+            institution: "INDAP",
+            ambito: "Nacional",
+          },
+          "test-source"
+        )
+      ).resolves.toEqual({});
+
+      expect(prisma.project.upsert).toHaveBeenCalled();
+    } finally {
+      if (previousGemini === undefined) {
+        delete process.env.GEMINI_API_KEY;
+      } else {
+        process.env.GEMINI_API_KEY = previousGemini;
+      }
+    }
   });
 });
 

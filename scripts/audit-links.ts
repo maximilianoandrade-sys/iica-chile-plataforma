@@ -1,3 +1,5 @@
+import { getPreferredProjectUrl } from '../lib/urlOverrides';
+
 const args = new Set(process.argv.slice(2));
 const BASE_URL = process.env.DEPLOYMENT_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://iica-chile-plataforma.vercel.app';
 const CHECK_LINK_BASE_URL = process.env.CHECK_LINK_BASE_URL || BASE_URL;
@@ -22,9 +24,93 @@ type CheckExternalOptions = {
   retryDelayMs?: number;
 };
 
+function isHomepageRedirect(originalUrl: string, finalUrl: string): boolean {
+  try {
+    const original = new URL(originalUrl);
+    const final = new URL(finalUrl);
+    const originalHasPath = original.pathname.length > 1 && original.pathname !== '/';
+    const finalIsRoot = final.pathname === '/' || final.pathname === '';
+    return originalHasPath && finalIsRoot && original.hostname === final.hostname;
+  } catch {
+    return false;
+  }
+}
+
+async function runDirectExternalCheck(url: string, fetcher: typeof fetch): Promise<LinkResult | null> {
+  const headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+    Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    'Accept-Language': 'es-CL,es;q=0.9,en;q=0.8',
+  };
+
+  const requests: Array<RequestInit> = [
+    { method: 'HEAD', redirect: 'follow', headers },
+    { method: 'GET', redirect: 'follow', headers: { ...headers, Range: 'bytes=0-0' } },
+    { method: 'GET', redirect: 'follow', headers },
+  ];
+
+  for (const requestInit of requests) {
+    try {
+      const response = await fetcher(url, requestInit);
+
+      if (response.status === 405 && requestInit.method === 'HEAD') {
+        continue;
+      }
+
+      const redirectedToHome = response.status >= 200
+        && response.status < 400
+        && response.url
+        && isHomepageRedirect(url, response.url);
+
+      if (redirectedToHome) {
+        return {
+          url,
+          ok: false,
+          status: response.status,
+          reason: 'redirected_to_home',
+          classification: 'needs_review',
+        };
+      }
+
+      if (response.status >= 200 && response.status < 400) {
+        return {
+          url,
+          ok: true,
+          status: response.status,
+          reason: 'ok_via_direct_check',
+          classification: 'ok',
+        };
+      }
+
+      if (response.status === 403 || response.status === 429) {
+        return {
+          url,
+          ok: true,
+          status: response.status,
+          reason: 'blocked_by_bot_protection',
+          classification: 'blocked',
+        };
+      }
+
+      return {
+        url,
+        ok: false,
+        status: response.status,
+        reason: `http_${response.status}`,
+        classification: 'invalid',
+      };
+    } catch {
+      continue;
+    }
+  }
+
+  return null;
+}
+
 function toAbsoluteUrl(href: string, base: string): string | null {
   try {
-    return new URL(href, base).toString();
+    const absoluteUrl = new URL(href, base).toString();
+    return getPreferredProjectUrl(absoluteUrl);
   } catch {
     return null;
   }
@@ -120,13 +206,28 @@ export async function checkExternal(url: string, options: CheckExternalOptions =
         || status === 405;
       const ok = check.isValid === true || isBlocked;
 
-      return {
+      const result: LinkResult = {
         url,
         ok,
         status,
         reason,
         classification: ok ? (isBlocked ? 'blocked' : 'ok') : (needsReview ? 'needs_review' : 'invalid'),
       };
+
+      if (result.classification !== 'blocked') {
+        return result;
+      }
+
+      const directCheckResult = await runDirectExternalCheck(url, fetcher);
+      if (!directCheckResult) {
+        return result;
+      }
+
+      if (directCheckResult.classification === 'ok' || directCheckResult.classification === 'needs_review') {
+        return directCheckResult;
+      }
+
+      return result;
     } catch {
       if (attempt < maxAttempts) {
         await sleep(retryDelayMs * attempt);
@@ -180,6 +281,7 @@ async function main() {
   const failedExternal = externalResults.filter((r) => !r.ok);
   const blockedExternal = externalResults.filter((r) => r.classification === 'blocked');
   const reviewExternal = externalResults.filter((r) => r.classification === 'needs_review');
+  const recoveredByDirectCheck = externalResults.filter((r) => r.reason === 'ok_via_direct_check');
 
   console.log(
     JSON.stringify(
@@ -194,6 +296,7 @@ async function main() {
         internalFailed: failedInternal.length,
         externalChecked: external.length,
         externalBlockedByBotProtection: blockedExternal.length,
+        externalRecoveredByDirectCheck: recoveredByDirectCheck.length,
         externalNeedsReview: reviewExternal.length,
         externalFailed: failedExternal.length,
       },

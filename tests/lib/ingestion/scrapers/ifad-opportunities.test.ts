@@ -62,6 +62,35 @@ const IFAD_OPPORTUNITIES_HTML = `
 </div>
 `;
 
+const UNGM_IFAD_FALLBACK_HTML = `
+<div role="row" tabindex="0" data-noticeid="301566" class="tableRow dataRow notice-table">
+  <div role="cell" class="tableCell resultTitle">
+    <span class="ungm-title ungm-title--small">Provision of Insurance for Rural Resilience & Economic Development</span>
+  </div>
+  <div role="cell" class="tableCell resultInfo1 deadline" data-description="Deadline">
+    <span>17-Jun-2026 11:00 (GMT 2.00)</span>
+  </div>
+  <div role="cell" class="tableCell"><span>20-May-2026</span></div>
+  <div role="cell" class="tableCell resultAgency"><span>IFAD</span></div>
+  <div role="cell" class="tableCell"><span><label>Request for proposal</label></span></div>
+  <div role="cell" class="tableCell resultInfo1" data-description="Reference"><span>IFAD/2026/011/RFP</span></div>
+  <div role="cell" class="tableCell"><span>Honduras</span></div>
+</div>
+<div role="row" tabindex="0" data-noticeid="301090" class="tableRow dataRow notice-table">
+  <div role="cell" class="tableCell resultTitle">
+    <span class="ungm-title ungm-title--small">Consulting services for IFAD portfolio support</span>
+  </div>
+  <div role="cell" class="tableCell resultInfo1 deadline" data-description="Deadline">
+    <span>19-Jun-2026 15:00 (GMT 1.00)</span>
+  </div>
+  <div role="cell" class="tableCell"><span>21-May-2026</span></div>
+  <div role="cell" class="tableCell resultAgency"><span>IFAD</span></div>
+  <div role="cell" class="tableCell"><span><label>Request for quotation</label></span></div>
+  <div role="cell" class="tableCell resultInfo1" data-description="Reference"><span>IFAD/2026/099/RFQ</span></div>
+  <div role="cell" class="tableCell"><span>Italy</span></div>
+</div>
+`;
+
 describe("ifadOpportunitiesScraper", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -105,5 +134,36 @@ describe("ifadOpportunitiesScraper", () => {
     const result = await ifadOpportunitiesScraper.scrape();
     expect(result.projects).toHaveLength(0);
     expect(result.partialErrors[0]).toContain("HTTP 503");
+  });
+
+  it("falls back to UNGM IFAD notices when IFAD page is blocked by Cloudflare", async () => {
+    (global.fetch as jest.Mock).mockImplementation((input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url === "https://www.ifad.org/en/project-procurement/opportunities") {
+        return Promise.resolve({ ok: false, status: 403 });
+      }
+
+      if (url === "https://www.ungm.org/Public/Notice/Search") {
+        return Promise.resolve({ ok: true, text: () => Promise.resolve(UNGM_IFAD_FALLBACK_HTML) });
+      }
+
+      return Promise.resolve({ ok: false, status: 404 });
+    });
+
+    const result = await ifadOpportunitiesScraper.scrape();
+
+    expect(result.sourceSlug).toBe("ifad-opportunities");
+    expect(result.projects).toHaveLength(1);
+    expect(result.partialErrors[0]).toContain("HTTP 403");
+    expect(result.partialErrors[0]).toContain("UNGM fallback");
+
+    const first = result.projects[0];
+    expect(first.institution).toBe("IFAD");
+    expect(first.url).toBe("https://www.ungm.org/Public/Notice/301566");
+    expect(first.region).toBe("Honduras");
+    expect(first.opportunityType).toBe("Licitacion");
+    expect(first.deadline).toBeInstanceOf(Date);
+    expect(first.tags).toContain("IFAD");
+    expect(first.tags).toContain("UNGM");
   });
 });

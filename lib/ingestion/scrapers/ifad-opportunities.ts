@@ -4,10 +4,36 @@ import type { Scraper, ScraperResult, RawProject } from "../types";
 import { absoluteUrl, cleanText } from "../utils";
 import { isAmericasCountry } from "../geo-filter";
 import { fetchWithRetry } from "../retry";
+import { parseUngmHtml } from "./ungm";
 
 const logger = getLogger("IFADOpportunitiesScraper");
 
 const IFAD_OPPORTUNITIES_URL = "https://www.ifad.org/en/project-procurement/opportunities";
+const UNGM_BASE = "https://www.ungm.org";
+const UNGM_SEARCH_URL = `${UNGM_BASE}/Public/Notice/Search`;
+
+const UNGM_IFAD_SEARCH_PARAMS = new URLSearchParams({
+  PageIndex: "0",
+  PageSize: "50",
+  Title: "",
+  Description: "IFAD",
+  DeadlineFrom: "",
+  SortField: "DatePublished",
+  SortAscending: "false",
+  isPagingReset: "true",
+});
+
+function decodeHtmlEntities(value: string): string {
+  return value
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#039;/g, "'")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, n) => String.fromCharCode(parseInt(n, 16)));
+}
 
 function parseIfadPublishDate(rawDate: string): Date | null {
   if (!rawDate) return null;
@@ -38,6 +64,39 @@ function parseIfadPublishDate(rawDate: string): Date | null {
 
   const parsed = new Date(compact);
   return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function parseUngmDeadline(value: string | null): Date | null {
+  if (!value) return null;
+
+  const cleaned = cleanText(value.replace(/\(GMT[^)]*\)/gi, "").trim());
+  const native = new Date(cleaned);
+  if (!Number.isNaN(native.getTime())) return native;
+
+  const match = cleaned.match(/(\d{1,2})-(\w{3})-(\d{4})\s+(\d{1,2}):(\d{2})/);
+  if (!match) return null;
+
+  const [, day, mon, year, hour, minute] = match;
+  const months: Record<string, number> = {
+    Jan: 0,
+    Feb: 1,
+    Mar: 2,
+    Apr: 3,
+    May: 4,
+    Jun: 5,
+    Jul: 6,
+    Aug: 7,
+    Sep: 8,
+    Oct: 9,
+    Nov: 10,
+    Dec: 11,
+  };
+
+  const month = months[mon];
+  if (month === undefined) return null;
+
+  const date = new Date(Date.UTC(Number(year), month, Number(day), Number(hour), Number(minute), 0));
+  return Number.isNaN(date.getTime()) ? null : date;
 }
 
 function extractMetaValue($row: any, label: string): string {
@@ -112,6 +171,62 @@ function parseRows(html: string): { projects: RawProject[]; partialErrors: strin
   return { projects, partialErrors };
 }
 
+async function scrapeFromUngmIfadFallback(): Promise<{ projects: RawProject[]; partialErrors: string[] }> {
+  const res = await fetchWithRetry(
+    UNGM_SEARCH_URL,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-Requested-With": "XMLHttpRequest",
+        "User-Agent": "IICA-Chile-Bot/1.0 (+contacto@iica.cl)",
+      },
+      body: UNGM_IFAD_SEARCH_PARAMS.toString(),
+    },
+    3,
+    600,
+  );
+
+  const html = await res.text();
+  const notices = parseUngmHtml(html);
+  const projects: RawProject[] = [];
+  const partialErrors: string[] = [];
+
+  for (const notice of notices) {
+    const agency = cleanText(decodeHtmlEntities(notice.agency || ""));
+    if (!agency || !/ifad/i.test(agency)) continue;
+
+    const title = cleanText(decodeHtmlEntities(notice.title || ""));
+    if (!title) {
+      partialErrors.push(`UNGM notice ${notice.noticeId}: missing title`);
+      continue;
+    }
+
+    const country = cleanText(decodeHtmlEntities(notice.country || ""));
+    if (!country || !isAmericasCountry(country)) continue;
+
+    const reference = cleanText(decodeHtmlEntities(notice.reference || ""));
+    const url = `${UNGM_BASE}/Public/Notice/${notice.noticeId}`;
+
+    projects.push({
+      title,
+      institution: "IFAD",
+      url,
+      canonicalKey: url,
+      deadline: parseUngmDeadline(notice.deadline),
+      budget: null,
+      description: reference ? `Reference: ${reference}` : undefined,
+      tags: ["IFAD", "UNGM"],
+      opportunityType: "Licitacion",
+      region: country,
+      ambito: "Internacional",
+      idioma: "en",
+    });
+  }
+
+  return { projects, partialErrors };
+}
+
 export const ifadOpportunitiesScraper: Scraper = {
   slug: "ifad-opportunities",
   name: "IFAD Project Procurement Opportunities",
@@ -133,6 +248,36 @@ export const ifadOpportunitiesScraper: Scraper = {
       html = await res.text();
     } catch (err) {
       const message = (err as Error).message;
+
+      if (message.includes("HTTP 403")) {
+        try {
+          const fallback = await scrapeFromUngmIfadFallback();
+          const fallbackNote = `IFAD opportunities blocked (${message}); using UNGM fallback`;
+          logger.warn("IFAD source blocked, switching to UNGM fallback", {
+            message,
+            fallbackProjects: fallback.projects.length,
+            fallbackErrors: fallback.partialErrors.length,
+          });
+
+          return {
+            sourceSlug: this.slug,
+            projects: fallback.projects,
+            partialErrors: [fallbackNote, ...fallback.partialErrors],
+          };
+        } catch (fallbackErr) {
+          const fallbackMessage = (fallbackErr as Error).message;
+          logger.error("IFAD fallback via UNGM failed", fallbackErr as Error, {
+            primaryMessage: message,
+            fallbackMessage,
+          });
+          return {
+            sourceSlug: this.slug,
+            projects: [],
+            partialErrors: [message, `UNGM fallback failed: ${fallbackMessage}`],
+          };
+        }
+      }
+
       logger.error("IFAD opportunities fetch failed", err as Error, { message });
       return {
         sourceSlug: this.slug,
