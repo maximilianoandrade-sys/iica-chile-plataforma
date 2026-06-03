@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import ProjectList from '@/components/ProjectList';
+import React from 'react';
 
 const pushMock = jest.fn();
 let mockSearchParams = new URLSearchParams('');
@@ -9,6 +10,14 @@ jest.mock('next/navigation', () => ({
   useSearchParams: () => mockSearchParams,
   usePathname: () => '/',
 }));
+
+jest.mock('react', () => {
+  const actual = jest.requireActual('react') as typeof import('react');
+  return {
+    ...actual,
+    useTransition: () => [false, (cb: () => void) => cb()] as const,
+  };
+});
 
 const projects = [
   {
@@ -57,6 +66,12 @@ describe('ProjectList accessibility', () => {
   it('has live region for result count', () => {
     render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
     expect(screen.getByText(/Mostrando 1 de 1 oportunidades/i)).toHaveAttribute('aria-live', 'polite');
+  });
+
+  it('announces pending updates while transitioning', () => {
+    jest.spyOn(React, 'useTransition').mockReturnValue([true, (cb: () => void) => cb()]);
+    render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
+    expect(screen.getByText(/Actualizando resultados/i)).toBeInTheDocument();
   });
 
   it('shows strict relevance badge by default', () => {

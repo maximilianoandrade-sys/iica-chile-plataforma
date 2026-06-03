@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { useTransition } from 'react';
 import { ProjectCard } from '@/components/ProjectCard';
 import { FilterChips } from '@/components/FilterChips';
 import { type FilterCounts } from '@/lib/data';
@@ -29,6 +30,7 @@ export default function ProjectList({
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const [isPending, startTransition] = useTransition();
 
   const hasQuery = Boolean(searchParams.get('q')?.trim());
   const sort = searchParams.get('sort') || (hasQuery ? 'relevance' : 'date_asc');
@@ -39,7 +41,9 @@ export default function ProjectList({
     const params = new URLSearchParams(searchParams.toString());
     params.set('sort', newSort);
     params.delete('page');
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    startTransition(() => {
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    });
   };
 
   const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
@@ -54,7 +58,9 @@ export default function ProjectList({
     const params = new URLSearchParams(searchParams.toString());
     if (page > 1) params.set('page', String(page));
     else params.delete('page');
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    startTransition(() => {
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    });
   };
 
   const handleViewAll = () => {
@@ -66,7 +72,9 @@ export default function ProjectList({
     const params = new URLSearchParams(searchParams.toString());
     params.set('relevanceMode', 'all');
     params.delete('page');
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    startTransition(() => {
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    });
   };
 
   const handleBackToChile = () => {
@@ -79,7 +87,9 @@ export default function ProjectList({
     params.delete('relevanceMode');
     params.delete('page');
     const qs = params.toString();
-    router.push(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+    startTransition(() => {
+      router.push(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+    });
   };
 
   logger.debug('Render ProjectList', { total: projects.length, page: currentPage });
@@ -95,6 +105,11 @@ export default function ProjectList({
           <span className="block text-sm font-medium text-gray-700" aria-live="polite" aria-atomic="true">
             Mostrando {projects.length} de {totalCount} oportunidades
           </span>
+          {isPending ? (
+            <span className="block text-xs font-medium text-iica-blue" aria-live="polite" aria-atomic="true">
+              Actualizando resultados...
+            </span>
+          ) : null}
           <div className="flex items-center gap-2">
             <span className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${
               relevanceMode === 'all'
@@ -137,7 +152,7 @@ export default function ProjectList({
 
       {/* Grid of cards */}
       {paginated.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className={`grid grid-cols-1 gap-4 transition-opacity duration-200 md:grid-cols-2 ${isPending ? 'opacity-70' : 'opacity-100'}`}>
           {paginated.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
@@ -163,7 +178,11 @@ export default function ProjectList({
           )}
           <button
             type="button"
-            onClick={() => router.push(pathname, { scroll: false })}
+            onClick={() => {
+              startTransition(() => {
+                router.push(pathname, { scroll: false });
+              });
+            }}
             className="inline-flex items-center justify-center rounded-full border border-iica-blue bg-iica-blue px-4 py-2 text-sm font-medium text-white hover:bg-iica-blue/90 min-h-[44px]"
           >
             Limpiar filtros

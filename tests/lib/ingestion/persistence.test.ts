@@ -30,13 +30,13 @@ jest.mock("../../../lib/ingestion/validateUrl", () => ({
 }));
 
 const mockEmbedText = jest.fn();
-const mockProjectToEmbeddingText = jest.fn(() => "embedding text");
+const mockProjectToEmbeddingText = jest.fn((_project: unknown) => "embedding text");
 const mockToPgVector = jest.fn((embedding: number[]) => `[${embedding.join(",")}]`);
 
 jest.mock("../../../lib/ingestion/embeddings", () => ({
-  embedText: (...args: unknown[]) => mockEmbedText(...args),
-  projectToEmbeddingText: (...args: unknown[]) => mockProjectToEmbeddingText(...args),
-  toPgVector: (...args: unknown[]) => mockToPgVector(...args),
+  embedText: (text: string) => mockEmbedText(text),
+  projectToEmbeddingText: (project: unknown) => mockProjectToEmbeddingText(project),
+  toPgVector: (embedding: number[]) => mockToPgVector(embedding),
 }));
 
 import { markStale, upsertProject, updateSourceStatus } from "../../../lib/ingestion/persistence";
