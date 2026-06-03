@@ -37,6 +37,11 @@ describe('ProjectCard', () => {
     expect(screen.getByText(/Biobío/)).toBeInTheDocument();
   });
 
+  it('shows metadata as semantic list', () => {
+    render(<ProjectCard project={mockProject} />);
+    expect(screen.getByRole('list', { name: /Metadatos de la oportunidad/i })).toBeInTheDocument();
+  });
+
   it('renders urgency deadline copy', () => {
     render(<ProjectCard project={mockProject} />);
     expect(screen.getByText(/Cierra en/i)).toBeInTheDocument();
@@ -64,6 +69,11 @@ describe('ProjectCard', () => {
   it('has accessible article role', () => {
     render(<ProjectCard project={mockProject} />);
     expect(screen.getByRole('article')).toBeInTheDocument();
+  });
+
+  it('exposes article label with project name', () => {
+    render(<ProjectCard project={mockProject} />);
+    expect(screen.getByRole('article', { name: /Programa de Riego Tecnificado/i })).toBeInTheDocument();
   });
 
   it('makes the entire card clickable via stretched link', () => {

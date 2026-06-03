@@ -63,6 +63,11 @@ describe('ProjectList accessibility', () => {
     expect(screen.getByRole('article')).toBeInTheDocument();
   });
 
+  it('renders results as a semantic list region', () => {
+    render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
+    expect(screen.getByRole('list', { name: /Resultados de oportunidades/i })).toBeInTheDocument();
+  });
+
   it('has live region for result count', () => {
     render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
     expect(screen.getByText(/Mostrando 1 de 1 oportunidades/i)).toHaveAttribute('aria-live', 'polite');
@@ -72,6 +77,7 @@ describe('ProjectList accessibility', () => {
     jest.spyOn(React, 'useTransition').mockReturnValue([true, (cb: () => void) => cb()]);
     render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
     expect(screen.getByText(/Actualizando resultados/i)).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: /Contenedor de resultados/i })).toHaveAttribute('aria-busy', 'true');
   });
 
   it('shows strict relevance badge by default', () => {
@@ -97,5 +103,14 @@ describe('ProjectList accessibility', () => {
     const clearButton = screen.getByRole('button', { name: /Limpiar filtros/i });
     fireEvent.click(clearButton);
     expect(pushMock).toHaveBeenCalledWith('/', { scroll: false });
+  });
+
+  it('offers include-international action in empty strict mode', () => {
+    render(<ProjectList projects={[]} filterCounts={filterCounts} totalCount={0} />);
+
+    const expandButton = screen.getByRole('button', { name: /Incluir internacionales/i });
+    fireEvent.click(expandButton);
+
+    expect(pushMock).toHaveBeenCalledWith('/?relevanceMode=all', { scroll: false });
   });
 });

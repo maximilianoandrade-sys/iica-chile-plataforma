@@ -152,15 +152,33 @@ export default function ProjectList({
 
       {/* Grid of cards */}
       {paginated.length > 0 ? (
-        <div className={`grid grid-cols-1 gap-4 transition-opacity duration-200 md:grid-cols-2 ${isPending ? 'opacity-70' : 'opacity-100'}`}>
-          {paginated.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
+        <div
+          role="region"
+          aria-label="Contenedor de resultados"
+          aria-busy={isPending}
+          className={`transition-opacity duration-200 ${isPending ? 'opacity-70' : 'opacity-100'}`}
+        >
+          <ul className="grid grid-cols-1 gap-4 md:grid-cols-2" aria-label="Resultados de oportunidades">
+            {paginated.map((project) => (
+              <li key={project.id} className="list-none">
+                <ProjectCard project={project} />
+              </li>
+            ))}
+          </ul>
         </div>
       ) : (
           <div className="text-center py-12 text-gray-500 space-y-3" role="status" aria-live="polite">
           <p className="text-lg font-medium text-iica-navy">No encontramos oportunidades con estos filtros</p>
           <p className="text-sm mt-1">Pruebe ampliar su búsqueda o restablecer los filtros activos.</p>
+          {relevanceMode !== 'all' ? (
+            <button
+              type="button"
+              onClick={handleViewAll}
+              className="inline-flex items-center justify-center rounded-full border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-900 hover:bg-amber-100 min-h-[44px]"
+            >
+              Incluir internacionales
+            </button>
+          ) : null}
           {activeFilterLabels.length > 0 && (
             <div className="mx-auto max-w-3xl">
               <p className="text-xs uppercase tracking-wide text-gray-500 mb-2">Filtros activos</p>
