@@ -17,6 +17,7 @@ const EnvSchema = z.object({
   // Requeridas
   DATABASE_URL: z.string().min(1),
   ADMIN_SESSION_SECRET: z.string().min(8),
+  ADMIN_PASSWORD: z.string().min(1).optional(),
   // Requeridas en producción
   CRON_SECRET: z.string().min(1).optional(),
   // Opcionales

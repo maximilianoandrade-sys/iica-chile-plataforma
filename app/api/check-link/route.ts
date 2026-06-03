@@ -16,8 +16,10 @@ import { NextRequest } from 'next/server';
 import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
 import { createErrorResponse, createSuccessResponse } from '@/lib/utils/api-response';
 import { isAllowedPublicHttpUrl, verifyHostnameResolvesToPublicIps } from '@/lib/utils/network-security';
+import { getLogger } from '@/lib/utils/logger';
 
 export const runtime = 'nodejs';
+const logger = getLogger('CheckLinkApi');
 
 const BOT_PROTECTED_HOST_PATTERNS = [
     'fia.cl',
@@ -189,13 +191,16 @@ export async function GET(request: NextRequest) {
                 });
             }
 
-            return createSuccessResponse({
-                isValid: false,
-                error: error instanceof Error ? error.message : 'Network error',
+            logger.warn('Check-link network verification failed', {
                 url,
-            }, 502);
+                hostname: parsed.hostname,
+                error: error instanceof Error ? error.message : String(error),
+            });
+
+            return createErrorResponse('Error de red verificando enlace', 502);
         }
     } catch (error: unknown) {
-        return createErrorResponse(error instanceof Error ? error.message : 'Internal server error', 500);
+        logger.error('Check-link request failed', error as Error);
+        return createErrorResponse('Error interno del servidor', 500);
     }
 }

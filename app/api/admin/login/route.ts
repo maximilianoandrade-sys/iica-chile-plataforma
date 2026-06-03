@@ -3,11 +3,19 @@ import { createHmac, timingSafeEqual } from "crypto";
 import { getLogger } from '@/lib/utils/logger';
 import { createSuccessResponse, createErrorResponse } from '@/lib/utils/api-response';
 import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
+import { getEnv } from '@/lib/utils/env';
 const logger = getLogger('AdminLogin');
 
 const ADMIN_LOGIN_RATE_LIMIT = { maxRequests: 5, windowSizeSeconds: 60 };
 
 export async function POST(req: NextRequest) {
+  let env: ReturnType<typeof getEnv>;
+  try {
+    env = getEnv();
+  } catch (error) {
+    logger.error('Invalid environment for admin login', error as Error);
+    return createErrorResponse('server config error', 500);
+  }
   const clientIp = getClientIp(req);
   const rateCheck = checkRateLimit(`admin-login:${clientIp}`, ADMIN_LOGIN_RATE_LIMIT);
   if (!rateCheck.allowed) {
@@ -23,7 +31,7 @@ export async function POST(req: NextRequest) {
     return createErrorResponse("Invalid JSON body", 400);
   }
   const password = (body.password as string) || "";
-  const expected = process.env.ADMIN_PASSWORD || "";
+  const expected = env.ADMIN_PASSWORD || "";
   
   if (!expected || !password) {
     return createErrorResponse("no autorizado", 401);
@@ -37,7 +45,7 @@ export async function POST(req: NextRequest) {
     return createErrorResponse("no autorizado", 401);
   }
 
-  const sessionSecret = process.env.ADMIN_SESSION_SECRET;
+  const sessionSecret = env.ADMIN_SESSION_SECRET;
   if (!sessionSecret) {
     logger.error('ADMIN_SESSION_SECRET not set');
     return createErrorResponse("server config error", 500);
@@ -53,7 +61,7 @@ export async function POST(req: NextRequest) {
   res.cookies.set("admin-token", token, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: env.NODE_ENV === "production",
     maxAge: 28800,
     path: "/",
   });

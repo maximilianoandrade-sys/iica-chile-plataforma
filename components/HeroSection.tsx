@@ -65,7 +65,7 @@ export function HeroSection({ stats }: HeroSectionProps) {
                             stat.label === 'Cierran pronto' ? (
                                 <Link
                                     key={stat.label}
-                                    href="/#convocatorias?estado=Abierta&sort=date_asc"
+                                    href="/?estado=Abierta&sort=date_asc#convocatorias"
                                     className="text-center bg-white/10 backdrop-blur-sm rounded-xl px-5 py-3 border border-white/20 hover:bg-white/20 transition-colors min-h-[44px] focus-visible:ring-2 focus-visible:ring-iica-yellow"
                                 >
                                     <div className="text-2xl font-black text-white flex items-center justify-center gap-2">{stat.icon} {stat.value}</div>

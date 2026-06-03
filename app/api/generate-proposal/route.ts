@@ -5,6 +5,7 @@ import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { getLogger } from "@/lib/utils/logger";
 import { GenerateProposalSchema, formatZodError } from "@/lib/utils/validation";
 import { createSuccessResponse, createErrorResponse } from "@/lib/utils/api-response";
+import { getEnv } from '@/lib/utils/env';
 
 const logger = getLogger("GenerateProposal");
 const PROPOSAL_RATE_LIMIT = { maxRequests: 5, windowSizeSeconds: 60 };
@@ -28,6 +29,14 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    let env: ReturnType<typeof getEnv>;
+    try {
+      env = getEnv();
+    } catch (error) {
+      logger.error('Invalid environment for generate-proposal', error as Error);
+      return createErrorResponse('Error de configuración del servidor', 500);
+    }
+
     // Rate limiting
     const clientIp = getClientIp(request);
     const rateCheck = checkRateLimit(`generate-proposal:${clientIp}`, PROPOSAL_RATE_LIMIT);
@@ -49,7 +58,7 @@ export async function POST(request: Request) {
     }
     const { projectId, applicantInfo } = parsed.data;
 
-    if (!process.env.GEMINI_API_KEY) {
+    if (!env.GEMINI_API_KEY) {
       return createErrorResponse("Servicio de generación no disponible. GEMINI_API_KEY no configurada.", 503);
     }
 
@@ -88,7 +97,7 @@ Genera únicamente el contenido de la propuesta, sin comentarios adicionales.`;
 - Fecha de cierre: ${project.fecha_cierre || "No especificada"}
 ${applicantContext}`;
 
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+    const ai = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
 
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-lite",

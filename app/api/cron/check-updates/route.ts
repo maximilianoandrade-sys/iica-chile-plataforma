@@ -358,9 +358,7 @@ export async function GET(request: NextRequest) {
 
     } catch (error: unknown) {
         logger.error('Update check failed', error as Error);
-
-        const message = error instanceof Error ? error.message : 'Unknown error';
-        return createErrorResponse(message, 500);
+        return createErrorResponse('Error interno del servidor', 500);
     }
 }
 
