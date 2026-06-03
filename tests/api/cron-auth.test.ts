@@ -3,6 +3,7 @@
  */
 import { GET } from '@/app/api/cron/check-updates/route';
 import { NextRequest } from 'next/server';
+import { _resetEnvCache } from '@/lib/utils/env';
 
 // Mock heavy dependencies so GET doesn't do real work after auth passes
 jest.mock('@/lib/data', () => ({ getProjects: jest.fn().mockResolvedValue([]) }));
@@ -26,7 +27,14 @@ describe('Auth del cron', () => {
   const REAL_SECRET = 'test-cron-secret-xyz';
 
   beforeAll(() => {
+    process.env.DATABASE_URL = process.env.DATABASE_URL || 'postgresql://localhost:5432/test';
+    process.env.ADMIN_SESSION_SECRET = process.env.ADMIN_SESSION_SECRET || 'test-session-secret';
     process.env.CRON_SECRET = REAL_SECRET;
+    _resetEnvCache();
+  });
+
+  afterAll(() => {
+    _resetEnvCache();
   });
 
   it('rechaza requests sin autenticación', async () => {

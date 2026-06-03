@@ -19,10 +19,41 @@ describe('DiscoveriesClient', () => {
 
     render(<DiscoveriesClient initial={[baseItem]} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /Aprobar/i }));
+    fireEvent.click(screen.getByLabelText(/Aprobar Proyecto Piloto/i));
 
     await waitFor(() => {
       expect(screen.getByText(/No pudimos actualizar este proyecto/i)).toBeInTheDocument();
+    });
+  });
+
+  it('permite seleccionar varios y ejecutar aprobacion masiva', async () => {
+    (global.fetch as jest.Mock) = jest
+      .fn()
+      .mockResolvedValueOnce({ ok: true })
+      .mockResolvedValueOnce({ ok: true });
+
+    render(
+      <DiscoveriesClient
+        initial={[
+          baseItem,
+          {
+            ...baseItem,
+            id: 2,
+            nombre: 'Proyecto Dos',
+          },
+        ]}
+      />,
+    );
+
+    fireEvent.click(screen.getByLabelText(/Seleccionar Proyecto Piloto/i));
+    fireEvent.click(screen.getByLabelText(/Seleccionar Proyecto Dos/i));
+    fireEvent.click(screen.getByRole('button', { name: /Aprobar seleccionados/i }));
+
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledWith(
+        '/api/admin/discoveries/bulk/action',
+        expect.objectContaining({ method: 'POST' }),
+      );
     });
   });
 });

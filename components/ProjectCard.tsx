@@ -6,6 +6,7 @@ import { type Project, daysUntilClose, formatDeadline, pluralizeDias } from '@/l
 import { InstitutionLogo } from '@/components/InstitutionLogo';
 import { Badge } from '@/components/ui/Badge';
 import { getLogger } from '@/lib/utils/logger';
+import { trackEvent } from '@/lib/analytics';
 
 const logger = getLogger('ProjectCard');
 
@@ -70,6 +71,14 @@ export function ProjectCard({ project }: { project: Project }) {
 
   logger.debug('Rendering ProjectCard', { id: project.id });
 
+  const handleProjectClick = () => {
+    trackEvent({
+      action: 'project_click',
+      category: 'Search',
+      label: `${project.id}:${project.nombre}`,
+    });
+  };
+
   return (
     <article
       className={`group relative flex flex-col rounded-2xl border border-iica-border bg-white p-5 shadow-sm transition-shadow hover:shadow-md ${isClosed ? 'opacity-60' : ''}`}
@@ -96,6 +105,7 @@ export function ProjectCard({ project }: { project: Project }) {
 
       <Link
         href={`/proyecto/${project.id}`}
+        onClick={handleProjectClick}
         className="stretched-link text-base font-semibold text-iica-navy line-clamp-2 hover:underline focus-visible:ring-2 focus-visible:ring-iica-yellow focus-visible:outline-none rounded mb-3"
       >
         {project.nombre}

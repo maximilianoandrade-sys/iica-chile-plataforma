@@ -6,6 +6,7 @@ import { FilterChips } from '@/components/FilterChips';
 import { type FilterCounts } from '@/lib/data';
 import { getLogger } from '@/lib/utils/logger';
 import type { Project } from '@/lib/data';
+import { trackEvent } from '@/lib/analytics';
 
 const logger = getLogger('ProjectList');
 const ITEMS_PER_PAGE = 16;
@@ -56,6 +57,31 @@ export default function ProjectList({
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
+  const handleViewAll = () => {
+    trackEvent({
+      action: 'filter_change',
+      category: 'Search',
+      label: 'relevance_mode:all',
+    });
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('relevanceMode', 'all');
+    params.delete('page');
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  const handleBackToChile = () => {
+    trackEvent({
+      action: 'filter_change',
+      category: 'Search',
+      label: 'relevance_mode:chile_strict',
+    });
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('relevanceMode');
+    params.delete('page');
+    const qs = params.toString();
+    router.push(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  };
+
   logger.debug('Render ProjectList', { total: projects.length, page: currentPage });
 
   return (
@@ -80,13 +106,7 @@ export default function ProjectList({
             {relevanceMode === 'all' ? (
               <button
                 type="button"
-                onClick={() => {
-                  const params = new URLSearchParams(searchParams.toString());
-                  params.delete('relevanceMode');
-                  params.delete('page');
-                  const qs = params.toString();
-                  router.push(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
-                }}
+                onClick={handleBackToChile}
                 className="text-xs text-iica-blue hover:underline"
               >
                 Volver a Solo Chile
@@ -94,12 +114,7 @@ export default function ProjectList({
             ) : (
               <button
                 type="button"
-                onClick={() => {
-                  const params = new URLSearchParams(searchParams.toString());
-                  params.set('relevanceMode', 'all');
-                  params.delete('page');
-                  router.push(`${pathname}?${params.toString()}`, { scroll: false });
-                }}
+                onClick={handleViewAll}
                 className="text-xs text-iica-blue hover:underline"
               >
                 Ver todas

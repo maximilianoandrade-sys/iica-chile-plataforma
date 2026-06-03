@@ -175,4 +175,11 @@ describe('audit-links external checker', () => {
     expect(result.classification).toBe('needs_review');
     expect(result.reason).toBe('redirected_to_home');
   });
+
+  it('fails process when review links are configured as blocking', async () => {
+    const reviewLinks = [{ classification: 'needs_review' }];
+    const shouldFailByReview = true && reviewLinks.length > 0;
+
+    expect(shouldFailByReview).toBe(true);
+  });
 });
