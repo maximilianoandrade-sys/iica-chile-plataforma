@@ -192,7 +192,7 @@ export const tedNoticesScraper: Scraper = {
 
     const projects: RawProject[] = [];
 
-    for (const notice of uniqueNotices.values()) {
+    for (const notice of Array.from(uniqueNotices.values())) {
       const title = pickLocalizedText(notice["notice-title"]);
       if (!title) {
         partialErrors.push("notice without title");
