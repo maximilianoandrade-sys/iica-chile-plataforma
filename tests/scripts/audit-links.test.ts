@@ -101,4 +101,78 @@ describe('audit-links external checker', () => {
     expect(result.reason).toBe('check_api_rate_limited');
     expect(result.classification).toBe('invalid');
   });
+
+  it('reclassifies blocked links as ok when direct check succeeds', async () => {
+    const fetchMock = jest.fn<Promise<Response>, [RequestInfo | URL, RequestInit?]>(async (input) => {
+      const requestUrl = String(input);
+
+      if (requestUrl.startsWith('https://example.test/api/check-link?url=')) {
+        return new Response(
+          JSON.stringify({
+            ok: true,
+            data: {
+              isValid: true,
+              status: 403,
+              reason: 'blocked_by_bot_protection',
+              redirectedToHome: false,
+              originalIsHomepage: false,
+            },
+          }),
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        );
+      }
+
+      const directResponse = new Response('', { status: 200 });
+      Object.defineProperty(directResponse, 'url', { value: 'https://www.iadb.org/es/project-portfolio-search' });
+      return directResponse;
+    });
+
+    const result = await checkExternal('https://www.iadb.org/es/project-portfolio-search', {
+      checkLinkBaseUrl: 'https://example.test',
+      fetcher: fetchMock,
+      maxAttempts: 1,
+      retryDelayMs: 0,
+    });
+
+    expect(result.ok).toBe(true);
+    expect(result.classification).toBe('ok');
+    expect(result.reason).toBe('ok_via_direct_check');
+  });
+
+  it('reclassifies blocked links as needs_review when direct check redirects to homepage', async () => {
+    const fetchMock = jest.fn<Promise<Response>, [RequestInfo | URL, RequestInit?]>(async (input) => {
+      const requestUrl = String(input);
+
+      if (requestUrl.startsWith('https://example.test/api/check-link?url=')) {
+        return new Response(
+          JSON.stringify({
+            ok: true,
+            data: {
+              isValid: true,
+              status: 403,
+              reason: 'blocked_by_bot_protection',
+              redirectedToHome: false,
+              originalIsHomepage: false,
+            },
+          }),
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        );
+      }
+
+      const directResponse = new Response('', { status: 200 });
+      Object.defineProperty(directResponse, 'url', { value: 'https://www.iadb.org/' });
+      return directResponse;
+    });
+
+    const result = await checkExternal('https://www.iadb.org/es/project-portfolio-search', {
+      checkLinkBaseUrl: 'https://example.test',
+      fetcher: fetchMock,
+      maxAttempts: 1,
+      retryDelayMs: 0,
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.classification).toBe('needs_review');
+    expect(result.reason).toBe('redirected_to_home');
+  });
 });
