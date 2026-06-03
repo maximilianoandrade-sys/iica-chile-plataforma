@@ -13,6 +13,26 @@ export interface AnalyticsEvent {
     value?: number;
 }
 
+type AnalyticsApiEvent =
+  | 'page_view'
+  | 'search'
+  | 'project_click'
+  | 'project_view'
+  | 'filter_change'
+  | 'ai_search'
+  | 'proposal_generated'
+  | 'link_click'
+  | 'share'
+  | 'pwa_install';
+
+const ANALYTICS_EVENT_MAP: Record<string, AnalyticsApiEvent> = {
+    search: 'search',
+    search_no_results: 'search',
+    click_outbound_link: 'link_click',
+    project_click: 'project_click',
+    filter_change: 'filter_change',
+};
+
 export interface SearchAnalytics {
     searchTerm: string;
     resultsCount: number;
@@ -84,7 +104,7 @@ export function trackEvent(event: AnalyticsEvent) {
     }
 
     // Enviar a servidor propio
-    sendToServer('event', event);
+    sendToServer(event.action, event);
 }
 
 /**
@@ -116,12 +136,18 @@ export function getNoResultsStats(): { term: string; count: number }[] {
  * Envía datos al backend de analytics
  */
 async function sendToServer(eventType: string, data: object) {
+    const normalizedEvent = ANALYTICS_EVENT_MAP[eventType];
+    if (!normalizedEvent) {
+        logger.debug('Evento sin mapeo analytics API, omitido', { eventType });
+        return;
+    }
+
     try {
         await fetch('/api/analytics', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                event: eventType,
+                event: normalizedEvent,
                 properties: { ...data },
                 timestamp: new Date().toISOString(),
             }),

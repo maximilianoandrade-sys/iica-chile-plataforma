@@ -3,6 +3,7 @@
  */
 
 import { NextRequest } from 'next/server';
+import { _resetEnvCache } from '@/lib/utils/env';
 
 const mockGetProjects = jest.fn();
 const mockPrismaQueryRawUnsafe = jest.fn();
@@ -58,8 +59,11 @@ describe('/api/cron/check-updates SSRF protection', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    _resetEnvCache();
     process.env = {
       ...originalEnv,
+      DATABASE_URL: 'postgresql://localhost:5432/test',
+      ADMIN_SESSION_SECRET: 'test-session-secret',
       CRON_SECRET: 'cron-secret-test',
     };
 
@@ -86,6 +90,7 @@ describe('/api/cron/check-updates SSRF protection', () => {
 
   afterEach(() => {
     process.env = originalEnv;
+    _resetEnvCache();
     global.fetch = realFetch;
   });
 

@@ -6,6 +6,7 @@ const CHECK_LINK_BASE_URL = process.env.CHECK_LINK_BASE_URL || BASE_URL;
 const INCLUDE_PROJECT_PAGES = process.env.AUDIT_INCLUDE_PROJECT_PAGES === 'true' || args.has('--include-project-pages');
 const CHECK_LINK_MAX_ATTEMPTS = Number(process.env.AUDIT_CHECK_LINK_MAX_ATTEMPTS || '3');
 const CHECK_LINK_RETRY_DELAY_MS = Number(process.env.AUDIT_CHECK_LINK_RETRY_DELAY_MS || '250');
+const FAIL_ON_NEEDS_REVIEW = process.env.AUDIT_FAIL_ON_NEEDS_REVIEW === 'true';
 
 type LinkResult = {
   url: string;
@@ -333,7 +334,13 @@ async function main() {
     }
   }
 
-  if (failedInternal.length > 0 || failedExternal.length > 0) {
+  const shouldFailByReview = FAIL_ON_NEEDS_REVIEW && reviewExternal.length > 0;
+
+  if (shouldFailByReview) {
+    console.error(`\n[audit-links] failing due to needs_review links: ${reviewExternal.length}`);
+  }
+
+  if (failedInternal.length > 0 || failedExternal.length > 0 || shouldFailByReview) {
     process.exit(1);
   }
 }

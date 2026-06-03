@@ -14,6 +14,7 @@ import { getLogger } from '@/lib/utils/logger';
 import { sendAlert } from '@/lib/utils/alerts';
 import { createSuccessResponse, createErrorResponse } from '@/lib/utils/api-response';
 import { isAllowedPublicHttpUrl, verifyHostnameResolvesToPublicIps } from '@/lib/utils/network-security';
+import { getEnv } from '@/lib/utils/env';
 
 const logger = getLogger('CronCheckUpdates');
 
@@ -24,15 +25,23 @@ export const runtime = 'nodejs';
 // ============================================================================
 
 const CHECK_INTERVAL = 24 * 60 * 60 * 1000; // 24 horas
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@iica.cl';
-const NOTIFICATION_WEBHOOK = process.env.NOTIFICATION_WEBHOOK;
+
+function getRuntimeConfig() {
+    const env = getEnv();
+    return {
+        cronSecret: env.CRON_SECRET,
+        adminEmail: env.ADMIN_EMAIL || 'admin@iica.cl',
+        notificationWebhook: env.NOTIFICATION_WEBHOOK,
+        geminiApiKey: env.GEMINI_API_KEY,
+    };
+}
 
 // ============================================================================
 // VERIFICACIÓN DE AUTORIZACIÓN
 // ============================================================================
 
 function isAuthorized(request: NextRequest): boolean {
-    const cronSecret = process.env.CRON_SECRET;
+    const { cronSecret } = getRuntimeConfig();
     if (!cronSecret) {
         logger.error('CRON_SECRET no configurado', new Error('Env faltante'));
         return false;
@@ -168,12 +177,13 @@ interface UpdateNotification {
 }
 
 async function sendNotification(notification: UpdateNotification): Promise<void> {
+    const { notificationWebhook, adminEmail } = getRuntimeConfig();
     const message = formatNotificationMessage(notification);
 
     // Enviar por webhook si está configurado
-    if (NOTIFICATION_WEBHOOK) {
+    if (notificationWebhook) {
         try {
-            await fetch(NOTIFICATION_WEBHOOK, {
+            await fetch(notificationWebhook, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -188,7 +198,7 @@ async function sendNotification(notification: UpdateNotification): Promise<void>
 
     // Enviar email de notificación
     await sendEmail({
-        to: ADMIN_EMAIL,
+        to: adminEmail,
         subject: `[IICA] Actualización de Convocatorias - ${notification.changedProjects.length} cambios, ${notification.brokenLinks.length} enlaces rotos`,
         text: message,
         html: `<pre style="font-family: monospace; white-space: pre-wrap;">${message}</pre>`,
@@ -276,7 +286,8 @@ export async function GET(request: NextRequest) {
         // EMBEDDING BACKFILL — fill up to 20 projects missing embeddings
         // ==================================================================
         let embeddingsBackfilled = 0;
-        if (process.env.GEMINI_API_KEY) {
+        const { geminiApiKey } = getRuntimeConfig();
+        if (geminiApiKey) {
             try {
                 const missing = await prisma.$queryRawUnsafe<
                     Array<{ id: number; nombre: string; institucion: string | null; objetivo: string | null; categoria: string | null }>

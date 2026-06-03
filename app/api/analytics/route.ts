@@ -9,7 +9,7 @@
  * Body: { event: string, properties?: Record<string, unknown>, sessionId?: string }
  */
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { getLogger } from "@/lib/utils/logger";
 import { createSuccessResponse, createErrorResponse } from "@/lib/utils/api-response";
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  return NextResponse.json({
+  return createSuccessResponse({
     route: "/api/analytics",
     method: "POST",
     description: "Collect frontend analytics events",
