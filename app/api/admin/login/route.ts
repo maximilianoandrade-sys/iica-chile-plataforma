@@ -3,15 +3,15 @@ import { createHmac, timingSafeEqual } from "crypto";
 import { getLogger } from '@/lib/utils/logger';
 import { createSuccessResponse, createErrorResponse } from '@/lib/utils/api-response';
 import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
-import { getEnv } from '@/lib/utils/env';
+import { getAuthEnv } from '@/lib/utils/env';
 const logger = getLogger('AdminLogin');
 
 const ADMIN_LOGIN_RATE_LIMIT = { maxRequests: 5, windowSizeSeconds: 60 };
 
 export async function POST(req: NextRequest) {
-  let env: ReturnType<typeof getEnv>;
+  let env: ReturnType<typeof getAuthEnv>;
   try {
-    env = getEnv();
+    env = getAuthEnv();
   } catch (error) {
     logger.error('Invalid environment for admin login', error as Error);
     return createErrorResponse('server config error', 500);

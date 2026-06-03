@@ -29,5 +29,6 @@ describe('/api/check-link network errors', () => {
     expect(res.status).toBe(502);
     expect(json.ok).toBe(false);
     expect(json.error).toBe('Error de red verificando enlace');
+    expect(json.data?.isValid).toBe(false);
   });
 });

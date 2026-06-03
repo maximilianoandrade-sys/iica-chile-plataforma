@@ -5,7 +5,7 @@ import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { getLogger } from "@/lib/utils/logger";
 import { GenerateProposalSchema, formatZodError } from "@/lib/utils/validation";
 import { createSuccessResponse, createErrorResponse } from "@/lib/utils/api-response";
-import { getEnv } from '@/lib/utils/env';
+import { getAiEnv } from '@/lib/utils/env';
 
 const logger = getLogger("GenerateProposal");
 const PROPOSAL_RATE_LIMIT = { maxRequests: 5, windowSizeSeconds: 60 };
@@ -29,9 +29,9 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    let env: ReturnType<typeof getEnv>;
+    let env: ReturnType<typeof getAiEnv>;
     try {
-      env = getEnv();
+      env = getAiEnv();
     } catch (error) {
       logger.error('Invalid environment for generate-proposal', error as Error);
       return createErrorResponse('Error de configuración del servidor', 500);

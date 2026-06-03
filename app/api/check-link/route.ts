@@ -192,15 +192,38 @@ export async function GET(request: NextRequest) {
             }
 
             logger.warn('Check-link network verification failed', {
-                url,
+                url: maskUrlForLogs(url),
                 hostname: parsed.hostname,
                 error: error instanceof Error ? error.message : String(error),
             });
 
-            return createErrorResponse('Error de red verificando enlace', 502);
+            return createErrorResponse(
+                'Error de red verificando enlace',
+                502,
+                undefined,
+                {
+                    isValid: false,
+                    status: 0,
+                    statusText: 'Network Error',
+                    url,
+                    finalUrl: url,
+                    reason: 'network_error',
+                    redirectedToHome: false,
+                    originalIsHomepage,
+                },
+            );
         }
     } catch (error: unknown) {
         logger.error('Check-link request failed', error as Error);
         return createErrorResponse('Error interno del servidor', 500);
+    }
+}
+
+function maskUrlForLogs(rawUrl: string): string {
+    try {
+        const parsed = new URL(rawUrl);
+        return `${parsed.origin}${parsed.pathname}`;
+    } catch {
+        return '[invalid-url]';
     }
 }

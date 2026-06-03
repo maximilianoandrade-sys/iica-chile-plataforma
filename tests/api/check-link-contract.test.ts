@@ -81,6 +81,8 @@ describe('/api/check-link response envelope', () => {
       expect(res.status).toBe(502);
       expect(json.ok).toBe(false);
       expect(String(json.error)).toContain('Error de red verificando enlace');
+      expect(json.data?.isValid).toBe(false);
+      expect(json.data?.reason).toBe('network_error');
     } finally {
       global.fetch = originalFetch;
     }

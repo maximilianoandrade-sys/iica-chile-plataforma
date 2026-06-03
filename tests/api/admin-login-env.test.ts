@@ -16,6 +16,18 @@ function makeRequest(password: string): NextRequest {
   });
 }
 
+jest.mock('@/lib/utils/env', () => {
+  const actual = jest.requireActual('@/lib/utils/env');
+  return {
+    ...actual,
+    getAuthEnv: jest.fn(() => ({
+      ADMIN_SESSION_SECRET: process.env.ADMIN_SESSION_SECRET,
+      ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
+      NODE_ENV: process.env.NODE_ENV || 'test',
+    })),
+  };
+});
+
 describe('/api/admin/login env validation', () => {
   const originalEnv = process.env;
 
@@ -36,18 +48,18 @@ describe('/api/admin/login env validation', () => {
     jest.resetModules();
   });
 
-  it('rechaza login cuando falta DATABASE_URL en la configuración validada', async () => {
+  it('no depende de DATABASE_URL para responder credenciales inválidas', async () => {
     delete process.env.DATABASE_URL;
     _resetEnvCache();
 
     const { POST } = await import('@/app/api/admin/login/route');
 
     const res = await POST(makeRequest('whatever'));
-    expect(res.status).toBe(500);
+    expect(res.status).toBe(401);
 
     const json = await res.json();
     expect(json.ok).toBe(false);
-    expect(String(json.error)).toContain('server config error');
+    expect(String(json.error)).toContain('no autorizado');
   });
 
   it('rechaza login cuando falta ADMIN_PASSWORD', async () => {
