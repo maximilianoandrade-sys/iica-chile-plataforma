@@ -62,6 +62,13 @@ audit-broken-urls.csv
 # Scraper temp
 tmp/
 
+# Python cache
+__pycache__/
+*.pyc
+
+# Local nested workspace copy
+iica-chile-plataforma/
+
 # PWA generated files
 public/sw.js
 public/workbox-*.js

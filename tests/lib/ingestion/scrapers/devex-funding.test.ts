@@ -126,4 +126,95 @@ describe("devexFundingScraper", () => {
     expect(result.partialErrors).toHaveLength(1);
     expect(result.partialErrors[0]).toContain("captcha");
   });
+
+  it("sends browser-like headers to reduce anti-bot 403 responses", async () => {
+    const payload = {
+      total: 0,
+      page: { number: 1, size: 10, pages: 1, next_url: null },
+      data: [],
+    };
+
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      status: 200,
+      text: () => Promise.resolve(JSON.stringify(payload)),
+    });
+
+    await devexFundingScraper.scrape();
+
+    const firstCall = (global.fetch as jest.Mock).mock.calls[0];
+    expect(firstCall).toBeDefined();
+
+    const requestInit = firstCall[1] as RequestInit;
+    const headers = requestInit.headers as Record<string, string>;
+
+    expect(headers["Origin"]).toBe("https://www.devex.com");
+    expect(headers["Referer"]).toBe("https://www.devex.com/funding/r");
+    expect(headers["Accept-Language"]).toContain("en-US");
+    expect(headers["Sec-Fetch-Site"]).toBe("same-origin");
+    expect(headers["Sec-Fetch-Mode"]).toBe("cors");
+    expect(headers["Sec-Fetch-Dest"]).toBe("empty");
+    expect(headers["User-Agent"]).toContain("Mozilla/5.0");
+  });
+
+  it("normalizes next_url relative API paths to avoid page 2 404", async () => {
+    const pageOne = {
+      total: 20,
+      page: {
+        number: 1,
+        size: 10,
+        pages: 2,
+        next_url:
+          "/funding_projects?filter%5Bplaces%5D%5B%5D=Chile&filter%5Bstatuses%5D%5B%5D=open&page%5Bnumber%5D=2&sorting%5Bfield%5D=updated_at&sorting%5Border%5D=desc",
+      },
+      data: [
+        {
+          id: 877050,
+          type: "tender",
+          title: "Page 1 tender",
+          places: [{ name: "Chile" }],
+          deadline: "2026-06-12",
+          updated_at: "2026-06-02T09:38:32.856+00:00",
+          status: "forecast",
+        },
+      ],
+    };
+
+    const pageTwo = {
+      total: 20,
+      page: { number: 2, size: 10, pages: 2, next_url: null },
+      data: [
+        {
+          id: 877051,
+          type: "tender",
+          title: "Page 2 tender",
+          places: [{ name: "Chile" }],
+          deadline: "2026-06-20",
+          updated_at: "2026-06-02T10:38:32.856+00:00",
+          status: "open",
+        },
+      ],
+    };
+
+    (global.fetch as jest.Mock)
+      .mockResolvedValueOnce({ ok: true, status: 200, text: () => Promise.resolve(JSON.stringify(pageOne)) })
+      .mockResolvedValueOnce({ ok: true, status: 200, text: () => Promise.resolve(JSON.stringify(pageTwo)) });
+
+    const originalSetTimeout = global.setTimeout;
+    jest.spyOn(global, "setTimeout").mockImplementation(((fn: (...args: any[]) => void) => {
+      fn();
+      return 0 as unknown as NodeJS.Timeout;
+    }) as any);
+
+    try {
+      const result = await devexFundingScraper.scrape();
+      expect(result.projects).toHaveLength(2);
+      expect(result.partialErrors).toHaveLength(0);
+
+      const secondCall = (global.fetch as jest.Mock).mock.calls[1];
+      expect(secondCall[0]).toContain("/api/funding_projects?");
+    } finally {
+      global.setTimeout = originalSetTimeout;
+    }
+  });
 });

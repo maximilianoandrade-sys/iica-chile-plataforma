@@ -13,6 +13,18 @@ const DEFAULT_QUERY =
 const MAX_PAGES = 3;
 const CRAWL_DELAY_MS = 10000;
 
+const DEVEX_BROWSER_HEADERS: Record<string, string> = {
+  "User-Agent":
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+  Accept: "application/json, text/plain, */*",
+  "Accept-Language": "en-US,en;q=0.9,es;q=0.8",
+  Referer: "https://www.devex.com/funding/r",
+  Origin: "https://www.devex.com",
+  "Sec-Fetch-Site": "same-origin",
+  "Sec-Fetch-Mode": "cors",
+  "Sec-Fetch-Dest": "empty",
+};
+
 interface DevexPlace {
   name?: string;
 }
@@ -70,6 +82,9 @@ function buildPageUrl(nextUrl: string | null | undefined): string {
   }
 
   if (nextUrl.startsWith("/")) {
+    if (nextUrl.startsWith("/funding_projects")) {
+      return `https://www.devex.com/api${nextUrl}`;
+    }
     return `https://www.devex.com${nextUrl}`;
   }
 
@@ -100,10 +115,7 @@ export const devexFundingScraper: Scraper = {
         const response = await fetchWithRetry(
           pageUrl,
           {
-            headers: {
-              "User-Agent": "IICA-Chile-Bot/1.0 (+contacto@iica.cl)",
-              Accept: "application/json",
-            },
+            headers: DEVEX_BROWSER_HEADERS,
           },
           3,
           600,
