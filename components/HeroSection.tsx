@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React from 'react';
 import Link from 'next/link';
@@ -22,25 +22,21 @@ export function HeroSection({ stats }: HeroSectionProps) {
 
     return (
         <section className="relative min-h-[580px] flex items-center overflow-hidden">
-            {/* Background Image con overlay */}
             <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                 style={{
                     backgroundImage: 'url(https://d2xsxph8kpxj0f.cloudfront.net/310519663573662923/MMCKhgYRiHjKpTZNSuJJdS/hero-agricultural-landscape-7xaiHJXWKsB3BA6QjUhFga.webp)',
                 }}
                 role="img"
-                aria-label="Paisaje agrícola chileno"
+                aria-label="Paisaje agricola chileno"
             />
-            {/* Dark gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/20" />
 
-            {/* Content */}
             <div className="container mx-auto max-w-[1200px] px-4 relative z-10 py-20">
                 <div className="max-w-2xl">
-                    {/* Label superior */}
                     <div className="mb-5">
                         <span className="inline-block text-[var(--iica-yellow)] font-semibold text-xs tracking-widest uppercase">
-                            ✓ Financiamiento Agrícola Verificado
+                            Financiamiento Agricola Verificado
                         </span>
                     </div>
 
@@ -71,7 +67,6 @@ export function HeroSection({ stats }: HeroSectionProps) {
                 </div>
             </div>
 
-            {/* Stats overlay — esquina inferior derecha (desktop) */}
             <div className="absolute bottom-0 right-0 bg-gradient-to-l from-black/80 via-black/60 to-transparent p-8 hidden lg:block">
                 <div className="grid grid-cols-2 gap-8">
                     <div>
@@ -87,7 +82,6 @@ export function HeroSection({ stats }: HeroSectionProps) {
                 </div>
             </div>
 
-            {/* Badge urgentes */}
             {urgentes > 0 && (
                 <Link
                     href="/?estado=Abierta&sort=date_asc#convocatorias"
@@ -98,77 +92,6 @@ export function HeroSection({ stats }: HeroSectionProps) {
                     {urgentes} cierran pronto
                 </Link>
             )}
-        </section>
-    );
-}
-
-
-export function HeroSection({ stats }: HeroSectionProps) {
-    const totalOportunidades = stats?.total ?? 0;
-    const internacionales = stats?.internacionales ?? 0;
-    const abiertas = stats?.abiertas ?? 0;
-    const urgentCount = stats?.urgentes ?? 0;
-
-    return (
-        <section className="relative">
-            <div
-                className="hero-iica relative overflow-hidden bg-[var(--iica-navy)] text-white py-10 md:py-28 text-center"
-                style={{
-                    backgroundImage: 'linear-gradient(rgba(0, 45, 114, 0.85), rgba(0, 45, 114, 0.7)), url("https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2832&auto=format&fit=crop")',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center'
-                }}
-            >
-                {/* Overlay decorativo graduado */}
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--iica-navy)]/40 pointer-events-none"></div>
-
-                <div className="relative z-10 container mx-auto px-4">
-                    <h1 className="animate-fade-in-up text-2xl md:text-5xl font-extrabold mb-6 leading-tight drop-shadow-lg">
-                        Encuentre financiamiento agrícola{' '}
-                        <span className="text-[var(--iica-yellow)]">verificado para Chile</span>
-                    </h1>
-
-                    <p className="animate-fade-in-up text-lg md:text-xl font-medium text-blue-50 max-w-2xl mx-auto mb-10 drop-shadow-md">
-                        Compare convocatorias vigentes, revise requisitos clave y acceda a fuentes oficiales en minutos.
-                    </p>
-
-                    <div className="animate-fade-in-up flex justify-center">
-                        <Link
-                            href="#convocatorias"
-                            className="bg-[var(--iica-secondary)] hover:bg-green-600 text-white font-bold py-4 px-10 rounded-full shadow-xl transition-all hover:-translate-y-1 inline-flex items-center justify-center gap-2 cursor-pointer ring-4 ring-white/20 min-h-[44px]"
-                        >
-                            <Target className="h-5 w-5" />
-                            Ver Oportunidades Activas
-                        </Link>
-                    </div>
-
-                    {/* Mini stats row */}
-                    <div className="animate-fade-in-up mt-10 grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        {([
-                            { label: 'Oportunidades', value: totalOportunidades, icon: <ClipboardList className="h-5 w-5" /> },
-                            { label: 'Abiertas Ahora', value: abiertas, icon: <CircleDot className="h-5 w-5 text-green-400" /> },
-                            { label: 'Internacionales', value: internacionales, icon: <Globe className="h-5 w-5" /> },
-                            { label: 'Cierran pronto', value: urgentCount, icon: <AlertTriangle className="h-5 w-5 text-amber-400" /> },
-                        ] as { label: string; value: number; icon: React.ReactNode }[]).map(stat => (
-                            stat.label === 'Cierran pronto' ? (
-                                <Link
-                                    key={stat.label}
-                                    href="/?estado=Abierta&sort=date_asc#convocatorias"
-                                    className="text-center bg-white/10 backdrop-blur-sm rounded-xl px-5 py-3 border border-white/20 hover:bg-white/20 transition-colors min-h-[44px] focus-visible:ring-2 focus-visible:ring-iica-yellow"
-                                >
-                                    <div className="text-2xl font-black text-white flex items-center justify-center gap-2">{stat.icon} {stat.value}</div>
-                                    <div className="text-xs text-blue-200 font-medium">{stat.label}</div>
-                                </Link>
-                            ) : (
-                                <div key={stat.label} className="text-center bg-white/10 backdrop-blur-sm rounded-xl px-5 py-3 border border-white/20">
-                                    <div className="text-2xl font-black text-white flex items-center justify-center gap-2">{stat.icon} {stat.value}</div>
-                                    <div className="text-xs text-blue-200 font-medium">{stat.label}</div>
-                                </div>
-                            )
-                        ))}
-                    </div>
-                </div>
-            </div>
         </section>
     );
 }
