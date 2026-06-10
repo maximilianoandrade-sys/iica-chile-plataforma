@@ -11,14 +11,13 @@ describe('Footer', () => {
     render(<Footer />);
 
     expect(screen.getByRole('img', { name: /Logo oficial IICA Chile/i })).toBeInTheDocument();
-    expect(screen.getByText(/Contacto IICA Chile/i)).toBeInTheDocument();
+    expect(screen.getByText(/Enlaces Útiles/i)).toBeInTheDocument();
   });
 
-  it('usa enlace canonico de FONTAGRO', () => {
+  it('incluye enlace a política de privacidad', () => {
     render(<Footer />);
-    const fontagro = screen.getByRole('link', { name: /FONTAGRO/i });
-    expect(fontagro).toHaveAttribute('href', 'https://www.fontagro.org/es/convocatorias/');
-    expect(fontagro).toHaveAttribute('target', '_blank');
+    const privacidad = screen.getByRole('link', { name: /Política de Privacidad/i });
+    expect(privacidad).toHaveAttribute('href', '/legal/privacidad');
   });
 
   it('usa redes oficiales verificables para iconos sociales', () => {
@@ -27,9 +26,9 @@ describe('Footer', () => {
       'href',
       'https://www.linkedin.com/company/iica/',
     );
-    expect(screen.getByRole('link', { name: /x iica noticias/i })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /x iica/i })).toHaveAttribute(
       'href',
-      'https://x.com/IICAnoticias',
+      'https://x.com/IABOREA',
     );
   });
 });
