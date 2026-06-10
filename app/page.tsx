@@ -140,19 +140,19 @@ export default async function DashboardPage({
         {/* 1. Header — sticky top-0 (direct flex child for proper sticky) */}
         <Header urgentCount={urgentes} />
 
-        {/* 2. Search/Filter bar — sticky below header (direct flex child) */}
-        <FilterChips filterCounts={filterCounts} />
-
-        {/* 3. Hero */}
+        {/* 2. Hero — primera impresión limpia, scroll normal */}
         <HeroSection stats={heroStats} />
 
-        {/* 4. Stats Section */}
+        {/* 3. Stats Section */}
         <StatsSection
           total={heroStats.total}
           abiertas={heroStats.abiertas}
           internacionales={heroStats.internacionales}
           urgentes={heroStats.urgentes}
         />
+
+        {/* 4. Search/Filter bar — sticky below header, se pega solo al pasar el hero */}
+        <FilterChips filterCounts={filterCounts} />
 
         <main id="convocatorias" className="flex-grow container mx-auto max-w-[1200px] px-4 pb-10 scroll-mt-40">
           <div className="flex flex-col gap-10">
