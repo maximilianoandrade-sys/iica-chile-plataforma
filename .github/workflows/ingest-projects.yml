@@ -40,13 +40,18 @@ jobs:
         run: npx tsx scripts/run-scrapers.ts
 
       - name: Audit links full (SLO)
-        if: ${{ secrets.DEPLOYMENT_URL != '' }}
+        continue-on-error: true
         env:
           DEPLOYMENT_URL: ${{ secrets.DEPLOYMENT_URL }}
           CHECK_LINK_BASE_URL: ${{ secrets.DEPLOYMENT_URL }}
           AUDIT_INCLUDE_PROJECT_PAGES: "true"
           AUDIT_FAIL_ON_NEEDS_REVIEW: "false"
-        run: npm run audit:links:full
+        run: |
+          if [ -z "$DEPLOYMENT_URL" ]; then
+            echo "⏭️ DEPLOYMENT_URL not set — skipping link audit"
+            exit 0
+          fi
+          npm run audit:links:full
 
       - name: Coverage check
         env:
