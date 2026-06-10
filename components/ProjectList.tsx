@@ -3,8 +3,6 @@
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useTransition } from 'react';
 import { ProjectCard } from '@/components/ProjectCard';
-import { FilterChips } from '@/components/FilterChips';
-import { type FilterCounts } from '@/lib/data';
 import { getLogger } from '@/lib/utils/logger';
 import type { Project } from '@/lib/data';
 import { trackEvent } from '@/lib/analytics';
@@ -14,7 +12,6 @@ const ITEMS_PER_PAGE = 16;
 
 interface ProjectListProps {
   projects: Project[];
-  filterCounts: FilterCounts;
   totalCount: number;
   pageSize?: number;
   activeFilterLabels?: string[];
@@ -22,7 +19,6 @@ interface ProjectListProps {
 
 export default function ProjectList({
   projects,
-  filterCounts,
   totalCount,
   pageSize = ITEMS_PER_PAGE,
   activeFilterLabels = [],
@@ -102,9 +98,6 @@ export default function ProjectList({
 
   return (
     <div className="space-y-4 md:space-y-5">
-      {/* Filter chips */}
-      <FilterChips filterCounts={filterCounts} />
-
       {/* Toolbar: count + sort */}
       <div className="flex flex-col gap-3 rounded-xl border border-iica-border bg-white p-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1.5">
@@ -235,36 +228,41 @@ export default function ProjectList({
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <nav aria-label="Paginación" className="flex justify-center gap-1 pt-3">
-          {visiblePages.map((page) => {
-            return (
-              <button
-                key={page}
-                type="button"
-                onClick={() => goToPage(page)}
-                aria-current={page === currentPage ? 'page' : undefined}
-                className={`min-w-[44px] min-h-[44px] rounded-lg text-sm font-medium transition-colors ${
-                  page === currentPage
-                    ? 'bg-iica-blue text-white'
-                    : 'bg-white border border-iica-border text-gray-700 hover:bg-gray-50'
-                }`}
-              >
-                {page}
-              </button>
-            );
-          })}
-          {visibleEnd < totalPages && (
-            <>
-              <span className="px-2 self-center text-gray-400">…</span>
-              <button
-                type="button"
-                onClick={() => goToPage(totalPages)}
-                className="min-w-[44px] min-h-[44px] rounded-lg text-sm font-medium bg-white border border-iica-border text-gray-700 hover:bg-gray-50"
-              >
-                {totalPages}
-              </button>
-            </>
-          )}
+        <nav aria-label="Paginación" className="flex flex-col items-center gap-2 pt-3">
+          <p className="text-sm text-gray-600" aria-live="polite" aria-atomic="true">
+            Página {currentPage} de {totalPages}
+          </p>
+          <div className="flex justify-center gap-1">
+            {visiblePages.map((page) => {
+              return (
+                <button
+                  key={page}
+                  type="button"
+                  onClick={() => goToPage(page)}
+                  aria-current={page === currentPage ? 'page' : undefined}
+                  className={`min-w-[44px] min-h-[44px] rounded-lg text-sm font-medium transition-colors ${
+                    page === currentPage
+                      ? 'bg-green-600 text-white font-medium rounded'
+                      : 'bg-white border border-iica-border text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  {page}
+                </button>
+              );
+            })}
+            {visibleEnd < totalPages && (
+              <>
+                <span className="px-2 self-center text-gray-400">…</span>
+                <button
+                  type="button"
+                  onClick={() => goToPage(totalPages)}
+                  className="min-w-[44px] min-h-[44px] rounded-lg text-sm font-medium bg-white border border-iica-border text-gray-700 hover:bg-gray-50"
+                >
+                  {totalPages}
+                </button>
+              </>
+            )}
+          </div>
         </nav>
       )}
     </div>

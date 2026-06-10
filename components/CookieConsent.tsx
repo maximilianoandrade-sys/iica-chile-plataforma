@@ -3,23 +3,47 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
+export interface CookieConsentValue {
+    essential: boolean;
+    analytics: boolean;
+    timestamp: number;
+}
+
+const STORAGE_KEY = 'iica_cookie_consent';
+
+function getStoredConsent(): CookieConsentValue | null {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw) as CookieConsentValue;
+        if (typeof parsed.essential !== 'boolean' || typeof parsed.analytics !== 'boolean' || typeof parsed.timestamp !== 'number') {
+            return null;
+        }
+        return parsed;
+    } catch {
+        return null;
+    }
+}
+
 export default function CookieConsent() {
     const [showConsent, setShowConsent] = useState(false);
 
     useEffect(() => {
-        const consent = localStorage.getItem('iica_cookie_consent');
+        const consent = getStoredConsent();
         if (!consent) {
             setShowConsent(true);
         }
     }, []);
 
     const acceptCookies = () => {
-        localStorage.setItem('iica_cookie_consent', 'accepted');
+        const value: CookieConsentValue = { essential: true, analytics: true, timestamp: Date.now() };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
         setShowConsent(false);
     };
 
     const rejectOptionalCookies = () => {
-        localStorage.setItem('iica_cookie_consent', 'rejected');
+        const value: CookieConsentValue = { essential: true, analytics: false, timestamp: Date.now() };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
         setShowConsent(false);
     };
 
@@ -37,7 +61,7 @@ export default function CookieConsent() {
                 <div className="flex items-center gap-4 flex-shrink-0">
                     <button
                         onClick={rejectOptionalCookies}
-                        className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors min-h-[44px]"
+                        className="px-4 py-2 text-gray-200 hover:text-white underline text-sm font-medium transition-colors min-h-[44px]"
                     >
                         Rechazar opcionales
                     </button>

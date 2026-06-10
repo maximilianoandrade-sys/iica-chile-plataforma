@@ -8,7 +8,10 @@ import ProjectListContainer from "@/components/ProjectListContainer";
 import SkeletonProjectList from "@/components/SkeletonProjectList";
 import Newsletter from "@/components/Newsletter";
 import FuentesOficiales from "@/components/FuentesOficiales";
+import PipelineStatus from "@/components/PipelineStatus";
+import { FilterChips } from "@/components/FilterChips";
 import { getProjectFilterSnapshot, getProjects } from "@/lib/data";
+import { buildFilterCounts } from "@/lib/search/filtering";
 import prisma from "@/lib/prisma";
 
 // Estrategia híbrida: home cacheada con ISR y búsqueda/filtros dinámicos por query.
@@ -127,19 +130,23 @@ export default async function DashboardPage({
 
   const lastUpdatedAt = latestSourceRun?.lastRunAt?.toISOString() ?? null;
 
+  // Build filter facet counts for the search bar (rendered outside main for immediate sticky)
+  const filterCounts = buildFilterCounts(filterSnapshot);
+
   return (
     <>
-      <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 selection:bg-blue-100">
+      <div id="inicio" className="min-h-screen flex flex-col bg-white dark:bg-gray-900 selection:bg-blue-100">
 
-        {/* 1. Header */}
-        <div id="inicio">
-          <Header urgentCount={urgentes} />
-        </div>
+        {/* 1. Header — sticky top-0 (direct flex child for proper sticky) */}
+        <Header urgentCount={urgentes} />
 
-        {/* 2. Hero */}
+        {/* 2. Search/Filter bar — sticky below header (direct flex child) */}
+        <FilterChips filterCounts={filterCounts} />
+
+        {/* 3. Hero */}
         <HeroSection stats={heroStats} />
 
-        {/* 3. Stats Section */}
+        {/* 4. Stats Section */}
         <StatsSection
           total={heroStats.total}
           abiertas={heroStats.abiertas}
@@ -147,11 +154,12 @@ export default async function DashboardPage({
           urgentes={heroStats.urgentes}
         />
 
-        <main className="flex-grow container mx-auto max-w-[1200px] px-4 py-10">
+        <main id="convocatorias" className="flex-grow container mx-auto max-w-[1200px] px-4 pb-10 scroll-mt-40">
           <div className="flex flex-col gap-10">
 
-            {/* Buscador y Proyectos — sección principal */}
-            <section id="convocatorias" className="scroll-mt-24">
+            {/* Proyectos — sección principal */}
+            <section>
+              {lastUpdatedAt && <div className="mb-4"><PipelineStatus lastUpdated={lastUpdatedAt} /></div>}
               <Suspense fallback={<SkeletonProjectList />}>
                 <ProjectListContainer searchParams={resolvedSearchParams} />
               </Suspense>

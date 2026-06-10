@@ -1,12 +1,14 @@
 ﻿'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { X, Filter, ChevronDown } from 'lucide-react';
 import { type FilterCounts } from '@/lib/data';
 import { getLogger } from '@/lib/utils/logger';
 import { sortRegionLabels } from '@/lib/search/region-normalization';
+import { normalizeInstitution } from '@/lib/search/filtering';
 import AdvancedSearch from '@/components/AdvancedSearch';
+import InstitutionFilter from '@/components/InstitutionFilter';
 
 const logger = getLogger('FilterChips');
 
@@ -174,6 +176,24 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
   });
   const categoryOptions = Object.keys(filterCounts.categoria ?? {}).sort((a, b) => a.localeCompare(b, 'es'));
 
+  // Deduplicated institution list for InstitutionFilter (merges aliases)
+  const deduplicatedInstitutions = useMemo(() => {
+    const merged: Record<string, number> = {};
+    for (const [rawName, count] of Object.entries(filterCounts.institucion)) {
+      const canonical = normalizeInstitution(rawName);
+      merged[canonical] = (merged[canonical] || 0) + count;
+    }
+    return Object.entries(merged)
+      .map(([name, count]) => ({ name, count }))
+      .filter((inst) => {
+        if (coverage === 'all') return true;
+        const detected = classifyInstitutionCoverage(inst.name);
+        if (detected === 'unknown') return true;
+        return detected === coverage;
+      })
+      .sort((a, b) => a.name.localeCompare(b.name, 'es'));
+  }, [filterCounts.institucion, coverage]);
+
   const selectedInstitutions = parseCsvParam(currentInstitution);
   const selectedRegions = parseCsvParam(currentRegion);
   const selectedCategories = parseCsvParam(currentCategory);
@@ -249,7 +269,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
   logger.debug('Render FilterChips', { hasActiveFilters });
 
   return (
-    <section className="bg-white dark:bg-gray-900 border-b border-[var(--iica-border)] dark:border-gray-700 sticky top-16 z-40">
+    <section className="bg-white dark:bg-gray-900 border-b border-[var(--iica-border)] dark:border-gray-700 sticky top-[var(--header-height)] z-40">
       <div className="container mx-auto max-w-[1200px] px-4 py-5">
 
         {/* ── Search bar avanzado ── */}
@@ -384,25 +404,13 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
           <div className="pt-4 border-t border-[var(--iica-border)] dark:border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
 
-              {/* InstituciÃ³n multi-select */}
-              <div className="space-y-1.5">
-                <label htmlFor="filter-institution-adv" className="text-xs font-bold uppercase tracking-wide text-gray-500">
-                  InstituciÃ³n
-                </label>
-                <select
-                  id="filter-institution-adv"
-                  multiple
-                  aria-label="Instituciones mÃºltiple"
-                  value={selectedInstitutions}
-                  onChange={(e) => {
-                    const next = Array.from(e.target.selectedOptions).map((o) => o.value);
-                    updateParams({ institution: stringifyCsv(next) });
-                  }}
-                  className="w-full rounded-lg border border-[var(--iica-border)] bg-white dark:bg-gray-800 dark:text-white px-3 py-2 text-sm text-gray-800 min-h-[88px] focus:outline-none focus:ring-2 focus:ring-[var(--iica-yellow)]"
-                  disabled={filteredInstitutionOptions.length === 0}
-                >
-                  {filteredInstitutionOptions.map((i) => <option key={i} value={i}>{i}</option>)}
-                </select>
+              {/* Institución searchable filter */}
+              <div>
+                <InstitutionFilter
+                  institutions={deduplicatedInstitutions}
+                  selected={selectedInstitutions}
+                  onChange={(next) => updateParams({ institution: stringifyCsv(next) })}
+                />
               </div>
 
               {/* Sectores */}

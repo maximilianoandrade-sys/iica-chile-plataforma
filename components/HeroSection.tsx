@@ -49,17 +49,17 @@ export function HeroSection({ stats }: HeroSectionProps) {
                         Compare convocatorias vigentes, revise requisitos clave y acceda a fuentes oficiales en minutos.
                     </p>
 
-                    <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex flex-col sm:flex-row gap-4 items-start">
                         <Link
                             href="#convocatorias"
-                            className="flex items-center justify-center gap-2 bg-[var(--iica-secondary)] hover:bg-green-700 text-white font-bold py-3.5 px-8 rounded-xl shadow-xl transition-all hover:-translate-y-0.5 group min-h-[48px]"
+                            className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold text-lg py-4 px-8 rounded-lg shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl group min-h-[48px]"
                         >
                             Explorar Oportunidades
-                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </Link>
                         <Link
                             href="/about"
-                            className="flex items-center justify-center gap-2 border-2 border-white/60 text-white hover:bg-white/10 font-semibold py-3.5 px-8 rounded-xl transition-all min-h-[48px]"
+                            className="flex items-center justify-center gap-2 border-2 border-white/80 text-white hover:bg-white/10 font-medium py-3 px-6 rounded-lg transition-all min-h-[44px]"
                         >
                             Conocer IICA Chile
                         </Link>

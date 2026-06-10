@@ -18,6 +18,8 @@
     --iica-text-on-light: #1a1a1a;
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
+    /* Layout heights */
+    --header-height: 93px;
     /* Radar 2026 Design System */
     --primary: #003366;
     --primary-foreground: #ffffff;

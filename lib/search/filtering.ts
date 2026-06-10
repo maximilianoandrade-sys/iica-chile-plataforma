@@ -6,6 +6,56 @@ import {
   sortRegionLabels,
 } from '@/lib/search/region-normalization';
 
+// ---------------------------------------------------------------------------
+// Institution normalization — deduplicates aliases into canonical short names
+// ---------------------------------------------------------------------------
+
+export const INSTITUTION_ALIASES: Record<string, string> = {
+  'Comisión Nacional de Riego (CNR)': 'CNR',
+  'Comisión Nacional de Riego': 'CNR',
+  'Instituto de Desarrollo Agropecuario (INDAP)': 'INDAP',
+  'Instituto de Desarrollo Agropecuario': 'INDAP',
+  'Fundación para la Innovación Agraria (FIA)': 'FIA',
+  'Fundación para la Innovación Agraria': 'FIA',
+  'Corporación de Fomento de la Producción (CORFO)': 'CORFO',
+  'Corporación de Fomento de la Producción': 'CORFO',
+  'Fondo Regional de Tecnología Agropecuaria (FONTAGRO)': 'FONTAGRO',
+  'Fondo Regional de Tecnología Agropecuaria': 'FONTAGRO',
+  'Organización de las Naciones Unidas para la Alimentación y la Agricultura (FAO)': 'FAO',
+  'Organización de las Naciones Unidas para la Alimentación y la Agricultura': 'FAO',
+  'Servicio Agrícola y Ganadero (SAG)': 'SAG',
+  'Servicio Agrícola y Ganadero': 'SAG',
+  'Banco Interamericano de Desarrollo (BID)': 'BID',
+  'Banco Interamericano de Desarrollo': 'BID',
+  'Inter-American Development Bank': 'BID',
+  'IADB': 'BID',
+  'Programa de las Naciones Unidas para el Desarrollo (PNUD)': 'PNUD',
+  'Programa de las Naciones Unidas para el Desarrollo': 'PNUD',
+  'Fondo Internacional de Desarrollo Agrícola (FIDA)': 'FIDA',
+  'Fondo Internacional de Desarrollo Agrícola': 'FIDA',
+  'IFAD': 'FIDA',
+  'International Fund for Agricultural Development': 'FIDA',
+  'WORLD BANK': 'Banco Mundial',
+  'World Bank': 'Banco Mundial',
+  'Ministerio de Agricultura (MINAGRI)': 'MINAGRI',
+  'Ministerio de Agricultura': 'MINAGRI',
+};
+
+/**
+ * Normalizes an institution name using the aliases map.
+ * Returns the canonical short name if found, otherwise the original trimmed name.
+ */
+export function normalizeInstitution(name: string): string {
+  const trimmed = name.trim();
+  if (INSTITUTION_ALIASES[trimmed]) return INSTITUTION_ALIASES[trimmed];
+  // Check case-insensitive match
+  const upper = trimmed.toUpperCase();
+  for (const [alias, canonical] of Object.entries(INSTITUTION_ALIASES)) {
+    if (alias.toUpperCase() === upper) return canonical;
+  }
+  return trimmed;
+}
+
 export interface SearchProjectLike {
   institucion: string;
   monto: number;
