@@ -30,6 +30,7 @@ export interface HybridSearchOptions {
   maxAmount?: number;
   postedFrom?: string;
   postedTill?: string;
+  closingWithinDays?: number;
   includeUnverified?: boolean;
   sort?: SortMode;
   offset?: number;
@@ -53,6 +54,7 @@ interface HybridQueryFilters {
   maxAmount: number;
   postedFrom?: string;
   postedTill?: string;
+  closingWithinDays?: number;
   includeUnverified: boolean;
 }
 
@@ -72,6 +74,7 @@ function buildHybridFilters(opts: HybridSearchOptions): HybridQueryFilters {
     maxAmount: Number.isFinite(opts.maxAmount) ? (opts.maxAmount as number) : Number.POSITIVE_INFINITY,
     postedFrom: opts.postedFrom,
     postedTill: opts.postedTill,
+    closingWithinDays: opts.closingWithinDays,
     includeUnverified: opts.includeUnverified !== false,
   };
 }
@@ -127,6 +130,15 @@ function buildProjectWhere(filters: HybridQueryFilters): Prisma.ProjectWhereInpu
     if (Object.keys(createdAtFilter).length > 0) {
       where.createdAt = createdAtFilter;
     }
+  }
+
+  if (filters.closingWithinDays != null && filters.closingWithinDays > 0) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const maxDate = new Date(today);
+    maxDate.setDate(maxDate.getDate() + filters.closingWithinDays);
+    maxDate.setHours(23, 59, 59, 999);
+    where.fecha_cierre = { gte: today, lte: maxDate };
   }
 
   return where;

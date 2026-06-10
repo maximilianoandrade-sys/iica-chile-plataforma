@@ -37,6 +37,7 @@ export default async function ProjectListContainer({
     const maxAmountRaw = typeof searchParams.maxAmount === 'string' ? Number.parseInt(searchParams.maxAmount, 10) : Infinity;
     const minAmount = Number.isFinite(minAmountRaw) ? minAmountRaw : 0;
     const maxAmount = Number.isFinite(maxAmountRaw) ? maxAmountRaw : Infinity;
+    const closingWithinDays = typeof searchParams.urgencia === 'string' ? Number.parseInt(searchParams.urgencia, 10) : undefined;
 
     const searchResult = await hybridSearch({
         query: searchTerm,
@@ -49,6 +50,7 @@ export default async function ProjectListContainer({
         maxAmount,
         postedFrom,
         postedTill,
+        closingWithinDays: closingWithinDays && Number.isFinite(closingWithinDays) && closingWithinDays > 0 ? closingWithinDays : undefined,
         sort: sort === 'amount_desc' || sort === 'newest' || sort === 'relevance' ? sort : 'date_asc',
         offset: (currentPage - 1) * DEFAULT_PAGE_SIZE,
         limit: DEFAULT_PAGE_SIZE,
