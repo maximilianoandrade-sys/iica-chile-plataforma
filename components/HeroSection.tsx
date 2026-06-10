@@ -25,7 +25,7 @@ export function HeroSection({ stats }: HeroSectionProps) {
             <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                 style={{
-                    backgroundImage: 'url(https://d2xsxph8kpxj0f.cloudfront.net/310519663573662923/MMCKhgYRiHjKpTZNSuJJdS/hero-agricultural-landscape-7xaiHJXWKsB3BA6QjUhFga.webp)',
+                    backgroundImage: 'url(https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2832&auto=format&fit=crop)',
                 }}
                 role="img"
                 aria-label="Paisaje agricola chileno"

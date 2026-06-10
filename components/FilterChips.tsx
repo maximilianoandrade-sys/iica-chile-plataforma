@@ -92,7 +92,6 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const [advancedOpen, setAdvancedOpen] = useState(false);
-  const [mainFiltersVisible, setMainFiltersVisible] = useState(true);
 
   const currentQ = searchParams.get('q') ?? '';
   const estadoParam = searchParams.get('estado');
@@ -264,288 +263,148 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
   logger.debug('Render FilterChips', { hasActiveFilters });
 
   return (
-    <div className="rounded-2xl border border-iica-border bg-white p-4 shadow-sm space-y-4">
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+    <div className="bg-white dark:bg-gray-800 rounded-2xl border border-[var(--iica-border)] shadow-sm overflow-hidden">
+      {/* Search bar */}
+      <div className="px-5 pt-5 pb-4">
+        <div className="relative">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
           <input
             type="search"
             role="searchbox"
             aria-label="Buscar oportunidades"
-            placeholder="Buscar por palabra clave"
+            placeholder="Buscar por palabra clave, institución o región..."
             value={searchInput}
-            onChange={(event) => setSearchInput(event.target.value)}
-            className="w-full rounded-xl border border-iica-border bg-white py-3 pl-10 pr-10 text-sm text-gray-900 placeholder:text-gray-400 min-h-[44px] focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none"
+            onChange={(e) => setSearchInput(e.target.value)}
+            className="w-full rounded-xl border border-[var(--iica-border)] bg-white dark:bg-gray-700 dark:text-white py-3 pl-12 pr-10 text-sm text-gray-900 placeholder:text-gray-400 min-h-[48px] focus-visible:ring-2 focus-visible:ring-[var(--iica-yellow)] focus:outline-none focus:border-[var(--iica-blue)] transition-colors"
           />
-          {searchInput ? (
+          {searchInput && (
             <button
               type="button"
-              onClick={() => {
-                setSearchInput('');
-                updateParams({ q: '' }, 'replace');
-              }}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              onClick={() => { setSearchInput(''); updateParams({ q: '' }, 'replace'); }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1 rounded"
               aria-label="Limpiar búsqueda"
             >
               <X className="h-4 w-4" />
             </button>
-          ) : null}
+          )}
         </div>
-
-        <label className="flex items-center gap-2 text-sm text-gray-700">
-          <span className="whitespace-nowrap">Buscar en</span>
-          <select
-            aria-label="Buscar en"
-            value="all"
-            disabled
-            className="rounded-xl border border-iica-border bg-gray-50 px-3 py-2 text-sm text-gray-600 min-h-[44px]"
-          >
-            <option value="all">Todas las oportunidades</option>
-          </select>
-        </label>
       </div>
 
-      <div className="flex items-center justify-between">
-        <p className="text-xs font-semibold uppercase tracking-wide text-gray-600">Filtros principales</p>
-        <button
-          type="button"
-          onClick={() => setMainFiltersVisible((prev) => !prev)}
-          className="text-xs font-medium text-iica-blue hover:underline min-h-[44px]"
-          aria-expanded={mainFiltersVisible}
-        >
-          {mainFiltersVisible ? 'Ocultar filtros' : 'Mostrar filtros'}
-        </button>
-      </div>
-
-      {mainFiltersVisible ? (
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4" role="group" aria-label="Filtros principales">
-        <Field label="Cobertura" htmlFor="filter-coverage">
+      {/* Main filters grid */}
+      <div className="px-5 pb-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
+        {/* Cobertura */}
+        <div className="space-y-1">
+          <label htmlFor="filter-coverage" className="text-xs font-bold uppercase tracking-wide text-gray-500">
+            Cobertura
+          </label>
           <select
             id="filter-coverage"
             aria-label="Cobertura"
             value={coverage}
-            onChange={(event) => {
-              const value = event.target.value;
+            onChange={(e) => {
+              const value = e.target.value;
               if (value === 'internacional') {
                 updateParams({ ambito: 'Internacional', relevanceMode: 'all', region: '' });
-                return;
-              }
-              if (value === 'chile') {
+              } else if (value === 'chile') {
                 updateParams({ ambito: '', relevanceMode: 'chile_strict' });
-                return;
+              } else {
+                updateParams({ ambito: '', relevanceMode: 'all' });
               }
-              updateParams({ ambito: '', relevanceMode: 'all' });
             }}
-            className="w-full rounded-xl border border-iica-border bg-white px-3 py-2.5 text-sm text-gray-800 min-h-[44px] focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none"
+            className="w-full rounded-xl border border-[var(--iica-border)] bg-white dark:bg-gray-700 dark:text-white px-3 py-2.5 text-sm text-gray-800 min-h-[44px] focus-visible:ring-2 focus-visible:ring-[var(--iica-yellow)] focus:outline-none appearance-none cursor-pointer"
           >
             <option value="all">Chile + Internacional</option>
             <option value="chile">Solo Chile</option>
             <option value="internacional">Solo Internacional</option>
           </select>
-        </Field>
+        </div>
 
-        <Field label="Estado" htmlFor="filter-estado">
-            <select
-              id="filter-estado"
-              aria-label="Estado"
-              value={currentEstado}
-              onChange={(event) => updateParams({ estado: event.target.value })}
-            className="w-full rounded-xl border border-iica-border bg-white px-3 py-2.5 text-sm text-gray-800 min-h-[44px] focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none"
+        {/* Estado */}
+        <div className="space-y-1">
+          <label htmlFor="filter-estado" className="text-xs font-bold uppercase tracking-wide text-gray-500">
+            Estado
+          </label>
+          <select
+            id="filter-estado"
+            aria-label="Estado"
+            value={currentEstado}
+            onChange={(e) => updateParams({ estado: e.target.value })}
+            className="w-full rounded-xl border border-[var(--iica-border)] bg-white dark:bg-gray-700 dark:text-white px-3 py-2.5 text-sm text-gray-800 min-h-[44px] focus-visible:ring-2 focus-visible:ring-[var(--iica-yellow)] focus:outline-none appearance-none cursor-pointer"
           >
             <option value="all">Todos los estados</option>
             <option value="Abierta">Abiertas</option>
             <option value="Próxima">Próximas</option>
             <option value="Cerrada">Cerradas</option>
           </select>
-        </Field>
-
-        <Field label="Ubicaciones" htmlFor="filter-region">
-            <select
-              id="filter-region"
-              multiple
-              aria-label="Ubicaciones"
-              value={selectedRegions}
-            onChange={(event) => {
-              const next = Array.from(event.target.selectedOptions).map((option) => option.value);
-              updateParams({ region: stringifyCsv(next) });
-            }}
-            className="w-full rounded-xl border border-iica-border bg-white px-3 py-2 text-sm text-gray-800 min-h-[88px] focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none"
-            disabled={filteredRegionOptions.length === 0}
-          >
-            {filteredRegionOptions.length === 0 ? (
-              <option value="">Sin opciones para esta cobertura</option>
-            ) : (
-              filteredRegionOptions.map((region) => (
-                <option key={region} value={region}>
-                  {region}
-                </option>
-              ))
-            )}
-          </select>
-        </Field>
-
-        <Field label="Instituciones" htmlFor="filter-institution">
-          <select
-            id="filter-institution"
-            multiple
-            aria-label="Instituciones"
-            value={selectedInstitutions}
-            onChange={(event) => {
-              const next = Array.from(event.target.selectedOptions).map((option) => option.value);
-              updateParams({ institution: stringifyCsv(next) });
-            }}
-            className="w-full rounded-xl border border-iica-border bg-white px-3 py-2 text-sm text-gray-800 min-h-[88px] focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none"
-            disabled={filteredInstitutionOptions.length === 0}
-          >
-            {filteredInstitutionOptions.length === 0 ? (
-              <option value="">Sin opciones para esta cobertura</option>
-            ) : (
-              filteredInstitutionOptions.map((institution) => (
-                <option key={institution} value={institution}>
-                  {institution}
-                </option>
-              ))
-            )}
-          </select>
-        </Field>
-
-        <Field label="Sectores" htmlFor="filter-category">
-          <select
-            id="filter-category"
-            multiple
-            aria-label="Sectores"
-            value={selectedCategories}
-            onChange={(event) => {
-              const next = Array.from(event.target.selectedOptions).map((option) => option.value);
-              updateParams({ category: stringifyCsv(next) });
-            }}
-            className="w-full rounded-xl border border-iica-border bg-white px-3 py-2 text-sm text-gray-800 min-h-[88px] focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none"
-            disabled={categoryOptions.length === 0}
-          >
-            {categoryOptions.length === 0 ? (
-              <option value="">Disponible próximamente</option>
-            ) : (
-              categoryOptions.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))
-            )}
-          </select>
-        </Field>
-      </div>
-      ) : null}
-
-      <div className="flex flex-wrap items-center gap-3 border-t border-iica-border pt-3">
-        <button
-          type="button"
-          onClick={() => setAdvancedOpen((prev) => !prev)}
-          className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2.5 text-sm min-h-[44px] transition-colors ${
-            advancedOpen ? 'border-iica-blue bg-iica-blue/5 text-iica-blue' : 'border-iica-border bg-white text-gray-700 hover:bg-gray-50'
-          }`}
-          aria-expanded={advancedOpen}
-        >
-          <SlidersHorizontal className="h-4 w-4" />
-          Filtros avanzados
-        </button>
-
-        <button
-          type="button"
-          onClick={clearAll}
-          className="inline-flex items-center rounded-full border border-iica-border bg-white px-4 py-2.5 text-sm text-gray-700 min-h-[44px] hover:bg-gray-50"
-        >
-          Restablecer todo
-        </button>
-
-        <span className="text-sm text-gray-500" aria-live="polite">
-          {activeFilterCount} filtro{activeFilterCount === 1 ? '' : 's'} activo{activeFilterCount === 1 ? '' : 's'}
-        </span>
-      </div>
-
-      {advancedOpen ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 border-t border-iica-border pt-3">
-          <Field label="Ámbito" htmlFor="filter-ambito">
-            <select
-              id="filter-ambito"
-              aria-label="Ámbito"
-              value={currentAmbito}
-              onChange={(event) => updateParams({ ambito: event.target.value })}
-              className="w-full rounded-xl border border-iica-border bg-white px-3 py-2.5 text-sm text-gray-800 min-h-[44px] focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none"
-            >
-              <option value="">Todos</option>
-              <option value="Nacional">Nacional</option>
-              <option value="Regional">Regional</option>
-              <option value="Internacional">Internacional</option>
-            </select>
-          </Field>
-
-          <Field label="Publicado desde" htmlFor="filter-posted-from">
-            <input
-              id="filter-posted-from"
-              type="date"
-              aria-label="Publicado desde"
-              value={currentPostedFrom}
-              onChange={(event) => {
-                const normalized = normalizeDateRange(event.target.value, currentPostedTill);
-                updateParams(normalized, 'replace');
-              }}
-              className="w-full rounded-xl border border-iica-border bg-white px-3 py-2.5 text-sm text-gray-800 min-h-[44px] focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none"
-            />
-          </Field>
-
-          <Field label="Publicado hasta" htmlFor="filter-posted-till">
-            <input
-              id="filter-posted-till"
-              type="date"
-              aria-label="Publicado hasta"
-              value={currentPostedTill}
-              onChange={(event) => {
-                const normalized = normalizeDateRange(currentPostedFrom, event.target.value);
-                updateParams(normalized, 'replace');
-              }}
-              className="w-full rounded-xl border border-iica-border bg-white px-3 py-2.5 text-sm text-gray-800 min-h-[44px] focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none"
-            />
-          </Field>
-
-          <Field label="Presupuesto (CLP)" htmlFor="filter-min-amount">
-            <div className="flex items-center gap-2">
-              <input
-                id="filter-min-amount"
-                type="number"
-                inputMode="numeric"
-                min={0}
-                aria-label="Monto mínimo"
-                placeholder="Min"
-                value={currentMinAmount}
-                onChange={(event) => {
-                  const normalized = normalizeAmountRange(event.target.value, currentMaxAmount);
-                  updateParams(normalized, 'replace');
-                }}
-                className="w-full rounded-xl border border-iica-border bg-white px-3 py-2.5 text-sm text-gray-800 min-h-[44px] focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none"
-              />
-
-              <span className="text-gray-400" aria-hidden="true">-</span>
-
-              <input
-                type="number"
-                inputMode="numeric"
-                min={0}
-                aria-label="Monto máximo"
-                placeholder="Max"
-                value={currentMaxAmount}
-                onChange={(event) => {
-                  const normalized = normalizeAmountRange(currentMinAmount, event.target.value);
-                  updateParams(normalized, 'replace');
-                }}
-                className="w-full rounded-xl border border-iica-border bg-white px-3 py-2.5 text-sm text-gray-800 min-h-[44px] focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none"
-              />
-            </div>
-          </Field>
         </div>
-      ) : null}
 
-      {hasActiveFilters ? (
-        <div className="flex flex-wrap items-center gap-2" aria-live="polite">
+        {/* Región (single-select principal) */}
+        <div className="space-y-1">
+          <label htmlFor="filter-region-main" className="text-xs font-bold uppercase tracking-wide text-gray-500">
+            Región
+          </label>
+          <select
+            id="filter-region-main"
+            aria-label="Región"
+            value={selectedRegions[0] ?? ''}
+            onChange={(e) => updateParams({ region: e.target.value })}
+            className="w-full rounded-xl border border-[var(--iica-border)] bg-white dark:bg-gray-700 dark:text-white px-3 py-2.5 text-sm text-gray-800 min-h-[44px] focus-visible:ring-2 focus-visible:ring-[var(--iica-yellow)] focus:outline-none appearance-none cursor-pointer"
+          >
+            <option value="">Todas las regiones</option>
+            {filteredRegionOptions.map((r) => (
+              <option key={r} value={r}>{r}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Institución (single-select principal) */}
+        <div className="space-y-1">
+          <label htmlFor="filter-inst-main" className="text-xs font-bold uppercase tracking-wide text-gray-500">
+            Institución
+          </label>
+          <select
+            id="filter-inst-main"
+            aria-label="Institución"
+            value={selectedInstitutions[0] ?? ''}
+            onChange={(e) => updateParams({ institution: e.target.value })}
+            className="w-full rounded-xl border border-[var(--iica-border)] bg-white dark:bg-gray-700 dark:text-white px-3 py-2.5 text-sm text-gray-800 min-h-[44px] focus-visible:ring-2 focus-visible:ring-[var(--iica-yellow)] focus:outline-none appearance-none cursor-pointer"
+          >
+            <option value="">Todas las instituciones</option>
+            {filteredInstitutionOptions.map((i) => (
+              <option key={i} value={i}>{i}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Botón avanzados */}
+        <div className="space-y-1">
+          <span className="text-xs font-bold uppercase tracking-wide text-transparent select-none">
+            &nbsp;
+          </span>
+          <button
+            type="button"
+            onClick={() => setAdvancedOpen((prev) => !prev)}
+            aria-expanded={advancedOpen}
+            className={`w-full flex items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-semibold min-h-[44px] transition-colors ${
+              advancedOpen
+                ? 'border-[var(--iica-blue)] bg-[var(--iica-blue)]/5 text-[var(--iica-blue)]'
+                : 'border-[var(--iica-border)] bg-white dark:bg-gray-700 dark:text-gray-200 text-gray-700 hover:bg-gray-50'
+            }`}
+          >
+            <SlidersHorizontal className="h-4 w-4" />
+            Avanzados
+            {activeFilterCount > 0 && (
+              <span className="ml-auto bg-[var(--iica-navy)] text-white text-[10px] font-black rounded-full w-5 h-5 flex items-center justify-center">
+                {activeFilterCount}
+              </span>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Active filter chips + reset */}
+      {hasActiveFilters && (
+        <div className="px-5 pb-4 flex flex-wrap items-center gap-2 border-t border-[var(--iica-border)] pt-3">
           {activeFilterChips.map((chip) => (
             <button
               key={chip.key}
@@ -555,20 +414,167 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
                 updateParams(chip.clear);
               }}
               aria-label={`Quitar filtro ${chip.label}`}
-              className="inline-flex items-center gap-1 rounded-full border border-iica-border bg-white px-3 py-1 text-xs text-gray-700 hover:bg-gray-50"
+              className="inline-flex items-center gap-1.5 rounded-full border border-[var(--iica-border)] bg-[var(--iica-blue)]/5 px-3 py-1 text-xs font-medium text-[var(--iica-navy)] dark:text-blue-300 hover:bg-[var(--iica-blue)]/10"
             >
               <span>{chip.label}</span>
-              <X className="h-3.5 w-3.5" />
+              <X className="h-3 w-3" />
             </button>
           ))}
+          <button
+            type="button"
+            onClick={clearAll}
+            className="inline-flex items-center gap-1 rounded-full border border-[var(--iica-border)] bg-white dark:bg-gray-700 px-3 py-1 text-xs font-medium text-gray-500 hover:bg-gray-50 ml-auto"
+          >
+            <X className="h-3 w-3" />
+            Limpiar filtros
+          </button>
         </div>
-      ) : null}
+      )}
 
-      {hasActiveFilters ? (
-        <div className="text-xs text-gray-500">
-          Los resultados se actualizan automáticamente mientras ajusta filtros.
+      {/* Advanced filters panel */}
+      {advancedOpen && (
+        <div className="px-5 pb-5 pt-3 border-t border-[var(--iica-border)] bg-gray-50 dark:bg-gray-700/30 space-y-4">
+          <p className="text-xs font-black uppercase tracking-widest text-gray-400">Filtros avanzados</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Sectores multi-select */}
+            <Field label="Sectores" htmlFor="filter-category">
+              <select
+                id="filter-category"
+                multiple
+                aria-label="Sectores"
+                value={selectedCategories}
+                onChange={(e) => {
+                  const next = Array.from(e.target.selectedOptions).map((o) => o.value);
+                  updateParams({ category: stringifyCsv(next) });
+                }}
+                className="w-full rounded-xl border border-[var(--iica-border)] bg-white dark:bg-gray-700 dark:text-white px-3 py-2 text-sm text-gray-800 min-h-[88px] focus-visible:ring-2 focus-visible:ring-[var(--iica-yellow)] focus:outline-none"
+                disabled={categoryOptions.length === 0}
+              >
+                {categoryOptions.length === 0 ? (
+                  <option value="">Disponible próximamente</option>
+                ) : (
+                  categoryOptions.map((c) => <option key={c} value={c}>{c}</option>)
+                )}
+              </select>
+            </Field>
+
+            {/* Ámbito */}
+            <Field label="Ámbito" htmlFor="filter-ambito">
+              <select
+                id="filter-ambito"
+                aria-label="Ámbito"
+                value={currentAmbito}
+                onChange={(e) => updateParams({ ambito: e.target.value })}
+                className="w-full rounded-xl border border-[var(--iica-border)] bg-white dark:bg-gray-700 dark:text-white px-3 py-2.5 text-sm text-gray-800 min-h-[44px] focus-visible:ring-2 focus-visible:ring-[var(--iica-yellow)] focus:outline-none appearance-none"
+              >
+                <option value="">Todos</option>
+                <option value="Nacional">Nacional</option>
+                <option value="Regional">Regional</option>
+                <option value="Internacional">Internacional</option>
+              </select>
+            </Field>
+
+            {/* Fechas */}
+            <Field label="Publicado desde" htmlFor="filter-posted-from">
+              <input
+                id="filter-posted-from"
+                type="date"
+                aria-label="Publicado desde"
+                value={currentPostedFrom}
+                onChange={(e) => {
+                  const normalized = normalizeDateRange(e.target.value, currentPostedTill);
+                  updateParams(normalized, 'replace');
+                }}
+                className="w-full rounded-xl border border-[var(--iica-border)] bg-white dark:bg-gray-700 dark:text-white px-3 py-2.5 text-sm text-gray-800 min-h-[44px] focus-visible:ring-2 focus-visible:ring-[var(--iica-yellow)] focus:outline-none"
+              />
+            </Field>
+
+            <Field label="Publicado hasta" htmlFor="filter-posted-till">
+              <input
+                id="filter-posted-till"
+                type="date"
+                aria-label="Publicado hasta"
+                value={currentPostedTill}
+                onChange={(e) => {
+                  const normalized = normalizeDateRange(currentPostedFrom, e.target.value);
+                  updateParams(normalized, 'replace');
+                }}
+                className="w-full rounded-xl border border-[var(--iica-border)] bg-white dark:bg-gray-700 dark:text-white px-3 py-2.5 text-sm text-gray-800 min-h-[44px] focus-visible:ring-2 focus-visible:ring-[var(--iica-yellow)] focus:outline-none"
+              />
+            </Field>
+
+            {/* Presupuesto */}
+            <Field label="Presupuesto (CLP)" htmlFor="filter-min-amount">
+              <div className="flex items-center gap-2">
+                <input
+                  id="filter-min-amount"
+                  type="number"
+                  inputMode="numeric"
+                  min={0}
+                  aria-label="Monto mínimo"
+                  placeholder="Mín"
+                  value={currentMinAmount}
+                  onChange={(e) => {
+                    const normalized = normalizeAmountRange(e.target.value, currentMaxAmount);
+                    updateParams(normalized, 'replace');
+                  }}
+                  className="w-full rounded-xl border border-[var(--iica-border)] bg-white dark:bg-gray-700 dark:text-white px-3 py-2.5 text-sm text-gray-800 min-h-[44px] focus-visible:ring-2 focus-visible:ring-[var(--iica-yellow)] focus:outline-none"
+                />
+                <span className="text-gray-400 shrink-0" aria-hidden>—</span>
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  min={0}
+                  aria-label="Monto máximo"
+                  placeholder="Máx"
+                  value={currentMaxAmount}
+                  onChange={(e) => {
+                    const normalized = normalizeAmountRange(currentMinAmount, e.target.value);
+                    updateParams(normalized, 'replace');
+                  }}
+                  className="w-full rounded-xl border border-[var(--iica-border)] bg-white dark:bg-gray-700 dark:text-white px-3 py-2.5 text-sm text-gray-800 min-h-[44px] focus-visible:ring-2 focus-visible:ring-[var(--iica-yellow)] focus:outline-none"
+                />
+              </div>
+            </Field>
+
+            {/* Regiones multi-select en avanzados */}
+            <Field label="Regiones (múltiple)" htmlFor="filter-region-adv">
+              <select
+                id="filter-region-adv"
+                multiple
+                aria-label="Regiones múltiple"
+                value={selectedRegions}
+                onChange={(e) => {
+                  const next = Array.from(e.target.selectedOptions).map((o) => o.value);
+                  updateParams({ region: stringifyCsv(next) });
+                }}
+                className="w-full rounded-xl border border-[var(--iica-border)] bg-white dark:bg-gray-700 dark:text-white px-3 py-2 text-sm text-gray-800 min-h-[88px] focus-visible:ring-2 focus-visible:ring-[var(--iica-yellow)] focus:outline-none"
+                disabled={filteredRegionOptions.length === 0}
+              >
+                {filteredRegionOptions.map((r) => <option key={r} value={r}>{r}</option>)}
+              </select>
+            </Field>
+
+            {/* Instituciones multi-select en avanzados */}
+            <Field label="Instituciones (múltiple)" htmlFor="filter-institution-adv">
+              <select
+                id="filter-institution-adv"
+                multiple
+                aria-label="Instituciones múltiple"
+                value={selectedInstitutions}
+                onChange={(e) => {
+                  const next = Array.from(e.target.selectedOptions).map((o) => o.value);
+                  updateParams({ institution: stringifyCsv(next) });
+                }}
+                className="w-full rounded-xl border border-[var(--iica-border)] bg-white dark:bg-gray-700 dark:text-white px-3 py-2 text-sm text-gray-800 min-h-[88px] focus-visible:ring-2 focus-visible:ring-[var(--iica-yellow)] focus:outline-none"
+                disabled={filteredInstitutionOptions.length === 0}
+              >
+                {filteredInstitutionOptions.map((i) => <option key={i} value={i}>{i}</option>)}
+              </select>
+            </Field>
+          </div>
         </div>
-      ) : null}
+      )}
     </div>
   );
 }
