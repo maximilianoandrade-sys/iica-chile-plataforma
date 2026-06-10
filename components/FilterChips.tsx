@@ -2,10 +2,11 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { Search, X, Filter, ChevronDown } from 'lucide-react';
+import { X, Filter, ChevronDown } from 'lucide-react';
 import { type FilterCounts } from '@/lib/data';
 import { getLogger } from '@/lib/utils/logger';
 import { sortRegionLabels } from '@/lib/search/region-normalization';
+import AdvancedSearch from '@/components/AdvancedSearch';
 
 const logger = getLogger('FilterChips');
 
@@ -104,12 +105,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
   const currentAmbito = searchParams.get('ambito') ?? '';
   const currentPostedFrom = searchParams.get('postedFrom') ?? '';
   const currentPostedTill = searchParams.get('postedTill') ?? '';
-  const [searchInput, setSearchInput] = useState(currentQ);
   const coverage = currentAmbito === 'Internacional' ? 'internacional' : currentAmbito ? 'chile' : 'all';
-
-  useEffect(() => {
-    setSearchInput(currentQ);
-  }, [currentQ]);
 
   useEffect(() => {
     const hasAdvancedFilters = Boolean(currentAmbito || currentMinAmount || currentMaxAmount || currentPostedFrom || currentPostedTill);
@@ -158,16 +154,6 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
     },
     []
   );
-
-  useEffect(() => {
-    const debounceMs = 350;
-    const timer = setTimeout(() => {
-      if (searchInput === currentQ) return;
-      updateParams({ q: searchInput }, 'replace');
-    }, debounceMs);
-
-    return () => clearTimeout(timer);
-  }, [searchInput, currentQ, updateParams]);
 
   function clearAll() {
     router.push(pathname, { scroll: false });
@@ -266,33 +252,17 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
     <section className="bg-white dark:bg-gray-900 border-b border-[var(--iica-border)] dark:border-gray-700 sticky top-16 z-40">
       <div className="container mx-auto max-w-[1200px] px-4 py-5">
 
-        {/* â”€â”€ Search bar â”€â”€ */}
+        {/* ── Search bar avanzado ── */}
         <div className="mb-5">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-            <input
-              type="search"
-              role="searchbox"
-              aria-label="Buscar oportunidades"
-              placeholder="Buscar por palabra clave, instituciÃ³n o regiÃ³n..."
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              className="w-full rounded-lg border border-[var(--iica-border)] bg-white dark:bg-gray-800 dark:text-white py-3 pl-12 pr-10 text-sm text-gray-900 placeholder:text-gray-400 min-h-[48px] focus:outline-none focus:ring-2 focus:ring-[var(--iica-blue)] focus:border-transparent transition-colors"
-            />
-            {searchInput && (
-              <button
-                type="button"
-                onClick={() => { setSearchInput(''); updateParams({ q: '' }, 'replace'); }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded text-gray-400 hover:text-gray-600"
-                aria-label="Limpiar bÃºsqueda"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
-          </div>
+          <AdvancedSearch
+            value={currentQ}
+            onChange={(v) => updateParams({ q: v }, 'replace')}
+            onClear={() => updateParams({ q: '' }, 'replace')}
+            filterCounts={filterCounts}
+          />
         </div>
 
-        {/* â”€â”€ Main filters (5 cols = ZIP layout) â”€â”€ */}
+        {/* ── Main filters (5 cols = ZIP layout) ── */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 mb-4">
 
           {/* 1. Cobertura */}
@@ -388,7 +358,6 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
                   key={chip.key}
                   type="button"
                   onClick={() => {
-                    if (chip.clear.q === '') setSearchInput('');
                     updateParams(chip.clear);
                   }}
                   aria-label={`Quitar filtro ${chip.label}`}
