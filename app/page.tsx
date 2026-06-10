@@ -8,7 +8,10 @@ import ProjectListContainer from "@/components/ProjectListContainer";
 import SkeletonProjectList from "@/components/SkeletonProjectList";
 import Newsletter from "@/components/Newsletter";
 import FuentesOficiales from "@/components/FuentesOficiales";
+import PipelineStatus from "@/components/PipelineStatus";
+import { FilterChips } from "@/components/FilterChips";
 import { getProjectFilterSnapshot, getProjects } from "@/lib/data";
+import { buildFilterCounts } from "@/lib/search/filtering";
 import prisma from "@/lib/prisma";
 
 // Estrategia híbrida: home cacheada con ISR y búsqueda/filtros dinámicos por query.
@@ -127,6 +130,9 @@ export default async function DashboardPage({
 
   const lastUpdatedAt = latestSourceRun?.lastRunAt?.toISOString() ?? null;
 
+  // Build filter facet counts for the search bar (rendered outside main for immediate sticky)
+  const filterCounts = buildFilterCounts(filterSnapshot);
+
   return (
     <>
       <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 selection:bg-blue-100">
@@ -147,18 +153,24 @@ export default async function DashboardPage({
           urgentes={heroStats.urgentes}
         />
 
-        <main className="flex-grow container mx-auto max-w-[1200px] px-4 py-10">
-          <div className="flex flex-col gap-10">
+        {/* 4. Search/Filter bar — outside main for immediate sticky behavior */}
+        <div id="convocatorias" className="scroll-mt-24 flex-grow flex flex-col">
+          <FilterChips filterCounts={filterCounts} />
 
-            {/* Buscador y Proyectos — sección principal */}
-            <section id="convocatorias" className="scroll-mt-24">
-              <Suspense fallback={<SkeletonProjectList />}>
-                <ProjectListContainer searchParams={resolvedSearchParams} />
-              </Suspense>
-            </section>
+          <main className="flex-grow container mx-auto max-w-[1200px] px-4 pb-10">
+            <div className="flex flex-col gap-10">
 
-          </div>
-        </main>
+              {/* Proyectos — sección principal */}
+              <section>
+                {lastUpdatedAt && <div className="mb-4"><PipelineStatus lastUpdated={lastUpdatedAt} /></div>}
+                <Suspense fallback={<SkeletonProjectList />}>
+                  <ProjectListContainer searchParams={resolvedSearchParams} />
+                </Suspense>
+              </section>
+
+            </div>
+          </main>
+        </div>
 
         {/* Fuentes Oficiales */}
         <div className="scroll-mt-20">

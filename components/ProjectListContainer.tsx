@@ -3,9 +3,6 @@ import ProjectList from "@/components/ProjectList";
 import JsonLd from "@/components/JsonLd";
 import { hybridSearch } from '@/lib/searchHybrid';
 import DatabaseError from "@/components/DatabaseError";
-import {
-    buildFilterCounts,
-} from "@/lib/search/filtering";
 
 const DEFAULT_PAGE_SIZE = 16;
 
@@ -41,7 +38,6 @@ export default async function ProjectListContainer({
     const minAmount = Number.isFinite(minAmountRaw) ? minAmountRaw : 0;
     const maxAmount = Number.isFinite(maxAmountRaw) ? maxAmountRaw : Infinity;
 
-    const filterCounts = buildFilterCounts(filterProjects);
     const searchResult = await hybridSearch({
         query: searchTerm,
         ambito: selectedAmbito || 'all',
@@ -93,7 +89,6 @@ export default async function ProjectListContainer({
             <JsonLd projects={filteredProjects} />
             <ProjectList
                 projects={filteredProjects}
-                filterCounts={filterCounts}
                 totalCount={resultTotal}
                 pageSize={DEFAULT_PAGE_SIZE}
                 activeFilterLabels={activeFilterLabels}
