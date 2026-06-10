@@ -135,59 +135,52 @@ export default async function DashboardPage({
 
   return (
     <>
-      <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 selection:bg-blue-100">
+      <div id="inicio" className="min-h-screen flex flex-col bg-white dark:bg-gray-900 selection:bg-blue-100">
 
-        {/* 1. Header */}
-        <div id="inicio">
-          <Header urgentCount={urgentes} />
+        {/* 1. Header — sticky top-0 (direct flex child for proper sticky) */}
+        <Header urgentCount={urgentes} />
+
+        {/* 2. Search/Filter bar — sticky below header (direct flex child) */}
+        <FilterChips filterCounts={filterCounts} />
+
+        {/* 3. Hero */}
+        <HeroSection stats={heroStats} />
+
+        {/* 4. Stats Section */}
+        <StatsSection
+          total={heroStats.total}
+          abiertas={heroStats.abiertas}
+          internacionales={heroStats.internacionales}
+          urgentes={heroStats.urgentes}
+        />
+
+        <main id="convocatorias" className="flex-grow container mx-auto max-w-[1200px] px-4 pb-10 scroll-mt-40">
+          <div className="flex flex-col gap-10">
+
+            {/* Proyectos — sección principal */}
+            <section>
+              {lastUpdatedAt && <div className="mb-4"><PipelineStatus lastUpdated={lastUpdatedAt} /></div>}
+              <Suspense fallback={<SkeletonProjectList />}>
+                <ProjectListContainer searchParams={resolvedSearchParams} />
+              </Suspense>
+            </section>
+
+          </div>
+        </main>
+
+        {/* Fuentes Oficiales */}
+        <div className="scroll-mt-20">
+          <FuentesOficiales institutionCounts={institutionCounts} lastUpdatedAt={lastUpdatedAt} totalActiveOpportunities={heroStats.total} />
         </div>
 
-        {/* 2. Search/Filter + rest of page — wrapper gives sticky its scrolling runway */}
-        <div id="convocatorias" className="scroll-mt-24 flex-grow flex flex-col">
+        {/* Newsletter */}
+        <section id="newsletter" className="container mx-auto max-w-[1200px] px-4 py-8">
+          <Newsletter />
+        </section>
 
-          {/* Search bar — sticky immediately after header, never moves */}
-          <FilterChips filterCounts={filterCounts} />
-
-          {/* 3. Hero */}
-          <HeroSection stats={heroStats} />
-
-          {/* 4. Stats Section */}
-          <StatsSection
-            total={heroStats.total}
-            abiertas={heroStats.abiertas}
-            internacionales={heroStats.internacionales}
-            urgentes={heroStats.urgentes}
-          />
-
-          <main className="flex-grow container mx-auto max-w-[1200px] px-4 pb-10">
-            <div className="flex flex-col gap-10">
-
-              {/* Proyectos — sección principal */}
-              <section>
-                {lastUpdatedAt && <div className="mb-4"><PipelineStatus lastUpdated={lastUpdatedAt} /></div>}
-                <Suspense fallback={<SkeletonProjectList />}>
-                  <ProjectListContainer searchParams={resolvedSearchParams} />
-                </Suspense>
-              </section>
-
-            </div>
-          </main>
-
-          {/* Fuentes Oficiales */}
-          <div className="scroll-mt-20">
-            <FuentesOficiales institutionCounts={institutionCounts} lastUpdatedAt={lastUpdatedAt} totalActiveOpportunities={heroStats.total} />
-          </div>
-
-          {/* Newsletter */}
-          <section id="newsletter" className="container mx-auto max-w-[1200px] px-4 py-8">
-            <Newsletter />
-          </section>
-
-          {/* Footer */}
-          <div id="contacto">
-            <Footer />
-          </div>
-
+        {/* Footer */}
+        <div id="contacto">
+          <Footer />
         </div>
 
       </div>

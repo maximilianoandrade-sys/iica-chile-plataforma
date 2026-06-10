@@ -269,7 +269,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
   logger.debug('Render FilterChips', { hasActiveFilters });
 
   return (
-    <section className="bg-white dark:bg-gray-900 border-b border-[var(--iica-border)] dark:border-gray-700 sticky top-16 z-40">
+    <section className="bg-white dark:bg-gray-900 border-b border-[var(--iica-border)] dark:border-gray-700 sticky top-[var(--header-height)] z-40">
       <div className="container mx-auto max-w-[1200px] px-4 py-5">
 
         {/* ── Search bar avanzado ── */}
