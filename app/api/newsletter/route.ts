@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getLogger } from '@/lib/utils/logger';
 import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
@@ -14,7 +14,11 @@ export async function POST(req: NextRequest) {
 
     try {
         const body = await req.json();
-        const { email, name } = body;
+        const { email, name, consent } = body;
+
+        if (!consent) {
+            return createErrorResponse('Se requiere consentimiento para la suscripción', 400);
+        }
 
         if (!email || typeof email !== 'string') {
             return createErrorResponse('Email es requerido', 400);

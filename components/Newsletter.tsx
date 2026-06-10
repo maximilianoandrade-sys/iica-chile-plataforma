@@ -9,6 +9,7 @@ const logger = getLogger('Newsletter');
 export default function Newsletter() {
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
+    const [consent, setConsent] = useState(false);
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
     const validateEmail = (value: string) => {
@@ -26,7 +27,7 @@ export default function Newsletter() {
             const res = await fetch('/api/newsletter', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email }),
+                body: JSON.stringify({ email, consent: true }),
             });
 
             if (!res.ok) {
@@ -36,6 +37,7 @@ export default function Newsletter() {
 
             setStatus('success');
             setEmail('');
+            setConsent(false);
         } catch (error) {
             logger.error('Newsletter subscription failed', { error });
             setStatus('error');
@@ -65,12 +67,12 @@ export default function Newsletter() {
 
                 <div className="w-full md:w-auto max-w-md">
                     {status === 'success' ? (
-                        <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-6 text-center animate-in fade-in zoom-in">
+                        <div role="alert" className="bg-green-500/20 border border-green-500/30 rounded-lg p-6 text-center animate-in fade-in zoom-in">
                             <div className="flex justify-center mb-2">
                                 <CheckCircle className="h-8 w-8 text-green-400 gap-2" />
                             </div>
                             <h3 className="font-bold text-lg">¡Suscripción Exitosa!</h3>
-                            <p className="text-sm text-blue-100">Pronto recibirás nuestras novedades.</p>
+                            <p className="text-sm text-blue-100">¡Listo! Revisa tu correo para confirmar la suscripción.</p>
                             <button
                                 onClick={() => setStatus('idle')}
                                 className="mt-3 text-xs text-green-300 underline hover:text-green-200"
@@ -96,12 +98,34 @@ export default function Newsletter() {
                                 <p role="alert" aria-live="polite" className="text-red-300 text-sm -mt-1">{emailError}</p>
                             )}
                             {status === 'error' && (
-                                <p role="alert" aria-live="polite" className="text-red-300 text-sm mt-1">Hubo un error. Intente de nuevo.</p>
+                                <p role="alert" aria-live="polite" className="text-red-300 text-sm mt-1">No pudimos registrar tu suscripción. Inténtalo de nuevo.</p>
                             )}
+
+                            <div className="flex items-start gap-2">
+                                <input
+                                    id="consent-newsletter"
+                                    type="checkbox"
+                                    checked={consent}
+                                    onChange={(e) => setConsent(e.target.checked)}
+                                    disabled={status === 'loading'}
+                                    className="mt-1 h-4 w-4 rounded border-gray-300 accent-[var(--iica-secondary)]"
+                                />
+                                <label htmlFor="consent-newsletter" className="text-xs text-blue-100">
+                                    Acepto recibir información según la{' '}
+                                    <a
+                                        href="/legal/privacidad"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="underline hover:text-white"
+                                    >
+                                        política de privacidad
+                                    </a>
+                                </label>
+                            </div>
 
                             <button
                                 type="submit"
-                                disabled={status === 'loading'}
+                                disabled={status === 'loading' || !consent || !email}
                                 className="w-full min-h-[44px] bg-[var(--iica-secondary)] hover:bg-[#008f45] text-white font-bold py-3 px-6 rounded-lg transition-all shadow-lg flex items-center justify-center gap-2 group disabled:opacity-70 mt-1"
                             >
                                 {status === 'loading' ? (
