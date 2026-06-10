@@ -156,15 +156,14 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
   const selectedCategories = parseCsvParam(currentCategory);
 
   // Build active filter chips for display
+  // Quick-chip filters (urgencia, ambito chile/Internacional) don't need tags — the chip highlight IS the indicator
   const activeFilterChips: Array<{ key: string; label: string; clear: Record<string, string> }> = [];
 
   if (currentQ.trim()) {
-    activeFilterChips.push({ key: `q:${currentQ.trim()}`, label: `Búsqueda: "${currentQ.trim()}"`, clear: { q: '' } });
+    activeFilterChips.push({ key: `q:${currentQ.trim()}`, label: `"${currentQ.trim()}"`, clear: { q: '' } });
   }
-  if (currentUrgencia) {
-    activeFilterChips.push({ key: 'urgencia', label: `Urgentes ≤${currentUrgencia}d`, clear: { urgencia: '' } });
-  }
-  if (currentAmbito) {
+  // Only show ambito tag for values NOT covered by quick chips (Nacional, Regional from advanced panel)
+  if (currentAmbito && currentAmbito !== 'Internacional' && currentAmbito !== 'chile') {
     activeFilterChips.push({ key: `ambito:${currentAmbito}`, label: `Ámbito: ${currentAmbito}`, clear: { ambito: '' } });
   }
   selectedInstitutions.forEach((institution) => {
@@ -214,9 +213,9 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
   // Determine which quick chip is active
   const isUrgentActive = currentUrgencia === '7';
   const isInternacionalActive = currentAmbito === 'Internacional' && !isUrgentActive;
-  const isChileActive = coverage === 'chile' && !currentAmbito && !isUrgentActive;
-  const isAbiertaActive = currentEstado === 'Abierta' && !isUrgentActive && !isInternacionalActive && !isChileActive && estadoParam !== 'all';
-  const isTodosActive = estadoParam === 'all' && !isUrgentActive && !isInternacionalActive;
+  const isChileActive = currentAmbito === 'chile' && !isUrgentActive;
+  const isAbiertaActive = currentEstado === 'Abierta' && !isUrgentActive && !isInternacionalActive && !isChileActive && estadoParam !== 'all' && !currentAmbito;
+  const isTodosActive = estadoParam === 'all' && !isUrgentActive && !isInternacionalActive && !isChileActive;
 
   return (
     <section className="bg-white dark:bg-gray-900 border-b border-[var(--iica-border)] dark:border-gray-700 sticky top-[var(--header-height)] z-40">
@@ -265,7 +264,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
           </QuickChip>
           <QuickChip
             active={isChileActive}
-            onClick={() => updateParams({ ambito: '', urgencia: '', estado: 'Abierta', relevanceMode: 'chile_strict' })}
+            onClick={() => updateParams({ ambito: 'chile', urgencia: '', estado: 'Abierta' })}
           >
             <span className="w-2 h-2 rounded-full bg-emerald-600" />
             Solo Chile

@@ -83,7 +83,12 @@ function buildProjectWhere(filters: HybridQueryFilters): Prisma.ProjectWhereInpu
   const where: Prisma.ProjectWhereInput = {};
 
   if (filters.ambito && filters.ambito !== 'all') {
-    where.ambito = filters.ambito;
+    if (filters.ambito === 'chile') {
+      // "Solo Chile" = todo menos Internacional
+      where.ambito = { not: 'Internacional' };
+    } else {
+      where.ambito = filters.ambito;
+    }
   }
 
   if (!filters.includeUnverified) {
