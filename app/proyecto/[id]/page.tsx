@@ -6,7 +6,6 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import Link from 'next/link';
 import { ExternalLink, ArrowLeft, Calendar, CheckCircle, Info, MapPin, Users, DollarSign } from 'lucide-react';
-import { ActionButton } from '@/components/ActionButton';
 
 const getCachedProjects = cache(getProjects);
 const SITE_URL = 'https://iica-chile-plataforma.vercel.app';
@@ -76,14 +75,18 @@ export default async function ProyectoDetallePage({ params }: Props) {
     // sobre el numérico, que asume CLP y pierde la unidad real.
     const montoDisplay = displayMonto(project);
     const montoFormatted = montoDisplay === 'Ver bases' ? 'Consultar institución' : montoDisplay;
-    const hasRegions = Array.isArray(project.regiones) && project.regiones.length > 0;
-    const hasBeneficiaries = Array.isArray(project.beneficiarios) && project.beneficiarios.length > 0;
+    const EN_VALIDACION = 'en validación editorial';
+    const isEmptyField = (val: string | undefined | null) => !val || val.trim() === '' || val.trim().toLowerCase() === EN_VALIDACION;
+    const meaningfulRegiones = (project.regiones ?? []).filter(r => !isEmptyField(r));
+    const meaningfulBeneficiarios = (project.beneficiarios ?? []).filter(b => !isEmptyField(b));
+    const hasRegions = meaningfulRegiones.length > 0;
+    const hasBeneficiaries = meaningfulBeneficiarios.length > 0;
     const regionPreview = hasRegions
-        ? (project.regiones?.includes('Todas') ? 'Todo Chile' : project.regiones?.slice(0, 2).join(', '))
-        : 'Ver regiones elegibles en las bases oficiales';
+        ? (meaningfulRegiones.includes('Todas') ? 'Todo Chile' : meaningfulRegiones.slice(0, 2).join(', '))
+        : null;
     const beneficiariesPreview = hasBeneficiaries
-        ? project.beneficiarios?.slice(0, 2).join(', ')
-        : 'Ver beneficiarios elegibles en las bases oficiales';
+        ? meaningfulBeneficiarios.slice(0, 2).join(', ')
+        : null;
     const projectUrl = `${SITE_URL}/proyecto/${id}`;
     const deadlineIso = new Date(project.fecha_cierre).toISOString();
 
@@ -182,7 +185,7 @@ export default async function ProyectoDetallePage({ params }: Props) {
                     </div>
 
                     {/* Métricas clave */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-gray-100 border-b border-gray-100">
+                    <div className={`grid grid-cols-2 ${hasRegions || hasBeneficiaries ? 'md:grid-cols-4' : 'md:grid-cols-2'} divide-x divide-y md:divide-y-0 divide-gray-100 border-b border-gray-100`}>
                         <div className="p-5 flex flex-col gap-1">
                             <div className="flex items-center gap-1.5 text-xs font-bold text-gray-500 uppercase tracking-wide">
                                 <DollarSign className="h-3.5 w-3.5" /> Monto Máximo
@@ -197,24 +200,28 @@ export default async function ProyectoDetallePage({ params }: Props) {
                                 {closingDate.toLocaleDateString('es-CL', { day: 'numeric', month: 'long', year: 'numeric' })}
                             </div>
                         </div>
-                        <div className="p-5 flex flex-col gap-1">
-                            <div className="flex items-center gap-1.5 text-xs font-bold text-gray-500 uppercase tracking-wide">
-                                <MapPin className="h-3.5 w-3.5" /> Regiones
+                        {hasRegions && (
+                            <div className="p-5 flex flex-col gap-1">
+                                <div className="flex items-center gap-1.5 text-xs font-bold text-gray-500 uppercase tracking-wide">
+                                    <MapPin className="h-3.5 w-3.5" /> Regiones
+                                </div>
+                                <div className="font-bold text-gray-700 text-sm">
+                                    {regionPreview}
+                                    {!meaningfulRegiones.includes('Todas') && meaningfulRegiones.length > 2 && ` +${meaningfulRegiones.length - 2}`}
+                                </div>
                             </div>
-                            <div className="font-bold text-gray-700 text-sm">
-                                {regionPreview}
-                                {hasRegions && !project.regiones?.includes('Todas') && project.regiones && project.regiones.length > 2 && ` +${project.regiones.length - 2}`}
+                        )}
+                        {hasBeneficiaries && (
+                            <div className="p-5 flex flex-col gap-1">
+                                <div className="flex items-center gap-1.5 text-xs font-bold text-gray-500 uppercase tracking-wide">
+                                    <Users className="h-3.5 w-3.5" /> Beneficiarios
+                                </div>
+                                <div className="font-bold text-gray-700 text-sm">
+                                    {beneficiariesPreview}
+                                    {meaningfulBeneficiarios.length > 2 && ` +${meaningfulBeneficiarios.length - 2}`}
+                                </div>
                             </div>
-                        </div>
-                        <div className="p-5 flex flex-col gap-1">
-                            <div className="flex items-center gap-1.5 text-xs font-bold text-gray-500 uppercase tracking-wide">
-                                <Users className="h-3.5 w-3.5" /> Beneficiarios
-                            </div>
-                            <div className="font-bold text-gray-700 text-sm">
-                                {beneficiariesPreview}
-                                {hasBeneficiaries && project.beneficiarios && project.beneficiarios.length > 2 && ` +${project.beneficiarios.length - 2}`}
-                            </div>
-                        </div>
+                        )}
                     </div>
 
                     {/* Contenido detallado */}
@@ -228,6 +235,17 @@ export default async function ProyectoDetallePage({ params }: Props) {
                                     Cofinanciamiento
                                 </h2>
                                 <p className="text-gray-700 font-medium">{project.resumen.cofinanciamiento}</p>
+                            </div>
+                        )}
+
+                        {/* Objetivo / Descripción */}
+                        {project.objetivo && !isEmptyField(project.objetivo) && (
+                            <div>
+                                <h2 className="font-bold text-[var(--iica-navy)] mb-3 flex items-center gap-2 text-lg">
+                                    <Info className="h-5 w-5 text-[var(--iica-blue)]" />
+                                    Descripción
+                                </h2>
+                                <p className="text-gray-700 leading-relaxed">{project.objetivo}</p>
                             </div>
                         )}
 
@@ -286,11 +304,11 @@ export default async function ProyectoDetallePage({ params }: Props) {
                         </div>
 
                         {/* Regiones completas */}
-                        {project.regiones && !project.regiones.includes('Todas') && project.regiones.length > 0 && (
+                        {hasRegions && !meaningfulRegiones.includes('Todas') && (
                             <div>
                                 <h2 className="font-bold text-[var(--iica-navy)] mb-3 text-lg">📍 Regiones Elegibles</h2>
                                 <div className="flex flex-wrap gap-2">
-                                    {project.regiones.map((region: string) => (
+                                    {meaningfulRegiones.map((region: string) => (
                                         <span key={region} className="px-3 py-1 bg-blue-50 text-[var(--iica-navy)] text-sm font-medium rounded-full border border-blue-100">
                                             {region}
                                         </span>
@@ -300,11 +318,11 @@ export default async function ProyectoDetallePage({ params }: Props) {
                         )}
 
                         {/* Beneficiarios completos */}
-                        {project.beneficiarios && project.beneficiarios.length > 0 && (
+                        {hasBeneficiaries && (
                             <div>
                                 <h2 className="font-bold text-[var(--iica-navy)] mb-3 text-lg">👥 Beneficiarios Elegibles</h2>
                                 <div className="flex flex-wrap gap-2">
-                                    {project.beneficiarios.map((ben: string) => (
+                                    {meaningfulBeneficiarios.map((ben: string) => (
                                         <span key={ben} className="px-3 py-1 bg-green-50 text-green-700 text-sm font-medium rounded-full border border-green-100">
                                             {ben}
                                         </span>
@@ -314,18 +332,26 @@ export default async function ProyectoDetallePage({ params }: Props) {
                         )}
 
                         {/* CTA Principal */}
-                        <div className="border-t border-gray-100 pt-6 flex flex-col sm:flex-row gap-3 items-center justify-between">
-                            <div className="text-sm text-gray-500">
-                                ⚠️ Verifica siempre las fechas y requisitos en el sitio oficial antes de postular.
-                            </div>
-                            {!isClosed && (
-                                <ActionButton
-                                    url={project.url_bases}
-                                    date={project.fecha_cierre}
-                                    projectName={project.nombre}
-                                    institution={project.institucion}
-                                />
+                        <div className="border-t border-gray-100 pt-6 space-y-4">
+                            {project.url_bases && project.url_bases.trim() !== '' ? (
+                                <a
+                                    href={project.url_bases}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label={`Ver bases y postular a ${project.nombre}`}
+                                    className="flex items-center justify-center gap-2 w-full sm:w-auto sm:inline-flex px-6 py-3 min-h-[44px] bg-green-600 hover:bg-green-700 text-white font-bold text-lg rounded-xl shadow-md transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                                >
+                                    <ExternalLink className="h-5 w-5" />
+                                    Ver Bases / Postular
+                                </a>
+                            ) : (
+                                <p className="text-gray-500 italic">
+                                    Consulte directamente con {project.institucion} para más información.
+                                </p>
                             )}
+                            <p className="text-sm text-gray-500">
+                                Verifica siempre las fechas y requisitos en el sitio oficial antes de postular.
+                            </p>
                         </div>
                     </div>
                 </div>
