@@ -142,20 +142,22 @@ export default async function DashboardPage({
           <Header urgentCount={urgentes} />
         </div>
 
-        {/* 2. Hero */}
-        <HeroSection stats={heroStats} />
-
-        {/* 3. Stats Section */}
-        <StatsSection
-          total={heroStats.total}
-          abiertas={heroStats.abiertas}
-          internacionales={heroStats.internacionales}
-          urgentes={heroStats.urgentes}
-        />
-
-        {/* 4. Search/Filter bar — outside main for immediate sticky behavior */}
+        {/* 2. Search/Filter + rest of page — wrapper gives sticky its scrolling runway */}
         <div id="convocatorias" className="scroll-mt-24 flex-grow flex flex-col">
+
+          {/* Search bar — sticky immediately after header, never moves */}
           <FilterChips filterCounts={filterCounts} />
+
+          {/* 3. Hero */}
+          <HeroSection stats={heroStats} />
+
+          {/* 4. Stats Section */}
+          <StatsSection
+            total={heroStats.total}
+            abiertas={heroStats.abiertas}
+            internacionales={heroStats.internacionales}
+            urgentes={heroStats.urgentes}
+          />
 
           <main className="flex-grow container mx-auto max-w-[1200px] px-4 pb-10">
             <div className="flex flex-col gap-10">
@@ -170,21 +172,22 @@ export default async function DashboardPage({
 
             </div>
           </main>
-        </div>
 
-        {/* Fuentes Oficiales */}
-        <div className="scroll-mt-20">
-          <FuentesOficiales institutionCounts={institutionCounts} lastUpdatedAt={lastUpdatedAt} totalActiveOpportunities={heroStats.total} />
-        </div>
+          {/* Fuentes Oficiales */}
+          <div className="scroll-mt-20">
+            <FuentesOficiales institutionCounts={institutionCounts} lastUpdatedAt={lastUpdatedAt} totalActiveOpportunities={heroStats.total} />
+          </div>
 
-        {/* Newsletter */}
-        <section id="newsletter" className="container mx-auto max-w-[1200px] px-4 py-8">
-          <Newsletter />
-        </section>
+          {/* Newsletter */}
+          <section id="newsletter" className="container mx-auto max-w-[1200px] px-4 py-8">
+            <Newsletter />
+          </section>
 
-        {/* Footer */}
-        <div id="contacto">
-          <Footer />
+          {/* Footer */}
+          <div id="contacto">
+            <Footer />
+          </div>
+
         </div>
 
       </div>
