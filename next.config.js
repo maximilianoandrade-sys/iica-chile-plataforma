@@ -64,7 +64,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "img-src 'self' data: https: blob:",
               "font-src 'self' https://fonts.gstatic.com",
-              "connect-src 'self' https://www.google-analytics.com https://*.gob.cl https://*.corfo.cl https://*.indap.cl",
+              "connect-src 'self' https://www.google-analytics.com https://*.gob.cl https://*.corfo.cl https://*.indap.cl https://images.unsplash.com",
               "frame-src 'self' https://www.youtube.com",
               "object-src 'none'",
               "base-uri 'self'",
