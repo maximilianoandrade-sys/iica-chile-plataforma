@@ -14,7 +14,16 @@ const nextConfig = {
     return config;
   },
 
-  // Configuración de Paths
+  // Redirect rutas eliminadas
+  async redirects() {
+    return [
+      {
+        source: '/maletin',
+        destination: '/',
+        permanent: true,
+      },
+    ];
+  },
 
   // Headers de seguridad mejorados
   async headers() {

@@ -73,7 +73,7 @@ export function Footer() {
                             <li><Link href="/#inicio" className="text-white/70 hover:text-white transition-colors">Inicio</Link></li>
                             <li><Link href="/#convocatorias" className="text-white/70 hover:text-white transition-colors">Ver Oportunidades</Link></li>
                             <li><Link href="/#fuentes" className="text-white/70 hover:text-white transition-colors">Fuentes Internacionales</Link></li>
-                            <li><Link href="/maletin" className="text-white/70 hover:text-white transition-colors">Recursos de Referencia</Link></li>
+
                             <li><Link href="/about" className="text-white/70 hover:text-white transition-colors">Sobre IICA Chile</Link></li>
                         </ul>
                     </div>
