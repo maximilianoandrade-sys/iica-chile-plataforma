@@ -7,7 +7,7 @@ on:
 
 jobs:
   ingest:
-    name: Ejecutar scrapers (FIA, FIA licitaciones, CORFO, INDAP, FONTAGRO, CNR, IICA)
+    name: Ejecutar scrapers Capa A (19 fuentes — nacionales + internacionales)
     runs-on: ubuntu-latest
     timeout-minutes: 10
 

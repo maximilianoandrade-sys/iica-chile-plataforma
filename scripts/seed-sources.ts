@@ -16,6 +16,12 @@ const SOURCES = [
   { slug: "ifad-opportunities", name: "IFAD Project Procurement Opportunities", type: "scraper",      homepageUrl: "https://www.ifad.org/en/project-procurement/opportunities" },
   { slug: "ted-notices",      name: "TED Public Notices",                      type: "scraper",       homepageUrl: "https://ted.europa.eu/en/search/expert-search" },
   { slug: "devex-funding",    name: "Devex Funding Search",                    type: "scraper",       homepageUrl: "https://www.devex.com/funding/r?filter%5Bplaces%5D%5B%5D=Chile&filter%5Bstatuses%5D%5B%5D=forecast&filter%5Bstatuses%5D%5B%5D=open&sorting%5Border%5D=desc&sorting%5Bfield%5D=updated_at" },
+  { slug: "iki",              name: "IKI — International Climate Initiative",    type: "scraper",       homepageUrl: "https://www.international-climate-initiative.com/en/funding/" },
+  { slug: "gafsp",            name: "GAFSP — Global Agriculture and Food Security Program", type: "scraper", homepageUrl: "https://www.gafspfund.org/" },
+  { slug: "aecid",            name: "AECID — Cooperación Española",             type: "scraper",       homepageUrl: "https://www.aecid.es/en/tenders" },
+  { slug: "gcf",              name: "GCF — Green Climate Fund",                  type: "scraper",       homepageUrl: "https://www.greenclimate.fund/news/announcements" },
+  { slug: "afd",              name: "AFD — Agence Française de Développement",   type: "scraper",       homepageUrl: "https://www.afd.fr/fr/appels-a-projets" },
+  { slug: "fundsforngos",     name: "FundsforNGOs (Aggregator)",                 type: "scraper",       homepageUrl: "https://www2.fundsforngos.org/" },
 ];
 
 async function main() {

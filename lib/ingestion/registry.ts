@@ -12,6 +12,12 @@ import { devexFundingScraper } from "./scrapers/devex-funding";
 import { worldBankScraper } from "./scrapers/world-bank";
 import { ungmScraper } from "./scrapers/ungm";
 import { gefScraper } from "./scrapers/gef";
+import { ikiScraper } from "./scrapers/iki";
+import { gafspScraper } from "./scrapers/gafsp";
+import { aecidScraper } from "./scrapers/aecid";
+import { gcfScraper } from "./scrapers/gcf";
+import { afdScraper } from "./scrapers/afd";
+import { fundsforNgosScraper } from "./scrapers/fundsforngos";
 
 /**
  * Scrapers de Capa A (determinísticos, corren diario vía GitHub Actions).
@@ -39,6 +45,12 @@ export const scrapers: Scraper[] = [
   worldBankScraper,
   ungmScraper,
   gefScraper,
+  ikiScraper,
+  gafspScraper,
+  aecidScraper,
+  gcfScraper,
+  afdScraper,
+  fundsforNgosScraper,
 ];
 
 /**
