@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
 import { Footer } from "@/components/Footer";
+import StatsSection from "@/components/StatsSection";
 import ProjectListContainer from "@/components/ProjectListContainer";
 import SkeletonProjectList from "@/components/SkeletonProjectList";
 import Newsletter from "@/components/Newsletter";
@@ -128,25 +129,33 @@ export default async function DashboardPage({
 
   return (
     <>
-      <div className="min-h-screen flex flex-col bg-[#f4f7f9] selection:bg-blue-100 italic-none">
+      <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 selection:bg-blue-100">
 
-        {/* 1. Header con Hero */}
+        {/* 1. Header */}
         <div id="inicio">
           <Header urgentCount={urgentes} />
-          <HeroSection stats={heroStats} />
         </div>
 
-        <main className="flex-grow container mx-auto max-w-[1200px] px-4 py-8 -mt-12 relative z-20">
+        {/* 2. Hero */}
+        <HeroSection stats={heroStats} />
+
+        {/* 3. Stats Section */}
+        <StatsSection
+          total={heroStats.total}
+          abiertas={heroStats.abiertas}
+          internacionales={heroStats.internacionales}
+          urgentes={heroStats.urgentes}
+        />
+
+        <main className="flex-grow container mx-auto max-w-[1200px] px-4 py-10">
           <div className="flex flex-col gap-10">
 
             {/* Buscador y Proyectos — sección principal */}
-            <section id="convocatorias" className="scroll-mt-28">
+            <section id="convocatorias" className="scroll-mt-24">
               <Suspense fallback={<SkeletonProjectList />}>
                 <ProjectListContainer searchParams={resolvedSearchParams} />
               </Suspense>
             </section>
-
-
 
           </div>
         </main>

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Outfit } from 'next/font/google'
+import { Poppins } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { ToastProvider } from '@/components/ui/ToastProvider'
@@ -9,7 +9,11 @@ import OfflineIndicator from '@/components/OfflineIndicator';
 import PushNotificationManager from '@/components/PushNotificationManager';
 import ScrollToTop from '@/components/ScrollToTop';
 
-const outfit = Outfit({ subsets: ['latin'] })
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  display: 'swap',
+})
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://iica-chile-plataforma.vercel.app'
 
 const organizationJsonLd = {
@@ -150,7 +154,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es" dir="ltr" className={`${outfit.className} scroll-smooth`}>
+    <html lang="es" dir="ltr" className={`${poppins.className} scroll-smooth`}>
       <head>
         {/* DNS Prefetch */}
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />

@@ -5,6 +5,7 @@
 
 @layer base {
   :root {
+    /* IICA Brand Tokens (legados) */
     --iica-navy: #003366;
     --iica-blue: #005CB9;
     --iica-cyan: #00AEEF;
@@ -17,6 +18,21 @@
     --iica-text-on-light: #1a1a1a;
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
+    /* Radar 2026 Design System */
+    --primary: #003366;
+    --primary-foreground: #ffffff;
+    --secondary: #2D7A4A;
+    --secondary-foreground: #ffffff;
+    --accent: #D4AF37;
+    --accent-foreground: #003366;
+    --muted: #E8EAED;
+    --muted-foreground: #666666;
+    --card-bg: #F8F9FA;
+    --card-foreground: #1A1A1A;
+    --destructive: #E74C3C;
+    --destructive-foreground: #ffffff;
+    --rd-border: #E0E0E0;
+    --radius: 0.5rem;
   }
 
   .dark {
@@ -32,6 +48,18 @@
     --iica-text-on-light: #f8fafc;
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
+    /* Radar 2026 Dark */
+    --primary: #4A9EFF;
+    --primary-foreground: #0F1419;
+    --secondary: #4FD4A0;
+    --secondary-foreground: #0F1419;
+    --accent: #FFD700;
+    --accent-foreground: #0F1419;
+    --muted: #2A3A4A;
+    --muted-foreground: #A0A0A0;
+    --card-bg: #1A2332;
+    --card-foreground: #ffffff;
+    --rd-border: rgba(255,255,255,0.1);
   }
 
   body {
