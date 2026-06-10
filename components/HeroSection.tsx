@@ -21,17 +21,17 @@ export function HeroSection({ stats }: HeroSectionProps) {
     const urgentes = stats?.urgentes ?? 0;
 
     return (
-        <section className="relative min-h-[580px] flex items-center overflow-hidden">
-            <div
-                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{
-                    backgroundImage: 'url(https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2832&auto=format&fit=crop)',
-                }}
-                role="img"
-                aria-label="Paisaje agricola chileno"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/20" />
-
+        <section
+            className="relative min-h-[580px] flex items-center overflow-hidden"
+            style={{
+                backgroundImage: [
+                    'linear-gradient(to right, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.2) 100%)',
+                    'url(https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2832&auto=format&fit=crop)',
+                ].join(', '),
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+            }}
+        >
             <div className="container mx-auto max-w-[1200px] px-4 relative z-10 py-20">
                 <div className="max-w-2xl">
                     <div className="mb-5">
@@ -52,7 +52,7 @@ export function HeroSection({ stats }: HeroSectionProps) {
                     <div className="flex flex-col sm:flex-row gap-4">
                         <Link
                             href="#convocatorias"
-                            className="flex items-center justify-center gap-2 bg-secondary hover:bg-emerald-800 text-white font-bold py-3.5 px-8 rounded-xl shadow-xl transition-all hover:-translate-y-0.5 group min-h-[48px]"
+                            className="flex items-center justify-center gap-2 bg-[var(--iica-secondary)] hover:bg-green-700 text-white font-bold py-3.5 px-8 rounded-xl shadow-xl transition-all hover:-translate-y-0.5 group min-h-[48px]"
                         >
                             Explorar Oportunidades
                             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -67,7 +67,8 @@ export function HeroSection({ stats }: HeroSectionProps) {
                 </div>
             </div>
 
-            <div className="absolute bottom-0 right-0 bg-gradient-to-l from-black/80 via-black/60 to-transparent p-8 hidden lg:block">
+            {/* Stats overlay bottom-right (desktop) */}
+            <div className="absolute bottom-0 right-0 p-8 hidden lg:block" style={{background: 'linear-gradient(to left, rgba(0,0,0,0.75) 0%, transparent 100%)'}}>
                 <div className="grid grid-cols-2 gap-8">
                     <div>
                         <p className="text-[var(--iica-yellow)] text-[10px] font-black uppercase tracking-widest">Total</p>
@@ -82,10 +83,11 @@ export function HeroSection({ stats }: HeroSectionProps) {
                 </div>
             </div>
 
+            {/* Badge urgentes */}
             {urgentes > 0 && (
                 <Link
                     href="/?estado=Abierta&sort=date_asc#convocatorias"
-                    className="absolute top-6 right-6 flex items-center gap-2 bg-rose-600/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg hover:bg-rose-600 transition-colors focus-visible:ring-2 focus-visible:ring-[var(--iica-yellow)]"
+                    className="absolute top-6 right-6 flex items-center gap-2 bg-rose-600/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg hover:bg-rose-600 transition-colors"
                     aria-label={`${urgentes} oportunidades cierran pronto`}
                 >
                     <AlertTriangle className="w-4 h-4" />
