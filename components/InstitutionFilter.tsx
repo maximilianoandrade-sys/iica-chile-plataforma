@@ -41,7 +41,7 @@ export default function InstitutionFilter({
       className="space-y-2 border-0 p-0 m-0"
       aria-label="Filtrar por institución"
     >
-      <legend className="text-xs font-bold uppercase tracking-wide text-gray-500 mb-1.5">
+      <legend className="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-1.5">
         Institución
       </legend>
 
@@ -90,7 +90,7 @@ export default function InstitutionFilter({
         aria-label="Lista de instituciones"
       >
         {filteredInstitutions.length === 0 ? (
-          <p className="px-3 py-2 text-sm text-gray-500">
+          <p className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">
             No se encontraron instituciones
           </p>
         ) : (

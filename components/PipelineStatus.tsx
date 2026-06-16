@@ -27,7 +27,7 @@ export default function PipelineStatus({ lastUpdated }: PipelineStatusProps) {
 
   return (
     <div
-      className="flex items-center gap-2 text-sm text-gray-600"
+      className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400"
       aria-live="polite"
       role="status"
     >

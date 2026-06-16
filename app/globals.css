@@ -115,7 +115,7 @@
 
   /* Card component */
   .card-iica {
-    @apply bg-white rounded-2xl shadow-sm border border-[var(--iica-border)] p-6 hover:shadow-md transition-shadow;
+    @apply bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-[var(--iica-border)] dark:border-gray-700 p-6 hover:shadow-md transition-shadow;
   }
 
   /* Mobile-first filter pill */
@@ -128,7 +128,7 @@
   }
 
   .filter-pill-inactive {
-    @apply bg-white text-gray-600 border-gray-200 hover:border-[var(--iica-blue)] hover:text-[var(--iica-blue)];
+    @apply bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:border-[var(--iica-blue)] hover:text-[var(--iica-blue)];
   }
 }
 

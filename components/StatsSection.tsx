@@ -87,7 +87,7 @@ export default function StatsSection({ total, abiertas, internacionales, urgente
                             <div className={`w-11 h-11 rounded-lg ${stat.iconClass} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                                 {stat.icon}
                             </div>
-                            <p className="text-xs font-black uppercase tracking-widest text-gray-400 mb-1">
+                            <p className="text-xs font-black uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-1">
                                 {stat.label}
                             </p>
                             <p className="text-3xl font-black text-gray-900 dark:text-white mb-0.5 leading-none">

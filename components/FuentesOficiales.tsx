@@ -13,7 +13,9 @@ interface FuenteOficial {
     url: string;
     urlConcursos: string;
     color: string;
+    darkColor: string;
     bgColor: string;
+    darkBgColor: string;
     icon: string;
     tipoFondos: string[];
     beneficiarios: string[];
@@ -42,7 +44,9 @@ const FUENTES: FuenteOficial[] = [
         url: 'https://www.cnr.gob.cl/agricultores/concursos-de-riego/',
         urlConcursos: 'https://www.cnr.gob.cl/agricultores/concursos-de-riego/',
         color: 'text-blue-700',
+        darkColor: 'dark:text-blue-300',
         bgColor: 'bg-blue-50 border-blue-200',
+        darkBgColor: 'dark:bg-blue-900/30 dark:border-blue-800',
         icon: 'droplets',
         tipoFondos: ['Tecnificación del riego', 'Obras hidráulicas', 'Drenaje', 'Embalses de acumulación'],
         beneficiarios: ['Pequeño Agricultor', 'Mediano Agricultor', 'Organizaciones de Usuarios de Agua'],
@@ -59,7 +63,9 @@ const FUENTES: FuenteOficial[] = [
         url: 'https://www.indap.gob.cl/plataforma-de-servicios/',
         urlConcursos: 'https://www.indap.gob.cl/plataforma-de-servicios/',
         color: 'text-green-700',
+        darkColor: 'dark:text-green-300',
         bgColor: 'bg-green-50 border-green-200',
+        darkBgColor: 'dark:bg-green-900/30 dark:border-green-800',
         icon: 'sprout',
         tipoFondos: ['SIRSD-S (Suelos)', 'PRODESAL (Asistencia Técnica)', 'SAT', 'Créditos de Enlace', 'Bono Mujer Rural'],
         beneficiarios: ['Pequeño Agricultor', 'Agricultor Familiar Campesino', 'Mujer Rural', 'Usuario INDAP'],
@@ -76,7 +82,9 @@ const FUENTES: FuenteOficial[] = [
         url: 'https://www.fia.cl',
         urlConcursos: 'https://www.fia.cl/convocatorias/',
         color: 'text-purple-700',
+        darkColor: 'dark:text-purple-300',
         bgColor: 'bg-purple-50 border-purple-200',
+        darkBgColor: 'dark:bg-purple-900/30 dark:border-purple-800',
         icon: 'flask',
         tipoFondos: ['Proyectos de Innovación', 'Jóvenes Innovadores', 'Agricultura Sustentable', 'Cambio Climático'],
         beneficiarios: ['Empresa Agrícola', 'Startup AgTech', 'Universidad', 'Centro de Investigación', 'Jóvenes 18-35 años'],
@@ -93,7 +101,9 @@ const FUENTES: FuenteOficial[] = [
         url: 'https://www.corfo.gob.cl/sites/cpp/convocatorias_programas_innovacion/',
         urlConcursos: 'https://www.corfo.gob.cl/sites/cpp/convocatorias_programas_innovacion/',
         color: 'text-orange-700',
+        darkColor: 'dark:text-orange-300',
         bgColor: 'bg-orange-50 border-orange-200',
+        darkBgColor: 'dark:bg-orange-900/30 dark:border-orange-800',
         icon: 'factory',
         tipoFondos: ['Activa Inversión Agro', 'Economía Circular', 'Escalamiento Productivo', 'Eficiencia Energética'],
         beneficiarios: ['PYME Agrícola', 'Empresa Mediana', 'Cooperativa Exportadora', 'Agroindustria'],
@@ -111,7 +121,9 @@ const FUENTES: FuenteOficial[] = [
         url: 'https://www.undp.org/es/chile',
         urlConcursos: 'https://www.undp.org/es/chile/participa',
         color: 'text-blue-600',
+        darkColor: 'dark:text-blue-300',
         bgColor: 'bg-blue-50 border-blue-200',
+        darkBgColor: 'dark:bg-blue-900/30 dark:border-blue-800',
         icon: 'globe',
         tipoFondos: ['Medio Ambiente (GEF)', 'Energía Sostenible', 'Género', 'Innovación Social'],
         beneficiarios: ['ONGs', 'Comunidades', 'Instituciones Públicas'],
@@ -128,7 +140,9 @@ const FUENTES: FuenteOficial[] = [
         url: 'https://www.fao.org/chile',
         urlConcursos: 'https://www.fao.org/employment/vacancies/consultants/es/',
         color: 'text-cyan-600',
+        darkColor: 'dark:text-cyan-300',
         bgColor: 'bg-cyan-50 border-cyan-200',
+        darkBgColor: 'dark:bg-cyan-900/30 dark:border-cyan-800',
         icon: 'wheat',
         tipoFondos: ['Seguridad Alimentaria', 'Agricultura Familiar', 'Pesca y Acuicultura'],
         beneficiarios: ['Gobiernos', 'Organizaciones de la Sociedad Civil'],
@@ -145,7 +159,9 @@ const FUENTES: FuenteOficial[] = [
         url: 'https://www.ifad.org/',
         urlConcursos: 'https://ifad-cofinancing.org/catalogue/',
         color: 'text-emerald-600',
+        darkColor: 'dark:text-emerald-300',
         bgColor: 'bg-emerald-50 border-emerald-200',
+        darkBgColor: 'dark:bg-emerald-900/30 dark:border-emerald-800',
         icon: 'landmark',
         tipoFondos: ['Desarrollo Rural', 'Inclusión Financiera', 'Cambio Climático'],
         beneficiarios: ['Pequeños Productores', 'Pueblos Indígenas'],
@@ -162,7 +178,9 @@ const FUENTES: FuenteOficial[] = [
         url: 'https://www.fontagro.org/es',
         urlConcursos: 'https://www.fontagro.org/es/convocatorias/',
         color: 'text-amber-700',
+        darkColor: 'dark:text-amber-300',
         bgColor: 'bg-amber-50 border-amber-200',
+        darkBgColor: 'dark:bg-amber-900/30 dark:border-amber-800',
         icon: 'globe',
         tipoFondos: ['Innovación Tecnológica', 'Adaptación Cambio Climático'],
         beneficiarios: ['Institutos de Investigación (INIA)', 'Universidades'],
@@ -212,34 +230,34 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
     const [expandedId, setExpandedId] = useState<string | null>(null);
 
     return (
-        <section id="fuentes" aria-labelledby="fuentes-heading" className="py-16 bg-white">
+        <section id="fuentes" aria-labelledby="fuentes-heading" className="py-16 bg-white dark:bg-gray-900">
             <div className="container mx-auto max-w-[1200px] px-4">
 
                 {/* Header */}
                 <div className="text-center mb-12">
-                    <div className="inline-flex items-center gap-2 bg-blue-100 text-[var(--iica-blue)] px-4 py-2 rounded-full text-sm font-bold mb-4">
+                    <div className="inline-flex items-center gap-2 bg-blue-100 dark:bg-blue-900/40 text-[var(--iica-blue)] px-4 py-2 rounded-full text-sm font-bold mb-4">
                         <Shield className="h-4 w-4" aria-hidden={true} />
                         Fuentes Verificadas
                     </div>
-                    <h2 id="fuentes-heading" className="text-3xl md:text-4xl font-extrabold text-[var(--iica-navy)] mb-3">
+                    <h2 id="fuentes-heading" className="text-3xl md:text-4xl font-extrabold text-[var(--iica-navy)] dark:text-white mb-3">
                         Fuentes Oficiales de Fondos Chile 2026
                     </h2>
-                    <p className="text-gray-600 max-w-2xl mx-auto mb-4">
+                    <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-4">
                         Todos los fondos de esta plataforma provienen directamente de estas instituciones gubernamentales.
                         El estado se actualiza automaticamente con la ultima ejecucion real del pipeline.
                     </p>
                     <div className="flex flex-wrap justify-center gap-4 text-sm">
-                        <div className="flex items-center gap-2 bg-green-50 border border-green-200 px-4 py-2 rounded-full">
+                        <div className="flex items-center gap-2 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 px-4 py-2 rounded-full">
                             <CheckCircle className="h-4 w-4 text-green-600" aria-hidden={true} />
-                            <span className="text-green-700 font-bold">{FUENTES.length} fuentes verificadas</span>
+                            <span className="text-green-700 dark:text-green-300 font-bold">{FUENTES.length} fuentes verificadas</span>
                         </div>
-                        <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 px-4 py-2 rounded-full">
+                        <div className="flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 px-4 py-2 rounded-full">
                             <RefreshCw className="h-4 w-4 text-blue-600" aria-hidden={true} />
-                            <span className="text-blue-700 font-bold">{totalOportunidadesActivas} oportunidades activas</span>
+                            <span className="text-blue-700 dark:text-blue-300 font-bold">{totalOportunidadesActivas} oportunidades activas</span>
                         </div>
-                        <div className="flex items-center gap-2 bg-yellow-50 border border-yellow-200 px-4 py-2 rounded-full">
+                        <div className="flex items-center gap-2 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 px-4 py-2 rounded-full">
                             <Clock className="h-4 w-4 text-yellow-600" aria-hidden={true} />
-                            <span className="text-yellow-700 font-bold">{formatLastUpdatedLabel(lastUpdatedAt)}</span>
+                            <span className="text-yellow-700 dark:text-yellow-300 font-bold">{formatLastUpdatedLabel(lastUpdatedAt)}</span>
                         </div>
                     </div>
                 </div>
@@ -252,7 +270,7 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
                         return (
                             <div
                                 key={fuente.id}
-                                className={`border-2 rounded-2xl overflow-hidden transition-all animate-fade-in-up ${fuente.bgColor} ${isExpanded ? 'shadow-lg' : 'shadow-sm hover:shadow-md'}`}
+                                className={`border-2 rounded-2xl overflow-hidden transition-all animate-fade-in-up ${fuente.bgColor} ${fuente.darkBgColor} ${isExpanded ? 'shadow-lg' : 'shadow-sm hover:shadow-md'}`}
                                 style={{ animationDelay: `${i * 80}ms` }}
                             >
                                 {/* Card Header */}
@@ -266,13 +284,13 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
                                     <InstitutionLogo nombre={fuente.sigla} size={32} />
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2 flex-wrap mb-1">
-                                            <span className={`text-xl font-extrabold ${fuente.color}`}>{fuente.sigla}</span>
-                                            <span className="text-xs font-bold text-gray-500 bg-white px-2 py-0.5 rounded-full border border-gray-200">
+                                            <span className={`text-xl font-extrabold ${fuente.color} ${fuente.darkColor}`}>{fuente.sigla}</span>
+                                            <span className="text-xs font-bold text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 px-2 py-0.5 rounded-full border border-gray-200 dark:border-gray-600">
                                                 {fuente.fondosActivos} fondos activos
                                             </span>
                                         </div>
-                                        <p className="text-sm font-medium text-gray-700 mb-1">{fuente.nombre}</p>
-                                        <p className="text-xs text-gray-500 line-clamp-2">{fuente.descripcion}</p>
+                                        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{fuente.nombre}</p>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">{fuente.descripcion}</p>
                                     </div>
                                     <div className="flex-shrink-0 text-gray-400">
                                         {isExpanded ? <ChevronUp className="h-5 w-5" aria-hidden={true} /> : <ChevronDown className="h-5 w-5" aria-hidden={true} />}
@@ -286,13 +304,13 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
                                         role="region"
                                         aria-labelledby={`source-btn-${i}`}
                                     >
-                                        <div className="px-5 pb-5 border-t border-white/60 pt-4 space-y-4">
+                                        <div className="px-5 pb-5 border-t border-white/60 dark:border-gray-600 pt-4 space-y-4">
                                             {/* Tipos de Fondos */}
                                             <div>
-                                                <p className="text-xs font-bold text-gray-600 uppercase tracking-wide mb-2">Tipos de Fondos</p>
+                                                <p className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">Tipos de Fondos</p>
                                                 <div className="flex flex-wrap gap-1.5">
                                                     {fuente.tipoFondos.map(tipo => (
-                                                        <span key={tipo} className="px-2.5 py-1 bg-white text-gray-700 text-xs font-medium rounded-full border border-gray-200 shadow-sm">
+                                                        <span key={tipo} className="px-2.5 py-1 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs font-medium rounded-full border border-gray-200 dark:border-gray-600 shadow-sm">
                                                             {tipo}
                                                         </span>
                                                     ))}
@@ -301,10 +319,10 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
 
                                             {/* Beneficiarios */}
                                             <div>
-                                                <p className="text-xs font-bold text-gray-600 uppercase tracking-wide mb-2">¿Quién puede postular?</p>
+                                                <p className="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">¿Quién puede postular?</p>
                                                 <div className="flex flex-wrap gap-1.5">
                                                     {fuente.beneficiarios.map(b => (
-                                                        <span key={b} className="px-2.5 py-1 bg-white text-gray-700 text-xs font-medium rounded-full border border-gray-200 shadow-sm">
+                                                        <span key={b} className="px-2.5 py-1 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs font-medium rounded-full border border-gray-200 dark:border-gray-600 shadow-sm">
                                                             {b}
                                                         </span>
                                                     ))}
@@ -313,17 +331,17 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
 
                                             {/* Monto y Región */}
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                                <div className="bg-white rounded-xl p-3 border border-gray-200">
-                                                    <p className="text-xs font-bold text-gray-500 mb-1 flex items-center gap-1">
+                                                <div className="bg-white dark:bg-gray-800 rounded-xl p-3 border border-gray-200 dark:border-gray-700">
+                                                    <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-1 flex items-center gap-1">
                                                         <Coins className="h-3 w-3" aria-hidden={true} /> Monto/Cofinanciamiento
                                                     </p>
-                                                    <p className="text-sm font-bold text-gray-800">{fuente.montoRango}</p>
+                                                    <p className="text-sm font-bold text-gray-800 dark:text-gray-200">{fuente.montoRango}</p>
                                                 </div>
-                                                <div className="bg-white rounded-xl p-3 border border-gray-200">
-                                                    <p className="text-xs font-bold text-gray-500 mb-1 flex items-center gap-1">
+                                                <div className="bg-white dark:bg-gray-800 rounded-xl p-3 border border-gray-200 dark:border-gray-700">
+                                                    <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-1 flex items-center gap-1">
                                                         <MapPin className="h-3 w-3" aria-hidden={true} /> Cobertura
                                                     </p>
-                                                    <p className="text-sm font-bold text-gray-800">{fuente.regiones}</p>
+                                                    <p className="text-sm font-bold text-gray-800 dark:text-gray-200">{fuente.regiones}</p>
                                                 </div>
                                             </div>
 
@@ -333,7 +351,7 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
                                                     href={fuente.urlConcursos}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-sm transition-all min-h-[48px] bg-white border-2 ${fuente.color} border-current hover:opacity-80`}
+                                                    className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-sm transition-all min-h-[48px] bg-white dark:bg-gray-800 border-2 ${fuente.color} ${fuente.darkColor} border-current hover:opacity-80`}
                                                 >
                                                     <ExternalLink className="h-4 w-4" aria-hidden={true} />
                                                     Ver Convocatorias
@@ -342,7 +360,7 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
                                                     href={fuente.url}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-sm text-gray-600 border-2 border-gray-200 hover:border-gray-400 transition-all min-h-[48px] bg-white"
+                                                    className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-sm text-gray-600 dark:text-gray-300 border-2 border-gray-200 dark:border-gray-600 hover:border-gray-400 transition-all min-h-[48px] bg-white dark:bg-gray-800"
                                                 >
                                                     Sitio Web
                                                 </a>
@@ -356,11 +374,11 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
                 </div>
 
                 {/* Disclaimer */}
-                <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-5 flex gap-4 items-start">
+                <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-2xl p-5 flex gap-4 items-start">
                     <AlertTriangle className="h-6 w-6 text-yellow-600 flex-shrink-0" aria-hidden={true} />
                     <div>
-                        <p className="font-bold text-yellow-800 mb-1">Importante sobre los plazos</p>
-                        <p className="text-yellow-700 text-sm">
+                        <p className="font-bold text-yellow-800 dark:text-yellow-200 mb-1">Importante sobre los plazos</p>
+                        <p className="text-yellow-700 dark:text-yellow-300 text-sm">
                             Las fechas de cierre y montos son referenciales y pueden cambiar sin previo aviso.
                             Siempre verifica directamente en el sitio oficial de la institución antes de postular.
                             Esta plataforma actualiza la información periódicamente pero no reemplaza la consulta oficial.

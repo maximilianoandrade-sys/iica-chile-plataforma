@@ -99,9 +99,9 @@ export default function ProjectList({
   return (
     <div className="space-y-4 md:space-y-5">
       {/* Toolbar: count + sort */}
-      <div className="flex flex-col gap-3 rounded-xl border border-iica-border bg-white p-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 rounded-xl border border-iica-border bg-white dark:bg-gray-800 p-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1.5">
-          <span className="block text-sm font-medium text-gray-700" aria-live="polite" aria-atomic="true">
+          <span className="block text-sm font-medium text-gray-700 dark:text-gray-300" aria-live="polite" aria-atomic="true">
             Mostrando {projects.length} de {totalCount} oportunidades
           </span>
           {isPending ? (
@@ -112,8 +112,8 @@ export default function ProjectList({
           <div className="flex items-center gap-2">
             <span className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold ${
               relevanceMode === 'all'
-                ? 'border-amber-200 bg-amber-50 text-amber-900'
-                : 'border-iica-border bg-iica-blue/10 text-iica-navy'
+                ? 'border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-800 dark:bg-amber-900/30 dark:text-amber-200'
+                : 'border-iica-border bg-iica-blue/10 text-iica-navy dark:text-blue-300'
             }`}>
               {relevanceMode === 'all' ? 'Mostrando internacionales no verificadas' : 'Solo Chile (estricto)'}
             </span>
@@ -139,7 +139,7 @@ export default function ProjectList({
         <select
           value={sort}
           onChange={(e) => updateSort(e.target.value)}
-          className="text-sm border border-iica-border rounded-lg px-3 py-2 bg-white text-gray-700 focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none min-h-[44px]"
+          className="text-sm border border-iica-border rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none min-h-[44px]"
           aria-label="Ordenar por"
         >
           <option value="relevance">Más relevantes</option>
@@ -150,13 +150,13 @@ export default function ProjectList({
       </div>
 
       {activeFilterLabels.length > 0 && paginated.length > 0 ? (
-        <div className="flex flex-col gap-2 rounded-xl border border-iica-border bg-iica-blue/5 px-3 py-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-2 rounded-xl border border-iica-border bg-iica-blue/5 dark:bg-blue-900/20 px-3 py-2 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-sm font-medium text-iica-navy">{activeFilterLabels.length} filtros activos</span>
+            <span className="text-sm font-medium text-iica-navy dark:text-blue-300">{activeFilterLabels.length} filtros activos</span>
             {activeFilterLabels.map((label) => (
               <span
                 key={label}
-                className="inline-flex items-center rounded-full border border-iica-border bg-white px-2.5 py-1 text-xs text-gray-700"
+                className="inline-flex items-center rounded-full border border-iica-border bg-white dark:bg-gray-700 px-2.5 py-1 text-xs text-gray-700 dark:text-gray-300"
               >
                 {label}
               </span>
@@ -189,14 +189,14 @@ export default function ProjectList({
           </ul>
         </div>
       ) : (
-          <div className="text-center py-12 text-gray-500 space-y-3" role="status" aria-live="polite">
-          <p className="text-lg font-medium text-iica-navy">No encontramos oportunidades con estos filtros</p>
+          <div className="text-center py-12 text-gray-500 dark:text-gray-400 space-y-3" role="status" aria-live="polite">
+          <p className="text-lg font-medium text-iica-navy dark:text-white">No encontramos oportunidades con estos filtros</p>
           <p className="text-sm mt-1">Pruebe ampliar su búsqueda o restablecer los filtros activos.</p>
           {relevanceMode !== 'all' ? (
             <button
               type="button"
               onClick={handleViewAll}
-              className="inline-flex items-center justify-center rounded-full border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-medium text-amber-900 hover:bg-amber-100 min-h-[44px]"
+              className="inline-flex items-center justify-center rounded-full border border-amber-200 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/30 px-4 py-2 text-sm font-medium text-amber-900 dark:text-amber-200 hover:bg-amber-100 min-h-[44px]"
             >
               Incluir internacionales
             </button>
@@ -208,7 +208,7 @@ export default function ProjectList({
                 {activeFilterLabels.map((label) => (
                   <span
                     key={label}
-                    className="inline-flex items-center rounded-full border border-iica-border bg-white px-3 py-1 text-xs text-gray-700"
+                    className="inline-flex items-center rounded-full border border-iica-border bg-white dark:bg-gray-700 px-3 py-1 text-xs text-gray-700 dark:text-gray-300"
                   >
                     {label}
                   </span>
@@ -229,7 +229,7 @@ export default function ProjectList({
       {/* Pagination */}
       {totalPages > 1 && (
         <nav aria-label="Paginación" className="flex flex-col items-center gap-2 pt-3">
-          <p className="text-sm text-gray-600" aria-live="polite" aria-atomic="true">
+          <p className="text-sm text-gray-600 dark:text-gray-400" aria-live="polite" aria-atomic="true">
             Página {currentPage} de {totalPages}
           </p>
           <div className="flex justify-center gap-1">
@@ -243,7 +243,7 @@ export default function ProjectList({
                   className={`min-w-[44px] min-h-[44px] rounded-lg text-sm font-medium transition-colors ${
                     page === currentPage
                       ? 'bg-green-600 text-white font-medium rounded'
-                      : 'bg-white border border-iica-border text-gray-700 hover:bg-gray-50'
+                      : 'bg-white dark:bg-gray-800 border border-iica-border text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
                   }`}
                 >
                   {page}
@@ -256,7 +256,7 @@ export default function ProjectList({
                 <button
                   type="button"
                   onClick={() => goToPage(totalPages)}
-                  className="min-w-[44px] min-h-[44px] rounded-lg text-sm font-medium bg-white border border-iica-border text-gray-700 hover:bg-gray-50"
+                  className="min-w-[44px] min-h-[44px] rounded-lg text-sm font-medium bg-white dark:bg-gray-800 border border-iica-border text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   {totalPages}
                 </button>

@@ -351,7 +351,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
 
               {/* Región */}
               <div className="space-y-1.5">
-                <label htmlFor="filter-region-adv" className="text-xs font-bold uppercase tracking-wide text-gray-500">
+                <label htmlFor="filter-region-adv" className="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">
                   Región
                 </label>
                 <select
@@ -370,7 +370,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
 
               {/* Sectores */}
               <div className="space-y-1.5">
-                <label htmlFor="filter-category-adv" className="text-xs font-bold uppercase tracking-wide text-gray-500">
+                <label htmlFor="filter-category-adv" className="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">
                   Sector
                 </label>
                 <select
@@ -387,7 +387,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
 
               {/* Fecha cierre desde */}
               <div className="space-y-1.5">
-                <label htmlFor="filter-posted-from" className="text-xs font-bold uppercase tracking-wide text-gray-500">
+                <label htmlFor="filter-posted-from" className="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">
                   Publicado desde
                 </label>
                 <input
@@ -405,7 +405,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
 
               {/* Fecha cierre hasta */}
               <div className="space-y-1.5">
-                <label htmlFor="filter-posted-till" className="text-xs font-bold uppercase tracking-wide text-gray-500">
+                <label htmlFor="filter-posted-till" className="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">
                   Publicado hasta
                 </label>
                 <input
@@ -423,7 +423,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
 
               {/* Presupuesto */}
               <div className="space-y-1.5">
-                <label className="text-xs font-bold uppercase tracking-wide text-gray-500">
+                <label className="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">
                   Presupuesto (CLP)
                 </label>
                 <div className="flex items-center gap-2">
