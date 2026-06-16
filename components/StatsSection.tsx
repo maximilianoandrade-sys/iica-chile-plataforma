@@ -1,5 +1,8 @@
-import Link from 'next/link';
-import { TrendingUp, Globe, Clock, Zap } from 'lucide-react';
+'use client';
+
+import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
+import { TrendingUp, Globe, Clock, Zap, Loader2 } from 'lucide-react';
 
 interface StatsSectionProps {
     total: number;
@@ -9,6 +12,9 @@ interface StatsSectionProps {
 }
 
 export default function StatsSection({ total, abiertas, internacionales, urgentes }: StatsSectionProps) {
+    const router = useRouter();
+    const [isPending, startTransition] = useTransition();
+
     const stats = [
         {
             icon: <Zap className="w-6 h-6" />,
@@ -44,15 +50,39 @@ export default function StatsSection({ total, abiertas, internacionales, urgente
         },
     ];
 
+    const handleCardClick = (href: string) => {
+        startTransition(() => {
+            router.push(href, { scroll: false });
+        });
+        // Scroll to #convocatorias after a short delay so the transition starts first
+        requestAnimationFrame(() => {
+            const target = document.getElementById('convocatorias');
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    };
+
     return (
         <section className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 py-10">
             <div className="container mx-auto max-w-[1200px] px-4">
+                {isPending && (
+                    <div className="flex items-center gap-2 mb-3 text-sm text-iica-blue animate-pulse">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Filtrando oportunidades...</span>
+                    </div>
+                )}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                     {stats.map((stat, i) => (
-                        <Link
+                        <button
                             key={i}
-                            href={stat.href}
-                            className="bg-white dark:bg-gray-800 rounded-xl p-5 md:p-6 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md hover:border-[var(--iica-blue)] transition-all cursor-pointer group"
+                            type="button"
+                            onClick={() => handleCardClick(stat.href)}
+                            onMouseEnter={() => router.prefetch(stat.href)}
+                            disabled={isPending}
+                            className={`text-left bg-white dark:bg-gray-800 rounded-xl p-5 md:p-6 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md hover:border-[var(--iica-blue)] transition-all cursor-pointer group ${
+                                isPending ? 'opacity-70 pointer-events-none' : ''
+                            }`}
                         >
                             <div className={`w-11 h-11 rounded-lg ${stat.iconClass} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                                 {stat.icon}
@@ -66,7 +96,7 @@ export default function StatsSection({ total, abiertas, internacionales, urgente
                             <p className="text-sm text-gray-500 dark:text-gray-400">
                                 {stat.description}
                             </p>
-                        </Link>
+                        </button>
                     ))}
                 </div>
             </div>

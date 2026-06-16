@@ -1,4 +1,4 @@
-import { getProjectFilterSnapshot, type Project } from '@/lib/data';
+import { getCachedProjectFilterSnapshot, type Project } from '@/lib/data';
 import ProjectList from "@/components/ProjectList";
 import JsonLd from "@/components/JsonLd";
 import { hybridSearch } from '@/lib/searchHybrid';
@@ -11,14 +11,7 @@ export default async function ProjectListContainer({
 }: {
     searchParams: { [key: string]: string | string[] | undefined };
 }) {
-    const filterSnapshot = await getProjectFilterSnapshot();
-
-    if (!filterSnapshot.ok) {
-        return <DatabaseError />;
-    }
-
-    const filterProjects = filterSnapshot.projects;
-
+    // Parse all params synchronously (no DB calls needed here)
     const searchTerm = typeof searchParams.q === 'string' ? searchParams.q : '';
     const selectedEstadoRaw = typeof searchParams.estado === 'string' ? searchParams.estado : 'Abierta';
     const selectedEstado = selectedEstadoRaw === 'all' ? '' : selectedEstadoRaw;
@@ -39,23 +32,32 @@ export default async function ProjectListContainer({
     const maxAmount = Number.isFinite(maxAmountRaw) ? maxAmountRaw : Infinity;
     const closingWithinDays = typeof searchParams.urgencia === 'string' ? Number.parseInt(searchParams.urgencia, 10) : undefined;
 
-    const searchResult = await hybridSearch({
-        query: searchTerm,
-        ambito: selectedAmbito || 'all',
-        selectedInstitutions,
-        selectedRegions,
-        selectedCategories,
-        estado: selectedEstado || undefined,
-        minAmount,
-        maxAmount,
-        postedFrom,
-        postedTill,
-        closingWithinDays: closingWithinDays && Number.isFinite(closingWithinDays) && closingWithinDays > 0 ? closingWithinDays : undefined,
-        sort: sort === 'amount_desc' || sort === 'newest' || sort === 'relevance' ? sort : 'date_asc',
-        offset: (currentPage - 1) * DEFAULT_PAGE_SIZE,
-        limit: DEFAULT_PAGE_SIZE,
-        includeUnverified: true,
-    });
+    // Run DB check and search in parallel for better performance
+    const [filterSnapshot, searchResult] = await Promise.all([
+        getCachedProjectFilterSnapshot(),
+        hybridSearch({
+            query: searchTerm,
+            ambito: selectedAmbito || 'all',
+            selectedInstitutions,
+            selectedRegions,
+            selectedCategories,
+            estado: selectedEstado || undefined,
+            minAmount,
+            maxAmount,
+            postedFrom,
+            postedTill,
+            closingWithinDays: closingWithinDays && Number.isFinite(closingWithinDays) && closingWithinDays > 0 ? closingWithinDays : undefined,
+            sort: sort === 'amount_desc' || sort === 'newest' || sort === 'relevance' ? sort : 'date_asc',
+            offset: (currentPage - 1) * DEFAULT_PAGE_SIZE,
+            limit: DEFAULT_PAGE_SIZE,
+            includeUnverified: true,
+        }),
+    ]);
+
+    if (!filterSnapshot.ok) {
+        return <DatabaseError />;
+    }
+
     const filteredProjects = searchResult.projects.map((project) => ({
         ...project,
         fecha_cierre: project.fecha_cierre.toISOString().split('T')[0],

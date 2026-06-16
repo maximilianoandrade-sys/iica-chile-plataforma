@@ -10,7 +10,7 @@ import Newsletter from "@/components/Newsletter";
 import FuentesOficiales from "@/components/FuentesOficiales";
 import PipelineStatus from "@/components/PipelineStatus";
 import { FilterChips } from "@/components/FilterChips";
-import { getProjectFilterSnapshot, getProjects } from "@/lib/data";
+import { getCachedProjectFilterSnapshot, getCachedProjects } from "@/lib/data";
 import { buildFilterCounts } from "@/lib/search/filtering";
 import prisma from "@/lib/prisma";
 
@@ -62,8 +62,8 @@ export default async function DashboardPage({
   const resolvedSearchParams = await searchParams;
 
   const [result, filterSnapshotResult] = await Promise.all([
-    getProjects(),
-    getProjectFilterSnapshot(),
+    getCachedProjects(),
+    getCachedProjectFilterSnapshot(),
   ]);
   const projects = result.ok ? result.projects : [];
   const filterSnapshot = filterSnapshotResult.ok ? filterSnapshotResult.projects : [];

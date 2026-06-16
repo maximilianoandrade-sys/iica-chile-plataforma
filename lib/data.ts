@@ -235,6 +235,7 @@ export function rolIICAInfo(rol?: string): { text: string; bg: string; border: s
     }
 }
 
+import { cache } from 'react';
 import { getLogger } from '@/lib/utils/logger';
 import prisma from './prisma';
 
@@ -405,6 +406,18 @@ export async function getProjectFilterSnapshot(): Promise<GetProjectFilterSnapsh
 export async function getAllProjects(): Promise<GetProjectsResult> {
     return getProjects();
 }
+
+/**
+ * Cached version of getProjects — deduplicates within a single React server request.
+ * Use this in server components to avoid redundant DB calls when multiple components
+ * need the same data in the same render tree.
+ */
+export const getCachedProjects = cache(getProjects);
+
+/**
+ * Cached version of getProjectFilterSnapshot — deduplicates within a single React server request.
+ */
+export const getCachedProjectFilterSnapshot = cache(getProjectFilterSnapshot);
 
 export interface FilterCounts {
   estado: Record<string, number>;
