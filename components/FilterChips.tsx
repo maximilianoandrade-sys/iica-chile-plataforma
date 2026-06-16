@@ -1,8 +1,8 @@
 ﻿'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { X, SlidersHorizontal, ChevronDown } from 'lucide-react';
+import { X, SlidersHorizontal, ChevronDown, Loader2 } from 'lucide-react';
 import { type FilterCounts } from '@/lib/data';
 import { getLogger } from '@/lib/utils/logger';
 import { sortRegionLabels } from '@/lib/search/region-normalization';
@@ -54,6 +54,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const [advancedOpen, setAdvancedOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const currentQ = searchParams.get('q') ?? '';
   const estadoParam = searchParams.get('estado');
@@ -88,12 +89,14 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
     params.delete('page');
     const qs = params.toString();
     const href = qs ? `${pathname}?${qs}` : pathname;
-    if (mode === 'replace') {
-      router.replace(href, { scroll: false });
-      return;
-    }
-    router.push(href, { scroll: false });
-  }, [searchParams, pathname, router]);
+    startTransition(() => {
+      if (mode === 'replace') {
+        router.replace(href, { scroll: false });
+      } else {
+        router.push(href, { scroll: false });
+      }
+    });
+  }, [searchParams, pathname, router, startTransition]);
 
   const normalizeAmountRange = useCallback(
     (nextMinAmount: string, nextMaxAmount: string): { minAmount: string; maxAmount: string } => {
@@ -116,7 +119,9 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
   );
 
   function clearAll() {
-    router.push(pathname, { scroll: false });
+    startTransition(() => {
+      router.push(pathname, { scroll: false });
+    });
   }
 
   const institutionOptions = Object.keys(filterCounts.institucion).sort((a, b) => a.localeCompare(b, 'es'));
@@ -228,11 +233,18 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
             onChange={(v) => updateParams({ q: v }, 'replace')}
             onClear={() => updateParams({ q: '' }, 'replace')}
             filterCounts={filterCounts}
+            isPending={isPending}
           />
+          {isPending && (
+            <div className="flex items-center gap-2 mt-2 text-sm text-[var(--iica-blue)] animate-pulse">
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              <span>Filtrando resultados...</span>
+            </div>
+          )}
         </div>
 
         {/* ── Quick-access chips ── */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className={`flex flex-wrap items-center gap-2 transition-opacity duration-200 ${isPending ? 'opacity-70' : ''}`}>
           <QuickChip
             active={isTodosActive}
             onClick={() => updateParams({ estado: 'all', urgencia: '', ambito: '' })}

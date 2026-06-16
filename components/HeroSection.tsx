@@ -1,8 +1,9 @@
 ﻿'use client';
 
-import React from 'react';
+import React, { useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowRight, AlertTriangle } from 'lucide-react';
+import { ArrowRight, AlertTriangle, Loader2 } from 'lucide-react';
 
 interface HeroStats {
     total: number;
@@ -16,9 +17,23 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ stats }: HeroSectionProps) {
+    const router = useRouter();
+    const [isPending, startTransition] = useTransition();
     const totalOportunidades = stats?.total ?? 0;
     const abiertas = stats?.abiertas ?? 0;
     const urgentes = stats?.urgentes ?? 0;
+
+    const handleUrgentClick = () => {
+        startTransition(() => {
+            router.push('/?estado=Abierta&sort=date_asc#convocatorias', { scroll: false });
+        });
+        requestAnimationFrame(() => {
+            const target = document.getElementById('convocatorias');
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    };
 
     return (
         <section
@@ -85,14 +100,20 @@ export function HeroSection({ stats }: HeroSectionProps) {
 
             {/* Badge urgentes */}
             {urgentes > 0 && (
-                <Link
-                    href="/?estado=Abierta&sort=date_asc#convocatorias"
-                    className="absolute top-6 right-6 flex items-center gap-2 bg-rose-600/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg hover:bg-rose-600 transition-colors"
+                <button
+                    type="button"
+                    onClick={handleUrgentClick}
+                    disabled={isPending}
+                    className="absolute top-6 right-6 flex items-center gap-2 bg-rose-600/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg hover:bg-rose-600 transition-colors disabled:opacity-70"
                     aria-label={`${urgentes} oportunidades cierran pronto`}
                 >
-                    <AlertTriangle className="w-4 h-4" />
+                    {isPending ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                        <AlertTriangle className="w-4 h-4" />
+                    )}
                     {urgentes} cierran pronto
-                </Link>
+                </button>
             )}
         </section>
     );

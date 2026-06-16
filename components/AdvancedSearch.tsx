@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useRef, useEffect } from 'react';
-import { Search, X, Clock, Star } from 'lucide-react';
+import { Search, X, Clock, Star, Loader2 } from 'lucide-react';
 import { type FilterCounts } from '@/lib/data';
 
 interface SavedSearch {
@@ -15,9 +15,10 @@ interface AdvancedSearchProps {
   onChange: (value: string) => void;
   onClear: () => void;
   filterCounts: FilterCounts;
+  isPending?: boolean;
 }
 
-export default function AdvancedSearch({ value, onChange, onClear, filterCounts }: AdvancedSearchProps) {
+export default function AdvancedSearch({ value, onChange, onClear, filterCounts, isPending }: AdvancedSearchProps) {
   const [inputValue, setInputValue] = useState(value);
   const [showDropdown, setShowDropdown] = useState(false);
   const [savedSearches, setSavedSearches] = useState<SavedSearch[]>([]);
@@ -128,7 +129,11 @@ export default function AdvancedSearch({ value, onChange, onClear, filterCounts 
     <div ref={containerRef} className="relative w-full">
       {/* Input principal */}
       <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+        {isPending ? (
+          <Loader2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--iica-blue)] animate-spin pointer-events-none" />
+        ) : (
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+        )}
         <input
           ref={inputRef}
           type="search"
