@@ -35,10 +35,12 @@ export function SearchableMultiSelect({
 }: SearchableMultiSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [highlightedIndex, setHighlightedIndex] = useState(0);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const optionRefs = useRef<(HTMLLIElement | null)[]>([]);
 
   const generatedId = useId();
   const componentId = id ?? generatedId;
@@ -50,6 +52,18 @@ export function SearchableMultiSelect({
     const term = searchTerm.toLowerCase();
     return options.filter((option) => option.label.toLowerCase().includes(term));
   }, [options, searchTerm]);
+
+  // Reset highlighted index when filtered options change
+  useEffect(() => {
+    setHighlightedIndex(0);
+  }, [searchTerm]);
+
+  // Scroll highlighted option into view
+  useEffect(() => {
+    if (isOpen && optionRefs.current[highlightedIndex]) {
+      optionRefs.current[highlightedIndex]?.scrollIntoView({ block: 'nearest' });
+    }
+  }, [highlightedIndex, isOpen]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -96,6 +110,39 @@ export function SearchableMultiSelect({
   const handleSearchKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (event) => {
     if (event.key === 'Escape') {
       closePanel();
+      return;
+    }
+
+    if (filteredOptions.length === 0) return;
+
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        setHighlightedIndex((prev) => (prev + 1) % filteredOptions.length);
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        setHighlightedIndex((prev) => (prev - 1 + filteredOptions.length) % filteredOptions.length);
+        break;
+      case 'Enter':
+        event.preventDefault();
+        toggleOption(filteredOptions[highlightedIndex].value);
+        break;
+      case ' ':
+        // Only intercept Space when input is empty to allow typing spaces in search
+        if (searchTerm.trim() === '' || event.ctrlKey) {
+          event.preventDefault();
+          toggleOption(filteredOptions[highlightedIndex].value);
+        }
+        break;
+      case 'Home':
+        event.preventDefault();
+        setHighlightedIndex(0);
+        break;
+      case 'End':
+        event.preventDefault();
+        setHighlightedIndex(filteredOptions.length - 1);
+        break;
     }
   };
 
@@ -193,6 +240,15 @@ export function SearchableMultiSelect({
               <input
                 ref={searchInputRef}
                 type="text"
+                role="combobox"
+                aria-expanded={isOpen}
+                aria-controls={listboxId}
+                aria-activedescendant={
+                  filteredOptions.length > 0
+                    ? `${listboxId}-option-${highlightedIndex}`
+                    : undefined
+                }
+                aria-autocomplete="list"
                 className={cn(
                   'block w-full pl-8 pr-2 py-1.5 border border-gray-200 rounded-md',
                   'text-sm leading-5 bg-gray-50 placeholder-gray-400',
@@ -213,6 +269,11 @@ export function SearchableMultiSelect({
             role="listbox"
             aria-multiselectable="true"
             aria-label={ariaLabel ?? 'Opciones disponibles'}
+            aria-activedescendant={
+              filteredOptions.length > 0
+                ? `${listboxId}-option-${highlightedIndex}`
+                : undefined
+            }
             className="max-h-48 overflow-y-auto"
           >
             {filteredOptions.length === 0 ? (
@@ -220,19 +281,24 @@ export function SearchableMultiSelect({
                 No se encontraron resultados
               </li>
             ) : (
-              filteredOptions.map((option) => {
+              filteredOptions.map((option, index) => {
                 const isChecked = selected.includes(option.value);
+                const isHighlighted = index === highlightedIndex;
                 return (
                   <li
                     key={option.value}
+                    ref={(el) => { optionRefs.current[index] = el; }}
+                    id={`${listboxId}-option-${index}`}
                     role="option"
                     aria-selected={isChecked}
                     className={cn(
                       'cursor-pointer select-none py-2 px-3 flex items-center gap-2',
                       'hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors',
-                      isChecked && 'bg-blue-50/50 dark:bg-gray-700/50'
+                      isChecked && 'bg-blue-50/50 dark:bg-gray-700/50',
+                      isHighlighted && 'bg-gray-100 dark:bg-gray-700'
                     )}
                     onClick={() => toggleOption(option.value)}
+                    onMouseEnter={() => setHighlightedIndex(index)}
                   >
                     <input
                       type="checkbox"

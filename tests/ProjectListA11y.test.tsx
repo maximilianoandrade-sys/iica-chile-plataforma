@@ -28,10 +28,7 @@ const projects = [
   },
 ];
 
-const filterCounts = {
-  estado: { Abierta: 1 }, institucion: { CORFO: 1 },
-  region: { Metropolitana: 1 }, categoria: { Test: 1 }, ambito: { Nacional: 1 },
-};
+
 
 describe('ProjectList accessibility', () => {
   beforeEach(() => {
@@ -41,12 +38,12 @@ describe('ProjectList accessibility', () => {
 
   it('defaults to relevance sort when query is active', () => {
     mockSearchParams = new URLSearchParams('q=riego');
-    render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
+    render(<ProjectList projects={projects} totalCount={1} />);
     expect(screen.getByRole('combobox', { name: /Ordenar por/i })).toHaveValue('relevance');
   });
 
   it('renders structured filter controls', () => {
-    render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
+    render(<ProjectList projects={projects} totalCount={1} />);
     expect(screen.getByRole('searchbox', { name: /Buscar oportunidades/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/Estado/i)).toHaveValue('Abierta');
     expect(screen.getByLabelText(/Ubicaciones/i)).toBeInTheDocument();
@@ -54,34 +51,34 @@ describe('ProjectList accessibility', () => {
   });
 
   it('has sort control with label', () => {
-    render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
+    render(<ProjectList projects={projects} totalCount={1} />);
     expect(screen.getByRole('combobox', { name: /Ordenar por/i })).toBeInTheDocument();
   });
 
   it('renders project cards as articles', () => {
-    render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
+    render(<ProjectList projects={projects} totalCount={1} />);
     expect(screen.getByRole('article')).toBeInTheDocument();
   });
 
   it('renders results as a semantic list region', () => {
-    render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
+    render(<ProjectList projects={projects} totalCount={1} />);
     expect(screen.getByRole('list', { name: /Resultados de oportunidades/i })).toBeInTheDocument();
   });
 
   it('has live region for result count', () => {
-    render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
+    render(<ProjectList projects={projects} totalCount={1} />);
     expect(screen.getByText(/Mostrando 1 de 1 oportunidades/i)).toHaveAttribute('aria-live', 'polite');
   });
 
   it('announces pending updates while transitioning', () => {
     jest.spyOn(React, 'useTransition').mockReturnValue([true, (cb: () => void) => cb()]);
-    render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
+    render(<ProjectList projects={projects} totalCount={1} />);
     expect(screen.getByText(/Actualizando resultados/i)).toBeInTheDocument();
     expect(screen.getByRole('region', { name: /Contenedor de resultados/i })).toHaveAttribute('aria-busy', 'true');
   });
 
   it('shows strict relevance badge by default', () => {
-    render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
+    render(<ProjectList projects={projects} totalCount={1} />);
     expect(screen.getByText(/Solo Chile \(estricto\)/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Ver todas/i })).toBeInTheDocument();
   });
@@ -90,7 +87,6 @@ describe('ProjectList accessibility', () => {
     render(
       <ProjectList
         projects={[]}
-        filterCounts={filterCounts}
         totalCount={1}
         activeFilterLabels={['Búsqueda: "fia"', 'Estado: Abierta']}
       />
@@ -106,7 +102,7 @@ describe('ProjectList accessibility', () => {
   });
 
   it('offers include-international action in empty strict mode', () => {
-    render(<ProjectList projects={[]} filterCounts={filterCounts} totalCount={0} />);
+    render(<ProjectList projects={[]} totalCount={0} />);
 
     const expandButton = screen.getByRole('button', { name: /Incluir internacionales/i });
     fireEvent.click(expandButton);
@@ -116,7 +112,7 @@ describe('ProjectList accessibility', () => {
 
   it('offers return-to-chile action in empty all mode', () => {
     mockSearchParams = new URLSearchParams('relevanceMode=all');
-    render(<ProjectList projects={[]} filterCounts={filterCounts} totalCount={0} />);
+    render(<ProjectList projects={[]} totalCount={0} />);
 
     const strictButton = screen.getByRole('button', { name: /Volver a Solo Chile/i });
     fireEvent.click(strictButton);
@@ -128,7 +124,6 @@ describe('ProjectList accessibility', () => {
     render(
       <ProjectList
         projects={projects}
-        filterCounts={filterCounts}
         totalCount={1}
         activeFilterLabels={['Estado: Abierta', 'Región: Metropolitana']}
       />
