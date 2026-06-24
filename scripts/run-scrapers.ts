@@ -8,7 +8,7 @@ const CRITICAL_SOURCE_SLUGS = new Set(["fia", "fia-licitaciones", "corfo", "inda
 
 interface RunOneResult {
   slug: string;
-  status: "success" | "partial";
+  status: "success" | "partial" | "empty";
   inserted: number;
   rawCount: number;
   duplicatesMerged: number;
@@ -45,8 +45,12 @@ async function runOne(scraper: typeof scrapers[number]): Promise<RunOneResult> {
       }
     }
 
-    const status: "success" | "partial" =
-      result.partialErrors.length > 0 || skipReasons.length > 0 ? "partial" : "success";
+    const status: "success" | "partial" | "empty" =
+      result.partialErrors.length > 0 || skipReasons.length > 0
+        ? "partial"
+        : result.projects.length === 0
+        ? "empty"
+        : "success";
     const errorSummary = [
       ...result.partialErrors.slice(0, 5),
       ...skipReasons.slice(0, 5),

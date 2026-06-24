@@ -265,7 +265,7 @@ export async function markStale(
 
 export async function updateSourceStatus(
   slug: string,
-  status: "success" | "error" | "partial",
+  status: "success" | "error" | "partial" | "empty",
   count: number,
   errorMsg?: string
 ): Promise<void> {

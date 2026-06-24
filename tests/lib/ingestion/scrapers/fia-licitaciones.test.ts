@@ -83,4 +83,33 @@ describe("fiaLicitacionesScraper", () => {
     expect(result.projects).toEqual([]);
     expect(result.partialErrors[0]).toContain("HTTP 503");
   });
+
+  it("retorna proyectos vacíos sin partialErrors si el feed está legítimamente vacío", async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve("<html><body><p>Sin licitaciones activas</p></body></html>"),
+    });
+
+    const result = await fiaLicitacionesScraper.scrape();
+    expect(result.projects).toHaveLength(0);
+    expect(result.partialErrors).toHaveLength(0);
+  });
+
+  it("usa selector fallback cuando a.Link no existe", async () => {
+    const html = `
+      <div>
+        <a href="#">Id: 9999999-1-LE26 Nombre: PROYECTO FALLBACK VIA TEXTO</a>
+      </div>
+    `;
+
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve(html),
+    });
+
+    const result = await fiaLicitacionesScraper.scrape();
+    expect(result.projects).toHaveLength(1);
+    expect(result.projects[0].url).toContain("9999999-1-LE26");
+    expect(result.partialErrors).toHaveLength(0);
+  });
 });
