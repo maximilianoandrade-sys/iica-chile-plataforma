@@ -10,7 +10,6 @@ import { sortRegionLabels } from '@/lib/search/region-normalization';
 import { normalizeInstitution } from '@/lib/search/filtering';
 import AdvancedSearch from '@/components/AdvancedSearch';
 import InstitutionFilter from '@/components/InstitutionFilter';
-import SearchableFilterList from '@/components/SearchableFilterList';
 
 const logger = getLogger('FilterChips');
 
@@ -139,24 +138,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
     if (coverage === 'chile') return CHILE_REGION_LABELS.has(region);
     return !CHILE_REGION_LABELS.has(region);
   });
-
-  // Convertir a { name, count }[] para SearchableFilterList
-  const regionItems = useMemo(
-    () =>
-      filteredRegionOptions.map((r) => ({
-        name: r,
-        count: filterCounts.region[r] ?? 0,
-      })),
-    [filteredRegionOptions, filterCounts.region],
-  );
-
-  const categoryItems = useMemo(
-    () =>
-      Object.entries(filterCounts.categoria ?? {})
-        .map(([name, count]) => ({ name, count }))
-        .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, 'es')),
-    [filterCounts.categoria],
-  );
+  const categoryOptions = Object.keys(filterCounts.categoria ?? {}).sort((a, b) => a.localeCompare(b, 'es'));
 
   const deduplicatedInstitutions = useMemo(() => {
     const merged: Record<string, number> = {};
@@ -387,9 +369,9 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
             <AdvancedFiltersContent
               deduplicatedInstitutions={deduplicatedInstitutions}
               selectedInstitutions={selectedInstitutions}
-              regionItems={regionItems}
+              filteredRegionOptions={filteredRegionOptions}
               selectedRegions={selectedRegions}
-              categoryItems={categoryItems}
+              categoryOptions={categoryOptions}
               selectedCategories={selectedCategories}
               currentPostedFrom={currentPostedFrom}
               currentPostedTill={currentPostedTill}
@@ -437,9 +419,9 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
               <AdvancedFiltersContent
                 deduplicatedInstitutions={deduplicatedInstitutions}
                 selectedInstitutions={selectedInstitutions}
-                regionItems={regionItems}
+                filteredRegionOptions={filteredRegionOptions}
                 selectedRegions={selectedRegions}
-                categoryItems={categoryItems}
+                categoryOptions={categoryOptions}
                 selectedCategories={selectedCategories}
                 currentPostedFrom={currentPostedFrom}
                 currentPostedTill={currentPostedTill}
@@ -504,9 +486,9 @@ function QuickChip({ active, variant = 'default', onClick, children }: QuickChip
 interface AdvancedFiltersContentProps {
   deduplicatedInstitutions: { name: string; count: number }[];
   selectedInstitutions: string[];
-  regionItems: { name: string; count: number }[];
+  filteredRegionOptions: string[];
   selectedRegions: string[];
-  categoryItems: { name: string; count: number }[];
+  categoryOptions: string[];
   selectedCategories: string[];
   currentPostedFrom: string;
   currentPostedTill: string;
@@ -521,9 +503,9 @@ interface AdvancedFiltersContentProps {
 function AdvancedFiltersContent({
   deduplicatedInstitutions,
   selectedInstitutions,
-  regionItems,
+  filteredRegionOptions,
   selectedRegions,
-  categoryItems,
+  categoryOptions,
   selectedCategories,
   currentPostedFrom,
   currentPostedTill,
@@ -547,27 +529,39 @@ function AdvancedFiltersContent({
       </div>
 
       {/* Región */}
-      <div>
-        <SearchableFilterList
-          label="Región"
-          placeholder="Buscar región..."
-          items={regionItems}
-          selected={selectedRegions}
-          onChange={(next) => updateParams({ region: stringifyCsv(next) })}
-          quickChips={['Metropolitana', 'Valparaíso', 'Biobío', 'Maule', 'Nacional']}
-        />
+      <div className="space-y-1.5">
+        <label htmlFor="filter-region-adv" className="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+          Región
+        </label>
+        <select
+          id="filter-region-adv"
+          aria-label="Región"
+          value={selectedRegions[0] ?? ''}
+          onChange={(e) => updateParams({ region: e.target.value })}
+          className="w-full rounded-lg border border-[var(--iica-border)] bg-white dark:bg-gray-800 dark:text-white px-3 py-2.5 text-sm min-h-[44px] focus:outline-none focus:ring-2 focus:ring-[var(--iica-blue)]"
+        >
+          <option value="">Todas las regiones</option>
+          {filteredRegionOptions.map((r) => (
+            <option key={r} value={r}>{r}</option>
+          ))}
+        </select>
       </div>
 
       {/* Sector */}
-      <div>
-        <SearchableFilterList
-          label="Sector"
-          placeholder="Buscar sector..."
-          items={categoryItems}
-          selected={selectedCategories}
-          onChange={(next) => updateParams({ category: stringifyCsv(next) })}
-          quickChips={['Convocatoria', 'Licitacion', 'Programa']}
-        />
+      <div className="space-y-1.5">
+        <label htmlFor="filter-category-adv" className="text-xs font-bold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+          Sector
+        </label>
+        <select
+          id="filter-category-adv"
+          aria-label="Sector"
+          value={selectedCategories[0] ?? ''}
+          onChange={(e) => updateParams({ category: e.target.value })}
+          className="w-full rounded-lg border border-[var(--iica-border)] bg-white dark:bg-gray-800 dark:text-white px-3 py-2.5 text-sm min-h-[44px] focus:outline-none focus:ring-2 focus:ring-[var(--iica-blue)]"
+        >
+          <option value="">Todos los sectores</option>
+          {categoryOptions.map((c) => <option key={c} value={c}>{c}</option>)}
+        </select>
       </div>
 
       {/* Publicado desde */}
