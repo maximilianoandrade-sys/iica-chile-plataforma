@@ -3,10 +3,17 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
     title: 'Política de Privacidad | IICA Chile',
-    description:
-        'Política de privacidad y protección de datos personales conforme a la Ley 21.719 — Plataforma IICA Chile.',
-    alternates: {
-        canonical: '/legal/privacidad',
+    description: 'Política de privacidad y protección de datos personales conforme a la Ley 21.719.',
+    alternates: { canonical: '/legal/privacidad' },
+    openGraph: {
+        title: 'Política de Privacidad | IICA Chile',
+        description: 'Política de privacidad y protección de datos personales conforme a la Ley 21.719.',
+        url: '/legal/privacidad',
+    },
+    twitter: {
+        card: 'summary',
+        title: 'Política de Privacidad | IICA Chile',
+        description: 'Política de privacidad y protección de datos personales.',
     },
 };
 
@@ -174,14 +181,7 @@ export default function PrivacyPolicyPage() {
                 </p>
             </section>
 
-            {/* Disclaimer banner */}
-            <div className="rounded-lg border border-amber-300 bg-amber-50 px-5 py-4 text-sm text-amber-900">
-                <p className="font-semibold mb-1">Aviso importante</p>
-                <p>
-                    Este documento es un borrador técnico y requiere revisión por un profesional
-                    legal antes de su publicación definitiva.
-                </p>
-            </div>
+
 
             {/* Back link */}
             <div className="pt-4">

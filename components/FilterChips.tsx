@@ -72,7 +72,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
   const currentCategory = searchParams.get('category') ?? '';
   const currentMinAmount = searchParams.get('minAmount') ?? '';
   const currentMaxAmount = searchParams.get('maxAmount') ?? '';
-  const currentAmbito = searchParams.get('ambito') ?? '';
+  const currentAmbito = searchParams.get('ambito') ?? 'chile';
   const currentPostedFrom = searchParams.get('postedFrom') ?? '';
   const currentPostedTill = searchParams.get('postedTill') ?? '';
   const currentUrgencia = searchParams.get('urgencia') ?? '';

@@ -51,7 +51,7 @@ export function HeroSection({ stats }: HeroSectionProps) {
                 <div className="max-w-2xl">
                     <div className="mb-5">
                         <span className="inline-block text-[var(--iica-yellow)] font-semibold text-xs tracking-widest uppercase">
-                            Financiamiento Agricola Verificado
+                            Financiamiento Agrícola Verificado
                         </span>
                     </div>
 
@@ -78,22 +78,6 @@ export function HeroSection({ stats }: HeroSectionProps) {
                         >
                             Conocer IICA Chile
                         </Link>
-                    </div>
-                </div>
-            </div>
-
-            {/* Stats overlay bottom-right (desktop) */}
-            <div className="absolute bottom-0 right-0 p-8 hidden lg:block" style={{background: 'linear-gradient(to left, rgba(0,0,0,0.75) 0%, transparent 100%)'}}>
-                <div className="grid grid-cols-2 gap-8">
-                    <div>
-                        <p className="text-[var(--iica-yellow)] text-[10px] font-black uppercase tracking-widest">Total</p>
-                        <p className="text-white text-4xl font-black leading-none">{totalOportunidades}</p>
-                        <p className="text-gray-300 text-sm mt-1">Oportunidades</p>
-                    </div>
-                    <div>
-                        <p className="text-[var(--iica-yellow)] text-[10px] font-black uppercase tracking-widest">Activas</p>
-                        <p className="text-white text-4xl font-black leading-none">{abiertas}</p>
-                        <p className="text-gray-300 text-sm mt-1">Abiertas Ahora</p>
                     </div>
                 </div>
             </div>

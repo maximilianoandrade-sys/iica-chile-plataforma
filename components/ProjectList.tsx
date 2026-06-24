@@ -141,6 +141,7 @@ export default function ProjectList({
           onChange={(e) => updateSort(e.target.value)}
           className="text-sm border border-iica-border rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none min-h-[44px]"
           aria-label="Ordenar por"
+          title="Prioriza convocatorias nacionales con cierre próximo y monto disponible"
         >
           <option value="relevance">Más relevantes</option>
           <option value="date_asc">Cierre más próximo</option>

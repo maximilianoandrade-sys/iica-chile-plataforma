@@ -188,7 +188,45 @@ const FUENTES: FuenteOficial[] = [
         verificado: true,
         fondosActivos: 0,
         regiones: 'Países miembros (incluye Chile)'
-    }
+    },
+    {
+        id: 'anid',
+        nombre: 'Agencia Nacional de Investigación y Desarrollo',
+        sigla: 'ANID',
+        descripcion: 'Financia investigación científica y tecnológica en Chile. Incluye Fondecyt, Fondef y programas de innovación aplicada al sector agropecuario.',
+        url: 'https://anid.cl',
+        urlConcursos: 'https://anid.cl/concursos/',
+        color: 'text-indigo-700',
+        darkColor: 'dark:text-indigo-300',
+        bgColor: 'bg-indigo-50 border-indigo-200',
+        darkBgColor: 'dark:bg-indigo-900/30 dark:border-indigo-800',
+        icon: 'flask',
+        tipoFondos: ['Fondecyt', 'Fondef', 'Innovación Aplicada al Agro'],
+        beneficiarios: ['Universidades', 'Centros de Investigación', 'Empresas I+D'],
+        montoRango: 'Variable según instrumento',
+        verificado: true,
+        fondosActivos: 0,
+        regiones: 'Nacional'
+    },
+    {
+        id: 'sag',
+        nombre: 'Servicio Agrícola y Ganadero',
+        sigla: 'SAG',
+        descripcion: 'Administra programas de sustentabilidad agroambiental como el SIRSD-S. Regula y apoya la producción agrícola con incentivos directos.',
+        url: 'https://www.sag.gob.cl',
+        urlConcursos: 'https://www.sag.gob.cl/ambitos-de-accion/incentivos-para-la-sustentabilidad-agroambiental',
+        color: 'text-teal-700',
+        darkColor: 'dark:text-teal-300',
+        bgColor: 'bg-teal-50 border-teal-200',
+        darkBgColor: 'dark:bg-teal-900/30 dark:border-teal-800',
+        icon: 'wheat',
+        tipoFondos: ['SIRSD-S', 'Sustentabilidad Agroambiental', 'Incentivos Directos'],
+        beneficiarios: ['Productores Agrícolas', 'Empresas Agropecuarias'],
+        montoRango: 'Variable según programa',
+        verificado: true,
+        fondosActivos: 0,
+        regiones: 'Nacional'
+    },
 ];
 
 interface FuentesOficialesProps {
@@ -244,7 +282,7 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
                     </h2>
                     <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-4">
                         Todos los fondos de esta plataforma provienen directamente de estas instituciones gubernamentales.
-                        El estado se actualiza automaticamente con la ultima ejecucion real del pipeline.
+                        El estado se actualiza automáticamente con la última ejecución real del pipeline.
                     </p>
                     <div className="flex flex-wrap justify-center gap-4 text-sm">
                         <div className="flex items-center gap-2 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 px-4 py-2 rounded-full">

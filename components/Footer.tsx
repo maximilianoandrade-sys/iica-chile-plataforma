@@ -27,7 +27,7 @@ export function Footer() {
                                 <h3 className="text-lg font-black leading-tight">
                                     IICA <span className="text-[var(--iica-secondary)] dark:text-emerald-400">Chile</span>
                                 </h3>
-                                <p className="text-[10px] text-white/60 uppercase tracking-widest font-medium">Plataforma de Certificación</p>
+                                <p className="text-[10px] text-white/60 uppercase tracking-widest font-medium">Radar de Oportunidades · IICA Chile</p>
                             </div>
                         </div>
                         <p className="text-sm text-white/75 leading-relaxed mb-5 max-w-sm">
@@ -45,7 +45,7 @@ export function Footer() {
                                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.48 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7 0h3.8v2.2h.1c.5-1 1.8-2.2 3.8-2.2 4.1 0 4.8 2.7 4.8 6.2V24h-4v-7.3c0-1.7 0-4-2.4-4s-2.8 1.9-2.8 3.9V24h-4V8z" /></svg>
                             </a>
                             <a
-                                href="https://x.com/IABOREA"
+                                href="https://x.com/IICANoticias"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="w-9 h-9 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors"
