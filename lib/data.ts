@@ -303,6 +303,7 @@ export interface ProjectFilterSnapshot {
     regiones: string[];
     region: string | null;
     ambito: string | null;
+    categoria: string;
     url_bases: string;
 }
 
@@ -378,6 +379,7 @@ export async function getProjectFilterSnapshot(): Promise<GetProjectFilterSnapsh
                 regiones: true,
                 region: true,
                 ambito: true,
+                categoria: true,
                 url_bases: true,
             },
         });
@@ -391,6 +393,7 @@ export async function getProjectFilterSnapshot(): Promise<GetProjectFilterSnapsh
             regiones: project.regiones,
             region: project.region,
             ambito: project.ambito,
+            categoria: project.categoria,
             url_bases: project.url_bases,
         }));
 

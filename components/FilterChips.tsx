@@ -33,6 +33,14 @@ const CHILE_REGION_LABELS = new Set([
   'Macrozona Sur', 'Macrozona', 'Chile',
 ]);
 
+const SECTOR_OPTIONS = [
+  'Comercio Internacional',
+  'Desarrollo Territorial',
+  'Digitalización Agroalimentaria',
+  'Innovación y Bioeconomía',
+  'Sanidad Agropecuaria',
+];
+
 function classifyInstitutionCoverage(value: string): 'chile' | 'internacional' | 'unknown' {
   const upper = value.toUpperCase();
   if (NATIONAL_INSTITUTION_KEYS.some((key) => upper.includes(key))) return 'chile';
@@ -137,7 +145,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
     if (coverage === 'chile') return CHILE_REGION_LABELS.has(region);
     return !CHILE_REGION_LABELS.has(region);
   });
-  const categoryOptions = Object.keys(filterCounts.categoria ?? {}).sort((a, b) => a.localeCompare(b, 'es'));
+  const categoryOptions = SECTOR_OPTIONS;
 
   const deduplicatedInstitutions = useMemo(() => {
     const merged: Record<string, number> = {};
