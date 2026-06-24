@@ -18,6 +18,9 @@ import { aecidScraper } from "./scrapers/aecid";
 import { gcfScraper } from "./scrapers/gcf";
 import { afdScraper } from "./scrapers/afd";
 import { fundsforNgosScraper } from "./scrapers/fundsforngos";
+import { anidScraper } from "./scrapers/anid";
+import { minagriFeedScraper } from "./scrapers/minagri-licitaciones";
+import { iniaScraper } from "./scrapers/inia";
 
 /**
  * Scrapers de Capa A (determinísticos, corren diario vía GitHub Actions).
@@ -51,6 +54,9 @@ export const scrapers: Scraper[] = [
   gcfScraper,
   afdScraper,
   fundsforNgosScraper,
+  anidScraper,
+  minagriFeedScraper,
+  iniaScraper,
 ];
 
 /**

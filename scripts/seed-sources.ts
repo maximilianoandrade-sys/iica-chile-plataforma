@@ -22,6 +22,9 @@ const SOURCES = [
   { slug: "gcf",              name: "GCF — Green Climate Fund",                  type: "scraper",       homepageUrl: "https://www.greenclimate.fund/news/announcements" },
   { slug: "afd",              name: "AFD — Agence Française de Développement",   type: "scraper",       homepageUrl: "https://www.afd.fr/fr/appels-a-projets" },
   { slug: "fundsforngos",     name: "FundsforNGOs (Aggregator)",                 type: "scraper",       homepageUrl: "https://www2.fundsforngos.org/" },
+  { slug: "anid",             name: "ANID — Agencia Nacional de Investigación y Desarrollo", type: "scraper", homepageUrl: "https://anid.cl/concursos/" },
+  { slug: "minagri-licitaciones", name: "MINAGRI — Licitaciones MercadoPublico", type: "scraper", homepageUrl: "https://www.mercadopublico.cl/Portal/FeedOrg.aspx?qs=Mer+eNmLUHn7TN5dx6I0Mg==" },
+  { slug: "inia",             name: "INIA — Instituto de Investigaciones Agropecuarias", type: "scraper", homepageUrl: "https://www.inia.cl/licitaciones/" },
 ];
 
 async function main() {
