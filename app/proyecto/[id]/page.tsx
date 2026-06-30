@@ -8,7 +8,14 @@ import Link from 'next/link';
 import { ExternalLink, ArrowLeft, Calendar, CheckCircle, Info, MapPin, Users, DollarSign } from 'lucide-react';
 
 const getCachedProjects = cache(getProjects);
-const SITE_URL = 'https://iica-chile-plataforma.vercel.app';
+// ponytail: VERCEL_URL is auto-set by Vercel; fallback for local dev
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL
+    || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
+
+/** Escapes </ sequences to prevent XSS in JSON-LD script injection */
+function safeJsonLd(obj: Record<string, unknown>): string {
+    return JSON.stringify(obj).replace(/</g, '\\u003c');
+}
 
 interface Props {
     params: Promise<{ id: string }>;
@@ -362,15 +369,11 @@ export default async function ProyectoDetallePage({ params }: Props) {
             {/* JSON-LD Structured Data */}
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(governmentGrantJsonLd),
-                }}
+                dangerouslySetInnerHTML={{ __html: safeJsonLd(governmentGrantJsonLd) }}
             />
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(breadcrumbJsonLd),
-                }}
+                dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbJsonLd) }}
             />
         </div>
     );
