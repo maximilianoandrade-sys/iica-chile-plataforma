@@ -227,6 +227,25 @@ const FUENTES: FuenteOficial[] = [
         fondosActivos: 0,
         regiones: 'Nacional'
     },
+    {
+        id: 'ocde',
+        nombre: 'Organización para la Cooperación y el Desarrollo Económicos',
+        sigla: 'OCDE',
+        descripcion: 'Programa de Investigación Cooperativa en Sistemas Alimentarios y Agrícolas Sostenibles. Ofrece becas de investigación internacional de 6-26 semanas para científicos en agricultura, silvicultura y pesca.',
+        url: 'https://www.oecd.org/en/about/programmes/co-operative-research-programme.html',
+        urlConcursos: 'https://www.oecd.org/en/about/programmes/co-operative-research-programme/crp-applications-for-fellowships.html',
+        color: 'text-sky-700',
+        darkColor: 'dark:text-sky-300',
+        bgColor: 'bg-sky-50 border-sky-200',
+        darkBgColor: 'dark:bg-sky-900/30 dark:border-sky-800',
+        icon: 'globe',
+        tipoFondos: ['Becas de Investigación', 'Agricultura Sostenible', 'Silvicultura', 'Pesca y Acuicultura'],
+        beneficiarios: ['Investigadores', 'Científicos', 'Universidades', 'Centros de Investigación'],
+        montoRango: '6-26 semanas financiadas en país miembro',
+        verificado: true,
+        fondosActivos: 1,
+        regiones: 'Chile y 31 países miembros OCDE'
+    },
 ];
 
 interface FuentesOficialesProps {

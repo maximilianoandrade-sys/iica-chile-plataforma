@@ -21,6 +21,7 @@ import { fundsforNgosScraper } from "./scrapers/fundsforngos";
 import { anidScraper } from "./scrapers/anid";
 import { minagriFeedScraper } from "./scrapers/minagri-licitaciones";
 import { iniaScraper } from "./scrapers/inia";
+import { globalSouthOpportunitiesScraper } from "./scrapers/global-south-opportunities";
 
 /**
  * Scrapers de Capa A (determinísticos, corren diario vía GitHub Actions).
@@ -57,6 +58,7 @@ export const scrapers: Scraper[] = [
   anidScraper,
   minagriFeedScraper,
   iniaScraper,
+  globalSouthOpportunitiesScraper,
 ];
 
 /**
