@@ -324,7 +324,8 @@ export async function getProjects(): Promise<GetProjectsResult> {
                 fecha_cierre: { gte: today },
                 NOT: { estadoPostulacion: 'Cerrada' },
                 publishable: true,
-                relevanciaChile: true,
+                // TODO: restore after running scripts/sql/2026-06-30-relevancia-chile.sql on prod
+                // relevanciaChile: true,
                 // Defensa redundante: si purgeFakeProjects falló, esto los excluye
                 id: { notIn: FAKE_PROJECT_IDS },
             },
