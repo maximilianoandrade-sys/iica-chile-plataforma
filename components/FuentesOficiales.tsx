@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import { ExternalLink, CheckCircle, Clock, ChevronDown, ChevronUp, Shield, RefreshCw, Droplets, Sprout, FlaskConical, Factory, Globe, Wheat, Landmark, AlertTriangle, MapPin, Coins, type LucideIcon } from 'lucide-react';
 import { InstitutionLogo } from '@/components/InstitutionLogo';
 
@@ -285,6 +286,15 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
     const totalOportunidadesActivas = totalActiveOpportunities ?? totalFondos;
 
     const [expandedId, setExpandedId] = useState<string | null>(null);
+    const router = useRouter();
+    const [isPending, startTransition] = useTransition();
+
+    const handleActiveClick = () => {
+        startTransition(() => {
+            router.push('/?estado=Abierta#convocatorias', { scroll: false });
+        });
+        document.getElementById('convocatorias')?.scrollIntoView({ behavior: 'smooth' });
+    };
 
     return (
         <section id="fuentes" aria-labelledby="fuentes-heading" className="py-16 bg-white dark:bg-gray-900">
@@ -308,10 +318,15 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
                             <CheckCircle className="h-4 w-4 text-green-600" aria-hidden={true} />
                             <span className="text-green-700 dark:text-green-300 font-bold">{FUENTES.length} fuentes verificadas</span>
                         </div>
-                        <div className="flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 px-4 py-2 rounded-full">
-                            <RefreshCw className="h-4 w-4 text-blue-600" aria-hidden={true} />
+                        <button
+                            type="button"
+                            onClick={handleActiveClick}
+                            aria-label={`Filtrar y ver las ${totalOportunidadesActivas} oportunidades activas`}
+                            className="flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 px-4 py-2 rounded-full min-h-[44px] cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900/50 hover:scale-105 transition-all"
+                        >
+                            <RefreshCw className={`h-4 w-4 text-blue-600 ${isPending ? 'animate-spin' : ''}`} aria-hidden={true} />
                             <span className="text-blue-700 dark:text-blue-300 font-bold">{totalOportunidadesActivas} oportunidades activas</span>
-                        </div>
+                        </button>
                         <div className="flex items-center gap-2 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 px-4 py-2 rounded-full">
                             <Clock className="h-4 w-4 text-yellow-600" aria-hidden={true} />
                             <span className="text-yellow-700 dark:text-yellow-300 font-bold">{formatLastUpdatedLabel(lastUpdatedAt)}</span>
