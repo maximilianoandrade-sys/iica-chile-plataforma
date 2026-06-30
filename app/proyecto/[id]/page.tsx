@@ -151,7 +151,7 @@ export default async function ProyectoDetallePage({ params }: Props) {
     };
 
     return (
-        <div className="min-h-screen flex flex-col bg-[#f4f7f9]">
+        <div className="min-h-screen flex flex-col bg-[#f4f7f9] dark:bg-gray-900">
             <Header />
 
             <main className="flex-grow container mx-auto max-w-[900px] px-4 py-10">

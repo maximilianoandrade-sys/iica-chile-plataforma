@@ -495,6 +495,7 @@ function QuickChip({ active, variant = 'default', onClick, children }: QuickChip
     <button
       type="button"
       onClick={onClick}
+      aria-pressed={active}
       className={`${baseClasses} ${variantClasses}`}
     >
       {children}
