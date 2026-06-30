@@ -75,7 +75,7 @@ export default function Newsletter() {
                             <p className="text-sm text-blue-100">Te avisaremos cuando publiquemos nuevas oportunidades.</p>
                             <button
                                 onClick={() => setStatus('idle')}
-                                className="mt-3 text-xs text-green-300 underline hover:text-green-200"
+                                className="mt-3 text-xs text-green-300 underline hover:text-green-200 min-h-[44px] px-4 py-2"
                             >
                                 Suscribir otro correo
                             </button>
@@ -108,7 +108,7 @@ export default function Newsletter() {
                                     checked={consent}
                                     onChange={(e) => setConsent(e.target.checked)}
                                     disabled={status === 'loading'}
-                                    className="mt-1 h-4 w-4 rounded border-gray-300 accent-[var(--iica-secondary)]"
+                                    className="mt-0.5 h-5 w-5 rounded border-gray-300 accent-[var(--iica-secondary)]"
                                 />
                                 <label htmlFor="consent-newsletter" className="text-xs text-blue-100">
                                     Acepto recibir información según la{' '}

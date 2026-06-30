@@ -126,7 +126,7 @@ export function ProjectCard({ project }: { project: Project }) {
           {/* Badge estado */}
           <div className="flex flex-col items-end gap-1 shrink-0">
             <span
-              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold whitespace-nowrap ${styles.badge}`}
+              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold whitespace-nowrap ${styles.badge}`}
             >
               {urgency === 'critical' && <AlertCircle className="w-3 h-3" />}
               {styles.label}
@@ -144,8 +144,8 @@ export function ProjectCard({ project }: { project: Project }) {
         </Link>
 
         {isLikelyInternational && (
-          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold border border-blue-200 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/30 text-[var(--iica-navy)] dark:text-blue-300">
-            🌎 Internacional
+          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold border border-blue-200 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/30 text-[var(--iica-navy)] dark:text-blue-300">
+            <span aria-hidden="true">🌎</span> Internacional
           </span>
         )}
       </div>
@@ -158,7 +158,7 @@ export function ProjectCard({ project }: { project: Project }) {
             <div className="flex items-center gap-1.5 col-span-2">
               <DollarSign className="w-3.5 h-3.5 text-secondary dark:text-emerald-400 shrink-0" />
               <div>
-                <p className="text-[10px] text-gray-400 leading-none">Monto</p>
+                <p className="text-xs text-gray-400 leading-none">Monto</p>
                 <p className="text-[13px] font-semibold text-gray-800 dark:text-gray-200 mt-0.5">{monto}</p>
               </div>
             </div>
@@ -166,7 +166,7 @@ export function ProjectCard({ project }: { project: Project }) {
             <div className="flex items-center gap-1.5 col-span-2">
               <DollarSign className="w-3.5 h-3.5 text-gray-300 dark:text-gray-500 shrink-0" />
               <div>
-                <p className="text-[10px] text-gray-400 leading-none">Monto</p>
+                <p className="text-xs text-gray-400 leading-none">Monto</p>
                 <p className="text-[12px] italic text-gray-400 dark:text-gray-500 mt-0.5">No especificado — ver bases</p>
               </div>
             </div>
@@ -175,7 +175,7 @@ export function ProjectCard({ project }: { project: Project }) {
           <div className="flex items-center gap-1.5">
             <Calendar className="w-3.5 h-3.5 text-secondary dark:text-emerald-400 shrink-0" />
             <div>
-              <p className="text-[10px] text-gray-400 leading-none">Cierra</p>
+              <p className="text-xs text-gray-400 leading-none">Cierra</p>
               <p className={`text-[13px] font-semibold mt-0.5 ${styles.deadlineText}`}>{deadlineDetail.replace('Fecha límite: ', '')}</p>
             </div>
           </div>
@@ -183,7 +183,7 @@ export function ProjectCard({ project }: { project: Project }) {
             <div className="flex items-center gap-1.5">
               <MapPin className="w-3.5 h-3.5 text-secondary dark:text-emerald-400 shrink-0" />
               <div>
-                <p className="text-[10px] text-gray-400 leading-none">Región</p>
+                <p className="text-xs text-gray-400 leading-none">Región</p>
                 <p className="text-xs text-gray-600 dark:text-gray-300 mt-0.5 truncate">{region}</p>
               </div>
             </div>

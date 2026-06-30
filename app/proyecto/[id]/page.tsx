@@ -168,7 +168,7 @@ export default async function ProyectoDetallePage({ params }: Props) {
                 </div>
 
                 {/* Card principal */}
-                <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
 
                     {/* Header del fondo */}
                     <div className="bg-gradient-to-r from-[var(--iica-navy)] to-[var(--iica-blue)] p-8 text-white">
@@ -182,7 +182,7 @@ export default async function ProyectoDetallePage({ params }: Props) {
                                         ? 'bg-amber-500/20 border-amber-300/30 text-amber-100'
                                         : 'bg-green-500/20 border-green-300/30 text-green-100'
                                 }`}>
-                                {isClosed ? '🔴 Cerrado' : isUrgent ? `⚠️ Cierra en ${pluralizeDias(diffDays)}` : '🟢 Abierto'}
+                                {isClosed ? <><span aria-hidden="true">🔴</span> Cerrado</> : isUrgent ? <><span aria-hidden="true">⚠️</span> Cierra en {pluralizeDias(diffDays)}</> : <><span aria-hidden="true">🟢</span> Abierto</>}
                             </span>
                         </div>
                         <h1 className="text-2xl md:text-3xl font-extrabold leading-tight mb-3">
@@ -298,13 +298,13 @@ export default async function ProyectoDetallePage({ params }: Props) {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {project.resumen?.plazo_ejecucion && (
                                 <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
-                                    <h3 className="font-bold text-gray-700 mb-1 text-sm">⏱️ Plazo de Ejecución</h3>
+                                    <h3 className="font-bold text-gray-700 mb-1 text-sm"><span aria-hidden="true">⏱️</span> Plazo de Ejecución</h3>
                                     <p className="text-gray-600">{project.resumen.plazo_ejecucion}</p>
                                 </div>
                             )}
                             {project.resumen?.observaciones && (
                                 <div className="bg-amber-50 rounded-xl p-4 border border-amber-100">
-                                    <h3 className="font-bold text-gray-700 mb-1 text-sm">ℹ️ Observaciones</h3>
+                                    <h3 className="font-bold text-gray-700 mb-1 text-sm"><span aria-hidden="true">ℹ️</span> Observaciones</h3>
                                     <p className="text-gray-600 text-sm">{project.resumen.observaciones}</p>
                                 </div>
                             )}

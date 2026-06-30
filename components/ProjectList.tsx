@@ -121,7 +121,7 @@ export default function ProjectList({
               <button
                 type="button"
                 onClick={handleBackToChile}
-                className="text-xs font-medium text-iica-blue hover:underline"
+                className="text-xs font-medium text-iica-blue hover:underline min-h-[44px] px-2"
               >
                 Volver a Solo Chile
               </button>
@@ -129,7 +129,7 @@ export default function ProjectList({
               <button
                 type="button"
                 onClick={handleViewAll}
-                className="text-xs font-medium text-iica-blue hover:underline"
+                className="text-xs font-medium text-iica-blue hover:underline min-h-[44px] px-2"
               >
                 Ver todas
               </button>
