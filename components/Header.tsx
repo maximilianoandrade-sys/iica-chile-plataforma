@@ -76,7 +76,7 @@ export function Header({ urgentCount = 0 }: HeaderProps) {
                             href="/#convocatorias"
                             className="hidden md:flex items-center gap-2 px-5 py-2 bg-secondary hover:bg-emerald-800 text-white font-semibold rounded-xl text-sm transition-all hover:-translate-y-0.5 shadow-sm"
                         >
-                            Explorar Oportunidades
+                            <span>Explorar Oportunidades</span>
                             {urgentCount > 0 && (
                                 <span
                                     className="bg-rose-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black animate-pulse"

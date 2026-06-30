@@ -3,6 +3,7 @@
 import React, { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, AlertTriangle, Loader2 } from 'lucide-react';
 
 interface HeroStats {
@@ -27,26 +28,29 @@ export function HeroSection({ stats }: HeroSectionProps) {
         startTransition(() => {
             router.push('/?estado=Abierta&sort=date_asc#convocatorias', { scroll: false });
         });
-        requestAnimationFrame(() => {
-            const target = document.getElementById('convocatorias');
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        });
+        document.getElementById('convocatorias')?.scrollIntoView({ behavior: 'smooth' });
     };
 
     return (
         <section
             className="relative min-h-[580px] flex items-center overflow-hidden"
-            style={{
-                backgroundImage: [
-                    'linear-gradient(to right, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.2) 100%)',
-                    'url(https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2832&auto=format&fit=crop)',
-                ].join(', '),
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-            }}
         >
+            {/* LCP hero image — priority tells Next.js to preload */}
+            <Image
+                src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2832&auto=format&fit=crop"
+                alt="Campo agrícola chileno"
+                fill
+                priority
+                className="object-cover object-center"
+                sizes="100vw"
+            />
+            {/* Gradient overlay */}
+            <div
+                className="absolute inset-0"
+                style={{
+                    background: 'linear-gradient(to right, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.2) 100%)',
+                }}
+            />
             <div className="container mx-auto max-w-[1200px] px-4 relative z-10 py-20">
                 <div className="max-w-2xl">
                     <div className="mb-5">

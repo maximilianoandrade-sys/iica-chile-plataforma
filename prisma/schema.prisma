@@ -75,6 +75,7 @@ model Project {
   needsReview               Boolean  @default(false)
   publishable               Boolean  @default(true)
   chileEligibility          String   @default("eligible")
+  relevanciaChile           Boolean  @default(true)
   qualityScore              Int      @default(100)
   qualityFlags              String[]
   qualityReasons            String[]
@@ -99,6 +100,7 @@ model Project {
   @@index([sourceRefId])
   @@index([needsReview])
   @@index([publishable])
+  @@index([relevanciaChile])
   @@index([chileEligibility])
   @@index([qualityUpdatedAt])
   @@index([lastSeenAt])

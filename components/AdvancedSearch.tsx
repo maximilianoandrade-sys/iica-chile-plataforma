@@ -23,8 +23,10 @@ export default function AdvancedSearch({ value, onChange, onClear, filterCounts,
   const [showDropdown, setShowDropdown] = useState(false);
   const [savedSearches, setSavedSearches] = useState<SavedSearch[]>([]);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [activeIndex, setActiveIndex] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const listboxId = 'advanced-search-listbox';
 
   // Sincronizar con valor externo (URL param)
   useEffect(() => {
@@ -79,6 +81,24 @@ export default function AdvancedSearch({ value, onChange, onClear, filterCounts,
     return Array.from(results).slice(0, 8);
   }, [inputValue, filterCounts]);
 
+  // Flat list of all visible options for keyboard navigation
+  const flatOptions = useMemo((): string[] => {
+    if (inputValue.trim() && suggestions.length > 0) {
+      return suggestions.map((s) => s.text);
+    }
+    if (!inputValue.trim()) {
+      return [...recentSearches, ...savedSearches.map((s) => s.query)];
+    }
+    return [];
+  }, [inputValue, suggestions, recentSearches, savedSearches]);
+
+  // Reset activeIndex when options change
+  useEffect(() => {
+    setActiveIndex(-1);
+  }, [flatOptions]);
+
+  const activeOptionId = activeIndex >= 0 ? `${listboxId}-option-${activeIndex}` : undefined;
+
   const saveToRecent = (query: string) => {
     const updated = [query, ...recentSearches.filter((s) => s !== query)].slice(0, 6);
     setRecentSearches(updated);
@@ -107,11 +127,27 @@ export default function AdvancedSearch({ value, onChange, onClear, filterCounts,
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Escape') { setShowDropdown(false); inputRef.current?.blur(); }
+    if (e.key === 'Escape') { setShowDropdown(false); setActiveIndex(-1); inputRef.current?.blur(); }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (!showDropdown) { setShowDropdown(true); return; }
+      setActiveIndex((prev) => (prev < flatOptions.length - 1 ? prev + 1 : 0));
+    }
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (!showDropdown) { setShowDropdown(true); return; }
+      setActiveIndex((prev) => (prev > 0 ? prev - 1 : flatOptions.length - 1));
+    }
     if (e.key === 'Enter') {
-      setShowDropdown(false);
-      saveToRecent(inputValue.trim());
-      onChange(inputValue);
+      if (activeIndex >= 0 && activeIndex < flatOptions.length) {
+        e.preventDefault();
+        handleSelect(flatOptions[activeIndex]);
+      } else {
+        setShowDropdown(false);
+        saveToRecent(inputValue.trim());
+        onChange(inputValue);
+      }
+      setActiveIndex(-1);
     }
   };
 
@@ -137,13 +173,15 @@ export default function AdvancedSearch({ value, onChange, onClear, filterCounts,
         <input
           ref={inputRef}
           type="search"
-          role="searchbox"
+          role="combobox"
           aria-label="Buscar oportunidades"
           aria-autocomplete="list"
-          aria-expanded={showDropdown}
+          aria-expanded={dropdownVisible}
+          aria-controls={listboxId}
+          aria-activedescendant={activeOptionId}
           placeholder="Busca por palabra clave, sector, institución..."
           value={inputValue}
-          onChange={(e) => { setInputValue(e.target.value); setShowDropdown(true); }}
+          onChange={(e) => { setInputValue(e.target.value); setShowDropdown(true); setActiveIndex(-1); }}
           onFocus={() => setShowDropdown(true)}
           onKeyDown={handleKeyDown}
           className="w-full rounded-xl border-2 border-[var(--iica-border)] bg-white dark:bg-gray-800 dark:text-white py-3 pl-12 pr-24 text-sm text-gray-900 placeholder:text-gray-400 min-h-[48px] focus:outline-none focus:border-[var(--iica-blue)] transition-colors"
@@ -177,7 +215,9 @@ export default function AdvancedSearch({ value, onChange, onClear, filterCounts,
       {/* Dropdown */}
       {dropdownVisible && (
         <div
+          id={listboxId}
           role="listbox"
+          aria-label="Sugerencias de búsqueda"
           className="absolute top-full left-0 right-0 mt-1.5 bg-white dark:bg-gray-800 border border-[var(--iica-border)] dark:border-gray-700 rounded-xl shadow-xl z-50 overflow-hidden"
         >
           {/* Sugerencias en tiempo real */}
@@ -189,10 +229,12 @@ export default function AdvancedSearch({ value, onChange, onClear, filterCounts,
               {suggestions.map((s, i) => (
                 <button
                   key={i}
+                  id={`${listboxId}-option-${i}`}
                   type="button"
                   role="option"
+                  aria-selected={activeIndex === i}
                   onClick={() => handleSelect(s.text)}
-                  className="w-full text-left px-4 py-2.5 hover:bg-[var(--iica-blue)]/5 dark:hover:bg-gray-700 transition-colors flex items-center gap-3"
+                  className={`w-full text-left px-4 py-2.5 transition-colors flex items-center gap-3 ${activeIndex === i ? 'bg-[var(--iica-blue)]/10 dark:bg-gray-700' : 'hover:bg-[var(--iica-blue)]/5 dark:hover:bg-gray-700'}`}
                 >
                   <Search className="w-4 h-4 text-[var(--iica-secondary)] dark:text-emerald-400 shrink-0" />
                   <span className="text-sm text-gray-800 dark:text-white flex-1">{s.text}</span>
@@ -213,9 +255,12 @@ export default function AdvancedSearch({ value, onChange, onClear, filterCounts,
               {recentSearches.map((s, i) => (
                 <button
                   key={i}
+                  id={`${listboxId}-option-${i}`}
                   type="button"
+                  role="option"
+                  aria-selected={activeIndex === i}
                   onClick={() => handleSelect(s)}
-                  className="w-full text-left px-4 py-2.5 hover:bg-[var(--iica-blue)]/5 dark:hover:bg-gray-700 transition-colors flex items-center gap-3"
+                  className={`w-full text-left px-4 py-2.5 transition-colors flex items-center gap-3 ${activeIndex === i ? 'bg-[var(--iica-blue)]/10 dark:bg-gray-700' : 'hover:bg-[var(--iica-blue)]/5 dark:hover:bg-gray-700'}`}
                 >
                   <Clock className="w-4 h-4 text-gray-400 shrink-0" />
                   <span className="text-sm text-gray-700 dark:text-gray-300">{s}</span>
@@ -230,12 +275,17 @@ export default function AdvancedSearch({ value, onChange, onClear, filterCounts,
               <p className="px-4 pt-3 pb-1.5 text-[10px] font-black uppercase tracking-widest text-gray-400">
                 Guardadas
               </p>
-              {savedSearches.map((s) => (
+              {savedSearches.map((s, i) => {
+                const optionIndex = recentSearches.length + i;
+                return (
                 <div key={s.id} className="flex items-center group">
                   <button
                     type="button"
+                    id={`${listboxId}-option-${optionIndex}`}
+                    role="option"
+                    aria-selected={activeIndex === optionIndex}
                     onClick={() => handleSelect(s.query)}
-                    className="flex-1 text-left px-4 py-2.5 hover:bg-[var(--iica-blue)]/5 dark:hover:bg-gray-700 transition-colors flex items-center gap-3"
+                    className={`flex-1 text-left px-4 py-2.5 transition-colors flex items-center gap-3 ${activeIndex === optionIndex ? 'bg-[var(--iica-blue)]/10 dark:bg-gray-700' : 'hover:bg-[var(--iica-blue)]/5 dark:hover:bg-gray-700'}`}
                   >
                     <Star className="w-4 h-4 text-[var(--iica-yellow)] shrink-0" />
                     <span className="text-sm text-gray-700 dark:text-gray-300">{s.query}</span>
@@ -249,15 +299,19 @@ export default function AdvancedSearch({ value, onChange, onClear, filterCounts,
                     <X className="w-3.5 h-3.5" />
                   </button>
                 </div>
-              ))}
+                );
+              })}
             </div>
           )}
 
           {/* Hint teclado */}
           <div className="px-4 py-2 border-t border-[var(--iica-border)] dark:border-gray-700 bg-gray-50 dark:bg-gray-700/40 flex items-center gap-3">
             <p className="text-[10px] text-gray-400">
+              <kbd className="px-1.5 py-0.5 bg-white dark:bg-gray-600 border border-gray-200 dark:border-gray-500 rounded text-[10px] font-mono">↑↓</kbd>
+              {' '}navegar
+              {' · '}
               <kbd className="px-1.5 py-0.5 bg-white dark:bg-gray-600 border border-gray-200 dark:border-gray-500 rounded text-[10px] font-mono">↵</kbd>
-              {' '}buscar
+              {' '}seleccionar
               {' · '}
               <kbd className="px-1.5 py-0.5 bg-white dark:bg-gray-600 border border-gray-200 dark:border-gray-500 rounded text-[10px] font-mono">Esc</kbd>
               {' '}cerrar

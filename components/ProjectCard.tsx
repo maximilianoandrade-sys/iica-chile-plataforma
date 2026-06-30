@@ -154,12 +154,20 @@ export function ProjectCard({ project }: { project: Project }) {
       <div className="px-5 py-3 bg-gray-50 dark:bg-gray-700/40 border-t border-b border-gray-100 dark:border-gray-700">
         <div className="grid grid-cols-2 gap-3">
           {/* Monto — second visual priority */}
-          {monto !== 'Ver bases oficiales' && (
+          {monto !== 'Ver bases oficiales' ? (
             <div className="flex items-center gap-1.5 col-span-2">
               <DollarSign className="w-3.5 h-3.5 text-secondary dark:text-emerald-400 shrink-0" />
               <div>
                 <p className="text-[10px] text-gray-400 leading-none">Monto</p>
                 <p className="text-[13px] font-semibold text-gray-800 dark:text-gray-200 mt-0.5">{monto}</p>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center gap-1.5 col-span-2">
+              <DollarSign className="w-3.5 h-3.5 text-gray-300 dark:text-gray-500 shrink-0" />
+              <div>
+                <p className="text-[10px] text-gray-400 leading-none">Monto</p>
+                <p className="text-[12px] italic text-gray-400 dark:text-gray-500 mt-0.5">No especificado — ver bases</p>
               </div>
             </div>
           )}
@@ -186,9 +194,6 @@ export function ProjectCard({ project }: { project: Project }) {
       {/* Footer — deadline urgency text */}
       <div className="px-5 py-3 mt-auto">
         <p className={`text-[13px] font-semibold ${styles.deadlineText}`}>{deadlineText}</p>
-        {monto === 'Ver bases oficiales' && (
-          <p className="text-xs text-gray-400 mt-0.5">Consultar bases para monto</p>
-        )}
       </div>
     </article>
   );
