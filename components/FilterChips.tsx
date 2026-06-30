@@ -298,7 +298,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
             type="button"
             onClick={() => setAdvancedOpen((prev) => !prev)}
             aria-expanded={advancedOpen}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all min-h-[36px] ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium transition-all min-h-[44px] ${
               advancedOpen || advancedFilterCount > 0
                 ? 'bg-[var(--iica-blue)] text-white shadow-sm'
                 : 'border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:border-gray-400 hover:text-gray-900 dark:hover:text-white'
@@ -345,7 +345,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
 
         {/* ── Advanced filters panel ── */}
         {advancedOpen && (
-          <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-800 animate-in slide-in-from-top-2 duration-200">
+          <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
 
               {/* Institución searchable */}
@@ -481,7 +481,7 @@ interface QuickChipProps {
 }
 
 function QuickChip({ active, variant = 'default', onClick, children }: QuickChipProps) {
-  const baseClasses = 'inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium transition-all cursor-pointer min-h-[36px] select-none';
+  const baseClasses = 'inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-sm font-medium transition-all cursor-pointer min-h-[44px] select-none';
 
   const variantClasses = active
     ? variant === 'urgent'

@@ -67,6 +67,7 @@ export async function upsertProject(
     ambito: raw.ambito ?? "Nacional",
     idioma: raw.idioma ?? "es",
     region: raw.region ? cleanText(normalizeMojibake(raw.region)) : null,
+    relevanciaChile: raw.relevanciaChile ?? true,
     publishable: quality.publishable,
     chileEligibility: quality.chileEligibility,
     qualityScore: quality.qualityScore,

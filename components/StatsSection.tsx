@@ -54,13 +54,7 @@ export default function StatsSection({ total, abiertas, internacionales, urgente
         startTransition(() => {
             router.push(href, { scroll: false });
         });
-        // Scroll to #convocatorias after a short delay so the transition starts first
-        requestAnimationFrame(() => {
-            const target = document.getElementById('convocatorias');
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        });
+        document.getElementById('convocatorias')?.scrollIntoView({ behavior: 'smooth' });
     };
 
     return (

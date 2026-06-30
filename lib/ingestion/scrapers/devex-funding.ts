@@ -178,6 +178,16 @@ export const devexFundingScraper: Scraper = {
 
         const deadline = parseDate(item.deadline) || parseDate(item.updated_at);
 
+        // Chile relevance: true if firstPlace is Chile, or title/description mentions Chile
+        const allPlaces = (item.places ?? []).map(p => cleanText(p.name).toLowerCase());
+        const descText = stripHtml(item.summarized_description).toLowerCase();
+        const titleLower = title.toLowerCase();
+        const relevanciaChile =
+          firstPlace.toLowerCase() === 'chile' ||
+          allPlaces.includes('chile') ||
+          titleLower.includes('chile') ||
+          descText.includes('chile');
+
         projects.push({
           title,
           institution: "Devex",
@@ -191,6 +201,7 @@ export const devexFundingScraper: Scraper = {
           region: firstPlace,
           ambito: "Internacional",
           idioma: "en",
+          relevanciaChile,
         });
       }
 

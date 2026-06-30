@@ -1,13 +1,16 @@
 import type { Metadata, Viewport } from 'next'
 import { Poppins } from 'next/font/google'
+import dynamic from 'next/dynamic'
+import Script from 'next/script'
 import './globals.css'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { ToastProvider } from '@/components/ui/ToastProvider'
 import CookieConsent from '@/components/CookieConsent';
-import PWAInstallBanner from '@/components/PWAInstallBanner';
 import OfflineIndicator from '@/components/OfflineIndicator';
-import PushNotificationManager from '@/components/PushNotificationManager';
-import ScrollToTop from '@/components/ScrollToTop';
+
+const PWAInstallBanner = dynamic(() => import('@/components/PWAInstallBanner'), { ssr: false });
+const ScrollToTop = dynamic(() => import('@/components/ScrollToTop'), { ssr: false });
+const PushNotificationManager = dynamic(() => import('@/components/PushNotificationManager'), { ssr: false });
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -217,6 +220,26 @@ export default function RootLayout({
             `,
           }}
         />
+
+        {/* Google Analytics 4 */}
+        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="gtag-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}', {
+                  page_path: window.location.pathname,
+                });
+              `}
+            </Script>
+          </>
+        )}
         </ThemeProvider>
       </body>
     </html>

@@ -25,6 +25,7 @@ const SOURCES = [
   { slug: "anid",             name: "ANID — Agencia Nacional de Investigación y Desarrollo", type: "scraper", homepageUrl: "https://anid.cl/concursos/" },
   { slug: "minagri-licitaciones", name: "MINAGRI — Licitaciones MercadoPublico", type: "scraper", homepageUrl: "https://www.mercadopublico.cl/Portal/FeedOrg.aspx?qs=Mer+eNmLUHn7TN5dx6I0Mg==" },
   { slug: "inia",             name: "INIA — Instituto de Investigaciones Agropecuarias", type: "scraper", homepageUrl: "https://www.inia.cl/licitaciones/" },
+  { slug: "global-south-opportunities", name: "Global South Opportunities (Aggregator)", type: "scraper", homepageUrl: "https://www.globalsouthopportunities.com/" },
 ];
 
 async function main() {

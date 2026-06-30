@@ -171,10 +171,10 @@ export default function PrivacyPolicyPage() {
                     IICA Chile<br />
                     Correo electrónico:{' '}
                     <a
-                        href="mailto:chile.iica@iica.int"
+                        href="mailto:representacion.chile@iica.int"
                         className="underline text-[var(--iica-blue)]"
                     >
-                        chile.iica@iica.int
+                        representacion.chile@iica.int
                     </a>
                     <br />
                     Dirección: Calle Rancagua N.° 0320, Providencia, Santiago, Chile.

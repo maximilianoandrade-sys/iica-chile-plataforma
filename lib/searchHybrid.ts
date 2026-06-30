@@ -82,6 +82,13 @@ function buildHybridFilters(opts: HybridSearchOptions): HybridQueryFilters {
 function buildProjectWhere(filters: HybridQueryFilters): Prisma.ProjectWhereInput {
   const where: Prisma.ProjectWhereInput = {};
 
+  // Default: exclude expired projects (fecha_cierre must be today or later)
+  // This prevents search from returning already-closed opportunities.
+  // The closingWithinDays filter below may further narrow this range.
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  where.fecha_cierre = { gte: today };
+
   if (filters.ambito && filters.ambito !== 'all') {
     if (filters.ambito === 'chile') {
       // "Solo Chile" = todo menos Internacional
@@ -138,12 +145,13 @@ function buildProjectWhere(filters: HybridQueryFilters): Prisma.ProjectWhereInpu
   }
 
   if (filters.closingWithinDays != null && filters.closingWithinDays > 0) {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const maxDate = new Date(today);
+    const closingToday = new Date();
+    closingToday.setHours(0, 0, 0, 0);
+    const maxDate = new Date(closingToday);
     maxDate.setDate(maxDate.getDate() + filters.closingWithinDays);
     maxDate.setHours(23, 59, 59, 999);
-    where.fecha_cierre = { gte: today, lte: maxDate };
+    // Override the default fecha_cierre filter with a narrower window
+    where.fecha_cierre = { gte: closingToday, lte: maxDate };
   }
 
   return where;

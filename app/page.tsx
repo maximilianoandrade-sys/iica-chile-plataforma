@@ -15,7 +15,8 @@ import { buildFilterCounts } from "@/lib/search/filtering";
 import prisma from "@/lib/prisma";
 
 // Estrategia híbrida: home cacheada con ISR y búsqueda/filtros dinámicos por query.
-export const revalidate = 3600;
+// 15 min revalidation reduces stale "urgent" data window (was 1 hour).
+export const revalidate = 900;
 
 // Dynamic Metadata for SEO
 export async function generateMetadata({
@@ -96,6 +97,10 @@ export default async function DashboardPage({
     'UE',
     'EUROCLIMA',
     'UNGM',
+    'OCDE',
+    'OECD',
+    'GSO',
+    'GLOBAL SOUTH',
   ];
 
   const internacionales = projects.filter((p) => {
@@ -117,9 +122,24 @@ export default async function DashboardPage({
   const heroStats = { total: projects.length, internacionales, abiertas, urgentes };
 
   // Compute institution counts for FuentesOficiales (avoids shipping 150KB JSON to client)
+  // Match by sigla-contains to handle compound names like "SAG / MINAGRI" → counts for "SAG"
+  const KNOWN_SIGLAS = [
+    'CNR', 'INDAP', 'FIA', 'CORFO', 'SAG', 'SERCOTEC', 'GORE', 'SUBDERE', 'MINAGRI',
+    'FONTAGRO', 'FAO', 'FIDA', 'IFAD', 'BID', 'IADB', 'PNUD', 'GEF', 'GCF', 'IICA', 'UE', 'ANID',
+    'OCDE', 'OECD', 'GSO',
+  ];
   const institutionCounts: Record<string, number> = {};
   filterSnapshot.forEach(p => {
-    institutionCounts[p.institucion] = (institutionCounts[p.institucion] || 0) + 1;
+    const upper = (p.institucion || '').toUpperCase();
+    for (const sigla of KNOWN_SIGLAS) {
+      if (upper.includes(sigla)) {
+        institutionCounts[sigla] = (institutionCounts[sigla] || 0) + 1;
+      }
+    }
+    // Also keep the raw key for any institution not matching a known sigla
+    if (!KNOWN_SIGLAS.some(s => upper.includes(s))) {
+      institutionCounts[p.institucion] = (institutionCounts[p.institucion] || 0) + 1;
+    }
   });
 
   const latestSourceRun = await prisma.source.findFirst({
@@ -152,7 +172,9 @@ export default async function DashboardPage({
         />
 
         {/* 4. Search/Filter bar — sticky below header, se pega solo al pasar el hero */}
-        <FilterChips filterCounts={filterCounts} />
+        <Suspense>
+          <FilterChips filterCounts={filterCounts} />
+        </Suspense>
 
         <main id="convocatorias" className="flex-grow container mx-auto max-w-[1200px] px-4 pb-10 scroll-mt-40">
           <div className="flex flex-col gap-10">
