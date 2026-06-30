@@ -10,8 +10,8 @@ import { test, expect } from "@playwright/test";
 test.describe("Home & navegación", () => {
   test("home carga y muestra el listado de convocatorias", async ({ page }) => {
     await page.goto("/");
-    // FilterChips search input is the new anchor
-    await expect(page.getByRole("searchbox", { name: /Buscar oportunidades/i })).toBeVisible();
+    // FilterChips search input is the new anchor (role=combobox due to autocomplete)
+    await expect(page.getByRole("combobox", { name: /Buscar oportunidades/i })).toBeVisible();
     // La sección "convocatorias" debería renderizar.
     await expect(page.locator("#convocatorias")).toBeVisible();
   });
@@ -30,7 +30,7 @@ test.describe("Home & navegación", () => {
 test.describe("Búsqueda", () => {
   test("búsqueda con texto filtra sin error", async ({ page }) => {
     await page.goto("/");
-    const input = page.getByRole("searchbox", { name: /Buscar oportunidades/i });
+    const input = page.getByRole("combobox", { name: /Buscar oportunidades/i });
     await input.fill("riego");
     // FilterChips filters client-side — no network call needed.
     // Verify no error is displayed.
