@@ -58,7 +58,7 @@ export default function CookieConsent() {
             <div className="container mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-between gap-4">
                 <div className="flex-1 text-center md:text-left">
                     <p className="text-white text-sm md:text-base leading-relaxed">
-                        <strong>🍪 Respetamos tu privacidad.</strong> Utilizamos cookies propias y de terceros para analizar el tráfico, mejorar tu experiencia y ofrecerte contenido relevante.
+                        <strong><span aria-hidden="true">🍪</span> Respetamos tu privacidad.</strong> Utilizamos cookies propias y de terceros para analizar el tráfico, mejorar tu experiencia y ofrecerte contenido relevante.
                         Al continuar navegando, aceptas nuestra <Link href="/legal/privacidad" className="underline text-[var(--iica-cyan)] hover:text-white">Política de Privacidad</Link> y el uso de cookies.
                     </p>
                 </div>

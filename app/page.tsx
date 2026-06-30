@@ -158,6 +158,7 @@ export default async function DashboardPage({
         <Header urgentCount={urgentes} />
 
         {/* 2. Hero — primera impresión limpia, scroll normal */}
+        <main>
         <HeroSection stats={heroStats} />
 
         {/* 3. Stats Section */}
@@ -169,11 +170,11 @@ export default async function DashboardPage({
         />
 
         {/* 4. Search/Filter bar — sticky below header, se pega solo al pasar el hero */}
-        <Suspense>
+        <Suspense fallback={<div className="h-16" />}>
           <FilterChips filterCounts={filterCounts} />
         </Suspense>
 
-        <main id="convocatorias" className="flex-grow container mx-auto max-w-[1200px] px-4 pb-10 scroll-mt-40">
+        <div id="convocatorias" className="flex-grow container mx-auto max-w-[1200px] px-4 pb-10 scroll-mt-40">
           <div className="flex flex-col gap-10">
 
             {/* Proyectos — sección principal */}
@@ -185,7 +186,7 @@ export default async function DashboardPage({
             </section>
 
           </div>
-        </main>
+        </div>
 
         {/* Fuentes Oficiales */}
         <div className="scroll-mt-20">
@@ -196,6 +197,7 @@ export default async function DashboardPage({
         <section id="newsletter" className="container mx-auto max-w-[1200px] px-4 py-8">
           <Newsletter />
         </section>
+        </main>
 
         {/* Footer */}
         <div id="contacto">

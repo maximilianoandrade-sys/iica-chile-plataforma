@@ -58,7 +58,7 @@ const ALIANZAS = [
 
 export default function AboutPage() {
     return (
-        <div className="min-h-screen flex flex-col bg-[#f4f7f9]">
+        <div className="min-h-screen flex flex-col bg-[#f4f7f9] dark:bg-gray-900">
             <Header />
 
             <main className="flex-grow">
@@ -169,7 +169,7 @@ export default function AboutPage() {
                 </section>
 
                 {/* Capacidades */}
-                <section className="py-16 bg-[#f4f7f9]">
+                <section className="py-16 bg-[#f4f7f9] dark:bg-gray-900">
                     <div className="container mx-auto max-w-[1100px] px-4">
                         <div className="text-center mb-12">
                             <h2 className="text-3xl font-black text-[var(--iica-navy)] mb-3">Áreas de Capacidad</h2>
@@ -178,7 +178,7 @@ export default function AboutPage() {
                         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
                             {CAPACIDADES.map((c) => (
                                 <div key={c.title} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
-                                    <div className="text-3xl mb-3">{c.icon}</div>
+                                    <div className="text-3xl mb-3" aria-hidden="true">{c.icon}</div>
                                     <h3 className="font-bold text-[var(--iica-navy)] mb-2 text-sm">{c.title}</h3>
                                     <p className="text-gray-500 text-xs leading-relaxed">{c.desc}</p>
                                 </div>

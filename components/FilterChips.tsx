@@ -259,7 +259,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
             active={isAbiertaActive}
             onClick={() => updateParams({ estado: 'Abierta', urgencia: '', ambito: '' })}
           >
-            <span className="w-2 h-2 rounded-full bg-green-500" />
+            <span className="w-2 h-2 rounded-full bg-green-500" aria-hidden="true" />
             Abiertas
           </QuickChip>
           <QuickChip
@@ -267,7 +267,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
             variant="urgent"
             onClick={() => updateParams({ urgencia: '7', estado: 'Abierta', ambito: '' })}
           >
-            <span className="w-2 h-2 rounded-full bg-red-500" />
+            <span className="w-2 h-2 rounded-full bg-red-500" aria-hidden="true" />
             Urgentes ≤7d
           </QuickChip>
           <QuickChip
@@ -275,14 +275,14 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
             variant="intl"
             onClick={() => updateParams({ ambito: 'Internacional', urgencia: '', estado: 'Abierta' })}
           >
-            <span className="w-2 h-2 rounded-full bg-blue-500" />
+            <span className="w-2 h-2 rounded-full bg-blue-500" aria-hidden="true" />
             Internacional
           </QuickChip>
           <QuickChip
             active={isChileActive}
             onClick={() => updateParams({ ambito: 'chile', urgencia: '', estado: 'Abierta' })}
           >
-            <span className="w-2 h-2 rounded-full bg-emerald-600" />
+            <span className="w-2 h-2 rounded-full bg-emerald-600" aria-hidden="true" />
             Solo Chile
           </QuickChip>
 
@@ -332,7 +332,7 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
             <button
               type="button"
               onClick={clearAll}
-              className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 underline ml-1"
+              className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 underline ml-1 min-h-[44px] flex items-center"
             >
               Limpiar todo
             </button>

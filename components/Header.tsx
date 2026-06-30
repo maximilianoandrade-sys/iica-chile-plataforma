@@ -20,7 +20,7 @@ export function Header({ urgentCount = 0 }: HeaderProps) {
             {/* Institutional Top Bar */}
             <div className="bg-[var(--iica-navy)] dark:bg-gray-800 text-white text-xs py-1.5 px-4">
                 <div className="container mx-auto max-w-[1200px] flex justify-between items-center">
-                    <span className="font-medium">Instituto Interamericano de Cooperación para la Agricultura — Oficina Chile</span>
+                    <span className="font-medium truncate">Instituto Interamericano de Cooperación para la Agricultura — Oficina Chile</span>
                     <span className="opacity-75 hidden sm:block tracking-wide">Radar de Oportunidades 2026</span>
                 </div>
             </div>
@@ -48,7 +48,7 @@ export function Header({ urgentCount = 0 }: HeaderProps) {
                             <span className="font-black text-[var(--iica-navy)] dark:text-white text-base">
                                 IICA <span className="text-[var(--iica-blue)] dark:text-blue-400">Chile</span>
                             </span>
-                            <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Radar 2026</span>
+                            <span className="text-xs font-bold uppercase tracking-widest text-gray-400">Radar 2026</span>
                         </div>
                     </a>
 

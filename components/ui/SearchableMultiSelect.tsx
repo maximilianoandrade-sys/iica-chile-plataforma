@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback, useId, useMemo } from 'react';
 import { ChevronDown, Search } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/cn';
 
 export interface MultiSelectOption {
   value: string;

@@ -193,7 +193,7 @@ export default function AdvancedSearch({ value, onChange, onClear, filterCounts,
               type="button"
               onClick={handleSave}
               title="Guardar búsqueda"
-              className="p-1.5 rounded-lg text-gray-300 hover:text-[var(--iica-yellow)] hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition-colors"
+              className="p-2.5 rounded-lg text-gray-300 hover:text-[var(--iica-yellow)] hover:bg-yellow-50 dark:hover:bg-yellow-900/20 transition-colors"
               aria-label="Guardar búsqueda"
             >
               <Star className="w-4 h-4" />
@@ -203,7 +203,7 @@ export default function AdvancedSearch({ value, onChange, onClear, filterCounts,
             <button
               type="button"
               onClick={() => { setInputValue(''); setShowDropdown(false); onClear(); }}
-              className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              className="p-2.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               aria-label="Limpiar búsqueda"
             >
               <X className="w-4 h-4" />
