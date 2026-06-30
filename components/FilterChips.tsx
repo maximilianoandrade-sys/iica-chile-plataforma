@@ -12,18 +12,14 @@ import InstitutionFilter from '@/components/InstitutionFilter';
 
 const logger = getLogger('FilterChips');
 
+import { NATIONAL_INSTITUTIONS, INTERNATIONAL_INSTITUTIONS } from '@/lib/constants/institutions';
+
 interface FilterChipsProps {
   filterCounts: FilterCounts;
 }
 
-const NATIONAL_INSTITUTION_KEYS = [
-  'CNR', 'INDAP', 'FIA', 'CORFO', 'SAG', 'SERCOTEC', 'GORE', 'SUBDERE', 'MINAGRI',
-];
-
-const INTERNATIONAL_INSTITUTION_KEYS = [
-  'FONTAGRO', 'FAO', 'FIDA', 'IFAD', 'BID', 'IADB', 'PNUD', 'GEF', 'GCF',
-  'WORLD BANK', 'IICA', 'UE', 'EUROCLIMA', 'UNGM',
-];
+const NATIONAL_INSTITUTION_KEYS = NATIONAL_INSTITUTIONS;
+const INTERNATIONAL_INSTITUTION_KEYS = INTERNATIONAL_INSTITUTIONS;
 
 const CHILE_REGION_LABELS = new Set([
   'Arica y Parinacota', 'Tarapacá', 'Antofagasta', 'Atacama', 'Coquimbo',
