@@ -72,7 +72,7 @@ export default function Newsletter() {
                                 <CheckCircle className="h-8 w-8 text-green-400 gap-2" />
                             </div>
                             <h3 className="font-bold text-lg">¡Suscripción Exitosa!</h3>
-                            <p className="text-sm text-blue-100">¡Listo! Revisa tu correo para confirmar la suscripción.</p>
+                            <p className="text-sm text-blue-100">Te avisaremos cuando publiquemos nuevas oportunidades.</p>
                             <button
                                 onClick={() => setStatus('idle')}
                                 className="mt-3 text-xs text-green-300 underline hover:text-green-200"
