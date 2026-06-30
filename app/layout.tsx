@@ -3,7 +3,7 @@ import { Poppins } from 'next/font/google'
 import dynamic from 'next/dynamic'
 import Script from 'next/script'
 import './globals.css'
-import { ThemeProvider } from '@/components/ThemeProvider'
+import { ThemeProvider } from 'next-themes'
 import { ToastProvider } from '@/components/ui/ToastProvider'
 import CookieConsent from '@/components/CookieConsent';
 import OfflineIndicator from '@/components/OfflineIndicator';
