@@ -35,9 +35,9 @@ export function HeroSection({ stats }: HeroSectionProps) {
         <section
             className="relative min-h-[580px] flex items-center overflow-hidden"
         >
-            {/* LCP hero image — priority tells Next.js to preload */}
+            {/* LCP hero image — self-hosted for performance */}
             <Image
-                src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2832&auto=format&fit=crop"
+                src="/hero-campo.webp"
                 alt="Campo agrícola chileno"
                 fill
                 priority

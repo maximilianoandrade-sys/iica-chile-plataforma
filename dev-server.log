@@ -1,0 +1,30 @@
+  ▲ Next.js 14.2.23
+  - Local:        http://localhost:3000
+  - Environments: .env.local, .env
+
+ ✓ Starting...
+ ○ (pwa) PWA support is disabled.
+ ✓ Ready in 2.2s
+ ✓ Compiled /middleware in 343ms (72 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 4.6s (986 modules)
+[2026-06-30T15:13:02.206Z] [INFO] [Data] Prisma OK: proyectos vigentes {"count":0}
+ GET / 200 in 4982ms
+ ✓ Compiled in 261ms (382 modules)
+ ✓ Compiled / in 171ms (595 modules)
+[2026-06-30T15:15:43.124Z] [INFO] [Data] Prisma OK: proyectos vigentes {"count":0}
+ GET / 200 in 361ms
+ ✓ Compiled in 728ms (977 modules)
+[2026-06-30T15:16:53.811Z] [INFO] [Data] Prisma OK: proyectos vigentes {"count":0}
+ GET / 200 in 244ms
+[2026-06-30T15:18:05.332Z] [INFO] [Data] Prisma OK: proyectos vigentes {"count":0}
+ GET / 200 in 88ms
+[2026-06-30T15:18:05.929Z] [INFO] [Data] Prisma OK: proyectos vigentes {"count":0}
+ GET / 200 in 55ms
+[2026-06-30T15:18:08.106Z] [INFO] [Data] Prisma OK: proyectos vigentes {"count":0}
+ GET / 200 in 57ms
+ ✓ Compiled /_not-found in 263ms (626 modules)
+ ✓ Compiled in 189ms (369 modules)
+ GET /icon.svg?7d842868907c6386 200 in 826ms
+ GET /_next/static/7pfGF8uNscDiNviMaC0gz/_buildManifest.js 404 in 720ms
+ GET /icon-144.png 404 in 828ms

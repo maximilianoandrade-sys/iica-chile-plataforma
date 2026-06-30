@@ -12,6 +12,7 @@ import PipelineStatus from "@/components/PipelineStatus";
 import { FilterChips } from "@/components/FilterChips";
 import { getCachedProjectFilterSnapshot, getCachedProjects } from "@/lib/data";
 import { buildFilterCounts } from "@/lib/search/filtering";
+import { ALL_INSTITUTION_SIGLAS } from "@/lib/constants/institutions";
 import prisma from "@/lib/prisma";
 
 // Estrategia híbrida: home cacheada con ISR y búsqueda/filtros dinámicos por query.
@@ -123,11 +124,7 @@ export default async function DashboardPage({
 
   // Compute institution counts for FuentesOficiales (avoids shipping 150KB JSON to client)
   // Match by sigla-contains to handle compound names like "SAG / MINAGRI" → counts for "SAG"
-  const KNOWN_SIGLAS = [
-    'CNR', 'INDAP', 'FIA', 'CORFO', 'SAG', 'SERCOTEC', 'GORE', 'SUBDERE', 'MINAGRI',
-    'FONTAGRO', 'FAO', 'FIDA', 'IFAD', 'BID', 'IADB', 'PNUD', 'GEF', 'GCF', 'IICA', 'UE', 'ANID',
-    'OCDE', 'OECD', 'GSO',
-  ];
+  const KNOWN_SIGLAS = ALL_INSTITUTION_SIGLAS;
   const institutionCounts: Record<string, number> = {};
   filterSnapshot.forEach(p => {
     const upper = (p.institucion || '').toUpperCase();
