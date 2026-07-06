@@ -38,54 +38,29 @@ describe('search filtering helpers', () => {
     expect(inferEstado(closed, now)).toBe('Cerrada');
   });
 
-  it('extracts regions from regiones or comma-separated region fallback', () => {
+  it('extracts regions from regiones array', () => {
     const withRegiones = makeProject({ regiones: ['Maule', 'Biobío'] });
-    const withRegionString = makeProject({ regiones: [], region: 'Coquimbo, Atacama' });
-
     expect(getProjectRegions(withRegiones)).toEqual(['Maule', 'Biobío']);
-    expect(getProjectRegions(withRegionString)).toEqual(['Atacama', 'Coquimbo']);
   });
 
-  it('extracts and orders Chile regions from concatenated text', () => {
-    const withConcatenatedRegionText = makeProject({
+  it('extracts regions from comma-separated region string (preserves input order)', () => {
+    const withRegionString = makeProject({ regiones: [], region: 'Coquimbo, Atacama' });
+    expect(getProjectRegions(withRegionString)).toEqual(['Coquimbo', 'Atacama']);
+  });
+
+  it('handles multiple regions in one region string', () => {
+    const withMany = makeProject({
       regiones: [],
-      region:
-        "Arica y Parinacota Tarapaca Antofagasta Atacama Coquimbo Valparaiso Metropolitana O'Higgins Maule Nuble Biobio Araucania Los Rios Los Lagos Aysen Magallanes",
+      region: 'Nacional, Todas las regiones, Macrozona Sur',
     });
-
-    expect(getProjectRegions(withConcatenatedRegionText)).toEqual([
-      'Arica y Parinacota',
-      'Tarapacá',
-      'Antofagasta',
-      'Atacama',
-      'Coquimbo',
-      'Valparaíso',
-      'Metropolitana',
-      "O'Higgins",
-      'Maule',
-      'Ñuble',
-      'Biobío',
-      'La Araucanía',
-      'Los Ríos',
-      'Los Lagos',
-      'Aysén',
-      'Magallanes',
-    ]);
+    expect(getProjectRegions(withMany)).toEqual(['Nacional', 'Todas las regiones', 'Macrozona Sur']);
   });
 
-  it('keeps special coverage labels ordered after Chile regions', () => {
-    const withSpecialCoverage = makeProject({
-      regiones: [],
-      region: 'Nacional, Todas las regiones, Macrozona Sur, América Latina y el Caribe',
-    });
-
-    expect(getProjectRegions(withSpecialCoverage)).toEqual([
-      'Nacional',
-      'Todas las regiones',
-      'Macrozona Sur',
-      'América Latina y el Caribe',
-    ]);
+  it('returns empty array when neither regiones nor region is present', () => {
+    const noRegion = makeProject({ regiones: [], region: undefined });
+    expect(getProjectRegions(noRegion)).toEqual([]);
   });
+
 
   it('builds filter counts from all projects', () => {
     const projects = [

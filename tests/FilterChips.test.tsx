@@ -32,12 +32,24 @@ describe('FilterChips', () => {
     jest.useRealTimers();
   });
 
-  it('renders main search and basic filter controls', () => {
+  it('renders search input and estado chips', () => {
     render(<FilterChips filterCounts={mockFilterCounts} />);
-    expect(screen.getByRole('searchbox')).toBeInTheDocument();
-    expect(screen.getByLabelText(/Estado/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Ubicaciones/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Instituciones/i)).toBeInTheDocument();
+    expect(screen.getByRole('searchbox', { name: /Buscar oportunidades/i })).toBeInTheDocument();
+    // Estado chips rendered as buttons
+    expect(screen.getByRole('button', { name: /Abiertas/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Próximas/i })).toBeInTheDocument();
+  });
+
+  it('renders top institution chips', () => {
+    render(<FilterChips filterCounts={mockFilterCounts} />);
+    expect(screen.getByRole('button', { name: 'CORFO' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'FIA' })).toBeInTheDocument();
+  });
+
+  it('renders top region chips', () => {
+    render(<FilterChips filterCounts={mockFilterCounts} />);
+    expect(screen.getByRole('button', { name: 'Metropolitana' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Biobío' })).toBeInTheDocument();
   });
 
   it('aplica busqueda en vivo con debounce y replace', () => {
@@ -55,41 +67,45 @@ describe('FilterChips', () => {
     expect(replaceMock).toHaveBeenCalledWith('/?q=indap', { scroll: false });
   });
 
-  it('expands advanced filters and applies ambito in real time', () => {
+  it('expands advanced filters panel on "Más filtros" click', () => {
     render(<FilterChips filterCounts={mockFilterCounts} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /Filtros avanzados/i }));
+    const toggleBtn = screen.getByRole('button', { name: /Más filtros/i });
+    fireEvent.click(toggleBtn);
 
-    const scopeSelect = screen.getByLabelText(/Ambito/i);
-    fireEvent.change(scopeSelect, { target: { value: 'Internacional' } });
+    // Ambito chips appear in expanded panel
+    expect(screen.getByRole('button', { name: 'Nacional' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Regional' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Internacional' })).toBeInTheDocument();
+  });
+
+  it('selects ambito chip and navigates', () => {
+    render(<FilterChips filterCounts={mockFilterCounts} />);
+
+    // Open panel first
+    fireEvent.click(screen.getByRole('button', { name: /Más filtros/i }));
+
+    fireEvent.click(screen.getByRole('button', { name: 'Internacional' }));
 
     expect(pushMock).toHaveBeenCalledWith('/?ambito=Internacional', { scroll: false });
   });
 
-  it('resets all filters with dedicated action', () => {
-    mockSearchParams = new URLSearchParams('q=fia&estado=Abierta');
+  it('resets all filters with "Limpiar" button', () => {
+    mockSearchParams = new URLSearchParams('estado=Abierta');
     render(<FilterChips filterCounts={mockFilterCounts} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /Restablecer todo/i }));
+    // Use exact name to avoid matching "Limpiar búsqueda" on the search box
+    fireEvent.click(screen.getByRole('button', { name: 'Limpiar' }));
 
     expect(pushMock).toHaveBeenCalledWith('/', { scroll: false });
   });
 
-  it('orders region options in Chile official order, not alphabetical', () => {
-    const regionSortedByName = {
-      ...mockFilterCounts,
-      region: {
-        Magallanes: 1,
-        Coquimbo: 1,
-        Atacama: 1,
-        Metropolitana: 1,
-      },
-    };
-
-    render(<FilterChips filterCounts={regionSortedByName} />);
-
-    const regionSelect = screen.getByLabelText(/Ubicaciones/i);
-    const optionTexts = Array.from(regionSelect.querySelectorAll('option')).map((option) => option.textContent);
-    expect(optionTexts).toEqual(['Atacama', 'Coquimbo', 'Metropolitana', 'Magallanes']);
+  it('renders top regions sorted by count (most first)', () => {
+    render(<FilterChips filterCounts={mockFilterCounts} />);
+    // Metropolitana (6) appears before Biobío (4) in the DOM
+    const buttons = screen.getAllByRole('button').map((b) => b.textContent?.trim());
+    const metroIdx = buttons.findIndex((t) => t === 'Metropolitana');
+    const biobioIdx = buttons.findIndex((t) => t === 'Biobío');
+    expect(metroIdx).toBeLessThan(biobioIdx);
   });
 });

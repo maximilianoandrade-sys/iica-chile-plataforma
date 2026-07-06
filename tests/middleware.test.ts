@@ -97,8 +97,9 @@ describe("middleware admin token expiry", () => {
   it("rejects a tampered token", async () => {
     const now = Date.now();
     const token = generateToken(SECRET, now);
-    // Tamper with the signature
-    const tampered = "a" + token.substring(1);
+    // Tamper with the signature: "z" is never a valid hex char so the
+    // signature will always differ from the expected HMAC.
+    const tampered = "z" + token.substring(1);
     const req = makeRequest("/admin/dashboard", tampered);
 
     await middleware(req as any);

@@ -48,9 +48,12 @@ describe('ProjectList accessibility', () => {
   it('renders structured filter controls', () => {
     render(<ProjectList projects={projects} filterCounts={filterCounts} totalCount={1} />);
     expect(screen.getByRole('searchbox', { name: /Buscar oportunidades/i })).toBeInTheDocument();
-    expect(screen.getByLabelText(/Estado/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Ubicaciones/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Instituciones/i)).toBeInTheDocument();
+    // Estado chips replace the old <select> controls
+    expect(screen.getByRole('button', { name: /Abiertas/i })).toBeInTheDocument();
+    // Top institutions rendered as chips
+    expect(screen.getByRole('button', { name: 'CORFO' })).toBeInTheDocument();
+    // Top regions rendered as chips
+    expect(screen.getByRole('button', { name: 'Metropolitana' })).toBeInTheDocument();
   });
 
   it('has sort control with label', () => {

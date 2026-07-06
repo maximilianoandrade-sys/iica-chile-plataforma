@@ -1,12 +1,16 @@
 import { render, screen } from '@testing-library/react';
 import { ProjectCard } from '@/components/ProjectCard';
 
+const futureDate = new Date();
+futureDate.setDate(futureDate.getDate() + 30);
+const futureDateStr = futureDate.toISOString().slice(0, 10);
+
 const mockProject = {
   id: 1,
   nombre: 'Programa de Riego Tecnificado',
   institucion: 'CORFO',
   monto: 150000000,
-  fecha_cierre: '2026-06-01',
+  fecha_cierre: futureDateStr,
   estado: 'active',
   categoria: 'Infraestructura',
   url_bases: 'https://example.com',
@@ -14,6 +18,7 @@ const mockProject = {
   estadoPostulacion: 'Abierta' as const,
   regiones: ['Biobío', 'Maule'],
 };
+
 
 describe('ProjectCard', () => {
   it('renders project name as link', () => {
