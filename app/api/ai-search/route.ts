@@ -19,6 +19,7 @@ import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { getLogger } from "@/lib/utils/logger";
 import { AiSearchSchema, formatZodError } from "@/lib/utils/validation";
 import { createSuccessResponse, createErrorResponse } from "@/lib/utils/api-response";
+import { getAiEnv } from '@/lib/utils/env';
 
 const logger = getLogger("AiSearch");
 const AI_SEARCH_RATE_LIMIT = { maxRequests: 10, windowSizeSeconds: 60 };
@@ -50,6 +51,14 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    let env: ReturnType<typeof getAiEnv>;
+    try {
+      env = getAiEnv();
+    } catch (error) {
+      logger.error('Invalid environment for ai-search', error as Error);
+      return createErrorResponse('Error de configuración del servidor', 500);
+    }
+
     // Rate limiting
     const clientIp = getClientIp(request);
     const rateCheck = checkRateLimit(`ai-search:${clientIp}`, AI_SEARCH_RATE_LIMIT);
@@ -64,7 +73,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!process.env.GEMINI_API_KEY) {
+    if (!env.GEMINI_API_KEY) {
       return createErrorResponse("GEMINI_API_KEY no está configurada en el servidor.", 503);
     }
 
@@ -75,7 +84,7 @@ export async function POST(request: NextRequest) {
     }
     const { query } = parsed.data;
 
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    const ai = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
 
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-lite",
@@ -107,8 +116,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (err: unknown) {
     logger.error("AI search failed", err);
-    const message =
-      err instanceof Error ? err.message : "Error interno del servidor";
-    return createErrorResponse(message, 500);
+    return createErrorResponse("Error interno del servidor", 500);
   }
 }

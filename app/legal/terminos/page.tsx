@@ -1,4 +1,14 @@
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Términos de Uso | IICA Chile',
+    description: 'Condiciones de uso de la Plataforma de Financiamiento Agrícola de IICA Chile.',
+    alternates: {
+        canonical: '/legal/terminos',
+    },
+};
+
 export default function TermsOfUsePage() {
     return (
         <main className="container mx-auto px-4 py-12 max-w-4xl text-gray-700 leading-relaxed space-y-8">

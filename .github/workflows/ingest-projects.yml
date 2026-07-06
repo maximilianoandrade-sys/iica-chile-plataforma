@@ -2,13 +2,12 @@ name: Ingest — Capa A (scrapers determinísticos)
 
 on:
   schedule:
-    # Cada día a las 10:00 UTC (06:00 Chile)
-    - cron: "0 10 * * *"
+    - cron: "0 11 * * *" # 11:00 UTC diario para mantener datos vigentes en producción
   workflow_dispatch:
 
 jobs:
   ingest:
-    name: Ejecutar scrapers (FIA, FIA licitaciones, CORFO, INDAP, FONTAGRO, CNR, IICA)
+    name: Ejecutar scrapers Capa A (19 fuentes — nacionales + internacionales)
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -39,6 +38,20 @@ jobs:
           DIRECT_URL: ${{ secrets.DIRECT_URL }}
           ADMIN_SESSION_SECRET: ${{ secrets.ADMIN_SESSION_SECRET }}
         run: npx tsx scripts/run-scrapers.ts
+
+      - name: Audit links full (SLO)
+        continue-on-error: true
+        env:
+          DEPLOYMENT_URL: ${{ secrets.DEPLOYMENT_URL }}
+          CHECK_LINK_BASE_URL: ${{ secrets.DEPLOYMENT_URL }}
+          AUDIT_INCLUDE_PROJECT_PAGES: "true"
+          AUDIT_FAIL_ON_NEEDS_REVIEW: "false"
+        run: |
+          if [ -z "$DEPLOYMENT_URL" ]; then
+            echo "⏭️ DEPLOYMENT_URL not set — skipping link audit"
+            exit 0
+          fi
+          npm run audit:links:full
 
       - name: Coverage check
         env:

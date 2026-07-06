@@ -1,8 +1,10 @@
-'use client';
+﻿'use client';
 
-import React from 'react';
+import React, { useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Target, ClipboardList, CircleDot, Globe, AlertTriangle } from 'lucide-react';
+import Image from 'next/image';
+import { ArrowRight, AlertTriangle, Loader2 } from 'lucide-react';
 
 interface HeroStats {
     total: number;
@@ -16,60 +18,88 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ stats }: HeroSectionProps) {
+    const router = useRouter();
+    const [isPending, startTransition] = useTransition();
     const totalOportunidades = stats?.total ?? 0;
-    const internacionales = stats?.internacionales ?? 0;
     const abiertas = stats?.abiertas ?? 0;
-    const urgentCount = stats?.urgentes ?? 0;
+    const urgentes = stats?.urgentes ?? 0;
+
+    const handleUrgentClick = () => {
+        startTransition(() => {
+            router.push('/?estado=Abierta&sort=date_asc#convocatorias', { scroll: false });
+        });
+        document.getElementById('convocatorias')?.scrollIntoView({ behavior: 'smooth' });
+    };
 
     return (
-        <section className="relative">
+        <section
+            className="relative min-h-[580px] flex items-center overflow-hidden"
+        >
+            {/* LCP hero image — self-hosted for performance */}
+            <Image
+                src="/hero-campo.webp"
+                alt="Campo agrícola chileno"
+                fill
+                priority
+                className="object-cover object-center"
+                sizes="100vw"
+            />
+            {/* Gradient overlay */}
             <div
-                className="hero-iica relative overflow-hidden bg-[var(--iica-navy)] text-white py-10 md:py-28 text-center"
-                style={{
-                    backgroundImage: 'linear-gradient(rgba(0, 45, 114, 0.85), rgba(0, 45, 114, 0.7)), url("https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2832&auto=format&fit=crop")',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center'
-                }}
-            >
-                {/* Overlay decorativo graduado */}
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--iica-navy)]/40 pointer-events-none"></div>
+                className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/55 to-black/20"
+            />
+            <div className="container mx-auto max-w-[1200px] px-4 relative z-10 py-20">
+                <div className="max-w-2xl">
+                    <div className="mb-5">
+                        <span className="inline-block text-[var(--iica-yellow)] font-semibold text-sm tracking-widest uppercase">
+                            Financiamiento Agrícola Verificado
+                        </span>
+                    </div>
 
-                <div className="relative z-10 container mx-auto px-4">
-                    <h1 className="animate-fade-in-up text-2xl md:text-5xl font-extrabold mb-6 leading-tight drop-shadow-lg">
-                        Encuentre financiamiento agrícola{' '}
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-5 leading-tight drop-shadow-lg">
+                        Encuentre financiamiento{' '}
                         <span className="text-[var(--iica-yellow)]">verificado para Chile</span>
                     </h1>
 
-                    <p className="animate-fade-in-up text-lg md:text-xl font-medium text-blue-50 max-w-2xl mx-auto mb-10 drop-shadow-md">
+                    <p className="text-lg text-gray-100 mb-8 max-w-xl leading-relaxed drop-shadow-md">
                         Compare convocatorias vigentes, revise requisitos clave y acceda a fuentes oficiales en minutos.
                     </p>
 
-                    <div className="animate-fade-in-up flex justify-center">
+                    <div className="flex flex-col sm:flex-row gap-4 items-start">
                         <Link
                             href="#convocatorias"
-                            className="bg-[var(--iica-secondary)] hover:bg-green-600 text-white font-bold py-4 px-10 rounded-full shadow-xl transition-all hover:-translate-y-1 inline-flex items-center justify-center gap-2 cursor-pointer ring-4 ring-white/20 min-h-[44px]"
+                            className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold text-lg py-4 px-8 rounded-lg shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl group min-h-[48px]"
                         >
-                            <Target className="h-5 w-5" />
-                            Ver Oportunidades Activas
+                            Explorar Oportunidades
+                            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </Link>
-                    </div>
-
-                    {/* Mini stats row */}
-                    <div className="animate-fade-in-up mt-10 grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        {([
-                            { label: 'Oportunidades', value: totalOportunidades, icon: <ClipboardList className="h-5 w-5" /> },
-                            { label: 'Abiertas Ahora', value: abiertas, icon: <CircleDot className="h-5 w-5 text-green-400" /> },
-                            { label: 'Internacionales', value: internacionales, icon: <Globe className="h-5 w-5" /> },
-                            { label: 'Cierran pronto', value: urgentCount, icon: <AlertTriangle className="h-5 w-5 text-amber-400" /> },
-                        ] as { label: string; value: number; icon: React.ReactNode }[]).map(stat => (
-                            <div key={stat.label} className="text-center bg-white/10 backdrop-blur-sm rounded-xl px-5 py-3 border border-white/20">
-                                <div className="text-2xl font-black text-white flex items-center justify-center gap-2">{stat.icon} {stat.value}</div>
-                                <div className="text-xs text-blue-200 font-medium">{stat.label}</div>
-                            </div>
-                        ))}
+                        <Link
+                            href="/about"
+                            className="flex items-center justify-center gap-2 border-2 border-white/80 text-white hover:bg-white/10 font-medium py-3 px-6 rounded-lg transition-all min-h-[44px]"
+                        >
+                            Conocer IICA Chile
+                        </Link>
                     </div>
                 </div>
             </div>
+
+            {/* Badge urgentes */}
+            {urgentes > 0 && (
+                <button
+                    type="button"
+                    onClick={handleUrgentClick}
+                    disabled={isPending}
+                    className="absolute top-6 right-6 flex items-center gap-2 bg-rose-600/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg hover:bg-rose-600 transition-colors disabled:opacity-70"
+                    aria-label={`${urgentes} oportunidades cierran pronto`}
+                >
+                    {isPending ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                        <AlertTriangle className="w-4 h-4" />
+                    )}
+                    {urgentes} cierran pronto
+                </button>
+            )}
         </section>
     );
 }

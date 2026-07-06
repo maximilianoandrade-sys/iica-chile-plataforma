@@ -1,9 +1,66 @@
 import type { FilterCounts } from '@/lib/data';
+import {
+  extractRegionsFromText,
+  getRegionSearchTerms,
+  normalizeRegionTerm,
+  sortRegionLabels,
+} from '@/lib/search/region-normalization';
+
+// ---------------------------------------------------------------------------
+// Institution normalization — deduplicates aliases into canonical short names
+// ---------------------------------------------------------------------------
+
+export const INSTITUTION_ALIASES: Record<string, string> = {
+  'Comisión Nacional de Riego (CNR)': 'CNR',
+  'Comisión Nacional de Riego': 'CNR',
+  'Instituto de Desarrollo Agropecuario (INDAP)': 'INDAP',
+  'Instituto de Desarrollo Agropecuario': 'INDAP',
+  'Fundación para la Innovación Agraria (FIA)': 'FIA',
+  'Fundación para la Innovación Agraria': 'FIA',
+  'Corporación de Fomento de la Producción (CORFO)': 'CORFO',
+  'Corporación de Fomento de la Producción': 'CORFO',
+  'Fondo Regional de Tecnología Agropecuaria (FONTAGRO)': 'FONTAGRO',
+  'Fondo Regional de Tecnología Agropecuaria': 'FONTAGRO',
+  'Organización de las Naciones Unidas para la Alimentación y la Agricultura (FAO)': 'FAO',
+  'Organización de las Naciones Unidas para la Alimentación y la Agricultura': 'FAO',
+  'Servicio Agrícola y Ganadero (SAG)': 'SAG',
+  'Servicio Agrícola y Ganadero': 'SAG',
+  'Banco Interamericano de Desarrollo (BID)': 'BID',
+  'Banco Interamericano de Desarrollo': 'BID',
+  'Inter-American Development Bank': 'BID',
+  'IADB': 'BID',
+  'Programa de las Naciones Unidas para el Desarrollo (PNUD)': 'PNUD',
+  'Programa de las Naciones Unidas para el Desarrollo': 'PNUD',
+  'Fondo Internacional de Desarrollo Agrícola (FIDA)': 'FIDA',
+  'Fondo Internacional de Desarrollo Agrícola': 'FIDA',
+  'IFAD': 'FIDA',
+  'International Fund for Agricultural Development': 'FIDA',
+  'WORLD BANK': 'Banco Mundial',
+  'World Bank': 'Banco Mundial',
+  'Ministerio de Agricultura (MINAGRI)': 'MINAGRI',
+  'Ministerio de Agricultura': 'MINAGRI',
+};
+
+/**
+ * Normalizes an institution name using the aliases map.
+ * Returns the canonical short name if found, otherwise the original trimmed name.
+ */
+export function normalizeInstitution(name: string): string {
+  const trimmed = name.trim();
+  if (INSTITUTION_ALIASES[trimmed]) return INSTITUTION_ALIASES[trimmed];
+  // Check case-insensitive match
+  const upper = trimmed.toUpperCase();
+  for (const [alias, canonical] of Object.entries(INSTITUTION_ALIASES)) {
+    if (alias.toUpperCase() === upper) return canonical;
+  }
+  return trimmed;
+}
 
 export interface SearchProjectLike {
   institucion: string;
   monto: number;
   fecha_cierre: string | Date;
+  categoria?: string | null;
   estadoPostulacion?: 'Abierta' | 'Próxima' | 'Cerrada' | null;
   regiones?: string[];
   region?: string | null;
@@ -14,6 +71,7 @@ export interface FacetFilters {
   selectedEstado: string;
   selectedInstitutions: string[];
   selectedRegions: string[];
+  selectedCategories?: string[];
   selectedAmbito: string;
   minAmount: number;
   maxAmount: number;
@@ -32,14 +90,12 @@ export function inferEstado(project: SearchProjectLike, now = new Date()): strin
 
 export function getProjectRegions(project: SearchProjectLike): string[] {
   if (project.regiones && project.regiones.length > 0) {
-    return project.regiones;
+    const normalized = project.regiones.flatMap((region) => extractRegionsFromText(region));
+    if (normalized.length > 0) return sortRegionLabels(normalized);
   }
 
   if (project.region) {
-    return project.region
-      .split(',')
-      .map((r) => r.trim())
-      .filter(Boolean);
+    return extractRegionsFromText(project.region);
   }
 
   return [];
@@ -57,6 +113,10 @@ export function buildFilterCounts<T extends SearchProjectLike>(
     }, {} as Record<string, number>),
     institucion: projects.reduce((acc, p) => {
       acc[p.institucion] = (acc[p.institucion] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>),
+    categoria: projects.reduce((acc, p) => {
+      if (p.categoria) acc[p.categoria] = (acc[p.categoria] || 0) + 1;
       return acc;
     }, {} as Record<string, number>),
     region: projects.reduce((acc, p) => {
@@ -81,6 +141,7 @@ export function filterProjectsByFacets<T extends SearchProjectLike>(
     selectedEstado,
     selectedInstitutions,
     selectedRegions,
+    selectedCategories = [],
     selectedAmbito,
     minAmount,
     maxAmount,
@@ -91,8 +152,11 @@ export function filterProjectsByFacets<T extends SearchProjectLike>(
     const matchesInstitution =
       selectedInstitutions.length === 0 || selectedInstitutions.includes(project.institucion);
     const projectRegions = getProjectRegions(project);
+    const selectedRegionTerms = selectedRegions.flatMap((region) => getRegionSearchTerms(region));
+    const projectRegionTerms = projectRegions.map((region) => normalizeRegionTerm(region));
     const matchesRegion =
-      selectedRegions.length === 0 || projectRegions.some((r) => selectedRegions.includes(r));
+      selectedRegions.length === 0 || projectRegionTerms.some((region) => selectedRegionTerms.includes(region));
+    const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(project.categoria ?? '');
     const matchesAmbito = !selectedAmbito || project.ambito === selectedAmbito;
 
     const filterActive = minAmount > 0 || maxAmount < Infinity;
@@ -103,6 +167,7 @@ export function filterProjectsByFacets<T extends SearchProjectLike>(
       matchesEstado &&
       matchesInstitution &&
       matchesRegion &&
+      matchesCategory &&
       matchesAmbito &&
       matchesAmount
     );

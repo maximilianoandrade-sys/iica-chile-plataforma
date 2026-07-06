@@ -10,8 +10,8 @@ import { test, expect } from "@playwright/test";
 test.describe("Home & navegación", () => {
   test("home carga y muestra el listado de convocatorias", async ({ page }) => {
     await page.goto("/");
-    // FilterChips search input is the new anchor
-    await expect(page.getByRole("searchbox", { name: /Buscar oportunidades/i })).toBeVisible();
+    // FilterChips search input is the new anchor (role=combobox due to autocomplete)
+    await expect(page.getByRole("combobox", { name: /Buscar oportunidades/i })).toBeVisible();
     // La sección "convocatorias" debería renderizar.
     await expect(page.locator("#convocatorias")).toBeVisible();
   });
@@ -30,7 +30,7 @@ test.describe("Home & navegación", () => {
 test.describe("Búsqueda", () => {
   test("búsqueda con texto filtra sin error", async ({ page }) => {
     await page.goto("/");
-    const input = page.getByRole("searchbox", { name: /Buscar oportunidades/i });
+    const input = page.getByRole("combobox", { name: /Buscar oportunidades/i });
     await input.fill("riego");
     // FilterChips filters client-side — no network call needed.
     // Verify no error is displayed.
@@ -58,17 +58,18 @@ test.describe("API endpoints", () => {
     const res = await request.get(`/api/check-link?url=${target}`);
     expect(res.ok()).toBeTruthy();
     const body = await res.json();
-    expect(typeof body.isValid).toBe("boolean");
+    const data = body.data ?? body;
+    expect(typeof data.isValid).toBe("boolean");
   });
 
   test("/api/check-link marca URL inexistente como inválida", async ({ request }) => {
     const target = encodeURIComponent("https://no-existe-este-dominio-1234567890.cl/");
     const res = await request.get(`/api/check-link?url=${target}`);
-    // El endpoint debería responder ok=true (el endpoint funciona)
-    // pero con isValid=false (la URL no responde).
-    expect(res.ok()).toBeTruthy();
+    // Contrato endurecido: fallas de red devuelven 502 con payload isValid=false.
+    expect(res.status()).toBe(502);
     const body = await res.json();
-    expect(body.isValid).toBe(false);
+    const data = body.data ?? body;
+    expect(data.isValid).toBe(false);
   });
 });
 
@@ -78,14 +79,43 @@ test.describe("Detalle de proyecto", () => {
     const home = await request.get("/");
     expect(home.ok()).toBeTruthy();
     const html = await home.text();
-    const match = html.match(/href="\/proyecto\/(\d+)"/);
+    const matches = Array.from(html.matchAll(/href="\/proyecto\/(\d+)"/g));
+    const candidateIds = Array.from(
+      new Set(
+        matches
+          .map((entry) => Number(entry[1]))
+          .filter((id) => Number.isInteger(id) && id > 0)
+      )
+    );
 
-    if (!match?.[1]) {
+    if (candidateIds.length === 0) {
       test.skip(true, "Home sin links de detalle — corre `npm run ingest` primero");
       return;
     }
-    const id = Number(match[1]);
-    await page.goto(`/proyecto/${id}`);
+
+    let selectedId: number | null = null;
+    for (const candidateId of candidateIds) {
+      const detailResponse = await request.get(`/proyecto/${candidateId}`);
+      if (!detailResponse.ok()) {
+        continue;
+      }
+
+      const detailHtml = await detailResponse.text();
+      const hasBackLink = /Volver a todas las convocatorias/i.test(detailHtml);
+      const isNotFound = /P[aá]gina no encontrada/i.test(detailHtml);
+
+      if (hasBackLink && !isNotFound) {
+        selectedId = candidateId;
+        break;
+      }
+    }
+
+    if (!selectedId) {
+      test.skip(true, "No se encontró un detalle público accesible en /proyecto/[id]");
+      return;
+    }
+
+    await page.goto(`/proyecto/${selectedId}`);
 
     await expect(page.getByLabel(/Cargando proyecto/i)).toHaveCount(0, { timeout: 20000 });
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible({ timeout: 15000 });

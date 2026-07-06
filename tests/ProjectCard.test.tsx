@@ -1,16 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import { ProjectCard } from '@/components/ProjectCard';
 
-const futureDate = new Date();
-futureDate.setDate(futureDate.getDate() + 30);
-const futureDateStr = futureDate.toISOString().slice(0, 10);
-
 const mockProject = {
   id: 1,
   nombre: 'Programa de Riego Tecnificado',
   institucion: 'CORFO',
   monto: 150000000,
-  fecha_cierre: futureDateStr,
+  fecha_cierre: '2030-06-01',
   estado: 'active',
   categoria: 'Infraestructura',
   url_bases: 'https://example.com',
@@ -18,7 +14,6 @@ const mockProject = {
   estadoPostulacion: 'Abierta' as const,
   regiones: ['Biobío', 'Maule'],
 };
-
 
 describe('ProjectCard', () => {
   it('renders project name as link', () => {
@@ -42,9 +37,14 @@ describe('ProjectCard', () => {
     expect(screen.getByText(/Biobío/)).toBeInTheDocument();
   });
 
-  it('renders urgency deadline', () => {
+  it('shows metadata as semantic list', () => {
     render(<ProjectCard project={mockProject} />);
-    expect(screen.getByText(/Cierra/i)).toBeInTheDocument();
+    expect(screen.getByRole('list', { name: /Metadatos de la oportunidad/i })).toBeInTheDocument();
+  });
+
+  it('renders urgency deadline copy', () => {
+    render(<ProjectCard project={mockProject} />);
+    expect(screen.getByText(/Cierra en/i)).toBeInTheDocument();
     expect(screen.getByText(/Fecha límite:/i)).toBeInTheDocument();
   });
 
@@ -69,6 +69,11 @@ describe('ProjectCard', () => {
   it('has accessible article role', () => {
     render(<ProjectCard project={mockProject} />);
     expect(screen.getByRole('article')).toBeInTheDocument();
+  });
+
+  it('exposes article label with project name', () => {
+    render(<ProjectCard project={mockProject} />);
+    expect(screen.getByRole('article', { name: /Programa de Riego Tecnificado/i })).toBeInTheDocument();
   });
 
   it('makes the entire card clickable via stretched link', () => {

@@ -51,8 +51,24 @@ export async function runCoverageCheck() {
     throw new Error(blockingProblems.join(" | "));
   }
 
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const expiredOpenCount = await prisma.project.count({
+    where: {
+      estadoPostulacion: { in: ["Abierta", "Próxima"] },
+      fecha_cierre: { lt: today },
+    },
+  });
+
+  if (expiredOpenCount > 0) {
+    throw new Error(
+      `Se detectaron ${expiredOpenCount} proyectos vencidos con estado abierto/próxima. Ejecuta cleanup y reingesta.`
+    );
+  }
+
   logger.info("Coverage check passed", {
     checkedSources: sources.map((s) => s.slug),
+    expiredOpenCount,
   });
 
   await prisma.$disconnect();

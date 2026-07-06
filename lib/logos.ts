@@ -39,6 +39,8 @@ const registry: InstitutionEntry[] = [
   { slug: "agcid", sigla: "AGCID", path: null, sourceType: null, brandColor: "#C8102E" },
   { slug: "pnud", sigla: "PNUD", path: "/logos/official/pnud.svg", sourceType: "official", brandColor: "#0468B1" },
   { slug: "sag", sigla: "SAG", path: null, sourceType: null, brandColor: "#388E3C" },
+  { slug: "ocde", sigla: "OCDE", path: null, sourceType: null, brandColor: "#0077B6" },
+  { slug: "global-south-opportunities", sigla: "GSO", path: null, sourceType: null, brandColor: "#1B5E20" },
 ];
 
 // Name variants for matching
@@ -49,6 +51,9 @@ const nameAliases: Record<string, string> = {
   "aecid": "ue-aecid",
   "iica hemisférico": "iica-hemisferico",
   "iica hemisferico": "iica-hemisferico",
+  "oecd": "ocde",
+  "global south opportunities": "global-south-opportunities",
+  "gso": "global-south-opportunities",
 };
 
 function normalize(s: string): string {

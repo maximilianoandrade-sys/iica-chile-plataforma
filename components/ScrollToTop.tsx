@@ -1,32 +1,29 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ArrowUp } from 'lucide-react';
 
 export default function ScrollToTop() {
     const [isVisible, setIsVisible] = useState(false);
+    const ticking = useRef(false);
 
-    // Toggle visibility based on scroll position
     useEffect(() => {
-        const toggleVisibility = () => {
-            if (window.scrollY > 300) {
-                setIsVisible(true);
-            } else {
-                setIsVisible(false);
-            }
+        // ponytail: requestAnimationFrame throttle — no deps, no lib
+        const onScroll = () => {
+            if (ticking.current) return;
+            ticking.current = true;
+            requestAnimationFrame(() => {
+                setIsVisible(window.scrollY > 300);
+                ticking.current = false;
+            });
         };
 
-        window.addEventListener('scroll', toggleVisibility);
-
-        return () => window.removeEventListener('scroll', toggleVisibility);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
-    // Scroll to top smooth
     const scrollToTop = () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     return (

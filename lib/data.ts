@@ -45,6 +45,24 @@ export interface Project {
     /** Ámbito geográfico: Nacional / Internacional / Regional */
     ambito?: 'Nacional' | 'Internacional' | 'Regional';
 
+    /** Publicación en catálogo público */
+    publishable?: boolean;
+
+    /** Elegibilidad para Chile en policy estricta */
+    chileEligibility?: 'eligible' | 'ineligible';
+
+    /** Puntaje de calidad de ingesta (0-100) */
+    qualityScore?: number;
+
+    /** Flags de calidad detectados en ingestión */
+    qualityFlags?: string[];
+
+    /** Explicaciones de flags de calidad */
+    qualityReasons?: string[];
+
+    /** Timestamp de última evaluación de calidad */
+    qualityUpdatedAt?: Date | string;
+
     /** Estado de la ventana de postulación */
     estadoPostulacion?: 'Abierta' | 'Próxima' | 'Cerrada';
 
@@ -217,6 +235,7 @@ export function rolIICAInfo(rol?: string): { text: string; bg: string; border: s
     }
 }
 
+import { cache } from 'react';
 import { getLogger } from '@/lib/utils/logger';
 import prisma from './prisma';
 
@@ -284,6 +303,7 @@ export interface ProjectFilterSnapshot {
     regiones: string[];
     region: string | null;
     ambito: string | null;
+    categoria: string;
     url_bases: string;
 }
 
@@ -303,6 +323,8 @@ export async function getProjects(): Promise<GetProjectsResult> {
             where: {
                 fecha_cierre: { gte: today },
                 NOT: { estadoPostulacion: 'Cerrada' },
+                publishable: true,
+                relevanciaChile: true,
                 // Defensa redundante: si purgeFakeProjects falló, esto los excluye
                 id: { notIn: FAKE_PROJECT_IDS },
             },
@@ -316,6 +338,12 @@ export async function getProjects(): Promise<GetProjectsResult> {
             fecha_cierre: p.fecha_cierre.toISOString().split('T')[0],
             webinar_fecha: p.webinar_fecha ? p.webinar_fecha.toISOString() : null,
             ambito: p.ambito as Project['ambito'],
+            publishable: p.publishable,
+            chileEligibility: p.chileEligibility as 'eligible' | 'ineligible' | undefined,
+            qualityScore: p.qualityScore,
+            qualityFlags: p.qualityFlags,
+            qualityReasons: p.qualityReasons,
+            qualityUpdatedAt: p.qualityUpdatedAt,
             estadoPostulacion: p.estadoPostulacion as Project['estadoPostulacion'],
             viabilidadIICA: p.viabilidadIICA as Project['viabilidadIICA'],
             rolIICA: p.rolIICA as Project['rolIICA'],
@@ -352,6 +380,7 @@ export async function getProjectFilterSnapshot(): Promise<GetProjectFilterSnapsh
                 regiones: true,
                 region: true,
                 ambito: true,
+                categoria: true,
                 url_bases: true,
             },
         });
@@ -365,6 +394,7 @@ export async function getProjectFilterSnapshot(): Promise<GetProjectFilterSnapsh
             regiones: project.regiones,
             region: project.region,
             ambito: project.ambito,
+            categoria: project.categoria,
             url_bases: project.url_bases,
         }));
 
@@ -381,9 +411,22 @@ export async function getAllProjects(): Promise<GetProjectsResult> {
     return getProjects();
 }
 
+/**
+ * Cached version of getProjects — deduplicates within a single React server request.
+ * Use this in server components to avoid redundant DB calls when multiple components
+ * need the same data in the same render tree.
+ */
+export const getCachedProjects = cache(getProjects);
+
+/**
+ * Cached version of getProjectFilterSnapshot — deduplicates within a single React server request.
+ */
+export const getCachedProjectFilterSnapshot = cache(getProjectFilterSnapshot);
+
 export interface FilterCounts {
   estado: Record<string, number>;
   institucion: Record<string, number>;
   region: Record<string, number>;
+  categoria?: Record<string, number>;
   ambito: Record<string, number>;
 }

@@ -38,29 +38,53 @@ describe('search filtering helpers', () => {
     expect(inferEstado(closed, now)).toBe('Cerrada');
   });
 
-  it('extracts regions from regiones array', () => {
+  it('extracts regions from regiones or comma-separated region fallback', () => {
     const withRegiones = makeProject({ regiones: ['Maule', 'Biobío'] });
-    expect(getProjectRegions(withRegiones)).toEqual(['Maule', 'Biobío']);
-  });
-
-  it('extracts regions from comma-separated region string (preserves input order)', () => {
     const withRegionString = makeProject({ regiones: [], region: 'Coquimbo, Atacama' });
-    expect(getProjectRegions(withRegionString)).toEqual(['Coquimbo', 'Atacama']);
+
+    expect(getProjectRegions(withRegiones)).toEqual(['Maule', 'Biobío']);
+    expect(getProjectRegions(withRegionString)).toEqual(['Atacama', 'Coquimbo']);
   });
 
-  it('handles multiple regions in one region string', () => {
-    const withMany = makeProject({
+  it('extracts and sorts regions from concatenated region text', () => {
+    const withConcatenatedRegionText = makeProject({
       regiones: [],
-      region: 'Nacional, Todas las regiones, Macrozona Sur',
+      region: "Arica y Parinacota Tarapaca Antofagasta Atacama Coquimbo Valparaiso Metropolitana O'Higgins Maule Nuble Biobio Araucania Los Rios Los Lagos Aysen Magallanes",
     });
-    expect(getProjectRegions(withMany)).toEqual(['Nacional', 'Todas las regiones', 'Macrozona Sur']);
+
+    expect(getProjectRegions(withConcatenatedRegionText)).toEqual([
+      'Arica y Parinacota',
+      'Tarapacá',
+      'Antofagasta',
+      'Atacama',
+      'Coquimbo',
+      'Valparaíso',
+      'Metropolitana',
+      "O'Higgins",
+      'Maule',
+      'Ñuble',
+      'Biobío',
+      'La Araucanía',
+      'Los Ríos',
+      'Los Lagos',
+      'Aysén',
+      'Magallanes',
+    ]);
   });
 
-  it('returns empty array when neither regiones nor region is present', () => {
-    const noRegion = makeProject({ regiones: [], region: undefined });
-    expect(getProjectRegions(noRegion)).toEqual([]);
-  });
+  it('keeps special coverage labels ordered after Chile regions', () => {
+    const withSpecialCoverage = makeProject({
+      regiones: [],
+      region: 'Nacional, Todas las regiones, Macrozona Sur, América Latina y el Caribe',
+    });
 
+    expect(getProjectRegions(withSpecialCoverage)).toEqual([
+      'Nacional',
+      'Todas las regiones',
+      'Macrozona Sur',
+      'América Latina y el Caribe',
+    ]);
+  });
 
   it('builds filter counts from all projects', () => {
     const projects = [
@@ -74,6 +98,7 @@ describe('search filtering helpers', () => {
     expect(counts.institucion.INDAP).toBe(2);
     expect(counts.region.Maule).toBe(2);
     expect(counts.ambito.Nacional).toBe(2);
+    expect(counts.categoria?.Convocatoria).toBe(3);
     expect(counts.estado.Abierta).toBeGreaterThanOrEqual(1);
   });
 
@@ -103,6 +128,7 @@ describe('search filtering helpers', () => {
         selectedEstado: 'Abierta',
         selectedInstitutions: ['INDAP'],
         selectedRegions: ['Maule'],
+        selectedCategories: ['Convocatoria'],
         selectedAmbito: 'Nacional',
         minAmount: 200000,
         maxAmount: 500000,

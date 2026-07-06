@@ -72,4 +72,15 @@ describe("validateUrl", () => {
     expect(r.ok).toBe(false);
     expect(r.reason).toContain("ETIMEDOUT");
   });
+
+  it("acepta 403 para deep links de Devex (anti-bot protegido)", async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: false,
+      status: 403,
+      url: "https://www.devex.com/funding/r?report=tender-877050",
+    });
+
+    const r = await validateUrl("https://www.devex.com/funding/r?report=tender-877050");
+    expect(r).toEqual({ ok: true });
+  });
 });

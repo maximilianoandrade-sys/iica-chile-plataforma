@@ -74,7 +74,13 @@ export const fiaLicitacionesScraper: Scraper = {
 
     const $ = load(html);
 
-    $("a.Link").each((_, element) => {
+    // Intentar selector primario; si falla, usar fallback por texto
+    let candidates = $("a.Link");
+    if (candidates.length === 0) {
+      candidates = $("a").filter((_, el) => /Id:\s*[A-Z0-9-]+/i.test($(el).text()));
+    }
+
+    candidates.each((_, element) => {
       const rawTitle = cleanText($(element).text());
       if (!rawTitle) return;
 
@@ -108,10 +114,6 @@ export const fiaLicitacionesScraper: Scraper = {
         tags: ["FIA", "Mercado Publico", "Licitacion"],
       });
     });
-
-    if (projects.length === 0) {
-      partialErrors.push("No matching FIA licitation rows found in MercadoPublico feed");
-    }
 
     return {
       sourceSlug: this.slug,

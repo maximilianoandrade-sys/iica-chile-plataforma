@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
 import { getLogger } from "@/lib/utils/logger";
 import { createSuccessResponse, createErrorResponse } from "@/lib/utils/api-response";
+import { getEnv } from "@/lib/utils/env";
 
 const logger = getLogger("AdminDiscoveryAction");
 
@@ -11,7 +12,7 @@ const MAX_AGE_MS = 8 * 60 * 60 * 1000; // 8 hours
 
 /** Verify admin-token cookie matches the expected HMAC (sig.timestamp format). */
 function isAuthenticated(req: NextRequest): boolean {
-  const secret = process.env.ADMIN_SESSION_SECRET;
+  const secret = getEnv().ADMIN_SESSION_SECRET;
   if (!secret) {
     logger.error("ADMIN_SESSION_SECRET not configured");
     return false;

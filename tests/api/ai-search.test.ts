@@ -22,6 +22,7 @@ jest.mock("@google/genai", () => ({
   })),
 }));
 
+import { _resetEnvCache } from '@/lib/utils/env';
 import { POST, GET } from "@/app/api/ai-search/route";
 import { NextRequest } from "next/server";
 
@@ -37,11 +38,18 @@ describe("/api/ai-search", () => {
   const originalEnv = process.env;
 
   beforeEach(() => {
-    process.env = { ...originalEnv, GEMINI_API_KEY: "test-key" };
+    process.env = {
+      ...originalEnv,
+      DATABASE_URL: 'postgresql://localhost:5432/test',
+      ADMIN_SESSION_SECRET: 'secret12345678',
+      GEMINI_API_KEY: "test-key",
+    };
+    _resetEnvCache();
   });
 
   afterEach(() => {
     process.env = originalEnv;
+    _resetEnvCache();
   });
 
   it("GET returns route description", async () => {

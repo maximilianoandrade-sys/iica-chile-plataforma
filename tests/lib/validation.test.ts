@@ -77,6 +77,7 @@ describe('SearchProjectsRequestSchema', () => {
       query: 'riego',
       sourceMode: 'external',
       providers: ['linkedin_public'],
+      relevanceMode: 'chile_strict',
       ambito: 'Nacional',
       institution: 'INDAP',
       region: 'Maule',
@@ -90,7 +91,24 @@ describe('SearchProjectsRequestSchema', () => {
     if (result.success) {
       expect(result.data.sourceMode).toBe('external');
       expect(result.data.providers).toEqual(['linkedin_public']);
+      expect(result.data.relevanceMode).toBe('chile_strict');
     }
+  });
+
+  it('acepta relevanceMode=all', () => {
+    const result = SearchProjectsRequestSchema.safeParse({
+      query: 'riego',
+      relevanceMode: 'all',
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('rechaza relevanceMode inválido', () => {
+    const result = SearchProjectsRequestSchema.safeParse({
+      query: 'riego',
+      relevanceMode: 'strict_only',
+    });
+    expect(result.success).toBe(false);
   });
 
   it('rechaza sourceMode inválido', () => {

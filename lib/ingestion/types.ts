@@ -18,6 +18,8 @@ export interface RawProject {
   region?: string;
   ambito?: "Nacional" | "Internacional" | "Regional";
   idioma?: "es" | "en" | "pt" | "fr";
+  /** Whether this project is relevant to Chile (for Internacional projects) */
+  relevanciaChile?: boolean;
 }
 
 export interface ScraperResult {

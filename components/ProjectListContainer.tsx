@@ -1,11 +1,8 @@
-import { getProjectFilterSnapshot, type Project } from '@/lib/data';
+import { getCachedProjectFilterSnapshot, type Project } from '@/lib/data';
 import ProjectList from "@/components/ProjectList";
 import JsonLd from "@/components/JsonLd";
 import { hybridSearch } from '@/lib/searchHybrid';
 import DatabaseError from "@/components/DatabaseError";
-import {
-    buildFilterCounts,
-} from "@/lib/search/filtering";
 
 const DEFAULT_PAGE_SIZE = 16;
 
@@ -14,19 +11,16 @@ export default async function ProjectListContainer({
 }: {
     searchParams: { [key: string]: string | string[] | undefined };
 }) {
-    const filterSnapshot = await getProjectFilterSnapshot();
-
-    if (!filterSnapshot.ok) {
-        return <DatabaseError />;
-    }
-
-    const filterProjects = filterSnapshot.projects;
-
+    // Parse all params synchronously (no DB calls needed here)
     const searchTerm = typeof searchParams.q === 'string' ? searchParams.q : '';
-    const selectedEstado = typeof searchParams.estado === 'string' ? searchParams.estado : '';
+    const selectedEstadoRaw = typeof searchParams.estado === 'string' ? searchParams.estado : 'Abierta';
+    const selectedEstado = selectedEstadoRaw === 'all' ? '' : selectedEstadoRaw;
     const selectedInstitutions = typeof searchParams.institution === 'string' ? searchParams.institution.split(',').filter(Boolean) : [];
     const selectedRegions = typeof searchParams.region === 'string' ? searchParams.region.split(',').filter(Boolean) : [];
+    const selectedCategories = typeof searchParams.category === 'string' ? searchParams.category.split(',').filter(Boolean) : [];
     const selectedAmbito = typeof searchParams.ambito === 'string' ? searchParams.ambito : '';
+    const postedFrom = typeof searchParams.postedFrom === 'string' ? searchParams.postedFrom : undefined;
+    const postedTill = typeof searchParams.postedTill === 'string' ? searchParams.postedTill : undefined;
     const sort = typeof searchParams.sort === 'string'
         ? searchParams.sort
         : (searchTerm.trim() ? 'relevance' : 'date_asc');
@@ -36,21 +30,34 @@ export default async function ProjectListContainer({
     const maxAmountRaw = typeof searchParams.maxAmount === 'string' ? Number.parseInt(searchParams.maxAmount, 10) : Infinity;
     const minAmount = Number.isFinite(minAmountRaw) ? minAmountRaw : 0;
     const maxAmount = Number.isFinite(maxAmountRaw) ? maxAmountRaw : Infinity;
+    const closingWithinDays = typeof searchParams.urgencia === 'string' ? Number.parseInt(searchParams.urgencia, 10) : undefined;
 
-    const filterCounts = buildFilterCounts(filterProjects);
-    const searchResult = await hybridSearch({
-        query: searchTerm,
-        ambito: selectedAmbito || 'all',
-        selectedInstitutions,
-        selectedRegions,
-        estado: selectedEstado || undefined,
-        minAmount,
-        maxAmount,
-        sort: sort === 'amount_desc' || sort === 'newest' || sort === 'relevance' ? sort : 'date_asc',
-        offset: (currentPage - 1) * DEFAULT_PAGE_SIZE,
-        limit: DEFAULT_PAGE_SIZE,
-        includeUnverified: true,
-    });
+    // Run DB check and search in parallel for better performance
+    const [filterSnapshot, searchResult] = await Promise.all([
+        getCachedProjectFilterSnapshot(),
+        hybridSearch({
+            query: searchTerm,
+            ambito: selectedAmbito || 'all',
+            selectedInstitutions,
+            selectedRegions,
+            selectedCategories,
+            estado: selectedEstado || undefined,
+            minAmount,
+            maxAmount,
+            postedFrom,
+            postedTill,
+            closingWithinDays: closingWithinDays && Number.isFinite(closingWithinDays) && closingWithinDays > 0 ? closingWithinDays : undefined,
+            sort: sort === 'amount_desc' || sort === 'newest' || sort === 'relevance' ? sort : 'date_asc',
+            offset: (currentPage - 1) * DEFAULT_PAGE_SIZE,
+            limit: DEFAULT_PAGE_SIZE,
+            includeUnverified: true,
+        }),
+    ]);
+
+    if (!filterSnapshot.ok) {
+        return <DatabaseError />;
+    }
+
     const filteredProjects = searchResult.projects.map((project) => ({
         ...project,
         fecha_cierre: project.fecha_cierre.toISOString().split('T')[0],
@@ -66,24 +73,26 @@ export default async function ProjectListContainer({
         : filteredProjects.length;
 
     const activeFilterLabels: string[] = [];
-    if (searchTerm.trim()) activeFilterLabels.push(`Busqueda: "${searchTerm.trim()}"`);
+    if (searchTerm.trim()) activeFilterLabels.push(`Búsqueda: "${searchTerm.trim()}"`);
     if (selectedEstado) activeFilterLabels.push(`Estado: ${selectedEstado}`);
-    if (selectedAmbito) activeFilterLabels.push(`Ambito: ${selectedAmbito}`);
-    selectedInstitutions.forEach((inst) => activeFilterLabels.push(`Institucion: ${inst}`));
-    selectedRegions.forEach((region) => activeFilterLabels.push(`Region: ${region}`));
+    if (selectedAmbito) activeFilterLabels.push(`Ámbito: ${selectedAmbito}`);
+    selectedInstitutions.forEach((inst) => activeFilterLabels.push(`Institución: ${inst}`));
+    selectedRegions.forEach((region) => activeFilterLabels.push(`Región: ${region}`));
+    selectedCategories.forEach((category) => activeFilterLabels.push(`Sector: ${category}`));
     if (minAmount > 0 || maxAmount < Infinity) {
         const amountLabel = maxAmount < Infinity
             ? `Monto: ${minAmount.toLocaleString('es-CL')} - ${maxAmount.toLocaleString('es-CL')}`
             : `Monto: desde ${minAmount.toLocaleString('es-CL')}`;
         activeFilterLabels.push(amountLabel);
     }
+    if (postedFrom) activeFilterLabels.push(`Publicado desde: ${postedFrom}`);
+    if (postedTill) activeFilterLabels.push(`Publicado hasta: ${postedTill}`);
 
     return (
         <>
             <JsonLd projects={filteredProjects} />
             <ProjectList
                 projects={filteredProjects}
-                filterCounts={filterCounts}
                 totalCount={resultTotal}
                 pageSize={DEFAULT_PAGE_SIZE}
                 activeFilterLabels={activeFilterLabels}

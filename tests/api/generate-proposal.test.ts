@@ -23,6 +23,7 @@ jest.mock("@/lib/prisma", () => ({
 
 import { POST, GET } from "@/app/api/generate-proposal/route";
 import prisma from "@/lib/prisma";
+import { _resetEnvCache } from '@/lib/utils/env';
 
 const mockPrisma = prisma as jest.Mocked<typeof prisma>;
 
@@ -51,12 +52,19 @@ describe("/api/generate-proposal", () => {
   const originalEnv = process.env;
 
   beforeEach(() => {
-    process.env = { ...originalEnv, GEMINI_API_KEY: "test-key" };
+    process.env = {
+      ...originalEnv,
+      DATABASE_URL: 'postgresql://localhost:5432/test',
+      ADMIN_SESSION_SECRET: 'secret12345678',
+      GEMINI_API_KEY: "test-key",
+    };
+    _resetEnvCache();
     (mockPrisma.project.findUnique as jest.Mock).mockResolvedValue(MOCK_PROJECT);
   });
 
   afterEach(() => {
     process.env = originalEnv;
+    _resetEnvCache();
     jest.clearAllMocks();
   });
 

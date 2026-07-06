@@ -1,15 +1,22 @@
 import type { Metadata, Viewport } from 'next'
-import { Outfit } from 'next/font/google'
+import { Poppins } from 'next/font/google'
+import dynamic from 'next/dynamic'
+import Script from 'next/script'
 import './globals.css'
-import { ThemeProvider } from '@/components/ThemeProvider'
+import { ThemeProvider } from 'next-themes'
 import { ToastProvider } from '@/components/ui/ToastProvider'
 import CookieConsent from '@/components/CookieConsent';
-import PWAInstallBanner from '@/components/PWAInstallBanner';
 import OfflineIndicator from '@/components/OfflineIndicator';
-import PushNotificationManager from '@/components/PushNotificationManager';
-import ScrollToTop from '@/components/ScrollToTop';
 
-const outfit = Outfit({ subsets: ['latin'] })
+const PWAInstallBanner = dynamic(() => import('@/components/PWAInstallBanner'), { ssr: false });
+const ScrollToTop = dynamic(() => import('@/components/ScrollToTop'), { ssr: false });
+const PushNotificationManager = dynamic(() => import('@/components/PushNotificationManager'), { ssr: false });
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  display: 'swap',
+})
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://iica-chile-plataforma.vercel.app'
 
 const organizationJsonLd = {
@@ -44,12 +51,32 @@ function safeJsonStringify(data: unknown): string {
   return JSON.stringify(data).replace(/<\//g, '<\\/').replace(/<!--/g, '<\\!--')
 }
 
+function mainFocusScript() {
+  return `
+    (function () {
+      function focusMainIfHashPresent() {
+        if (window.location.hash !== '#main-content') return;
+        var main = document.getElementById('main-content');
+        if (main && typeof main.focus === 'function') {
+          main.focus({ preventScroll: true });
+        }
+      }
+
+      window.addEventListener('hashchange', focusMainIfHashPresent);
+      window.addEventListener('load', focusMainIfHashPresent);
+    })();
+  `;
+}
+
 // ============================================================================
 // METADATA - SEO & PWA
 // ============================================================================
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  alternates: {
+    canonical: '/',
+  },
   title: {
     default: 'Radar de Oportunidades IICA Chile 2026',
     template: '%s | IICA Chile'
@@ -130,7 +157,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es" dir="ltr" className={`${outfit.className} scroll-smooth`}>
+    <html lang="es" dir="ltr" className={`${poppins.className} scroll-smooth`}>
       <head>
         {/* DNS Prefetch */}
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
@@ -140,10 +167,8 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
-        {/* Security Headers (via meta tags) */}
+        {/* Security Headers — X-Frame-Options y X-XSS-Protection se envían como HTTP headers en next.config.js, no como <meta> */}
         <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
-        <meta httpEquiv="X-Frame-Options" content="DENY" />
-        <meta httpEquiv="X-XSS-Protection" content="1; mode=block" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: safeJsonStringify(organizationJsonLd) }}
@@ -152,24 +177,27 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: safeJsonStringify(webSiteJsonLd) }}
         />
+        <script
+          dangerouslySetInnerHTML={{ __html: mainFocusScript() }}
+        />
       </head>
 
       <body className="flex flex-col min-h-screen bg-[#f4f7f9] dark:bg-gray-900 antialiased transition-colors">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {/* Skip to main content - Accesibilidad */}
-          <a
-            href="#main-content"
-            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:shadow-lg"
-          >
-            Saltar al contenido principal
-          </a>
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:shadow-lg"
+            >
+              Saltar al contenido principal
+            </a>
 
           {/* Indicadores de estado */}
           <OfflineIndicator />
 
           {/* Contenido principal */}
           <ToastProvider>
-          <div id="main-content">
+          <div id="main-content" tabIndex={-1} className="scroll-mt-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-iica-yellow">
             {children}
           </div>
           </ToastProvider>
@@ -192,6 +220,26 @@ export default function RootLayout({
             `,
           }}
         />
+
+        {/* Google Analytics 4 */}
+        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="gtag-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}', {
+                  page_path: window.location.pathname,
+                });
+              `}
+            </Script>
+          </>
+        )}
         </ThemeProvider>
       </body>
     </html>

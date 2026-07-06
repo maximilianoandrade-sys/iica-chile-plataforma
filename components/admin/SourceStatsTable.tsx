@@ -12,6 +12,20 @@ interface SourceStat {
   enabled: boolean;
 }
 
+function getHealthScore(status: string | null): number {
+  if (status === 'success') return 100;
+  if (status === 'partial') return 60;
+  if (status === 'error') return 20;
+  return 0;
+}
+
+function getHealthLabel(score: number): string {
+  if (score >= 90) return 'Saludable';
+  if (score >= 50) return 'Parcial';
+  if (score > 0) return 'Riesgo';
+  return 'Sin datos';
+}
+
 export function SourceStatsTable({ stats }: { stats: SourceStat[] }) {
   return (
     <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
@@ -21,6 +35,7 @@ export function SourceStatsTable({ stats }: { stats: SourceStat[] }) {
             <th className="px-6 py-4">Fuente</th>
             <th className="px-6 py-4">Proyectos</th>
             <th className="px-6 py-4">Estado</th>
+            <th className="px-6 py-4">Salud</th>
             <th className="px-6 py-4">Última Ingesta</th>
           </tr>
         </thead>
@@ -41,6 +56,12 @@ export function SourceStatsTable({ stats }: { stats: SourceStat[] }) {
                 }`}>
                   {stat.lastRunStatus || 'Sin ejecutar'}
                 </span>
+              </td>
+              <td className="px-6 py-4 text-xs text-gray-600">
+                {(() => {
+                  const score = getHealthScore(stat.lastRunStatus);
+                  return `${getHealthLabel(score)} (${score}%)`;
+                })()}
               </td>
               <td className="px-6 py-4 text-xs text-gray-400">
                 {stat.lastRunAt ? new Date(stat.lastRunAt).toLocaleDateString('es-CL') : 'Nunca'}

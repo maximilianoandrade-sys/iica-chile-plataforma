@@ -3,12 +3,26 @@ import { fiaScraper } from "./scrapers/fia";
 import { fiaLicitacionesScraper } from "./scrapers/fia-licitaciones";
 import { corfoScraper } from "./scrapers/corfo";
 import { cnrScraper } from "./scrapers/cnr";
+import { fondosGobScraper } from "./scrapers/fondos-gob";
 import { indapScraper } from "./scrapers/indap";
 import { fontagroScraper } from "./scrapers/fontagro";
 import { iicaHemisfericoScraper } from "./scrapers/iica-hemisferico";
+import { ifadOpportunitiesScraper } from "./scrapers/ifad-opportunities";
+import { tedNoticesScraper } from "./scrapers/ted-notices";
+import { devexFundingScraper } from "./scrapers/devex-funding";
 import { worldBankScraper } from "./scrapers/world-bank";
 import { ungmScraper } from "./scrapers/ungm";
 import { gefScraper } from "./scrapers/gef";
+import { ikiScraper } from "./scrapers/iki";
+import { gafspScraper } from "./scrapers/gafsp";
+import { aecidScraper } from "./scrapers/aecid";
+import { gcfScraper } from "./scrapers/gcf";
+import { afdScraper } from "./scrapers/afd";
+import { fundsforNgosScraper } from "./scrapers/fundsforngos";
+import { anidScraper } from "./scrapers/anid";
+import { minagriFeedScraper } from "./scrapers/minagri-licitaciones";
+import { iniaScraper } from "./scrapers/inia";
+import { globalSouthOpportunitiesScraper } from "./scrapers/global-south-opportunities";
 
 /**
  * Scrapers de Capa A (determinísticos, corren diario vía GitHub Actions).
@@ -29,10 +43,24 @@ export const scrapers: Scraper[] = [
   indapScraper,
   fontagroScraper,
   cnrScraper,
+  fondosGobScraper,
   iicaHemisfericoScraper,
+  ifadOpportunitiesScraper,
+  tedNoticesScraper,
+  devexFundingScraper,
   worldBankScraper,
   ungmScraper,
   gefScraper,
+  ikiScraper,
+  gafspScraper,
+  aecidScraper,
+  gcfScraper,
+  afdScraper,
+  fundsforNgosScraper,
+  anidScraper,
+  minagriFeedScraper,
+  iniaScraper,
+  globalSouthOpportunitiesScraper,
 ];
 
 /**

@@ -8,8 +8,10 @@ const CRITICAL_SOURCE_SLUGS = new Set(["fia", "fia-licitaciones", "corfo", "inda
 
 interface RunOneResult {
   slug: string;
-  status: "success" | "partial";
+  status: "success" | "partial" | "empty";
   inserted: number;
+  rawCount: number;
+  duplicatesMerged: number;
 }
 
 interface MainOptions {
@@ -28,32 +30,47 @@ async function runOne(scraper: typeof scrapers[number]): Promise<RunOneResult> {
   try {
     const result = await scraper.scrape();
     let inserted = 0;
+    let duplicatesMerged = 0;
     const skipReasons: string[] = [];
 
     for (const raw of result.projects) {
       const r = await upsertProject(raw, scraper.slug);
       if (r.skipped) {
+        if (r.reason?.startsWith('duplicate_')) {
+          duplicatesMerged++;
+        }
         skipReasons.push(`${raw.url}: ${r.reason}`);
       } else {
         inserted++;
       }
     }
 
-    const status: "success" | "partial" =
-      result.partialErrors.length > 0 || skipReasons.length > 0 ? "partial" : "success";
+    const status: "success" | "partial" | "empty" =
+      result.partialErrors.length > 0 || skipReasons.length > 0
+        ? "partial"
+        : result.projects.length === 0
+        ? "empty"
+        : "success";
     const errorSummary = [
       ...result.partialErrors.slice(0, 5),
       ...skipReasons.slice(0, 5),
     ].join("\n") || undefined;
 
-    await updateSourceStatus(scraper.slug, status, inserted, errorSummary);
+    await updateSourceStatus(scraper.slug, status, result.projects.length, errorSummary);
     logger.info("Scraper completed", {
       scraper: scraper.slug,
       inserted,
+      duplicatesMerged,
       rawCount: result.projects.length,
       status,
     });
-    return { slug: scraper.slug, status, inserted };
+    return {
+      slug: scraper.slug,
+      status,
+      inserted,
+      rawCount: result.projects.length,
+      duplicatesMerged,
+    };
   } catch (err) {
     const msg = (err as Error).message;
     await updateSourceStatus(scraper.slug, "error", 0, msg);
@@ -90,7 +107,7 @@ export async function main(options: MainOptions = {}) {
 
       const run = result.value;
       const isCritical = CRITICAL_SOURCE_SLUGS.has(run.slug);
-      if (isCritical && (run.status !== "success" || run.inserted === 0)) {
+      if (isCritical && (run.status !== "success" || run.rawCount === 0)) {
         return [run.slug];
       }
 
@@ -100,6 +117,9 @@ export async function main(options: MainOptions = {}) {
       failed,
       total: selectedScrapers.length,
       staleProtectedSourceSlugs,
+      duplicatesMerged: results
+        .filter((result): result is PromiseFulfilledResult<RunOneResult> => result.status === 'fulfilled')
+        .reduce((sum, result) => sum + result.value.duplicatesMerged, 0),
     });
 
     if (failed === selectedScrapers.length && selectedScrapers.length > 0) {

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { EXTERNAL_PROVIDER_IDS, SEARCH_SOURCE_MODES } from '@/lib/search/contracts';
+import { EXTERNAL_PROVIDER_IDS, SEARCH_RELEVANCE_MODES, SEARCH_SOURCE_MODES } from '@/lib/search/contracts';
 
 /**
  * Schemas Zod compartidos para validación de input en APIs.
@@ -30,9 +30,13 @@ export const GenerateProposalSchema = z.object({
 
 const SearchProviderSchema = z.enum(EXTERNAL_PROVIDER_IDS);
 const SearchSourceModeSchema = z.enum(SEARCH_SOURCE_MODES);
+const SearchRelevanceModeSchema = z.enum(SEARCH_RELEVANCE_MODES);
 const SearchAmbitoSchema = z.enum(['all', 'Nacional', 'Regional', 'Internacional']);
 const SearchEstadoSchema = z.enum(['Abierta', 'Próxima', 'Cerrada']);
 const SearchSortSchema = z.enum(['date_asc', 'amount_desc', 'newest', 'relevance']);
+const SearchDateParamSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, 'Formato de fecha invalido (YYYY-MM-DD)');
 
 export const SearchProjectsRequestSchema = z
   .object({
@@ -42,8 +46,11 @@ export const SearchProjectsRequestSchema = z
     ambito: SearchAmbitoSchema.optional(),
     institution: z.string().trim().max(200, 'institution no puede exceder 200 caracteres').optional(),
     region: z.string().trim().max(120, 'region no puede exceder 120 caracteres').optional(),
+    category: z.string().trim().max(200, 'category no puede exceder 200 caracteres').optional(),
     estado: SearchEstadoSchema.optional(),
     sort: SearchSortSchema.optional(),
+    postedFrom: SearchDateParamSchema.optional(),
+    postedTill: SearchDateParamSchema.optional(),
     page: z
       .number({ error: 'page debe ser un número' })
       .int({ error: 'page debe ser entero' })
@@ -68,6 +75,7 @@ export const SearchProjectsRequestSchema = z
     includeUnverified: z.boolean().optional(),
     sourceMode: SearchSourceModeSchema.optional(),
     providers: z.array(SearchProviderSchema).max(5, 'Máximo 5 proveedores').optional(),
+    relevanceMode: SearchRelevanceModeSchema.optional(),
     includeMercadoPublico: z.boolean().optional(),
   })
   .refine(
@@ -75,6 +83,13 @@ export const SearchProjectsRequestSchema = z
     {
       message: 'maxAmount debe ser mayor o igual a minAmount',
       path: ['maxAmount'],
+    }
+  )
+  .refine(
+    (data) => data.postedFrom == null || data.postedTill == null || data.postedTill >= data.postedFrom,
+    {
+      message: 'postedTill debe ser mayor o igual a postedFrom',
+      path: ['postedTill'],
     }
   );
 

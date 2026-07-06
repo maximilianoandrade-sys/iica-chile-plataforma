@@ -3,6 +3,7 @@
  */
 
 const findManyMock = jest.fn();
+const countMock = jest.fn();
 const disconnectMock = jest.fn();
 
 jest.mock("../../lib/prisma", () => ({
@@ -10,6 +11,9 @@ jest.mock("../../lib/prisma", () => ({
   default: {
     source: {
       findMany: (...args: unknown[]) => findManyMock(...args),
+    },
+    project: {
+      count: (...args: unknown[]) => countMock(...args),
     },
     $disconnect: (...args: unknown[]) => disconnectMock(...args),
   },
@@ -54,7 +58,9 @@ describe("coverage-check script", () => {
   beforeEach(() => {
     jest.resetModules();
     findManyMock.mockReset();
+    countMock.mockReset();
     disconnectMock.mockReset();
+    countMock.mockResolvedValue(0);
     disconnectMock.mockResolvedValue(undefined);
   });
 
