@@ -35,6 +35,7 @@ export default function CookieConsent() {
                     </p>
                 </div>
                 <div className="flex items-center gap-4 flex-shrink-0">
+                <div className="flex items-center gap-4 flex-shrink-0">
                     <button
                         onClick={rejectOptionalCookies}
                         className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors min-h-[44px]"
@@ -43,7 +44,7 @@ export default function CookieConsent() {
                     </button>
                     <button
                         onClick={acceptCookies}
-                        className="bg-[var(--iica-cyan)] hover:bg-[#008ec2] text-white font-bold py-2 px-6 rounded-lg transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-cyan-500"
+                        className="bg-[var(--iica-cyan)] hover:bg-[#008ec2] text-white font-bold py-2 px-6 rounded-lg transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-cyan-500 min-h-[44px]"
                     >
                         Aceptar todo
                     </button>

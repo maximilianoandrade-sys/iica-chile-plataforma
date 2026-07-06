@@ -85,7 +85,7 @@ export default function Newsletter() {
                                 id="email-newsletter"
                                 type="email"
                                 required
-                                placeholder="tu@correo.com"
+                                placeholder="correo@ejemplo.com"
                                 className="w-full px-4 py-3 rounded-lg text-gray-900 focus:ring-2 focus:ring-[var(--iica-secondary)] outline-none border-none shadow-inner"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
