@@ -103,6 +103,7 @@ export default function AboutPage() {
                                     </a>
                                 </div>
                             </div>
+                            {/* Stats grid — WCAG 1.3.1: role="group" + aria-label compuesto + dl/dd/dt */}
                             <div className="grid grid-cols-2 gap-4">
                                 {[
                                     { n: '75', label: 'Años en Chile', icon: <Award className="h-6 w-6" /> },
@@ -110,10 +111,17 @@ export default function AboutPage() {
                                     { n: '48+', label: 'Proyectos 2026', icon: <TrendingUp className="h-6 w-6" /> },
                                     { n: 'USD 85M+', label: 'Fondos Gestionados', icon: <Shield className="h-6 w-6" /> },
                                 ].map(({ n, label, icon }) => (
-                                    <div key={label} className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-5">
-                                        <div className="text-white/70 mb-2">{icon}</div>
-                                        <div className="text-3xl font-black">{n}</div>
-                                        <div className="text-sm text-blue-100">{label}</div>
+                                    <div
+                                        key={label}
+                                        role="group"
+                                        aria-label={`${n} ${label}`}
+                                        className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-5"
+                                    >
+                                        <div className="text-white/70 mb-2" aria-hidden="true">{icon}</div>
+                                        <dl>
+                                            <dd className="text-3xl font-black">{n}</dd>
+                                            <dt className="text-sm text-blue-100">{label}</dt>
+                                        </dl>
                                     </div>
                                 ))}
                             </div>

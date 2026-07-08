@@ -11,6 +11,7 @@ import OfflineIndicator from '@/components/OfflineIndicator';
 const PWAInstallBanner = dynamic(() => import('@/components/PWAInstallBanner'), { ssr: false });
 const ScrollToTop = dynamic(() => import('@/components/ScrollToTop'), { ssr: false });
 const PushNotificationManager = dynamic(() => import('@/components/PushNotificationManager'), { ssr: false });
+const RouteAnnouncer = dynamic(() => import('@/components/RouteAnnouncer'), { ssr: false });
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -207,6 +208,8 @@ export default function RootLayout({
         <PWAInstallBanner />
         <ScrollToTop />
         <PushNotificationManager />
+        {/* Accesibilidad SPA — anuncia cambios de ruta y gestiona foco (WCAG 2.4.3 / 4.1.3) */}
+        <RouteAnnouncer />
 
         {/* Service Worker Registration */}
         <script

@@ -71,6 +71,7 @@ export default function StatsSection({ total, abiertas, internacionales, urgente
                         <button
                             key={i}
                             type="button"
+                            aria-label={`${stat.value} ${stat.description} — ${stat.label}`}
                             onClick={() => handleCardClick(stat.href)}
                             onMouseEnter={() => router.prefetch(stat.href)}
                             disabled={isPending}

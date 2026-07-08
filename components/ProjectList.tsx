@@ -240,6 +240,7 @@ export default function ProjectList({
                   key={page}
                   type="button"
                   onClick={() => goToPage(page)}
+                  aria-label={page === currentPage ? `Página ${page}, página actual` : `Ir a la página ${page}`}
                   aria-current={page === currentPage ? 'page' : undefined}
                   className={`min-w-[44px] min-h-[44px] rounded-lg text-sm font-medium transition-colors ${
                     page === currentPage
@@ -257,6 +258,7 @@ export default function ProjectList({
                 <button
                   type="button"
                   onClick={() => goToPage(totalPages)}
+                  aria-label={`Ir a la última página, página ${totalPages}`}
                   className="min-w-[44px] min-h-[44px] rounded-lg text-sm font-medium bg-white dark:bg-gray-800 border border-iica-border text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   {totalPages}
