@@ -3,7 +3,7 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
 import Link from 'next/link';
-import { Globe, Users, Leaf, Award, CheckCircle, ArrowRight, ExternalLink, TrendingUp, Shield, MapPin, BookOpen } from 'lucide-react';
+import { Globe, Users, Leaf, Award, CheckCircle, ArrowRight, ExternalLink, TrendingUp, Shield, MapPin, BookOpen, Zap, Database, Sprout, Users2, Building2, GraduationCap } from 'lucide-react';
 
 export const metadata: Metadata = {
     title: 'Sobre IICA Chile',
@@ -24,14 +24,14 @@ export const metadata: Metadata = {
 };
 
 const CAPACIDADES = [
-    { icon: '🌎', title: 'Cooperación Técnica Internacional', desc: 'Diseño e implementación de proyectos en asociación con FAO, BID, GEF, GCF, FONTAGRO y Unión Europea.' },
-    { icon: '🔬', title: 'Investigación y Transferencia', desc: 'Estudios de base, diagnósticos territoriales y transferencia tecnológica al sector agropecuario chileno.' },
-    { icon: '💧', title: 'Agua y Cambio Climático', desc: 'Adaptación, mitigación y gestión sostenible de recursos hídricos en zonas áridas y semiáridas.' },
-    { icon: '📊', title: 'Sistemas de Información', desc: 'Plataformas de datos, monitoreo de proyectos y observatorios de precios agroalimentarios.' },
-    { icon: '🌱', title: 'Bioeconomía y Sostenibilidad', desc: 'Valorización de residuos agrícolas, economía circular y encadenamientos productivos verdes.' },
-    { icon: '👩‍🌾', title: 'Inclusión y Género', desc: 'Programas de empoderamiento económico de mujeres rurales, jóvenes y pueblos originarios.' },
-    { icon: '🏛️', title: 'Fortalecimiento Institucional', desc: 'Apoyo a ministerios, GOREs, INDAP, SAG, CNR en modernización de procesos y servicios.' },
-    { icon: '📚', title: 'Formación de Capacidades', desc: 'Diplomados, talleres y cursos en línea con alcance hemisférico.' },
+    { icon: Globe, title: 'Cooperación Técnica Internacional', desc: 'Diseño e implementación de proyectos en asociación con FAO, BID, GEF, GCF, FONTAGRO y Unión Europea.' },
+    { icon: Zap, title: 'Investigación y Transferencia', desc: 'Estudios de base, diagnósticos territoriales y transferencia tecnológica al sector agropecuario chileno.' },
+    { icon: Leaf, title: 'Agua y Cambio Climático', desc: 'Adaptación, mitigación y gestión sostenible de recursos hídricos en zonas áridas y semiáridas.' },
+    { icon: Database, title: 'Sistemas de Información', desc: 'Plataformas de datos, monitoreo de proyectos y observatorios de precios agroalimentarios.' },
+    { icon: Sprout, title: 'Bioeconomía y Sostenibilidad', desc: 'Valorización de residuos agrícolas, economía circular y encadenamientos productivos verdes.' },
+    { icon: Users2, title: 'Inclusión y Género', desc: 'Programas de empoderamiento económico de mujeres rurales, jóvenes y pueblos originarios.' },
+    { icon: Building2, title: 'Fortalecimiento Institucional', desc: 'Apoyo a ministerios, GOREs, INDAP, SAG, CNR en modernización de procesos y servicios.' },
+    { icon: GraduationCap, title: 'Formación de Capacidades', desc: 'Diplomados, talleres y cursos en línea con alcance hemisférico.' },
 ];
 
 const HITOS = [
@@ -46,14 +46,14 @@ const HITOS = [
 ];
 
 const ALIANZAS = [
-    { name: 'MINAGRI / SAG', desc: 'Ministerio de Agricultura y servicio fitosanitario' },
-    { name: 'INDAP', desc: 'Agricultura familiar campesina' },
-    { name: 'CNR', desc: 'Comisión Nacional de Riego' },
-    { name: 'FIA', desc: 'Fundación para la Innovación Agraria' },
-    { name: 'CORFO', desc: 'Fomento productivo y emprendimiento' },
-    { name: 'GOREs', desc: '10 gobiernos regionales con proyectos activos' },
-    { name: 'U. de Chile / PUC', desc: 'Universidades socias en investigación' },
-    { name: 'FAO / BID / GEF', desc: 'Organismos internacionales coejecutores' },
+    { name: 'MINAGRI / SAG', desc: 'Ministerio de Agricultura y servicio fitosanitario', icon: Building2 },
+    { name: 'INDAP', desc: 'Agricultura familiar campesina', icon: Sprout },
+    { name: 'CNR', desc: 'Comisión Nacional de Riego', icon: Leaf },
+    { name: 'FIA', desc: 'Fundación para la Innovación Agraria', icon: Zap },
+    { name: 'CORFO', desc: 'Fomento productivo y emprendimiento', icon: TrendingUp },
+    { name: 'GOREs', desc: '10 gobiernos regionales con proyectos activos', icon: MapPin },
+    { name: 'U. de Chile / PUC', desc: 'Universidades socias en investigación', icon: GraduationCap },
+    { name: 'FAO / BID / GEF', desc: 'Organismos internacionales coejecutores', icon: Globe },
 ];
 
 export default function AboutPage() {
@@ -104,23 +104,23 @@ export default function AboutPage() {
                                 </div>
                             </div>
                             {/* Stats grid — WCAG 1.3.1: role="group" + aria-label compuesto + dl/dd/dt */}
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-2 gap-5">
                                 {[
-                                    { n: '75', label: 'Años en Chile', icon: <Award className="h-6 w-6" /> },
-                                    { n: '34', label: 'Estados Miembros', icon: <Globe className="h-6 w-6" /> },
-                                    { n: '48+', label: 'Proyectos 2026', icon: <TrendingUp className="h-6 w-6" /> },
-                                    { n: 'USD 85M+', label: 'Fondos Gestionados', icon: <Shield className="h-6 w-6" /> },
+                                    { n: '75', label: 'Años en Chile', icon: <Award className="h-7 w-7 text-white/80" /> },
+                                    { n: '34', label: 'Estados Miembros', icon: <Globe className="h-7 w-7 text-white/80" /> },
+                                    { n: '48+', label: 'Proyectos 2026', icon: <TrendingUp className="h-7 w-7 text-white/80" /> },
+                                    { n: 'USD 85M+', label: 'Fondos Gestionados', icon: <Shield className="h-7 w-7 text-white/80" /> },
                                 ].map(({ n, label, icon }) => (
                                     <div
                                         key={label}
                                         role="group"
                                         aria-label={`${n} ${label}`}
-                                        className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-5"
+                                        className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300"
                                     >
-                                        <div className="text-white/70 mb-2" aria-hidden="true">{icon}</div>
+                                        <div className="mb-3" aria-hidden="true">{icon}</div>
                                         <dl>
-                                            <dd className="text-3xl font-black">{n}</dd>
-                                            <dt className="text-sm text-blue-100">{label}</dt>
+                                            <dd className="text-3xl md:text-4xl font-black">{n}</dd>
+                                            <dt className="text-sm text-blue-100 mt-1">{label}</dt>
                                         </dl>
                                     </div>
                                 ))}
@@ -130,43 +130,43 @@ export default function AboutPage() {
                 </div>
 
                 {/* Mandato */}
-                <section className="py-16 bg-white">
+                <section className="py-20 bg-white">
                     <div className="container mx-auto max-w-[1100px] px-4">
                         <div className="grid md:grid-cols-2 gap-12 items-start">
                             <div>
-                                <h2 className="text-3xl font-black text-[var(--iica-navy)] mb-6">
+                                <h2 className="text-3xl md:text-4xl font-black text-[var(--iica-navy)] mb-8">
                                     Nuestro Mandato
                                 </h2>
-                                <p className="text-gray-600 text-lg leading-relaxed mb-6">
+                                <p className="text-gray-600 text-base leading-relaxed mb-6">
                                     Fundado en 1942 y con sede en San José, Costa Rica, el IICA opera en los 34 países miembros de la OEA para estimular, promover y apoyar los esfuerzos de los Estados Miembros para lograr el desarrollo agrícola y el bienestar de las poblaciones rurales.
                                 </p>
-                                <p className="text-gray-600 leading-relaxed mb-6">
+                                <p className="text-gray-600 text-base leading-relaxed mb-8">
                                     En Chile, la oficina nacional con presencia desde 1950 actúa como puente entre las agencias internacionales de cooperación y los organismos nacionales, facilitando el acceso a fondos concursables, cooperación técnica especializada y redes de conocimiento hemisféricas.
                                 </p>
-                                <div className="bg-blue-50 p-5 rounded-xl border-l-4 border-[var(--iica-blue)]">
-                                    <p className="text-sm text-blue-800 italic leading-relaxed">
+                                <div className="bg-blue-50 p-6 rounded-xl border-l-4 border-[var(--iica-blue)]">
+                                    <p className="text-base text-blue-800 italic leading-relaxed">
                                         &ldquo;Contribuimos a mejorar la competitividad y sostenibilidad del agro chileno articulando recursos internacionales con capacidades locales, en un marco de excelencia técnica e integridad institucional.&rdquo;
                                     </p>
-                                    <p className="text-xs font-bold text-blue-900 mt-2">— Representación IICA Chile, 2026</p>
+                                    <p className="text-sm font-bold text-blue-900 mt-3">— Representación IICA Chile, 2026</p>
                                 </div>
                             </div>
                             <div>
-                                <h3 className="text-xl font-bold text-[var(--iica-navy)] mb-4 flex items-center gap-2">
-                                    <CheckCircle className="h-5 w-5 text-green-500" />
+                                <h3 className="text-2xl font-bold text-[var(--iica-navy)] mb-8 flex items-center gap-3">
+                                    <CheckCircle className="h-6 w-6 text-green-500 flex-shrink-0" />
                                     ¿Por qué el IICA es el ejecutor ideal?
                                 </h3>
-                                <ul className="space-y-4">
+                                <ul className="space-y-6">
                                     {[
                                         { t: 'Acreditación Internacional', d: 'Reconocido explícitamente como ejecutor elegible por GEF, GCF, FONTAGRO, UE-EUROCLIMA+ y BID, lo que elimina costosas evaluaciones fiduciarias.' },
                                         { t: 'Neutralidad Institucional', d: 'Como organismo internacional, actúa como articulador neutral entre ministerios, privados y academia, facilitando alianzas que de otro modo serían difíciles.' },
                                         { t: 'Capacidad de Co-formulación', d: 'Equipo especializado que apoya a contrapartes chilenas en identificar la fuente correcta, formular la propuesta y gestionar el proceso de aprobación.' },
                                         { t: 'Seguimiento y Rendición', d: 'Cumplimiento estricto de los estándares fiduciarios internacionales (auditorías, informes técnicos, planes de adquisiciones), vitales para organismos multilaterales.' },
                                     ].map(({ t, d }) => (
-                                        <li key={t} className="flex items-start gap-3">
-                                            <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                                        <li key={t} className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors duration-200">
+                                            <CheckCircle className="h-6 w-6 text-green-500 flex-shrink-0 mt-0.5" />
                                             <div>
-                                                <strong className="text-gray-800 font-bold">{t}</strong>
-                                                <p className="text-gray-600 text-sm mt-0.5 leading-relaxed">{d}</p>
+                                                <strong className="text-gray-800 font-bold text-base block mb-1">{t}</strong>
+                                                <p className="text-gray-600 text-sm leading-relaxed">{d}</p>
                                             </div>
                                         </li>
                                     ))}
@@ -177,42 +177,50 @@ export default function AboutPage() {
                 </section>
 
                 {/* Capacidades */}
-                <section className="py-16 bg-[#f4f7f9] dark:bg-gray-900">
+                <section className="py-20 bg-[#f4f7f9] dark:bg-gray-900">
                     <div className="container mx-auto max-w-[1100px] px-4">
-                        <div className="text-center mb-12">
-                            <h2 className="text-3xl font-black text-[var(--iica-navy)] mb-3">Áreas de Capacidad</h2>
-                            <p className="text-gray-600 max-w-xl mx-auto">Nuestro equipo multidisciplinario opera en 8 áreas de expertise complementarias para el desarrollo agrícola chileno.</p>
+                        <div className="text-center mb-16">
+                            <h2 className="text-3xl md:text-4xl font-black text-[var(--iica-navy)] mb-4">Áreas de Capacidad</h2>
+                            <p className="text-gray-600 text-base max-w-2xl mx-auto">Nuestro equipo multidisciplinario opera en 8 áreas de expertise complementarias para el desarrollo agrícola chileno.</p>
                         </div>
-                        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                            {CAPACIDADES.map((c) => (
-                                <div key={c.title} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
-                                    <div className="text-3xl mb-3" aria-hidden="true">{c.icon}</div>
-                                    <h3 className="font-bold text-[var(--iica-navy)] mb-2 text-sm">{c.title}</h3>
-                                    <p className="text-gray-500 text-xs leading-relaxed">{c.desc}</p>
-                                </div>
-                            ))}
+                        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {CAPACIDADES.map((c) => {
+                                const IconComponent = c.icon;
+                                return (
+                                    <div 
+                                        key={c.title} 
+                                        className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm hover:shadow-lg hover:border-[var(--iica-blue)] transition-all duration-300 hover:-translate-y-2 group"
+                                    >
+                                        <div className="mb-4 inline-flex p-3 bg-blue-50 rounded-xl group-hover:bg-[var(--iica-blue)] transition-colors duration-300">
+                                            <IconComponent className="h-6 w-6 text-[var(--iica-blue)] group-hover:text-white transition-colors duration-300" />
+                                        </div>
+                                        <h3 className="font-bold text-[var(--iica-navy)] mb-3 text-base leading-snug">{c.title}</h3>
+                                        <p className="text-gray-600 text-sm leading-relaxed">{c.desc}</p>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                 </section>
 
                 {/* Hitos */}
-                <section className="py-16 bg-white">
+                <section className="py-20 bg-white">
                     <div className="container mx-auto max-w-[1100px] px-4">
-                        <h2 className="text-3xl font-black text-[var(--iica-navy)] mb-10 text-center">75 Años de Presencia en Chile</h2>
+                        <h2 className="text-3xl md:text-4xl font-black text-[var(--iica-navy)] mb-16 text-center">75 Años de Presencia en Chile</h2>
                         <div className="relative">
                             {/* Timeline line */}
-                            <div className="absolute left-[88px] top-0 bottom-0 w-0.5 bg-gradient-to-b from-[var(--iica-blue)] to-blue-100 hidden sm:block" />
-                            <div className="space-y-6">
+                            <div className="absolute left-[88px] top-0 bottom-0 w-1 bg-gradient-to-b from-[var(--iica-blue)] via-[var(--iica-blue)] to-blue-100 hidden sm:block" />
+                            <div className="space-y-8">
                                 {HITOS.map((h, i) => (
-                                    <div key={h.year} className="flex items-start gap-6">
-                                        <div className="w-20 flex-shrink-0 text-right">
-                                            <span className="font-black text-[var(--iica-blue)] text-lg">{h.year}</span>
+                                    <div key={h.year} className="flex items-start gap-6 group">
+                                        <div className="w-20 flex-shrink-0 text-right pt-1">
+                                            <span className="font-black text-[var(--iica-blue)] text-xl">{h.year}</span>
                                         </div>
-                                        <div className="relative hidden sm:flex items-start justify-center w-6 flex-shrink-0 mt-1.5">
-                                            <div className="w-3 h-3 rounded-full bg-[var(--iica-blue)] ring-4 ring-blue-50 z-10" />
+                                        <div className="relative hidden sm:flex items-start justify-center w-6 flex-shrink-0 mt-1">
+                                            <div className="w-4 h-4 rounded-full bg-white border-3 border-[var(--iica-blue)] z-10 group-hover:scale-125 transition-transform duration-300" />
                                         </div>
-                                        <div className="flex-1 bg-gray-50 rounded-xl px-5 py-4 border border-gray-100">
-                                            <p className="text-gray-700 text-sm leading-relaxed">{h.text}</p>
+                                        <div className="flex-1 bg-gradient-to-r from-blue-50 to-transparent rounded-xl px-6 py-5 border border-gray-100 group-hover:border-[var(--iica-blue)] group-hover:shadow-md transition-all duration-300">
+                                            <p className="text-gray-700 text-base leading-relaxed font-medium">{h.text}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -222,34 +230,47 @@ export default function AboutPage() {
                 </section>
 
                 {/* Alianzas Chile */}
-                <section className="py-16 bg-gradient-to-b from-[#f4f7f9] to-white">
+                <section className="py-20 bg-gradient-to-b from-[#f4f7f9] to-white">
                     <div className="container mx-auto max-w-[1100px] px-4">
-                        <div className="text-center mb-10">
-                            <h2 className="text-3xl font-black text-[var(--iica-navy)] mb-3">Alianzas Estratégicas en Chile</h2>
-                            <p className="text-gray-600 max-w-xl mx-auto">Trabajamos articuladamente con organismos públicos, academia e instituciones internacionales.</p>
+                        <div className="text-center mb-16">
+                            <h2 className="text-3xl md:text-4xl font-black text-[var(--iica-navy)] mb-4">Alianzas Estratégicas en Chile</h2>
+                            <p className="text-gray-600 text-base max-w-2xl mx-auto">Trabajamos articuladamente con organismos públicos, academia e instituciones internacionales.</p>
                         </div>
-                        <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
-                            {ALIANZAS.map((a) => (
-                                <div key={a.name} className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm text-center hover:border-[var(--iica-blue)] transition-colors">
-                                    <div className="font-black text-[var(--iica-navy)] mb-1">{a.name}</div>
-                                    <div className="text-xs text-gray-500">{a.desc}</div>
-                                </div>
-                            ))}
+                        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {ALIANZAS.map((a) => {
+                                const IconComponent = a.icon;
+                                return (
+                                    <div 
+                                        key={a.name} 
+                                        className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md hover:border-[var(--iica-blue)] transition-all duration-300 group"
+                                    >
+                                        <div className="flex items-start gap-4">
+                                            <div className="p-2 bg-blue-50 rounded-lg group-hover:bg-[var(--iica-blue)] transition-colors duration-300 flex-shrink-0">
+                                                <IconComponent className="h-5 w-5 text-[var(--iica-blue)] group-hover:text-white transition-colors duration-300" />
+                                            </div>
+                                            <div className="flex-1">
+                                                <div className="font-black text-[var(--iica-navy)] text-sm mb-1">{a.name}</div>
+                                                <div className="text-xs text-gray-500 leading-relaxed">{a.desc}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                 </section>
 
                 {/* CTA */}
-                <section className="py-16 bg-gradient-to-r from-[var(--iica-navy)] to-[var(--iica-blue)] text-white">
+                <section className="py-20 bg-gradient-to-r from-[var(--iica-navy)] to-[var(--iica-blue)] text-white">
                     <div className="container mx-auto max-w-[1100px] px-4 text-center">
-                        <h2 className="text-3xl font-black mb-4">¿Quieres colaborar con el IICA?</h2>
-                        <p className="text-blue-100 text-lg mb-8 max-w-xl mx-auto">
+                        <h2 className="text-3xl md:text-4xl font-black mb-6">¿Quieres colaborar con el IICA?</h2>
+                        <p className="text-blue-100 text-lg mb-10 max-w-2xl mx-auto leading-relaxed">
                             Si tu institución, empresa o gobierno regional tiene un proyecto agrícola que requiere financiamiento internacional, contáctanos para explorar opciones.
                         </p>
                         <div className="flex flex-wrap gap-4 justify-center">
                             <Link
                                 href="/#convocatorias"
-                                className="inline-flex items-center gap-2 bg-white text-[var(--iica-navy)] font-bold px-8 py-4 rounded-xl hover:bg-blue-50 transition-colors shadow-lg"
+                                className="inline-flex items-center gap-2 bg-white text-[var(--iica-navy)] font-bold px-8 py-4 rounded-xl hover:bg-blue-50 transition-colors shadow-lg hover:shadow-xl"
                             >
                                 <BookOpen className="h-5 w-5" />
                                 Explorar Convocatorias
