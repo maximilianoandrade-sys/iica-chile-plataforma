@@ -108,28 +108,42 @@ async function checkLinkForUpdates(url: string, projectName: string): Promise<Li
         const lastModified = response.headers.get('last-modified');
 
         // Persist and detect changes across invocations (serverless has no shared memory).
-        const previous = await prisma.linkCheck.findUnique({ where: { url } });
+        let previous: { lastModified: string | null } | null = null;
+        try {
+            previous = await prisma.linkCheck.findUnique({ where: { url } });
+        } catch (e) {
+            // ponytail: LinkCheck.last_modified puede faltar si no se aplicó scripts/sql/2026-07-15-linkcheck-lastmodified.sql
+            logger.warn('LinkCheck lectura falló (¿esquema desactualizado?)', { url, error: String(e) });
+        }
         const hasChanged = Boolean(
             previous?.lastModified && lastModified && previous.lastModified !== lastModified
         );
 
         const isValid = response.status > 0 && response.status < 400;
-        await prisma.linkCheck.upsert({
-            where: { url },
-            update: {
-                statusCode: response.status,
-                lastModified: lastModified || null,
-                isValid,
-                lastChecked: new Date(),
-            },
-            create: {
+        try {
+            await prisma.linkCheck.upsert({
+                where: { url },
+                update: {
+                    statusCode: response.status,
+                    lastModified: lastModified || null,
+                    isValid,
+                    lastChecked: new Date(),
+                },
+                create: {
+                    url,
+                    status: isValid ? 'ok' : 'broken',
+                    statusCode: response.status,
+                    lastModified: lastModified || null,
+                    isValid,
+                },
+            });
+        } catch (e) {
+            // ponytail: no romper el cron completo si falta la columna last_modified en producción
+            logger.warn('LinkCheck upsert falló (aplicar scripts/sql/2026-07-15-linkcheck-lastmodified.sql)', {
                 url,
-                status: isValid ? 'ok' : 'broken',
-                statusCode: response.status,
-                lastModified: lastModified || null,
-                isValid,
-            },
-        });
+                error: String(e),
+            });
+        }
 
         return {
             url,

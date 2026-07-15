@@ -416,12 +416,17 @@ export async function getAllProjects(): Promise<GetProjectsResult> {
  * Use this in server components to avoid redundant DB calls when multiple components
  * need the same data in the same render tree.
  */
-export const getCachedProjects = cache(getProjects);
+// ponytail: React.cache solo existe en el runtime de servidor (condición react-server).
+// En el bundle del cliente (react 18.3) es undefined y rompe el módulo al evaluarlo.
+const maybeCache = <T>(fn: () => T): (() => T) =>
+  typeof cache === 'function' ? cache(fn) : fn;
+
+export const getCachedProjects = maybeCache(getProjects);
 
 /**
  * Cached version of getProjectFilterSnapshot — deduplicates within a single React server request.
  */
-export const getCachedProjectFilterSnapshot = cache(getProjectFilterSnapshot);
+export const getCachedProjectFilterSnapshot = maybeCache(getProjectFilterSnapshot);
 
 export interface FilterCounts {
   estado: Record<string, number>;
