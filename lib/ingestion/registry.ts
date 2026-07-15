@@ -51,6 +51,16 @@ const TARGET_URLS = [
   "https://www.forus-international.org/es/funding-opportunities",
   "https://www.visegradfund.org/grants",
   "https://www.developmentaid.org/", // DevelopmentAid
+  // Fuentes adicionales para ampliar cobertura (una oportunidad por URL vía LLM)
+  "https://www.fosis.gob.cl/", // FOSIS (fondos territoriales/rural)
+  "https://www.goreohiggins.cl/", // GORE O'Higgins
+  "https://www.goremaule.cl/", // GORE del Maule
+  "https://www.gorebiobio.cl/", // GORE Biobío
+  "https://www.gorearaucania.cl/", // GORE La Araucanía
+  "https://www.goreloslagos.cl/", // GORE Los Lagos
+  "https://www.prochile.gob.cl/", // ProChile (apoyo a exportaciones)
+  "https://www.wfp.org/", // Programa Mundial de Alimentos
+  "https://www.cgiar.org/", // CGIAR (investigación agrícola)
 ];
 
 export const universalAiCrawler: Scraper = {
