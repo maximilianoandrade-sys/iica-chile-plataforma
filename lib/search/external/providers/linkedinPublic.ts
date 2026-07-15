@@ -5,8 +5,7 @@ import {
   normalizeLinkedInPublicRecord,
   type LinkedInPublicRawRecord,
 } from '@/lib/search/external/normalizer';
-import type { ExternalProjectRecord } from '@/lib/search/external/types';
-import { BaseExternalProvider, type ProviderContext } from '@/lib/search/external/providers/base';
+import type { ExternalProjectRecord, ExternalProvider } from '@/lib/search/external/types';
 
 const logger = getLogger('LinkedInPublicProvider');
 const DEFAULT_TIMEOUT_MS = 10_000;
@@ -131,10 +130,13 @@ export function extractLinkedInRawRecordsFromHtml(
   return records;
 }
 
-export class LinkedInPublicProvider extends BaseExternalProvider {
+export class LinkedInPublicProvider implements ExternalProvider {
   id = 'linkedin_public' as const;
 
-  async search(request: SearchRequest, context?: ProviderContext): Promise<ExternalProjectRecord[]> {
+  async search(
+    request: SearchRequest,
+    context?: { timeoutMs?: number }
+  ): Promise<ExternalProjectRecord[]> {
     const mapped = mapSearchRequestToLinkedInQuery(request);
     logger.debug('Mapped external search query', {
       provider: this.id,

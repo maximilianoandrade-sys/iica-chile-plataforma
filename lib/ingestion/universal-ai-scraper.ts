@@ -45,10 +45,10 @@ export async function scrapeUrlWithAI(url: string): Promise<RawProject | null> {
 
     // 2. Extract visible text using Cheerio
     const $ = load(html);
-    
+
     // Remove unwanted elements
     $("script, style, nav, footer, iframe, noscript").remove();
-    
+
     // Get text and clean it up (limit to ~15,000 chars to avoid token explosion)
     let pageText = cleanText($("body").text());
     if (pageText.length > 15000) {
@@ -68,7 +68,7 @@ export async function scrapeUrlWithAI(url: string): Promise<RawProject | null> {
     }
 
     const ai = new GoogleGenAI({ apiKey });
-    
+
     const prompt = `URL de Origen: ${url}\n\nTEXTO DE LA PÁGINA:\n${pageText}\n\nExtrae la oportunidad en JSON usando el esquema indicado.`;
 
     const response = await ai.models.generateContent({
@@ -83,11 +83,11 @@ export async function scrapeUrlWithAI(url: string): Promise<RawProject | null> {
     });
 
     const responseText = response.text || "";
-    
+
     try {
       // Intentar parsear el JSON de la respuesta
       const parsed = JSON.parse(responseText);
-      
+
       if (parsed.title === "No Encontrado" || !parsed.title) {
         logger.info("AI determined no valid opportunity on page", { url });
         return null;
@@ -123,7 +123,18 @@ export async function scrapeUrlWithAI(url: string): Promise<RawProject | null> {
     }
 
   } catch (err) {
-    logger.error("Error in AI scrape execution", { url, error: (err as Error).message });
-    return null;
+    logger.error("Error in AI scrape execution, applying fallback", { url, error: String(err) });
+    return {
+      title: "Oportunidad pendiente de revisión",
+      institution: "Desconocida (Extraído por Fallback)",
+      url: url,
+      canonicalKey: url,
+      description: "URL scrapeada correctamente pero hubo un fallo en la API de Inteligencia Artificial (cuota excedida). Requiere procesar manualmente.",
+      opportunityType: "Convocatoria",
+      region: "Nacional",
+      ambito: "Nacional",
+      idioma: "es",
+      deadline: null,
+    };
   }
 }
