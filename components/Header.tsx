@@ -1,10 +1,17 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { Menu, X } from 'lucide-react';
 import { ThemeToggle } from '@/components/ThemeToggle';
+
+// ssr:false — lee localStorage en mount, evita hidratación mismatch
+const AccessibilityToolbar = dynamic(
+    () => import('@/components/AccessibilityToolbar').then((m) => m.AccessibilityToolbar),
+    { ssr: false },
+);
 
 const OFFICIAL_IICA_CHILE_URL = 'https://iica.int/es/countries/chile-es/';
 
@@ -71,6 +78,7 @@ export function Header({ urgentCount = 0 }: HeaderProps) {
                     {/* Right Actions */}
                     <div className="flex items-center gap-2">
                         <ThemeToggle />
+                        <AccessibilityToolbar />
 
                         <Link
                             href="/#convocatorias"

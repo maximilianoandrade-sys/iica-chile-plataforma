@@ -22,6 +22,7 @@ export interface HybridSearchOptions {
   scope?: string;
   role?: string;
   ambito?: string;
+  tipo?: 'fondo' | 'licitacion' | 'all';
   selectedInstitutions?: string[];
   selectedRegions?: string[];
   selectedCategories?: string[];
@@ -46,6 +47,7 @@ export interface HybridSearchResult {
 
 interface HybridQueryFilters {
   ambito?: string;
+  tipo?: 'fondo' | 'licitacion' | 'all';
   selectedInstitutions: string[];
   selectedRegions: string[];
   selectedCategories: string[];
@@ -66,6 +68,7 @@ function normalizeSort(sort: HybridSearchOptions['sort']): SortMode {
 function buildHybridFilters(opts: HybridSearchOptions): HybridQueryFilters {
   return {
     ambito: opts.ambito,
+    tipo: opts.tipo,
     selectedInstitutions: opts.selectedInstitutions ?? [],
     selectedRegions: opts.selectedRegions ?? [],
     selectedCategories: opts.selectedCategories ?? [],
@@ -79,23 +82,37 @@ function buildHybridFilters(opts: HybridSearchOptions): HybridQueryFilters {
   };
 }
 
+const LICITACION_CATEGORIES = ['Licitación', 'Procurement', 'Adquisiciones', 'UNGM', 'FAO'];
+const LICITACION_INSTITUTIONS = ['FAO (UN)', 'FAO', 'UNGM', 'WORLD BANK', 'Mercado Público'];
+
 function buildProjectWhere(filters: HybridQueryFilters): Prisma.ProjectWhereInput {
-  const where: Prisma.ProjectWhereInput = {};
+  const where: Prisma.ProjectWhereInput = { AND: [] };
 
   // Default: exclude expired projects (fecha_cierre must be today or later)
-  // This prevents search from returning already-closed opportunities.
-  // The closingWithinDays filter below may further narrow this range.
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   where.fecha_cierre = { gte: today };
 
   if (filters.ambito && filters.ambito !== 'all') {
     if (filters.ambito === 'chile') {
-      // "Solo Chile" = todo menos Internacional
       where.ambito = { not: 'Internacional' };
     } else {
       where.ambito = filters.ambito;
     }
+  }
+
+  if (filters.tipo === 'licitacion') {
+    (where.AND as Prisma.ProjectWhereInput[]).push({
+      OR: [
+        { categoria: { in: LICITACION_CATEGORIES } },
+        { institucion: { in: LICITACION_INSTITUTIONS } }
+      ]
+    });
+  } else if (filters.tipo === 'fondo') {
+    (where.AND as Prisma.ProjectWhereInput[]).push({
+      categoria: { notIn: LICITACION_CATEGORIES },
+      institucion: { notIn: LICITACION_INSTITUTIONS }
+    });
   }
 
   if (!filters.includeUnverified) {
@@ -152,6 +169,10 @@ function buildProjectWhere(filters: HybridQueryFilters): Prisma.ProjectWhereInpu
     maxDate.setHours(23, 59, 59, 999);
     // Override the default fecha_cierre filter with a narrower window
     where.fecha_cierre = { gte: closingToday, lte: maxDate };
+  }
+
+  if (Array.isArray(where.AND) && where.AND.length === 0) {
+    delete where.AND;
   }
 
   return where;

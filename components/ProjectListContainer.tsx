@@ -19,6 +19,7 @@ export default async function ProjectListContainer({
     const selectedRegions = typeof searchParams.region === 'string' ? searchParams.region.split(',').filter(Boolean) : [];
     const selectedCategories = typeof searchParams.category === 'string' ? searchParams.category.split(',').filter(Boolean) : [];
     const selectedAmbito = typeof searchParams.ambito === 'string' ? searchParams.ambito : '';
+    const tipo = (typeof searchParams.tipo === 'string' && (searchParams.tipo === 'fondo' || searchParams.tipo === 'licitacion')) ? searchParams.tipo : 'all';
     const postedFrom = typeof searchParams.postedFrom === 'string' ? searchParams.postedFrom : undefined;
     const postedTill = typeof searchParams.postedTill === 'string' ? searchParams.postedTill : undefined;
     const sort = typeof searchParams.sort === 'string'
@@ -38,6 +39,7 @@ export default async function ProjectListContainer({
         hybridSearch({
             query: searchTerm,
             ambito: selectedAmbito || 'all',
+            tipo,
             selectedInstitutions,
             selectedRegions,
             selectedCategories,
@@ -74,6 +76,7 @@ export default async function ProjectListContainer({
 
     const activeFilterLabels: string[] = [];
     if (searchTerm.trim()) activeFilterLabels.push(`Búsqueda: "${searchTerm.trim()}"`);
+    if (tipo !== 'all') activeFilterLabels.push(tipo === 'fondo' ? 'Fondos Concursables' : 'Licitaciones / Procurement');
     if (selectedEstado) activeFilterLabels.push(`Estado: ${selectedEstado}`);
     if (selectedAmbito) activeFilterLabels.push(`Ámbito: ${selectedAmbito}`);
     selectedInstitutions.forEach((inst) => activeFilterLabels.push(`Institución: ${inst}`));

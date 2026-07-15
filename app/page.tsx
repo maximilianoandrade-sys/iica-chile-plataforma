@@ -10,6 +10,7 @@ import Newsletter from "@/components/Newsletter";
 import FuentesOficiales from "@/components/FuentesOficiales";
 import PipelineStatus from "@/components/PipelineStatus";
 import { FilterChips } from "@/components/FilterChips";
+import { TipoTabs } from "@/components/TipoTabs";
 import { getCachedProjectFilterSnapshot, getCachedProjects } from "@/lib/data";
 import { buildFilterCounts } from "@/lib/search/filtering";
 import { ALL_INSTITUTION_SIGLAS } from "@/lib/constants/institutions";
@@ -180,6 +181,7 @@ export default async function DashboardPage({
             {/* Proyectos — sección principal */}
             <section>
               {lastUpdatedAt && <div className="mb-4"><PipelineStatus lastUpdated={lastUpdatedAt} /></div>}
+              <TipoTabs />
               <Suspense fallback={<SkeletonProjectList />}>
                 <ProjectListContainer searchParams={resolvedSearchParams} />
               </Suspense>

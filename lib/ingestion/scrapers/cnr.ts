@@ -107,9 +107,7 @@ export const cnrScraper: Scraper = {
         // la que ve el usuario.
         const stillFuture = publicacionBases && publicacionBases.getTime() > today.getTime();
         const url = stillFuture ? this.homepageUrl : detailUrl;
-        const canonicalKey = stillFuture
-          ? `${this.homepageUrl}?concurso=${code}`
-          : detailUrl;
+        const canonicalKey = detailUrl;
 
         const montoText = montoUf ? `Monto: ${montoUf} UF.` : "";
         const regionesText = regiones ? `Regiones: ${regiones.slice(0, 200)}.` : "";

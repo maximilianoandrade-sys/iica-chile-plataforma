@@ -6,6 +6,7 @@ import { type Project, daysUntilClose, formatDeadline, pluralizeDias } from '@/l
 import { InstitutionLogo } from '@/components/InstitutionLogo';
 import { getLogger } from '@/lib/utils/logger';
 import { trackEvent } from '@/lib/analytics';
+import { FavoriteButton } from '@/components/FavoriteButton';
 
 const logger = getLogger('ProjectCard');
 
@@ -123,14 +124,17 @@ export function ProjectCard({ project }: { project: Project }) {
               {project.institucion}
             </span>
           </div>
-          {/* Badge estado */}
-          <div className="flex flex-col items-end gap-1 shrink-0">
-            <span
-              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold whitespace-nowrap ${styles.badge}`}
-            >
-              {urgency === 'critical' && <AlertCircle className="w-3 h-3" />}
-              {styles.label}
-            </span>
+          {/* Badge estado & Favorite */}
+          <div className="flex flex-col items-end gap-2 shrink-0 z-10 relative">
+            <div className="flex items-center gap-2">
+              <span
+                className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold whitespace-nowrap ${styles.badge}`}
+              >
+                {urgency === 'critical' && <AlertCircle className="w-3 h-3" />}
+                {styles.label}
+              </span>
+              <FavoriteButton projectId={project.id} />
+            </div>
           </div>
         </div>
 

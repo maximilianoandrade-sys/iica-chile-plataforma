@@ -296,6 +296,9 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
         document.getElementById('convocatorias')?.scrollIntoView({ behavior: 'smooth' });
     };
 
+    const activeFuentes = fuentesWithCounts.filter(f => f.fondosActivos > 0);
+    const inactiveFuentes = fuentesWithCounts.filter(f => f.fondosActivos === 0);
+
     return (
         <section id="fuentes" aria-labelledby="fuentes-heading" className="py-16 bg-white dark:bg-gray-900">
             <div className="container mx-auto max-w-[1200px] px-4">
@@ -316,7 +319,7 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
                     <div className="flex flex-wrap justify-center gap-4 text-sm">
                         <div className="flex items-center gap-2 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 px-4 py-2 rounded-full">
                             <CheckCircle className="h-4 w-4 text-green-600" aria-hidden={true} />
-                            <span className="text-green-700 dark:text-green-300 font-bold">{FUENTES.length} fuentes verificadas</span>
+                            <span className="text-green-700 dark:text-green-300 font-bold">{activeFuentes.length} fuentes con fondos activos</span>
                         </div>
                         <button
                             type="button"
@@ -334,9 +337,9 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
                     </div>
                 </div>
 
-                {/* Sources Grid */}
+                {/* Active Sources Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                    {fuentesWithCounts.map((fuente, i) => {
+                    {activeFuentes.map((fuente, i) => {
                         const IconComponent = ICON_MAP[fuente.icon] || Globe;
                         const isExpanded = expandedId === fuente.id;
                         return (
@@ -444,6 +447,33 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
                         );
                     })}
                 </div>
+
+                {/* Inactive Sources */}
+                {inactiveFuentes.length > 0 && (
+                    <div className="mb-12">
+                        <h3 className="text-lg font-bold text-[var(--iica-navy)] dark:text-gray-300 mb-4 px-2 border-b border-gray-200 dark:border-gray-700 pb-2">
+                            Otras fuentes en monitoreo (0 fondos activos actualmente)
+                        </h3>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            {inactiveFuentes.map((fuente) => (
+                                <a 
+                                    key={fuente.id}
+                                    href={fuente.urlConcursos}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                                >
+                                    <div className="opacity-60 grayscale">
+                                        <InstitutionLogo nombre={fuente.sigla} size={24} />
+                                    </div>
+                                    <div className="min-w-0">
+                                        <p className="text-sm font-bold text-gray-500 dark:text-gray-400 truncate">{fuente.sigla}</p>
+                                    </div>
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 {/* Disclaimer */}
                 <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-2xl p-5 flex gap-4 items-start">

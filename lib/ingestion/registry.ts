@@ -36,6 +36,39 @@ import { globalSouthOpportunitiesScraper } from "./scrapers/global-south-opportu
  * - IICA Dashboard (Playwright): requiere browser headless + cookie
  *   Cloudflare persistente. Se corre separadamente (ver export más abajo).
  */
+import { scrapeUrlWithAI } from "./universal-ai-scraper";
+import type { RawProject } from "./types";
+
+const TARGET_URLS = [
+  "https://www.agci.cl/becas/becas-para-chilenos", // New source
+  // More URLs can be added here, eliminating custom scrapers progressively.
+];
+
+export const universalAiCrawler: Scraper = {
+  slug: "universal-ai-crawler",
+  name: "Extractor Universal LLM",
+  homepageUrl: "https://gemini.google.com",
+  async scrape() {
+    const projects: RawProject[] = [];
+    const partialErrors: string[] = [];
+    
+    for (const url of TARGET_URLS) {
+      try {
+        const project = await scrapeUrlWithAI(url);
+        if (project) projects.push(project);
+      } catch (err) {
+        partialErrors.push(`Failed URL ${url}: ${(err as Error).message}`);
+      }
+    }
+    
+    return {
+      sourceSlug: this.slug,
+      projects,
+      partialErrors
+    };
+  }
+};
+
 export const scrapers: Scraper[] = [
   fiaScraper,
   fiaLicitacionesScraper,
@@ -61,6 +94,7 @@ export const scrapers: Scraper[] = [
   minagriFeedScraper,
   iniaScraper,
   globalSouthOpportunitiesScraper,
+  universalAiCrawler,
 ];
 
 /**
