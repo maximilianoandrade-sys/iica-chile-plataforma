@@ -56,7 +56,7 @@ async function runOne(scraper: typeof scrapers[number]): Promise<RunOneResult> {
       ...skipReasons.slice(0, 5),
     ].join("\n") || undefined;
 
-    await updateSourceStatus(scraper.slug, status, result.projects.length, errorSummary);
+    await updateSourceStatus(scraper.slug, status, inserted, errorSummary);
     logger.info("Scraper completed", {
       scraper: scraper.slug,
       inserted,
@@ -93,6 +93,8 @@ export async function main(options: MainOptions = {}) {
 
   if (selectedScrapers.length === 0) {
     logger.warn("Registry vacío, nada que correr.");
+    await prisma.$disconnect();
+    return;
   } else {
     logger.info("Running deterministic scrapers", {
       count: selectedScrapers.length,

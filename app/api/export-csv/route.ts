@@ -1,19 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getProjects } from '@/lib/data';
-import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
 import { getLogger } from '@/lib/utils/logger';
 const logger = getLogger('ExportCSV');
 
-export async function GET(request: NextRequest) {
-    const ip = getClientIp(request);
-    const rateLimit = checkRateLimit(`export-csv:${ip}`, { maxRequests: 10, windowSizeSeconds: 60 });
-    if (!rateLimit.allowed) {
-        return NextResponse.json(
-            { error: 'Demasiadas solicitudes. Intente nuevamente más tarde.' },
-            { status: 429, headers: { 'Retry-After': String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)) } }
-        );
-    }
+export const dynamic = 'force-dynamic';
 
+export async function GET(request: NextRequest) {
     try {
     const { searchParams } = new URL(request.url);
     const category = searchParams.get('category') || '';
@@ -22,8 +14,15 @@ export async function GET(request: NextRequest) {
     const q = searchParams.get('q') || '';
 
     const beneficiary = searchParams.get('beneficiary') || '';
-    const minAmount = searchParams.get('minAmount');
-    const maxAmount = searchParams.get('maxAmount');
+    const minAmountRaw = searchParams.get('minAmount');
+    const maxAmountRaw = searchParams.get('maxAmount');
+    const minAmount = minAmountRaw != null ? Number(minAmountRaw) : undefined;
+    const maxAmount = maxAmountRaw != null ? Number(maxAmountRaw) : undefined;
+
+    // ponytail: reject malformed amounts instead of silently dropping every row
+    if ((minAmountRaw != null && !Number.isFinite(minAmount)) || (maxAmountRaw != null && !Number.isFinite(maxAmount))) {
+      return NextResponse.json({ error: 'Parámetros de monto inválidos' }, { status: 400 });
+    }
 
     const result = await getProjects();
     const projects = result.ok ? result.projects : [];
@@ -38,8 +37,8 @@ export async function GET(request: NextRequest) {
 
         // Amount logic handling "sin monto definido" (0 or null)
         const amount = p.monto || 0;
-        const matchMin = !minAmount || amount >= parseInt(minAmount);
-        const matchMax = !maxAmount || amount <= parseInt(maxAmount);
+        const matchMin = minAmount === undefined || amount >= minAmount;
+        const matchMax = maxAmount === undefined || amount <= maxAmount;
 
         return matchCat && matchReg && matchInst && matchQ && matchBen && matchMin && matchMax;
     });

@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { createHmac, timingSafeEqual } from "crypto";
 import { getLogger } from '@/lib/utils/logger';
 import { createSuccessResponse, createErrorResponse } from '@/lib/utils/api-response';
-import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
 import { getAuthEnv } from '@/lib/utils/env';
 const logger = getLogger('AdminLogin');
 
@@ -15,13 +14,6 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     logger.error('Invalid environment for admin login', error as Error);
     return createErrorResponse('server config error', 500);
-  }
-  const clientIp = getClientIp(req);
-  const rateCheck = checkRateLimit(`admin-login:${clientIp}`, ADMIN_LOGIN_RATE_LIMIT);
-  if (!rateCheck.allowed) {
-    return createErrorResponse("Demasiadas solicitudes. Intente nuevamente más tarde.", 429, {
-      "Retry-After": String(Math.ceil((rateCheck.resetAt - Date.now()) / 1000)),
-    });
   }
 
   let body: Record<string, unknown>;

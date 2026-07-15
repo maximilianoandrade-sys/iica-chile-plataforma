@@ -1,3 +1,4 @@
+import { getAiEnv } from '@/lib/utils/env';
 /**
  * Búsqueda híbrida: combina full-text (tsvector + GIN) con búsqueda
  * semántica (pgvector + Gemini embeddings) usando Reciprocal Rank Fusion.
@@ -242,7 +243,7 @@ export async function hybridSearch(opts: HybridSearchOptions): Promise<HybridSea
 
   let queryEmbedding: number[] | null = null;
   try {
-    if (process.env.GEMINI_API_KEY) {
+    if (getAiEnv().GEMINI_API_KEY) {
       queryEmbedding = await embedText(query.trim());
     }
   } catch (err) {

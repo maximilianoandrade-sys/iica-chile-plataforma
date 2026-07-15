@@ -5,7 +5,6 @@ import { useTransition } from 'react';
 import { ProjectCard } from '@/components/ProjectCard';
 import { getLogger } from '@/lib/utils/logger';
 import type { Project } from '@/lib/data';
-import { trackEvent } from '@/lib/analytics';
 
 const logger = getLogger('ProjectList');
 const ITEMS_PER_PAGE = 16;
@@ -60,12 +59,7 @@ export default function ProjectList({
   };
 
   const handleViewAll = () => {
-    trackEvent({
-      action: 'filter_change',
-      category: 'Search',
-      label: 'relevance_mode:all',
-    });
-    const params = new URLSearchParams(searchParams.toString());
+        const params = new URLSearchParams(searchParams.toString());
     params.set('relevanceMode', 'all');
     params.delete('page');
     startTransition(() => {
@@ -74,12 +68,7 @@ export default function ProjectList({
   };
 
   const handleBackToChile = () => {
-    trackEvent({
-      action: 'filter_change',
-      category: 'Search',
-      label: 'relevance_mode:chile_strict',
-    });
-    const params = new URLSearchParams(searchParams.toString());
+        const params = new URLSearchParams(searchParams.toString());
     params.delete('relevanceMode');
     params.delete('page');
     const qs = params.toString();

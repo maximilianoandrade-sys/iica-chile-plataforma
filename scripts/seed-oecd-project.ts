@@ -1,3 +1,5 @@
+import { getLogger } from '@/lib/utils/logger';
+const logger = getLogger('Script');
 /**
  * One-shot script: inserta la beca OECD 2027 como proyecto manual.
  * Ejecutar una sola vez: npx tsx scripts/seed-oecd-project.ts
@@ -13,7 +15,7 @@ async function main() {
   });
 
   if (existing) {
-    console.log(`Proyecto OECD ya existe (id=${existing.id}). Saltando.`);
+    logger.info(`Proyecto OECD ya existe (id=${existing.id}). Saltando.`);
     await prisma.$disconnect();
     return;
   }
@@ -73,11 +75,11 @@ async function main() {
     },
   });
 
-  console.log(`Proyecto OECD creado (id=${project.id})`);
+  logger.info(`Proyecto OECD creado (id=${project.id})`);
   await prisma.$disconnect();
 }
 
 main().catch((e) => {
-  console.error(e);
+  logger.error(e);
   process.exit(1);
 });

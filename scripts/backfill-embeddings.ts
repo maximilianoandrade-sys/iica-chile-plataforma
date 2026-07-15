@@ -1,3 +1,5 @@
+import { getLogger } from '@/lib/utils/logger';
+const logger = getLogger('Script');
 /**
  * Backfill embeddings: genera vectores para todos los proyectos que aún
  * no tienen `embedding` en BD.
@@ -28,7 +30,7 @@ async function main() {
   const force = process.argv.includes("--force");
 
   if (!process.env.GEMINI_API_KEY) {
-    console.error("[backfill] GEMINI_API_KEY no configurada. Saliendo.");
+    logger.error("[backfill] GEMINI_API_KEY no configurada. Saliendo.");
     process.exit(1);
   }
 
@@ -49,12 +51,12 @@ async function main() {
   );
 
   if (rows.length === 0) {
-    console.log("[backfill] Nada que hacer — todos los proyectos ya tienen embedding.");
+    logger.info("[backfill] Nada que hacer — todos los proyectos ya tienen embedding.");
     await prisma.$disconnect();
     return;
   }
 
-  console.log(`[backfill] Procesando ${rows.length} proyectos en batches de ${BATCH_SIZE}...`);
+  logger.info(`[backfill] Procesando ${rows.length} proyectos en batches de ${BATCH_SIZE}...`);
 
   let done = 0;
   let errors = 0;
@@ -85,17 +87,17 @@ async function main() {
 
       process.stdout.write(`\r[backfill] ${done}/${rows.length} OK, ${errors} errores`);
     } catch (err) {
-      console.error(`\n[backfill] Batch falló: ${(err as Error).message}`);
+      logger.error(`\n[backfill] Batch falló: ${(err as Error).message}`);
       errors += batch.length;
     }
   }
 
-  console.log("");
-  console.log(`[backfill] Terminado. Insertados: ${done}, Errores: ${errors}`);
+  logger.info("");
+  logger.info(`[backfill] Terminado. Insertados: ${done}, Errores: ${errors}`);
   await prisma.$disconnect();
 }
 
 main().catch((e) => {
-  console.error(e);
+  logger.error(e);
   process.exit(1);
 });

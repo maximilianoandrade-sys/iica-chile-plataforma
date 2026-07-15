@@ -23,7 +23,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { hybridSearch } from "@/lib/searchHybrid";
 import { fetchMercadoPublicoLive } from "@/lib/ingestion/scrapers/mercado-publico";
-import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
 import { getLogger } from '@/lib/utils/logger';
 import { createSuccessResponse, createErrorResponse } from '@/lib/utils/api-response';
 import { SearchProjectsRequestSchema, formatZodError } from '@/lib/utils/validation';
@@ -84,9 +83,15 @@ function resolveHybridTotal(result: { total?: number; projects: Array<unknown> }
 }
 
 function countBySourcePrefix(projects: Record<string, unknown>[], sourcePrefix: string): number {
+  // ponytail: Project.sourceId is a globally @unique column that is never populated;
+  // use sourceId for external/MP results and the included source.slug for internal rows.
   return projects.filter((project) => {
     const sourceId = project.sourceId;
-    return typeof sourceId === 'string' && sourceId.startsWith(`${sourcePrefix}:`);
+    const slug = (project as { source?: { slug?: unknown } }).source?.slug;
+    const key = typeof sourceId === 'string'
+      ? sourceId
+      : (typeof slug === 'string' ? `${slug}:` : null);
+    return key != null && key.startsWith(`${sourcePrefix}:`);
   }).length;
 }
 
@@ -132,12 +137,6 @@ function publishableOf(
 }
 
 export async function POST(req: NextRequest) {
-  const ip = getClientIp(req);
-  const rateLimit = checkRateLimit(`search-projects:${ip}`, { maxRequests: 30, windowSizeSeconds: 60 });
-  if (!rateLimit.allowed) {
-    return createErrorResponse('Demasiadas solicitudes. Intente nuevamente más tarde.', 429, { 'Retry-After': String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)) });
-  }
-
   try {
     let body: unknown;
     try {
@@ -308,7 +307,8 @@ export async function POST(req: NextRequest) {
       hidden_by_quality: hiddenHybridByQuality + hiddenExternalByQuality,
       page,
       page_size: safePageSize,
-      has_next: offset + enrichedHybrid.length < hybridTotal,
+      // ponytail: base has_next on the same pagination basis the internal search actually uses
+      has_next: offset + safePageSize < hybridTotal,
       query,
       searched_at: new Date().toISOString(),
     };

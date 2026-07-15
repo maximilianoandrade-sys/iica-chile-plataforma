@@ -15,7 +15,6 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
-import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { getLogger } from "@/lib/utils/logger";
 import { AiSearchSchema, formatZodError } from "@/lib/utils/validation";
 import { createSuccessResponse, createErrorResponse } from "@/lib/utils/api-response";
@@ -59,19 +58,6 @@ export async function POST(request: NextRequest) {
       return createErrorResponse('Error de configuración del servidor', 500);
     }
 
-    // Rate limiting
-    const clientIp = getClientIp(request);
-    const rateCheck = checkRateLimit(`ai-search:${clientIp}`, AI_SEARCH_RATE_LIMIT);
-    if (!rateCheck.allowed) {
-      return createErrorResponse(
-        "Demasiadas solicitudes. Intente de nuevo en un momento.",
-        429,
-        {
-          "Retry-After": String(Math.ceil((rateCheck.resetAt - Date.now()) / 1000)),
-          "X-RateLimit-Remaining": "0",
-        }
-      );
-    }
 
     if (!env.GEMINI_API_KEY) {
       return createErrorResponse("GEMINI_API_KEY no está configurada en el servidor.", 503);

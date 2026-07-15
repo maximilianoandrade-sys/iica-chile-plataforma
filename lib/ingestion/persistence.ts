@@ -1,3 +1,4 @@
+import { getAiEnv } from '@/lib/utils/env';
 import { getLogger } from '@/lib/utils/logger';
 import prisma from "../prisma";
 
@@ -107,7 +108,7 @@ export async function upsertProject(
     return { skipped: true, reason: `duplicate_textual:${textualDuplicate.id}` };
   }
 
-  if (process.env.GEMINI_API_KEY) {
+  if (getAiEnv().GEMINI_API_KEY) {
     const semanticText = projectToEmbeddingText({
       nombre: baseFields.nombre,
       institucion: baseFields.institucion,
@@ -167,7 +168,7 @@ export async function upsertProject(
   });
 
   // Auto-embed (best-effort)
-  if (process.env.GEMINI_API_KEY) {
+  if (getAiEnv().GEMINI_API_KEY) {
     try {
       const text = projectToEmbeddingText({
         nombre: baseFields.nombre,

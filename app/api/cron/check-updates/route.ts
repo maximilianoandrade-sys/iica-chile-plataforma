@@ -8,7 +8,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getProjects } from '@/lib/data';
 import prisma from '@/lib/prisma';
 import { embedText, projectToEmbeddingText, toPgVector } from '@/lib/ingestion/embeddings';
-import { getKVStore } from '@/lib/kvStore';
 import { sendEmail } from '@/lib/email';
 import { getLogger } from '@/lib/utils/logger';
 import { sendAlert } from '@/lib/utils/alerts';
@@ -107,28 +106,29 @@ async function checkLinkForUpdates(url: string, projectName: string): Promise<Li
         clearTimeout(timeoutId);
 
         const lastModified = response.headers.get('last-modified');
-        const etag = response.headers.get('etag');
 
-        // Obtener última verificación desde caché
-        const cacheKey = `last_check_${url}`;
-        const lastCheck = await getFromCache(cacheKey);
+        // Persist and detect changes across invocations (serverless has no shared memory).
+        const previous = await prisma.linkCheck.findUnique({ where: { url } });
+        const hasChanged = Boolean(
+            previous?.lastModified && lastModified && previous.lastModified !== lastModified
+        );
 
-        let hasChanged = false;
-
-        if (lastCheck) {
-            // Comparar Last-Modified o ETag
-            if (lastModified && lastCheck.lastModified !== lastModified) {
-                hasChanged = true;
-            } else if (etag && lastCheck.etag !== etag) {
-                hasChanged = true;
-            }
-        }
-
-        // Guardar en caché
-        await saveToCache(cacheKey, {
-            lastModified,
-            etag,
-            checkedAt: new Date().toISOString()
+        const isValid = response.status > 0 && response.status < 400;
+        await prisma.linkCheck.upsert({
+            where: { url },
+            update: {
+                statusCode: response.status,
+                lastModified: lastModified || null,
+                isValid,
+                lastChecked: new Date(),
+            },
+            create: {
+                url,
+                status: isValid ? 'ok' : 'broken',
+                statusCode: response.status,
+                lastModified: lastModified || null,
+                isValid,
+            },
         });
 
         return {
@@ -148,21 +148,6 @@ async function checkLinkForUpdates(url: string, projectName: string): Promise<Li
             error: error instanceof Error ? error.message : 'Network error'
         };
     }
-}
-
-// ============================================================================
-// CACHE CON KV STORE
-// ============================================================================
-
-async function getFromCache(key: string): Promise<Record<string, string> | null> {
-    const kv = getKVStore();
-    return kv.get<Record<string, string>>(key);
-}
-
-async function saveToCache(key: string, value: Record<string, string | null>): Promise<void> {
-    const kv = getKVStore();
-    // TTL 7 days - entries older than that are stale anyway
-    await kv.set(key, value, { ttlSeconds: 7 * 24 * 60 * 60 });
 }
 
 // ============================================================================

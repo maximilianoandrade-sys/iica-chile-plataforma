@@ -1,3 +1,5 @@
+import { getLogger } from '@/lib/utils/logger';
+const logger = getLogger('Script');
 import prisma from "../lib/prisma";
 
 const SOURCES = [
@@ -36,12 +38,12 @@ async function main() {
       update: { name: s.name, type: s.type, homepageUrl: s.homepageUrl },
       create: s,
     });
-    console.log(`OK: ${s.slug}`);
+    logger.info(`OK: ${s.slug}`);
   }
   await prisma.$disconnect();
 }
 
 main().catch((e) => {
-  console.error(e);
+  logger.error(e);
   process.exit(1);
 });

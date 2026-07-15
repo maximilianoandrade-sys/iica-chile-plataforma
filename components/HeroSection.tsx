@@ -26,9 +26,8 @@ export function HeroSection({ stats }: HeroSectionProps) {
 
     const handleUrgentClick = () => {
         startTransition(() => {
-            router.push('/?estado=Abierta&sort=date_asc#convocatorias', { scroll: false });
+            router.push('/?estado=Abierta&sort=date_asc#convocatorias');
         });
-        document.getElementById('convocatorias')?.scrollIntoView({ behavior: 'smooth' });
     };
 
     return (

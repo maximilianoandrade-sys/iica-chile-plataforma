@@ -1,9 +1,12 @@
 import { MetadataRoute } from "next";
 import prisma from "@/lib/prisma";
 
+import { getEnv } from "@/lib/utils/env";
+
 export const dynamic = "force-dynamic";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://iica-chile-plataforma.vercel.app";
+const env = getEnv();
+const BASE_URL = env.NEXT_PUBLIC_SITE_URL || "https://iica-chile-plataforma.vercel.app";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const projects = await prisma.project.findMany({

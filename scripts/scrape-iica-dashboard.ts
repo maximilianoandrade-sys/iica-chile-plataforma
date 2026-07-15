@@ -1,3 +1,5 @@
+import { getLogger } from '@/lib/utils/logger';
+const logger = getLogger('Script');
 /**
  * CLI orchestrator for the IICA Dashboard scraper.
  *
@@ -36,7 +38,7 @@ const VALID_CATEGORIES: CounterpartCategory[] = [
 ];
 
 if (category && !VALID_CATEGORIES.includes(category)) {
-  console.error(
+  logger.error(
     `[scrape-iica] Invalid category "${category}". Valid: ${VALID_CATEGORIES.join(", ")}`
   );
   process.exit(1);
@@ -46,11 +48,11 @@ if (category && !VALID_CATEGORIES.includes(category)) {
 // Main
 // ---------------------------------------------------------------------------
 async function main() {
-  console.log(`[scrape-iica] Starting...`);
-  console.log(
+  logger.info(`[scrape-iica] Starting...`);
+  logger.info(
     `[scrape-iica] Mode: ${dryRun ? "DRY RUN" : "LIVE (will write to DB)"}`
   );
-  if (category) console.log(`[scrape-iica] Category filter: ${category}`);
+  if (category) logger.info(`[scrape-iica] Category filter: ${category}`);
 
   const result = await iicaDashboardScraper.scrape();
 
@@ -63,24 +65,24 @@ async function main() {
 
   // Progress logging
   const total = projects.length;
-  console.log(`\n[scrape-iica] Scrape complete: ${total} projects`);
+  logger.info(`\n[scrape-iica] Scrape complete: ${total} projects`);
 
   if (result.partialErrors && result.partialErrors.length > 0) {
-    console.warn(
+    logger.warn(
       `[scrape-iica] Partial errors: ${result.partialErrors.length}`
     );
     result.partialErrors
       .slice(0, 10)
-      .forEach((e) => console.warn(`  - ${e}`));
+      .forEach((e) => logger.warn(`  - ${e}`));
   }
 
   if (dryRun) {
     projects.forEach((p, i) => {
-      console.log(
+      logger.info(
         `  [DRY] (${i + 1}/${total}) ${p.institution} | ${p.title} | ${p.url}`
       );
     });
-    console.log(
+    logger.info(
       `\n[scrape-iica] DRY RUN complete. ${total} projects would be ingested.`
     );
   } else {
@@ -90,7 +92,7 @@ async function main() {
 
     for (let i = 0; i < projects.length; i++) {
       const p = projects[i];
-      console.log(
+      logger.info(
         `[scrape-iica] (${i + 1}/${total}) ${p.institution}: ${p.title}`
       );
 
@@ -113,14 +115,14 @@ async function main() {
       result.partialErrors?.slice(0, 5).join("\n") || undefined
     );
 
-    console.log(`\n[scrape-iica] SUMMARY:`);
-    console.log(`  Found:    ${total}`);
-    console.log(`  Ingested: ${ingested}`);
-    console.log(`  Skipped:  ${skipped}`);
-    console.log(`  Errors:   ${errorCount}`);
+    logger.info(`\n[scrape-iica] SUMMARY:`);
+    logger.info(`  Found:    ${total}`);
+    logger.info(`  Ingested: ${ingested}`);
+    logger.info(`  Skipped:  ${skipped}`);
+    logger.info(`  Errors:   ${errorCount}`);
     if (skipReasons.length > 0) {
-      console.log(`  Skip reasons (first 5):`);
-      skipReasons.slice(0, 5).forEach((r) => console.log(`    - ${r}`));
+      logger.info(`  Skip reasons (first 5):`);
+      skipReasons.slice(0, 5).forEach((r) => logger.info(`    - ${r}`));
     }
   }
 
@@ -128,6 +130,6 @@ async function main() {
 }
 
 main().catch((err) => {
-  console.error("[scrape-iica] Fatal:", err);
+  logger.error("[scrape-iica] Fatal:", err);
   prisma.$disconnect().finally(() => process.exit(1));
 });

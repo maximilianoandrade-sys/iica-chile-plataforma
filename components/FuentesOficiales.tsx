@@ -291,9 +291,8 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
 
     const handleActiveClick = () => {
         startTransition(() => {
-            router.push('/?estado=Abierta#convocatorias', { scroll: false });
+            router.push('/?estado=Abierta#convocatorias');
         });
-        document.getElementById('convocatorias')?.scrollIntoView({ behavior: 'smooth' });
     };
 
     const activeFuentes = fuentesWithCounts.filter(f => f.fondosActivos > 0);

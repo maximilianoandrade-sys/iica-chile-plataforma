@@ -237,3 +237,14 @@ html.a11y-high-contrast *:focus-visible {
     animation: none !important;
   }
 }
+
+/* ponytail: native anchor scroll for ScrollToTop (#93); disabled for reduced-motion */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

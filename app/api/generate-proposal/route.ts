@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { GoogleGenAI } from "@google/genai";
-import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { getLogger } from "@/lib/utils/logger";
 import { GenerateProposalSchema, formatZodError } from "@/lib/utils/validation";
 import { createSuccessResponse, createErrorResponse } from "@/lib/utils/api-response";
@@ -37,19 +36,6 @@ export async function POST(request: Request) {
       return createErrorResponse('Error de configuración del servidor', 500);
     }
 
-    // Rate limiting
-    const clientIp = getClientIp(request);
-    const rateCheck = checkRateLimit(`generate-proposal:${clientIp}`, PROPOSAL_RATE_LIMIT);
-    if (!rateCheck.allowed) {
-      return createErrorResponse(
-        "Demasiadas solicitudes. Intente de nuevo en un momento.",
-        429,
-        {
-          "Retry-After": String(Math.ceil((rateCheck.resetAt - Date.now()) / 1000)),
-          "X-RateLimit-Remaining": "0",
-        }
-      );
-    }
 
     const body = await request.json();
     const parsed = GenerateProposalSchema.safeParse(body);

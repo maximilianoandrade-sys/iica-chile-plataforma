@@ -1,3 +1,5 @@
+import { getLogger } from '@/lib/utils/logger';
+const logger = getLogger('Script');
 import prisma from "../lib/prisma";
 
 function normalizeUrl(rawUrl: string | null): string | null {
@@ -28,12 +30,12 @@ async function main() {
   for (const p of all) {
     const cu = normalizeUrl(p.url_bases);
     if (!cu) {
-      console.warn(`Project ${p.id} (${p.nombre}) sin URL válida — saltando`);
+      logger.warn(`Project ${p.id} (${p.nombre}) sin URL válida — saltando`);
       continue;
     }
     if (seen.has(cu)) {
       collisions.push(p.id);
-      console.warn(`Colisión: project ${p.id} colisiona con ${seen.get(cu)} en ${cu}`);
+      logger.warn(`Colisión: project ${p.id} colisiona con ${seen.get(cu)} en ${cu}`);
       continue;
     }
     seen.set(cu, p.id);
@@ -41,14 +43,14 @@ async function main() {
   }
 
   if (collisions.length > 0) {
-    console.error(`WARNING: ${collisions.length} colisiones detectadas. Resolver manualmente antes de NOT NULL.`);
+    logger.error(`WARNING: ${collisions.length} colisiones detectadas. Resolver manualmente antes de NOT NULL.`);
     process.exit(1);
   }
-  console.log(`OK: Backfilled ${all.length - collisions.length}/${all.length} proyectos`);
+  logger.info(`OK: Backfilled ${all.length - collisions.length}/${all.length} proyectos`);
   await prisma.$disconnect();
 }
 
 main().catch((e) => {
-  console.error(e);
+  logger.error(e);
   process.exit(1);
 });

@@ -21,6 +21,11 @@ export default function Newsletter() {
     };
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        // ponytail: enforce the email format check before sending, not just on blur
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            setEmailError('Ingrese un correo electrónico válido');
+            return;
+        }
         setStatus('loading');
 
         try {
@@ -90,7 +95,10 @@ export default function Newsletter() {
                                 placeholder="correo@ejemplo.com"
                                 className="w-full px-4 py-3 rounded-lg text-gray-900 focus:ring-2 focus:ring-[var(--iica-secondary)] outline-none border-none shadow-inner"
                                 value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                onChange={(e) => {
+                                    setEmail(e.target.value);
+                                    if (emailError) setEmailError('');
+                                }}
                                 onBlur={(e) => validateEmail(e.target.value)}
                                 disabled={status === 'loading'}
                             />
@@ -125,7 +133,7 @@ export default function Newsletter() {
 
                             <button
                                 type="submit"
-                                disabled={status === 'loading' || !consent || !email}
+                                disabled={status === 'loading' || !consent || !email || !!emailError}
                                 className="w-full min-h-[44px] bg-[var(--iica-secondary)] hover:bg-[#008f45] text-white font-bold py-3 px-6 rounded-lg transition-all shadow-lg flex items-center justify-center gap-2 group disabled:opacity-70 mt-1"
                             >
                                 {status === 'loading' ? (

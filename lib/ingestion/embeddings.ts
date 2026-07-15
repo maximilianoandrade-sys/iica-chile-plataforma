@@ -1,3 +1,4 @@
+import { getAiEnv } from '@/lib/utils/env';
 /**
  * Embeddings via Gemini text-embedding-004 (768 dimensiones).
  *
@@ -26,12 +27,12 @@ const memoCache = new Map<string, number[]>();
 let _client: GoogleGenAI | null = null;
 function client(): GoogleGenAI {
   if (!_client) {
-    if (!process.env.GEMINI_API_KEY) {
+    if (!getAiEnv().GEMINI_API_KEY) {
       throw new Error(
         "GEMINI_API_KEY no configurada. Conseguila gratis en https://aistudio.google.com/"
       );
     }
-    _client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    _client = new GoogleGenAI({ apiKey: getAiEnv().GEMINI_API_KEY });
   }
   return _client;
 }

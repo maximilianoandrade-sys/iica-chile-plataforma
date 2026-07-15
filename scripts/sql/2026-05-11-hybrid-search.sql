@@ -65,7 +65,7 @@ AS $$
     WHERE
       p.search_vector @@ plainto_tsquery('spanish', query_text)
       AND (include_unverified OR p."needsReview" = FALSE)
-    LIMIT 100
+    LIMIT match_limit
   ),
   semantic AS (
     SELECT
@@ -77,7 +77,7 @@ AS $$
       p.embedding IS NOT NULL
       AND (include_unverified OR p."needsReview" = FALSE)
     ORDER BY p.embedding <=> query_embedding
-    LIMIT 100
+    LIMIT match_limit
   ),
   combined AS (
     SELECT

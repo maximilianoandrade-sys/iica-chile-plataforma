@@ -52,9 +52,8 @@ export default function StatsSection({ total, abiertas, internacionales, urgente
 
     const handleCardClick = (href: string) => {
         startTransition(() => {
-            router.push(href, { scroll: false });
+            router.push(href);
         });
-        document.getElementById('convocatorias')?.scrollIntoView({ behavior: 'smooth' });
     };
 
     return (

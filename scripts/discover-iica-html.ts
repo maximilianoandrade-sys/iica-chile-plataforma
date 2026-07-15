@@ -1,3 +1,5 @@
+import { getLogger } from '@/lib/utils/logger';
+const logger = getLogger('Script');
 /**
  * Discovery script: navigates to IICA Dashboard, selects counterparts,
  * and saves raw HTML to tmp/iica-discovery/ for offline DOM inspection.
@@ -55,10 +57,10 @@ async function main() {
   const { mode, counterparts } = parseArgs();
   mkdirSync(OUT_DIR, { recursive: true });
 
-  console.log(`[discover] Mode: ${mode}, counterparts: ${counterparts.length}`);
-  console.log("[discover] Launching persistent browser context (headed)...");
-  console.log("[discover] Si Cloudflare muestra un challenge, resuélvelo manualmente.");
-  console.log("[discover] El script esperará hasta 60s por cada carga.\n");
+  logger.info(`[discover] Mode: ${mode}, counterparts: ${counterparts.length}`);
+  logger.info("[discover] Launching persistent browser context (headed)...");
+  logger.info("[discover] Si Cloudflare muestra un challenge, resuélvelo manualmente.");
+  logger.info("[discover] El script esperará hasta 60s por cada carga.\n");
 
   // Persistent context keeps Cloudflare cookies between navigations
   const context = await chromium.launchPersistentContext(USER_DATA_DIR, {
@@ -82,17 +84,17 @@ async function main() {
     Object.defineProperty(navigator, "webdriver", { get: () => false });
   });
 
-  console.log(`[discover] Navigando a ${DASHBOARD_URL}`);
+  logger.info(`[discover] Navigando a ${DASHBOARD_URL}`);
   await page.goto(DASHBOARD_URL, { waitUntil: "domcontentloaded", timeout: 60_000 });
 
   // Wait for Cloudflare challenge to resolve (up to 30s)
-  console.log("[discover] Esperando que Cloudflare resuelva (máx 30s)...");
+  logger.info("[discover] Esperando que Cloudflare resuelva (máx 30s)...");
   try {
     await page.waitForSelector("#ddl_Contrapartes", { state: "visible", timeout: 30_000 });
-    console.log("[discover] ✓ Dropdown visible, Cloudflare pasado.");
+    logger.info("[discover] ✓ Dropdown visible, Cloudflare pasado.");
   } catch {
-    console.log("[discover] ⚠ Dropdown no visible. Si hay un CAPTCHA, resuélvelo ahora.");
-    console.log("[discover] Esperando 60s adicionales...");
+    logger.info("[discover] ⚠ Dropdown no visible. Si hay un CAPTCHA, resuélvelo ahora.");
+    logger.info("[discover] Esperando 60s adicionales...");
     await page.waitForSelector("#ddl_Contrapartes", { state: "visible", timeout: 60_000 });
   }
 
@@ -100,14 +102,14 @@ async function main() {
   if (mode === "html") {
     const initialHtml = await page.content();
     writeFileSync(join(OUT_DIR, "initial.html"), initialHtml, "utf-8");
-    console.log(`[discover] Guardado initial.html (${(initialHtml.length / 1024).toFixed(0)}KB)`);
+    logger.info(`[discover] Guardado initial.html (${(initialHtml.length / 1024).toFixed(0)}KB)`);
   }
 
   const results: { abbrev: string; id: string; count: number }[] = [];
 
   for (let i = 0; i < counterparts.length; i++) {
     const cp = counterparts[i];
-    console.log(
+    logger.info(
       `\n[discover] (${i + 1}/${counterparts.length}) Seleccionando: ${cp.abbrev} (id=${cp.id})`
     );
     await sleep(2000);
@@ -130,7 +132,7 @@ async function main() {
     for (const sel of submitSelectors) {
       const btn = await page.$(sel);
       if (btn && (await btn.isVisible())) {
-        if (i === 0) console.log(`[discover]   → Click en: ${sel}`);
+        if (i === 0) logger.info(`[discover]   → Click en: ${sel}`);
         await btn.click();
         clicked = true;
         break;
@@ -138,7 +140,7 @@ async function main() {
     }
 
     if (!clicked) {
-      console.log("[discover]   → No encontré botón, esperando auto-postback...");
+      logger.info("[discover]   → No encontré botón, esperando auto-postback...");
     }
 
     // Wait for navigation/response
@@ -154,7 +156,7 @@ async function main() {
       bodyText?.includes("Attention Required") ||
       bodyText?.includes("you have been blocked")
     ) {
-      console.log("[discover]   ✗ BLOQUEADO por Cloudflare. Deteniendo.");
+      logger.info("[discover]   ✗ BLOQUEADO por Cloudflare. Deteniendo.");
       break;
     }
 
@@ -165,9 +167,9 @@ async function main() {
       const html = await page.content();
       const filename = `contraparte-${cp.id}.html`;
       writeFileSync(join(OUT_DIR, filename), html, "utf-8");
-      console.log(`[discover]   Guardado ${filename} (${(html.length / 1024).toFixed(0)}KB) — ${count} proyectos`);
+      logger.info(`[discover]   Guardado ${filename} (${(html.length / 1024).toFixed(0)}KB) — ${count} proyectos`);
     } else {
-      console.log(`[discover]   ${cp.abbrev}: ${count} proyectos`);
+      logger.info(`[discover]   ${cp.abbrev}: ${count} proyectos`);
     }
 
     await sleep(2000);
@@ -177,16 +179,16 @@ async function main() {
 
   // Summary
   const total = results.reduce((sum, r) => sum + r.count, 0);
-  console.log("\n[discover] ═══════════════════════════════════════════");
-  console.log(`[discover] RESUMEN: ${results.length} contrapartes consultadas`);
-  console.log(`[discover] Total proyectos encontrados: ${total}`);
+  logger.info("\n[discover] ═══════════════════════════════════════════");
+  logger.info(`[discover] RESUMEN: ${results.length} contrapartes consultadas`);
+  logger.info(`[discover] Total proyectos encontrados: ${total}`);
   if (mode === "count") {
-    console.log("[discover] Detalle:");
+    logger.info("[discover] Detalle:");
     for (const r of results.filter((r) => r.count > 0)) {
-      console.log(`  ${r.abbrev.padEnd(20)} ${r.count}`);
+      logger.info(`  ${r.abbrev.padEnd(20)} ${r.count}`);
     }
   }
-  console.log("[discover] ═══════════════════════════════════════════");
+  logger.info("[discover] ═══════════════════════════════════════════");
 
   // Save results summary
   writeFileSync(
@@ -197,6 +199,6 @@ async function main() {
 }
 
 main().catch((err) => {
-  console.error("[discover] Error fatal:", err.message || err);
+  logger.error("[discover] Error fatal:", err.message || err);
   process.exit(1);
 });

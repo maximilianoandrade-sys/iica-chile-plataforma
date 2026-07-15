@@ -1,3 +1,5 @@
+import { getLogger } from '@/lib/utils/logger';
+const logger = getLogger('Script');
 /**
  * AI Discovery — Capa B del pipeline de ingesta IICA Chile
  *
@@ -123,7 +125,7 @@ async function discover(query: string): Promise<AiResult[]> {
     ? `${RESEARCH_PROMPT}\n\nFiltro adicional: enfocate en "${query}".`
     : RESEARCH_PROMPT;
 
-  console.log("[discover] paso 1: investigación con Google Search...");
+  logger.info("[discover] paso 1: investigación con Google Search...");
   const research = await ai.models.generateContent({
     model: "gemini-2.5-flash-lite",
     contents: researchPrompt,
@@ -135,15 +137,15 @@ async function discover(query: string): Promise<AiResult[]> {
 
   const researchText = research.text || "";
   if (!researchText.trim()) {
-    console.warn("[discover] investigación sin texto");
+    logger.warn("[discover] investigación sin texto");
     return [];
   }
 
   const groundingChunks =
     (research.candidates as any)?.[0]?.groundingMetadata?.groundingChunks?.length || 0;
-  console.log(`[discover] investigación: ${researchText.length} chars, ${groundingChunks} fuentes citadas`);
+  logger.info(`[discover] investigación: ${researchText.length} chars, ${groundingChunks} fuentes citadas`);
 
-  console.log("[discover] paso 2: estructurando a JSON...");
+  logger.info("[discover] paso 2: estructurando a JSON...");
   const structured = await ai.models.generateContent({
     model: "gemini-2.5-flash-lite",
     contents: STRUCTURE_PROMPT(researchText),
@@ -152,7 +154,7 @@ async function discover(query: string): Promise<AiResult[]> {
 
   const parsed = extractJsonObject(structured.text || "");
   if (!parsed || !Array.isArray(parsed.results)) {
-    console.warn("[discover] no se pudo parsear JSON. Respuesta:", (structured.text || "").slice(0, 500));
+    logger.warn("[discover] no se pudo parsear JSON. Respuesta:", { text: (structured.text || "").slice(0, 500) });
     return [];
   }
   return parsed.results;
@@ -160,17 +162,17 @@ async function discover(query: string): Promise<AiResult[]> {
 
 async function main() {
   if (!process.env.GEMINI_API_KEY) {
-    console.error("[discover] GEMINI_API_KEY no configurada. Saliendo.");
-    console.error("Conseguila gratis en https://aistudio.google.com/ → Get API Key");
+    logger.error("[discover] GEMINI_API_KEY no configurada. Saliendo.");
+    logger.error("Conseguila gratis en https://aistudio.google.com/ → Get API Key");
     process.exit(1);
   }
 
   const query = process.env.DISCOVERY_QUERY || "";
-  console.log(`[discover] modelo: gemini-2.5-flash · query: "${query || "(general)"}"`);
+  logger.info(`[discover] modelo: gemini-2.5-flash · query: "${query || "(general)"}"`);
 
   const aiSource = await prisma.source.findUnique({ where: { slug: "ai-discovery" } });
   if (!aiSource) {
-    console.error("[discover] Source 'ai-discovery' no existe. Corré scripts/seed-sources.ts.");
+    logger.error("[discover] Source 'ai-discovery' no existe. Corré scripts/seed-sources.ts.");
     process.exit(1);
   }
 
@@ -179,7 +181,7 @@ async function main() {
     results = await discover(query);
   } catch (err) {
     const msg = (err as Error).message;
-    console.error(`[discover] Gemini API error: ${msg}`);
+    logger.error(`[discover] Gemini API error: ${msg}`);
     await prisma.source.update({
       where: { slug: "ai-discovery" },
       data: { lastRunAt: new Date(), lastRunStatus: "error", lastRunError: msg.slice(0, 500) },
@@ -188,7 +190,7 @@ async function main() {
     process.exit(1);
   }
 
-  console.log(`[discover] ${results.length} convocatorias estructuradas`);
+  logger.info(`[discover] ${results.length} convocatorias estructuradas`);
 
   let inserted = 0;
   let updated = 0;
@@ -266,16 +268,16 @@ async function main() {
     },
   });
 
-  console.log(`[discover] Insertados: ${inserted}, Actualizados: ${updated}, Descartados: ${discarded}`);
+  logger.info(`[discover] Insertados: ${inserted}, Actualizados: ${updated}, Descartados: ${discarded}`);
   if (discarded > 0) {
-    console.log(`[discover] Razones de descarte (primeras 5):`);
-    discardReasons.slice(0, 5).forEach((r) => console.log(`  - ${r}`));
+    logger.info(`[discover] Razones de descarte (primeras 5):`);
+    discardReasons.slice(0, 5).forEach((r) => logger.info(`  - ${r}`));
   }
 
   await prisma.$disconnect();
 }
 
 main().catch((e) => {
-  console.error(e);
+  logger.error(e);
   process.exit(1);
 });

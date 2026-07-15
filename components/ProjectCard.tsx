@@ -5,7 +5,6 @@ import { Calendar, MapPin, DollarSign, AlertCircle } from 'lucide-react';
 import { type Project, daysUntilClose, formatDeadline, pluralizeDias } from '@/lib/data';
 import { InstitutionLogo } from '@/components/InstitutionLogo';
 import { getLogger } from '@/lib/utils/logger';
-import { trackEvent } from '@/lib/analytics';
 import { FavoriteButton } from '@/components/FavoriteButton';
 
 const logger = getLogger('ProjectCard');
@@ -98,12 +97,7 @@ export function ProjectCard({ project }: { project: Project }) {
   logger.debug('Rendering ProjectCard', { id: project.id });
 
   const handleProjectClick = () => {
-    trackEvent({
-      action: 'project_click',
-      category: 'Search',
-      label: `${project.id}:${project.nombre}`,
-    });
-  };
+      };
 
   return (
     <article

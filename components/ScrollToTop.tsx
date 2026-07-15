@@ -1,42 +1,13 @@
-'use client';
-
-import { useState, useEffect, useRef } from 'react';
 import { ArrowUp } from 'lucide-react';
 
 export default function ScrollToTop() {
-    const [isVisible, setIsVisible] = useState(false);
-    const ticking = useRef(false);
-
-    useEffect(() => {
-        // ponytail: requestAnimationFrame throttle — no deps, no lib
-        const onScroll = () => {
-            if (ticking.current) return;
-            ticking.current = true;
-            requestAnimationFrame(() => {
-                setIsVisible(window.scrollY > 300);
-                ticking.current = false;
-            });
-        };
-
-        window.addEventListener('scroll', onScroll, { passive: true });
-        return () => window.removeEventListener('scroll', onScroll);
-    }, []);
-
-    const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    return (
-        <>
-            {isVisible && (
-                <button
-                    onClick={scrollToTop}
-                    className="fixed bottom-6 right-6 z-50 p-3 bg-[var(--iica-blue)] text-white rounded-full shadow-lg hover:bg-[var(--iica-navy)] transition-all hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--iica-blue)]"
-                    aria-label="Volver arriba"
-                >
-                    <ArrowUp className="h-6 w-6" />
-                </button>
-            )}
-        </>
-    );
+  return (
+    <a
+      href="#top"
+      className="fixed bottom-6 right-6 z-50 p-3 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+      aria-label="Volver arriba"
+    >
+      <ArrowUp className="h-5 w-5" />
+    </a>
+  );
 }

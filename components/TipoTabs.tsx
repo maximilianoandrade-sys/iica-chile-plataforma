@@ -8,13 +8,15 @@ export function TipoTabs() {
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
-    const currentTipo = searchParams.get('tipo') || 'fondo';
+    // Align default with ProjectListContainer: 'all' when no valid tipo is present
+    const rawTipo = searchParams.get('tipo');
+    const currentTipo =
+        rawTipo === 'fondo' || rawTipo === 'licitacion' ? rawTipo : 'all';
 
     const handleTabChange = (value: string) => {
         const params = new URLSearchParams(searchParams.toString());
-        if (value === 'fondo') {
-            params.delete('tipo'); // default is fondo, or maybe we explicitly set it? Wait, let's explicitly set it.
-            params.set('tipo', 'fondo');
+        if (value === 'all') {
+            params.delete('tipo');
         } else {
             params.set('tipo', value);
         }
@@ -27,6 +29,7 @@ export function TipoTabs() {
         <div className="flex justify-center mb-6">
             <Tabs value={currentTipo} onValueChange={handleTabChange}>
                 <TabsList>
+                    <TabsTrigger value="all">Todos</TabsTrigger>
                     <TabsTrigger value="fondo">Fondos Concursables</TabsTrigger>
                     <TabsTrigger value="licitacion">Licitaciones / Procurement</TabsTrigger>
                 </TabsList>

@@ -1,3 +1,5 @@
+import { getLogger } from '@/lib/utils/logger';
+const logger = getLogger('Script');
 import prisma from "../lib/prisma";
 import * as fs from "fs";
 
@@ -50,13 +52,13 @@ function toCsv(rows: Array<Record<string, string | number>>): string {
 async function main() {
   const apply = process.argv.includes("--apply");
 
-  console.log(`[audit] Modo: ${apply ? "APPLY (modificará BD)" : "DRY-RUN (solo CSV)"}`);
+  logger.info(`[audit] Modo: ${apply ? "APPLY (modificará BD)" : "DRY-RUN (solo CSV)"}`);
 
   const all = await prisma.project.findMany({
     where: { estadoPostulacion: { not: "Cerrada" } },
   });
 
-  console.log(`[audit] Validando ${all.length} proyectos no-cerrados...`);
+  logger.info(`[audit] Validando ${all.length} proyectos no-cerrados...`);
 
   const broken: Array<Record<string, string | number>> = [];
   let okCount = 0;
@@ -77,17 +79,17 @@ async function main() {
       okCount++;
     }
   }
-  console.log("\n");
+  logger.info("\n");
 
   const csv = toCsv(broken);
   fs.writeFileSync("audit-broken-urls.csv", csv);
 
-  console.log(`[audit] OK: ${okCount}`);
-  console.log(`[audit] Broken: ${broken.length}`);
-  console.log(`[audit] CSV escrito: audit-broken-urls.csv`);
+  logger.info(`[audit] OK: ${okCount}`);
+  logger.info(`[audit] Broken: ${broken.length}`);
+  logger.info(`[audit] CSV escrito: audit-broken-urls.csv`);
 
   if (apply && broken.length > 0) {
-    console.log(`[audit] Aplicando cierre de ${broken.length} proyectos...`);
+    logger.info(`[audit] Aplicando cierre de ${broken.length} proyectos...`);
     const today = new Date().toISOString().slice(0, 10);
     for (const b of broken) {
       await prisma.project.update({
@@ -98,15 +100,15 @@ async function main() {
         },
       });
     }
-    console.log(`[audit] Listo.`);
+    logger.info(`[audit] Listo.`);
   } else if (!apply) {
-    console.log(`[audit] Revisá audit-broken-urls.csv. Para aplicar el cierre, corré con --apply.`);
+    logger.info(`[audit] Revisá audit-broken-urls.csv. Para aplicar el cierre, corré con --apply.`);
   }
 
   await prisma.$disconnect();
 }
 
 main().catch((e) => {
-  console.error(e);
+  logger.error(e);
   process.exit(1);
 });

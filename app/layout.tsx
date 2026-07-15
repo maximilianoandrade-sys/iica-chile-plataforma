@@ -5,8 +5,10 @@ import Script from 'next/script'
 import './globals.css'
 import { ThemeProvider } from 'next-themes'
 import { ToastProvider } from '@/components/ui/ToastProvider'
-import CookieConsent from '@/components/CookieConsent';
 import OfflineIndicator from '@/components/OfflineIndicator';
+import { getEnv } from '@/lib/utils/env';
+
+const env = getEnv();
 
 const PWAInstallBanner = dynamic(() => import('@/components/PWAInstallBanner'), { ssr: false });
 const ScrollToTop = dynamic(() => import('@/components/ScrollToTop'), { ssr: false });
@@ -18,7 +20,7 @@ const poppins = Poppins({
   weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
 })
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://iica-chile-plataforma.vercel.app'
+const SITE_URL = env.NEXT_PUBLIC_SITE_URL || 'https://iica-chile-plataforma.vercel.app'
 
 const organizationJsonLd = {
   '@context': 'https://schema.org',
@@ -183,7 +185,7 @@ export default function RootLayout({
         />
       </head>
 
-      <body className="flex flex-col min-h-screen bg-[#f4f7f9] dark:bg-gray-900 antialiased transition-colors">
+      <body id="top" className="flex flex-col min-h-screen bg-[#f4f7f9] dark:bg-gray-900 antialiased transition-colors">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {/* Skip to main content - Accesibilidad */}
             <a
@@ -204,7 +206,6 @@ export default function RootLayout({
           </ToastProvider>
 
         {/* Componentes globales */}
-        <CookieConsent />
         <PWAInstallBanner />
         <ScrollToTop />
         <PushNotificationManager />
@@ -225,10 +226,10 @@ export default function RootLayout({
         />
 
         {/* Google Analytics 4 */}
-        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+        {env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
           <>
             <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
+              src={`https://www.googletagmanager.com/gtag/js?id=${env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
               strategy="afterInteractive"
             />
             <Script id="gtag-init" strategy="afterInteractive">
@@ -236,7 +237,7 @@ export default function RootLayout({
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
-                gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}', {
+                gtag('config', '${env.NEXT_PUBLIC_GA_MEASUREMENT_ID}', {
                   page_path: window.location.pathname,
                 });
               `}

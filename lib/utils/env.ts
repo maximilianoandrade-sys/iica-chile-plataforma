@@ -47,6 +47,10 @@ const EnvSchema = z.object({
   SEARCH_QUALITY_STRICT_ENABLED: z.enum(['true', 'false']).optional(),
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).optional(),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+  VERCEL_URL: z.string().optional(),
+  IICA_HEADLESS: z.string().optional(),
+  IICA_DELAY_MS: z.string().optional(),
+  IICA_USER_DATA_DIR: z.string().optional(),
 });
 
 const AuthEnvSchema = z.object({

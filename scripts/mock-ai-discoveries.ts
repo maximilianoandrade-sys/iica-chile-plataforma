@@ -1,3 +1,5 @@
+import { getLogger } from '@/lib/utils/logger';
+const logger = getLogger('Script');
 /**
  * Mock data para probar la UI de AI Discovery sin gastar API key.
  *
@@ -68,7 +70,7 @@ const MOCK_DISCOVERIES = [
 async function main() {
   const aiSource = await prisma.source.findUnique({ where: { slug: "ai-discovery" } });
   if (!aiSource) {
-    console.error("Source ai-discovery no existe. Corré scripts/seed-sources.ts primero.");
+    logger.error("Source ai-discovery no existe. Corré scripts/seed-sources.ts primero.");
     process.exit(1);
   }
 
@@ -78,7 +80,7 @@ async function main() {
 
     const existing = await prisma.project.findUnique({ where: { canonicalUrl } });
     if (existing) {
-      console.log(`⏭️  ya existe: ${m.title.slice(0, 50)}`);
+      logger.info(`⏭️  ya existe: ${m.title.slice(0, 50)}`);
       continue;
     }
 
@@ -102,7 +104,7 @@ async function main() {
       },
     });
     inserted++;
-    console.log(`✅ ${m.title.slice(0, 60)}`);
+    logger.info(`✅ ${m.title.slice(0, 60)}`);
   }
 
   await prisma.source.update({
@@ -115,11 +117,11 @@ async function main() {
     },
   });
 
-  console.log(`\n✅ ${inserted} mock discoveries insertados. Buscá en /admin/discoveries`);
+  logger.info(`\n✅ ${inserted} mock discoveries insertados. Buscá en /admin/discoveries`);
   await prisma.$disconnect();
 }
 
 main().catch((e) => {
-  console.error(e);
+  logger.error(e);
   process.exit(1);
 });

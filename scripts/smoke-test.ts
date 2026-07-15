@@ -1,3 +1,5 @@
+import { getLogger } from '@/lib/utils/logger';
+const logger = getLogger('Script');
 /**
  * Smoke test HTTP — verifica que los endpoints y páginas clave responden.
  *
@@ -22,16 +24,16 @@ async function check(name: string, fn: () => Promise<string>): Promise<void> {
   try {
     const detail = await fn();
     results.push({ name, ok: true, detail });
-    console.log(`  ✓ ${name} — ${detail}`);
+    logger.info(`  ✓ ${name} — ${detail}`);
   } catch (err) {
     const detail = (err as Error).message;
     results.push({ name, ok: false, detail });
-    console.error(`  ✗ ${name} — ${detail}`);
+    logger.error(`  ✗ ${name} — ${detail}`);
   }
 }
 
 async function main() {
-  console.log(`[smoke] testing ${BASE}`);
+  logger.info(`[smoke] testing ${BASE}`);
 
   await check("Home page (/) responde 200", async () => {
     const res = await fetch(BASE);
@@ -143,19 +145,19 @@ async function main() {
       return `${html.length} bytes`;
     });
   } else {
-    console.log("  ⊘ /proyecto/[id] — saltado (BD vacía)");
+    logger.info("  ⊘ /proyecto/[id] — saltado (BD vacía)");
   }
 
   const failed = results.filter((r) => !r.ok);
-  console.log(`\n[smoke] ${results.length - failed.length}/${results.length} OK`);
+  logger.info(`\n[smoke] ${results.length - failed.length}/${results.length} OK`);
   if (failed.length > 0) {
-    console.error(`[smoke] ${failed.length} fallaron`);
+    logger.error(`[smoke] ${failed.length} fallaron`);
     process.exit(1);
   }
 }
 
 main().catch((e) => {
-  console.error("[smoke] crash:", e);
+  logger.error("[smoke] crash:", e);
   process.exit(1);
 });
 

@@ -1,3 +1,4 @@
+import { getEnv } from '@/lib/utils/env';
 /**
  * IICA Dashboard Proyectos scraper.
  * Uses Playwright with a persistent browser context to bypass Cloudflare.
@@ -28,9 +29,9 @@ import type { RawProject, Scraper, ScraperResult } from "../types";
 const DASHBOARD_URL = "https://apps.iica.int/dashboardproyectos/";
 const DETAIL_BASE = "https://apps.iica.int/dashboardproyectos/";
 
-const HEADLESS = process.env.IICA_HEADLESS !== "false";
-const DELAY_MS = Number(process.env.IICA_DELAY_MS) || 4000;
-const USER_DATA_DIR = process.env.IICA_USER_DATA_DIR || path.resolve("tmp/iica-browser-profile");
+const HEADLESS = getEnv().IICA_HEADLESS !== "false";
+const DELAY_MS = Number(getEnv().IICA_DELAY_MS) || 4000;
+const USER_DATA_DIR = getEnv().IICA_USER_DATA_DIR || path.resolve("tmp/iica-browser-profile");
 
 // Anti-detection args
 const STEALTH_ARGS = [

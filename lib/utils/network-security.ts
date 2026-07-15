@@ -54,9 +54,10 @@ export function isAllowedPublicHttpUrl(urlString: string): boolean {
 export async function verifyHostnameResolvesToPublicIps(hostname: string): Promise<boolean> {
   try {
     const addresses = await lookup(hostname, { all: true, verbatim: true });
-    if (addresses.length === 0) return true;
+    // ponytail: fail closed — empty results or lookup errors must not be treated as safe
+    if (addresses.length === 0) return false;
     return addresses.every((entry) => !isBlockedHost(entry.address));
   } catch {
-    return true;
+    return false;
   }
 }

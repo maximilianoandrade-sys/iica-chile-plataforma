@@ -1,3 +1,5 @@
+import { getLogger } from '@/lib/utils/logger';
+const logger = getLogger('Script');
 import { getPreferredProjectUrl } from '../lib/urlOverrides';
 
 const args = new Set(process.argv.slice(2));
@@ -284,7 +286,7 @@ async function main() {
   const reviewExternal = externalResults.filter((r) => r.classification === 'needs_review');
   const recoveredByDirectCheck = externalResults.filter((r) => r.reason === 'ok_via_direct_check');
 
-  console.log(
+  logger.info(
     JSON.stringify(
       {
         baseUrl: BASE_URL,
@@ -307,37 +309,37 @@ async function main() {
   );
 
   if (failedInternal.length > 0) {
-    console.log('\nFAILED_INTERNAL_LINKS');
+    logger.info('\nFAILED_INTERNAL_LINKS');
     for (const item of failedInternal) {
-      console.log(`${item.status} ${item.url}`);
+      logger.info(`${item.status} ${item.url}`);
     }
   }
 
   if (failedExternal.length > 0) {
-    console.log('\nFAILED_EXTERNAL_LINKS');
+    logger.info('\nFAILED_EXTERNAL_LINKS');
     for (const item of failedExternal) {
-      console.log(`${item.status} ${item.url} ${item.reason || ''}`);
+      logger.info(`${item.status} ${item.url} ${item.reason || ''}`);
     }
   }
 
   if (blockedExternal.length > 0) {
-    console.log('\nBLOCKED_EXTERNAL_LINKS');
+    logger.info('\nBLOCKED_EXTERNAL_LINKS');
     for (const item of blockedExternal) {
-      console.log(`${item.status} ${item.url} ${item.reason || ''}`);
+      logger.info(`${item.status} ${item.url} ${item.reason || ''}`);
     }
   }
 
   if (reviewExternal.length > 0) {
-    console.log('\nREVIEW_EXTERNAL_LINKS');
+    logger.info('\nREVIEW_EXTERNAL_LINKS');
     for (const item of reviewExternal) {
-      console.log(`${item.status} ${item.url} ${item.reason || ''}`);
+      logger.info(`${item.status} ${item.url} ${item.reason || ''}`);
     }
   }
 
   const shouldFailByReview = FAIL_ON_NEEDS_REVIEW && reviewExternal.length > 0;
 
   if (shouldFailByReview) {
-    console.error(`\n[audit-links] failing due to needs_review links: ${reviewExternal.length}`);
+    logger.error(`\n[audit-links] failing due to needs_review links: ${reviewExternal.length}`);
   }
 
   if (failedInternal.length > 0 || failedExternal.length > 0 || shouldFailByReview) {
@@ -353,7 +355,7 @@ const isDirectExecution = Boolean(
 
 if (isDirectExecution) {
   main().catch((error) => {
-    console.error('[audit-links] crash:', error instanceof Error ? error.message : String(error));
+    logger.error('[audit-links] crash:', error instanceof Error ? error.message : String(error));
     process.exit(1);
   });
 }

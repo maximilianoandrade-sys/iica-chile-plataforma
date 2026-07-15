@@ -1,3 +1,5 @@
+import { getLogger } from '@/lib/utils/logger';
+const logger = getLogger('Script');
 import prisma from '../lib/prisma';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -33,8 +35,8 @@ async function exportProjects() {
 
     const outPath = path.join(__dirname, '..', 'data', 'projects.json');
     fs.writeFileSync(outPath, JSON.stringify(mapped, null, 2), 'utf-8');
-    console.log(`Exported ${mapped.length} projects to ${outPath}`);
+    logger.info(`Exported ${mapped.length} projects to ${outPath}`);
     await prisma.$disconnect();
 }
 
-exportProjects().catch(e => { console.error(e); process.exit(1); });
+exportProjects().catch(e => { logger.error(e); process.exit(1); });

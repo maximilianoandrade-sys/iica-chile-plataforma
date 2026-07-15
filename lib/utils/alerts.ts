@@ -1,3 +1,4 @@
+import { getEnv } from '@/lib/utils/env';
 import { getLogger } from './logger';
 
 const logger = getLogger('Alerts');
@@ -14,7 +15,7 @@ interface AlertPayload {
  * Hace fallback al logger si no hay webhook configurado.
  */
 export async function sendAlert(payload: AlertPayload): Promise<void> {
-  const webhookUrl = process.env.NOTIFICATION_WEBHOOK;
+  const webhookUrl = getEnv().NOTIFICATION_WEBHOOK;
 
   if (!webhookUrl) {
     logger.warn('NOTIFICATION_WEBHOOK no configurado, logueando alerta', {

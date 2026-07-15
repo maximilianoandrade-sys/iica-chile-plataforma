@@ -1,7 +1,6 @@
 'use client';
 
 import { X, Check, History, Search } from "lucide-react";
-import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLinkGuardian } from "@/lib/linkGuardian";
 import { getLogger } from '@/lib/utils/logger';
 
@@ -16,16 +15,14 @@ export interface ActionButtonProps {
 }
 
 export function ActionButton({ url, date, projectName, institution, onTrack }: ActionButtonProps) {
-    const { trackEvent } = useAnalytics();
-    const { shouldShow, finalUrl, archivedUrl, isFallback, isLoading } = useLinkGuardian(url, projectName, institution);
+      const { shouldShow, finalUrl, archivedUrl, isFallback, isLoading } = useLinkGuardian(url, projectName, institution);
 
     const today = new Date();
     const closingDate = new Date(date);
     const isClosed = closingDate.getTime() < today.setHours(0, 0, 0, 0);
 
     const handleClick = () => {
-        trackEvent('click_outbound_link', 'Outbound', `Bases: ${projectName}${isFallback ? ' (Fallback)' : ''}`);
-        if (onTrack) onTrack();
+            if (onTrack) onTrack();
     };
 
     if (isClosed) {

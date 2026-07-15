@@ -13,7 +13,6 @@
  */
 
 import { NextRequest } from 'next/server';
-import { checkRateLimit, getClientIp } from '@/lib/rateLimit';
 import { createErrorResponse, createSuccessResponse } from '@/lib/utils/api-response';
 import { isAllowedPublicHttpUrl, verifyHostnameResolvesToPublicIps } from '@/lib/utils/network-security';
 import { getLogger } from '@/lib/utils/logger';
@@ -65,17 +64,9 @@ function isOriginalHomepage(originalUrl: string): boolean {
     }
 }
 
-export async function GET(request: NextRequest) {
-    const ip = getClientIp(request);
-    const rateLimit = checkRateLimit(`check-link:${ip}`, { maxRequests: 20, windowSizeSeconds: 60 });
-    if (!rateLimit.allowed) {
-        return createErrorResponse(
-            'Demasiadas solicitudes. Intente nuevamente más tarde.',
-            429,
-            { 'Retry-After': String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)) }
-        );
-    }
+export const dynamic = 'force-dynamic';
 
+export async function GET(request: NextRequest) {
     try {
         const { searchParams } = new URL(request.url);
         const url = searchParams.get('url');

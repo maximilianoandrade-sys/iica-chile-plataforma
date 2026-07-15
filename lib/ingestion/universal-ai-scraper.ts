@@ -1,3 +1,4 @@
+import { getAiEnv } from '@/lib/utils/env';
 import { GoogleGenAI } from "@google/genai";
 import { load } from "cheerio";
 import { getLogger } from "@/lib/utils/logger";
@@ -61,7 +62,7 @@ export async function scrapeUrlWithAI(url: string): Promise<RawProject | null> {
     }
 
     // 3. Prompt Gemini
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = getAiEnv().GEMINI_API_KEY;
     if (!apiKey) {
       logger.error("GEMINI_API_KEY is not defined");
       throw new Error("Missing GEMINI_API_KEY");
