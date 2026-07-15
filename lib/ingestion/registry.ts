@@ -40,8 +40,17 @@ import { scrapeUrlWithAI } from "./universal-ai-scraper";
 import type { RawProject } from "./types";
 
 const TARGET_URLS = [
-  "https://www.agci.cl/becas/becas-para-chilenos", // New source
-  // More URLs can be added here, eliminating custom scrapers progressively.
+  "https://www.agci.cl/becas/becas-para-chilenos", // AGCID
+  "https://www.sercotec.cl/programas/", // SERCOTEC
+  "https://www.goremet.cl/", // FNDR/GORE (Ejemplo GORE RM)
+  "https://www.undp.org/es/chile/licitaciones", // PNUD Chile
+  "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/home", // EuropeAid / Horizonte Europa
+  "https://projectprocurement.iadb.org/es/procesos-de-adquisicion", // BID Procurement
+  "https://www2.fundsforngos.org/",
+  "https://international.grantwatch.com/",
+  "https://www.forus-international.org/es/funding-opportunities",
+  "https://www.visegradfund.org/grants",
+  "https://www.developmentaid.org/", // DevelopmentAid
 ];
 
 export const universalAiCrawler: Scraper = {
