@@ -3,10 +3,19 @@ import { getLogger } from './logger';
 
 const logger = getLogger('Env');
 
+// Una var opcional marcada como URL no debe tumbar la app si está vacía o mal
+// formada: se tolera y queda undefined (la funcionalidad que la usa se degrada).
+const optionalUrl = z
+  .string()
+  .url()
+  .optional()
+  .or(z.literal(''))
+  .transform((value) => (value ? value : undefined));
+
 /**
  * Variables de entorno validadas.
  * Las vars requeridas lanzan error al inicio si faltan.
- * Las opcionales retornan undefined.
+ * Las opcionales retornan undefined (y toleran valores vacíos/inválidos).
  *
  * Uso: import { getEnv } from '@/lib/utils/env';
  *      const env = getEnv();
@@ -24,12 +33,12 @@ const EnvSchema = z.object({
   GEMINI_API_KEY: z.string().optional(),
   MERCADO_PUBLICO_TICKET: z.string().optional(),
   ADMIN_EMAIL: z.string().optional(),
-  NOTIFICATION_WEBHOOK: z.string().url().optional(),
+  NOTIFICATION_WEBHOOK: optionalUrl,
   RESEND_API_KEY: z.string().optional(),
   EMAIL_FROM: z.string().optional(),
-  KV_REST_API_URL: z.string().url().optional(),
+  KV_REST_API_URL: optionalUrl,
   KV_REST_API_TOKEN: z.string().optional(),
-  NEXT_PUBLIC_SITE_URL: z.string().url().optional(),
+  NEXT_PUBLIC_SITE_URL: optionalUrl,
   NEXT_PUBLIC_GA_MEASUREMENT_ID: z.string().optional(),
   NEXT_PUBLIC_VAPID_PUBLIC_KEY: z.string().optional(),
   SEARCH_EXTERNAL_ENABLED: z.enum(['true', 'false']).optional(),

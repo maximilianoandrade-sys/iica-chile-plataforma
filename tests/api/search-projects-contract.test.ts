@@ -312,7 +312,7 @@ describe('/api/search-projects request contract', () => {
     expect(mockRunExternalSearch).not.toHaveBeenCalled();
   });
 
-  it('defaults to chile_strict and hides non-Chile international opportunities', async () => {
+  it('defaults to all and shows Chile + international opportunities', async () => {
     mockHybridSearch.mockResolvedValue({
       mode: 'hybrid',
       projects: [
@@ -347,7 +347,6 @@ describe('/api/search-projects request contract', () => {
       projects: [
         {
           id: 1003,
-          sourceId: 'linkedin_public:x-3',
           nombre: 'Programa agrícola para Chile y Perú',
           institucion: 'IICA',
           monto: 0,
@@ -360,7 +359,6 @@ describe('/api/search-projects request contract', () => {
         },
         {
           id: 1004,
-          sourceId: 'linkedin_public:x-4',
           nombre: 'Procurement kit for Nepal',
           institucion: 'UNGM',
           monto: 0,
@@ -390,14 +388,9 @@ describe('/api/search-projects request contract', () => {
     const payload = json.data;
 
     expect(res.status).toBe(200);
-    expect(payload.meta.relevance_mode).toBe('chile_strict');
-    expect(payload.results.map((r: { nombre: string }) => r.nombre)).toEqual(
-      expect.arrayContaining(['Fondo de riego Maule', 'Programa agrícola para Chile y Perú'])
-    );
-    expect(payload.results.map((r: { nombre: string }) => r.nombre)).not.toEqual(
-      expect.arrayContaining(['Audio devices tender Tanzania', 'Procurement kit for Nepal'])
-    );
-    expect(payload.meta.hidden_by_relevance).toBeGreaterThanOrEqual(2);
+    expect(payload.meta.relevance_mode).toBe('all');
+    expect(payload.results).toHaveLength(4);
+    expect(payload.meta.hidden_by_relevance).toBe(0);
   });
 
   it('supports relevanceMode=all to include international opportunities', async () => {

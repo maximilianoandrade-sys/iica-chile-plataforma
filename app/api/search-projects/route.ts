@@ -154,7 +154,7 @@ export async function POST(req: NextRequest) {
     const query = requestBody.query?.trim() || "";
     const ambito = requestBody.ambito || requestBody.scope || "all";
     const strictQualityEnabled = env.SEARCH_QUALITY_STRICT_ENABLED !== 'false';
-    const requestedRelevanceMode = requestBody.relevanceMode ?? 'chile_strict';
+    const requestedRelevanceMode = requestBody.relevanceMode ?? 'all';
     const relevanceMode = strictQualityEnabled ? requestedRelevanceMode : 'all';
     const includeUnverified = requestBody.includeUnverified !== false;
     const includeMercadoPublico = requestBody.includeMercadoPublico !== false;
