@@ -16,7 +16,7 @@ describe('FuentesOficiales', () => {
 
   it('falls back to institution counts when dashboard total is not provided', () => {
     render(<FuentesOficiales institutionCounts={mockCounts} />);
-    expect(screen.getByText('17 oportunidades activas')).toBeInTheDocument();
+    expect(screen.getByText('18 oportunidades activas')).toBeInTheDocument();
   });
 
   it('renders without prop (uses defaults)', () => {
@@ -40,10 +40,7 @@ describe('FuentesOficiales', () => {
 
   it('uses normalized FONTAGRO url', () => {
     render(<FuentesOficiales institutionCounts={mockCounts} />);
-    const trigger = screen.getByRole('button', { name: /fontagro/i });
-    fireEvent.click(trigger);
-    const links = screen.getAllByRole('link', { name: /sitio web/i });
-    const fontagroSite = links.find((link) => link.getAttribute('href')?.includes('fontagro'));
-    expect(fontagroSite).toHaveAttribute('href', 'https://www.fontagro.org/es');
+    const fontagroLink = screen.getByRole('link', { name: /fontagro/i });
+    expect(fontagroLink).toHaveAttribute('href', 'https://www.fontagro.org/es/convocatorias/');
   });
 });

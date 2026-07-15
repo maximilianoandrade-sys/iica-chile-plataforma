@@ -44,10 +44,9 @@ describe('ProjectList accessibility', () => {
 
   it('renders structured filter controls', () => {
     render(<ProjectList projects={projects} totalCount={1} />);
-    expect(screen.getByRole('searchbox', { name: /Buscar oportunidades/i })).toBeInTheDocument();
-    expect(screen.getByLabelText(/Estado/i)).toHaveValue('Abierta');
-    expect(screen.getByLabelText(/Ubicaciones/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Instituciones/i)).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /Ordenar por/i })).toBeInTheDocument();
+    expect(screen.getByText(/Solo Chile \(estricto\)/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Ver todas/i })).toBeInTheDocument();
   });
 
   it('has sort control with label', () => {

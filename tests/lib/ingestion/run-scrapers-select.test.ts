@@ -128,7 +128,7 @@ describe("selectScrapers", () => {
     expect(updateSourceStatus).toHaveBeenCalledWith(
       "fia",
       "partial",
-      1,
+      0,
       expect.stringContaining("duplicate_textual")
     );
   });

@@ -40,6 +40,7 @@ jest.mock("../../../lib/ingestion/embeddings", () => ({
 }));
 
 import { markStale, upsertProject, updateSourceStatus } from "../../../lib/ingestion/persistence";
+import { _resetEnvCache } from "../../../lib/utils/env";
 const prisma = require("../../../lib/prisma").default;
 const embeddings = require("../../../lib/ingestion/embeddings");
 
@@ -253,6 +254,7 @@ describe("upsertProject", () => {
   it("continues upsert when semantic duplicate embedding lookup fails", async () => {
     const previousGemini = process.env.GEMINI_API_KEY;
     process.env.GEMINI_API_KEY = "test-key";
+    _resetEnvCache(); // ponytail: getAiEnv() memoizes process.env; force re-read so GEMINI_API_KEY applies here
     mockEmbedText.mockRejectedValueOnce(new Error("RESOURCE_EXHAUSTED"));
 
     try {
@@ -270,6 +272,7 @@ describe("upsertProject", () => {
 
       expect(prisma.project.upsert).toHaveBeenCalled();
     } finally {
+      _resetEnvCache();
       if (previousGemini === undefined) {
         delete process.env.GEMINI_API_KEY;
       } else {

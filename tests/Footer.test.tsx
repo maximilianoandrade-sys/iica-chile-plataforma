@@ -22,13 +22,13 @@ describe('Footer', () => {
 
   it('usa redes oficiales verificables para iconos sociales', () => {
     render(<Footer />);
-    expect(screen.getByRole('link', { name: /linkedin iica/i })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /LinkedIn de IICA Chile/i })).toHaveAttribute(
       'href',
       'https://www.linkedin.com/company/iica/',
     );
-    expect(screen.getByRole('link', { name: /x iica/i })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /X \(Twitter\) de IICA Chile/i })).toHaveAttribute(
       'href',
-      'https://x.com/IABOREA',
+      'https://x.com/IICANoticias',
     );
   });
 });

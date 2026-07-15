@@ -31,13 +31,6 @@ jest.mock("next/server", () => ({
   },
 }));
 
-jest.mock("@/lib/security", () => ({
-  SECURITY_HEADERS: {
-    "X-Frame-Options": "DENY",
-    "X-Content-Type-Options": "nosniff",
-  },
-}));
-
 const SECRET = "test-secret";
 
 function generateToken(secret: string, timestampMs: number): string {

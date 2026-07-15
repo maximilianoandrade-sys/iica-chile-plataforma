@@ -37,21 +37,23 @@ describe('ProjectCard', () => {
     expect(screen.getByText(/Biobío/)).toBeInTheDocument();
   });
 
-  it('shows metadata as semantic list', () => {
+  it('shows metadata as labeled fields', () => {
     render(<ProjectCard project={mockProject} />);
-    expect(screen.getByRole('list', { name: /Metadatos de la oportunidad/i })).toBeInTheDocument();
+    expect(screen.getByText('Monto')).toBeInTheDocument();
+    expect(screen.getByText('Cierra')).toBeInTheDocument();
+    expect(screen.getByText('Región')).toBeInTheDocument();
   });
 
   it('renders urgency deadline copy', () => {
     render(<ProjectCard project={mockProject} />);
     expect(screen.getByText(/Cierra en/i)).toBeInTheDocument();
-    expect(screen.getByText(/Fecha límite:/i)).toBeInTheDocument();
+    expect(screen.getByText('01-06-2030')).toBeInTheDocument();
   });
 
   it('renders fallback text for undefined amount', () => {
     const withoutAmount = { ...mockProject, monto: 0, montoTexto: null };
     render(<ProjectCard project={withoutAmount} />);
-    expect(screen.getByText(/Ver bases oficiales/i)).toBeInTheDocument();
+    expect(screen.getByText(/No especificado — ver bases/i)).toBeInTheDocument();
   });
 
   it('renders international badge for international institutions', () => {

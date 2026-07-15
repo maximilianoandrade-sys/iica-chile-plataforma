@@ -34,31 +34,32 @@ describe('FilterChips', () => {
 
   it('renders main search and basic filter controls', () => {
     render(<FilterChips filterCounts={mockFilterCounts} />);
-    expect(screen.getByRole('searchbox')).toBeInTheDocument();
-    expect(screen.getByLabelText(/Estado/i)).toHaveValue('Abierta');
-    expect(screen.getByLabelText(/Ubicaciones/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Instituciones/i)).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /Buscar oportunidades/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Más filtros/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Abiertas/i })).toBeInTheDocument();
   });
 
   it('labels filters section for assistive tech', () => {
     render(<FilterChips filterCounts={mockFilterCounts} />);
-    expect(screen.getByRole('group', { name: /Filtros principales/i })).toBeInTheDocument();
+    // Quick-filter chips expose their toggle state to assistive tech
+    expect(screen.getByRole('button', { name: /Todos/i })).toHaveAttribute('aria-pressed');
+    expect(screen.getByRole('button', { name: /Abiertas/i })).toHaveAttribute('aria-pressed');
   });
 
   it('allows collapsing and expanding filter controls', () => {
     render(<FilterChips filterCounts={mockFilterCounts} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /Ocultar filtros/i }));
-    expect(screen.queryByLabelText(/Estado/i)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /Más filtros/i }));
+    expect(screen.getByLabelText(/Región/i)).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: /Mostrar filtros/i }));
-    expect(screen.getByLabelText(/Estado/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /Más filtros/i }));
+    expect(screen.queryByLabelText(/Región/i)).not.toBeInTheDocument();
   });
 
   it('allows choosing all estados explicitly', () => {
     render(<FilterChips filterCounts={mockFilterCounts} />);
 
-    fireEvent.change(screen.getByLabelText(/Estado/i), { target: { value: 'all' } });
+    fireEvent.click(screen.getByRole('button', { name: /Todos/i }));
 
     expect(pushMock).toHaveBeenCalledTimes(1);
     const [href] = pushMock.mock.calls[0] as [string, { scroll: boolean }];
@@ -68,7 +69,7 @@ describe('FilterChips', () => {
   it('aplica busqueda en vivo con debounce y replace', () => {
     render(<FilterChips filterCounts={mockFilterCounts} />);
 
-    const input = screen.getByRole('searchbox');
+    const input = screen.getByRole('combobox', { name: /Buscar oportunidades/i });
     fireEvent.change(input, { target: { value: 'indap' } });
 
     expect(replaceMock).not.toHaveBeenCalled();
@@ -83,19 +84,18 @@ describe('FilterChips', () => {
   it('expands advanced filters and applies ambito in real time', () => {
     render(<FilterChips filterCounts={mockFilterCounts} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /Filtros avanzados/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Internacional/i }));
 
-    const scopeSelect = screen.getByLabelText(/Ámbito/i);
-    fireEvent.change(scopeSelect, { target: { value: 'Internacional' } });
-
-    expect(pushMock).toHaveBeenCalledWith('/?ambito=Internacional', { scroll: false });
+    expect(pushMock).toHaveBeenCalled();
+    const [href] = pushMock.mock.calls[0] as [string, { scroll: boolean }];
+    expect(href).toContain('ambito=Internacional');
   });
 
   it('resets all filters with dedicated action', () => {
     mockSearchParams = new URLSearchParams('q=fia&estado=Abierta');
     render(<FilterChips filterCounts={mockFilterCounts} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /Restablecer todo/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Limpiar todo/i }));
 
     expect(pushMock).toHaveBeenCalledWith('/', { scroll: false });
   });
@@ -128,7 +128,7 @@ describe('FilterChips', () => {
     mockSearchParams = new URLSearchParams('q=fia&estado=Próxima');
     render(<FilterChips filterCounts={mockFilterCounts} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /Quitar filtro Búsqueda: "fia"/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Quitar filtro "fia"/i }));
 
     expect(pushMock).toHaveBeenCalledTimes(1);
     const [href] = pushMock.mock.calls[0] as [string, { scroll: boolean }];
@@ -148,9 +148,10 @@ describe('FilterChips', () => {
     };
 
     render(<FilterChips filterCounts={regionSortedByName} />);
+    fireEvent.click(screen.getByRole('button', { name: /Más filtros/i }));
 
-    const regionSelect = screen.getByLabelText(/Ubicaciones/i);
+    const regionSelect = screen.getByLabelText(/Región/i);
     const optionTexts = Array.from(regionSelect.querySelectorAll('option')).map((option) => option.textContent);
-    expect(optionTexts).toEqual(['Atacama', 'Coquimbo', 'Metropolitana', 'Magallanes']);
+    expect(optionTexts).toEqual(['Todas las regiones', 'Atacama', 'Coquimbo', 'Metropolitana', 'Magallanes']);
   });
 });

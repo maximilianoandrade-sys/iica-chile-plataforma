@@ -213,7 +213,7 @@ describe('data utilities', () => {
   });
 
   describe('proyecto detalle placeholders', () => {
-    it('shows editorial validation text when regions and beneficiaries are missing', async () => {
+    it('omits regions and beneficiaries sections when missing', async () => {
       getProjects.mockResolvedValue({
         ok: true,
         projects: [
@@ -239,8 +239,15 @@ describe('data utilities', () => {
 
       render(element);
 
-      expect(screen.getByText(/Ver regiones elegibles en las bases oficiales/i)).toBeInTheDocument();
-      expect(screen.getByText(/Ver beneficiarios elegibles en las bases oficiales/i)).toBeInTheDocument();
+      // The refactored page omits the regiones/beneficiarios sections (and the
+      // old editorial placeholder text) entirely when those fields are empty.
+      expect(screen.queryByText(/Ver regiones elegibles en las bases oficiales/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Ver beneficiarios elegibles en las bases oficiales/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Regiones Elegibles/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Beneficiarios Elegibles/i)).not.toBeInTheDocument();
+      // The rest of the project still renders correctly.
+      expect(screen.getByText(/Proyecto sin campos completos/i)).toBeInTheDocument();
+      expect(screen.getByText(/Consultar institución/i)).toBeInTheDocument();
     });
   });
 });
