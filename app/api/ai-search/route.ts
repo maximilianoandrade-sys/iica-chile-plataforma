@@ -19,9 +19,10 @@ import { getLogger } from "@/lib/utils/logger";
 import { AiSearchSchema, formatZodError } from "@/lib/utils/validation";
 import { createSuccessResponse, createErrorResponse } from "@/lib/utils/api-response";
 import { getAiEnv } from '@/lib/utils/env';
+import { checkRateLimit } from "@/lib/utils/rateLimit";
 
 const logger = getLogger("AiSearch");
-const AI_SEARCH_RATE_LIMIT = { maxRequests: 10, windowSizeSeconds: 60 };
+const AI_SEARCH_RATE_LIMIT = { maxRequests: 10, windowSizeMs: 60000 };
 
 const SYSTEM_PROMPT = `Eres un asistente experto en oportunidades de financiamiento, fondos concursables, subsidios y programas de apoyo para el sector agrícola y agroalimentario en Chile.
 
@@ -50,6 +51,12 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    const clientIp = request.headers.get("x-forwarded-for")?.split(",")[0] || "127.0.0.1";
+    const rl = checkRateLimit(`ai-search:${clientIp}`, AI_SEARCH_RATE_LIMIT.maxRequests, AI_SEARCH_RATE_LIMIT.windowSizeMs);
+    if (!rl.success) {
+      return createErrorResponse(`Demasiadas solicitudes de búsqueda IA. Por favor reintente en ${rl.resetSeconds} segundos.`, 429);
+    }
+
     let env: ReturnType<typeof getAiEnv>;
     try {
       env = getAiEnv();

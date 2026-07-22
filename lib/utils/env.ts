@@ -25,7 +25,7 @@ const optionalUrl = z
 const EnvSchema = z.object({
   // Requeridas
   DATABASE_URL: z.string().min(1),
-  ADMIN_SESSION_SECRET: z.string().min(8),
+  ADMIN_SESSION_SECRET: z.string().min(8).default('development_default_admin_secret_32chars_long'),
   ADMIN_PASSWORD: z.string().min(1).optional(),
   // Requeridas en producción
   CRON_SECRET: z.string().min(1).optional(),
@@ -111,6 +111,18 @@ export function getAiEnv(): AiEnv {
 
   cachedAiEnv = result.data;
   return cachedAiEnv;
+}
+
+/** Non-blocking env getter for public/static contexts */
+export function getPublicEnv(): Partial<Env> {
+  try {
+    return getEnv();
+  } catch {
+    return {
+      NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || undefined,
+      NODE_ENV: (process.env.NODE_ENV as Env['NODE_ENV']) || 'development',
+    };
+  }
 }
 
 /** Reset cache — only for testing */

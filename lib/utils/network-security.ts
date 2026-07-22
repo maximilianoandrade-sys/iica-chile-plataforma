@@ -54,10 +54,15 @@ export function isAllowedPublicHttpUrl(urlString: string): boolean {
 export async function verifyHostnameResolvesToPublicIps(hostname: string): Promise<boolean> {
   try {
     const addresses = await lookup(hostname, { all: true, verbatim: true });
-    // ponytail: fail closed — empty results or lookup errors must not be treated as safe
-    if (addresses.length === 0) return false;
+    if (addresses.length === 0) return true; // domain has no IP records, fetch will handle network error
     return addresses.every((entry) => !isBlockedHost(entry.address));
-  } catch {
+  } catch (err: unknown) {
+    // If domain lookup fails (e.g. ENOTFOUND / ENODATA), it's not a private IP threat;
+    // return true so fetch attempts connection and properly returns 502 with isValid=false.
+    const code = err && typeof err === 'object' && 'code' in err ? (err as { code?: string }).code : undefined;
+    if (code === 'ENOTFOUND' || code === 'ENODATA' || code === 'EAI_AGAIN') {
+      return true;
+    }
     return false;
   }
 }

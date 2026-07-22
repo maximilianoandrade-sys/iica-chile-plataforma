@@ -18,7 +18,9 @@ export default async function ProjectListContainer({
     const selectedInstitutions = typeof searchParams.institution === 'string' ? searchParams.institution.split(',').filter(Boolean) : [];
     const selectedRegions = typeof searchParams.region === 'string' ? searchParams.region.split(',').filter(Boolean) : [];
     const selectedCategories = typeof searchParams.category === 'string' ? searchParams.category.split(',').filter(Boolean) : [];
-    const selectedAmbito = typeof searchParams.ambito === 'string' ? searchParams.ambito : '';
+    const rawAmbito = typeof searchParams.ambito === 'string' ? searchParams.ambito : '';
+    const relevanceMode = typeof searchParams.relevanceMode === 'string' ? searchParams.relevanceMode : '';
+    const selectedAmbito = rawAmbito || (relevanceMode === 'chile' ? 'Nacional' : relevanceMode === 'international' ? 'Internacional' : '');
     const tipo = (typeof searchParams.tipo === 'string' && (searchParams.tipo === 'fondo' || searchParams.tipo === 'licitacion')) ? searchParams.tipo : 'all';
     const postedFrom = typeof searchParams.postedFrom === 'string' ? searchParams.postedFrom : undefined;
     const postedTill = typeof searchParams.postedTill === 'string' ? searchParams.postedTill : undefined;

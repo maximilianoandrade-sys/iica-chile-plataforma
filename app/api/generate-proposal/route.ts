@@ -5,9 +5,10 @@ import { getLogger } from "@/lib/utils/logger";
 import { GenerateProposalSchema, formatZodError } from "@/lib/utils/validation";
 import { createSuccessResponse, createErrorResponse } from "@/lib/utils/api-response";
 import { getAiEnv } from '@/lib/utils/env';
+import { checkRateLimit } from "@/lib/utils/rateLimit";
 
 const logger = getLogger("GenerateProposal");
-const PROPOSAL_RATE_LIMIT = { maxRequests: 5, windowSizeSeconds: 60 };
+const PROPOSAL_RATE_LIMIT = { maxRequests: 5, windowSizeMs: 60000 };
 
 export async function GET() {
   return NextResponse.json({
@@ -28,6 +29,12 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const clientIp = request.headers.get("x-forwarded-for")?.split(",")[0] || "127.0.0.1";
+    const rl = checkRateLimit(`proposal:${clientIp}`, PROPOSAL_RATE_LIMIT.maxRequests, PROPOSAL_RATE_LIMIT.windowSizeMs);
+    if (!rl.success) {
+      return createErrorResponse(`Demasiadas solicitudes. Por favor reintente en ${rl.resetSeconds} segundos.`, 429);
+    }
+
     let env: ReturnType<typeof getAiEnv>;
     try {
       env = getAiEnv();
