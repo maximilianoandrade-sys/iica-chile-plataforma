@@ -17,7 +17,6 @@ model Usuario {
   fechaRegistro DateTime      @default(now())
   alertas       Alerta[]
   favoritos     Favorito[]
-  postulaciones Postulacion[]
 }
 
 model Project {
@@ -124,30 +123,6 @@ model Source {
   @@index([enabled])
 }
 
-model Fondo {
-  id              Int       @id @default(autoincrement())
-  nombre          String
-  descripcion     String    @db.Text
-  organismo       String
-  montoTotal      Float?
-  montoTexto      String?
-  moneda          String    @default("USD")
-  paisDestino     String[]
-  ods             Int[]
-  estado          String
-  fechaApertura   DateTime?
-  fechaCierre     DateTime
-  fechaScraping   DateTime  @default(now())
-  documentoTexto  String?   @db.Text
-  enlaceFuente    String
-  
-  favoritos       Favorito[]
-  postulaciones   Postulacion[]
-
-  @@index([organismo])
-  @@index([estado])
-}
-
 model Alerta {
   id         Int      @id @default(autoincrement())
   usuarioId  Int
@@ -155,31 +130,21 @@ model Alerta {
   criterios  Json
   frecuencia String
   activo     Boolean  @default(true)
+
+  @@index([usuarioId])
 }
 
 model Favorito {
   id        Int      @id @default(autoincrement())
   usuarioId Int
   proyectoId Int?
-  fondoId   Int?
   usuario   Usuario  @relation(fields: [usuarioId], references: [id])
   proyecto  Project? @relation(fields: [proyectoId], references: [id])
-  fondo     Fondo?   @relation(fields: [fondoId], references: [id])
   notas     String?
   createdAt DateTime @default(now())
 
   @@unique([usuarioId, proyectoId])
-  @@unique([usuarioId, fondoId])
-}
-
-model Postulacion {
-  id        Int      @id @default(autoincrement())
-  usuarioId Int
-  fondoId   Int
-  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
-  fondo     Fondo    @relation(fields: [fondoId], references: [id])
-  estado    String
-  fecha     DateTime @default(now())
+  @@index([usuarioId])
 }
 
 model SearchHistory {
@@ -212,8 +177,6 @@ model LinkCheck {
   lastModified String?  @map("last_modified")
   lastChecked  DateTime @default(now())
   isValid      Boolean  @default(true)
-
-  @@index([url])
 }
 
 model NewsletterSubscriber {

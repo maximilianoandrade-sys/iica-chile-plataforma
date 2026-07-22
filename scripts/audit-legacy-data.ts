@@ -25,7 +25,6 @@ async function validateUrl(url: string): Promise<ValidationResult> {
     if (res.status >= 500) return { ok: false, reason: `HTTP ${res.status}` };
     if (!res.ok) return { ok: false, reason: `HTTP ${res.status}` };
 
-    // Detectar redirect a homepage genérica
     const original = new URL(url);
     const final = new URL(res.url);
     const originalHasPath = original.pathname.length > 1;
@@ -54,61 +53,67 @@ async function main() {
 
   logger.info(`[audit] Modo: ${apply ? "APPLY (modificará BD)" : "DRY-RUN (solo CSV)"}`);
 
-  const all = await prisma.project.findMany({
-    where: { estadoPostulacion: { not: "Cerrada" } },
-  });
+  try {
+    const all = await prisma.project.findMany({
+      where: { estadoPostulacion: { not: "Cerrada" } },
+    });
 
-  logger.info(`[audit] Validando ${all.length} proyectos no-cerrados...`);
+    logger.info(`[audit] Validando ${all.length} proyectos no-cerrados...`);
 
-  const broken: Array<Record<string, string | number>> = [];
-  let okCount = 0;
+    const broken: Array<Record<string, string | number>> = [];
+    let okCount = 0;
 
-  for (let i = 0; i < all.length; i++) {
-    const p = all[i];
-    process.stdout.write(`\r[audit] ${i + 1}/${all.length}`);
-    const v = await validateUrl(p.url_bases || "");
-    if (!v.ok) {
-      broken.push({
-        id: p.id,
-        nombre: p.nombre,
-        institucion: p.institucion,
-        url: p.url_bases || "",
-        reason: v.reason || "unknown",
-      });
-    } else {
-      okCount++;
+    for (let i = 0; i < all.length; i++) {
+      const p = all[i];
+      process.stdout.write(`\r[audit] ${i + 1}/${all.length}`);
+      const v = await validateUrl(p.url_bases || "");
+      if (!v.ok) {
+        broken.push({
+          id: p.id,
+          nombre: p.nombre,
+          institucion: p.institucion,
+          url: p.url_bases || "",
+          reason: v.reason || "unknown",
+        });
+      } else {
+        okCount++;
+      }
     }
-  }
-  logger.info("\n");
+    logger.info("\n");
 
-  const csv = toCsv(broken);
-  fs.writeFileSync("audit-broken-urls.csv", csv);
+    const csv = toCsv(broken);
+    fs.writeFileSync("audit-broken-urls.csv", csv);
 
-  logger.info(`[audit] OK: ${okCount}`);
-  logger.info(`[audit] Broken: ${broken.length}`);
-  logger.info(`[audit] CSV escrito: audit-broken-urls.csv`);
+    logger.info(`[audit] OK: ${okCount}`);
+    logger.info(`[audit] Broken: ${broken.length}`);
+    logger.info(`[audit] CSV escrito: audit-broken-urls.csv`);
 
-  if (apply && broken.length > 0) {
-    logger.info(`[audit] Aplicando cierre de ${broken.length} proyectos...`);
-    const today = new Date().toISOString().slice(0, 10);
-    for (const b of broken) {
-      await prisma.project.update({
-        where: { id: b.id as number },
-        data: {
-          estadoPostulacion: "Cerrada",
-          notasInternas: `auditoría legacy ${today}: ${b.reason}`,
-        },
-      });
+    if (apply && broken.length > 0) {
+      logger.info(`[audit] Aplicando cierre de ${broken.length} proyectos...`);
+      const today = new Date().toISOString().slice(0, 10);
+      for (const b of broken) {
+        await prisma.project.update({
+          where: { id: b.id as number },
+          data: {
+            estadoPostulacion: "Cerrada",
+            notasInternas: `auditoría legacy ${today}: ${b.reason}`,
+          },
+        });
+      }
+      logger.info(`[audit] Listo.`);
+    } else if (!apply) {
+      logger.info(`[audit] Revisá audit-broken-urls.csv. Para aplicar el cierre, corré con --apply.`);
     }
-    logger.info(`[audit] Listo.`);
-  } else if (!apply) {
-    logger.info(`[audit] Revisá audit-broken-urls.csv. Para aplicar el cierre, corré con --apply.`);
+  } catch (err) {
+    logger.error(`[audit] Error de conexión con la base de datos: ${(err as Error).message}`);
+    logger.info(`[audit] Por favor verifica que DATABASE_URL en .env sea accesible.`);
+    process.exit(1);
+  } finally {
+    await prisma.$disconnect();
   }
-
-  await prisma.$disconnect();
 }
 
 main().catch((e) => {
-  logger.error(e);
+  logger.error(`[audit] Error inesperado: ${e?.message || e}`);
   process.exit(1);
 });
