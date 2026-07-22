@@ -1,10 +1,11 @@
-'use client';
-
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { useTransition } from 'react';
+import { useTransition, useState } from 'react';
+import Link from 'next/link';
+import { LayoutGrid, List, Calendar, ArrowRight, ExternalLink, ShieldCheck } from 'lucide-react';
 import { ProjectCard } from '@/components/ProjectCard';
+import { FavoriteButton } from '@/components/FavoriteButton';
 import { getLogger } from '@/lib/utils/logger';
-import type { Project } from '@/lib/data';
+import { type Project, daysUntilClose, formatDeadline, formatMontoCLP } from '@/lib/data';
 
 const logger = getLogger('ProjectList');
 const ITEMS_PER_PAGE = 16;
@@ -26,6 +27,7 @@ export default function ProjectList({
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
+  const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
 
   const hasQuery = Boolean(searchParams.get('q')?.trim());
   const sort = searchParams.get('sort') || (hasQuery ? 'relevance' : 'date_asc');
@@ -125,18 +127,51 @@ export default function ProjectList({
             )}
           </div>
         </div>
-        <select
-          value={sort}
-          onChange={(e) => updateSort(e.target.value)}
-          className="text-sm border border-iica-border rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none min-h-[44px]"
-          aria-label="Ordenar por"
-          title="Prioriza convocatorias nacionales con cierre próximo y monto disponible"
-        >
-          <option value="relevance">Más relevantes</option>
-          <option value="date_asc">Cierre más próximo</option>
-          <option value="amount_desc">Mayor monto</option>
-          <option value="newest">Más recientes</option>
-        </select>
+
+        <div className="flex items-center gap-3">
+          {/* Dual View Toggle Switcher */}
+          <div className="flex items-center rounded-lg border border-iica-border bg-gray-50 dark:bg-gray-700/50 p-1" role="group" aria-label="Modo de vista">
+            <button
+              type="button"
+              onClick={() => setViewMode('grid')}
+              className={`flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-all ${
+                viewMode === 'grid'
+                  ? 'bg-white dark:bg-gray-800 text-iica-navy dark:text-white shadow-sm'
+                  : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+              }`}
+              title="Vista de Tarjetas Visuales"
+            >
+              <LayoutGrid size={15} />
+              <span className="hidden sm:inline">Tarjetas</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('table')}
+              className={`flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-all ${
+                viewMode === 'table'
+                  ? 'bg-white dark:bg-gray-800 text-iica-navy dark:text-white shadow-sm'
+                  : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+              }`}
+              title="Vista de Tabla Compacta de Alta Densidad"
+            >
+              <List size={15} />
+              <span className="hidden sm:inline">Tabla</span>
+            </button>
+          </div>
+
+          <select
+            value={sort}
+            onChange={(e) => updateSort(e.target.value)}
+            className="text-sm border border-iica-border rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none min-h-[44px]"
+            aria-label="Ordenar por"
+            title="Prioriza convocatorias nacionales con cierre próximo y monto disponible"
+          >
+            <option value="relevance">Más relevantes</option>
+            <option value="date_asc">Cierre más próximo</option>
+            <option value="amount_desc">Mayor monto</option>
+            <option value="newest">Más recientes</option>
+          </select>
+        </div>
       </div>
 
       {activeFilterLabels.length > 0 && paginated.length > 0 ? (
@@ -162,7 +197,7 @@ export default function ProjectList({
         </div>
       ) : null}
 
-      {/* Grid of cards */}
+      {/* Grid or Table View */}
       {paginated.length > 0 ? (
         <div
           role="region"
@@ -170,13 +205,93 @@ export default function ProjectList({
           aria-busy={isPending}
           className={`transition-opacity duration-200 ${isPending ? 'opacity-70' : 'opacity-100'}`}
         >
-          <ul className="grid grid-cols-1 gap-4 md:grid-cols-2" aria-label="Resultados de oportunidades">
-            {paginated.map((project) => (
-              <li key={project.id} className="list-none">
-                <ProjectCard project={project} />
-              </li>
-            ))}
-          </ul>
+          {viewMode === 'grid' ? (
+            <ul className="grid grid-cols-1 gap-4 md:grid-cols-2" aria-label="Resultados de oportunidades">
+              {paginated.map((project) => (
+                <li key={project.id} className="list-none">
+                  <ProjectCard project={project} />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="overflow-x-auto rounded-xl border border-iica-border bg-white dark:bg-gray-800 shadow-sm">
+              <table className="w-full text-left text-sm text-gray-600 dark:text-gray-300">
+                <thead className="bg-gray-50 dark:bg-gray-700/50 text-xs font-semibold uppercase text-gray-700 dark:text-gray-200 border-b border-iica-border">
+                  <tr>
+                    <th scope="col" className="px-4 py-3">Oportunidad / Institución</th>
+                    <th scope="col" className="px-4 py-3">Ámbito</th>
+                    <th scope="col" className="px-4 py-3">Monto Estimado</th>
+                    <th scope="col" className="px-4 py-3">Cierre</th>
+                    <th scope="col" className="px-4 py-3">Viabilidad IICA</th>
+                    <th scope="col" className="px-4 py-3 text-right">Acción</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-iica-border">
+                  {paginated.map((project) => {
+                    const days = daysUntilClose(project);
+                    const closeDate = formatDeadline(project.fecha_cierre);
+                    const monto = project.montoTexto || (project.monto ? formatMontoCLP(project.monto) : 'Ver bases');
+
+                    return (
+                      <tr key={project.id} className="hover:bg-gray-50/80 dark:hover:bg-gray-700/30 transition-colors">
+                        <td className="px-4 py-3.5 font-medium text-gray-900 dark:text-white max-w-md">
+                          <Link href={`/proyecto/${project.id}`} className="hover:text-iica-blue font-semibold line-clamp-2">
+                            {project.nombre}
+                          </Link>
+                          <span className="block text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                            {project.institucion}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3.5">
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                            project.ambito === 'Internacional'
+                              ? 'bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300'
+                              : 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                          }`}>
+                            {project.regiones?.[0] || project.region || project.ambito || 'Nacional'}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3.5 font-medium text-gray-900 dark:text-gray-100 whitespace-nowrap">
+                          {monto}
+                        </td>
+                        <td className="px-4 py-3.5 whitespace-nowrap text-xs">
+                          <span className={`font-semibold ${
+                            days <= 1 && days >= 0
+                              ? 'text-red-600 dark:text-red-400'
+                              : days <= 7 && days >= 0
+                              ? 'text-amber-600 dark:text-amber-400'
+                              : 'text-gray-700 dark:text-gray-300'
+                          }`}>
+                            {days < 0 ? 'Cerrada' : days === 0 ? 'Cierra hoy' : `${days} días`}
+                          </span>
+                          <span className="block text-gray-400 dark:text-gray-500">{closeDate}</span>
+                        </td>
+                        <td className="px-4 py-3.5 whitespace-nowrap">
+                          <div className="flex items-center gap-1.5">
+                            <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                            <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+                              {project.porcentajeViabilidad ? `${project.porcentajeViabilidad}% ${project.viabilidadIICA || 'Alta'}` : 'Alta'}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3.5 text-right whitespace-nowrap">
+                          <div className="flex items-center justify-end gap-2">
+                            <FavoriteButton projectId={project.id} />
+                            <Link
+                              href={`/proyecto/${project.id}`}
+                              className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-md bg-iica-blue text-white hover:bg-iica-navy transition-colors min-h-[36px]"
+                            >
+                              Ver Ficha <ArrowRight size={13} />
+                            </Link>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       ) : (
           <div className="text-center py-12 text-gray-500 dark:text-gray-400 space-y-3" role="status" aria-live="polite">

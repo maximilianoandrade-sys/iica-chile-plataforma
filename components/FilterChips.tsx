@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
@@ -269,6 +269,14 @@ export function FilterChips({ filterCounts }: FilterChipsProps) {
           >
             <span className="w-2 h-2 rounded-full bg-red-500" aria-hidden="true" />
             Urgentes ≤7d
+          </QuickChip>
+          <QuickChip
+            active={currentInstitution === 'GORE'}
+            variant="intl"
+            onClick={() => updateParams({ institution: 'GORE', estado: 'Abierta', urgencia: '', ambito: '' })}
+          >
+            <span className="w-2 h-2 rounded-full bg-amber-500" aria-hidden="true" />
+            Fondos GORE
           </QuickChip>
           <QuickChip
             active={isInternacionalActive}
