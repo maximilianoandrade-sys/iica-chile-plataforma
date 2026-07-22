@@ -90,7 +90,7 @@ async function discover(query: string): Promise<AiResult[]> {
 
   logger.info("[discover] paso 1: investigación con Google Search...");
   const research = await ai.models.generateContent({
-    model: "gemini-2.5-flash-lite",
+    model: "gemini-2.0-flash",
     contents: researchPrompt,
     config: {
       tools: [{ googleSearch: {} }],
@@ -110,7 +110,7 @@ async function discover(query: string): Promise<AiResult[]> {
 
   logger.info("[discover] paso 2: estructurando a JSON...");
   const structured = await ai.models.generateContent({
-    model: "gemini-2.5-flash-lite",
+    model: "gemini-2.0-flash",
     contents: STRUCTURE_PROMPT(researchText),
     config: { temperature: 0 },
   });
