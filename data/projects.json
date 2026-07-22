@@ -9,15 +9,22 @@
     "estado": "Abierto",
     "categoria": "Riego y Recursos Hídricos",
     "url_bases": "https://www.ctc-n.org/",
-    "regiones": ["Nacional e Internacional"],
-    "beneficiarios": ["Organismos Públicos", "Agencias de Cooperación"],
+    "regiones": [
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "Organismos Públicos",
+      "Agencias de Cooperación"
+    ],
     "requiere_cofinanciamiento": false,
     "idioma": "es",
     "faq_disponible": true,
     "permite_adendas": false,
     "bases_estado": "published",
     "requiere_firma": false,
-    "tipos_solicitante": ["Entidades Técnicas Acreditadas"],
+    "tipos_solicitante": [
+      "Entidades Técnicas Acreditadas"
+    ],
     "checklist": [],
     "ambito": "Internacional",
     "estadoPostulacion": "Abierta",
@@ -25,8 +32,12 @@
     "porcentajeViabilidad": 91,
     "objetivo": "Asistencia técnica especializada y financiamiento para acelerar tecnologías de resiliencia hídrica y adaptación agrícola.",
     "descripcionIICA": "IICA actúa como entidad de implementación técnica para la formulación e integración de capacidades institucionales.",
-    "requisitos": ["Presentación respaldada por la Entidad Nacional Designada (NDE)"],
-    "fortalezas": ["Red institucional en América Latina y capacidad técnica en recursos hídricos"],
+    "requisitos": [
+      "Presentación respaldada por la Entidad Nacional Designada (NDE)"
+    ],
+    "fortalezas": [
+      "Red institucional en América Latina y capacidad técnica en recursos hídricos"
+    ],
     "debilidades": [],
     "complejidad": "Media",
     "rolIICA": "Implementador",
@@ -52,15 +63,22 @@
     "estado": "Abierto",
     "categoria": "Riego y Recursos Hídricos",
     "url_bases": "https://anid.cl/",
-    "regiones": ["Nacional"],
-    "beneficiarios": ["Centros de Investigación", "Sector Agrícola"],
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Centros de Investigación",
+      "Sector Agrícola"
+    ],
     "requiere_cofinanciamiento": true,
     "idioma": "es",
     "faq_disponible": true,
     "permite_adendas": false,
     "bases_estado": "published",
     "requiere_firma": false,
-    "tipos_solicitante": ["Universidades y Centros Científicos"],
+    "tipos_solicitante": [
+      "Universidades y Centros Científicos"
+    ],
     "checklist": [],
     "ambito": "Nacional",
     "estadoPostulacion": "Abierta",
@@ -68,8 +86,12 @@
     "porcentajeViabilidad": 89,
     "objetivo": "Fondo especial de investigación aplicada para generar modelos de eficiencia hídrica y conservación de suelos agrícolas en Chile.",
     "descripcionIICA": "IICA participa como organismo asociado co-ejecutor junto a facultades de agronomía chilenas.",
-    "requisitos": ["Asociatividad entre centro de I+D e institución de transferencia tecnológica"],
-    "fortalezas": ["Vínculo directo con agricultores e INDAP para validación en terreno"],
+    "requisitos": [
+      "Asociatividad entre centro de I+D e institución de transferencia tecnológica"
+    ],
+    "fortalezas": [
+      "Vínculo directo con agricultores e INDAP para validación en terreno"
+    ],
     "debilidades": [],
     "complejidad": "Media",
     "rolIICA": "Asesor",
@@ -95,15 +117,22 @@
     "estado": "Abierto",
     "categoria": "Sustentabilidad y Cambio Climático",
     "url_bases": "https://www.cgiar.org/funding-opportunities/",
-    "regiones": ["Nacional e Internacional"],
-    "beneficiarios": ["Organismos Internacionales", "Productores Locales"],
+    "regiones": [
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "Organismos Internacionales",
+      "Productores Locales"
+    ],
     "requiere_cofinanciamiento": false,
     "idioma": "es",
     "faq_disponible": true,
     "permite_adendas": false,
     "bases_estado": "published",
     "requiere_firma": false,
-    "tipos_solicitante": ["Consorcios de Investigación Agrícola"],
+    "tipos_solicitante": [
+      "Consorcios de Investigación Agrícola"
+    ],
     "checklist": [],
     "ambito": "Internacional",
     "estadoPostulacion": "Abierta",
@@ -111,8 +140,12 @@
     "porcentajeViabilidad": 93,
     "objetivo": "Desarrollo y difusión de cultivos resilientes al estrés hídrico y conservación de agrobiodiversidad en el Cono Sur.",
     "descripcionIICA": "IICA actúa como articulador regional e implementación en campo con los servicios agrícolas nacionales.",
-    "requisitos": ["Consorcio multinacional de investigación participativa"],
-    "fortalezas": ["Alianza histórica entre IICA y CGIAR para la región"],
+    "requisitos": [
+      "Consorcio multinacional de investigación participativa"
+    ],
+    "fortalezas": [
+      "Alianza histórica entre IICA y CGIAR para la región"
+    ],
     "debilidades": [],
     "complejidad": "Media",
     "rolIICA": "Ejecutor",
@@ -138,15 +171,22 @@
     "estado": "Abierto",
     "categoria": "Cooperación Internacional",
     "url_bases": "https://www.fontagro.org/es/iniciativas/convocatorias/",
-    "regiones": ["Nacional e Internacional"],
-    "beneficiarios": ["Organismos Internacionales", "Centros de Investigación"],
+    "regiones": [
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "Organismos Internacionales",
+      "Centros de Investigación"
+    ],
     "requiere_cofinanciamiento": true,
     "idioma": "es",
     "faq_disponible": true,
     "permite_adendas": false,
     "bases_estado": "published",
     "requiere_firma": false,
-    "tipos_solicitante": ["Consorcios Internacionales"],
+    "tipos_solicitante": [
+      "Consorcios Internacionales"
+    ],
     "checklist": [],
     "ambito": "Internacional",
     "estadoPostulacion": "Abierta",
@@ -154,8 +194,12 @@
     "porcentajeViabilidad": 95,
     "objetivo": "Convocatoria anual del Fondo Regional de Tecnología Agropecuaria para proyectos de innovación en sistemas agroalimentarios sostenibles en América Latina y el Caribe.",
     "descripcionIICA": "IICA es miembro fundador de FONTAGRO y puede liderar o co-ejecutar propuestas de consorcios regionales.",
-    "requisitos": ["Consorcio internacional de al menos 2 países miembros"],
-    "fortalezas": ["Acreditación fiduciaria IICA y presencia hemisférica"],
+    "requisitos": [
+      "Consorcio internacional de al menos 2 países miembros"
+    ],
+    "fortalezas": [
+      "Acreditación fiduciaria IICA y presencia hemisférica"
+    ],
     "debilidades": [],
     "complejidad": "Media",
     "rolIICA": "Ejecutor",
@@ -181,15 +225,22 @@
     "estado": "Abierto",
     "categoria": "Sustentabilidad y Cambio Climático",
     "url_bases": "https://www.thegef.org/projects-operations/database",
-    "regiones": ["Nacional e Internacional"],
-    "beneficiarios": ["Instituciones Públicas", "Organismos de Cooperación"],
+    "regiones": [
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "Instituciones Públicas",
+      "Organismos de Cooperación"
+    ],
     "requiere_cofinanciamiento": true,
     "idioma": "es",
     "faq_disponible": true,
     "permite_adendas": false,
     "bases_estado": "published",
     "requiere_firma": false,
-    "tipos_solicitante": ["Entidades Acreditadas GEF"],
+    "tipos_solicitante": [
+      "Entidades Acreditadas GEF"
+    ],
     "checklist": [],
     "ambito": "Internacional",
     "estadoPostulacion": "Abierta",
@@ -197,8 +248,12 @@
     "porcentajeViabilidad": 90,
     "objetivo": "Financiamiento del ciclo GEF-8 destinado a proyectos de adaptación climática en territorios agropecuarios y forestales.",
     "descripcionIICA": "IICA actúa como agencia técnica implementadora en alianza con PNUD y FAO.",
-    "requisitos": ["Endoso de la Autoridad Nacional Designada GEF"],
-    "fortalezas": ["Capacidad de articulación institucional con MINAGRI"],
+    "requisitos": [
+      "Endoso de la Autoridad Nacional Designada GEF"
+    ],
+    "fortalezas": [
+      "Capacidad de articulación institucional con MINAGRI"
+    ],
     "debilidades": [],
     "complejidad": "Alta",
     "rolIICA": "Implementador",
@@ -224,15 +279,22 @@
     "estado": "Abierto",
     "categoria": "Riego y Recursos Hídricos",
     "url_bases": "https://www.euroclima.org/",
-    "regiones": ["Nacional e Internacional"],
-    "beneficiarios": ["Organizaciones Agrícolas", "Instituciones Públicas"],
+    "regiones": [
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "Organizaciones Agrícolas",
+      "Instituciones Públicas"
+    ],
     "requiere_cofinanciamiento": true,
     "idioma": "es",
     "faq_disponible": true,
     "permite_adendas": false,
     "bases_estado": "published",
     "requiere_firma": false,
-    "tipos_solicitante": ["Consorcios UE-ALC"],
+    "tipos_solicitante": [
+      "Consorcios UE-ALC"
+    ],
     "checklist": [],
     "ambito": "Internacional",
     "estadoPostulacion": "Abierta",
@@ -240,8 +302,12 @@
     "porcentajeViabilidad": 92,
     "objetivo": "Programa de cooperación de la Unión Europea enfocado en la gestión sustentable del agua y adaptación climática agrícola.",
     "descripcionIICA": "IICA posee acuerdo marco de cooperación con Euroclima+ para la gestión de proyectos de agua.",
-    "requisitos": ["Consorcio entre entidades europeas y latinoamericanas"],
-    "fortalezas": ["Experiencia comprobada en gestión hídrica territorial"],
+    "requisitos": [
+      "Consorcio entre entidades europeas y latinoamericanas"
+    ],
+    "fortalezas": [
+      "Experiencia comprobada en gestión hídrica territorial"
+    ],
     "debilidades": [],
     "complejidad": "Media",
     "rolIICA": "Implementador",
@@ -267,15 +333,23 @@
     "estado": "Abierto",
     "categoria": "Desarrollo Rural y Agricultura Familiar",
     "url_bases": "https://www.ifad.org/en/project-procurement/opportunities",
-    "regiones": ["Nacional e Internacional"],
-    "beneficiarios": ["Agricultura Familiar", "Cooperativas Rurales"],
+    "regiones": [
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "Agricultura Familiar",
+      "Cooperativas Rurales"
+    ],
     "requiere_cofinanciamiento": false,
     "idioma": "es",
     "faq_disponible": true,
     "permite_adendas": false,
     "bases_estado": "published",
     "requiere_firma": false,
-    "tipos_solicitante": ["Organizaciones de la Sociedad Civil", "Agencias Técnicas"],
+    "tipos_solicitante": [
+      "Organizaciones de la Sociedad Civil",
+      "Agencias Técnicas"
+    ],
     "checklist": [],
     "ambito": "Internacional",
     "estadoPostulacion": "Abierta",
@@ -283,8 +357,12 @@
     "porcentajeViabilidad": 88,
     "objetivo": "Subsidios directos y asistencia técnica para acelerar la transformación digital e inclusión financiera de pequeñas cooperativas agrícolas.",
     "descripcionIICA": "IICA actúa como contraparte de asistencia técnica y capacitación en terreno.",
-    "requisitos": ["Trabajo directo con cooperativas de pequeña agricultura"],
-    "fortalezas": ["Red de extensión rural y presencia regional en Chile"],
+    "requisitos": [
+      "Trabajo directo con cooperativas de pequeña agricultura"
+    ],
+    "fortalezas": [
+      "Red de extensión rural y presencia regional en Chile"
+    ],
     "debilidades": [],
     "complejidad": "Fácil",
     "rolIICA": "Asesor",
@@ -310,15 +388,23 @@
     "estado": "Abierto",
     "categoria": "Innovación y Bioeconomía",
     "url_bases": "https://projects.worldbank.org/en/projects-operations/procurement",
-    "regiones": ["Nacional e Internacional"],
-    "beneficiarios": ["MINAGRI", "Servicios Públicos", "Productores"],
+    "regiones": [
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "MINAGRI",
+      "Servicios Públicos",
+      "Productores"
+    ],
     "requiere_cofinanciamiento": false,
     "idioma": "es",
     "faq_disponible": true,
     "permite_adendas": false,
     "bases_estado": "published",
     "requiere_firma": false,
-    "tipos_solicitante": ["Organismos Internacionales Acreditados"],
+    "tipos_solicitante": [
+      "Organismos Internacionales Acreditados"
+    ],
     "checklist": [],
     "ambito": "Internacional",
     "estadoPostulacion": "Abierta",
@@ -326,8 +412,12 @@
     "porcentajeViabilidad": 96,
     "objetivo": "Operación de cooperación técnica para actualizar los modelos de transferencia tecnológica y servicios de extensión agrícola en Chile.",
     "descripcionIICA": "IICA es ejecutor acreditado por el BID para la implementación de operaciones de asistencia técnica agropecuaria.",
-    "requisitos": ["Acreditación fiduciaria BID vigente"],
-    "fortalezas": ["Estatus legal de organismo internacional e historial con BID"],
+    "requisitos": [
+      "Acreditación fiduciaria BID vigente"
+    ],
+    "fortalezas": [
+      "Estatus legal de organismo internacional e historial con BID"
+    ],
     "debilidades": [],
     "complejidad": "Media",
     "rolIICA": "Ejecutor",
@@ -7413,5 +7503,243 @@
     "needsReview": true,
     "firstSeenAt": "2026-05-13T02:45:58.979Z",
     "lastSeenAt": "2026-05-13T02:48:11.568Z"
+  },
+  {
+    "id": 914,
+    "nombre": "GORE Maule FIC-R — Transferencia Tecnológica para la Resiliencia Hídrica Frutícola",
+    "institucion": "GORE Maule (Gobierno Regional del Maule)",
+    "monto": 320000000,
+    "montoTexto": "CLP $320.000.000",
+    "fecha_cierre": "2026-09-15",
+    "estado": "Abierto",
+    "categoria": "Riego y Recursos Hídricos",
+    "url_bases": "https://www.goremaule.cl/fic-r-2026",
+    "regiones": [
+      "Región del Maule"
+    ],
+    "region": "Región del Maule",
+    "beneficiarios": [
+      "Pequeños y Medianos Agricultores",
+      "Asociaciones de Riego",
+      "IICA"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": true,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Centros de Investigación",
+      "Organismos Internacionales (IICA)",
+      "Universidades"
+    ],
+    "checklist": [
+      "Personería jurídica vigente",
+      "Convenio con asociación de agricultores del Maule"
+    ],
+    "ambito": "Regional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 93,
+    "objetivo": "Desarrollar e implementar soluciones de eficiencia hídrica y telemetría de riego en la cuenca del Maule.",
+    "descripcionIICA": "IICA actúa como ejecutor técnico en alianza con centros de investigación regionales para la transferencia en terreno.",
+    "requisitos": [
+      "Patrocinio del GORE Maule",
+      "Plan de transferencia tecnológica a pequeños productores"
+    ],
+    "fortalezas": [
+      "Presencia territorial de IICA en la cuenca del Maule y modelo de transferencia técnica"
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Ejecutor",
+    "createdAt": "2026-07-22T12:00:00.000Z",
+    "updatedAt": "2026-07-22T12:00:00.000Z",
+    "lastCheckedAt": "2026-07-22T12:00:00.000Z",
+    "canonicalUrl": "https://www.goremaule.cl/fic-r-2026-riego-agricola",
+    "sourceRefId": 24,
+    "discoveredBy": "ai",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-07-22T12:00:00.000Z",
+    "lastSeenAt": "2026-07-22T12:00:00.000Z"
+  },
+  {
+    "id": 915,
+    "nombre": "GORE Coquimbo FIC-R — Agricultura de Precisión en Zona de Escasez Hídrica Severa",
+    "institucion": "GORE Coquimbo (Gobierno Regional de Coquimbo)",
+    "monto": 280000000,
+    "montoTexto": "CLP $280.000.000",
+    "fecha_cierre": "2026-09-30",
+    "estado": "Abierto",
+    "categoria": "Innovación y Tecnología Agrícola",
+    "url_bases": "https://www.gorecoquimbo.cl/fic-2026",
+    "regiones": [
+      "Región de Coquimbo"
+    ],
+    "region": "Región de Coquimbo",
+    "beneficiarios": [
+      "Comunidades Agrícolas",
+      "Productores Crianceros y Hortícolas"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Universidades",
+      "IICA",
+      "Centros Tecnológicos"
+    ],
+    "checklist": [
+      "Propuesta técnica con enfoque en adaptación al cambio climático"
+    ],
+    "ambito": "Regional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 90,
+    "objetivo": "Implementar técnicas de atrapanieblas avanzadas y riego por goteo solar en los valles de Elqui y Limarí.",
+    "descripcionIICA": "IICA co-ejecuta el proyecto junto a organizaciones de usuarios de agua de Coquimbo.",
+    "requisitos": [
+      "Diagnóstico técnico previo de la cuenca"
+    ],
+    "fortalezas": [
+      "Metodología participativa IICA e indicadores de sostenibilidad probados"
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Implementador",
+    "createdAt": "2026-07-22T12:00:00.000Z",
+    "updatedAt": "2026-07-22T12:00:00.000Z",
+    "lastCheckedAt": "2026-07-22T12:00:00.000Z",
+    "canonicalUrl": "https://www.gorecoquimbo.cl/fic-2026-escasez-hidrica",
+    "sourceRefId": 24,
+    "discoveredBy": "ai",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-07-22T12:00:00.000Z",
+    "lastSeenAt": "2026-07-22T12:00:00.000Z"
+  },
+  {
+    "id": 916,
+    "nombre": "GORE La Araucanía FIC-R — Recuperación de Suelos Degradados e Innovación Silvoagropecuaria",
+    "institucion": "GORE La Araucanía (Gobierno Regional de La Araucanía)",
+    "monto": 350000000,
+    "montoTexto": "CLP $350.000.000",
+    "fecha_cierre": "2026-10-10",
+    "estado": "Abierto",
+    "categoria": "Sustentabilidad y Medio Ambiente",
+    "url_bases": "https://www.gorearaucania.cl/fic-r-2026",
+    "regiones": [
+      "Región de La Araucanía"
+    ],
+    "region": "Región de La Araucanía",
+    "beneficiarios": [
+      "Comunidades Rurales",
+      "Pequeños Productores Silvoagropecuarios"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": true,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "IICA",
+      "Universidades Regionales"
+    ],
+    "checklist": [
+      "Enfoque de interculturalidad y bioeconomía"
+    ],
+    "ambito": "Regional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 92,
+    "objetivo": "Recuperar suelos degradados mediante bioinsumos y prácticas regenerativas en comunidades agrícolas de La Araucanía.",
+    "descripcionIICA": "IICA aporta liderazgo en bioeconomía y articulación internacional de expertos.",
+    "requisitos": [
+      "Metodología de transferencia participativa"
+    ],
+    "fortalezas": [
+      "Experiencia IICA en programas de manejo sostenible de suelos en las Américas"
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Ejecutor",
+    "createdAt": "2026-07-22T12:00:00.000Z",
+    "updatedAt": "2026-07-22T12:00:00.000Z",
+    "lastCheckedAt": "2026-07-22T12:00:00.000Z",
+    "canonicalUrl": "https://www.gorearaucania.cl/fic-r-2026-suelos",
+    "sourceRefId": 24,
+    "discoveredBy": "ai",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-07-22T12:00:00.000Z",
+    "lastSeenAt": "2026-07-22T12:00:00.000Z"
+  },
+  {
+    "id": 917,
+    "nombre": "GORE O'Higgins FIC-R — Calidad Sanitaria y Digitalización de la Fruticultura de Exportación",
+    "institucion": "GORE O'Higgins (Gobierno Regional de O'Higgins)",
+    "monto": 300000000,
+    "montoTexto": "CLP $300.000.000",
+    "fecha_cierre": "2026-10-25",
+    "estado": "Abierto",
+    "categoria": "Sanidad y Inocuidad Agroalimentaria",
+    "url_bases": "https://www.goreohiggins.cl/fic-2026",
+    "regiones": [
+      "Región del Libertador General Bernardo O'Higgins"
+    ],
+    "region": "Región del Libertador General Bernardo O'Higgins",
+    "beneficiarios": [
+      "Agroindustria Frutícola",
+      "Asociaciones de Productores de Cachapoal y Colchagua"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "IICA",
+      "INIA",
+      "Centros de Innovación"
+    ],
+    "checklist": [
+      "Sistemas de trazabilidad sanitaria"
+    ],
+    "ambito": "Regional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 89,
+    "objetivo": "Implementar herramientas de monitoreo fitosanitario en línea para plagas de impacto de exportación.",
+    "descripcionIICA": "IICA actúa como asesor técnico especializado en normas sanitarias y fitosanitarias internacionales.",
+    "requisitos": [
+      "Validación previa por parte del SAG regional"
+    ],
+    "fortalezas": [
+      "Especialistas IICA en sanidad agropecuaria e inocuidad de los alimentos"
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "createdAt": "2026-07-22T12:00:00.000Z",
+    "updatedAt": "2026-07-22T12:00:00.000Z",
+    "lastCheckedAt": "2026-07-22T12:00:00.000Z",
+    "canonicalUrl": "https://www.goreohiggins.cl/fic-2026-sanidad-fruticola",
+    "sourceRefId": 24,
+    "discoveredBy": "ai",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-07-22T12:00:00.000Z",
+    "lastSeenAt": "2026-07-22T12:00:00.000Z"
   }
 ]

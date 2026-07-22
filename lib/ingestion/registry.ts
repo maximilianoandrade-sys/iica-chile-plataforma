@@ -42,25 +42,30 @@ import type { RawProject } from "./types";
 const TARGET_URLS = [
   "https://www.agci.cl/becas/becas-para-chilenos", // AGCID
   "https://www.sercotec.cl/programas/", // SERCOTEC
-  "https://www.goremet.cl/", // FNDR/GORE (Ejemplo GORE RM)
   "https://www.undp.org/es/chile/licitaciones", // PNUD Chile
   "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/home", // EuropeAid / Horizonte Europa
   "https://projectprocurement.iadb.org/es/procesos-de-adquisicion", // BID Procurement
   "https://www2.fundsforngos.org/",
-  "https://international.grantwatch.com/",
-  "https://www.forus-international.org/es/funding-opportunities",
-  "https://www.visegradfund.org/grants",
-  "https://www.developmentaid.org/", // DevelopmentAid
-  // Fuentes adicionales para ampliar cobertura (una oportunidad por URL vía LLM)
   "https://www.fosis.gob.cl/", // FOSIS (fondos territoriales/rural)
-  "https://www.goreohiggins.cl/", // GORE O'Higgins
-  "https://www.goremaule.cl/", // GORE del Maule
-  "https://www.gorebiobio.cl/", // GORE Biobío
-  "https://www.gorearaucania.cl/", // GORE La Araucanía
-  "https://www.goreloslagos.cl/", // GORE Los Lagos
-  "https://www.prochile.gob.cl/", // ProChile (apoyo a exportaciones)
-  "https://www.wfp.org/", // Programa Mundial de Alimentos
+  "https://www.prochile.gob.cl/", // ProChile
   "https://www.cgiar.org/", // CGIAR (investigación agrícola)
+  // ── 16 Gobiernos Regionales de Chile (FIC-R / FNDR / Transferencia Agrícola) ──
+  "https://www.gorearicayparinacota.cl/", // GORE Arica y Parinacota
+  "https://www.goretarapaca.gov.cl/",      // GORE Tarapacá
+  "https://www.goreantofagasta.cl/",      // GORE Antofagasta
+  "https://www.goreatacama.cl/",          // GORE Atacama
+  "https://www.gorecoquimbo.cl/",         // GORE Coquimbo
+  "https://www.gorevalparaiso.cl/",       // GORE Valparaíso
+  "https://www.goremet.cl/",              // GORE Región Metropolitana
+  "https://www.goreohiggins.cl/",         // GORE O'Higgins
+  "https://www.goremaule.cl/",            // GORE Maule
+  "https://www.gorenuble.cl/",            // GORE Ñuble
+  "https://www.gorebiobio.cl/",           // GORE Biobío
+  "https://www.gorearaucania.cl/",        // GORE La Araucanía
+  "https://www.gorelarios.cl/",           // GORE Los Ríos
+  "https://www.goreloslagos.cl/",         // GORE Los Lagos
+  "https://www.goreaysen.cl/",            // GORE Aysén
+  "https://www.goremagallanes.cl/",       // GORE Magallanes
 ];
 
 export const universalAiCrawler: Scraper = {
