@@ -238,6 +238,29 @@ export function rolIICAInfo(rol?: string): { text: string; bg: string; border: s
 import { cache } from 'react';
 import { getLogger } from '@/lib/utils/logger';
 import prisma from './prisma';
+import projectsJson from '../data/projects.json';
+
+function getStaticProjects(today: Date): Project[] {
+    const todayStr = today.toISOString().split('T')[0];
+    return (projectsJson as any[])
+        .filter(p => {
+            if ([103, 104, 106, 110, 113].includes(p.id)) return false;
+            if (p.publishable === false) return false;
+            if (p.relevanciaChile === false) return false;
+            if (p.estadoPostulacion === 'Cerrada') return false;
+            if (p.fecha_cierre && p.fecha_cierre < todayStr && !isDeadlineUnknown(p.fecha_cierre)) return false;
+            return true;
+        })
+        .map(p => ({
+            ...p,
+            fecha_cierre: p.fecha_cierre,
+            ambito: p.ambito as Project['ambito'],
+            estadoPostulacion: p.estadoPostulacion as Project['estadoPostulacion'],
+            viabilidadIICA: p.viabilidadIICA as Project['viabilidadIICA'],
+            rolIICA: p.rolIICA as Project['rolIICA'],
+            complejidad: p.complejidad as Project['complejidad']
+        })) as Project[];
+}
 
 const logger = getLogger('Data');
 
@@ -350,7 +373,9 @@ export async function getProjects(): Promise<GetProjectsResult> {
             complejidad: p.complejidad as Project['complejidad']
         })) as Project[];
 
-        return { ok: true, projects: deduplicateByUrl(mapped) };
+        const staticList = getStaticProjects(today);
+        const combined = deduplicateByUrl([...mapped, ...staticList]);
+        return { ok: true, projects: combined };
     } catch (error) {
         logger.error('getProjects Prisma/Supabase falló', error as Error);
         return { ok: false, error: (error as Error).message };
@@ -398,7 +423,19 @@ export async function getProjectFilterSnapshot(): Promise<GetProjectFilterSnapsh
             url_bases: project.url_bases,
         }));
 
-        const deduped = deduplicateByUrl(mapped);
+        const staticList = getStaticProjects(today).map(p => ({
+            id: p.id,
+            institucion: p.institucion,
+            monto: p.monto,
+            fecha_cierre: p.fecha_cierre,
+            estadoPostulacion: p.estadoPostulacion,
+            regiones: p.regiones || [],
+            region: p.region || null,
+            ambito: p.ambito || null,
+            categoria: p.categoria,
+            url_bases: p.url_bases,
+        }));
+        const deduped = deduplicateByUrl([...mapped, ...staticList]);
 
         return { ok: true, projects: deduped };
     } catch (error) {
