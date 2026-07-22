@@ -1,32 +1,5 @@
 import { getLogger } from '@/lib/utils/logger';
 const logger = getLogger('Script');
-/**
- * AI Discovery — Capa B del pipeline de ingesta IICA Chile
- *
- * Usa Gemini API (Google AI Studio) con grounding via Google Search.
- * Tier gratuito: 1500 requests/día en Gemini 2.5 Flash → más que suficiente
- * para el cron semanal.
- *
- * Estrategia en DOS PASOS para mejor calidad:
- *  1. Primer call CON googleSearch: pedir investigación en lenguaje natural
- *     (este paso encuentra info real y trae groundingMetadata).
- *  2. Segundo call SIN tools: convertir esa investigación a JSON estructurado
- *     (este paso es determinístico, no alucina URLs).
- *
- * Migrado de Anthropic Claude → Google Gemini porque Gemini tiene tier
- * gratuito robusto (no requiere tarjeta de crédito) y misma capacidad de
- * grounding via búsqueda web.
- *
- * Guardrails anti-alucinación (sin cambios respecto al original con Claude):
- *   - source_snippet textual obligatorio (>= 15 palabras)
- *   - URL debe resolver con HEAD (no 404, no redirect a homepage)
- *   - Snippet se guarda en notasInternas para auditoría humana
- *
- * Los proyectos descubiertos entran a BD con discoveredBy='ai' y needsReview=true.
- * Aparecen en la búsqueda con badge "🤖 Sin verificar".
- * El equipo IICA aprueba/descarta en /admin/discoveries.
- */
-
 import { GoogleGenAI } from "@google/genai";
 import prisma from "../lib/prisma";
 import { passesGuardrails, type AiResult } from "./discover-projects-lib";
@@ -34,34 +7,24 @@ import { normalizeUrl, parseSpanishDate, resolveShortUrl } from "../lib/ingestio
 
 const RESEARCH_PROMPT = `Investigá usando Google Search qué convocatorias de financiamiento agrícola están ABIERTAS HOY para el IICA Chile.
 
-FUENTES PRIORITARIAS (cobertura del scraper determinístico es PARCIAL en
-estas, así que tu rol es fundamental):
-- fontagro.org/iniciativas/convocatorias (Fondo Regional Tecnología
-  Agropecuaria — convocatorias 2026, IICA es miembro y puede liderar)
-- ifad.org / fida (operations/country/chile + en fondos como FO4IMPACT,
-  Rural Poverty Reduction Trust, oportunidades para Chile)
-- undp.org / pnud.cl (calls, funding opportunities Chile, especialmente
-  cambio climático, agricultura familiar y desarrollo rural)
-- fao.org/chile, fao.org/in-action/tcp (Programa Cooperación Técnica),
-  fao.org/agronoticias (convocatorias agrícolas LAC)
-- indap.gob.cl/convocatorias y indap.gob.cl/plataforma-de-servicios
-  (programas continuos: PRODESAL, PAP, PDI, PDTI — buscar postulaciones
-  vigentes y plazos por región)
+FUENTES PRIORITARIAS:
+- fontagro.org/iniciativas/convocatorias
+- ifad.org / fida (operations/country/chile + en fondos como FO4IMPACT)
+- undp.org / pnud.cl (calls, funding opportunities Chile)
+- fao.org/chile, fao.org/in-action/tcp
+- indap.gob.cl/convocatorias
 
-FUENTES SECUNDARIAS (ya cubiertas por scrapers determinísticos, evitá
-duplicar a menos que encuentres algo NUEVO que no esté listado):
-- fia.cl/convocatorias (ya scrapeado)
-- corfo.gob.cl/sites/cpp/convocatoria/ (ya scrapeado, solo Innovación)
-- cnr.gob.cl/agricultores/calendario-de-concurso/ (ya scrapeado)
-- iica.int/es/licitaciones (ya scrapeado)
+FUENTES SECUNDARIAS:
+- fia.cl/convocatorias
+- corfo.gob.cl/sites/cpp/convocatoria/
+- cnr.gob.cl/agricultores/calendario-de-concurso/
+- iica.int/es/licitaciones
 
 FUENTES COMPLEMENTARIAS:
-- iadb.org / BID (asistencia técnica agrícola, sector agropecuario Chile)
-- thegef.org / greenclimate.fund (adaptación climática, agricultura
-  resiliente Chile)
-- euroclima.org (cooperación UE-AL en cambio climático agrícola)
-- developmentaid.org (agregador de oportunidades de desarrollo)
-- agci.cl (Agencia Chilena de Cooperación Internacional al Desarrollo)
+- iadb.org / BID
+- thegef.org / greenclimate.fund
+- euroclima.org
+- agci.cl
 
 Para cada convocatoria que encuentres ABIERTA y vigente, dame:
 - Título exacto
@@ -71,7 +34,7 @@ Para cada convocatoria que encuentres ABIERTA y vigente, dame:
 - Snippet textual (al menos 15 palabras) tomado literalmente del search result
 - Breve descripción
 
-IMPORTANTE: Solo incluí convocatorias que efectivamente encontraste en los search results. Si una convocatoria YA CERRÓ, indicalo claramente (no la incluyas como abierta). Si no encontrás nada abierto, decilo.`;
+IMPORTANTE: Solo incluí convocatorias que efectivamente encontraste en los search results.`;
 
 const STRUCTURE_PROMPT = (research: string) => `A continuación tenés el resultado de una investigación sobre convocatorias agrícolas abiertas:
 
@@ -170,22 +133,32 @@ async function main() {
   const query = process.env.DISCOVERY_QUERY || "";
   logger.info(`[discover] modelo: gemini-2.5-flash · query: "${query || "(general)"}"`);
 
-  const aiSource = await prisma.source.findUnique({ where: { slug: "ai-discovery" } });
+  let aiSource: { id: number } | null = null;
+  try {
+    aiSource = await prisma.source.findUnique({ where: { slug: "ai-discovery" } });
+  } catch (err) {
+    logger.error(`[discover] Error de conexión con la base de datos: ${(err as Error).message}`);
+    logger.info(`[discover] Por favor verifica que DATABASE_URL en .env sea accesible.`);
+    process.exit(1);
+  }
+
   if (!aiSource) {
     logger.error("[discover] Source 'ai-discovery' no existe. Corré scripts/seed-sources.ts.");
     process.exit(1);
   }
 
-  let results: AiResult[];
+  let results: AiResult[] = [];
   try {
     results = await discover(query);
   } catch (err) {
     const msg = (err as Error).message;
     logger.error(`[discover] Gemini API error: ${msg}`);
-    await prisma.source.update({
-      where: { slug: "ai-discovery" },
-      data: { lastRunAt: new Date(), lastRunStatus: "error", lastRunError: msg.slice(0, 500) },
-    });
+    try {
+      await prisma.source.update({
+        where: { slug: "ai-discovery" },
+        data: { lastRunAt: new Date(), lastRunStatus: "error", lastRunError: msg.slice(0, 500) },
+      });
+    } catch {}
     await prisma.$disconnect();
     process.exit(1);
   }
@@ -198,16 +171,10 @@ async function main() {
   const discardReasons: string[] = [];
 
   for (const r of results) {
-    // Gemini a veces devuelve URLs sin protocolo (ej "www.fia.cl/..."). Las
-    // validateUrl falla porque no las puede parsear. Le agregamos https:// si
-    // arrancan con www/dominio.
     if (r.url && !/^https?:\/\//i.test(r.url) && /^[\w-]+\./.test(r.url)) {
       r.url = "https://" + r.url;
     }
 
-    // Si vino con acortador (bit.ly, t.co, etc.), resolvemos al destino real
-    // para que (a) el guardrail valide la URL final, (b) el dedup funcione
-    // por URL canónica y (c) el usuario vea la URL real en el botón.
     if (r.url) {
       r.url = await resolveShortUrl(r.url);
     }
@@ -225,48 +192,54 @@ async function main() {
       continue;
     }
 
-    const existing = await prisma.project.findUnique({ where: { canonicalUrl } });
-    if (existing) {
-      await prisma.project.update({
-        where: { canonicalUrl },
-        data: { lastSeenAt: new Date() },
-      });
-      updated++;
-      continue;
-    }
+    try {
+      const existing = await prisma.project.findUnique({ where: { canonicalUrl } });
+      if (existing) {
+        await prisma.project.update({
+          where: { canonicalUrl },
+          data: { lastSeenAt: new Date() },
+        });
+        updated++;
+        continue;
+      }
 
-    const deadline = r.deadline ? parseSpanishDate(r.deadline) : null;
-    await prisma.project.create({
-      data: {
-        canonicalUrl,
-        url_bases: r.url,
-        nombre: r.title,
-        institucion: r.institution || "Por confirmar",
-        objetivo: r.description || "",
-        fecha_cierre: deadline ?? new Date("2099-12-31"),
-        monto: 0,
-        estado: "Abierto",
-        categoria: "AI Discovery",
-        notasInternas: `AI snippet (Gemini): "${r.source_snippet.slice(0, 200)}..."`,
-        discoveredBy: "ai",
-        needsReview: true,
-        sourceRefId: aiSource.id,
-        estadoPostulacion: "Abierta",
-        ambito: "Internacional",
-      },
-    });
-    inserted++;
+      const deadline = r.deadline ? parseSpanishDate(r.deadline) : null;
+      await prisma.project.create({
+        data: {
+          canonicalUrl,
+          url_bases: r.url,
+          nombre: r.title,
+          institucion: r.institution || "Por confirmar",
+          objetivo: r.description || "",
+          fecha_cierre: deadline ?? new Date("2099-12-31"),
+          monto: 0,
+          estado: "Abierto",
+          categoria: "AI Discovery",
+          notasInternas: `AI snippet (Gemini): "${r.source_snippet.slice(0, 200)}..."`,
+          discoveredBy: "ai",
+          needsReview: true,
+          sourceRefId: aiSource.id,
+          estadoPostulacion: "Abierta",
+          ambito: "Internacional",
+        },
+      });
+      inserted++;
+    } catch (err) {
+      logger.warn(`[discover] Error al guardar proyecto ${canonicalUrl}: ${(err as Error).message}`);
+    }
   }
 
-  await prisma.source.update({
-    where: { slug: "ai-discovery" },
-    data: {
-      lastRunAt: new Date(),
-      lastRunStatus: results.length > 0 && discarded === results.length ? "error" : "success",
-      lastRunError: discardReasons.slice(0, 5).join("\n") || null,
-      projectsCount: inserted + updated,
-    },
-  });
+  try {
+    await prisma.source.update({
+      where: { slug: "ai-discovery" },
+      data: {
+        lastRunAt: new Date(),
+        lastRunStatus: results.length > 0 && discarded === results.length ? "error" : "success",
+        lastRunError: discardReasons.slice(0, 5).join("\n") || null,
+        projectsCount: inserted + updated,
+      },
+    });
+  } catch {}
 
   logger.info(`[discover] Insertados: ${inserted}, Actualizados: ${updated}, Descartados: ${discarded}`);
   if (discarded > 0) {
@@ -278,6 +251,6 @@ async function main() {
 }
 
 main().catch((e) => {
-  logger.error(e);
+  logger.error(`[discover] Error inesperado: ${e?.message || e}`);
   process.exit(1);
 });
