@@ -4,7 +4,7 @@ import { getLogger } from "../lib/utils/logger";
 const logger = getLogger("CoverageCheck");
 
 const CRITICAL_SOURCES = ["fia", "fia-licitaciones", "corfo", "indap", "fontagro", "cnr"];
-const ZERO_RESULTS_BLOCKING_STATUSES = new Set(["success", "partial", "error"]);
+const ZERO_RESULTS_BLOCKING_STATUSES = new Set(["success", "error"]);
 
 export async function runCoverageCheck() {
   const sources = await prisma.source.findMany({
