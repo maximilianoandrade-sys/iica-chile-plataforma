@@ -56,14 +56,105 @@ async function fetchCorfoMonto(url: string): Promise<string | null> {
   }
 }
 
+interface ConvocatoriasAjaxConfig {
+  ajaxurl: string;
+  nonce: string;
+  searchParam?: string;
+  postType?: string;
+}
+
+function parseConvocatoriasAjaxConfig(html: string): ConvocatoriasAjaxConfig | null {
+  const match = html.match(/var\s+convocatoriasAjax\s*=\s*(\{[\s\S]*?\});/);
+  if (!match) return null;
+
+  try {
+    return JSON.parse(match[1]) as ConvocatoriasAjaxConfig;
+  } catch {
+    return null;
+  }
+}
+
+function parseCorfoDateLoose(s: string): Date | null {
+  const normalized = s.trim();
+  const exact = parseCorfoDate(normalized);
+  if (exact) return exact;
+
+  const m = normalized.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if (!m) return null;
+  const [, d, mo, y] = m;
+  const date = new Date(Date.UTC(Number(y), Number(mo) - 1, Number(d), 12, 0, 0));
+  return isNaN(date.getTime()) ? null : date;
+}
+
+function extractProjectsFromCorfoHtml(html: string, partialErrors: string[]): RawProject[] {
+  const $ = load(html);
+  const projects: RawProject[] = [];
+
+  const cards = $(".caja-resultados_uno").length > 0 ? $(".caja-resultados_uno") : $(".cuadro-completo_fase2");
+
+  cards.each((_, el) => {
+    try {
+      const $card = $(el);
+      const isAjaxCard = $card.hasClass("caja-resultados_uno");
+
+      const title = isAjaxCard
+        ? cleanText($card.find(".titulo-cajas_fechas h4").first().text())
+        : cleanText($card.find(".cuerpo-titulo_fase2").first().text());
+
+      if (!title || title.length < 4) return;
+
+      const href = isAjaxCard
+        ? $card.find(".foot-caja_result a").first().attr("href")
+        : $card.find(".cuadro-completo_fase2-info a").first().attr("href");
+
+      if (!href) {
+        partialErrors.push(`sin href: ${title}`);
+        return;
+      }
+
+      const url = absoluteUrl(href, "https://www.corfo.gob.cl/");
+      if (!url.match(/corfo\.(gob\.)?cl/)) return;
+
+      const deadlineText = isAjaxCard
+        ? cleanText($card.find(".cierre span").first().text())
+        : cleanText($card.find(".box-cierre p").first().text());
+      const deadline = parseCorfoDateLoose(deadlineText);
+
+      const description = isAjaxCard
+        ? cleanText($card.find(".contenido-caja_prog p").first().text()).slice(0, 400)
+        : cleanText($card.find(".cuerpo-texto_fase2").first().text()).slice(0, 400);
+
+      const subtitle = isAjaxCard
+        ? cleanText($card.find("h5 em").first().text())
+        : cleanText($card.find(".cuerpo-titulo_fase2-subtitulo").first().text());
+
+      projects.push({
+        title,
+        institution: "CORFO",
+        url,
+        canonicalKey: url,
+        deadline,
+        description: subtitle ? `${subtitle}. ${description}` : description,
+        ambito: "Nacional",
+        opportunityType: "Programa",
+        tags: ["CORFO", "Innovación", "Programa"],
+      });
+    } catch (err) {
+      partialErrors.push(`parse: ${(err as Error).message}`);
+    }
+  });
+
+  return projects;
+}
+
 export const corfoScraper: Scraper = {
   slug: "corfo",
   name: "CORFO",
   // CORFO migró de corfo.cl a corfo.gob.cl. La página de listado real es
-  // /sites/cpp/convocatorias_programas_innovacion/ (otras secciones como
+  // /sites/cpp/programasyconvocatorias/ (otras secciones como
   // Emprendimiento existen pero usan formato JS-rendered; este listing es
   // el más confiable de extraer con Cheerio).
-  homepageUrl: "https://www.corfo.gob.cl/sites/cpp/convocatorias_programas_innovacion/",
+  homepageUrl: "https://www.corfo.gob.cl/sites/cpp/programasyconvocatorias/",
 
   async scrape(): Promise<ScraperResult> {
     const sourceSlug = this.slug;
@@ -71,15 +162,15 @@ export const corfoScraper: Scraper = {
     const partialErrors: string[] = [];
 
     try {
-      const listingUrls = [
+      const listingCandidates = [
         this.homepageUrl,
-        "https://www.corfo.gob.cl/sites/cpp/convocatorias_programas_innovacion",
+        "https://www.corfo.gob.cl/sites/cpp/convocatorias_programas_innovacion/",
       ];
 
-      let pages: string[] = [];
-      for (const listingUrl of listingUrls) {
+      let listingHtml = "";
+      for (const listingUrl of listingCandidates) {
         try {
-          const res = await fetchWithRetry(
+          const listingResponse = await fetchWithRetry(
             listingUrl,
             {
               headers: {
@@ -89,66 +180,68 @@ export const corfoScraper: Scraper = {
             3,
             600,
           );
-          pages = [await res.text()];
+          listingHtml = await listingResponse.text();
           break;
         } catch (err) {
           partialErrors.push(`listing fetch: ${(err as Error).message}`);
         }
       }
 
-      if (pages.length === 0) throw new Error("No CORFO listing pages available");
+      const ajaxConfig = parseConvocatoriasAjaxConfig(listingHtml);
 
       const mergedProjects: RawProject[] = [];
-      for (const html of pages) {
-        const $ = load(html);
 
-        // Cada convocatoria está en un div.cuadro-completo_fase2
-        $(".cuadro-completo_fase2").each((_, el) => {
-          try {
-            const $card = $(el);
+      if (!ajaxConfig?.ajaxurl || !ajaxConfig?.nonce) {
+        mergedProjects.push(...extractProjectsFromCorfoHtml(listingHtml, partialErrors));
+      } else {
+        const formBase = {
+          action: "filter_convocatorias",
+          post_type: ajaxConfig.postType || "convocatoria",
+          nonce: ajaxConfig.nonce,
+        };
 
-            // Título: <span class="cuerpo-titulo_fase2">...</span>
-            const title = cleanText($card.find(".cuerpo-titulo_fase2").first().text());
-            if (!title || title.length < 4) {
-              return; // sin título, skip
-            }
+        const pageOneResponse = await fetchWithRetry(
+          ajaxConfig.ajaxurl,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+              "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15",
+            },
+            body: new URLSearchParams({ ...formBase, page: "1" }),
+          },
+          3,
+          600,
+        );
 
-            // URL: enlace en .cuadro-completo_fase2-info
-            const $link = $card.find(".cuadro-completo_fase2-info a").first();
-            const href = $link.attr("href");
-            if (!href) {
-              partialErrors.push(`sin href: ${title}`);
-              return;
-            }
-            const url = absoluteUrl(href, "https://www.corfo.gob.cl/");
-            // Aceptamos tanto corfo.cl como corfo.gob.cl (corfo.cl redirige)
-            if (!url.match(/corfo\.(gob\.)?cl/)) return;
+        const pageOneJson = await pageOneResponse.json() as { found?: number; html?: string };
+        const pageOneHtml = pageOneJson.html || "";
+        const pageOneProjects = extractProjectsFromCorfoHtml(pageOneHtml, partialErrors);
+        mergedProjects.push(...pageOneProjects);
 
-            // Fecha de cierre: <div class="box-cierre"><h6>Cierre</h6><p>DD/MM/YYYY</p></div>
-            const deadlineText = cleanText($card.find(".box-cierre p").first().text());
-            const deadline = parseCorfoDate(deadlineText);
+        const totalFound = typeof pageOneJson.found === "number" ? pageOneJson.found : pageOneProjects.length;
+        const pageSize = pageOneProjects.length > 0 ? pageOneProjects.length : 10;
+        const totalPages = Math.max(1, Math.ceil(totalFound / pageSize));
 
-            // Descripción: <div class="cuerpo-texto_fase2">...</div>
-            const description = cleanText($card.find(".cuerpo-texto_fase2").first().text()).slice(0, 400);
+        for (let page = 2; page <= totalPages; page++) {
+          const pageResponse = await fetchWithRetry(
+            ajaxConfig.ajaxurl,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15",
+              },
+              body: new URLSearchParams({ ...formBase, page: String(page) }),
+            },
+            3,
+            600,
+          );
 
-            // Subtítulo (alcance geográfico): "Alcance: Todo Chile"
-            const subtitle = cleanText($card.find(".cuerpo-titulo_fase2-subtitulo").first().text());
-
-            mergedProjects.push({
-              title,
-              institution: "CORFO",
-              url,
-              canonicalKey: url,
-              deadline,
-              description: subtitle ? `${subtitle}. ${description}` : description,
-              ambito: "Nacional",
-              opportunityType: "Programa",
-              tags: ["CORFO", "Innovación", "Programa"],
-            });
-          } catch (err) {
-            partialErrors.push(`parse: ${(err as Error).message}`);
-          }
-        });
+          const pageJson = await pageResponse.json() as { html?: string };
+          if (!pageJson.html) break;
+          mergedProjects.push(...extractProjectsFromCorfoHtml(pageJson.html, partialErrors));
+        }
       }
 
       const unique = new Map<string, RawProject>();
@@ -160,7 +253,7 @@ export const corfoScraper: Scraper = {
 
       if (projects.length === 0) {
         partialErrors.push(
-          "No matching .cuadro-completo_fase2 elements found — CORFO may have changed structure"
+          "No matching CORFO results found — the listing structure or AJAX endpoint may have changed"
         );
       }
     } catch (err) {
