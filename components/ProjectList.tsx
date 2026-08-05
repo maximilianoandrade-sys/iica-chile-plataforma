@@ -108,7 +108,7 @@ export default function ProjectList({
                 ? 'border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-800 dark:bg-amber-900/30 dark:text-amber-200'
                 : 'border-iica-border bg-iica-blue/10 text-iica-navy dark:text-blue-300'
             }`}>
-              {relevanceMode === 'all' ? 'Mostrando internacionales no verificadas' : 'Solo Chile (estricto)'}
+              {relevanceMode === 'all' ? 'Mostrando todo el universo disponible' : 'Solo Chile (estricto)'}
             </span>
             {relevanceMode === 'all' ? (
               <button
@@ -116,7 +116,7 @@ export default function ProjectList({
                 onClick={handleBackToChile}
                 className="text-xs font-medium text-iica-blue hover:underline min-h-[44px] px-2"
               >
-                Volver a Solo Chile
+                Volver a solo Chile
               </button>
             ) : (
               <button
@@ -124,7 +124,7 @@ export default function ProjectList({
                 onClick={handleViewAll}
                 className="text-xs font-medium text-iica-blue hover:underline min-h-[44px] px-2"
               >
-                Ver todas
+                Ver todo
               </button>
             )}
           </div>
@@ -305,7 +305,7 @@ export default function ProjectList({
               onClick={handleViewAll}
               className="inline-flex items-center justify-center rounded-full border border-amber-200 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/30 px-4 py-2 text-sm font-medium text-amber-900 dark:text-amber-200 hover:bg-amber-100 min-h-[44px]"
             >
-              Incluir internacionales
+              Ver todo el universo disponible
             </button>
           ) : null}
           {activeFilterLabels.length > 0 && (
