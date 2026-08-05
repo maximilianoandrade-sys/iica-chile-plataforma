@@ -140,16 +140,21 @@ export default async function DashboardPage({
     }
   });
 
-  const latestSourceRun = await prisma.source.findFirst({
-    where: { lastRunAt: { not: null } },
-    orderBy: { lastRunAt: 'desc' },
-    select: { lastRunAt: true },
-  });
-
-  const lastUpdatedAt = latestSourceRun?.lastRunAt?.toISOString() ?? null;
-
   // Build filter facet counts for the search bar (rendered outside main for immediate sticky)
   const filterCounts = buildFilterCounts(filterSnapshot);
+
+  let lastUpdatedAt: string | null = null;
+  try {
+    const latestSourceRun = await prisma.source.findFirst({
+      where: { lastRunAt: { not: null } },
+      orderBy: { lastRunAt: 'desc' },
+      select: { lastRunAt: true },
+    });
+
+    lastUpdatedAt = latestSourceRun?.lastRunAt?.toISOString() ?? null;
+  } catch {
+    lastUpdatedAt = null;
+  }
 
   return (
     <>

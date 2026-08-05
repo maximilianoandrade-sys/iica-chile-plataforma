@@ -393,6 +393,8 @@ export async function getProjectFilterSnapshot(): Promise<GetProjectFilterSnapsh
             where: {
                 fecha_cierre: { gte: today },
                 NOT: { estadoPostulacion: 'Cerrada' },
+                publishable: true,
+                relevanciaChile: true,
                 id: { notIn: FAKE_PROJECT_IDS },
             },
             orderBy: { fecha_cierre: 'asc' },
