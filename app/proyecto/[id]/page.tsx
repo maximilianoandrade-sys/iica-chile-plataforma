@@ -4,15 +4,15 @@ import type { Metadata } from 'next';
 import { getProjects, displayMonto, formatDeadline, pluralizeDias } from '@/lib/data';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { EligibilityAssistant } from '@/components/EligibilityAssistant';
+import { CalendarReminderButton } from '@/components/CalendarReminderButton';
 import Link from 'next/link';
 import { ExternalLink, ArrowLeft, Calendar, CheckCircle, Info, MapPin, Users, DollarSign } from 'lucide-react';
 
 const getCachedProjects = cache(getProjects);
-// ponytail: VERCEL_URL is auto-set by Vercel; fallback for local dev
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL
     || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
 
-/** Escapes </ sequences to prevent XSS in JSON-LD script injection */
 function safeJsonLd(obj: Record<string, unknown>): string {
     return JSON.stringify(obj).replace(/</g, '\\u003c');
 }
@@ -78,8 +78,6 @@ export default async function ProyectoDetallePage({ params }: Props) {
     const diffDays = Math.ceil((closingDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
     const isUrgent = diffDays <= 7 && diffDays >= 0;
 
-    // Prefiere montoTexto (string crudo con unidad: "8.500 UF", "USD 50,000")
-    // sobre el numérico, que asume CLP y pierde la unidad real.
     const montoDisplay = displayMonto(project);
     const montoFormatted = montoDisplay === 'Ver bases' ? 'Consultar institución' : montoDisplay;
     const EN_VALIDACION = 'en validación editorial';
@@ -95,60 +93,6 @@ export default async function ProyectoDetallePage({ params }: Props) {
         ? meaningfulBeneficiarios.slice(0, 2).join(', ')
         : null;
     const projectUrl = `${SITE_URL}/proyecto/${id}`;
-    const deadlineIso = new Date(project.fecha_cierre).toISOString();
-
-    const governmentGrantJsonLd = {
-        '@context': 'https://schema.org',
-        '@type': 'GovernmentGrant',
-        name: project.nombre,
-        description: project.resumen?.observaciones || `Convocatoria de ${project.institucion}`,
-        url: projectUrl,
-        funder: {
-            '@type': 'GovernmentOrganization',
-            name: project.institucion,
-        },
-        provider: {
-            '@type': 'Organization',
-            name: 'IICA Chile',
-            url: SITE_URL,
-        },
-        applicationDeadline: deadlineIso,
-        areaServed: {
-            '@type': 'Country',
-            name: 'Chile',
-        },
-    };
-
-    const breadcrumbJsonLd = {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-            {
-                '@type': 'ListItem',
-                position: 1,
-                name: 'Inicio',
-                item: SITE_URL,
-            },
-            {
-                '@type': 'ListItem',
-                position: 2,
-                name: 'Oportunidades',
-                item: `${SITE_URL}/#convocatorias`,
-            },
-            {
-                '@type': 'ListItem',
-                position: 3,
-                name: project.institucion,
-                item: `${SITE_URL}/#convocatorias`,
-            },
-            {
-                '@type': 'ListItem',
-                position: 4,
-                name: project.nombre,
-                item: projectUrl,
-            },
-        ],
-    };
 
     return (
         <div className="min-h-screen flex flex-col bg-[#f4f7f9] dark:bg-gray-900">
@@ -172,18 +116,22 @@ export default async function ProyectoDetallePage({ params }: Props) {
 
                     {/* Header del fondo */}
                     <div className="bg-gradient-to-r from-[var(--iica-navy)] to-[var(--iica-blue)] p-8 text-white">
-                        <div className="flex flex-wrap gap-2 mb-4">
-                            <span className="bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full border border-white/30">
-                                {project.categoria}
-                            </span>
-                            <span className={`text-xs font-bold px-3 py-1 rounded-full border ${isClosed
-                                    ? 'bg-red-500/20 border-red-300/30 text-red-100'
-                                    : isUrgent
-                                        ? 'bg-amber-500/20 border-amber-300/30 text-amber-100'
-                                        : 'bg-green-500/20 border-green-300/30 text-green-100'
-                                }`}>
-                                {isClosed ? <><span aria-hidden="true">🔴</span> Cerrado</> : isUrgent ? <><span aria-hidden="true">⚠️</span> Cierra en {pluralizeDias(diffDays)}</> : <><span aria-hidden="true">🟢</span> Abierto</>}
-                            </span>
+                        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+                            <div className="flex flex-wrap gap-2">
+                                <span className="bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full border border-white/30">
+                                    {project.categoria}
+                                </span>
+                                <span className={`text-xs font-bold px-3 py-1 rounded-full border ${isClosed
+                                        ? 'bg-red-500/20 border-red-300/30 text-red-100'
+                                        : isUrgent
+                                            ? 'bg-amber-500/20 border-amber-300/30 text-amber-100'
+                                            : 'bg-green-500/20 border-green-300/30 text-green-100'
+                                    }`}>
+                                    {isClosed ? <><span aria-hidden="true">🔴</span> Cerrado</> : isUrgent ? <><span aria-hidden="true">⚠️</span> Cierra en {pluralizeDias(diffDays)}</> : <><span aria-hidden="true">🟢</span> Abierto</>}
+                                </span>
+                            </div>
+
+                            <CalendarReminderButton project={project} />
                         </div>
                         <h1 className="text-2xl md:text-3xl font-extrabold leading-tight mb-3">
                             {project.nombre}
@@ -234,6 +182,9 @@ export default async function ProyectoDetallePage({ params }: Props) {
                     {/* Contenido detallado */}
                     <div className="p-6 md:p-8 space-y-8">
 
+                        {/* Asistente de Elegibilidad Rápidas */}
+                        <EligibilityAssistant project={project} />
+
                         {/* Cofinanciamiento */}
                         {project.resumen?.cofinanciamiento && (
                             <div className="bg-blue-50 rounded-xl p-5 border border-blue-100">
@@ -274,107 +225,28 @@ export default async function ProyectoDetallePage({ params }: Props) {
                             </div>
                         )}
 
-                        {/* Requisitos clave */}
-                        {project.resumen?.requisitos_clave && project.resumen.requisitos_clave.length > 0 && (
+                        {/* Botón Bases Oficiales */}
+                        <div className="pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
                             <div>
-                                <h2 className="font-bold text-[var(--iica-navy)] mb-4 flex items-center gap-2 text-lg">
-                                    <Info className="h-5 w-5 text-[var(--iica-blue)]" />
-                                    Requisitos Clave
-                                </h2>
-                                <ul className="space-y-2">
-                                    {project.resumen.requisitos_clave.map((req: string, idx: number) => (
-                                        <li key={idx} className="flex items-start gap-3 text-gray-700">
-                                            <span className="w-6 h-6 rounded-full bg-[var(--iica-blue)] text-white text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
-                                                {idx + 1}
-                                            </span>
-                                            <span>{req}</span>
-                                        </li>
-                                    ))}
-                                </ul>
+                                <h3 className="font-bold text-[var(--iica-navy)]">¿Listo para postular?</h3>
+                                <p className="text-xs text-gray-500">Accede directamente al portal oficial de la institución.</p>
                             </div>
-                        )}
-
-                        {/* Plazo y observaciones */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {project.resumen?.plazo_ejecucion && (
-                                <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
-                                    <h3 className="font-bold text-gray-700 mb-1 text-sm"><span aria-hidden="true">⏱️</span> Plazo de Ejecución</h3>
-                                    <p className="text-gray-600">{project.resumen.plazo_ejecucion}</p>
-                                </div>
-                            )}
-                            {project.resumen?.observaciones && (
-                                <div className="bg-amber-50 rounded-xl p-4 border border-amber-100">
-                                    <h3 className="font-bold text-gray-700 mb-1 text-sm"><span aria-hidden="true">ℹ️</span> Observaciones</h3>
-                                    <p className="text-gray-600 text-sm">{project.resumen.observaciones}</p>
-                                </div>
-                            )}
+                            <a
+                                href={project.url_bases}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] text-white font-extrabold px-6 py-3 rounded-xl transition-all shadow-md min-h-[44px]"
+                            >
+                                Ver Bases en Sitio Oficial
+                                <ExternalLink className="h-4 w-4" />
+                            </a>
                         </div>
 
-                        {/* Regiones completas */}
-                        {hasRegions && !meaningfulRegiones.includes('Todas') && (
-                            <div>
-                                <h2 className="font-bold text-[var(--iica-navy)] mb-3 text-lg">📍 Regiones Elegibles</h2>
-                                <div className="flex flex-wrap gap-2">
-                                    {meaningfulRegiones.map((region: string) => (
-                                        <span key={region} className="px-3 py-1 bg-blue-50 text-[var(--iica-navy)] text-sm font-medium rounded-full border border-blue-100">
-                                            {region}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Beneficiarios completos */}
-                        {hasBeneficiaries && (
-                            <div>
-                                <h2 className="font-bold text-[var(--iica-navy)] mb-3 text-lg">👥 Beneficiarios Elegibles</h2>
-                                <div className="flex flex-wrap gap-2">
-                                    {meaningfulBeneficiarios.map((ben: string) => (
-                                        <span key={ben} className="px-3 py-1 bg-green-50 text-green-700 text-sm font-medium rounded-full border border-green-100">
-                                            {ben}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* CTA Principal */}
-                        <div className="border-t border-gray-100 pt-6 space-y-4">
-                            {project.url_bases && project.url_bases.trim() !== '' ? (
-                                <a
-                                    href={project.url_bases}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    aria-label={`Ver bases y postular a ${project.nombre}`}
-                                    className="flex items-center justify-center gap-2 w-full sm:w-auto sm:inline-flex px-6 py-3 min-h-[44px] bg-green-600 hover:bg-green-700 text-white font-bold text-lg rounded-xl shadow-md transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                                >
-                                    <ExternalLink className="h-5 w-5" />
-                                    Ver Bases / Postular
-                                </a>
-                            ) : (
-                                <p className="text-gray-500 italic">
-                                    Consulte directamente con {project.institucion} para más información.
-                                </p>
-                            )}
-                            <p className="text-sm text-gray-500">
-                                Verifica siempre las fechas y requisitos en el sitio oficial antes de postular.
-                            </p>
-                        </div>
                     </div>
                 </div>
             </main>
 
             <Footer />
-
-            {/* JSON-LD Structured Data */}
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: safeJsonLd(governmentGrantJsonLd) }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbJsonLd) }}
-            />
         </div>
     );
 }

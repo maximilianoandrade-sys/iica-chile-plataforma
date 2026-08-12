@@ -81,7 +81,15 @@ const URGENCY_STYLES: Record<
   },
 };
 
-export function ProjectCard({ project }: { project: Project }) {
+export function ProjectCard({ 
+  project, 
+  onToggleCompare, 
+  isSelectedForComparison = false 
+}: { 
+  project: Project;
+  onToggleCompare?: (project: Project) => void;
+  isSelectedForComparison?: boolean;
+}) {
   const { text: deadlineText, detail: deadlineDetail, urgency } = formatDeadlineStatus(project);
   const monto = formatMonto(project);
   const region = project.regiones?.[0] ?? project.region ?? null;
@@ -103,6 +111,8 @@ export function ProjectCard({ project }: { project: Project }) {
     <article
       aria-label={project.nombre}
       className={`group relative flex flex-col rounded-xl border bg-white dark:bg-gray-800 overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 ${styles.border} ${
+        isSelectedForComparison ? 'ring-2 ring-blue-500 border-blue-500' : ''
+      } ${
         urgency === 'closed'
           ? 'opacity-60 border-gray-100 dark:border-gray-700'
           : 'border-gray-200 dark:border-gray-700 hover:border-[var(--iica-blue)]/50 dark:hover:border-blue-500/50'
@@ -118,9 +128,27 @@ export function ProjectCard({ project }: { project: Project }) {
               {project.institucion}
             </span>
           </div>
-          {/* Badge estado & Favorite */}
+          {/* Badge estado, Compare checkbox & Favorite */}
           <div className="flex flex-col items-end gap-2 shrink-0 z-10 relative">
             <div className="flex items-center gap-2">
+              {onToggleCompare && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onToggleCompare(project);
+                  }}
+                  className={`px-2 py-0.5 rounded text-[11px] font-bold border transition-colors ${
+                    isSelectedForComparison
+                      ? 'bg-blue-600 text-white border-blue-600'
+                      : 'bg-gray-100 text-gray-700 border-gray-300 dark:bg-gray-700 dark:text-gray-300 hover:bg-blue-50'
+                  }`}
+                  title="Seleccionar para comparar lado a lado"
+                >
+                  {isSelectedForComparison ? '✓ Comparando' : '+ Comparar'}
+                </button>
+              )}
               <span
                 className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold whitespace-nowrap ${styles.badge}`}
               >

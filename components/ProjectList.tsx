@@ -3,9 +3,11 @@
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useTransition, useState } from 'react';
 import Link from 'next/link';
-import { LayoutGrid, List, Calendar, ArrowRight, ExternalLink, ShieldCheck } from 'lucide-react';
+import { LayoutGrid, List, Calendar, ArrowRight, ExternalLink, ShieldCheck, Download } from 'lucide-react';
 import { ProjectCard } from '@/components/ProjectCard';
 import { FavoriteButton } from '@/components/FavoriteButton';
+import { TenderComparator } from '@/components/TenderComparator';
+import { exportProjectsToCsv } from '@/lib/utils/exportCsv';
 import { getLogger } from '@/lib/utils/logger';
 import { type Project, daysUntilClose, formatDeadline, formatMontoCLP } from '@/lib/data';
 
@@ -30,6 +32,7 @@ export default function ProjectList({
   const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
+  const [selectedForComparison, setSelectedForComparison] = useState<Project[]>([]);
 
   const hasQuery = Boolean(searchParams.get('q')?.trim());
   const sort = searchParams.get('sort') || (hasQuery ? 'relevance' : 'date_asc');
@@ -78,6 +81,20 @@ export default function ProjectList({
     const qs = params.toString();
     startTransition(() => {
       router.push(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+    });
+  };
+
+  const handleToggleCompare = (project: Project) => {
+    setSelectedForComparison((prev) => {
+      const exists = prev.some((p) => p.id === project.id);
+      if (exists) {
+        return prev.filter((p) => p.id !== project.id);
+      }
+      if (prev.length >= 3) {
+        alert('Puedes comparar hasta 3 convocatorias simultáneamente.');
+        return prev;
+      }
+      return [...prev, project];
     });
   };
 
@@ -130,7 +147,18 @@ export default function ProjectList({
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Export CSV Button */}
+          <button
+            type="button"
+            onClick={() => exportProjectsToCsv(projects)}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold bg-emerald-50 dark:bg-emerald-900/30 hover:bg-emerald-100 text-emerald-800 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-700 transition-all min-h-[44px] cursor-pointer"
+            title="Exportar listado actual a Excel / CSV"
+          >
+            <Download size={15} className="text-emerald-600 dark:text-emerald-400" />
+            <span className="hidden sm:inline">Exportar Excel</span>
+          </button>
+
           {/* Dual View Toggle Switcher */}
           <div className="flex items-center rounded-lg border border-iica-border bg-gray-50 dark:bg-gray-700/50 p-1" role="group" aria-label="Modo de vista">
             <button
@@ -211,7 +239,11 @@ export default function ProjectList({
             <ul className="grid grid-cols-1 gap-4 md:grid-cols-2" aria-label="Resultados de oportunidades">
               {paginated.map((project) => (
                 <li key={project.id} className="list-none">
-                  <ProjectCard project={project} />
+                  <ProjectCard
+                    project={project}
+                    onToggleCompare={handleToggleCompare}
+                    isSelectedForComparison={selectedForComparison.some((sp) => sp.id === project.id)}
+                  />
                 </li>
               ))}
             </ul>
@@ -374,6 +406,13 @@ export default function ProjectList({
           </div>
         </nav>
       )}
+
+      {/* Tender Comparator Drawer/Modal */}
+      <TenderComparator
+        selectedProjects={selectedForComparison}
+        onRemoveProject={(id) => setSelectedForComparison((prev) => prev.filter((p) => p.id !== id))}
+        onClear={() => setSelectedForComparison([])}
+      />
     </div>
   );
 }
