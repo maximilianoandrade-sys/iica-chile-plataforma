@@ -46,7 +46,7 @@ describe('ProjectList accessibility', () => {
     render(<ProjectList projects={projects} totalCount={1} />);
     expect(screen.getByRole('combobox', { name: /Ordenar por/i })).toBeInTheDocument();
     expect(screen.getByText(/Solo Chile \(estricto\)/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Ver todas/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Ver todo/i })).toBeInTheDocument();
   });
 
   it('has sort control with label', () => {
@@ -79,7 +79,7 @@ describe('ProjectList accessibility', () => {
   it('shows strict relevance badge by default', () => {
     render(<ProjectList projects={projects} totalCount={1} />);
     expect(screen.getByText(/Solo Chile \(estricto\)/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Ver todas/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Ver todo/i })).toBeInTheDocument();
   });
 
   it('shows active filters and clear action in empty state', () => {
@@ -103,7 +103,7 @@ describe('ProjectList accessibility', () => {
   it('offers include-international action in empty strict mode', () => {
     render(<ProjectList projects={[]} totalCount={0} />);
 
-    const expandButton = screen.getByRole('button', { name: /Incluir internacionales/i });
+    const expandButton = screen.getByRole('button', { name: /Ver todo el universo disponible/i });
     fireEvent.click(expandButton);
 
     expect(pushMock).toHaveBeenCalledWith('/?relevanceMode=all', { scroll: false });
@@ -113,7 +113,7 @@ describe('ProjectList accessibility', () => {
     mockSearchParams = new URLSearchParams('relevanceMode=all');
     render(<ProjectList projects={[]} totalCount={0} />);
 
-    const strictButton = screen.getByRole('button', { name: /Volver a Solo Chile/i });
+    const strictButton = screen.getByRole('button', { name: /Volver a solo Chile/i });
     fireEvent.click(strictButton);
 
     expect(pushMock).toHaveBeenCalledWith('/', { scroll: false });
