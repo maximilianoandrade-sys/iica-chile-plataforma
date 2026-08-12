@@ -29,6 +29,7 @@ const SOURCES = [
   { slug: "minagri-licitaciones", name: "MINAGRI — Licitaciones MercadoPublico", type: "scraper", homepageUrl: "https://www.mercadopublico.cl/Portal/FeedOrg.aspx?qs=Mer+eNmLUHn7TN5dx6I0Mg==" },
   { slug: "inia",             name: "INIA — Instituto de Investigaciones Agropecuarias", type: "scraper", homepageUrl: "https://www.inia.cl/licitaciones/" },
   { slug: "global-south-opportunities", name: "Global South Opportunities (Aggregator)", type: "scraper", homepageUrl: "https://www.globalsouthopportunities.com/" },
+  { slug: "curated-external-2026", name: "Oportunidades Internacionales Verificadas 2026", type: "curated", homepageUrl: "https://github.com/maximilianoandrade-sys/iica-chile-plataforma" },
 ];
 
 async function main() {
