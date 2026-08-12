@@ -85,6 +85,11 @@ const TARGET_URLS = [
   "https://apps.iica.int/agtech-accelerator/", // IICA AgTech Accelerator
   "https://www.nwo.nl/en/researchprogrammes/kic/kic-ai-for-agriculture-food", // NWO KIC AI Agriculture
   "https://convocatoria.fia.cl/", // FIA Chile Innovación IA Agro
+  // ── Adaptación Climática, Recursos Hídricos y Relaciones Bilaterales 2026 ──
+  "https://globalebafund.org/grants/", // Global EbA Fund
+  "https://www.dfat.gov.au/people-to-people/foundations-councils-institutes/coalar/grants", // COALAR Australia
+  "https://www.cnr.gob.cl/concursos-oua/", // CNR OUA Chile
+  "https://www.dga.mop.gob.cl/fiie/", // FIIE Recursos Hídricos Chile
 ];
 
 export const universalAiCrawler: Scraper = {

@@ -57,6 +57,10 @@ const registry: InstitutionEntry[] = [
   { slug: "horizon-ai-agro", sigla: "AI-AGRO", path: null, sourceType: null, brandColor: "#0D47A1" },
   { slug: "iica-agtech", sigla: "AGTECH", path: "/logos/official/iica.png", sourceType: null, brandColor: "#002060" },
   { slug: "nwo-kic-ai", sigla: "NWO-AI", path: null, sourceType: null, brandColor: "#2E7D32" },
+  { slug: "global-eba-fund", sigla: "EBA-FUND", path: null, sourceType: null, brandColor: "#2E7D32" },
+  { slug: "coalar-australia", sigla: "COALAR", path: null, sourceType: null, brandColor: "#E65100" },
+  { slug: "cnr-oua", sigla: "CNR-OUA", path: "/logos/official/cnr.svg", sourceType: null, brandColor: "#006699" },
+  { slug: "fiie-chile", sigla: "FIIE", path: null, sourceType: null, brandColor: "#0277BD" },
 ];
 
 // Name variants for matching
@@ -78,6 +82,13 @@ const nameAliases: Record<string, string> = {
   "future for nature": "future-for-nature",
   "future for nature foundation": "future-for-nature",
   "ffn": "future-for-nature",
+  "global eba fund": "global-eba-fund",
+  "eba fund": "global-eba-fund",
+  "coalar": "coalar-australia",
+  "coalar australia": "coalar-australia",
+  "cnr oua": "cnr-oua",
+  "fiie": "fiie-chile",
+  "fiie chile": "fiie-chile",
   "generacción climática": "generaccion-climatica",
   "generaccion climatica": "generaccion-climatica",
   "microsoft ai for earth": "microsoft-ai-earth",

@@ -46,6 +46,10 @@ const SOURCES = [
   { slug: "horizon-ai-agro",  name: "Horizon Europe — AI & Robotics in Agriculture", type: "scraper", homepageUrl: "https://rea.ec.europa.eu/" },
   { slug: "iica-agtech",      name: "IICA AgTech Accelerator & Semana Agricultura Digital", type: "scraper", homepageUrl: "https://iica.int/" },
   { slug: "nwo-kic-ai",       name: "NWO KIC — AI for Agriculture, Food & Water", type: "scraper", homepageUrl: "https://www.nwo.nl/" },
+  { slug: "global-eba-fund",  name: "Global EbA Fund — Adaptación Basada en Ecosistemas", type: "scraper", homepageUrl: "https://globalebafund.org/" },
+  { slug: "coalar-australia", name: "COALAR — Council on Australia-Latin America Relations", type: "scraper", homepageUrl: "https://www.dfat.gov.au/coalar" },
+  { slug: "cnr-oua",          name: "CNR Chile — Fondo Concursable para OUA", type: "scraper", homepageUrl: "https://www.cnr.gob.cl/" },
+  { slug: "fiie-chile",       name: "FIIE Chile — Fondo de Investigación e Innovación en Recursos Hídricos", type: "scraper", homepageUrl: "https://www.dga.mop.gob.cl/" },
 ];
 
 async function main() {

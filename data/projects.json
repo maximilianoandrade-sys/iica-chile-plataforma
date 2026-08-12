@@ -9045,5 +9045,260 @@
     "relevanciaChile": true,
     "firstSeenAt": "2026-08-12T14:00:00.000Z",
     "lastSeenAt": "2026-08-12T14:00:00.000Z"
+  },
+  {
+    "id": 939,
+    "nombre": "Global EbA Fund — Adaptación Basada en Ecosistemas y Resiliencia Agrícola 2026-2027",
+    "institucion": "Global EbA Fund — Adaptación Basada en Ecosistemas",
+    "monto": 500000,
+    "montoTexto": "USD 50.000 – 500.000",
+    "fecha_cierre": "2026-11-15",
+    "estado": "Abierto",
+    "categoria": "Sostenibilidad y Cambio Climático",
+    "url_bases": "https://globalebafund.org/grants/",
+    "regiones": [
+      "América Latina y el Caribe",
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "ONGs",
+      "Organizaciones de Productores",
+      "Consorcios Locales"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": true,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "ONGs",
+      "Organizaciones Comunitarias",
+      "Consorcios"
+    ],
+    "checklist": [
+      "Propuesta de solución basada en naturaleza (EbA)",
+      "Plan de monitoreo de biodiversidad y suelos"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 95,
+    "objetivo": "Subvenciones directas para escalar soluciones de adaptación climática basadas en ecosistemas en sistemas agrícolas y de cuenca.",
+    "descripcionIICA": "IICA actúa como facilitador de transferencia técnica y articulador entre gobiernos locales y organizaciones campesinas.",
+    "requisitos": [
+      "Demostrar impacto directo en la resiliencia hídrica y la biodiversidad agrícola",
+      "Enfoque de co-diseño con comunidades rurales"
+    ],
+    "fortalezas": [
+      "100% Subvención no reembolsable",
+      "Proceso de postulación por fases"
+    ],
+    "debilidades": [
+      "Competencia internacional alta"
+    ],
+    "complejidad": "Media",
+    "rolIICA": "Implementador",
+    "createdAt": "2026-08-12T14:30:00.000Z",
+    "updatedAt": "2026-08-12T14:30:00.000Z",
+    "lastCheckedAt": "2026-08-12T14:30:00.000Z",
+    "canonicalUrl": "https://globalebafund.org/grant-call-2026",
+    "sourceRefId": 48,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T14:30:00.000Z",
+    "lastSeenAt": "2026-08-12T14:30:00.000Z"
+  },
+  {
+    "id": 940,
+    "nombre": "COALAR Grants — Innovación en Gestión Hídrica y Descarbonización Agrícola Australia-LAC",
+    "institucion": "COALAR — Council on Australia-Latin America Relations",
+    "monto": 200000,
+    "montoTexto": "AUD 50.000 – 200.000",
+    "fecha_cierre": "2026-10-30",
+    "estado": "Abierto",
+    "categoria": "Riego y Recursos Hídricos",
+    "url_bases": "https://www.dfat.gov.au/people-to-people/foundations-councils-institutes/coalar/grants",
+    "regiones": [
+      "América Latina y el Caribe",
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "Universidades",
+      "Centros de Investigación",
+      "Asociaciones Agrícolas"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "en",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Universidades",
+      "Centros I+D",
+      "Consorcios Bilaterales"
+    ],
+    "checklist": [
+      "Carta de acuerdo con institución australiana asociada",
+      "Propuesta en gestión sostenible de cuencas o descarbonización"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 91,
+    "objetivo": "Fondo bilateral de cooperación para transferir tecnologías de eficiencia hídrica, ciencia del agua y reducción de emisiones en la agricultura entre Australia y América Latina.",
+    "descripcionIICA": "IICA co-gestiona el componente de pilotaje en terreno y enlace con ministerios de agricultura de la región.",
+    "requisitos": [
+      "Asociación formal entre al menos una entidad australiana y una latinoamericana",
+      "Cofinanciamiento mínimo del 20% en especie o fondos propios"
+    ],
+    "fortalezas": [
+      "Transferencia directa de tecnología hídrica avanzada",
+      "Respaldo diplomático DFAT Australia"
+    ],
+    "debilidades": [
+      "Requiere socio australiano confirmado"
+    ],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "createdAt": "2026-08-12T14:30:00.000Z",
+    "updatedAt": "2026-08-12T14:30:00.000Z",
+    "lastCheckedAt": "2026-08-12T14:30:00.000Z",
+    "canonicalUrl": "https://www.dfat.gov.au/coalar-grant-2026",
+    "sourceRefId": 49,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T14:30:00.000Z",
+    "lastSeenAt": "2026-08-12T14:30:00.000Z"
+  },
+  {
+    "id": 941,
+    "nombre": "CNR Chile — Fondo Concursable para Organizaciones de Usuarios de Agua (OUA 2026-2027)",
+    "institucion": "CNR Chile — Fondo Concursable para OUA",
+    "monto": 6000000,
+    "montoTexto": "Hasta $6.000.000 CLP",
+    "fecha_cierre": "2026-09-20",
+    "estado": "Abierto",
+    "categoria": "Riego y Recursos Hídricos",
+    "url_bases": "https://www.cnr.gob.cl/concursos-oua/",
+    "regiones": [
+      "Chile",
+      "Todas las regiones"
+    ],
+    "beneficiarios": [
+      "Juntas de Vigilancia",
+      "Asociaciones de Canalistas",
+      "Comunidades de Aguas"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Organizaciones de Usuarios de Agua (OUA)"
+    ],
+    "checklist": [
+      "Registro de OUA al día en CNR y DGA",
+      "Presupuesto cotizado para aforo, software o paneles fotovoltaicos"
+    ],
+    "ambito": "Nacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 97,
+    "objetivo": "Financiamiento no reembolsable para adquisición de activos, telemetría, software de gestión hídrica y energía solar en organizaciones de usuarios de agua de Chile.",
+    "descripcionIICA": "IICA acompaña a las OUA en la formulación de carpetas técnicas y capacitación en uso de telemetría.",
+    "requisitos": [
+      "Estar legalmente constituida como OUA en Chile",
+      "Propuesta orientada a la eficiencia en distribución del agua de riego"
+    ],
+    "fortalezas": [
+      "100% Subvención no reembolsable",
+      "Proceso de postulación simplificado"
+    ],
+    "debilidades": [],
+    "complejidad": "Baja",
+    "rolIICA": "Asesor",
+    "createdAt": "2026-08-12T14:30:00.000Z",
+    "updatedAt": "2026-08-12T14:30:00.000Z",
+    "lastCheckedAt": "2026-08-12T14:30:00.000Z",
+    "canonicalUrl": "https://www.cnr.gob.cl/concurso-oua-2026",
+    "sourceRefId": 50,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T14:30:00.000Z",
+    "lastSeenAt": "2026-08-12T14:30:00.000Z"
+  },
+  {
+    "id": 942,
+    "nombre": "FIIE Chile — Fondo de Investigación, Innovación y Educación en Recursos Hídricos 2026",
+    "institucion": "FIIE Chile — Fondo de Investigación e Innovación en Recursos Hídricos",
+    "monto": 120000000,
+    "montoTexto": "Hasta $120.000.000 CLP",
+    "fecha_cierre": "2026-10-15",
+    "estado": "Abierto",
+    "categoria": "Riego y Recursos Hídricos",
+    "url_bases": "https://www.dga.mop.gob.cl/fiie/",
+    "regiones": [
+      "Chile",
+      "Todas las regiones"
+    ],
+    "beneficiarios": [
+      "Universidades",
+      "Centros I+D",
+      "Consorcios Hídricos"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Universidades",
+      "Centros de Investigación"
+    ],
+    "checklist": [
+      "Formulación de proyecto I+D+i en seguridad hídrica",
+      "Convenio de colaboración público-privada"
+    ],
+    "ambito": "Nacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 94,
+    "objetivo": "Financiamiento de I+D para proyectos de seguridad hídrica, modelos de recarga artificial de acuíferos y soluciones tecnológicas para cuencas prioritarias.",
+    "descripcionIICA": "El IICA participa como co-investigador de transferencia técnica y vinculación sectorial.",
+    "requisitos": [
+      "Cofinanciamiento institucional del 15%",
+      "Generar herramientas aplicables a la gestión pública del agua"
+    ],
+    "fortalezas": [
+      "Alto financiamiento nacional en recursos hídricos",
+      "Vínculo directo con la DGA y Ministerio de Obras Públicas"
+    ],
+    "debilidades": [
+      "Evaluación técnica rigurosa"
+    ],
+    "complejidad": "Media",
+    "rolIICA": "Implementador",
+    "createdAt": "2026-08-12T14:30:00.000Z",
+    "updatedAt": "2026-08-12T14:30:00.000Z",
+    "lastCheckedAt": "2026-08-12T14:30:00.000Z",
+    "canonicalUrl": "https://www.dga.mop.gob.cl/fiie-2026",
+    "sourceRefId": 51,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T14:30:00.000Z",
+    "lastSeenAt": "2026-08-12T14:30:00.000Z"
   }
 ]
