@@ -145,10 +145,4 @@ export function getLogoFallbackSvg(sigla: string, brandColor: string, size: numb
   return `data:image/svg+xml,${encodeURIComponent(svg)}`;
 }
 
-// Backward compat: keep old fallback name working
-export function getLogoFallback(nombre: string | null | undefined, size: number = 40): string {
-  const resolved = nombre ? getInstitutionalLogo(nombre) : { sigla: "?", brandColor: "#546E7A" };
-  return getLogoFallbackSvg(resolved.sigla, resolved.brandColor, size);
-}
-
 export { registry as institutionRegistry };

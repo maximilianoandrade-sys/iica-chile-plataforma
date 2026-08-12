@@ -141,11 +141,18 @@ export function ProjectCard({ project }: { project: Project }) {
           {project.nombre}
         </Link>
 
-        {isLikelyInternational && (
-          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold border border-blue-200 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/30 text-[var(--iica-navy)] dark:text-blue-300">
-            <span aria-hidden="true">🌎</span> Internacional
-          </span>
-        )}
+        <div className="flex flex-wrap items-center gap-1.5 mt-2">
+          {isLikelyInternational && (
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold border border-blue-200 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/30 text-[var(--iica-navy)] dark:text-blue-300">
+              <span aria-hidden="true">🌎</span> Internacional
+            </span>
+          )}
+          {project.requiere_cofinanciamiento === false && (
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300">
+              <span aria-hidden="true">🌱</span> 100% Subvención (Sin Cofinanciamiento)
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Meta info — Amount + Deadline prominent, Region secondary */}
