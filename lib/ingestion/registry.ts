@@ -90,6 +90,11 @@ const TARGET_URLS = [
   "https://www.dfat.gov.au/people-to-people/foundations-councils-institutes/coalar/grants", // COALAR Australia
   "https://www.cnr.gob.cl/concursos-oua/", // CNR OUA Chile
   "https://www.dga.mop.gob.cl/fiie/", // FIIE Recursos Hídricos Chile
+  // ── Biodiversidad, Montaña y Cadenas Agroalimentarias Resilientes 2026/2027 ──
+  "https://www.unep.org/resources/small-grants/mountains-adapt", // UNEP Mountains ADAPT
+  "https://www.international-climate-initiative.com/en/find-funding/", // IKI Climate Initiative
+  "https://www.innovationbridge.info/funding/power-of-diversity", // Power of Diversity Grants
+  "https://www.caf.com/es/actualidad/convocatorias/", // CAF Banco de Desarrollo
 ];
 
 export const universalAiCrawler: Scraper = {

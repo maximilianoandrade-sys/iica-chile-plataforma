@@ -50,6 +50,10 @@ const SOURCES = [
   { slug: "coalar-australia", name: "COALAR — Council on Australia-Latin America Relations", type: "scraper", homepageUrl: "https://www.dfat.gov.au/coalar" },
   { slug: "cnr-oua",          name: "CNR Chile — Fondo Concursable para OUA", type: "scraper", homepageUrl: "https://www.cnr.gob.cl/" },
   { slug: "fiie-chile",       name: "FIIE Chile — Fondo de Investigación e Innovación en Recursos Hídricos", type: "scraper", homepageUrl: "https://www.dga.mop.gob.cl/" },
+  { slug: "unep-mountains-adapt", name: "PNUMA / UNEP — Mountains ADAPT Small Grants", type: "scraper", homepageUrl: "https://www.unep.org/" },
+  { slug: "iki-small-grants", name: "IKI — International Climate Initiative (BMUV Alemania)", type: "scraper", homepageUrl: "https://www.international-climate-initiative.com/" },
+  { slug: "power-of-diversity", name: "Power of Diversity Grants — Cadenas Agroalimentarias Resilientes", type: "scraper", homepageUrl: "https://www.innovationbridge.info/" },
+  { slug: "caf-banco-desarrollo", name: "CAF — Banco de Desarrollo de América Latina y el Caribe", type: "scraper", homepageUrl: "https://www.caf.com/" },
 ];
 
 async function main() {

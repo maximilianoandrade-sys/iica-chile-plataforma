@@ -9300,5 +9300,260 @@
     "relevanciaChile": true,
     "firstSeenAt": "2026-08-12T14:30:00.000Z",
     "lastSeenAt": "2026-08-12T14:30:00.000Z"
+  },
+  {
+    "id": 943,
+    "nombre": "PNUMA / UNEP — Mountains ADAPT Small Grants de Adaptación Agrícola 2026-2027",
+    "institucion": "PNUMA / UNEP — Mountains ADAPT Small Grants",
+    "monto": 30000,
+    "montoTexto": "USD 10.000 – 30.000",
+    "fecha_cierre": "2026-11-20",
+    "estado": "Abierto",
+    "categoria": "Sostenibilidad y Cambio Climático",
+    "url_bases": "https://www.unep.org/resources/small-grants/mountains-adapt",
+    "regiones": [
+      "América Latina y el Caribe",
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "ONGs Locales",
+      "Organizaciones Comunitarias",
+      "Asociaciones de Montaña"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "ONGs",
+      "Organizaciones Comunitarias"
+    ],
+    "checklist": [
+      "Propuesta de solución adaptativa en cuenca de montaña",
+      "Participación de familias campesinas e indígenas"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 92,
+    "objetivo": "Subsidios de impacto rápido para protección de biodiversidad, restauración de vegetación nativa y resiliencia de cultivos en laderas y zonas de montaña.",
+    "descripcionIICA": "IICA actúa como entidad articuladora para replicabilidad metodológica y capacitación en conservación de suelos.",
+    "requisitos": [
+      "Estar enfocado en ecosistemas frágiles de cuencas de montaña",
+      "Presupuesto ejecutable en un horizonte de 12 meses"
+    ],
+    "fortalezas": [
+      "100% Subvención no reembolsable",
+      "Acompañamiento técnico directo del PNUMA"
+    ],
+    "debilidades": [
+      "Monto acotado a escala comunitaria"
+    ],
+    "complejidad": "Baja",
+    "rolIICA": "Asesor",
+    "createdAt": "2026-08-12T14:35:00.000Z",
+    "updatedAt": "2026-08-12T14:35:00.000Z",
+    "lastCheckedAt": "2026-08-12T14:35:00.000Z",
+    "canonicalUrl": "https://www.unep.org/mountains-adapt-2026",
+    "sourceRefId": 52,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T14:35:00.000Z",
+    "lastSeenAt": "2026-08-12T14:35:00.000Z"
+  },
+  {
+    "id": 944,
+    "nombre": "IKI Small & Medium Grants — Iniciativa Climática Internacional para Agrobiodiversidad 2026-2027",
+    "institucion": "IKI — International Climate Initiative (Alemania)",
+    "monto": 2000000,
+    "montoTexto": "€ 600.000 – 2.000.000",
+    "fecha_cierre": "2026-12-15",
+    "estado": "Abierto",
+    "categoria": "Sostenibilidad y Cambio Climático",
+    "url_bases": "https://www.international-climate-initiative.com/en/find-funding/",
+    "regiones": [
+      "América Latina y el Caribe",
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "ONGs Locales",
+      "Consorcios Regionales",
+      "Centros de Investigación"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "en",
+    "faq_disponible": true,
+    "permite_adendas": true,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "ONGs",
+      "Centros I+D",
+      "Consorcios Internacionales"
+    ],
+    "checklist": [
+      "Perfil de proyecto con indicadores de mitigación o agrobiodiversidad",
+      "Consorcio público-privado o multisectorial"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 96,
+    "objetivo": "Financiamiento de gran escala del gobierno alemán para iniciativas de transformación agroecológica, protección de cuencas e innovación resiliente en el Sur Global.",
+    "descripcionIICA": "IICA co-lidera el componente regional de formulación técnica e implementación con Ministerios de Agricultura y Medio Ambiente.",
+    "requisitos": [
+      "Proyecto enfocado en país elegibles para ayuda oficial al desarrollo (ODA)",
+      "Cofinanciamiento institucional del 15%"
+    ],
+    "fortalezas": [
+      "Gran escala de financiamiento y prestigio internacional",
+      "Impacto multisectorial sostenido"
+    ],
+    "debilidades": [
+      "Exige formulación avanzada y detallada"
+    ],
+    "complejidad": "Alta",
+    "rolIICA": "Implementador",
+    "createdAt": "2026-08-12T14:35:00.000Z",
+    "updatedAt": "2026-08-12T14:35:00.000Z",
+    "lastCheckedAt": "2026-08-12T14:35:00.000Z",
+    "canonicalUrl": "https://www.international-climate-initiative.com/grants-2026",
+    "sourceRefId": 53,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T14:35:00.000Z",
+    "lastSeenAt": "2026-08-12T14:35:00.000Z"
+  },
+  {
+    "id": 945,
+    "nombre": "Power of Diversity — Grants de Resiliencia Climática en Cadenas Agroalimentarias 2026",
+    "institucion": "Power of Diversity Grants — Cadenas Agroalimentarias Resilientes",
+    "monto": 200000,
+    "montoTexto": "USD 100.000 – 200.000",
+    "fecha_cierre": "2026-10-20",
+    "estado": "Abierto",
+    "categoria": "Innovación y Bioeconomía",
+    "url_bases": "https://www.innovationbridge.info/funding/power-of-diversity",
+    "regiones": [
+      "América Latina y el Caribe",
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "Cooperativas Agrícolas",
+      "Productores",
+      "Startups Agtech"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Cooperativas",
+      "Startups",
+      "ONGs"
+    ],
+    "checklist": [
+      "Demostración de fortalecimiento de cultivo nativo o resiliente",
+      "Estrategia de comercialización y valor agregado"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 93,
+    "objetivo": "Subvenciones no reembolsables para impulsar la biodiversidad cultivada, diversificación productiva y acceso a mercados para pequeños productores agrícolas.",
+    "descripcionIICA": "IICA acompaña el fortalecimiento asociativo y las alianzas comerciales con mercados regionales.",
+    "requisitos": [
+      "Involucrar directamente a asociaciones de pequeños agricultores",
+      "Medir reducción de pérdidas poscosecha o eficiencia hídrica"
+    ],
+    "fortalezas": [
+      "100% Subvención directa al desarrollo productivo",
+      "Enfoque práctico de mercado"
+    ],
+    "debilidades": [],
+    "complejidad": "Baja",
+    "rolIICA": "Asesor",
+    "createdAt": "2026-08-12T14:35:00.000Z",
+    "updatedAt": "2026-08-12T14:35:00.000Z",
+    "lastCheckedAt": "2026-08-12T14:35:00.000Z",
+    "canonicalUrl": "https://www.innovationbridge.info/pod-agri-2026",
+    "sourceRefId": 54,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T14:35:00.000Z",
+    "lastSeenAt": "2026-08-12T14:35:00.000Z"
+  },
+  {
+    "id": 946,
+    "nombre": "CAF Banco de Desarrollo — Cooperación Técnica para Resiliencia Agroambiental en América Latina",
+    "institucion": "CAF — Banco de Desarrollo de América Latina y el Caribe",
+    "monto": 1000000,
+    "montoTexto": "USD 100.000 – 1.000.000",
+    "fecha_cierre": "2026-11-30",
+    "estado": "Abierto",
+    "categoria": "Desarrollo Territorial",
+    "url_bases": "https://www.caf.com/es/actualidad/convocatorias/",
+    "regiones": [
+      "América Latina y el Caribe",
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "Ministerios de Agricultura",
+      "Gobiernos Regionales",
+      "Consorcios"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": true,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Gobiernos Regionales",
+      "Organismos Públicos",
+      "Consorcios"
+    ],
+    "checklist": [
+      "Carta de interés de entidad pública o regional",
+      "Propuesta de estudio o pilotaje de resiliencia agroambiental"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 98,
+    "objetivo": "Cooperación técnica no reembolsable para diseño de políticas de gestión de cuencas, resiliencia agrícola y financiamiento verde silvoagropecuario.",
+    "descripcionIICA": "El IICA ejerce como agencia ejecutora técnica especializada para la implementación en países miembros de CAF.",
+    "requisitos": [
+      "Aval institucional de autoridad ministerial o regional",
+      "Impacto multiplicador en políticas públicas agropecuarias"
+    ],
+    "fortalezas": [
+      "Financiamiento no reembolsable de escala hemisférica",
+      "Alianza estratégica de largo plazo IICA-CAF"
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Ejecutor",
+    "createdAt": "2026-08-12T14:35:00.000Z",
+    "updatedAt": "2026-08-12T14:35:00.000Z",
+    "lastCheckedAt": "2026-08-12T14:35:00.000Z",
+    "canonicalUrl": "https://www.caf.com/convocatoria-agro-2026",
+    "sourceRefId": 55,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T14:35:00.000Z",
+    "lastSeenAt": "2026-08-12T14:35:00.000Z"
   }
 ]

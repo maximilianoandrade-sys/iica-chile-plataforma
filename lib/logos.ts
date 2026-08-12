@@ -61,6 +61,10 @@ const registry: InstitutionEntry[] = [
   { slug: "coalar-australia", sigla: "COALAR", path: null, sourceType: null, brandColor: "#E65100" },
   { slug: "cnr-oua", sigla: "CNR-OUA", path: "/logos/official/cnr.svg", sourceType: null, brandColor: "#006699" },
   { slug: "fiie-chile", sigla: "FIIE", path: null, sourceType: null, brandColor: "#0277BD" },
+  { slug: "unep-mountains-adapt", sigla: "UNEP-MNT", path: null, sourceType: null, brandColor: "#00B0FF" },
+  { slug: "iki-small-grants", sigla: "IKI", path: null, sourceType: null, brandColor: "#004D40" },
+  { slug: "power-of-diversity", sigla: "POD", path: null, sourceType: null, brandColor: "#6A1B9A" },
+  { slug: "caf-banco-desarrollo", sigla: "CAF", path: null, sourceType: null, brandColor: "#003366" },
 ];
 
 // Name variants for matching
@@ -88,6 +92,14 @@ const nameAliases: Record<string, string> = {
   "coalar australia": "coalar-australia",
   "cnr oua": "cnr-oua",
   "fiie": "fiie-chile",
+  "unep mountains adapt": "unep-mountains-adapt",
+  "unep": "unep-mountains-adapt",
+  "pnuma": "unep-mountains-adapt",
+  "iki": "iki-small-grants",
+  "iki small grants": "iki-small-grants",
+  "power of diversity": "power-of-diversity",
+  "caf": "caf-banco-desarrollo",
+  "caf banco de desarrollo": "caf-banco-desarrollo",
   "fiie chile": "fiie-chile",
   "generacción climática": "generaccion-climatica",
   "generaccion climatica": "generaccion-climatica",
