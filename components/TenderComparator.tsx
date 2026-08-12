@@ -1,9 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Scale, ExternalLink, Calendar, MapPin, Coins, ShieldCheck, Check } from 'lucide-react';
+import { X, Scale, ExternalLink, Calendar, MapPin, Coins, ShieldCheck, Sparkles, Check, Download, AlertCircle } from 'lucide-react';
 import type { Project } from '@/lib/data';
 import { InstitutionLogo } from '@/components/InstitutionLogo';
+import { CalendarReminderButton } from '@/components/CalendarReminderButton';
+import { exportProjectsToCsv } from '@/lib/utils/exportCsv';
 
 interface TenderComparatorProps {
   selectedProjects: Project[];
@@ -16,14 +18,27 @@ export function TenderComparator({ selectedProjects, onRemoveProject, onClear }:
 
   if (selectedProjects.length === 0) return null;
 
+  // Calculate highest amount or 100% subsidy project
+  const highestSubsidyId = selectedProjects.find(p => !p.requiere_cofinanciamiento)?.id ?? selectedProjects[0]?.id;
+
   return (
     <>
-      {/* Floating Action Bar */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-[var(--iica-navy)] dark:bg-gray-800 text-white px-5 py-3 rounded-2xl shadow-2xl border border-blue-400/40 flex items-center gap-4 animate-bounce-short">
+      {/* Glassmorphism Floating Dock Bar */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-[var(--iica-navy)]/95 dark:bg-gray-900/95 backdrop-blur-md text-white px-6 py-3.5 rounded-2xl shadow-2xl border border-blue-400/30 flex items-center gap-4 animate-fade-in max-w-[95vw] sm:max-w-auto">
+        
+        {/* Selected Logos Preview */}
+        <div className="hidden sm:flex items-center -space-x-2 overflow-hidden py-1">
+          {selectedProjects.map((p) => (
+            <div key={p.id} className="relative inline-block ring-2 ring-white dark:ring-gray-800 rounded-full bg-white p-1">
+              <InstitutionLogo nombre={p.institucion} size={24} />
+            </div>
+          ))}
+        </div>
+
         <div className="flex items-center gap-2">
-          <Scale className="w-5 h-5 text-[var(--iica-yellow)]" aria-hidden="true" />
-          <span className="text-xs font-extrabold">
-            {selectedProjects.length} {selectedProjects.length === 1 ? 'Convocatoria Seleccionada' : 'Convocatorias Seleccionadas'}
+          <Scale className="w-5 h-5 text-[var(--iica-yellow)] shrink-0" aria-hidden="true" />
+          <span className="text-xs font-extrabold whitespace-nowrap">
+            {selectedProjects.length} {selectedProjects.length === 1 ? 'Convocatoria' : 'Convocatorias'}
           </span>
         </div>
 
@@ -31,15 +46,25 @@ export function TenderComparator({ selectedProjects, onRemoveProject, onClear }:
           <button
             type="button"
             onClick={() => setIsOpen(true)}
-            className="px-4 py-2 bg-[var(--iica-yellow)] text-gray-900 hover:bg-yellow-400 font-extrabold text-xs rounded-xl transition-all shadow-md min-h-[44px] cursor-pointer"
+            className="px-4 py-2.5 bg-[var(--iica-yellow)] text-gray-900 hover:bg-yellow-400 font-extrabold text-xs rounded-xl transition-all shadow-md min-h-[44px] cursor-pointer flex items-center gap-1.5 whitespace-nowrap"
           >
-            ⚖️ Comparar Lado a Lado
+            <span>⚖️ Ver Comparativa Lado a Lado</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => exportProjectsToCsv(selectedProjects, 'Comparativa_Radar_IICA.csv')}
+            className="hidden md:flex items-center gap-1 px-3 py-2 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl transition-colors min-h-[44px]"
+            title="Exportar seleccionadas a Excel"
+          >
+            <Download className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Excel</span>
           </button>
           
           <button
             type="button"
             onClick={onClear}
-            className="p-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-xl transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="p-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-xl transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
             title="Limpiar selección"
             aria-label="Limpiar selección de comparación"
           >
@@ -50,124 +75,193 @@ export function TenderComparator({ selectedProjects, onRemoveProject, onClear }:
 
       {/* Comparison Modal Overlay */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-fade-in">
-          <div className="bg-white dark:bg-gray-900 border-2 border-blue-200 dark:border-gray-700 rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 relative">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 md:p-6 overflow-y-auto animate-fade-in">
+          <div className="bg-white dark:bg-gray-900 border-2 border-blue-200 dark:border-gray-800 rounded-3xl max-w-6xl w-full max-h-[92vh] overflow-hidden shadow-2xl flex flex-col relative">
             
-            {/* Header */}
-            <div className="flex items-center justify-between border-b pb-4 mb-6 dark:border-gray-700">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-5 md:p-6 border-b dark:border-gray-800 bg-gray-50/80 dark:bg-gray-800/50 shrink-0">
               <div className="flex items-center gap-3">
-                <div className="p-3 bg-blue-100 dark:bg-blue-900/50 text-[var(--iica-blue)] rounded-2xl">
+                <div className="p-3 bg-[var(--iica-navy)] text-[var(--iica-yellow)] rounded-2xl shadow-inner">
                   <Scale className="w-6 h-6" aria-hidden="true" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-extrabold text-[var(--iica-navy)] dark:text-white">
-                    Comparativa Lado a Lado de Convocatorias
+                  <h2 className="text-lg md:text-xl font-extrabold text-[var(--iica-navy)] dark:text-white flex items-center gap-2">
+                    Matriz Comparativa de Convocatorias
                   </h2>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
-                    Contraste directo de montos, plazos, cofinanciamiento y perfil de elegibilidad entre las opciones seleccionadas.
+                    Alineación fila por fila para contrastar montos, exigencia de cofinanciamiento, fechas y viabilidad IICA.
                   </p>
                 </div>
               </div>
 
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                className="p-2.5 text-gray-500 hover:text-gray-700 dark:hover:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors min-h-[44px] min-w-[44px]"
-                aria-label="Cerrar comparador"
-              >
-                <X className="w-6 h-6" />
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => exportProjectsToCsv(selectedProjects, 'Comparativa_Radar_IICA.csv')}
+                  className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-50 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-700 hover:bg-emerald-100 transition-colors min-h-[44px]"
+                >
+                  <Download className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                  <span>Exportar Excel</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                  className="p-2.5 text-gray-500 hover:text-gray-700 dark:hover:text-gray-200 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                  aria-label="Cerrar comparador"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
             </div>
 
-            {/* Comparison Grid Table */}
-            <div className={`grid grid-cols-1 md:grid-cols-${selectedProjects.length} gap-6`}>
-              {selectedProjects.map((p) => (
-                <div key={p.id} className="border-2 border-gray-200 dark:border-gray-700 rounded-2xl p-5 bg-gray-50/50 dark:bg-gray-800/40 flex flex-col justify-between relative">
-                  
-                  <button
-                    type="button"
-                    onClick={() => onRemoveProject(p.id)}
-                    className="absolute top-3 right-3 text-gray-400 hover:text-red-600 p-1.5 rounded-lg transition-colors"
-                    title="Quitar de la comparación"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-
-                  <div>
-                    {/* Header: Institution + Name */}
-                    <div className="flex items-center gap-2 mb-3">
-                      <InstitutionLogo nombre={p.institucion} size={32} />
-                      <span className="text-xs font-bold text-gray-600 dark:text-gray-300 truncate">{p.institucion}</span>
-                    </div>
-
-                    <h3 className="font-extrabold text-sm text-gray-900 dark:text-white mb-4 line-clamp-2">
-                      {p.nombre}
-                    </h3>
-
-                    {/* Attribute Rows */}
-                    <div className="space-y-4 text-xs border-t pt-4 dark:border-gray-700">
-                      {/* Monto */}
-                      <div>
-                        <span className="font-bold text-gray-500 uppercase tracking-wide block mb-1">Monto / Subvención</span>
-                        <span className="font-extrabold text-sm text-gray-900 dark:text-gray-100">
-                          {p.montoTexto || (p.monto ? `$${p.monto}` : 'Ver bases')}
-                        </span>
-                      </div>
-
-                      {/* Cofinanciamiento */}
-                      <div>
-                        <span className="font-bold text-gray-500 uppercase tracking-wide block mb-1">Cofinanciamiento</span>
-                        {p.requiere_cofinanciamiento ? (
-                          <span className="px-2.5 py-1 bg-amber-100 text-amber-900 dark:bg-amber-900/40 dark:text-amber-200 font-bold rounded-md">
-                            ⚠️ Exige aporte propio
-                          </span>
-                        ) : (
-                          <span className="px-2.5 py-1 bg-emerald-100 text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-200 font-bold rounded-md">
-                            🌱 100% Subvención (Sin aporte)
+            {/* Matrix Body — Synchronized Rows */}
+            <div className="overflow-x-auto p-4 md:p-6 flex-1">
+              <table className="w-full text-left border-collapse min-w-[700px]">
+                <thead>
+                  <tr className="border-b-2 border-gray-200 dark:border-gray-700">
+                    <th scope="col" className="w-48 p-4 text-xs font-extrabold uppercase text-gray-400 dark:text-gray-500 bg-gray-50/50 dark:bg-gray-800/30 rounded-tl-2xl">
+                      Criterio de Evaluación
+                    </th>
+                    {selectedProjects.map((p) => (
+                      <th key={p.id} className="p-4 text-left align-top bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-800 relative">
+                        {p.id === highestSubsidyId && (
+                          <span className="absolute top-2 right-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-200 border border-emerald-300">
+                            <Sparkles className="w-3 h-3 text-emerald-600" /> Destacado
                           </span>
                         )}
-                      </div>
 
-                      {/* Fecha de Cierre */}
-                      <div>
-                        <span className="font-bold text-gray-500 uppercase tracking-wide block mb-1">Fecha de Cierre</span>
-                        <span className="font-bold text-gray-800 dark:text-gray-200">
-                          {p.fecha_cierre}
-                        </span>
-                      </div>
+                        <button
+                          type="button"
+                          onClick={() => onRemoveProject(p.id)}
+                          className="text-xs text-gray-400 hover:text-red-500 font-bold mb-2 flex items-center gap-1"
+                          title="Quitar de la comparación"
+                        >
+                          <X className="w-3.5 h-3.5" /> Quitar
+                        </button>
 
-                      {/* Beneficiarios */}
-                      <div>
-                        <span className="font-bold text-gray-500 uppercase tracking-wide block mb-1">Perfil Elegible</span>
-                        <p className="text-gray-700 dark:text-gray-300 font-medium">
-                          {p.beneficiarios?.join(', ') || 'Consultar bases'}
-                        </p>
-                      </div>
+                        <div className="flex items-center gap-2 mb-2">
+                          <InstitutionLogo nombre={p.institucion} size={28} />
+                          <span className="text-xs font-extrabold text-gray-600 dark:text-gray-400 truncate">{p.institucion}</span>
+                        </div>
 
-                      {/* Rol IICA */}
-                      <div>
-                        <span className="font-bold text-gray-500 uppercase tracking-wide block mb-1">Rol IICA</span>
-                        <span className="font-extrabold text-blue-700 dark:text-blue-300">
-                          {p.rolIICA || 'Asesor'} (Viabilidad {p.viabilidadIICA})
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                        <h3 className="font-extrabold text-sm text-[var(--iica-navy)] dark:text-white line-clamp-2 leading-snug">
+                          {p.nombre}
+                        </h3>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
 
-                  {/* Actions Footer */}
-                  <div className="mt-6 pt-4 border-t dark:border-gray-700">
-                    <a
-                      href={p.url_bases}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-[var(--iica-navy)] hover:bg-blue-900 text-white font-bold text-xs rounded-xl transition-all min-h-[44px]"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      Ver Bases Oficiales
-                    </a>
-                  </div>
-                </div>
-              ))}
+                <tbody className="divide-y divide-gray-100 dark:divide-gray-800 text-xs">
+                  {/* Row 1: Monto Subvención */}
+                  <tr className="hover:bg-blue-50/30 dark:hover:bg-blue-900/10 transition-colors">
+                    <td className="p-4 font-extrabold text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-gray-800/30 flex items-center gap-2">
+                      <Coins className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                      Monto Máximo
+                    </td>
+                    {selectedProjects.map((p) => (
+                      <td key={p.id} className="p-4 font-extrabold text-sm text-gray-900 dark:text-gray-100 border-l border-gray-200 dark:border-gray-800">
+                        {p.montoTexto || (p.monto ? `$${p.monto.toLocaleString('es-CL')}` : 'Ver bases')}
+                      </td>
+                    ))}
+                  </tr>
+
+                  {/* Row 2: Cofinanciamiento */}
+                  <tr className="hover:bg-blue-50/30 dark:hover:bg-blue-900/10 transition-colors">
+                    <td className="p-4 font-extrabold text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-gray-800/30 flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                      Exigencia Cofinanciamiento
+                    </td>
+                    {selectedProjects.map((p) => (
+                      <td key={p.id} className="p-4 border-l border-gray-200 dark:border-gray-800">
+                        {p.requiere_cofinanciamiento ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-50 text-amber-900 dark:bg-amber-900/30 dark:text-amber-200 border border-amber-200">
+                            ⚠️ Aporte Propio Obligatorio
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-50 text-emerald-900 dark:bg-emerald-900/30 dark:text-emerald-200 border border-emerald-200">
+                            🌱 100% Subvención (Sin Aporte)
+                          </span>
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+
+                  {/* Row 3: Fecha Cierre */}
+                  <tr className="hover:bg-blue-50/30 dark:hover:bg-blue-900/10 transition-colors">
+                    <td className="p-4 font-extrabold text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-gray-800/30 flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                      Fecha de Cierre
+                    </td>
+                    {selectedProjects.map((p) => (
+                      <td key={p.id} className="p-4 border-l border-gray-200 dark:border-gray-800 font-bold text-gray-800 dark:text-gray-200">
+                        <div className="flex flex-col gap-1">
+                          <span>{p.fecha_cierre}</span>
+                          <CalendarReminderButton project={p} />
+                        </div>
+                      </td>
+                    ))}
+                  </tr>
+
+                  {/* Row 4: Cobertura Región */}
+                  <tr className="hover:bg-blue-50/30 dark:hover:bg-blue-900/10 transition-colors">
+                    <td className="p-4 font-extrabold text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-gray-800/30 flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                      Región / Cobertura
+                    </td>
+                    {selectedProjects.map((p) => (
+                      <td key={p.id} className="p-4 border-l border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 font-medium">
+                        {p.regiones?.join(', ') || p.region || p.ambito}
+                      </td>
+                    ))}
+                  </tr>
+
+                  {/* Row 5: Beneficiarios */}
+                  <tr className="hover:bg-blue-50/30 dark:hover:bg-blue-900/10 transition-colors">
+                    <td className="p-4 font-extrabold text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-gray-800/30">
+                      Perfil Elegible
+                    </td>
+                    {selectedProjects.map((p) => (
+                      <td key={p.id} className="p-4 border-l border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 font-medium">
+                        {p.beneficiarios?.join(', ') || 'Consultar en bases'}
+                      </td>
+                    ))}
+                  </tr>
+
+                  {/* Row 6: Rol IICA */}
+                  <tr className="hover:bg-blue-50/30 dark:hover:bg-blue-900/10 transition-colors">
+                    <td className="p-4 font-extrabold text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-gray-800/30">
+                      Rol IICA & Viabilidad
+                    </td>
+                    {selectedProjects.map((p) => (
+                      <td key={p.id} className="p-4 border-l border-gray-200 dark:border-gray-800 font-extrabold text-[var(--iica-navy)] dark:text-blue-300">
+                        {p.rolIICA || 'Asesor Técnico'} (Viabilidad {p.viabilidadIICA || 'Alta'})
+                      </td>
+                    ))}
+                  </tr>
+
+                  {/* Row 7: Acciones Directas */}
+                  <tr>
+                    <td className="p-4 font-extrabold text-gray-700 dark:text-gray-300 bg-gray-50/50 dark:bg-gray-800/30 rounded-bl-2xl">
+                      Acción
+                    </td>
+                    {selectedProjects.map((p) => (
+                      <td key={p.id} className="p-4 border-l border-gray-200 dark:border-gray-800">
+                        <a
+                          href={p.url_bases}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] text-white font-extrabold text-xs rounded-xl transition-all shadow-md min-h-[44px]"
+                        >
+                          <span>Ver Bases Oficiales</span>
+                          <ExternalLink className="w-4 h-4" />
+                        </a>
+                      </td>
+                    ))}
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
           </div>
