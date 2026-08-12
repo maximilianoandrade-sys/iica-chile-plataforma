@@ -39,6 +39,13 @@ const SOURCES = [
   { slug: "eu-life",           name: "EU LIFE Programme (CINEA)",                 type: "scraper", homepageUrl: "https://cinea.ec.europa.eu/programmes/life_en" },
   { slug: "cfc",              name: "CFC — Common Fund for Commodities",           type: "scraper", homepageUrl: "https://common-fund.org/" },
   { slug: "rainforest-trust", name: "Rainforest Trust — Protected Areas",        type: "scraper", homepageUrl: "https://www.rainforesttrust.org/" },
+  { slug: "microsoft-ai-earth", name: "Microsoft AI for Earth & Climate Grants", type: "scraper", homepageUrl: "https://www.microsoft.com/en-us/ai/ai-for-earth" },
+  { slug: "ifc-agritech",     name: "IFC World Bank — Agritech Modernization Fund", type: "scraper", homepageUrl: "https://www.ifc.org/" },
+  { slug: "fao-digital-agri", name: "FAO — Digital Agriculture & Innovation Hub", type: "scraper", homepageUrl: "https://www.fao.org/digital-agriculture/" },
+  { slug: "idrc-ai4d",        name: "IDRC Canada — AI for Development (AI4D)", type: "scraper", homepageUrl: "https://idrc-crdi.ca/" },
+  { slug: "horizon-ai-agro",  name: "Horizon Europe — AI & Robotics in Agriculture", type: "scraper", homepageUrl: "https://rea.ec.europa.eu/" },
+  { slug: "iica-agtech",      name: "IICA AgTech Accelerator & Semana Agricultura Digital", type: "scraper", homepageUrl: "https://iica.int/" },
+  { slug: "nwo-kic-ai",       name: "NWO KIC — AI for Agriculture, Food & Water", type: "scraper", homepageUrl: "https://www.nwo.nl/" },
 ];
 
 async function main() {

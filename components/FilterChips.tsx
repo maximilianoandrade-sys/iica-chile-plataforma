@@ -30,6 +30,7 @@ const CHILE_REGION_LABELS = new Set([
 ]);
 
 const SECTOR_OPTIONS = [
+  'Inteligencia Artificial y AgriTech',
   'Comercio Internacional',
   'Desarrollo Territorial',
   'Digitalización Agroalimentaria',

@@ -8662,5 +8662,388 @@
     "relevanciaChile": true,
     "firstSeenAt": "2026-08-12T12:00:00.000Z",
     "lastSeenAt": "2026-08-12T12:00:00.000Z"
+  },
+  {
+    "id": 933,
+    "nombre": "IFC World Bank — Agritech Modernization & AI Grant 2026",
+    "institucion": "IFC World Bank — Agritech Modernization Fund",
+    "monto": 2500000,
+    "montoTexto": "USD 100.000 – 2.500.000",
+    "fecha_cierre": "2026-10-10",
+    "estado": "Abierto",
+    "categoria": "Inteligencia Artificial y AgriTech",
+    "url_bases": "https://www.ifc.org/en/types/projects/agritech-modernization-fund",
+    "regiones": [
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "Startups AgriTech",
+      "Empresas Agrícolas",
+      "Cooperativas Digitales"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": true,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Startups AgriTech",
+      "Empresas de Innovación"
+    ],
+    "checklist": [
+      "Demostración de prototipo TRL 4 o superior",
+      "Modelo de negocio para pequeños agricultores",
+      "Plan de escalamiento en América Latina"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 95,
+    "objetivo": "Subvención e inversión directa para escalamiento de plataformas de agricultura de precisión, analítica predictiva de cultivos e inteligencia artificial aplicada al campo.",
+    "descripcionIICA": "El IICA actúa como socio de validación técnica y facilitador de pilotos en redes de cooperativas agrícolas en América Latina y el Caribe.",
+    "requisitos": [
+      "Proyecto de base tecnológica enfocado en eficiencia hídrica o productividad",
+      "Cofinanciamiento mínimo del 30% en especie o fondos propios"
+    ],
+    "fortalezas": [
+      "Alto volumen de financiamiento",
+      "Acceso a la red global del Banco Mundial e IICA"
+    ],
+    "debilidades": [
+      "Exige tracción técnica inicial probada"
+    ],
+    "complejidad": "Alta",
+    "rolIICA": "Implementador",
+    "createdAt": "2026-08-12T14:00:00.000Z",
+    "updatedAt": "2026-08-12T14:00:00.000Z",
+    "lastCheckedAt": "2026-08-12T14:00:00.000Z",
+    "canonicalUrl": "https://www.ifc.org/agritech-grant-2026",
+    "sourceRefId": 42,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T14:00:00.000Z",
+    "lastSeenAt": "2026-08-12T14:00:00.000Z"
+  },
+  {
+    "id": 934,
+    "nombre": "NWO KIC — Artificial Intelligence for Agriculture, Food & Water 2026",
+    "institucion": "NWO KIC — AI for Agriculture, Food & Water",
+    "monto": 1840000,
+    "montoTexto": "€ 600.000 – 1.840.000",
+    "fecha_cierre": "2026-09-18",
+    "estado": "Abierto",
+    "categoria": "Inteligencia Artificial y AgriTech",
+    "url_bases": "https://www.nwo.nl/en/researchprogrammes/kic/kic-ai-for-agriculture-food",
+    "regiones": [
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "Consorcios de Investigación",
+      "Universidades",
+      "Empresas Agtech"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "en",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Universidades",
+      "Centros I+D",
+      "Consorcios Internacionales"
+    ],
+    "checklist": [
+      "Consorcio público-privado constituido",
+      "Propuesta de IA explicable aplicada a cultivos o gestión del agua"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 92,
+    "objetivo": "Financiamiento de I+D para consorcios internacionales que desarrollen modelos de IA para sostenibilidad, horticultura de precisión y gestión inteligente de cuencas.",
+    "descripcionIICA": "El IICA participa como co-investigador regional y articulador de datos de campo en América Latina.",
+    "requisitos": [
+      "Al menos 2 entidades académicas y 1 socio de implementación agrícola",
+      "Plan de difusión en código abierto o transferencia tecnológica"
+    ],
+    "fortalezas": [
+      "Prestigioso fondo marco internacional en IA",
+      "Cofinanciamiento flexible"
+    ],
+    "debilidades": [
+      "Requiere formulación en inglés"
+    ],
+    "complejidad": "Alta",
+    "rolIICA": "Asesor",
+    "createdAt": "2026-08-12T14:00:00.000Z",
+    "updatedAt": "2026-08-12T14:00:00.000Z",
+    "lastCheckedAt": "2026-08-12T14:00:00.000Z",
+    "canonicalUrl": "https://www.nwo.nl/kic-ai-agro-2026",
+    "sourceRefId": 43,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T14:00:00.000Z",
+    "lastSeenAt": "2026-08-12T14:00:00.000Z"
+  },
+  {
+    "id": 935,
+    "nombre": "IICA AgTech Accelerator & Semana Agricultura Digital 2026",
+    "institucion": "IICA AgTech Accelerator & Semana Agricultura Digital",
+    "monto": 50000,
+    "montoTexto": "Financiamiento + Mentoría IICA",
+    "fecha_cierre": "2026-09-30",
+    "estado": "Abierto",
+    "categoria": "Inteligencia Artificial y AgriTech",
+    "url_bases": "https://apps.iica.int/agtech-accelerator/",
+    "regiones": [
+      "América Latina y el Caribe",
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "Startups AgriTech",
+      "Emprendedores Rurales",
+      "Asociaciones de Agricultores"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Startups AgriTech",
+      "Emprendedores Tecnológicos"
+    ],
+    "checklist": [
+      "Solución de IA o agricultura digital funcionando",
+      "Video demostrativo de pitch técnico"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 99,
+    "objetivo": "Aceleración, validación en terreno y conexión con fondos de inversión para soluciones de IA, imágenes satelitales y robótica desarrolladas en las Américas.",
+    "descripcionIICA": "Liderado directamente por la Dirección Hemisférica del IICA en alianza con Microsoft y el Banco Interamericano de Desarrollo (BID).",
+    "requisitos": [
+      "Solución orientada a la eficiencia hídrica, sanidad o acceso a mercados",
+      "Disponibilidad para participar en la Semana de la Agricultura Digital 2026"
+    ],
+    "fortalezas": [
+      "100% Subvención (sin costo para la startup)",
+      "Red directa de contactos institucionales en 34 países"
+    ],
+    "debilidades": [],
+    "complejidad": "Baja",
+    "rolIICA": "Ejecutor",
+    "createdAt": "2026-08-12T14:00:00.000Z",
+    "updatedAt": "2026-08-12T14:00:00.000Z",
+    "lastCheckedAt": "2026-08-12T14:00:00.000Z",
+    "canonicalUrl": "https://apps.iica.int/agtech-accelerator-2026",
+    "sourceRefId": 44,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T14:00:00.000Z",
+    "lastSeenAt": "2026-08-12T14:00:00.000Z"
+  },
+  {
+    "id": 936,
+    "nombre": "Microsoft AI for Earth & Climate — Grants de Computación Nube para el Agro 2026",
+    "institucion": "Microsoft AI for Earth & Climate Grants",
+    "monto": 100000,
+    "montoTexto": "USD 10.000 – 100.000",
+    "fecha_cierre": "2026-11-30",
+    "estado": "Abierto",
+    "categoria": "Inteligencia Artificial y AgriTech",
+    "url_bases": "https://www.microsoft.com/en-us/ai/ai-for-earth",
+    "regiones": [
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "Universidades",
+      "ONGs",
+      "Centros de Investigación",
+      "Startups AgriTech"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": true,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Centros I+D",
+      "ONGs",
+      "Startups"
+    ],
+    "checklist": [
+      "Formulación de caso de uso en Azure AI",
+      "Plan de impacto ambiental y agrícola medible"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 94,
+    "objetivo": "Otorgamiento de créditos en Azure AI y subvención económica para entrenamiento de modelos de IA en predicción de cosechas, estrés hídrico e imágenes de drones.",
+    "descripcionIICA": "IICA actúa como entidad asociada para la recolección de datos de campo e implementación con ministerios de agricultura.",
+    "requisitos": [
+      "Uso de tecnología de IA generativa o visión por computador",
+      "Disponibilidad de datos abiertos o de sensores"
+    ],
+    "fortalezas": [
+      "Sin requisito de cofinanciamiento",
+      "Acceso directo a la infraestructura Azure AI de Microsoft"
+    ],
+    "debilidades": [],
+    "complejidad": "Baja",
+    "rolIICA": "Asesor",
+    "createdAt": "2026-08-12T14:00:00.000Z",
+    "updatedAt": "2026-08-12T14:00:00.000Z",
+    "lastCheckedAt": "2026-08-12T14:00:00.000Z",
+    "canonicalUrl": "https://www.microsoft.com/ai-for-earth-2026",
+    "sourceRefId": 45,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T14:00:00.000Z",
+    "lastSeenAt": "2026-08-12T14:00:00.000Z"
+  },
+  {
+    "id": 937,
+    "nombre": "IDRC Canada — Artificial Intelligence for Agricultural Sustainability (AI4D 2026)",
+    "institucion": "IDRC Canada — AI for Development (AI4D)",
+    "monto": 750000,
+    "montoTexto": "CAD 250.000 – 1.000.000",
+    "fecha_cierre": "2026-10-25",
+    "estado": "Abierto",
+    "categoria": "Inteligencia Artificial y AgriTech",
+    "url_bases": "https://idrc-crdi.ca/en/initiative/artificial-intelligence-development-ai4d",
+    "regiones": [
+      "América Latina y el Caribe",
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "Consorcios del Sur Global",
+      "Centros de Investigación",
+      "ONGs"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Universidades",
+      "Centros I+D",
+      "Consorcios"
+    ],
+    "checklist": [
+      "Propuesta de IA responsable con perspectiva de género e inclusión",
+      "Respaldo institucional en país de América Latina"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 93,
+    "objetivo": "Fondo canadiense para investigación aplicada en IA responsable, monitoreo de plagas mediante visión artificial y predicción climática para pequeños agricultores.",
+    "descripcionIICA": "IICA co-lidera el componente de transferencia tecnológica y difusión técnica en los países andinos y del Cono Sur.",
+    "requisitos": [
+      "Consorcio integrado por al menos una entidad del Sur Global",
+      "Garantizar la protección de datos agrícolas de los productores"
+    ],
+    "fortalezas": [
+      "100% Subvención no reembolsable",
+      "Fuerte enfoque en inclusión y resiliencia climática"
+    ],
+    "debilidades": [
+      "Exige rigor metodológico académico"
+    ],
+    "complejidad": "Media",
+    "rolIICA": "Implementador",
+    "createdAt": "2026-08-12T14:00:00.000Z",
+    "updatedAt": "2026-08-12T14:00:00.000Z",
+    "lastCheckedAt": "2026-08-12T14:00:00.000Z",
+    "canonicalUrl": "https://idrc-crdi.ca/ai4d-agri-2026",
+    "sourceRefId": 46,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T14:00:00.000Z",
+    "lastSeenAt": "2026-08-12T14:00:00.000Z"
+  },
+  {
+    "id": 938,
+    "nombre": "FIA Chile — Proyectos de Innovación Silvoagropecuaria con IA y Automatización 2026",
+    "institucion": "FIA — Fundación para la Innovación Agraria",
+    "monto": 50000000,
+    "montoTexto": "Hasta $50.000.000 CLP",
+    "fecha_cierre": "2026-09-15",
+    "estado": "Abierto",
+    "categoria": "Inteligencia Artificial y AgriTech",
+    "url_bases": "https://convocatoria.fia.cl/",
+    "regiones": [
+      "Chile",
+      "Todas las regiones"
+    ],
+    "beneficiarios": [
+      "Productores Agrícolas",
+      "PYMEs Agtech",
+      "Cooperativas"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Empresas Agrícolas",
+      "Cooperativas",
+      "Centros de Innovación"
+    ],
+    "checklist": [
+      "Inscripción en sistema de postulaciones FIA",
+      "Demostración de TRL 3 a TRL 5"
+    ],
+    "ambito": "Nacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 96,
+    "objetivo": "Financiamiento no reembolsable para validación técnica y empaquetamiento de soluciones de IA, robótica y automatización de riego en el agro chileno.",
+    "descripcionIICA": "El IICA asesora la formulación técnica y el acompañamiento en la implementación de la innovación en terreno.",
+    "requisitos": [
+      "Cofinanciamiento mínimo del 20% (puede ser en especie)",
+      "Impacto directo en la productividad de la pequeña y mediana agricultura chilena"
+    ],
+    "fortalezas": [
+      "Fondo nacional reconocido en Chile",
+      "Ventanilla de rápida evaluación"
+    ],
+    "debilidades": [
+      "Requiere rendición formal bajo normativa pública chilena"
+    ],
+    "complejidad": "Baja",
+    "rolIICA": "Asesor",
+    "createdAt": "2026-08-12T14:00:00.000Z",
+    "updatedAt": "2026-08-12T14:00:00.000Z",
+    "lastCheckedAt": "2026-08-12T14:00:00.000Z",
+    "canonicalUrl": "https://convocatoria.fia.cl/ia-agrotech-2026",
+    "sourceRefId": 47,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T14:00:00.000Z",
+    "lastSeenAt": "2026-08-12T14:00:00.000Z"
   }
 ]
