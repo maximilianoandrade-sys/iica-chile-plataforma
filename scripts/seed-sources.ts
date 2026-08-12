@@ -30,6 +30,15 @@ const SOURCES = [
   { slug: "inia",             name: "INIA — Instituto de Investigaciones Agropecuarias", type: "scraper", homepageUrl: "https://www.inia.cl/licitaciones/" },
   { slug: "global-south-opportunities", name: "Global South Opportunities (Aggregator)", type: "scraper", homepageUrl: "https://www.globalsouthopportunities.com/" },
   { slug: "curated-external-2026", name: "Oportunidades Internacionales Verificadas 2026", type: "curated", homepageUrl: "https://github.com/maximilianoandrade-sys/iica-chile-plataforma" },
+  { slug: "geda",             name: "GEDA — Gender and Environment Data Alliance", type: "scraper", homepageUrl: "https://genderenvironmentdata.org/" },
+  { slug: "afcia",            name: "AFCIA — Climate Adaptation Innovation Accelerator", type: "scraper", homepageUrl: "https://www.ctc-n.org/adaptation-fund-climate-innovation-accelerator" },
+  { slug: "future-for-nature", name: "Future for Nature Foundation",              type: "scraper", homepageUrl: "https://futurefornature.org/" },
+  { slug: "generaccion-climatica", name: "Generacción Climática Juvenil",        type: "scraper", homepageUrl: "https://www.cartagena.gov.co/" },
+  { slug: "resilient-futures", name: "Resilient Futures Fund (Global South)",     type: "scraper", homepageUrl: "https://www.betterpolitics.foundation/" },
+  { slug: "horizon-europe",    name: "Horizon Europe — Cluster 6 (Biodiversity & Bioeconomy)", type: "scraper", homepageUrl: "https://rea.ec.europa.eu/funding-and-grants/" },
+  { slug: "eu-life",           name: "EU LIFE Programme (CINEA)",                 type: "scraper", homepageUrl: "https://cinea.ec.europa.eu/programmes/life_en" },
+  { slug: "cfc",              name: "CFC — Common Fund for Commodities",           type: "scraper", homepageUrl: "https://common-fund.org/" },
+  { slug: "rainforest-trust", name: "Rainforest Trust — Protected Areas",        type: "scraper", homepageUrl: "https://www.rainforesttrust.org/" },
 ];
 
 async function main() {

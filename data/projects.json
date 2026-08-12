@@ -7741,5 +7741,926 @@
     "relevanciaChile": true,
     "firstSeenAt": "2026-07-22T12:00:00.000Z",
     "lastSeenAt": "2026-07-22T12:00:00.000Z"
+  },
+  {
+    "id": 918,
+    "nombre": "GEDA Small Grants 2026–2027",
+    "institucion": "GEDA (Gender and Environment Data Alliance)",
+    "monto": 15000,
+    "montoTexto": "USD 10.000 – 15.000",
+    "fecha_cierre": "2026-08-14",
+    "estado": "Abierto",
+    "categoria": "Sostenibilidad y Cambio Climático",
+    "url_bases": "https://genderenvironmentdata.org/small-grants/",
+    "regiones": [
+      "Internacional (prioridad Indo-Pacífico y organizaciones no miembros)"
+    ],
+    "beneficiarios": [
+      "Organizaciones de Género y Ambiente",
+      "Organizaciones del Sur Global"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "ONGs",
+      "Colectivos de Género y Ambiente"
+    ],
+    "checklist": [
+      "Propuesta de proyecto con enfoque de género",
+      "Presupuesto detallado",
+      "Carta de compromiso institucional"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 88,
+    "objetivo": "Grants para proyectos que fortalecen la recolección, análisis y uso de datos de género y ambiente para políticas climáticas inclusivas. Incluye fellowship de 6 meses.",
+    "descripcionIICA": "Acompañamiento técnico y metodológico a organizaciones de mujeres rurales en recolección de datos ambientales.",
+    "requisitos": [
+      "Organizaciones comunitarias o ONGs constituidas legalmente o en alianza estratégica"
+    ],
+    "fortalezas": [
+      "Amplio trabajo territorial del IICA con redes de mujeres rurales y agroecología"
+    ],
+    "debilidades": [
+      "Monto unitario enfocado en proyectos de escala pequeña a mediana"
+    ],
+    "complejidad": "Baja",
+    "rolIICA": "Asesor",
+    "createdAt": "2026-08-12T12:00:00.000Z",
+    "updatedAt": "2026-08-12T16:30:02.191Z",
+    "lastCheckedAt": "2026-08-12T12:00:00.000Z",
+    "canonicalUrl": "https://genderenvironmentdata.org/small-grants/2026-call",
+    "sourceRefId": 33,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T12:00:00.000Z",
+    "lastSeenAt": "2026-08-12T12:00:00.000Z"
+  },
+  {
+    "id": 919,
+    "nombre": "AFCIA – Climate Adaptation Innovation (Asia-Pacífico / Global)",
+    "institucion": "Adaptation Fund / UN CTCN (AFCIA)",
+    "monto": 150000,
+    "montoTexto": "Hasta USD 150.000 (Asistencia Técnica)",
+    "fecha_cierre": "2026-10-07",
+    "estado": "Abierto",
+    "categoria": "Riego y Recursos Hídricos",
+    "url_bases": "https://www.ctc-n.org/adaptation-fund-climate-innovation-accelerator",
+    "regiones": [
+      "Asia-Pacífico y Países Elegibles CMNUCC"
+    ],
+    "beneficiarios": [
+      "Gobiernos",
+      "ONGs",
+      "Academia",
+      "Empresas con NDE ante CMNUCC"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Entidades Públicas",
+      "Universidades",
+      "ONGs",
+      "Empresas Tecnológicas"
+    ],
+    "checklist": [
+      "Nota de concepto",
+      "Carta del Punto Focal Nacional (NDE/NDA)",
+      "Plan de escalabilidad técnica"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 92,
+    "objetivo": "Asistencia técnica especializada (no efectivo directo) para pilotear e implementar soluciones innovadoras de adaptación climática.",
+    "descripcionIICA": "Respaldo e integración institucional técnica para formulación e implementación de tecnologías adaptativas.",
+    "requisitos": [
+      "Aval del Designado Nacional (NDE) para el Mecanismo de Tecnología de la CMNUCC"
+    ],
+    "fortalezas": [
+      "Trayectoria comprobada del IICA en formulación e implementación de fondos de adaptación"
+    ],
+    "debilidades": [
+      "Proceso de selección highly competitivo a nivel global"
+    ],
+    "complejidad": "Media",
+    "rolIICA": "Implementador",
+    "createdAt": "2026-08-12T12:00:00.000Z",
+    "updatedAt": "2026-08-12T16:30:02.192Z",
+    "lastCheckedAt": "2026-08-12T12:00:00.000Z",
+    "canonicalUrl": "https://www.ctc-n.org/afcia-2026-call",
+    "sourceRefId": 34,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T12:00:00.000Z",
+    "lastSeenAt": "2026-08-12T12:00:00.000Z"
+  },
+  {
+    "id": 920,
+    "nombre": "Future for Nature Awards 2027",
+    "institucion": "Future for Nature Foundation",
+    "monto": 55000,
+    "montoTexto": "EUR 50.000 (Premio Individual)",
+    "fecha_cierre": "2026-08-23",
+    "estado": "Abierto",
+    "categoria": "Sostenibilidad y Cambio Climático",
+    "url_bases": "https://futurefornature.org/",
+    "regiones": [
+      "Internacional"
+    ],
+    "beneficiarios": [
+      "Conservacionistas individuales de 18–35 años"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Personas Naturales (Jóvenes de 18–35 años)"
+    ],
+    "checklist": [
+      "Formulario de postulación en línea",
+      "Dos cartas de referencia de expertos internacionales",
+      "Resumen del plan de conservación de especies o hábitats"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 78,
+    "objetivo": "Premia a 3 jóvenes conservacionistas por logros sustanciales y de largo plazo en la protección de especies silvestres. No es para organizaciones.",
+    "descripcionIICA": "Patrocinio y difusión de candidaturas de jóvenes investigadores y extensionistas en conservación.",
+    "requisitos": [
+      "Tener entre 18 y 35 años al momento del cierre de la postulación"
+    ],
+    "fortalezas": [
+      "Excelente vitrina internacional y financiamiento flexible de libre disponibilidad para conservación"
+    ],
+    "debilidades": [
+      "Enfocado en personas individuales más que en instituciones"
+    ],
+    "complejidad": "Baja",
+    "rolIICA": "Indirecto",
+    "createdAt": "2026-08-12T12:00:00.000Z",
+    "updatedAt": "2026-08-12T16:30:02.192Z",
+    "lastCheckedAt": "2026-08-12T12:00:00.000Z",
+    "canonicalUrl": "https://futurefornature.org/apply-2027/",
+    "sourceRefId": 35,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T12:00:00.000Z",
+    "lastSeenAt": "2026-08-12T12:00:00.000Z"
+  },
+  {
+    "id": 921,
+    "nombre": "Generacción Climática – Cartagena (Youth Climate Action Fund)",
+    "institucion": "Bloomberg Philanthropies – Youth Climate Action Fund / Cartagena",
+    "monto": 5000,
+    "montoTexto": "USD 1.000 – 5.000 (Microsubvenciones)",
+    "fecha_cierre": "2026-08-28",
+    "estado": "Abierto",
+    "categoria": "Sostenibilidad y Cambio Climático",
+    "url_bases": "https://www.cartagena.gov.co/",
+    "regiones": [
+      "Cartagena, Colombia y Latinoamérica"
+    ],
+    "beneficiarios": [
+      "Organizaciones con jóvenes de 15–24 años"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Colectivos Juveniles",
+      "ONGs Locales"
+    ],
+    "checklist": [
+      "Perfil del proyecto juvenil",
+      "Presupuesto participativo",
+      "Cronograma de ejecución comunitaria"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Microsubvenciones a proyectos ambientales y de resiliencia costera liderados por jóvenes dentro del Youth Climate Action Fund.",
+    "descripcionIICA": "Tutoría técnica e impulso a iniciativas agrícolas y ecológicas juveniles de impacto territorial.",
+    "requisitos": [
+      "Organizaciones compuestas por jóvenes entre 15 y 24 años"
+    ],
+    "fortalezas": [
+      "Fórmula ágil de desembolso para microproyectos comunitarios de alto impacto local"
+    ],
+    "debilidades": [
+      "Montos restringidos para infraestructura mayor"
+    ],
+    "complejidad": "Baja",
+    "rolIICA": "Asesor",
+    "createdAt": "2026-08-12T12:00:00.000Z",
+    "updatedAt": "2026-08-12T16:30:02.192Z",
+    "lastCheckedAt": "2026-08-12T12:00:00.000Z",
+    "canonicalUrl": "https://www.cartagena.gov.co/generaccion-climatica-2026",
+    "sourceRefId": 36,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T12:00:00.000Z",
+    "lastSeenAt": "2026-08-12T12:00:00.000Z"
+  },
+  {
+    "id": 922,
+    "nombre": "Resilient Futures Call 2026",
+    "institucion": "Better Politics Fund / European Climate Foundation / Naia Trust / Vibe Fund",
+    "monto": 700000,
+    "montoTexto": "USD 700.000 en total (Ideation USD 10k–20k; Incubation hasta USD 50k)",
+    "fecha_cierre": "2026-09-04",
+    "estado": "Abierto",
+    "categoria": "Sostenibilidad y Cambio Climático",
+    "url_bases": "https://www.betterpolitics.foundation/resilient-futures-call-2026",
+    "regiones": [
+      "Sur Global / Internacional"
+    ],
+    "beneficiarios": [
+      "Organizaciones, redes y colectivos no partidistas del Sur Global"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": true,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Organizaciones de la Sociedad Civil",
+      "Consorcios Regionales"
+    ],
+    "checklist": [
+      "Propuesta completa",
+      "Plan de resiliencia comunitaria",
+      "Matriz de riesgos climáticos"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 90,
+    "objetivo": "Financia iniciativas en la intersección de liderazgo político democrático y resiliencia climática. Formulario liviano de etapa única.",
+    "descripcionIICA": "Articulación técnica con organizaciones campesinas y entidades públicas para fortalecer resiliencia democrática y agrícola.",
+    "requisitos": [
+      "Liderazgo principal por instituciones de países en desarrollo / Sur Global"
+    ],
+    "fortalezas": [
+      "Gran volumen de financiamiento directo para proyectos de escala regional en Latinoamérica"
+    ],
+    "debilidades": [
+      "Requiere estructuración sólida de indicadores de impacto cuantitativo"
+    ],
+    "complejidad": "Alta",
+    "rolIICA": "Ejecutor",
+    "createdAt": "2026-08-12T12:00:00.000Z",
+    "updatedAt": "2026-08-12T16:30:02.192Z",
+    "lastCheckedAt": "2026-08-12T12:00:00.000Z",
+    "canonicalUrl": "https://www.betterpolitics.foundation/resilient-futures-call-2026",
+    "sourceRefId": 37,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T12:00:00.000Z",
+    "lastSeenAt": "2026-08-12T12:00:00.000Z"
+  },
+  {
+    "id": 923,
+    "nombre": "Horizon Europe – Biodiversity and Ecosystem Services",
+    "institucion": "Comisión Europea – Horizon Europe Cluster 6",
+    "monto": 6500000,
+    "montoTexto": "Variable (> EUR 580M en cluster)",
+    "fecha_cierre": "2026-09-17",
+    "estado": "Abierto",
+    "categoria": "Innovación y Tecnología Agropecuaria",
+    "url_bases": "https://rea.ec.europa.eu/funding-and-grants/horizon-europe-cluster-6-food-bioeconomy-natural-resources-agriculture-and-environment/biodiversity-and-ecosystem-services_en",
+    "regiones": [
+      "Europa y Países Asociados / Consorcios Internacionales"
+    ],
+    "beneficiarios": [
+      "Universidades",
+      "Centros de Investigación",
+      "Consorcios"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "en",
+    "faq_disponible": true,
+    "permite_adendas": true,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Consorcios Transnacionales",
+      "Centros I+D",
+      "Universidades"
+    ],
+    "checklist": [
+      "Propuesta en 2 etapas o etapa única",
+      "Acuerdo de consorcio",
+      "Plan de difusión y transferencia tecnológica"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 93,
+    "objetivo": "Call de etapa única sobre declive de insectos, ecosistemas subterráneos, economía nature-positive y agrobiodiversidad.",
+    "descripcionIICA": "Inclusión de socios latinoamericanos en consorcios internacionales de investigación agroecológica.",
+    "requisitos": [
+      "Consorcio mínimo de 3 entidades independientes de 3 países elegibles (incluye países asociados o tercer país como Chile)"
+    ],
+    "fortalezas": [
+      "Financiamiento de vanguardia científica y redes globales de colaboración"
+    ],
+    "debilidades": [
+      "Exigencia burocrática y nivel de competencia científico elevado"
+    ],
+    "complejidad": "Alta",
+    "rolIICA": "Implementador",
+    "createdAt": "2026-08-12T12:00:00.000Z",
+    "updatedAt": "2026-08-12T16:30:02.192Z",
+    "lastCheckedAt": "2026-08-12T12:00:00.000Z",
+    "canonicalUrl": "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/topic-details/horizon-cl6-2026-biodiv",
+    "sourceRefId": 38,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T12:00:00.000Z",
+    "lastSeenAt": "2026-08-12T12:00:00.000Z"
+  },
+  {
+    "id": 924,
+    "nombre": "EU LIFE 2026 – Nature & Biodiversity (SAP)",
+    "institucion": "Comisión Europea – Programa LIFE",
+    "monto": 8500000,
+    "montoTexto": "EUR 173,5 M (de EUR 601,5 M totales)",
+    "fecha_cierre": "2026-09-22",
+    "estado": "Abierto",
+    "categoria": "Sostenibilidad y Cambio Climático",
+    "url_bases": "https://cinea.ec.europa.eu/life-calls-proposals-2026_en",
+    "regiones": [
+      "Unión Europea y Países Asociados"
+    ],
+    "beneficiarios": [
+      "Entidades Públicas y Privadas",
+      "ONGs",
+      "Consorcios"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "en",
+    "faq_disponible": true,
+    "permite_adendas": true,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Entidades de Derecho Público y Privado"
+    ],
+    "checklist": [
+      "Formulario LIFE SAP",
+      "Presupuesto detallado por paquetes de trabajo",
+      "Evaluación de impacto ambiental"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 89,
+    "objetivo": "Standard Action Projects (SAP) para Nature & Biodiversity dedicados a conservación y restauración de ecosistemas.",
+    "descripcionIICA": "Réplica y transferencia de mejores prácticas de conservación de hábitats silvoagropecuarios.",
+    "requisitos": [
+      "Cofinanciamiento institucional obligatorio del 40% al 50% según tipo de acción"
+    ],
+    "fortalezas": [
+      "Gran escala financiera y enfoque en sostenibilidad duradera de los ecosistemas"
+    ],
+    "debilidades": [
+      "Largo periodo de evaluación y negociación contractual"
+    ],
+    "complejidad": "Alta",
+    "rolIICA": "Implementador",
+    "createdAt": "2026-08-12T12:00:00.000Z",
+    "updatedAt": "2026-08-12T16:30:02.192Z",
+    "lastCheckedAt": "2026-08-12T12:00:00.000Z",
+    "canonicalUrl": "https://cinea.ec.europa.eu/life/nature-biodiversity-2026",
+    "sourceRefId": 39,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T12:00:00.000Z",
+    "lastSeenAt": "2026-08-12T12:00:00.000Z"
+  },
+  {
+    "id": 925,
+    "nombre": "EU LIFE 2026 – Climate Change Mitigation & Adaptation",
+    "institucion": "Comisión Europea – Programa LIFE",
+    "monto": 8000000,
+    "montoTexto": "Parte de EUR 601,5 M totales (LIFE 2026)",
+    "fecha_cierre": "2026-09-22",
+    "estado": "Abierto",
+    "categoria": "Sostenibilidad y Cambio Climático",
+    "url_bases": "https://cinea.ec.europa.eu/life-calls-proposals-2026_en",
+    "regiones": [
+      "Unión Europea y Países Asociados"
+    ],
+    "beneficiarios": [
+      "Entidades Públicas y Privadas",
+      "Consorcios"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "en",
+    "faq_disponible": true,
+    "permite_adendas": true,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Consorcios Internacionales",
+      "Gobiernos Locales",
+      "ONGs"
+    ],
+    "checklist": [
+      "Formulario de propuesta técnica LIFE",
+      "Plan de resiliencia climática",
+      "Cálculo de reducción de emisiones CO2e"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 91,
+    "objetivo": "Línea de cambio climático del programa LIFE 2026 para proyectos de mitigación, adaptación y transición energética.",
+    "descripcionIICA": "Co-ejecución de acciones de transferencia tecnológica para gestión eficiente del agua y mitigación de emisiones.",
+    "requisitos": [
+      "Elegibilidad para consorcios internacionales con participación de países socios"
+    ],
+    "fortalezas": [
+      "Reconocimiento global y financiamiento plurianual robusto"
+    ],
+    "debilidades": [
+      "Gestión administrativa exigente"
+    ],
+    "complejidad": "Alta",
+    "rolIICA": "Ejecutor",
+    "createdAt": "2026-08-12T12:00:00.000Z",
+    "updatedAt": "2026-08-12T16:30:02.192Z",
+    "lastCheckedAt": "2026-08-12T12:00:00.000Z",
+    "canonicalUrl": "https://cinea.ec.europa.eu/life/climate-action-2026",
+    "sourceRefId": 39,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T12:00:00.000Z",
+    "lastSeenAt": "2026-08-12T12:00:00.000Z"
+  },
+  {
+    "id": 926,
+    "nombre": "Common Fund for Commodities – 29th Call for Proposals",
+    "institucion": "Common Fund for Commodities (CFC)",
+    "monto": 1500000,
+    "montoTexto": "Hasta USD 1,5 M (Deuda/Impact Finance; USD 300k Fast-Track)",
+    "fecha_cierre": "2026-10-01",
+    "estado": "Abierto",
+    "categoria": "Desarrollo Rural y Cadenas de Valor",
+    "url_bases": "https://common-fund.org/index.php/call-for-proposals",
+    "regiones": [
+      "101 Países Miembros del CFC"
+    ],
+    "beneficiarios": [
+      "Empresas",
+      "Cooperativas",
+      "PyMEs (≥3 años operación)"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "en",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Cooperativas",
+      "Empresas Privadas",
+      "Entidades Públicas"
+    ],
+    "checklist": [
+      "Plan de negocios sostenible",
+      "Estados financieros auditados",
+      "Impacto social y en pequeños agricultores"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 87,
+    "objetivo": "Financia proyectos comercialmente viables que fortalecen cadenas de valor de commodities y medios de vida de pequeños productores.",
+    "descripcionIICA": "Acompañamiento a cooperativas y PyMEs agrícolas en estructuración bancable y sostenible de proyectos.",
+    "requisitos": [
+      "Viabilidad financiera del modelo de negocio y beneficio directo demostrable para pequeños productores"
+    ],
+    "fortalezas": [
+      "Combina financiamiento concesional y asistencia técnica especializada"
+    ],
+    "debilidades": [
+      "Requiere demostrar retornos financieros o reembolso según la modalidad del fondo"
+    ],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "createdAt": "2026-08-12T12:00:00.000Z",
+    "updatedAt": "2026-08-12T16:30:02.192Z",
+    "lastCheckedAt": "2026-08-12T12:00:00.000Z",
+    "canonicalUrl": "https://common-fund.org/call-for-proposals-29th",
+    "sourceRefId": 40,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T12:00:00.000Z",
+    "lastSeenAt": "2026-08-12T12:00:00.000Z"
+  },
+  {
+    "id": 927,
+    "nombre": "Rainforest Trust – Protected Areas Creation/Expansion",
+    "institucion": "Rainforest Trust",
+    "monto": 500000,
+    "montoTexto": "Evaluación caso a caso (Awards ≥ USD 250.000 en fechas fijas)",
+    "fecha_cierre": "2026-10-01",
+    "estado": "Abierto",
+    "categoria": "Sostenibilidad y Cambio Climático",
+    "url_bases": "https://www.rainforesttrust.org/get-involved/apply-for-funding/",
+    "regiones": [
+      "Trópico y Subtrópico (ONGs Locales)"
+    ],
+    "beneficiarios": [
+      "ONGs Locales y de Conservación"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "ONGs de Conservación",
+      "Organizaciones Comunitarias Titulares de Tierras"
+    ],
+    "checklist": [
+      "Mapa del área protegida propuesta",
+      "Evaluación de especies en peligro crítico (IUCN)",
+      "Plan de gobernanza territorial"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 83,
+    "objetivo": "Apoya creación/expansión de áreas protegidas, corredores biológicos y OECM. Concept notes continuas; cierres de awards en mar/jul/oct.",
+    "descripcionIICA": "Promoción de paisajes productivos sostenibles articulados con áreas protegidas comunitarias.",
+    "requisitos": [
+      "Propiedad o acuerdo legal de conservación de tierras de alta prioridad biológica"
+    ],
+    "fortalezas": [
+      "Desembolso ágil para compra de tierras o delimitación de áreas protegidas"
+    ],
+    "debilidades": [
+      "Enfocado exclusivamente en conservación estricta y protección de especies"
+    ],
+    "complejidad": "Media",
+    "rolIICA": "Indirecto",
+    "createdAt": "2026-08-12T12:00:00.000Z",
+    "updatedAt": "2026-08-12T16:30:02.192Z",
+    "lastCheckedAt": "2026-08-12T12:00:00.000Z",
+    "canonicalUrl": "https://www.rainforesttrust.org/apply-for-funding-protected-areas",
+    "sourceRefId": 41,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T12:00:00.000Z",
+    "lastSeenAt": "2026-08-12T12:00:00.000Z"
+  },
+  {
+    "id": 928,
+    "nombre": "GEDA — Innovation Seed Fund for Gender & Climate Data",
+    "institucion": "Gender and Environment Data Alliance (GEDA)",
+    "monto": 35000,
+    "montoTexto": "USD 25.000 – 50.000",
+    "fecha_cierre": "2026-09-15",
+    "estado": "Abierto",
+    "categoria": "Innovación y Tecnología Agropecuaria",
+    "url_bases": "https://genderenvironmentdata.org/",
+    "regiones": [
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "Startups Sociales",
+      "Organizaciones Campesinas de Mujeres",
+      "Academia"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "ONGs",
+      "Colectivos de Mujeres"
+    ],
+    "checklist": [
+      "Propuesta de innovación digital",
+      "Metodología de recolección de datos de género"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 86,
+    "objetivo": "Financiar herramientas digitales e indicadores de género aplicados al monitoreo del cambio climático y agricultura sostenible.",
+    "descripcionIICA": "Soporte del IICA en validación campo-usuario y agregación de métricas agroclimáticas.",
+    "requisitos": [
+      "Enfoque de inclusión de mujeres rurales en la gobernanza de datos"
+    ],
+    "fortalezas": [
+      "Impulsa la transformación digital inclusiva en zonas rurales"
+    ],
+    "debilidades": [
+      "Fase semilla de corto plazo"
+    ],
+    "complejidad": "Baja",
+    "rolIICA": "Asesor",
+    "createdAt": "2026-08-12T12:00:00.000Z",
+    "updatedAt": "2026-08-12T12:00:00.000Z",
+    "lastCheckedAt": "2026-08-12T12:00:00.000Z",
+    "canonicalUrl": "https://genderenvironmentdata.org/seed-fund-2026",
+    "sourceRefId": 33,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T12:00:00.000Z",
+    "lastSeenAt": "2026-08-12T12:00:00.000Z"
+  },
+  {
+    "id": 929,
+    "nombre": "AFCIA Scale-Up Adaptation Grants — Escalamiento de Tecnologías Hídricas",
+    "institucion": "Adaptation Fund / UN CTCN",
+    "monto": 350000,
+    "montoTexto": "USD 250.000 – 500.000",
+    "fecha_cierre": "2026-10-15",
+    "estado": "Próximo",
+    "categoria": "Riego y Recursos Hídricos",
+    "url_bases": "https://www.adaptation-fund.org/afcia/",
+    "regiones": [
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "Agencias de Agua",
+      "Empresas Tecnológicas",
+      "Organismos Públicos"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": true,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Entidades Acreditadas",
+      "Consorcios de Innovación Hídrica"
+    ],
+    "checklist": [
+      "Estudio de factibilidad técnica",
+      "Plan de escalamiento comercial/territorial"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Próxima",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 94,
+    "objetivo": "Escalar prototipos probados de eficiencia hídrica y desalinización agrícola a escala comunitaria.",
+    "descripcionIICA": "IICA co-lidera la fase de transferencia y capacitación de usuarios finales.",
+    "requisitos": [
+      "Demostrar prototipo validado previamente en ambiente real TRL 6+"
+    ],
+    "fortalezas": [
+      "Financiamiento directo para escalar soluciones con alto impacto en sequía"
+    ],
+    "debilidades": [
+      "Exige cofinanciamiento del 20%"
+    ],
+    "complejidad": "Alta",
+    "rolIICA": "Implementador",
+    "createdAt": "2026-08-12T12:00:00.000Z",
+    "updatedAt": "2026-08-12T12:00:00.000Z",
+    "lastCheckedAt": "2026-08-12T12:00:00.000Z",
+    "canonicalUrl": "https://www.adaptation-fund.org/afcia-scale-up-2026",
+    "sourceRefId": 34,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T12:00:00.000Z",
+    "lastSeenAt": "2026-08-12T12:00:00.000Z"
+  },
+  {
+    "id": 930,
+    "nombre": "Horizon Europe Soil Mission — Soil Health and Resilient Agroecosystems",
+    "institucion": "Comisión Europea / Horizonte Europa",
+    "monto": 5500000,
+    "montoTexto": "Variable (€ 3M – € 8M por consorcio)",
+    "fecha_cierre": "2026-10-08",
+    "estado": "Abierto",
+    "categoria": "Capacitación y Asistencia Técnica",
+    "url_bases": "https://rea.ec.europa.eu/funding-and-grants/horizon-europe-cluster-6-food-bioeconomy-natural-resources-agriculture-and-environment/soil-health-and-food_en",
+    "regiones": [
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "Universidades",
+      "Institutos de Investigación Agrícola",
+      "Consorcios Transnacionales"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "en",
+    "faq_disponible": true,
+    "permite_adendas": true,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Consorcios Científicos",
+      "Centros de Investigación Agraria"
+    ],
+    "checklist": [
+      "Propuesta de investigación e innovación",
+      "Living Labs de suelos",
+      "Matriz de impacto agroecológico"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 92,
+    "objetivo": "Crear laboratorios vivientes (Living Labs) para la restauración microbiológica y química de suelos agrícolas degradados por la sequía.",
+    "descripcionIICA": "IICA facilita la integración de Living Labs de suelos en regiones vulnerables de América Latina.",
+    "requisitos": [
+      "Participación de actores de la cadena agroalimentaria y centros de investigación reconocidos"
+    ],
+    "fortalezas": [
+      "Gran reputación internacional y transferencia científica de vanguardia"
+    ],
+    "debilidades": [
+      "Proceso estructurado bajo normativa de la UE"
+    ],
+    "complejidad": "Alta",
+    "rolIICA": "Implementador",
+    "createdAt": "2026-08-12T12:00:00.000Z",
+    "updatedAt": "2026-08-12T12:00:00.000Z",
+    "lastCheckedAt": "2026-08-12T12:00:00.000Z",
+    "canonicalUrl": "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/topic-details/horizon-miss-2026-soil",
+    "sourceRefId": 38,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T12:00:00.000Z",
+    "lastSeenAt": "2026-08-12T12:00:00.000Z"
+  },
+  {
+    "id": 931,
+    "nombre": "CFC Fast-Track Facility — Tecnologías Digitales para Pequeños Agricultores",
+    "institucion": "Common Fund for Commodities (CFC)",
+    "monto": 200000,
+    "montoTexto": "USD 100.000 – 300.000",
+    "fecha_cierre": "2026-11-01",
+    "estado": "Próximo",
+    "categoria": "Innovación y Tecnología Agropecuaria",
+    "url_bases": "https://common-fund.org/index.php/call-for-proposals",
+    "regiones": [
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "Agritech Startups",
+      "Cooperativas Agrícolas",
+      "PYMEs Exportadoras"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "en",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Empresas Agrícolas",
+      "Cooperativas"
+    ],
+    "checklist": [
+      "Pitch Deck",
+      "Modelo Financiero",
+      "Plan de Inclusión Social"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Próxima",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 88,
+    "objetivo": "Financiar el despliegue rápido de plataformas de trazabilidad, pagos digitales y seguros parametrizados para pequeñas cadenas de valor.",
+    "descripcionIICA": "Asistencia técnica e integración institucional a través del programa AgTech IICA.",
+    "requisitos": [
+      "Modelo de negocio probado con rentabilidad financiera y retorno social"
+    ],
+    "fortalezas": [
+      "Ventanilla ágil y focalizada en tecnología agrícola de impacto"
+    ],
+    "debilidades": [
+      "Exige tracción comercial inicial"
+    ],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "createdAt": "2026-08-12T12:00:00.000Z",
+    "updatedAt": "2026-08-12T12:00:00.000Z",
+    "lastCheckedAt": "2026-08-12T12:00:00.000Z",
+    "canonicalUrl": "https://common-fund.org/fast-track-2026",
+    "sourceRefId": 40,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T12:00:00.000Z",
+    "lastSeenAt": "2026-08-12T12:00:00.000Z"
+  },
+  {
+    "id": 932,
+    "nombre": "Rainforest Trust — Rapid Action Emergency Conservation Fund",
+    "institucion": "Rainforest Trust",
+    "monto": 40000,
+    "montoTexto": "USD 20.000 – 50.000",
+    "fecha_cierre": "2026-11-15",
+    "estado": "Abierto",
+    "categoria": "Sostenibilidad y Cambio Climático",
+    "url_bases": "https://www.rainforesttrust.org/get-involved/apply-for-funding/",
+    "regiones": [
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "ONGs Locales",
+      "Comunidades Indígenas",
+      "Guardaparques"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "ONGs",
+      "Asociaciones Comunitarias"
+    ],
+    "checklist": [
+      "Solicitud de acción rápida",
+      "Evidencia de amenaza inminente al ecosistema"
+    ],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 80,
+    "objetivo": "Financiamiento de respuesta rápida para asegurar tierras bajo amenaza inminente de deforestación o degradación ecosistémica.",
+    "descripcionIICA": "IICA brinda articulación institucional entre comunidades locales y autoridades ambientales.",
+    "requisitos": [
+      "Amenaza urgente demostrable sobre especies vulnerables o en peligro"
+    ],
+    "fortalezas": [
+      "Resolución y desembolso ultrarrápido (menos de 30 días)"
+    ],
+    "debilidades": [
+      "Monto limitado a acciones inmediatas de resguardo"
+    ],
+    "complejidad": "Baja",
+    "rolIICA": "Indirecto",
+    "createdAt": "2026-08-12T12:00:00.000Z",
+    "updatedAt": "2026-08-12T12:00:00.000Z",
+    "lastCheckedAt": "2026-08-12T12:00:00.000Z",
+    "canonicalUrl": "https://www.rainforesttrust.org/rapid-action-fund",
+    "sourceRefId": 41,
+    "discoveredBy": "manual",
+    "needsReview": false,
+    "publishable": true,
+    "relevanciaChile": true,
+    "firstSeenAt": "2026-08-12T12:00:00.000Z",
+    "lastSeenAt": "2026-08-12T12:00:00.000Z"
   }
 ]
