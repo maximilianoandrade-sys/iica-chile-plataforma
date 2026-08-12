@@ -15,11 +15,11 @@ interface FavoritesDrawerProps {
 export default function FavoritesDrawer({ allProjects, isOpen, onClose }: FavoritesDrawerProps) {
   const [favoriteProjects, setFavoriteProjects] = useState<Project[]>([]);
 
-  const refreshFavorites = () => {
+  const refreshFavorites = React.useCallback(() => {
     const ids = getFavoriteIds();
     const matched = allProjects.filter((p) => ids.includes(p.id));
     setFavoriteProjects(matched);
-  };
+  }, [allProjects]);
 
   useEffect(() => {
     refreshFavorites();
@@ -27,7 +27,7 @@ export default function FavoritesDrawer({ allProjects, isOpen, onClose }: Favori
     const handleUpdate = () => refreshFavorites();
     window.addEventListener('iica_favorites_updated', handleUpdate);
     return () => window.removeEventListener('iica_favorites_updated', handleUpdate);
-  }, [allProjects]);
+  }, [refreshFavorites]);
 
   if (!isOpen) return null;
 
