@@ -224,9 +224,29 @@ export function ProjectCard({
         </div>
       </div>
 
-      {/* Footer — deadline urgency text */}
-      <div className="px-5 py-3 mt-auto">
+      {/* Footer — deadline urgency text & direct bases link */}
+      <div className="px-5 py-3 mt-auto flex items-center justify-between border-t border-gray-100 dark:border-gray-800">
         <p className={`text-[13px] font-semibold ${styles.deadlineText}`}>{deadlineText}</p>
+        <div className="flex items-center gap-2 z-10 relative">
+          <span 
+            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 cursor-help"
+            title="Fechas de cierre y montos provienen de las bases oficiales. Verifique adendas."
+          >
+            <AlertCircle className="w-3.5 h-3.5" />
+          </span>
+          {project.url_bases && (
+            <a
+              href={project.url_bases}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="text-xs font-bold text-[var(--iica-blue)] dark:text-blue-400 hover:underline flex items-center gap-1 bg-blue-50 dark:bg-blue-900/30 px-2.5 py-1 rounded-md"
+              title="Ver bases en sitio web oficial"
+            >
+              Bases ↗
+            </a>
+          )}
+        </div>
       </div>
     </article>
   );

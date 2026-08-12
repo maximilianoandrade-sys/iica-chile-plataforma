@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
@@ -69,7 +69,7 @@ export function HeroSection({ stats }: HeroSectionProps) {
                             href="#convocatorias"
                             className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold text-lg py-4 px-8 rounded-lg shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl group min-h-[48px]"
                         >
-                            Explorar Oportunidades
+                            Explorar {totalOportunidades > 0 ? `${totalOportunidades} ` : ''}Oportunidades
                             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </Link>
                         <Link

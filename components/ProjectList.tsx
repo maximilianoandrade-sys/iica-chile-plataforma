@@ -1,12 +1,15 @@
 'use client';
 
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { useTransition, useState } from 'react';
+import { useEffect, useTransition, useState } from 'react';
 import Link from 'next/link';
-import { LayoutGrid, List, Calendar, ArrowRight, ExternalLink, ShieldCheck, Download } from 'lucide-react';
+import { LayoutGrid, List, Calendar, ArrowRight, ExternalLink, ShieldCheck, Download, Star, Calculator } from 'lucide-react';
 import { ProjectCard } from '@/components/ProjectCard';
 import { FavoriteButton } from '@/components/FavoriteButton';
 import { TenderComparator } from '@/components/TenderComparator';
+import ActiveFiltersBar from '@/components/ActiveFiltersBar';
+import CofinancingCalculator from '@/components/CofinancingCalculator';
+import FavoritesDrawer from '@/components/FavoritesDrawer';
 import { exportProjectsToCsv } from '@/lib/utils/exportCsv';
 import { getLogger } from '@/lib/utils/logger';
 import { type Project, daysUntilClose, formatDeadline, formatMontoCLP } from '@/lib/data';
@@ -33,6 +36,29 @@ export default function ProjectList({
   const [isPending, startTransition] = useTransition();
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [selectedForComparison, setSelectedForComparison] = useState<Project[]>([]);
+  const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
+  const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
+
+  // Persist view mode preference in localStorage
+  useEffect(() => {
+    try {
+      const savedMode = localStorage.getItem('iica_view_mode') as 'grid' | 'table' | null;
+      if (savedMode && (savedMode === 'grid' || savedMode === 'table')) {
+        setViewMode(savedMode);
+      }
+    } catch (e) {
+      // Ignore localStorage errors
+    }
+  }, []);
+
+  const handleSetViewMode = (mode: 'grid' | 'table') => {
+    setViewMode(mode);
+    try {
+      localStorage.setItem('iica_view_mode', mode);
+    } catch (e) {
+      // Ignore localStorage errors
+    }
+  };
 
   const hasQuery = Boolean(searchParams.get('q')?.trim());
   const sort = searchParams.get('sort') || (hasQuery ? 'relevance' : 'date_asc');
@@ -147,7 +173,29 @@ export default function ProjectList({
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          {/* Favorites Drawer Toggle Button */}
+          <button
+            type="button"
+            onClick={() => setIsFavoritesOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold bg-amber-50 dark:bg-amber-900/30 hover:bg-amber-100 text-amber-900 dark:text-amber-200 border border-amber-200 dark:border-amber-700 transition-all min-h-[44px] cursor-pointer"
+            title="Ver mis convocatorias guardadas en el navegador"
+          >
+            <Star size={15} className="fill-amber-400 text-amber-500" />
+            <span className="hidden sm:inline">Mis Guardados</span>
+          </button>
+
+          {/* Cofinancing Calculator Button */}
+          <button
+            type="button"
+            onClick={() => setIsCalculatorOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 text-[var(--iica-blue)] dark:text-blue-200 border border-blue-200 dark:border-blue-700 transition-all min-h-[44px] cursor-pointer"
+            title="Calcular aporte propio y cofinanciamiento"
+          >
+            <Calculator size={15} className="text-[var(--iica-blue)] dark:text-blue-400" />
+            <span className="hidden sm:inline">Calculadora</span>
+          </button>
+
           {/* Export CSV Button */}
           <button
             type="button"
@@ -163,7 +211,7 @@ export default function ProjectList({
           <div className="flex items-center rounded-lg border border-iica-border bg-gray-50 dark:bg-gray-700/50 p-1" role="group" aria-label="Modo de vista">
             <button
               type="button"
-              onClick={() => setViewMode('grid')}
+              onClick={() => handleSetViewMode('grid')}
               className={`flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-all ${
                 viewMode === 'grid'
                   ? 'bg-white dark:bg-gray-800 text-iica-navy dark:text-white shadow-sm'
@@ -176,7 +224,7 @@ export default function ProjectList({
             </button>
             <button
               type="button"
-              onClick={() => setViewMode('table')}
+              onClick={() => handleSetViewMode('table')}
               className={`flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-all ${
                 viewMode === 'table'
                   ? 'bg-white dark:bg-gray-800 text-iica-navy dark:text-white shadow-sm'
@@ -412,6 +460,20 @@ export default function ProjectList({
         selectedProjects={selectedForComparison}
         onRemoveProject={(id) => setSelectedForComparison((prev) => prev.filter((p) => p.id !== id))}
         onClear={() => setSelectedForComparison([])}
+      />
+
+      {/* Cofinancing & Counterpart Calculator Modal */}
+      <CofinancingCalculator
+        isOpen={isCalculatorOpen}
+        onClose={() => setIsCalculatorOpen(false)}
+        project={selectedForComparison[0] || projects[0] || null}
+      />
+
+      {/* Persistent Favorites Drawer */}
+      <FavoritesDrawer
+        isOpen={isFavoritesOpen}
+        onClose={() => setIsFavoritesOpen(false)}
+        allProjects={projects}
       />
     </div>
   );
