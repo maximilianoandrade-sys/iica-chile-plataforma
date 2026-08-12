@@ -79,9 +79,9 @@ const TARGET_URLS = [
   "https://www.rainforesttrust.org/get-involved/apply-for-funding/", // Rainforest Trust
   // ── Convocatorias e Inteligencia Artificial + Agricultura (AgriTech 2026) ──
   "https://www.microsoft.com/en-us/ai/ai-for-earth", // Microsoft AI for Earth & Climate
-  "https://idrc-crdi.ca/en/initiative/artificial-intelligence-development-ai4d", // IDRC AI4D Agriculture
+  "https://idrc-crdi.ca/en/research-in-action/artificial-intelligence-development", // IDRC AI4D Agriculture
   "https://www.fao.org/digital-agriculture/en/", // FAO Digital Agriculture Hub
-  "https://www.ifc.org/en/types/projects/agritech-modernization-fund", // IFC World Bank Agritech
+  "https://www.ifc.org/en/what-we-do/sector-expertise/agribusiness", // IFC World Bank Agritech
   "https://apps.iica.int/agtech-accelerator/", // IICA AgTech Accelerator
   "https://www.nwo.nl/en/researchprogrammes/kic/kic-ai-for-agriculture-food", // NWO KIC AI Agriculture
   "https://convocatoria.fia.cl/", // FIA Chile Innovación IA Agro
