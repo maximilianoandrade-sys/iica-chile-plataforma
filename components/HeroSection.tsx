@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, AlertTriangle, Loader2 } from 'lucide-react';
+import { ArrowRight, AlertTriangle, Loader2, Bell } from 'lucide-react';
+import NewsletterModal from '@/components/NewsletterModal';
 
 interface HeroStats {
     total: number;
@@ -20,6 +21,7 @@ interface HeroSectionProps {
 export function HeroSection({ stats }: HeroSectionProps) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
+    const [isNewsletterOpen, setIsNewsletterOpen] = useState(false);
     const totalOportunidades = stats?.total ?? 0;
     const abiertas = stats?.abiertas ?? 0;
     const urgentes = stats?.urgentes ?? 0;
@@ -64,7 +66,7 @@ export function HeroSection({ stats }: HeroSectionProps) {
                         Compare convocatorias vigentes, revise requisitos clave y acceda a fuentes oficiales en minutos.
                     </p>
 
-                    <div className="flex flex-col sm:flex-row gap-4 items-start">
+                    <div className="flex flex-wrap gap-4 items-center">
                         <Link
                             href="#convocatorias"
                             className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold text-lg py-4 px-8 rounded-lg shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl group min-h-[48px]"
@@ -72,15 +74,23 @@ export function HeroSection({ stats }: HeroSectionProps) {
                             Explorar {totalOportunidades > 0 ? `${totalOportunidades} ` : ''}Oportunidades
                             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </Link>
-                        <Link
-                            href="/about"
-                            className="flex items-center justify-center gap-2 border-2 border-white/80 text-white hover:bg-white/10 font-medium py-3 px-6 rounded-lg transition-all min-h-[44px]"
+
+                        <button
+                            type="button"
+                            onClick={() => setIsNewsletterOpen(true)}
+                            className="flex items-center justify-center gap-2 bg-amber-400 hover:bg-amber-500 text-gray-900 font-bold text-base py-3.5 px-6 rounded-lg shadow-lg transition-all hover:-translate-y-0.5 min-h-[48px]"
                         >
-                            Conocer IICA Chile
-                        </Link>
+                            <Bell className="w-5 h-5 text-gray-900" />
+                            Recibir Alertas WhatsApp
+                        </button>
                     </div>
                 </div>
             </div>
+
+            <NewsletterModal
+                isOpen={isNewsletterOpen}
+                onClose={() => setIsNewsletterOpen(false)}
+            />
 
             {/* Badge urgentes */}
             {urgentes > 0 && (
