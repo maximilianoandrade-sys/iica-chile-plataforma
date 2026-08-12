@@ -3,6 +3,10 @@
 import { useState, useEffect } from 'react';
 import { Bookmark } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { isFavorite as checkIsFavorite, toggleFavorite as doToggle } from '@/lib/utils/favorites';
+import { getLogger } from '@/lib/utils/logger';
+
+const logger = getLogger('FavoriteButton');
 
 interface FavoriteButtonProps {
   projectId: number;
@@ -10,43 +14,27 @@ interface FavoriteButtonProps {
 }
 
 export function FavoriteButton({ projectId, className }: FavoriteButtonProps) {
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFav, setIsFav] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
-    try {
-      const stored = localStorage.getItem('iica_favorites');
-      if (stored) {
-        const favorites = JSON.parse(stored) as number[];
-        setIsFavorite(favorites.includes(projectId));
-      }
-    } catch {}
+    setIsFav(checkIsFavorite(projectId));
+
+    const handleUpdate = () => setIsFav(checkIsFavorite(projectId));
+    window.addEventListener('iica_favorites_updated', handleUpdate);
+    return () => window.removeEventListener('iica_favorites_updated', handleUpdate);
   }, [projectId]);
 
-  const toggleFavorite = async (e: React.MouseEvent) => {
+  const handleToggle = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
-    const newStatus = !isFavorite;
-    setIsFavorite(newStatus);
-
     try {
-      const stored = localStorage.getItem('iica_favorites');
-      let favorites: number[] = stored ? JSON.parse(stored) : [];
-      
-      if (newStatus) {
-        if (!favorites.includes(projectId)) favorites.push(projectId);
-      } else {
-        favorites = favorites.filter(id => id !== projectId);
-      }
-      
-      localStorage.setItem('iica_favorites', JSON.stringify(favorites));
+      doToggle(projectId);
+      setIsFav(checkIsFavorite(projectId));
 
-      // Disparar evento para que otros componentes se actualicen
-      window.dispatchEvent(new Event('iica_favorites_updated'));
-
-      // Tracking anónimo
+      // Tracking anónimo (fire-and-forget)
       let deviceId = localStorage.getItem('iica_device_id');
       if (!deviceId) {
         deviceId = Math.random().toString(36).substring(2, 15);
@@ -56,10 +44,10 @@ export function FavoriteButton({ projectId, className }: FavoriteButtonProps) {
       await fetch('/api/favorites/track', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ projectId, action: newStatus ? 'add' : 'remove', deviceId })
+        body: JSON.stringify({ projectId, action: checkIsFavorite(projectId) ? 'add' : 'remove', deviceId })
       });
     } catch (err) {
-      console.error('Failed to update favorite', err);
+      logger.error('Failed to update favorite', err as Error);
     }
   };
 
@@ -67,17 +55,17 @@ export function FavoriteButton({ projectId, className }: FavoriteButtonProps) {
 
   return (
     <button
-      onClick={toggleFavorite}
-      aria-label={isFavorite ? "Quitar de guardados" : "Guardar oportunidad"}
+      onClick={handleToggle}
+      aria-label={isFav ? "Quitar de guardados" : "Guardar oportunidad"}
       className={cn(
         "p-2 rounded-full transition-colors",
-        isFavorite 
+        isFav 
           ? "bg-amber-100 text-amber-500 hover:bg-amber-200 dark:bg-amber-900/30 dark:text-amber-400" 
           : "bg-gray-100 text-gray-400 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-500 dark:hover:bg-gray-700",
         className
       )}
     >
-      <Bookmark className={cn("w-5 h-5", isFavorite && "fill-current")} />
+      <Bookmark className={cn("w-5 h-5", isFav && "fill-current")} />
     </button>
   );
 }

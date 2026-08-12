@@ -110,7 +110,7 @@ export default function CofinancingCalculator({ project, isOpen, onClose }: Cofi
               </label>
               <select
                 value={entityType}
-                onChange={(e) => setEntityType(e.target.value as any)}
+                onChange={(e) => setEntityType(e.target.value as 'micro_small' | 'medium' | 'large' | 'ngo_coop')}
                 className="w-full px-3 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"
               >
                 <option value="micro_small">Micro / Pequeña Empresa (Hasta 80% Co-fin.)</option>

@@ -104,9 +104,6 @@ export function ProjectCard({
 
   logger.debug('Rendering ProjectCard', { id: project.id });
 
-  const handleProjectClick = () => {
-      };
-
   return (
     <article
       aria-label={project.nombre}
@@ -163,7 +160,6 @@ export function ProjectCard({
         {/* Título — primary visual element */}
         <Link
           href={`/proyecto/${project.id}`}
-          onClick={handleProjectClick}
           className="stretched-link block mb-2 line-clamp-2 text-[15px] font-medium leading-snug text-gray-900 dark:text-white hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--iica-yellow)]"
         >
           {project.nombre}
