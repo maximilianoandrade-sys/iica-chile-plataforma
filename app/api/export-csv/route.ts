@@ -43,13 +43,14 @@ export async function GET(request: NextRequest) {
         return matchCat && matchReg && matchInst && matchQ && matchBen && matchMin && matchMax;
     });
 
-    // Build CSV
+    // Build CSV with Semicolon (;) separator & sep=;\n header for native Spanish Windows Excel compatibility
     const headers = [
         'ID',
-        'Nombre',
-        'Institución',
-        'Categoría',
-        'Monto (CLP)',
+        'Nombre Convocatoria / Proyecto',
+        'Institución / Fuente',
+        'Categoría / Sector',
+        'Monto Subvención (CLP)',
+        'Monto Original (Bases)',
         'Fecha Cierre',
         'Estado',
         'Regiones',
@@ -62,7 +63,7 @@ export async function GET(request: NextRequest) {
     const escapeCSV = (val: string | number | undefined): string => {
         if (val === undefined || val === null) return '';
         const str = String(val);
-        if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+        if (str.includes(';') || str.includes('"') || str.includes('\n')) {
             return `"${str.replace(/"/g, '""')}"`;
         }
         return str;
@@ -73,24 +74,23 @@ export async function GET(request: NextRequest) {
         p.nombre,
         p.institucion,
         p.categoria,
-        p.monto,
+        p.monto || 0,
+        p.montoTexto || (p.monto ? `$${p.monto}` : 'Ver bases'),
         p.fecha_cierre,
-        p.estado,
+        p.estadoPostulacion || p.estado || 'Abierta',
         (p.regiones || []).join(' | '),
         (p.beneficiarios || []).join(' | '),
-        p.resumen?.cofinanciamiento || '',
-        p.resumen?.plazo_ejecucion || '',
+        p.requiere_cofinanciamiento ? 'Aporte Propio Requerido' : '100% Subvención (Sin Aporte)',
+        p.resumen?.plazo_ejecucion || '12 meses',
         p.url_bases
-    ].map(escapeCSV).join(','));
+    ].map(escapeCSV).join(';'));
 
-    const csv = [headers.join(','), ...rows].join('\n');
-
-    // Add BOM for Excel compatibility with Spanish characters
     const bom = '\uFEFF';
-    const csvWithBom = bom + csv;
+    const csvWithHeader = `sep=;\n${headers.join(';')}\n${rows.join('\n')}`;
+    const csvWithBom = bom + csvWithHeader;
 
     const today = new Date().toISOString().split('T')[0];
-    const filename = `fondos-iica-chile-${today}.csv`;
+    const filename = `Radar_IICA_Chile_Convocatorias_${today}.csv`;
 
     return new NextResponse(csvWithBom, {
         headers: {

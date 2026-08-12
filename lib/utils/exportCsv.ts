@@ -105,6 +105,17 @@ export function exportProjectsToExcel(projects: Project[], filename: string = 'R
     <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#2A4365"/>
    </Borders>
   </Style>
+  <Style ss:ID="TableHeader">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/>
+   <Font ss:FontName="Calibri" ss:Size="11" ss:Bold="1" ss:Color="#FFFFFF"/>
+   <Interior ss:Color="#002060" ss:Pattern="Solid"/>
+   <Borders>
+    <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#001030"/>
+    <Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="2" ss:Color="#001030"/>
+    <Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#2A4365"/>
+    <Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1" ss:Color="#2A4365"/>
+   </Borders>
+  </Style>
 
   <!-- Estilos Filas de Datos -->
   <Style ss:ID="TdNormal">
