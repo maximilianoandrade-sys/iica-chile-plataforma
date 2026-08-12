@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Star, X, ExternalLink, Calendar, DollarSign, Building2, Trash2 } from 'lucide-react';
+import { Star, X, ExternalLink, Calendar, Trash2 } from 'lucide-react';
 import { type Project } from '@/lib/data';
 import { getFavoriteIds, toggleFavorite } from '@/lib/utils/favorites';
 import Link from 'next/link';

@@ -1,3 +1,7 @@
+import { getLogger } from '@/lib/utils/logger';
+
+const logger = getLogger('favorites');
+
 export const FAVORITES_KEY = 'iica_favorite_projects_v1';
 
 export function getFavoriteIds(): number[] {
@@ -6,7 +10,7 @@ export function getFavoriteIds(): number[] {
     const raw = localStorage.getItem(FAVORITES_KEY);
     return raw ? JSON.parse(raw) : [];
   } catch (e) {
-    console.error('Error reading favorites from localStorage', e);
+    logger.error('Error reading favorites from localStorage', e as Error);
     return [];
   }
 }
@@ -31,7 +35,7 @@ export function toggleFavorite(id: number): number[] {
     window.dispatchEvent(new Event('iica_favorites_updated'));
     return updated;
   } catch (e) {
-    console.error('Error updating favorites in localStorage', e);
+    logger.error('Error updating favorites in localStorage', e as Error);
     return getFavoriteIds();
   }
 }
