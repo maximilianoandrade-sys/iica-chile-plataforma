@@ -67,6 +67,16 @@ const TARGET_URLS = [
   "https://www.goreloslagos.cl/",         // GORE Los Lagos
   "https://www.goreaysen.cl/",            // GORE Aysén
   "https://www.goremagallanes.cl/",       // GORE Magallanes
+  // ── Nuevas Fuentes Internacionales 2026 ──
+  "https://genderenvironmentdata.org/small-grants/", // GEDA
+  "https://www.ctc-n.org/adaptation-fund-climate-innovation-accelerator", // AFCIA
+  "https://futurefornature.org/", // Future for Nature Foundation
+  "https://www.cartagena.gov.co/", // Generacción Climática
+  "https://www.betterpolitics.foundation/resilient-futures-call-2026", // Resilient Futures Fund
+  "https://rea.ec.europa.eu/funding-and-grants/horizon-europe-cluster-6-food-bioeconomy-natural-resources-agriculture-and-environment/biodiversity-and-ecosystem-services_en", // Horizon Europe
+  "https://cinea.ec.europa.eu/life-calls-proposals-2026_en", // EU LIFE Programme
+  "https://common-fund.org/index.php/call-for-proposals", // Common Fund for Commodities (CFC)
+  "https://www.rainforesttrust.org/get-involved/apply-for-funding/", // Rainforest Trust
 ];
 
 export const universalAiCrawler: Scraper = {
