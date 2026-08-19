@@ -53,23 +53,13 @@ const EnvSchema = z.object({
   IICA_USER_DATA_DIR: z.string().optional(),
 });
 
-const AuthEnvSchema = z.object({
-  ADMIN_SESSION_SECRET: z.string().min(8),
-  ADMIN_PASSWORD: z.string().min(1).optional(),
-  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-});
 
-const AiEnvSchema = z.object({
-  GEMINI_API_KEY: z.string().optional(),
-});
 
 export type Env = z.infer<typeof EnvSchema>;
-export type AuthEnv = z.infer<typeof AuthEnvSchema>;
-export type AiEnv = z.infer<typeof AiEnvSchema>;
+export type AuthEnv = Pick<Env, 'ADMIN_SESSION_SECRET' | 'ADMIN_PASSWORD' | 'NODE_ENV'>;
+export type AiEnv = Pick<Env, 'GEMINI_API_KEY'>;
 
 let cachedEnv: Env | null = null;
-let cachedAuthEnv: AuthEnv | null = null;
-let cachedAiEnv: AiEnv | null = null;
 
 export function getEnv(): Env {
   if (cachedEnv) return cachedEnv;
@@ -86,31 +76,19 @@ export function getEnv(): Env {
 }
 
 export function getAuthEnv(): AuthEnv {
-  if (cachedAuthEnv) return cachedAuthEnv;
-
-  const result = AuthEnvSchema.safeParse(process.env);
-  if (!result.success) {
-    const missing = result.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`);
-    logger.error('Validación de auth env falló', new Error(missing.join('; ')));
-    throw new Error(`Variables de auth faltantes/inválidas:\n  ${missing.join('\n  ')}`);
-  }
-
-  cachedAuthEnv = result.data;
-  return cachedAuthEnv;
+  const env = getEnv();
+  return {
+    ADMIN_SESSION_SECRET: env.ADMIN_SESSION_SECRET,
+    ADMIN_PASSWORD: env.ADMIN_PASSWORD,
+    NODE_ENV: env.NODE_ENV,
+  };
 }
 
 export function getAiEnv(): AiEnv {
-  if (cachedAiEnv) return cachedAiEnv;
-
-  const result = AiEnvSchema.safeParse(process.env);
-  if (!result.success) {
-    const missing = result.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`);
-    logger.error('Validación de AI env falló', new Error(missing.join('; ')));
-    throw new Error(`Variables de AI faltantes/inválidas:\n  ${missing.join('\n  ')}`);
-  }
-
-  cachedAiEnv = result.data;
-  return cachedAiEnv;
+  const env = getEnv();
+  return {
+    GEMINI_API_KEY: env.GEMINI_API_KEY,
+  };
 }
 
 /** Non-blocking env getter for public/static contexts */
@@ -128,6 +106,5 @@ export function getPublicEnv(): Partial<Env> {
 /** Reset cache — only for testing */
 export function _resetEnvCache(): void {
   cachedEnv = null;
-  cachedAuthEnv = null;
-  cachedAiEnv = null;
 }
+

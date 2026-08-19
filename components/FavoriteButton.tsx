@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Bookmark } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/cn';
 import { isFavorite as checkIsFavorite, toggleFavorite as doToggle } from '@/lib/utils/favorites';
 import { getLogger } from '@/lib/utils/logger';
 

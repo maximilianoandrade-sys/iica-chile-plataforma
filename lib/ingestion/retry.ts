@@ -7,32 +7,28 @@ export async function fetchWithRetry(
   let lastError: Error | null = null;
 
   for (let attempt = 1; attempt <= attempts; attempt++) {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 30000);
-
     try {
       const response = await fetch(input, {
         ...init,
-        signal: controller.signal,
+        signal: init?.signal ?? AbortSignal.timeout(30000),
       });
-      clearTimeout(timeoutId);
 
       if (response.ok) return response;
 
-      if (response.status < 500 || attempt === attempts) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-
       lastError = new Error(`HTTP ${response.status}`);
+      if (response.status < 500 || attempt === attempts) {
+        throw lastError;
+      }
     } catch (error) {
-      clearTimeout(timeoutId);
       lastError = error as Error;
-      if (attempt === attempts) break;
+      if (attempt === attempts || (lastError.message && lastError.message.startsWith('HTTP ') && !['HTTP 500', 'HTTP 502', 'HTTP 503', 'HTTP 504'].includes(lastError.message))) {
+        throw lastError;
+      }
     }
 
     const waitMs = baseDelayMs * 2 ** (attempt - 1);
     await new Promise((resolve) => setTimeout(resolve, waitMs));
   }
 
-  throw lastError ?? new Error("fetchWithRetry failed");
+  throw lastError ?? new Error(`fetchWithRetry failed for ${input}`);
 }
