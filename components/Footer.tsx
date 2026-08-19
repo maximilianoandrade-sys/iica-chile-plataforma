@@ -1,10 +1,15 @@
 
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Code } from 'lucide-react';
+import { EmbedWidgetModal } from '@/components/EmbedWidgetModal';
 
 export function Footer() {
     const currentYear = new Date().getFullYear();
+    const [isWidgetModalOpen, setIsWidgetModalOpen] = useState(false);
 
     return (
         <footer className="bg-[var(--iica-navy)] dark:bg-gray-900 text-white mt-16">
@@ -63,6 +68,16 @@ export function Footer() {
                             <li><Link href="/#inicio" className="text-white/70 hover:text-white transition-colors">Inicio</Link></li>
                             <li><Link href="/#convocatorias" className="text-white/70 hover:text-white transition-colors">Ver Oportunidades</Link></li>
                             <li><Link href="/about" className="text-white/70 hover:text-white transition-colors">Sobre IICA Chile</Link></li>
+                            <li>
+                                <button
+                                    type="button"
+                                    onClick={() => setIsWidgetModalOpen(true)}
+                                    className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors flex items-center gap-1.5"
+                                >
+                                    <Code className="w-4 h-4" />
+                                    <span>Incrustar Widget (Municipios / PRODESAL)</span>
+                                </button>
+                            </li>
                             <li><Link href="/legal/privacidad" className="text-white/70 hover:text-white transition-colors">Política de Privacidad</Link></li>
                             <li><Link href="/legal/derechos" className="text-white/70 hover:text-white transition-colors">Derechos ARCO+</Link></li>
                             <li><Link href="/legal/terminos" className="text-white/70 hover:text-white transition-colors">Términos de Uso</Link></li>
@@ -75,6 +90,12 @@ export function Footer() {
                     <p>© {currentYear} Instituto Interamericano de Cooperación para la Agricultura (IICA). Todos los derechos reservados.</p>
                 </div>
             </div>
+
+            <EmbedWidgetModal
+                isOpen={isWidgetModalOpen}
+                onClose={() => setIsWidgetModalOpen(false)}
+            />
         </footer>
     );
 }
+

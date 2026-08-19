@@ -248,3 +248,24 @@ html {
     scroll-behavior: auto;
   }
 }
+
+/* Print Optimization for Minuta Ejecutiva PDF */
+@media print {
+  header, footer, nav, button, .no-print, [aria-label="Cerrar menú"] {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 11pt !important;
+  }
+  .container {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .print-page {
+    border: none !important;
+    box-shadow: none !important;
+  }
+}

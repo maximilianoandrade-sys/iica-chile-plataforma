@@ -6,6 +6,7 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { EligibilityAssistant } from '@/components/EligibilityAssistant';
 import { CalendarReminderButton } from '@/components/CalendarReminderButton';
+import { PrintProjectButton } from '@/components/PrintProjectButton';
 import Link from 'next/link';
 import { ExternalLink, ArrowLeft, Calendar, CheckCircle, Info, MapPin, Users, DollarSign } from 'lucide-react';
 
@@ -225,21 +226,25 @@ export default async function ProyectoDetallePage({ params }: Props) {
                             </div>
                         )}
 
-                        {/* Botón Bases Oficiales */}
+                        {/* Botones de Acción: Bases, Calendario e Impresión */}
                         <div className="pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
                             <div>
                                 <h3 className="font-bold text-[var(--iica-navy)]">¿Listo para postular?</h3>
-                                <p className="text-xs text-gray-500">Accede directamente al portal oficial de la institución.</p>
+                                <p className="text-xs text-gray-500">Accede a las bases oficiales, agéndalo en tu calendario o descarga la minuta impresible.</p>
                             </div>
-                            <a
-                                href={project.url_bases}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] text-white font-extrabold px-6 py-3 rounded-xl transition-all shadow-md min-h-[44px]"
-                            >
-                                Ver Bases en Sitio Oficial
-                                <ExternalLink className="h-4 w-4" />
-                            </a>
+                            <div className="w-full sm:w-auto flex flex-wrap items-center gap-3">
+                                <CalendarReminderButton project={project} />
+                                <PrintProjectButton />
+                                <a
+                                    href={project.url_bases}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] text-white font-extrabold px-6 py-3 rounded-xl transition-all shadow-md min-h-[44px]"
+                                >
+                                    Ver Bases en Sitio Oficial
+                                    <ExternalLink className="h-4 w-4" />
+                                </a>
+                            </div>
                         </div>
 
                     </div>

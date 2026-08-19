@@ -6,6 +6,7 @@ import { type Project, daysUntilClose, formatDeadline, pluralizeDias } from '@/l
 import { InstitutionLogo } from '@/components/InstitutionLogo';
 import { getLogger } from '@/lib/utils/logger';
 import { FavoriteButton } from '@/components/FavoriteButton';
+import { CalendarReminderButton } from '@/components/CalendarReminderButton';
 
 const logger = getLogger('ProjectCard');
 
@@ -230,6 +231,7 @@ export function ProjectCard({
           >
             <AlertCircle className="w-3.5 h-3.5" />
           </span>
+          <CalendarReminderButton project={project} variant="icon" />
           {project.url_bases && (
             <a
               href={project.url_bases}
