@@ -1,5 +1,55 @@
 [
   {
+    "id": 947,
+    "nombre": "Curso Internacional de Desarrollo de Capacidades para la Aplicación del Enfoque de Mejoramiento de Vida para el Desarrollo Rural Participativo",
+    "institucion": "AGCID",
+    "monto": 0,
+    "montoTexto": "Beca Completa (Cobertura Total)",
+    "fecha_cierre": "2026-11-30",
+    "estado": "Abierto",
+    "categoria": "Capacitación y Becas Internacionales",
+    "url_bases": "https://www.agcid.gob.cl/becas/becas-para-chilenos/convocatorias-vigentes",
+    "regiones": [
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "Profesionales Agrícolas",
+      "Técnicos del Sector Rural",
+      "Funcionarios Públicos"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Técnicos del Sector Rural",
+      "Profesionales del Agro"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "estadoPostulacion": "Abierta",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 92,
+    "objetivo": "Fortalecer las capacidades técnicas e institucionales de profesionales y líderes rurales mediante el enfoque de Mejoramiento de Vida (Kaisen/Life Improvement Approach) para el desarrollo agrícola y comunitario sostenible.",
+    "descripcionIICA": "Programa internacional gestionado por AGCID en alianza con JICA. Promueve el desarrollo rural participativo y la gestión eficiente en comunidades agrícolas.",
+    "requisitos": [
+      "Título profesional o técnico en ciencias agronómicas, desarrollo rural o áreas afines",
+      "Patrocinio de la institución u organización de origen",
+      "Compromiso de replicabilidad en comunidades rurales"
+    ],
+    "fortalezas": [
+      "Convocatoria oficial AGCID de alta relevancia para el desarrollo rural participativo y la formación de extensionistas agrícolas"
+    ],
+    "riesgos": [
+      "Cupos limitados por país"
+    ],
+    "recomendaciones": [
+      "Presentar patrocinio institucional con foco en impacto territorial rural"
+    ]
+  },
+  {
     "id": 906,
     "nombre": "Adaptation Fund AFCIA (UN CTCN) — Acelerador de Innovación Climática y Resiliencia Hídrica",
     "institucion": "Adaptation Fund / UN CTCN",

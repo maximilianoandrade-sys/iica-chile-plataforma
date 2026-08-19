@@ -172,6 +172,25 @@ const FUENTES: FuenteOficial[] = [
         regiones: 'Nacional (vía INDAP/Ministerios)'
     },
     {
+        id: 'agcid',
+        nombre: 'Agencia Chilena de Cooperación Internacional para el Desarrollo',
+        sigla: 'AGCID',
+        descripcion: 'Agencia del Ministerio de Relaciones Exteriores que gestiona becas, cooperación Sur-Sur, triangular y programas de formación internacional para profesionales y sectores rurales.',
+        url: 'https://www.agcid.gob.cl/',
+        urlConcursos: 'https://www.agcid.gob.cl/becas/becas-para-chilenos/convocatorias-vigentes',
+        color: 'text-red-700',
+        darkColor: 'dark:text-red-300',
+        bgColor: 'bg-red-50 border-red-200',
+        darkBgColor: 'dark:bg-red-900/30 dark:border-red-800',
+        icon: 'globe',
+        tipoFondos: ['Becas de Posgrado', 'Cursos Internacionales de Desarrollo', 'Fondo Chile (Sur-Sur)', 'Capacitación Rural'],
+        beneficiarios: ['Profesionales Agrícolas', 'Organismos Públicos', 'Técnicos del Sector Rural', 'Investigadores'],
+        montoRango: 'Financiamiento total / Becas completas y parciales',
+        verificado: true,
+        fondosActivos: 0,
+        regiones: 'Nacional e Internacional'
+    },
+    {
         id: 'fontagro',
         nombre: 'Fondo Regional de Tecnología Agropecuaria',
         sigla: 'FONTAGRO',
