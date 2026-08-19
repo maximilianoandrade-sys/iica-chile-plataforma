@@ -46,9 +46,13 @@ export function EligibilityAssistant({ project }: EligibilityAssistantProps) {
       allProfiles.some(p => p.includes(kw))
     ) ?? true;
 
-    if (isMatchProfile || allProfiles.length === 0) {
+    if (isMatchProfile) {
       score += 40;
-      reasons.push(`Perfil "${applicantLabel}" coincide con las bases oficiales del fondo.`);
+      if (allProfiles.length > 0) {
+        reasons.push(`Perfil "${applicantLabel}" coincide con los requisitos registrados en las bases.`);
+      } else {
+        reasons.push(`Perfil "${applicantLabel}" aplica a esta convocatoria de ventanilla o criterios generales.`);
+      }
     } else {
       missing.push(`Las bases enfatizan candidatos tipo: ${project.tipos_solicitante?.join(', ') || project.beneficiarios?.join(', ') || 'Consorcios o Entidades Acreditadas'}.`);
     }
