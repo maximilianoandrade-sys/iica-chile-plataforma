@@ -377,8 +377,8 @@ export default function ProjectList({
         </div>
       ) : (
           <div className="text-center py-12 text-gray-500 dark:text-gray-400 space-y-3" role="status" aria-live="polite">
-          <p className="text-lg font-medium text-iica-navy dark:text-white">No encontramos oportunidades con estos filtros</p>
-          <p className="text-sm mt-1">Pruebe ampliar su búsqueda o restablecer los filtros activos.</p>
+          <p className="text-lg font-medium text-iica-navy dark:text-white">No hemos encontrado convocatorias con los criterios seleccionados</p>
+          <p className="text-sm mt-1">Le sugerimos ampliar su búsqueda o restablecer los filtros activos para ver más alternativas.</p>
           {relevanceMode !== 'all' ? (
             <button
               type="button"

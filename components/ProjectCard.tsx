@@ -57,25 +57,25 @@ const URGENCY_STYLES: Record<
 > = {
   critical: {
     label: 'Cierra Hoy',
-    badge: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200',
+    badge: 'bg-red-100 text-red-800 dark:bg-red-950/70 dark:text-red-200 dark:border dark:border-red-800',
     border: 'border-l-4 border-l-red-500',
-    deadlineText: 'text-red-700 dark:text-red-400',
+    deadlineText: 'text-red-700 dark:text-red-300 font-semibold',
   },
   warning: {
     label: 'Cierra Pronto',
-    badge: 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200',
+    badge: 'bg-amber-100 text-amber-800 dark:bg-amber-950/70 dark:text-amber-200 dark:border dark:border-amber-800',
     border: 'border-l-4 border-l-amber-500',
-    deadlineText: 'text-amber-700 dark:text-amber-400',
+    deadlineText: 'text-amber-700 dark:text-amber-300 font-semibold',
   },
   normal: {
     label: 'Abierta',
-    badge: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200',
+    badge: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-200 dark:border dark:border-emerald-800',
     border: '',
     deadlineText: 'text-gray-700 dark:text-gray-300',
   },
   closed: {
     label: 'Cerrada',
-    badge: 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
+    badge: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:border dark:border-gray-700',
     border: '',
     deadlineText: 'text-gray-500 dark:text-gray-400',
   },

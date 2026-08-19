@@ -91,7 +91,7 @@ describe('ProjectList accessibility', () => {
       />
     );
 
-    expect(screen.getByText(/No encontramos oportunidades con estos filtros/i)).toBeInTheDocument();
+    expect(screen.getByText(/No hemos encontrado convocatorias/i)).toBeInTheDocument();
     expect(screen.getByText(/^Filtros activos$/i)).toBeInTheDocument();
     expect(screen.getByText('Búsqueda: "fia"')).toBeInTheDocument();
 

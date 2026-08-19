@@ -2,7 +2,7 @@ import { Search, Filter } from "lucide-react";
 
 export default function SkeletonProjectList() {
     return (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-[var(--iica-border)] overflow-hidden animate-pulse">
+        <div role="status" aria-label="Cargando convocatorias..." aria-busy="true" className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-[var(--iica-border)] overflow-hidden animate-pulse">
 
             {/* Header Skeleton */}
             <div className="p-6 border-b border-[var(--iica-border)] bg-gray-50/50 dark:bg-gray-700/50">
