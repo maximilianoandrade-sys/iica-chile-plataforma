@@ -87,7 +87,7 @@ export function Header({ urgentCount = 0 }: HeaderProps) {
                             <span>Explorar Oportunidades</span>
                             {urgentCount > 0 && (
                                 <span
-                                    className="bg-rose-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black animate-pulse"
+                                    className="ml-1 bg-rose-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black animate-pulse"
                                     aria-label={`${urgentCount} oportunidades urgentes`}
                                 >
                                     {urgentCount}
