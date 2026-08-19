@@ -20,7 +20,7 @@ export default function StatsSection({ total, abiertas, internacionales, urgente
             icon: <Zap className="w-6 h-6" />,
             label: 'Total',
             value: total,
-            description: 'Oportunidades disponibles',
+            description: total > 0 ? 'Oportunidades disponibles' : 'Fuentes monitorizadas',
             iconClass: 'text-[var(--iica-blue)] bg-blue-50 dark:bg-blue-950/40',
             href: '/?estado=all#convocatorias',
         },

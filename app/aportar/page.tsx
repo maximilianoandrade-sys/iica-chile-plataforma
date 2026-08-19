@@ -61,6 +61,7 @@ export default function AportarPage() {
           </label>
           <Input
             id="url"
+            name="url"
             type="url"
             placeholder="https://www.agci.cl/becas/..."
             value={url}
