@@ -22,28 +22,26 @@ jobs:
           POSTGRES_USER: iica
           POSTGRES_PASSWORD: iica
           POSTGRES_DB: iica_test
+          POSTGRES_HOST_AUTH_METHOD: trust
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U iica"
-          --health-interval 5s
+          --health-cmd pg_isready
+          --health-interval 10s
           --health-timeout 5s
-          --health-retries 10
+          --health-retries 5
 
     env:
       DATABASE_URL: postgres://iica:iica@localhost:5432/iica_test
       DIRECT_URL: postgres://iica:iica@localhost:5432/iica_test
       ADMIN_SESSION_SECRET: ci-test-secret-not-for-production
-      # No usamos GEMINI_API_KEY en CI: hybridSearch hace fallback a
-      # lexical-only cuando Gemini no responde, lo cual es suficiente
-      # para los smoke/E2E (no validan calidad semántica).
 
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: "20"
           cache: "npm"
 
       - name: Install dependencies
