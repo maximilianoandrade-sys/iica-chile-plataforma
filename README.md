@@ -20,7 +20,7 @@
 
 ## 🎯 Propósito de la Plataforma
 
-El **Radar de Oportunidades IICA Chile** centraliza, clasifica y monitorea en tiempo real más de **214 convocatorias activas** de financiamiento silvoagropecuario, desarrollo territorial, gestión hídrica, bioeconomía y **AgriTech / Inteligencia Artificial**.
+El **Radar de Oportunidades IICA Chile** centraliza, clasifica y monitorea en tiempo real **127 convocatorias activas vigentes** (de un catálogo total de **214 convocatorias monitoreadas**) de financiamiento silvoagropecuario, desarrollo territorial, gestión hídrica, bioeconomía y **AgriTech / Inteligencia Artificial**.
 
 Permite a profesionales del IICA, consultores, organizaciones campesinas y empresas agropecuarias:
 1. **Identificar oportunidades vigentes** en minutos con filtros por región de Chile, sector y rango de presupuesto.

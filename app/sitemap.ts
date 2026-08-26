@@ -1,19 +1,22 @@
 import { MetadataRoute } from "next";
 import prisma from "@/lib/prisma";
-
+import { getProjects } from "@/lib/data";
 import { getEnv } from "@/lib/utils/env";
 
 export const dynamic = "force-dynamic";
 
-const DEFAULT_SITE_URL = "https://iica-chile-plataforma.vercel.app";
+const CANONICAL_SITE_URL = "https://iica-chile-plataforma.vercel.app";
 
 function getBaseUrl(): string {
   try {
     const env = getEnv();
-    return env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : DEFAULT_SITE_URL;
+    if (env.NEXT_PUBLIC_SITE_URL && !env.NEXT_PUBLIC_SITE_URL.includes("localhost")) {
+      return env.NEXT_PUBLIC_SITE_URL;
+    }
   } catch {
-    return DEFAULT_SITE_URL;
+    // Fall back to canonical site URL
   }
+  return CANONICAL_SITE_URL;
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -25,14 +28,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       select: { id: true, updatedAt: true },
     });
 
-    projectUrls = projects.map((p) => ({
-      url: `${BASE_URL}/proyecto/${p.id}`,
-      lastModified: p.updatedAt,
-      changeFrequency: "weekly",
-      priority: 0.8,
-    }));
+    if (projects && projects.length > 0) {
+      projectUrls = projects.map((p) => ({
+        url: `${BASE_URL}/proyecto/${p.id}`,
+        lastModified: p.updatedAt,
+        changeFrequency: "weekly",
+        priority: 0.8,
+      }));
+    } else {
+      throw new Error("No projects found in DB");
+    }
   } catch {
-    // Non-blocking fallback if DB is unreachable during sitemap generation
+    // Fallback if DB is unreachable or empty: load from projects.json via getProjects()
+    try {
+      const result = await getProjects();
+      if (result.ok && result.projects) {
+        projectUrls = result.projects.map((p) => ({
+          url: `${BASE_URL}/proyecto/${p.id}`,
+          lastModified: new Date(),
+          changeFrequency: "weekly",
+          priority: 0.8,
+        }));
+      }
+    } catch {
+      // Graceful fallback
+    }
   }
 
   return [
@@ -43,3 +63,4 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...projectUrls,
   ];
 }
+

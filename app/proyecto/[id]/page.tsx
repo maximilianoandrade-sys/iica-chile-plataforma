@@ -247,6 +247,15 @@ export default async function ProyectoDetallePage({ params }: Props) {
                             </div>
                         </div>
 
+                        {/* Legal and verification disclaimer */}
+                        <div className="p-4 bg-gray-50 dark:bg-gray-800/60 rounded-xl border border-gray-200 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400 flex items-start gap-2.5">
+                            <Info className="w-4 h-4 text-[var(--iica-blue)] shrink-0 mt-0.5" />
+                            <div>
+                                <span className="font-bold text-gray-700 dark:text-gray-300">Verificado por IICA Chile: </span>
+                                La información expuesta proviene de fuentes públicas oficiales ({project.institucion}). Las evaluaciones y filtros entregados corresponden a una preevaluación previa. La decisión final de admisibilidad, evaluación y adjudicación es competencia exclusiva de la institución convocante según sus bases oficiales.
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </main>

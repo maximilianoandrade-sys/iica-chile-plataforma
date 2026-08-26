@@ -180,7 +180,7 @@ export function EligibilityAssistant({ project }: EligibilityAssistantProps) {
                   ? 'bg-amber-200 text-amber-900 dark:bg-amber-800 dark:text-amber-100'
                   : 'bg-red-200 text-red-900 dark:bg-red-800 dark:text-red-100'
               }`}>
-                {evaluation.verdict === 'eligible' && '✅ 100% Elegible para Postulación'}
+                {evaluation.verdict === 'eligible' && '✅ Preevaluación favorable'}
                 {evaluation.verdict === 'conditional' && '⚠️ Elegible con Condiciones o Socio Técnico'}
                 {evaluation.verdict === 'ineligible' && '❌ Perfil no prioritario según bases'}
               </span>
@@ -200,6 +200,10 @@ export function EligibilityAssistant({ project }: EligibilityAssistantProps) {
                 </li>
               ))}
             </ul>
+
+            <p className="mt-3 text-[11px] text-gray-500 dark:text-gray-400 italic border-t border-gray-200 dark:border-gray-700/60 pt-2">
+              Nota: La preevaluación mostrada es una orientación técnica previa del Radar IICA Chile. La decisión final de admisibilidad y adjudicación corresponde exclusivamente a la institución convocante según sus bases oficiales.
+            </p>
           </div>
         </div>
       </div>
