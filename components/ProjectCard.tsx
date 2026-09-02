@@ -33,7 +33,7 @@ function formatDeadlineStatus(project: Project): {
   const closeDate = formatDeadline(project.fecha_cierre);
 
   if (days === 999) {
-    return { text: 'Sin fecha definida', detail: 'Cierre por confirmar', urgency: 'normal' };
+    return { text: 'Ventanilla permanente', detail: 'Postulación continua', urgency: 'normal' };
   }
   if (days < 0) {
     return { text: 'Cerrada', detail: `Cerró: ${closeDate}`, urgency: 'closed' };

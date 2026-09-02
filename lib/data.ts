@@ -240,7 +240,7 @@ import { getLogger } from '@/lib/utils/logger';
 import prisma from './prisma';
 import projectsJson from '../data/projects.json';
 
-function getStaticProjects(today: Date): Project[] {
+export function getStaticProjects(today: Date): Project[] {
     const todayStr = today.toISOString().split('T')[0];
     return (projectsJson as any[])
         .filter(p => {

@@ -344,9 +344,9 @@ export default function ProjectList({
                               ? 'text-amber-600 dark:text-amber-400'
                               : 'text-gray-700 dark:text-gray-300'
                           }`}>
-                            {days < 0 ? 'Cerrada' : days === 0 ? 'Cierra hoy' : `${days} días`}
+                            {days < 0 ? 'Cerrada' : days === 0 ? 'Cierra hoy' : days >= 999 ? 'Ventanilla abierta' : `${days} días`}
                           </span>
-                          <span className="block text-gray-400 dark:text-gray-500">{closeDate}</span>
+                          <span className="block text-gray-400 dark:text-gray-500">{closeDate === 'Sin fecha definida' ? 'Postulación continua' : closeDate}</span>
                         </td>
                         <td className="px-4 py-3.5 whitespace-nowrap">
                           <div className="flex items-center gap-1.5">

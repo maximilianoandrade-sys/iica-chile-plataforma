@@ -13,6 +13,7 @@ import prisma from '@/lib/prisma';
 import { Prisma } from '@prisma/client';
 import { embedText, toPgVector } from '@/lib/ingestion/embeddings';
 import { getLogger } from '@/lib/utils/logger';
+import { getStaticProjects } from '@/lib/data';
 
 const logger = getLogger('HybridSearch');
 
@@ -95,7 +96,7 @@ function buildProjectWhere(filters: HybridQueryFilters): Prisma.ProjectWhereInpu
   where.fecha_cierre = { gte: today };
 
   if (filters.ambito && filters.ambito !== 'all') {
-    if (filters.ambito === 'chile') {
+    if (filters.ambito === 'chile' || filters.ambito === 'Nacional') {
       where.ambito = { not: 'Internacional' };
     } else {
       where.ambito = filters.ambito;
@@ -213,9 +214,90 @@ function sortProjectsByMode<T extends { fecha_cierre: Date; monto: number; id: n
   });
 }
 
+function deduplicateProjects<T extends { id: number; url_bases?: string }>(projects: T[]): T[] {
+  const seen = new Map<string, T>();
+  for (const p of projects) {
+    const key = p.url_bases?.toLowerCase().trim();
+    if (!key) {
+      seen.set(`__no_url_${p.id}`, p);
+    } else if (!seen.has(key)) {
+      seen.set(key, p);
+    }
+  }
+  return Array.from(seen.values());
+}
+
+function getFilteredStaticProjects(filters: HybridQueryFilters, query?: string): any[] {
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+  const staticList = getStaticProjects(today);
+  const q = query ? query.toLowerCase().trim() : '';
+
+  return staticList.filter(p => {
+    // Ambito
+    if (filters.ambito && filters.ambito !== 'all') {
+      if (filters.ambito === 'chile' || filters.ambito === 'Nacional') {
+        if (p.ambito === 'Internacional') return false;
+      } else if (filters.ambito === 'Internacional') {
+        if (p.ambito !== 'Internacional') return false;
+      }
+    }
+
+    // Tipo
+    if (filters.tipo === 'licitacion') {
+      const isLicitacion = LICITACION_CATEGORIES.includes(p.categoria) || LICITACION_INSTITUTIONS.includes(p.institucion);
+      if (!isLicitacion) return false;
+    } else if (filters.tipo === 'fondo') {
+      const isLicitacion = LICITACION_CATEGORIES.includes(p.categoria) || LICITACION_INSTITUTIONS.includes(p.institucion);
+      if (isLicitacion) return false;
+    }
+
+    // Estado
+    if (filters.estado && p.estadoPostulacion !== filters.estado) {
+      return false;
+    }
+
+    // Institutions
+    if (filters.selectedInstitutions.length > 0) {
+      if (!filters.selectedInstitutions.includes(p.institucion)) return false;
+    }
+
+    // Regions
+    if (filters.selectedRegions.length > 0) {
+      const pRegs = p.regiones || (p.region ? [p.region] : []);
+      const matchesReg = filters.selectedRegions.some(r => pRegs.includes(r));
+      if (!matchesReg) return false;
+    }
+
+    // Categories
+    if (filters.selectedCategories.length > 0) {
+      if (!filters.selectedCategories.includes(p.categoria)) return false;
+    }
+
+    // Amounts
+    if (filters.minAmount > 0 && p.monto && p.monto < filters.minAmount) return false;
+    if (filters.maxAmount < Number.POSITIVE_INFINITY && p.monto && p.monto > filters.maxAmount) return false;
+
+    // Search query
+    if (q) {
+      const blob = `${p.nombre || ''} ${p.institucion || ''} ${p.objetivo || ''} ${p.categoria || ''} ${p.descripcionIICA || ''}`.toLowerCase();
+      const words = q.split(/\s+/).filter(Boolean);
+      if (!words.every(w => blob.includes(w))) return false;
+    }
+
+    return true;
+  }).map(p => ({
+    ...p,
+    fecha_cierre: new Date(p.fecha_cierre || '2099-12-31T12:00:00Z'),
+    created_at: new Date(),
+    updated_at: new Date(),
+    source: { slug: (p.institucion || '').toLowerCase(), name: p.institucion || '' },
+  }));
+}
+
 /**
  * Búsqueda híbrida full-text + semántica.
- * Si query está vacío, devuelve los más recientes.
+ * Si query está vacío, devuelve los más recientes combinando DB y catálogo sincronizado.
  */
 export async function hybridSearch(opts: HybridSearchOptions): Promise<HybridSearchResult> {
   const { query, limit = 50, offset = 0, sort } = opts;
@@ -227,18 +309,24 @@ export async function hybridSearch(opts: HybridSearchOptions): Promise<HybridSea
   if (!query || !query.trim()) {
     const where = buildProjectWhere(filters);
 
-    const [total, projects] = await Promise.all([
-      prisma.project.count({ where }),
-      prisma.project.findMany({
+    let dbProjects: any[] = [];
+    try {
+      dbProjects = await prisma.project.findMany({
         where,
         include: { source: { select: { slug: true, name: true } } },
         orderBy: getOrderBy(normalizedSort),
-        skip: safeOffset,
-        take: safeLimit,
-      }),
-    ]);
+      });
+    } catch (err) {
+      logger.error('hybridSearch prisma findMany failed, fallback to static', err as Error);
+    }
 
-    return { projects, mode: 'all', total };
+    const staticMatched = getFilteredStaticProjects(filters);
+    const combined = deduplicateProjects([...dbProjects, ...staticMatched]);
+    const sorted = sortProjectsByMode(combined, normalizedSort);
+    const total = sorted.length;
+    const projects = sorted.slice(safeOffset, safeOffset + safeLimit);
+
+    return { projects: projects as any, mode: 'all', total };
   }
 
   let queryEmbedding: number[] | null = null;
@@ -251,27 +339,38 @@ export async function hybridSearch(opts: HybridSearchOptions): Promise<HybridSea
   }
 
   const candidateLimit = Math.max(200, safeLimit + safeOffset + 80);
+  const staticMatched = getFilteredStaticProjects(filters, query);
 
-  if (queryEmbedding) {
-    return runFullHybrid(
-      query,
-      queryEmbedding,
-      filters,
-      normalizedSort,
-      safeLimit,
-      safeOffset,
-      candidateLimit
-    );
+  let dbResult: HybridSearchResult = { projects: [], mode: 'lexical_only', total: 0 };
+  try {
+    dbResult = queryEmbedding
+      ? await runFullHybrid(
+          query,
+          queryEmbedding,
+          filters,
+          normalizedSort,
+          candidateLimit,
+          0,
+          candidateLimit
+        )
+      : await runLexicalOnly(
+          query,
+          filters,
+          normalizedSort,
+          candidateLimit,
+          0,
+          candidateLimit
+        );
+  } catch (err) {
+    logger.error('DB search failed, relying on static search', err as Error);
   }
 
-  return runLexicalOnly(
-    query,
-    filters,
-    normalizedSort,
-    safeLimit,
-    safeOffset,
-    candidateLimit
-  );
+  const combined = deduplicateProjects([...dbResult.projects, ...staticMatched]);
+  const sorted = sortProjectsByMode(combined, normalizedSort);
+  const total = sorted.length;
+  const projects = sorted.slice(safeOffset, safeOffset + safeLimit);
+
+  return { projects: projects as any, mode: dbResult.mode, total };
 }
 
 async function runFullHybrid(

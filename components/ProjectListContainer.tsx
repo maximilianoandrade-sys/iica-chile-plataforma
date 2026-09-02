@@ -20,7 +20,7 @@ export default async function ProjectListContainer({
     const selectedCategories = typeof searchParams.category === 'string' ? searchParams.category.split(',').filter(Boolean) : [];
     const rawAmbito = typeof searchParams.ambito === 'string' ? searchParams.ambito : '';
     const relevanceMode = typeof searchParams.relevanceMode === 'string' ? searchParams.relevanceMode : 'chile_strict';
-    const selectedAmbito = rawAmbito || (relevanceMode === 'all' ? 'all' : relevanceMode === 'international' ? 'Internacional' : 'Nacional');
+    const selectedAmbito = rawAmbito || (relevanceMode === 'all' ? 'all' : relevanceMode === 'international' ? 'Internacional' : 'chile');
     const tipo = (typeof searchParams.tipo === 'string' && (searchParams.tipo === 'fondo' || searchParams.tipo === 'licitacion')) ? searchParams.tipo : 'all';
     const postedFrom = typeof searchParams.postedFrom === 'string' ? searchParams.postedFrom : undefined;
     const postedTill = typeof searchParams.postedTill === 'string' ? searchParams.postedTill : undefined;
