@@ -15,6 +15,7 @@ import { getCachedProjectFilterSnapshot, getCachedProjects } from "@/lib/data";
 import { buildFilterCounts } from "@/lib/search/filtering";
 import { ALL_INSTITUTION_SIGLAS } from "@/lib/constants/institutions";
 import prisma from "@/lib/prisma";
+import metadata from "@/data/metadata.json";
 
 // Estrategia híbrida: home cacheada con ISR y búsqueda/filtros dinámicos por query.
 // 15 min revalidation reduces stale "urgent" data window (was 1 hour).
@@ -143,7 +144,7 @@ export default async function DashboardPage({
   // Build filter facet counts for the search bar (rendered outside main for immediate sticky)
   const filterCounts = buildFilterCounts(filterSnapshot);
 
-  let lastUpdatedAt: string | null = null;
+  let lastUpdatedAt: string | null = (metadata as { lastUpdatedAt?: string })?.lastUpdatedAt || null;
   try {
     const latestSourceRun = await prisma.source.findFirst({
       where: { lastRunAt: { not: null } },
@@ -151,9 +152,14 @@ export default async function DashboardPage({
       select: { lastRunAt: true },
     });
 
-    lastUpdatedAt = latestSourceRun?.lastRunAt?.toISOString() ?? null;
+    if (latestSourceRun?.lastRunAt) {
+      const dbDate = latestSourceRun.lastRunAt.toISOString();
+      if (!lastUpdatedAt || new Date(dbDate) > new Date(lastUpdatedAt)) {
+        lastUpdatedAt = dbDate;
+      }
+    }
   } catch {
-    lastUpdatedAt = null;
+    // Si la BD no responde o no tiene datos más nuevos, usa metadata.lastUpdatedAt
   }
 
   return (
