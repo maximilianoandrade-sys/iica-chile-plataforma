@@ -4,9 +4,8 @@ on:
   pull_request:
     branches: [main]
   push:
-    # Corre en todos los branches para feedback temprano antes del PR.
-    # Si esto consume demasiados minutos de Actions, restringir a [main].
-    branches-ignore: []
+    # Restringido a main para no agotar la cuota de minutos de GitHub Actions
+    branches: [main]
   workflow_dispatch:
 
 jobs:
