@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { X, SlidersHorizontal, ChevronDown, Loader2 } from 'lucide-react';
-import { type FilterCounts } from '@/lib/data';
+import { type FilterCounts } from '@/lib/project-utils';
 import { getLogger } from '@/lib/utils/logger';
 import { sortRegionLabels } from '@/lib/search/region-normalization';
 import { normalizeInstitution } from '@/lib/search/filtering';

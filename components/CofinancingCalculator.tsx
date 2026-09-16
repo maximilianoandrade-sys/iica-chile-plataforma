@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Calculator, DollarSign, Download, Info, CheckCircle2, ShieldCheck, X } from 'lucide-react';
-import { type Project } from '@/lib/data';
+import { type Project } from '@/lib/project-utils';
 import { exportProjectsToCsv } from '@/lib/utils/exportCsv';
 
 interface CofinancingCalculatorProps {

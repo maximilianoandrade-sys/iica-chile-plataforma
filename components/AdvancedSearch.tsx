@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { Search, X, Clock, Star, Loader2 } from 'lucide-react';
-import { type FilterCounts } from '@/lib/data';
+import { type FilterCounts } from '@/lib/project-utils';
 
 interface SavedSearch {
   id: string;

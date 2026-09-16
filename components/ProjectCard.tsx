@@ -2,13 +2,10 @@
 
 import Link from 'next/link';
 import { Calendar, MapPin, DollarSign, AlertCircle } from 'lucide-react';
-import { type Project, daysUntilClose, formatDeadline, pluralizeDias } from '@/lib/data';
+import { type Project, daysUntilClose, formatDeadline, pluralizeDias } from '@/lib/project-utils';
 import { InstitutionLogo } from '@/components/InstitutionLogo';
-import { getLogger } from '@/lib/utils/logger';
 import { FavoriteButton } from '@/components/FavoriteButton';
 import { CalendarReminderButton } from '@/components/CalendarReminderButton';
-
-const logger = getLogger('ProjectCard');
 
 /** Urgency semaphore: 3 levels + closed */
 type UrgencyLevel = 'critical' | 'warning' | 'normal' | 'closed';
@@ -102,8 +99,6 @@ export function ProjectCard({
     );
 
   const styles = URGENCY_STYLES[urgency];
-
-  logger.debug('Rendering ProjectCard', { id: project.id });
 
   return (
     <article

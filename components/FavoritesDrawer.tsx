@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Star, X, ExternalLink, Calendar, Trash2 } from 'lucide-react';
-import { type Project } from '@/lib/data';
+import { type Project } from '@/lib/project-utils';
 import { getFavoriteIds, toggleFavorite } from '@/lib/utils/favorites';
 import Link from 'next/link';
 

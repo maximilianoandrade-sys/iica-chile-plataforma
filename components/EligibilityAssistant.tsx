@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import { CheckCircle2, AlertTriangle, XCircle, HelpCircle, ShieldCheck, Sparkles, Building2, MapPin, Coins } from 'lucide-react';
-import type { Project } from '@/lib/data';
+import type { Project } from '@/lib/project-utils';
 
 interface EligibilityAssistantProps {
   project: Project;

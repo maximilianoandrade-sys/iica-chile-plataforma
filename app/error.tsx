@@ -3,6 +3,9 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { AlertTriangle } from 'lucide-react';
+import { getLogger } from '@/lib/utils/logger';
+
+const logger = getLogger('AppError');
 
 export default function Error({
     error,
@@ -12,7 +15,7 @@ export default function Error({
     reset: () => void;
 }) {
     useEffect(() => {
-        console.error(error);
+        logger.error('Unhandled application error captured by Error Boundary', error, { digest: error.digest });
     }, [error]);
 
     return (

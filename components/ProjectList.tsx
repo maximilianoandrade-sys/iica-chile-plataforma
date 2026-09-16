@@ -12,7 +12,7 @@ import CofinancingCalculator from '@/components/CofinancingCalculator';
 import FavoritesDrawer from '@/components/FavoritesDrawer';
 import { exportProjectsToCsv } from '@/lib/utils/exportCsv';
 import { getLogger } from '@/lib/utils/logger';
-import { type Project, daysUntilClose, formatDeadline, formatMontoCLP } from '@/lib/data';
+import { type Project, daysUntilClose, formatDeadline, formatMontoCLP } from '@/lib/project-utils';
 
 const logger = getLogger('ProjectList');
 const ITEMS_PER_PAGE = 16;

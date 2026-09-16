@@ -6,6 +6,9 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
+import { getLogger } from '@/lib/utils/logger';
+
+const logger = getLogger('usePWA');
 
 // ============================================================================
 // 1. SERVICE WORKER REGISTRATION
@@ -28,7 +31,7 @@ export function useServiceWorker() {
         navigator.serviceWorker
             .register('/sw.js')
             .then(reg => {
-                console.log('✅ Service Worker registrado');
+                logger.info('Service Worker registrado');
                 setRegistration(reg);
 
                 // Verificar actualizaciones
@@ -44,7 +47,7 @@ export function useServiceWorker() {
                 });
             })
             .catch(error => {
-                console.error('❌ Error registrando Service Worker:', error);
+                logger.error('Error registrando Service Worker', error as Error);
             });
 
         // Monitorear estado online/offline
@@ -94,7 +97,7 @@ export function usePushNotifications() {
 
     const requestPermission = useCallback(async () => {
         if (!('Notification' in window)) {
-            console.warn('⚠️ Notificaciones no soportadas');
+            logger.warn('Notificaciones no soportadas');
             return false;
         }
 
@@ -105,7 +108,7 @@ export function usePushNotifications() {
 
     const subscribe = useCallback(async () => {
         if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-            console.warn('⚠️ Push no soportado');
+            logger.warn('Push no soportado');
             return null;
         }
 
@@ -137,7 +140,7 @@ export function usePushNotifications() {
 
             return sub;
         } catch (error) {
-            console.error('❌ Error suscribiendo a push:', error);
+            logger.error('Error suscribiendo a push', error as Error);
             return null;
         }
     }, []);
@@ -231,12 +234,12 @@ export function useInstallPrompt() {
         const { outcome } = await deferredPrompt.userChoice;
 
         if (outcome === 'accepted') {
-            console.log('✅ PWA instalada');
+            logger.info('PWA instalada');
             setDeferredPrompt(null);
             setIsInstallable(false);
             return true;
         } else {
-            console.log('❌ Instalación rechazada');
+            logger.info('Instalación de PWA rechazada');
             return false;
         }
     }, [deferredPrompt]);
@@ -264,7 +267,7 @@ export function useOfflineDetection() {
             setIsOffline(false);
             if (wasOffline) {
                 // Mostrar mensaje de reconexión
-                console.log('✅ Conexión restaurada');
+                logger.info('Conexión restaurada');
             }
         };
 
@@ -305,17 +308,17 @@ export function useBackgroundSync() {
 
     const registerSync = useCallback(async (tag: string) => {
         if (!canSync) {
-            console.warn('⚠️ Background Sync no soportado');
+            logger.warn('Background Sync no soportado');
             return false;
         }
 
         try {
             const registration = await navigator.serviceWorker.ready;
             await (registration as any).sync.register(tag);
-            console.log(`✅ Sync registrado: ${tag}`);
+            logger.info('Sync registrado', { tag });
             return true;
         } catch (error) {
-            console.error('❌ Error registrando sync:', error);
+            logger.error('Error registrando sync', error as Error);
             return false;
         }
     }, [canSync]);
@@ -339,7 +342,7 @@ export function useWebShare() {
 
     const share = useCallback(async (data: ShareData) => {
         if (!canShare) {
-            console.warn('⚠️ Web Share API no soportada');
+            logger.warn('Web Share API no soportada');
             return false;
         }
 
@@ -348,7 +351,7 @@ export function useWebShare() {
             return true;
         } catch (error) {
             if ((error as Error).name !== 'AbortError') {
-                console.error('❌ Error compartiendo:', error);
+                logger.error('Error compartiendo con Web Share API', error as Error);
             }
             return false;
         }
@@ -369,7 +372,7 @@ export async function showLocalNotification(
     options?: NotificationOptions
 ) {
     if (!('Notification' in window)) {
-        console.warn('⚠️ Notificaciones no soportadas');
+        logger.warn('Notificaciones locales no soportadas');
         return null;
     }
 
@@ -405,10 +408,10 @@ export function useCacheManagement() {
             await Promise.all(
                 cacheNames.map(name => caches.delete(name))
             );
-            console.log('✅ Caché limpiado');
+            logger.info('Caché limpiado');
             return true;
         } catch (error) {
-            console.error('❌ Error limpiando caché:', error);
+            logger.error('Error limpiando caché', error as Error);
             return false;
         }
     }, []);
@@ -437,7 +440,7 @@ export function useCacheManagement() {
 
             return totalSize;
         } catch (error) {
-            console.error('❌ Error calculando tamaño de caché:', error);
+            logger.error('Error calculando tamaño de caché', error as Error);
             return 0;
         }
     }, []);

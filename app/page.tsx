@@ -13,7 +13,7 @@ import { FilterChips } from "@/components/FilterChips";
 import { TipoTabs } from "@/components/TipoTabs";
 import { getCachedProjectFilterSnapshot, getCachedProjects } from "@/lib/data";
 import { buildFilterCounts } from "@/lib/search/filtering";
-import { ALL_INSTITUTION_SIGLAS } from "@/lib/constants/institutions";
+import { ALL_INSTITUTION_SIGLAS, NATIONAL_INSTITUTIONS, INTERNATIONAL_INSTITUTIONS } from "@/lib/constants/institutions";
 import prisma from "@/lib/prisma";
 import metadata from "@/data/metadata.json";
 
@@ -73,46 +73,13 @@ export default async function DashboardPage({
   const filterSnapshot = filterSnapshotResult.ok ? filterSnapshotResult.projects : [];
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const NATIONAL_INSTITUTION_KEYS = [
-    'CNR',
-    'INDAP',
-    'FIA',
-    'CORFO',
-    'SAG',
-    'SERCOTEC',
-    'GORE',
-    'SUBDERE',
-    'MINAGRI',
-  ];
-
-  const INTERNATIONAL_INSTITUTION_KEYS = [
-    'FONTAGRO',
-    'FAO',
-    'FIDA',
-    'IFAD',
-    'BID',
-    'IADB',
-    'PNUD',
-    'GEF',
-    'GCF',
-    'WORLD BANK',
-    'IICA',
-    'UE',
-    'EUROCLIMA',
-    'UNGM',
-    'OCDE',
-    'OECD',
-    'GSO',
-    'GLOBAL SOUTH',
-  ];
-
   const internacionales = projects.filter((p) => {
     if (p.ambito === 'Nacional') return false;
     if (p.ambito === 'Internacional') return true;
 
     const institution = (p.institucion || '').toUpperCase();
-    if (NATIONAL_INSTITUTION_KEYS.some((key) => institution.includes(key))) return false;
-    if (INTERNATIONAL_INSTITUTION_KEYS.some((key) => institution.includes(key))) return true;
+    if (NATIONAL_INSTITUTIONS.some((key) => institution.includes(key))) return false;
+    if (INTERNATIONAL_INSTITUTIONS.some((key) => institution.includes(key))) return true;
 
     return false;
   }).length;

@@ -64,9 +64,9 @@ export async function POST(request: Request) {
 
     logger.info('Project submitted by community successfully', { projectId: dbProject.id, url: canonicalUrl });
 
-    return NextResponse.json({ success: true, project: dbProject }, { status: 201 });
+    return NextResponse.json({ ok: true, success: true, project: dbProject }, { status: 201 });
   } catch (error) {
-    logger.error('Error submitting project', { error: (error as Error).message });
-    return NextResponse.json({ error: 'Error interno procesando la sugerencia' }, { status: 500 });
+    logger.error('Error submitting project', error as Error);
+    return NextResponse.json({ ok: false, error: 'Error interno procesando la sugerencia' }, { status: 500 });
   }
 }

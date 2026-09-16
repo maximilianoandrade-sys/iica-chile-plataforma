@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { Calendar, Download, ExternalLink, ChevronDown } from 'lucide-react';
-import type { Project } from '@/lib/data';
+import type { Project } from '@/lib/project-utils';
 
 interface CalendarReminderButtonProps {
   project: Project;

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { X, Scale, ExternalLink, Calendar, MapPin, Coins, ShieldCheck, Sparkles, Check, Download, AlertCircle } from 'lucide-react';
-import type { Project } from '@/lib/data';
+import type { Project } from '@/lib/project-utils';
 import { InstitutionLogo } from '@/components/InstitutionLogo';
 import { CalendarReminderButton } from '@/components/CalendarReminderButton';
 import { exportProjectsToCsv } from '@/lib/utils/exportCsv';

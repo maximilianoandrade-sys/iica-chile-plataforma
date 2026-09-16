@@ -7,8 +7,10 @@ import { Footer } from '@/components/Footer';
 import { EligibilityAssistant } from '@/components/EligibilityAssistant';
 import { CalendarReminderButton } from '@/components/CalendarReminderButton';
 import { PrintProjectButton } from '@/components/PrintProjectButton';
+import { ProposalGeneratorButton } from '@/components/ProposalGeneratorButton';
+import { ProjectCard } from '@/components/ProjectCard';
 import Link from 'next/link';
-import { ExternalLink, ArrowLeft, Calendar, CheckCircle, Info, MapPin, Users, DollarSign } from 'lucide-react';
+import { ExternalLink, ArrowLeft, Calendar, CheckCircle, Info, MapPin, Users, DollarSign, Layers } from 'lucide-react';
 
 const getCachedProjects = cache(getProjects);
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL
@@ -94,6 +96,9 @@ export default async function ProyectoDetallePage({ params }: Props) {
         ? meaningfulBeneficiarios.slice(0, 2).join(', ')
         : null;
     const projectUrl = `${SITE_URL}/proyecto/${id}`;
+    const similarProjects = projects
+        .filter(p => p.id !== project.id && (p.institucion === project.institucion || p.categoria === project.categoria))
+        .slice(0, 3);
 
     return (
         <div className="min-h-screen flex flex-col bg-[#f4f7f9] dark:bg-gray-900">
@@ -141,27 +146,27 @@ export default async function ProyectoDetallePage({ params }: Props) {
                     </div>
 
                     {/* Métricas clave */}
-                    <div className={`grid grid-cols-2 ${hasRegions || hasBeneficiaries ? 'md:grid-cols-4' : 'md:grid-cols-2'} divide-x divide-y md:divide-y-0 divide-gray-100 border-b border-gray-100`}>
+                    <div className={`grid grid-cols-2 ${hasRegions || hasBeneficiaries ? 'md:grid-cols-4' : 'md:grid-cols-2'} divide-x divide-y md:divide-y-0 divide-gray-100 dark:divide-gray-700 border-b border-gray-100 dark:border-gray-700`}>
                         <div className="p-5 flex flex-col gap-1">
-                            <div className="flex items-center gap-1.5 text-xs font-bold text-gray-500 uppercase tracking-wide">
+                            <div className="flex items-center gap-1.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                                 <DollarSign className="h-3.5 w-3.5" /> Monto Máximo
                             </div>
-                            <div className="font-extrabold text-[var(--iica-navy)] text-lg leading-tight">{montoFormatted}</div>
+                            <div className="font-extrabold text-[var(--iica-navy)] dark:text-white text-lg leading-tight">{montoFormatted}</div>
                         </div>
                         <div className="p-5 flex flex-col gap-1">
-                            <div className="flex items-center gap-1.5 text-xs font-bold text-gray-500 uppercase tracking-wide">
+                            <div className="flex items-center gap-1.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                                 <Calendar className="h-3.5 w-3.5" /> Fecha Cierre
                             </div>
-                            <div className={`font-extrabold text-lg leading-tight ${isClosed ? 'text-red-500' : isUrgent ? 'text-amber-600' : 'text-[var(--iica-navy)]'}`}>
+                            <div className={`font-extrabold text-lg leading-tight ${isClosed ? 'text-red-500 dark:text-red-400' : isUrgent ? 'text-amber-600 dark:text-amber-400' : 'text-[var(--iica-navy)] dark:text-white'}`}>
                                 {closingDate.toLocaleDateString('es-CL', { day: 'numeric', month: 'long', year: 'numeric' })}
                             </div>
                         </div>
                         {hasRegions && (
                             <div className="p-5 flex flex-col gap-1">
-                                <div className="flex items-center gap-1.5 text-xs font-bold text-gray-500 uppercase tracking-wide">
+                                <div className="flex items-center gap-1.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                                     <MapPin className="h-3.5 w-3.5" /> Regiones
                                 </div>
-                                <div className="font-bold text-gray-700 text-sm">
+                                <div className="font-bold text-gray-700 dark:text-gray-300 text-sm">
                                     {regionPreview}
                                     {!meaningfulRegiones.includes('Todas') && meaningfulRegiones.length > 2 && ` +${meaningfulRegiones.length - 2}`}
                                 </div>
@@ -169,10 +174,10 @@ export default async function ProyectoDetallePage({ params }: Props) {
                         )}
                         {hasBeneficiaries && (
                             <div className="p-5 flex flex-col gap-1">
-                                <div className="flex items-center gap-1.5 text-xs font-bold text-gray-500 uppercase tracking-wide">
+                                <div className="flex items-center gap-1.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                                     <Users className="h-3.5 w-3.5" /> Beneficiarios
                                 </div>
-                                <div className="font-bold text-gray-700 text-sm">
+                                <div className="font-bold text-gray-700 dark:text-gray-300 text-sm">
                                     {beneficiariesPreview}
                                     {meaningfulBeneficiarios.length > 2 && ` +${meaningfulBeneficiarios.length - 2}`}
                                 </div>
@@ -188,51 +193,52 @@ export default async function ProyectoDetallePage({ params }: Props) {
 
                         {/* Cofinanciamiento */}
                         {project.resumen?.cofinanciamiento && (
-                            <div className="bg-blue-50 rounded-xl p-5 border border-blue-100">
-                                <h2 className="font-bold text-[var(--iica-navy)] mb-2 flex items-center gap-2">
+                            <div className="bg-blue-50 dark:bg-blue-950/40 rounded-xl p-5 border border-blue-100 dark:border-blue-900">
+                                <h2 className="font-bold text-[var(--iica-navy)] dark:text-blue-200 mb-2 flex items-center gap-2">
                                     <DollarSign className="h-5 w-5 text-[var(--iica-blue)]" />
                                     Cofinanciamiento
                                 </h2>
-                                <p className="text-gray-700 font-medium">{project.resumen.cofinanciamiento}</p>
+                                <p className="text-gray-700 dark:text-gray-300 font-medium">{project.resumen.cofinanciamiento}</p>
                             </div>
                         )}
 
                         {/* Objetivo / Descripción */}
                         {project.objetivo && !isEmptyField(project.objetivo) && (
                             <div>
-                                <h2 className="font-bold text-[var(--iica-navy)] mb-3 flex items-center gap-2 text-lg">
+                                <h2 className="font-bold text-[var(--iica-navy)] dark:text-white mb-3 flex items-center gap-2 text-lg">
                                     <Info className="h-5 w-5 text-[var(--iica-blue)]" />
                                     Descripción
                                 </h2>
-                                <p className="text-gray-700 leading-relaxed">{project.objetivo}</p>
+                                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{project.objetivo}</p>
                             </div>
                         )}
 
                         {/* Checklist de elegibilidad */}
                         {project.checklist && project.checklist.length > 0 && (
                             <div>
-                                <h2 className="font-bold text-[var(--iica-navy)] mb-4 flex items-center gap-2 text-lg">
+                                <h2 className="font-bold text-[var(--iica-navy)] dark:text-white mb-4 flex items-center gap-2 text-lg">
                                     <CheckCircle className="h-5 w-5 text-green-500" />
                                     Checklist de Elegibilidad
                                 </h2>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                     {project.checklist.map((item: string, idx: number) => (
-                                        <div key={idx} className="flex items-start gap-3 bg-green-50 rounded-lg p-3 border border-green-100">
+                                        <div key={idx} className="flex items-start gap-3 bg-green-50 dark:bg-emerald-950/30 rounded-lg p-3 border border-green-100 dark:border-emerald-800">
                                             <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                                            <span className="text-sm text-gray-700 font-medium">{item}</span>
+                                            <span className="text-sm text-gray-700 dark:text-gray-200 font-medium">{item}</span>
                                         </div>
                                     ))}
                                 </div>
                             </div>
                         )}
 
-                        {/* Botones de Acción: Bases, Calendario e Impresión */}
-                        <div className="pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        {/* Botones de Acción: Bases, IA, Calendario e Impresión */}
+                        <div className="pt-6 border-t border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row items-center justify-between gap-4">
                             <div>
-                                <h3 className="font-bold text-[var(--iica-navy)]">¿Listo para postular?</h3>
-                                <p className="text-xs text-gray-500">Accede a las bases oficiales, agéndalo en tu calendario o descarga la minuta impresible.</p>
+                                <h3 className="font-bold text-[var(--iica-navy)] dark:text-white">¿Listo para postular?</h3>
+                                <p className="text-xs text-gray-500 dark:text-gray-400">Accede a las bases oficiales, redacta un borrador con IA o descarga la minuta.</p>
                             </div>
                             <div className="w-full sm:w-auto flex flex-wrap items-center gap-3">
+                                <ProposalGeneratorButton project={project} />
                                 <CalendarReminderButton project={project} />
                                 <PrintProjectButton />
                                 <a
@@ -258,6 +264,21 @@ export default async function ProyectoDetallePage({ params }: Props) {
 
                     </div>
                 </div>
+
+                {/* Convocatorias Similares Recomendadas */}
+                {similarProjects.length > 0 && (
+                    <section className="mt-12 space-y-4">
+                        <div className="flex items-center gap-2 text-[var(--iica-navy)] dark:text-white">
+                            <Layers className="h-5 w-5 text-[var(--iica-blue)]" />
+                            <h2 className="text-xl font-bold">Convocatorias Similares Recomendadas</h2>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {similarProjects.map((p) => (
+                                <ProjectCard key={p.id} project={p} />
+                            ))}
+                        </div>
+                    </section>
+                )}
             </main>
 
             <Footer />
