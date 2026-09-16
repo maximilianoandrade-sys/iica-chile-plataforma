@@ -13,16 +13,20 @@
 
 ## Progress
 ### Done
+- **Revisión total, auditoría con skills y mejoras mayores implementadas y pusheadas a main** (commit `33d5841`):
+  - **Desacoplamiento cliente/servidor**: creado `lib/project-utils.ts` con tipos y formateadores puros. Componentes cliente ya no importan `lib/data.ts` ni arrastran dependencias de base de datos.
+  - **Resiliencia de datos**: fallback garantizado a `getStaticProjects(today)` en `lib/data.ts` si Prisma/Supabase no responde.
+  - **Asistente de Propuestas IA**: creado `ProposalGeneratorModal.tsx` y `ProposalGeneratorButton.tsx` conectados a `/api/generate-proposal` (Gemini 2.5 Flash Lite) con copia y descarga `.txt`.
+  - **Ficha de Proyecto (`/proyecto/[id]`)**: botón de IA integrado, modo oscuro 100% corregido y sección de "Convocatorias Similares Recomendadas".
+  - **Alertas Reales**: `/api/newsletter/subscribe` persiste en `prisma.usuario` y `prisma.alerta`.
+  - **Higiene de Logging**: 0 llamadas a `console.*` residuales (17 migradas en `hooks/usePWA.ts`, 1 en `app/error.tsx`). Log por render eliminado de `ProjectCard`.
+  - **Tests y Tipos**: 67 suites en verde (387 tests pasados), 0 errores TypeScript.
+
 - **Producción caída (white-screen) — RESUELTA** (commits `6408605`, `e101709` en `main`).
-- **Suite de tests 100% verde** (sin commitear). 18 fallos corregidos en 11 archivos:
-  - `tests/setup.ts`: agregados mocks globales `next/link` y `next/navigation` (evita "invariant expected app router to be mounted" en tests de componentes).
-  - `tests/middleware.test.ts`: eliminado mock muerto `jest.mock("@/lib/security")` — el `middleware.ts` real NO lo importa (config error "no mapped module").
-  - `tests/lib/ingestion/persistence.test.ts`: el test "continues upsert when semantic duplicate embedding lookup fails" filtraba por memoización de `getAiEnv()` (`cachedAiEnv` en `lib/utils/env.ts:102`). Se importó `_resetEnvCache()` y se llama antes de setear `GEMINI_API_KEY` para que el rejection de `embedText` se consuma en el test y no fugue al test `findSemanticDuplicates`.
-  - `tests/lib/ingestion/run-scrapers-select.test.ts`: esperaba `updateSourceStatus("fia","partial",1,...)`; corregido a `0` (el duplicado es `skipped`, así que `inserted` real = 0 en `scripts/run-scrapers.ts:59`).
-  - `tests/Footer.test.tsx`, `tests/HeroSection.test.tsx`, `tests/FilterChips.test.tsx`, `tests/data.test.ts`, `tests/ProjectCard.test.tsx`, `tests/ProjectListA11y.test.tsx`, `tests/FuentesOficiales.test.tsx`: assertions obsoletas alineadas a componentes refactorados (confirmados funcionando en producción). Subagentes paralelos fijaron data/ProjectCard/ProjectListA11y/FuentesOficiales; HeroSection ahora hace click en el botón "cierran pronto" y verifica `router.push('/?estado=Abierta&sort=date_asc#convocatorias')`; Footer y FilterChips fxeados a mano.
+- **Suite de tests 100% verde** (pusheado a `main`).
 
 ### In Progress
-- Nada pendiente de código. Cambios sin commitear (11 archivos de test). Confirmado verde con `npx jest` (exit 0).
+- Nada pendiente de código. Todo comiteado y sincronizado con `origin/main`.
 
 ### Blocked
 - **Migración BD producción #79**: `scripts/sql/2026-07-15-linkcheck-lastmodified.sql` (columna `last_modified` en `LinkCheck`) no aplicada en Supabase. Requiere acción del usuario en Supabase SQL Editor o `npx prisma db push` desde entorno con conectividad.
