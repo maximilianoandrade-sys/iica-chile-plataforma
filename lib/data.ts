@@ -6,6 +6,55 @@
 export * from './project-utils';
 import { isDeadlineUnknown, type Project } from './project-utils';
 
+/** Formatea monto en formato legible CLP */
+export function formatMontoCLP(monto: number): string {
+    if (monto <= 0) return 'Ver bases';
+    if (monto >= 1_000_000_000) return `$${(monto / 1_000_000_000).toFixed(1)}B`;
+    if (monto >= 1_000_000) return `$${(monto / 1_000_000).toFixed(0)}M`;
+    return `$${monto.toLocaleString('es-CL')}`;
+}
+
+/**
+ * Monto listo para mostrar al usuario. Prefiere `montoTexto` (string crudo
+ * de la fuente con su unidad, ej. "8.500 UF" o "USD 50,000") cuando está
+ * presente, porque el monto numérico chileno suele estar en UF/USD y la
+ * conversión a CLP pierde la unidad real.
+ */
+export function displayMonto(project: Project): string {
+    if (project.montoTexto && project.montoTexto.trim()) return project.montoTexto.trim();
+    return formatMontoCLP(project.monto);
+}
+
+/** Devuelve color semáforo para viabilidad IICA */
+export function viabilidadColors(nivel?: string): { text: string; bg: string; dot: string } {
+    switch (nivel) {
+        case 'Alta': return { text: 'text-green-800', bg: 'bg-green-100', dot: 'bg-green-500' };
+        case 'Media': return { text: 'text-yellow-800', bg: 'bg-yellow-100', dot: 'bg-yellow-500' };
+        case 'Baja': return { text: 'text-red-800', bg: 'bg-red-100', dot: 'bg-red-500' };
+        default: return { text: 'text-gray-600', bg: 'bg-gray-100', dot: 'bg-gray-400' };
+    }
+}
+
+/** Devuelve color para complejidad */
+export function complejidadColors(nivel?: string): { text: string; bg: string } {
+    switch (nivel) {
+        case 'Fácil': return { text: 'text-green-700', bg: 'bg-green-50' };
+        case 'Media': return { text: 'text-blue-700', bg: 'bg-blue-50' };
+        case 'Alta': return { text: 'text-purple-700', bg: 'bg-purple-50' };
+        default: return { text: 'text-gray-600', bg: 'bg-gray-50' };
+    }
+}
+
+/** Devuelve colores e icono para el rol del IICA en la oportunidad */
+export function rolIICAInfo(rol?: string): { text: string; bg: string; border: string; label: string; icon: string } {
+    switch (rol) {
+        case 'Ejecutor': return { text: 'text-green-800', bg: 'bg-green-50', border: 'border-green-300', label: 'IICA Ejecutor', icon: '✅' };
+        case 'Implementador': return { text: 'text-blue-800', bg: 'bg-blue-50', border: 'border-blue-300', label: 'IICA Implementador', icon: '🔧' };
+        case 'Asesor': return { text: 'text-amber-800', bg: 'bg-amber-50', border: 'border-amber-300', label: 'IICA Asesor técnico', icon: '💼' };
+        case 'Indirecto': return { text: 'text-gray-600', bg: 'bg-gray-100', border: 'border-gray-300', label: 'Rol indirecto', icon: '⚠️' };
+        default: return { text: 'text-gray-500', bg: 'bg-gray-50', border: 'border-gray-200', label: 'Sin definir', icon: '❓' };
+    }
+}
 
 import { cache } from 'react';
 import { getLogger } from '@/lib/utils/logger';

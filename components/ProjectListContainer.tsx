@@ -1,4 +1,4 @@
-import { getCachedProjectFilterSnapshot, type Project } from '@/lib/data';
+import { getCachedProjectFilterSnapshot, getCachedProjects, type Project } from '@/lib/data';
 import ProjectList from "@/components/ProjectList";
 import JsonLd from "@/components/JsonLd";
 import { hybridSearch } from '@/lib/searchHybrid';
@@ -36,9 +36,11 @@ export default async function ProjectListContainer({
     const closingWithinDays = typeof searchParams.urgencia === 'string' ? Number.parseInt(searchParams.urgencia, 10) : undefined;
 
     // Run DB check and search in parallel for better performance
-    const [filterSnapshot, searchResult] = await Promise.all([
-        getCachedProjectFilterSnapshot(),
-        hybridSearch({
+    const filterSnapshot = await getCachedProjectFilterSnapshot();
+    let searchResult: Awaited<ReturnType<typeof hybridSearch>>;
+
+    try {
+        searchResult = await hybridSearch({
             query: searchTerm,
             ambito: selectedAmbito || 'all',
             tipo,
@@ -55,8 +57,36 @@ export default async function ProjectListContainer({
             offset: (currentPage - 1) * DEFAULT_PAGE_SIZE,
             limit: DEFAULT_PAGE_SIZE,
             includeUnverified: relevanceMode === 'all',
-        }),
-    ]);
+        });
+        if (searchResult.projects.length === 0 && filterSnapshot.ok && filterSnapshot.projects.length > 0) {
+            throw new Error('La búsqueda remota no devolvió resultados; usar catálogo estático');
+        }
+    } catch {
+        const fallback = await getCachedProjects();
+        const sourceProjects = fallback.ok ? fallback.projects : [];
+        const normalizedQuery = searchTerm.trim().toLocaleLowerCase('es-CL');
+        const filtered = sourceProjects.filter((project) => {
+            const searchable = [project.nombre, project.institucion, project.categoria, project.objetivo, project.descripcionIICA]
+                .filter(Boolean)
+                .join(' ')
+                .toLocaleLowerCase('es-CL');
+            const matchesQuery = !normalizedQuery || searchable.includes(normalizedQuery);
+            const matchesStatus = !selectedEstado || project.estadoPostulacion === selectedEstado;
+            const matchesAmbito = selectedAmbito === 'all' || (selectedAmbito === 'Nacional' && project.ambito !== 'Internacional') || project.ambito === selectedAmbito;
+            const matchesInstitution = selectedInstitutions.length === 0 || selectedInstitutions.includes(project.institucion);
+            const matchesRegion = selectedRegions.length === 0 || selectedRegions.some((region) => project.regiones?.includes(region) || project.region === region);
+            const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(project.categoria);
+            return matchesQuery && matchesStatus && matchesAmbito && matchesInstitution && matchesRegion && matchesCategory;
+        });
+        const sorted = [...filtered].sort((a, b) => new Date(a.fecha_cierre).getTime() - new Date(b.fecha_cierre).getTime());
+        const offset = (currentPage - 1) * DEFAULT_PAGE_SIZE;
+        const fallbackProjects = sorted.slice(offset, offset + DEFAULT_PAGE_SIZE).map((project) => ({
+            ...project,
+            fecha_cierre: new Date(project.fecha_cierre),
+            webinar_fecha: project.webinar_fecha ? new Date(project.webinar_fecha) : null,
+        })) as Awaited<ReturnType<typeof hybridSearch>>['projects'];
+        searchResult = { projects: fallbackProjects, mode: 'all', total: sorted.length };
+    }
 
     if (!filterSnapshot.ok) {
         return <DatabaseError />;

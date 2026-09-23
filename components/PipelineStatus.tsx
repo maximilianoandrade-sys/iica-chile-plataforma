@@ -4,6 +4,7 @@ import { Clock } from 'lucide-react';
 
 interface PipelineStatusProps {
   lastUpdated: Date | string;
+  status?: string | null;
 }
 
 function timeAgo(date: Date): string {
@@ -19,11 +20,12 @@ function timeAgo(date: Date): string {
   return `Hace ${diffDays} ${diffDays === 1 ? 'día' : 'días'}`;
 }
 
-export default function PipelineStatus({ lastUpdated }: PipelineStatusProps) {
+export default function PipelineStatus({ lastUpdated, status }: PipelineStatusProps) {
   const date = typeof lastUpdated === 'string' ? new Date(lastUpdated) : lastUpdated;
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
   const isRecent = diffMs < 60 * 60 * 1000; // less than 1 hour
+  const isPartial = status === 'partial';
 
   return (
     <div
@@ -31,7 +33,7 @@ export default function PipelineStatus({ lastUpdated }: PipelineStatusProps) {
       aria-live="polite"
       role="status"
     >
-      {isRecent ? (
+      {isRecent && !isPartial ? (
         <span className="relative flex h-3 w-3" aria-hidden="true">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
           <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500" />
@@ -40,7 +42,7 @@ export default function PipelineStatus({ lastUpdated }: PipelineStatusProps) {
         <Clock className="h-4 w-4 text-gray-400" aria-hidden="true" />
       )}
       <span>
-        {isRecent ? 'Datos actualizados recientemente' : `Actualizado ${timeAgo(date)}`}
+        {isPartial ? 'Datos actualizados parcialmente' : isRecent ? 'Datos actualizados recientemente' : `Actualizado ${timeAgo(date)}`}
       </span>
     </div>
   );

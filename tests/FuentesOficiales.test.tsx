@@ -6,7 +6,7 @@ const mockCounts = { CNR: 4, INDAP: 6, FIA: 3, CORFO: 4, PNUD: 0, FAO: 0, FIDA: 
 describe('FuentesOficiales', () => {
   it('renders section heading', () => {
     render(<FuentesOficiales institutionCounts={mockCounts} />);
-    expect(screen.getByRole('heading', { name: /fuentes oficiales/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /fuentes monitoreadas para chile/i })).toBeInTheDocument();
   });
 
   it('shows total oportunidades activas from dashboard prop', () => {
@@ -22,7 +22,7 @@ describe('FuentesOficiales', () => {
   it('renders without prop (uses defaults)', () => {
     render(<FuentesOficiales />);
     // Should render without crashing, using default fondosActivos from FUENTES
-    expect(screen.getByRole('heading', { name: /fuentes oficiales/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /fuentes monitoreadas para chile/i })).toBeInTheDocument();
   });
 
   it('uses updated CORFO official URL', () => {

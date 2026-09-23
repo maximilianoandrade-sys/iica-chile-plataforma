@@ -271,13 +271,15 @@ export async function updateSourceStatus(
   count: number,
   errorMsg?: string
 ): Promise<void> {
+  const data = {
+    lastRunStatus: status,
+    lastRunError: errorMsg ?? null,
+    projectsCount: count,
+    ...(status === "error" ? {} : { lastRunAt: new Date() }),
+  };
+
   await prisma.source.update({
     where: { slug },
-    data: {
-      lastRunAt: new Date(),
-      lastRunStatus: status,
-      lastRunError: errorMsg ?? null,
-      projectsCount: count,
-    },
+    data,
   });
 }

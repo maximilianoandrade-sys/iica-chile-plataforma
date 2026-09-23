@@ -87,8 +87,11 @@ function buildHybridFilters(opts: HybridSearchOptions): HybridQueryFilters {
 const LICITACION_CATEGORIES = ['Licitación', 'Procurement', 'Adquisiciones', 'UNGM', 'FAO'];
 const LICITACION_INSTITUTIONS = ['FAO (UN)', 'FAO', 'UNGM', 'WORLD BANK', 'Mercado Público'];
 
-function buildProjectWhere(filters: HybridQueryFilters): Prisma.ProjectWhereInput {
-  const where: Prisma.ProjectWhereInput = { AND: [] };
+export function buildProjectWhere(filters: HybridQueryFilters): Prisma.ProjectWhereInput {
+  const where: Prisma.ProjectWhereInput = {
+    AND: [],
+    publishable: true,
+  };
 
   // Default: exclude expired projects (fecha_cierre must be today or later)
   const today = new Date();
@@ -98,6 +101,7 @@ function buildProjectWhere(filters: HybridQueryFilters): Prisma.ProjectWhereInpu
   if (filters.ambito && filters.ambito !== 'all') {
     if (filters.ambito === 'chile' || filters.ambito === 'Nacional') {
       where.ambito = { not: 'Internacional' };
+      where.chileEligibility = 'eligible';
     } else {
       where.ambito = filters.ambito;
     }

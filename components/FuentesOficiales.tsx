@@ -743,14 +743,14 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
                 <div className="text-center mb-12">
                     <div className="inline-flex items-center gap-2 bg-blue-100 dark:bg-blue-900/40 text-[var(--iica-blue)] px-4 py-2 rounded-full text-sm font-bold mb-4">
                         <Shield className="h-4 w-4" aria-hidden={true} />
-                        Fuentes Verificadas
+                        Fuentes oficiales monitoreadas
                     </div>
                     <h2 id="fuentes-heading" className="text-3xl md:text-4xl font-extrabold text-[var(--iica-navy)] dark:text-white mb-3">
-                        Fuentes Oficiales de Fondos Chile 2026
+                        Fuentes monitoreadas para Chile
                     </h2>
                     <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-4">
-                        Todos los fondos de esta plataforma provienen directamente de estas instituciones gubernamentales.
-                        El estado se actualiza automáticamente con la última ejecución real del pipeline.
+                        Reunimos oportunidades publicadas por estas instituciones y organismos oficiales.
+                        Revise siempre las bases de la convocatoria antes de postular. La fecha indica la última actualización disponible del radar.
                     </p>
                     <div className="flex flex-wrap justify-center gap-4 text-sm">
                         <div className="flex items-center gap-2 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 px-4 py-2 rounded-full">

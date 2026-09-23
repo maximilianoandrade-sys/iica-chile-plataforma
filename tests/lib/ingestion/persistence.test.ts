@@ -300,6 +300,21 @@ describe("updateSourceStatus", () => {
       })
     );
   });
+
+  it("does not replace the last successful run when a scraper fails", async () => {
+    prisma.source.update.mockResolvedValue({});
+
+    await updateSourceStatus("test-slug", "error", 0, "source unavailable");
+
+    expect(prisma.source.update).toHaveBeenCalledWith({
+      where: { slug: "test-slug" },
+      data: {
+        lastRunStatus: "error",
+        lastRunError: "source unavailable",
+        projectsCount: 0,
+      },
+    });
+  });
 });
 
 describe("markStale", () => {

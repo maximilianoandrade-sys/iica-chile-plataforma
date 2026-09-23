@@ -82,6 +82,11 @@ describe('data utilities', () => {
       
       expect(isOpen(project)).toBe(false);
     });
+      it('debe considerar abierta una oportunidad que cierra hoy', () => {
+        const project = { ...mockProject, fecha_cierre: new Date().toISOString().split('T')[0] };
+
+        expect(isOpen(project)).toBe(true);
+      });
   });
 
   describe('isClosingSoon', () => {
@@ -100,6 +105,12 @@ describe('data utilities', () => {
       
       expect(isClosingSoon(project)).toBe(false);
     });
+
+      it('debe considerar proxima una oportunidad que cierra hoy', () => {
+        const project = { ...mockProject, fecha_cierre: new Date().toISOString().split('T')[0] };
+
+        expect(isClosingSoon(project)).toBe(true);
+      });
   });
 
   describe('urgencyLabel', () => {

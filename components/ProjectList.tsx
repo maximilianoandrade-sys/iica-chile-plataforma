@@ -167,7 +167,7 @@ export default function ProjectList({
                 onClick={handleViewAll}
                 className="text-xs font-medium text-iica-blue hover:underline min-h-[44px] px-2"
               >
-                Ver todo
+                Ver todas las oportunidades
               </button>
             )}
           </div>
@@ -385,7 +385,7 @@ export default function ProjectList({
               onClick={handleViewAll}
               className="inline-flex items-center justify-center rounded-full border border-amber-200 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/30 px-4 py-2 text-sm font-medium text-amber-900 dark:text-amber-200 hover:bg-amber-100 min-h-[44px]"
             >
-              Ver todo el universo disponible
+              Incluir internacionales
             </button>
           ) : null}
           {activeFilterLabels.length > 0 && (

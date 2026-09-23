@@ -112,11 +112,12 @@ export default async function DashboardPage({
   const filterCounts = buildFilterCounts(filterSnapshot);
 
   let lastUpdatedAt: string | null = (metadata as { lastUpdatedAt?: string })?.lastUpdatedAt || null;
+  let lastUpdatedStatus: string | null = null;
   try {
     const latestSourceRun = await prisma.source.findFirst({
       where: { lastRunAt: { not: null } },
       orderBy: { lastRunAt: 'desc' },
-      select: { lastRunAt: true },
+      select: { lastRunAt: true, lastRunStatus: true },
     });
 
     if (latestSourceRun?.lastRunAt) {
@@ -125,6 +126,7 @@ export default async function DashboardPage({
         lastUpdatedAt = dbDate;
       }
     }
+    lastUpdatedStatus = latestSourceRun?.lastRunStatus ?? null;
   } catch {
     // Si la BD no responde o no tiene datos más nuevos, usa metadata.lastUpdatedAt
   }
@@ -158,7 +160,7 @@ export default async function DashboardPage({
 
             {/* Proyectos — sección principal */}
             <section>
-              {lastUpdatedAt && <div className="mb-4"><PipelineStatus lastUpdated={lastUpdatedAt} /></div>}
+              {lastUpdatedAt && <div className="mb-4"><PipelineStatus lastUpdated={lastUpdatedAt} status={lastUpdatedStatus} /></div>}
               <TipoTabs />
               <Suspense fallback={<SkeletonProjectList />}>
                 <ProjectListContainer searchParams={resolvedSearchParams} />
