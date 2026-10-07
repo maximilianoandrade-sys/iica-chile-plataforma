@@ -159,19 +159,27 @@ export function daysUntilClose(project: Project): number {
     if (isDeadlineUnknown(project.fecha_cierre)) return 999;
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const close = new Date(project.fecha_cierre);
-    return Math.ceil((close.getTime() - today.getTime()) / 86_400_000);
+
+    let closeDate: Date;
+    if (typeof project.fecha_cierre === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(project.fecha_cierre)) {
+        const [year, month, day] = project.fecha_cierre.split('-').map(Number);
+        closeDate = new Date(year, month - 1, day);
+    } else {
+        closeDate = new Date(project.fecha_cierre);
+        closeDate.setHours(0, 0, 0, 0);
+    }
+    return Math.round((closeDate.getTime() - today.getTime()) / 86_400_000);
 }
 
 /** Retorna true si la oportunidad cierra en ≤7 días */
 export function isClosingSoon(project: Project): boolean {
     const d = daysUntilClose(project);
-    return d > 0 && d <= 7;
+    return d >= 0 && d <= 7;
 }
 
-/** Retorna true si está abierta (fecha de cierre en el futuro) */
+/** Retorna true si está abierta (fecha de cierre es hoy o en el futuro) */
 export function isOpen(project: Project): boolean {
-    return daysUntilClose(project) > 0;
+    return daysUntilClose(project) >= 0;
 }
 
 /** Pluraliza correctamente: 1 día vs N días */

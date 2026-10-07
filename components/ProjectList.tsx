@@ -387,7 +387,15 @@ export default function ProjectList({
             >
               Incluir internacionales
             </button>
-          ) : null}
+          ) : (
+            <button
+              type="button"
+              onClick={handleBackToChile}
+              className="inline-flex items-center justify-center rounded-full border border-amber-200 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/30 px-4 py-2 text-sm font-medium text-amber-900 dark:text-amber-200 hover:bg-amber-100 min-h-[44px]"
+            >
+              Volver a solo Chile
+            </button>
+          )}
           {activeFilterLabels.length > 0 && (
             <div className="mx-auto max-w-3xl">
               <p className="text-xs uppercase tracking-wide text-gray-500 mb-2">Filtros activos</p>
