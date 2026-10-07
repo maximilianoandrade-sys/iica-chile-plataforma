@@ -1,5 +1,941 @@
 [
   {
+    "nombre": "Horizon Europe Cluster 6 — Circular Bioeconomy & Sustainable Agriculture 2027",
+    "institucion": "Comisión Europea – Horizon Europe",
+    "monto": 5000000,
+    "montoTexto": "EUR 4.000.000 - EUR 6.000.000 por consorcio",
+    "fecha_cierre": "2027-02-23",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Innovación y Bioeconomía",
+    "url_bases": "https://rea.ec.europa.eu/funding-and-grants/horizon-europe-cluster-6_en",
+    "regiones": [
+      "Internacional"
+    ],
+    "beneficiarios": [
+      "Consorcios Internacionales (incluyendo entidades de Chile)",
+      "Universidades",
+      "Empresas de Bioeconomía"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "en",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Consorcios con al menos 3 entidades de países elegibles"
+    ],
+    "checklist": [
+      "Part A & Part B Application Forms",
+      "Consortium Agreement",
+      "Impact Pathways"
+    ],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 86,
+    "objetivo": "Investigación colaborativa para desarrollar sistemas agroalimentarios climáticamente neutrales y modelos de valorización de subproductos agrícolas en bioeconomía circular.",
+    "descripcionIICA": "Oportunidad para vincular centros de investigación chilenos con redes científicas europeas.",
+    "requisitos": [
+      "Participación en consorcio europeo multi-actor"
+    ],
+    "fortalezas": [
+      "Financiamiento al 100% de costos directos de investigación"
+    ],
+    "debilidades": [],
+    "complejidad": "Alta",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Internacional",
+    "id": 1199,
+    "createdAt": "2026-10-07T14:14:41.716Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
+    "lastCheckedAt": "2026-10-07T14:14:41.716Z"
+  },
+  {
+    "nombre": "Green Climate Fund (GCF) — Preparación y Adaptación Climática en Cuencas Agrícolas del Cono Sur 2026-2027",
+    "institucion": "Green Climate Fund (GCF)",
+    "monto": 3000000,
+    "montoTexto": "Hasta USD 3,000,000 (subvenciones no reembolsables)",
+    "fecha_cierre": "2027-02-15",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Sostenibilidad y Cambio Climático",
+    "url_bases": "https://www.greenclimate.fund/projects",
+    "regiones": [
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "Ministerios de Agricultura y Medio Ambiente",
+      "Entidades Acreditadas GCF",
+      "Agencias de Cooperación"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Entidades Acreditadas ante el Fondo Verde del Clima"
+    ],
+    "checklist": [
+      "Concept Note GCF",
+      "Plan de salvaguardas ambientales y sociales",
+      "Estudio de vulnerabilidad climática"
+    ],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 94,
+    "objetivo": "Iniciativas de gran escala para la conservación de cuencas hidrográficas, restauración de corredores biológicos y gobernanza del agua en zonas de alta vulnerabilidad agroclimática.",
+    "descripcionIICA": "IICA actúa como entidad acreditada o de soporte técnico en la formulación de notas conceptuales.",
+    "requisitos": [
+      "Aval de la Autoridad Nacional Designada (NDA) de Chile"
+    ],
+    "fortalezas": [
+      "Fondo global de máxima escala y respaldo institucional multilateral"
+    ],
+    "debilidades": [],
+    "complejidad": "Alta",
+    "rolIICA": "Implementador",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional e Internacional",
+    "id": 1198,
+    "createdAt": "2026-10-07T14:14:41.716Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
+    "lastCheckedAt": "2026-10-07T14:14:41.716Z"
+  },
+  {
+    "nombre": "IICA & FAO — Acelerador de AgTech Hemisférico para la Resiliencia Rural 2026-2027",
+    "institucion": "IICA / FAO",
+    "monto": 75000,
+    "montoTexto": "USD 75,000 en capital de aceleración y soporte técnico",
+    "fecha_cierre": "2026-12-30",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Inteligencia Artificial y AgriTech",
+    "url_bases": "https://apps.iica.int/agtech-accelerator/",
+    "regiones": [
+      "Nacional e Internacional"
+    ],
+    "beneficiarios": [
+      "Startups AgTech de las Américas",
+      "Centros de Innovación Digital",
+      "Cooperativas Tecnológicas"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Emprendedores Tecnológicos",
+      "Startups"
+    ],
+    "checklist": [
+      "Pitch deck en español o inglés",
+      "Demo en vivo de la plataforma tecnológica"
+    ],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 97,
+    "objetivo": "Escalamiento e implantación de soluciones de agricultura digital, visión artificial, drones y sensórica de bajo costo para explotaciones agropecuarias familiares.",
+    "descripcionIICA": "Iniciativa insignia del IICA Hemisférico y FAO para cerrar la brecha digital rural.",
+    "requisitos": [
+      "Tecnología con TRL 6 o superior lista para pilotos en campo"
+    ],
+    "fortalezas": [
+      "Acceso directo a la red de 34 oficinas del IICA en el hemisferio"
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Ejecutor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional e Internacional",
+    "id": 1197,
+    "createdAt": "2026-10-07T14:14:41.716Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
+    "lastCheckedAt": "2026-10-07T14:14:41.716Z"
+  },
+  {
+    "nombre": "ANID Fondef IDeA I+D Agroclimática y Tecnologías Hídricas 2026-2027",
+    "institucion": "ANID (Agencia Nacional de Investigación y Desarrollo)",
+    "monto": 220000000,
+    "montoTexto": "CLP $220.000.000",
+    "fecha_cierre": "2026-11-19",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Innovación y Tecnología Agropecuaria",
+    "url_bases": "https://anid.cl/concursos/fondef-idea-id/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Universidades Chilenas",
+      "Centros Tecnológicos y de Investigación",
+      "Empresas Asociadas"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Instituciones de Educación Superior",
+      "Institutos Tecnológicos Públicos"
+    ],
+    "checklist": [
+      "Formulario Fondef IDeA",
+      "Cartas de entidades asociadas",
+      "Plan de transferencia tecnológica"
+    ],
+    "ambito": "Nacional",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 90,
+    "objetivo": "Proyectos de investigación científica y tecnológica con hipótesis validada orientados al desarrollo de tecnologías que resuelvan problemas críticos del sector agroalimentario nacional.",
+    "descripcionIICA": "Vinculación estrecha entre academia y sector productivo silvoagropecuario.",
+    "requisitos": [
+      "Al menos 2 entidades asociadas que cofinancien el proyecto"
+    ],
+    "fortalezas": [
+      "Rigor científico y potencial de transferencia a nivel país"
+    ],
+    "debilidades": [],
+    "complejidad": "Alta",
+    "rolIICA": "Implementador",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "id": 1196,
+    "createdAt": "2026-10-07T14:14:41.716Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
+    "lastCheckedAt": "2026-10-07T14:14:41.716Z"
+  },
+  {
+    "nombre": "INDAP — Sistema de Incentivos para la Sustentabilidad Agroambiental de Suelos (SIRSD-S 2026-2027)",
+    "institucion": "INDAP",
+    "monto": 6000000,
+    "montoTexto": "Hasta 160 UTM por plan de manejo",
+    "fecha_cierre": "2026-12-18",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Sostenibilidad y Cambio Climático",
+    "url_bases": "https://www.indap.gob.cl/programas/sirsd-s",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Pequeños Agricultores",
+      "Comunidades Agrícolas",
+      "Asociaciones de Regantes"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Persona Natural INDAP"
+    ],
+    "checklist": [
+      "Plan de manejo de suelo formulado por operador acreditado",
+      "Análisis químico de suelos"
+    ],
+    "ambito": "Nacional",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 93,
+    "objetivo": "Bonificación de prácticas agroambientales: incorporación de fertilizantes de base química o biológica, enmiendas calcáreas, establecimiento de cubiertas vegetales y control de erosión.",
+    "descripcionIICA": "Programa estratégico nacional para restaurar la fertilidad biológica y física de los suelos cultivables en Chile.",
+    "requisitos": [
+      "Elaboración del plan por un operador acreditado en el Registro SAG-INDAP"
+    ],
+    "fortalezas": [
+      "Mejora comprobada del rendimiento y retención de humedad en suelos"
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "id": 1195,
+    "createdAt": "2026-10-07T14:14:41.716Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
+    "lastCheckedAt": "2026-10-07T14:14:41.716Z"
+  },
+  {
+    "nombre": "INDAP — Programa de Desarrollo de Inversiones (PDI) Foco Sustentabilidad Agropecuaria 2026-2027",
+    "institucion": "INDAP",
+    "monto": 8000000,
+    "montoTexto": "Hasta CLP $8.000.000 no reembolsables",
+    "fecha_cierre": "2026-11-30",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Desarrollo Rural y Agricultura Familiar",
+    "url_bases": "https://www.indap.gob.cl/programas/pdi",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Productores de Hortalizas y Frutales",
+      "Crianceros",
+      "Cooperativas Campesinas"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Empresas Asociativas Campesinas"
+    ],
+    "checklist": [
+      "Plan de negocio silvoagropecuario",
+      "Cotizaciones de equipamiento"
+    ],
+    "ambito": "Nacional",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 94,
+    "objetivo": "Financiamiento de inversiones productivas en maquinaria menor, infraestructura de secado y bodegaje, invernaderos tecnificados y sistemas de valor agregado.",
+    "descripcionIICA": "Modernización del capital físico y de trabajo para agricultores de los programas PRODESAL y SAT.",
+    "requisitos": [
+      "Acreditación de condición de usuario INDAP"
+    ],
+    "fortalezas": [
+      "Impacto inmediato en la capacidad operativa y calidad de vida rural"
+    ],
+    "debilidades": [],
+    "complejidad": "Fácil",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "id": 1194,
+    "createdAt": "2026-10-07T14:14:41.716Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
+    "lastCheckedAt": "2026-10-07T14:14:41.716Z"
+  },
+  {
+    "nombre": "INDAP — Programa de Riego y Drenaje Intrapredial (PRI) Convocatoria Operación Temprana 2026-2027",
+    "institucion": "INDAP",
+    "monto": 12000000,
+    "montoTexto": "Hasta CLP $12.000.000 (hasta 90% del valor de la obra)",
+    "fecha_cierre": "2027-01-20",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Riego y Recursos Hídricos",
+    "url_bases": "https://www.indap.gob.cl/programas/riego-intrapredial",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Pequeños Agricultores INDAP",
+      "Comunidades Indígenas",
+      "Mujeres Rurales"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Persona Natural acreditada en INDAP"
+    ],
+    "checklist": [
+      "Acreditación usuario INDAP",
+      "Diseño técnico de riego",
+      "Presupuesto obra"
+    ],
+    "ambito": "Nacional",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 96,
+    "objetivo": "Subsidios para tecnificación de riego por goteo, microaspersión, bombeo solar y cosecha de aguas lluvias (SCALL) para la pequeña agricultura familiar campesina.",
+    "descripcionIICA": "Instrumento más directo de fomento al riego para la pequeña agricultura en Chile con soporte de las agencias de área INDAP.",
+    "requisitos": [
+      "Cumplir con las normas de usuario de INDAP",
+      "Tener explotación agrícola vigente"
+    ],
+    "fortalezas": [
+      "Subsidio del 90% no reembolsable y acompañamiento de consultores INDAP"
+    ],
+    "debilidades": [],
+    "complejidad": "Fácil",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "id": 1193,
+    "createdAt": "2026-10-07T14:14:41.716Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
+    "lastCheckedAt": "2026-10-07T14:14:41.716Z"
+  },
+  {
+    "nombre": "CORFO Crea y Valida I+D+i Silvoagropecuaria 2026-2027",
+    "institucion": "CORFO",
+    "monto": 120000000,
+    "montoTexto": "Hasta CLP $120.000.000",
+    "fecha_cierre": "2026-12-22",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Innovación y Tecnología Agropecuaria",
+    "url_bases": "https://www.corfo.cl/sites/cpp/convocatorias/crea_y_valida",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Empresas de I+D",
+      "Asociaciones Agrícolas",
+      "Agroexportadoras"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Persona Jurídica"
+    ],
+    "checklist": [
+      "Metodología I+D",
+      "Plan de validación en huerto",
+      "Acuerdo de propiedad intelectual"
+    ],
+    "ambito": "Nacional",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 87,
+    "objetivo": "Proyectos de I+D aplicada para el desarrollo y validación de prototipos comerciales en manejo de suelo, biosensores y control biológico en huertos agrícolas.",
+    "descripcionIICA": "Apoya el escalamiento desde el laboratorio al campo comercial en colaboración con centros científicos.",
+    "requisitos": [
+      "Contar con capacidad de I+D interna o entidad experta colaboradora"
+    ],
+    "fortalezas": [
+      "Montos sustantivos para validación empírica en terreno"
+    ],
+    "debilidades": [],
+    "complejidad": "Alta",
+    "rolIICA": "Implementador",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "id": 1192,
+    "createdAt": "2026-10-07T14:14:41.716Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
+    "lastCheckedAt": "2026-10-07T14:14:41.716Z"
+  },
+  {
+    "nombre": "CORFO Semilla Inicia Sostenible 2026-2027 (Foco AgTech & Bioinsumos)",
+    "institucion": "CORFO",
+    "monto": 15000000,
+    "montoTexto": "Hasta CLP $15.000.000 subsidio no reembolsable",
+    "fecha_cierre": "2026-11-20",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Inteligencia Artificial y AgriTech",
+    "url_bases": "https://www.corfo.cl/sites/cpp/convocatorias/semilla_inicia",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Startups AgriTech",
+      "Emprendedores Innovadores",
+      "Desarrolladores de Bioinsumos"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica menor a 18 meses"
+    ],
+    "checklist": [
+      "Pitch Deck",
+      "Prototipo o MVP funcional",
+      "Validación comercial preliminar"
+    ],
+    "ambito": "Nacional",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 89,
+    "objetivo": "Apoyo a emprendimientos dinámicos en fase inicial con soluciones biológicas o tecnológicas aplicadas a la agricultura regenerativa y protección vegetal.",
+    "descripcionIICA": "Fondo clave para nuevos talentos y empresas emergentes de software agrícola y microbiología de suelos.",
+    "requisitos": [
+      "Ventas inferiores a $10.000.000 en los últimos 12 meses"
+    ],
+    "fortalezas": [
+      "85% de cofinanciamiento y red de aceleradoras de CORFO"
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "id": 1191,
+    "createdAt": "2026-10-07T14:14:41.716Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
+    "lastCheckedAt": "2026-10-07T14:14:41.716Z"
+  },
+  {
+    "nombre": "CORFO Innova Región — Soluciones para la Sequía y Transición Hídrica en Zonas Frutícolas 2026-2027",
+    "institucion": "CORFO",
+    "monto": 60000000,
+    "montoTexto": "Hasta CLP $60.000.000 (hasta 50% cofinanciamiento)",
+    "fecha_cierre": "2026-12-05",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Innovación y Bioeconomía",
+    "url_bases": "https://www.corfo.cl/sites/cpp/convocatorias/innova_region",
+    "regiones": [
+      "Coquimbo",
+      "Valparaíso",
+      "O'Higgins",
+      "Maule"
+    ],
+    "beneficiarios": [
+      "Empresas Frutícolas",
+      "Agroindustrias",
+      "Cooperativas"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Persona Jurídica"
+    ],
+    "checklist": [
+      "Formulario Corfo Innova",
+      "Plan de I+D+i empresarial",
+      "Estados financieros"
+    ],
+    "ambito": "Regional",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 88,
+    "objetivo": "Desarrollo de innovaciones en productos y procesos orientados a resolver brechas de productividad y estrés hídrico en cuencas de la zona centro de Chile.",
+    "descripcionIICA": "Fondo regionalizado de CORFO para validar nuevas prácticas agronómicas y biotecnología aplicada a frutales.",
+    "requisitos": [
+      "Ventas anuales acreditadas y personalidad jurídica en Chile"
+    ],
+    "fortalezas": [
+      "Foco territorial en las regiones más afectadas por la megasequía"
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Maule",
+    "id": 1190,
+    "createdAt": "2026-10-07T14:14:41.716Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
+    "lastCheckedAt": "2026-10-07T14:14:41.716Z"
+  },
+  {
+    "nombre": "Programa de Giras Técnicas y Eventos de Innovación FIA 2026-2027",
+    "institucion": "FIA (Fundación para la Innovación Agraria)",
+    "monto": 8000000,
+    "montoTexto": "Hasta CLP $8.000.000 por gira",
+    "fecha_cierre": "2026-12-18",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Capacitación y Asistencia Técnica",
+    "url_bases": "https://www.fia.cl/instrumentos/giras-y-eventos/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Grupos de Productores",
+      "Extensionistas",
+      "Asociaciones Gremiales Agrícolas"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Asociaciones de Productores",
+      "Cooperativas",
+      "Universidades"
+    ],
+    "checklist": [
+      "Itinerario técnico",
+      "Lista de participantes confirmados"
+    ],
+    "ambito": "Nacional",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 93,
+    "objetivo": "Financiamiento para misiones tecnológicas y giras nacionales e internacionales que permitan a productores conocer soluciones de punta en terreno.",
+    "descripcionIICA": "Facilita la transferencia directa de conocimiento y adopción de tecnologías en el territorio.",
+    "requisitos": [
+      "Participación mínima de 6 beneficiarios directos"
+    ],
+    "fortalezas": [
+      "Rápida evaluación y alto impacto demostrativo"
+    ],
+    "debilidades": [],
+    "complejidad": "Fácil",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "id": 1189,
+    "createdAt": "2026-10-07T14:14:41.716Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
+    "lastCheckedAt": "2026-10-07T14:14:41.716Z"
+  },
+  {
+    "nombre": "Convocatoria FIA Jóvenes Innovadores 2026-2027",
+    "institucion": "FIA (Fundación para la Innovación Agraria)",
+    "monto": 15000000,
+    "montoTexto": "Hasta CLP $15.000.000 por proyecto",
+    "fecha_cierre": "2026-12-10",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Innovación y Bioeconomía",
+    "url_bases": "https://www.fia.cl/convocatorias/jovenes-innovadores/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Jóvenes entre 21 y 35 años",
+      "Estudiantes de Agronomía/Técnicos",
+      "Emprendedores Rurales"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica (equipo joven)"
+    ],
+    "checklist": [
+      "Perfil del emprendedor",
+      "Video pitch de 3 minutos",
+      "Formulario en plataforma FIA"
+    ],
+    "ambito": "Nacional",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 91,
+    "objetivo": "Fomentar el emprendimiento y la innovación en jóvenes vinculados al sector silvoagropecuario y la cadena agroalimentaria nacional.",
+    "descripcionIICA": "Impulso al relevo generacional en el agro chileno mediante prototipado rápido de ideas innovadoras.",
+    "requisitos": [
+      "Edad entre 21 y 35 años al momento de postulación"
+    ],
+    "fortalezas": [
+      "Subsidio 100% no reembolsable sin exigencia de garantía pesada"
+    ],
+    "debilidades": [],
+    "complejidad": "Fácil",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "id": 1188,
+    "createdAt": "2026-10-07T14:14:41.716Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
+    "lastCheckedAt": "2026-10-07T14:14:41.716Z"
+  },
+  {
+    "nombre": "Convocatoria Nacional de Proyectos de Innovación Silvoagropecuaria 2026-2027 — Resiliencia Climática y Seguridad Hídrica",
+    "institucion": "FIA (Fundación para la Innovación Agraria)",
+    "monto": 250000000,
+    "montoTexto": "Hasta CLP $250.000.000 (hasta 70% del costo total)",
+    "fecha_cierre": "2026-11-26",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Innovación y Bioeconomía",
+    "url_bases": "https://convocatoria.fia.cl/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Empresas Agrícolas",
+      "Universidades",
+      "Centros Tecnológicos",
+      "Asociaciones de Productores"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Persona Jurídica constituida en Chile"
+    ],
+    "checklist": [
+      "Propuesta técnica y plan de trabajo",
+      "Modelo de negocio y escalabilidad",
+      "Presupuesto y aportes valorizados/pecuniarios"
+    ],
+    "ambito": "Nacional",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 96,
+    "objetivo": "Apoyar iniciativas innovadoras que entreguen soluciones a los desafíos de adaptación al cambio climático, eficiencia hídrica y transición agroecológica en cadenas productivas silvoagropecuarias.",
+    "descripcionIICA": "Principal instrumento de innovación del Ministerio de Agricultura de Chile. Alta convergencia con la agenda técnica del IICA.",
+    "requisitos": [
+      "Entidad postulante con al menos 24 meses de iniciación de actividades",
+      "Asociatividad con productores o usuarios finales"
+    ],
+    "fortalezas": [
+      "Fondo directo con subsidio no reembolsable y seguimiento técnico especializado"
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Implementador",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "id": 1187,
+    "createdAt": "2026-10-07T14:14:41.716Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
+    "lastCheckedAt": "2026-10-07T14:14:41.716Z"
+  },
+  {
+    "nombre": "Concurso CNR 01-2027: Concurso de Tecnificación y Riego Sustentable 2027 (Operación Temprana)",
+    "institucion": "Comisión Nacional de Riego (CNR)",
+    "monto": 5000000000,
+    "montoTexto": "CLP $5.000.000.000",
+    "fecha_cierre": "2027-01-28",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Riego y Recursos Hídricos",
+    "url_bases": "https://www.cnr.gob.cl/concursos-de-riego/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Pequeños y Medianos Agricultores",
+      "Organizaciones de Regantes"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [
+      "Formulario CNR Operación Temprana 2027",
+      "Presupuesto detallado"
+    ],
+    "ambito": "Nacional",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 93,
+    "objetivo": "Primer concurso del calendario oficial 2027 de la Ley de Riego 18.450 enfocado en tecnificación intrapredial, telemetría y eficiencia energética para la temporada agrícola.",
+    "descripcionIICA": "Apertura temprana del fondo de riego 2027 para planificación anticipada de obras de cara al verano.",
+    "requisitos": [
+      "Presentación mediante consultor acreditado en CNR"
+    ],
+    "fortalezas": [
+      "Presupuesto robusto y plazo amplio de preparación"
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "id": 1186,
+    "createdAt": "2026-10-07T14:14:41.716Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
+    "lastCheckedAt": "2026-10-07T14:14:41.716Z"
+  },
+  {
+    "nombre": "Concurso CNR 26-2026: Concurso de Eficiencia Hídrica, ERNC y Calidad de Aguas para OUA",
+    "institucion": "Comisión Nacional de Riego (CNR)",
+    "monto": 2800000000,
+    "montoTexto": "CLP $2.800.000.000",
+    "fecha_cierre": "2026-12-15",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Riego y Recursos Hídricos",
+    "url_bases": "https://www.cnr.gob.cl/concursos-oua/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Organizaciones de Usuarios de Agua (OUA)",
+      "Comunidades de Riego"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "OUA",
+      "Juntas de Vigilancia",
+      "Asociaciones de Canalistas"
+    ],
+    "checklist": [
+      "Especificaciones ERNC fotovoltaicas",
+      "Plan de calidad de agua"
+    ],
+    "ambito": "Nacional",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 92,
+    "objetivo": "Implementación de compuertas telemetrizadas automatizadas con energía solar fotovoltaica, sensores de caudal en tiempo real y sistemas de sedimentación y filtrado.",
+    "descripcionIICA": "Fomenta la modernización energética y digital del monitoreo hídrico en canales chilenos.",
+    "requisitos": [
+      "Estatutos inscritos en Registro Público de Aguas"
+    ],
+    "fortalezas": [
+      "Ahorro energético sustancial y datos continuos de caudal"
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "id": 1185,
+    "createdAt": "2026-10-07T14:14:41.716Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
+    "lastCheckedAt": "2026-10-07T14:14:41.716Z"
+  },
+  {
+    "nombre": "Concurso CNR 25-2026: Concurso Nacional de Obras Civiles y Acumulación Intrapredial y Extrapredial",
+    "institucion": "Comisión Nacional de Riego (CNR)",
+    "monto": 4200000000,
+    "montoTexto": "CLP $4.200.000.000",
+    "fecha_cierre": "2026-12-03",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Riego y Recursos Hídricos",
+    "url_bases": "https://www.cnr.gob.cl/concursos-de-riego/concursos-ley-18450/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Organizaciones de Usuarios de Agua",
+      "Comunidades de Aguas",
+      "Asociaciones de Canalistas"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Organizaciones de Regantes",
+      "Juntas de Vigilancia"
+    ],
+    "checklist": [
+      "Bases del concurso",
+      "Plano de obras civiles",
+      "Aprobación de la DGA si aplica"
+    ],
+    "ambito": "Nacional",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 94,
+    "objetivo": "Financiamiento de obras civiles de conducción, revestimiento de canales matrices, marcos partidores y tranques comunitarios para organizaciones de regantes en Chile.",
+    "descripcionIICA": "Instrumento clave para reducir pérdidas por infiltración y asegurar volumen de riego ante sequía prolongada.",
+    "requisitos": [
+      "Personalidad jurídica vigente de la OUA",
+      "Acreditación de derechos de aprovechamiento consuntivos"
+    ],
+    "fortalezas": [
+      "Impacto asociativo a escala de cuenca y distribución equitativa del agua"
+    ],
+    "debilidades": [],
+    "complejidad": "Alta",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "id": 1184,
+    "createdAt": "2026-10-07T14:14:41.716Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
+    "lastCheckedAt": "2026-10-07T14:14:41.716Z"
+  },
+  {
+    "nombre": "Concurso CNR 24-2026: Concurso de Tecnificación y Obras Menores para la Pequeña Agricultura y Zonas Rezagadas",
+    "institucion": "Comisión Nacional de Riego (CNR)",
+    "monto": 3500000000,
+    "montoTexto": "CLP $3.500.000.000 fondo concursable",
+    "fecha_cierre": "2026-11-17",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Riego y Recursos Hídricos",
+    "url_bases": "https://www.cnr.gob.cl/concursos-de-riego/calendario-concursos-2026/",
+    "regiones": [
+      "Nacional",
+      "Maule",
+      "Ñuble",
+      "Biobío",
+      "La Araucanía"
+    ],
+    "beneficiarios": [
+      "Pequeños Agricultores INDAP",
+      "Pequeños Agricultores No INDAP",
+      "Comunidades Indígenas"
+    ],
+    "requiere_cofinanciamiento": true,
+    "idioma": "es",
+    "faq_disponible": true,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": true,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica",
+      "Comunidad Agrícola"
+    ],
+    "checklist": [
+      "Bases administrativas",
+      "Certificado dominio vigente de aguas",
+      "Proyecto técnico de riego"
+    ],
+    "ambito": "Nacional",
+    "viabilidadIICA": "Alta",
+    "porcentajeViabilidad": 95,
+    "objetivo": "Bonificar proyectos de tecnificación de riego por goteo, microaspersión y pequeñas obras de acumulación orientadas a optimizar el uso eficiente del agua en predios de la pequeña agricultura.",
+    "descripcionIICA": "Convocatoria prioritaria bajo la Ley de Fomento al Riego 18.450 con foco en seguridad hídrica para el sur y centro-sur de Chile.",
+    "requisitos": [
+      "Estar inscrito en el Registro de Consultores CNR",
+      "Derechos de aprovechamiento de aguas acreditados"
+    ],
+    "fortalezas": [
+      "Alta tasa de bonificación (hasta 90% para pequeños agricultores)",
+      "Cobertura multirregional"
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "id": 1183,
+    "createdAt": "2026-10-07T14:14:41.716Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
+    "lastCheckedAt": "2026-10-07T14:14:41.716Z"
+  },
+  {
     "id": 947,
     "nombre": "Curso Internacional de Desarrollo de Capacidades para la Aplicación del Enfoque de Mejoramiento de Vida para el Desarrollo Rural Participativo",
     "institucion": "AGCID",
@@ -218,7 +1154,7 @@
     "monto": 250000,
     "montoTexto": "USD 250,000",
     "fecha_cierre": "2026-09-30",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Cooperación Internacional",
     "url_bases": "https://www.fontagro.org/es/iniciativas/convocatorias/",
     "regiones": [
@@ -239,7 +1175,7 @@
     ],
     "checklist": [],
     "ambito": "Internacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Alta",
     "porcentajeViabilidad": 95,
     "objetivo": "Convocatoria anual del Fondo Regional de Tecnología Agropecuaria para proyectos de innovación en sistemas agroalimentarios sostenibles en América Latina y el Caribe.",
@@ -254,7 +1190,7 @@
     "complejidad": "Media",
     "rolIICA": "Ejecutor",
     "createdAt": "2026-07-22T12:00:00.000Z",
-    "updatedAt": "2026-07-22T12:00:00.000Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
     "lastCheckedAt": "2026-07-22T12:00:00.000Z",
     "canonicalUrl": "https://www.fontagro.org/es/iniciativas/convocatorias/2026",
     "sourceRefId": 5,
@@ -6263,7 +7199,7 @@
     "institucion": "Comisión Nacional de Riego (CNR)",
     "monto": 2.2,
     "fecha_cierre": "2026-09-02",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Desarrollo Territorial",
     "url_bases": "https://www.cnr.gob.cl/agricultores/calendario-de-concurso/",
     "regiones": [],
@@ -6277,7 +7213,7 @@
     "tipos_solicitante": [],
     "checklist": [],
     "ambito": "Nacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Media",
     "region": "O'Higgins Maule Ñuble Biobío Araucanía Los Ríos Los Lagos Aysén Magallanes",
     "objetivo": "Monto: 2.200 UF. Regiones: O'Higgins Maule Ñuble Biobío Araucanía Los Ríos Los Lagos Aysén Magallanes. Ley 18.450 — subsidios para obras de riego.",
@@ -6287,7 +7223,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:47.046Z",
-    "updatedAt": "2026-05-13T02:48:35.439Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
     "lastCheckedAt": "2026-05-13T02:46:47.046Z",
     "canonicalUrl": "https://www.cnr.gob.cl/agricultores/calendario-de-concurso/?concurso=20-2026",
     "sourceRefId": 7,
@@ -6302,7 +7238,7 @@
     "institucion": "Comisión Nacional de Riego (CNR)",
     "monto": 1.4,
     "fecha_cierre": "2026-09-29",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Desarrollo Territorial",
     "url_bases": "https://www.cnr.gob.cl/agricultores/calendario-de-concurso/",
     "regiones": [],
@@ -6316,7 +7252,7 @@
     "tipos_solicitante": [],
     "checklist": [],
     "ambito": "Nacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Media",
     "region": "Nacional",
     "objetivo": "Monto: 1.400 UF. Regiones: Nacional. Ley 18.450 — subsidios para obras de riego.",
@@ -6326,7 +7262,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:49.306Z",
-    "updatedAt": "2026-05-13T02:48:36.850Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
     "lastCheckedAt": "2026-05-13T02:46:49.306Z",
     "canonicalUrl": "https://www.cnr.gob.cl/agricultores/calendario-de-concurso/?concurso=21-2026",
     "sourceRefId": 7,
@@ -6341,7 +7277,7 @@
     "institucion": "Comisión Nacional de Riego (CNR)",
     "monto": 1.5,
     "fecha_cierre": "2026-10-01",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Desarrollo Territorial",
     "url_bases": "https://www.cnr.gob.cl/agricultores/calendario-de-concurso/",
     "regiones": [],
@@ -6355,7 +7291,7 @@
     "tipos_solicitante": [],
     "checklist": [],
     "ambito": "Nacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Media",
     "region": "Arica y Parinacota Tarapacá Antofagasta Atacama",
     "objetivo": "Monto: 1.500 UF. Regiones: Arica y Parinacota Tarapacá Antofagasta Atacama. Ley 18.450 — subsidios para obras de riego.",
@@ -6365,7 +7301,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:50.802Z",
-    "updatedAt": "2026-05-13T02:48:38.344Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
     "lastCheckedAt": "2026-05-13T02:46:50.802Z",
     "canonicalUrl": "https://www.cnr.gob.cl/agricultores/calendario-de-concurso/?concurso=22-2026",
     "sourceRefId": 7,
@@ -6380,7 +7316,7 @@
     "institucion": "Comisión Nacional de Riego (CNR)",
     "monto": 1.5,
     "fecha_cierre": "2026-10-06",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Desarrollo Territorial",
     "url_bases": "https://www.cnr.gob.cl/agricultores/calendario-de-concurso/",
     "regiones": [],
@@ -6394,7 +7330,7 @@
     "tipos_solicitante": [],
     "checklist": [],
     "ambito": "Nacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Media",
     "region": "Ñuble Biobío Araucanía Aysén",
     "objetivo": "Monto: 1.500 UF. Regiones: Ñuble Biobío Araucanía Aysén. Ley 18.450 — subsidios para obras de riego.",
@@ -6404,7 +7340,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:52.533Z",
-    "updatedAt": "2026-05-13T02:48:40.025Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
     "lastCheckedAt": "2026-05-13T02:46:52.533Z",
     "canonicalUrl": "https://www.cnr.gob.cl/agricultores/calendario-de-concurso/?concurso=23-2026",
     "sourceRefId": 7,
@@ -7561,7 +8497,7 @@
     "monto": 320000000,
     "montoTexto": "CLP $320.000.000",
     "fecha_cierre": "2026-09-15",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Riego y Recursos Hídricos",
     "url_bases": "https://www.goremaule.cl/fic-r-2026",
     "regiones": [
@@ -7589,7 +8525,7 @@
       "Convenio con asociación de agricultores del Maule"
     ],
     "ambito": "Regional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Alta",
     "porcentajeViabilidad": 93,
     "objetivo": "Desarrollar e implementar soluciones de eficiencia hídrica y telemetría de riego en la cuenca del Maule.",
@@ -7605,7 +8541,7 @@
     "complejidad": "Media",
     "rolIICA": "Ejecutor",
     "createdAt": "2026-07-22T12:00:00.000Z",
-    "updatedAt": "2026-07-22T12:00:00.000Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
     "lastCheckedAt": "2026-07-22T12:00:00.000Z",
     "canonicalUrl": "https://www.goremaule.cl/fic-r-2026-riego-agricola",
     "sourceRefId": 24,
@@ -7623,7 +8559,7 @@
     "monto": 280000000,
     "montoTexto": "CLP $280.000.000",
     "fecha_cierre": "2026-09-30",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Innovación y Tecnología Agrícola",
     "url_bases": "https://www.gorecoquimbo.cl/fic-2026",
     "regiones": [
@@ -7649,7 +8585,7 @@
       "Propuesta técnica con enfoque en adaptación al cambio climático"
     ],
     "ambito": "Regional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Alta",
     "porcentajeViabilidad": 90,
     "objetivo": "Implementar técnicas de atrapanieblas avanzadas y riego por goteo solar en los valles de Elqui y Limarí.",
@@ -7664,7 +8600,7 @@
     "complejidad": "Media",
     "rolIICA": "Implementador",
     "createdAt": "2026-07-22T12:00:00.000Z",
-    "updatedAt": "2026-07-22T12:00:00.000Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
     "lastCheckedAt": "2026-07-22T12:00:00.000Z",
     "canonicalUrl": "https://www.gorecoquimbo.cl/fic-2026-escasez-hidrica",
     "sourceRefId": 24,
@@ -8044,7 +8980,7 @@
     "monto": 700000,
     "montoTexto": "USD 700.000 en total (Ideation USD 10k–20k; Incubation hasta USD 50k)",
     "fecha_cierre": "2026-09-04",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Sostenibilidad y Cambio Climático",
     "url_bases": "https://www.betterpolitics.foundation/resilient-futures-call-2026",
     "regiones": [
@@ -8069,7 +9005,7 @@
       "Matriz de riesgos climáticos"
     ],
     "ambito": "Internacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Alta",
     "porcentajeViabilidad": 90,
     "objetivo": "Financia iniciativas en la intersección de liderazgo político democrático y resiliencia climática. Formulario liviano de etapa única.",
@@ -8086,7 +9022,7 @@
     "complejidad": "Alta",
     "rolIICA": "Ejecutor",
     "createdAt": "2026-08-12T12:00:00.000Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
     "lastCheckedAt": "2026-08-12T12:00:00.000Z",
     "canonicalUrl": "https://www.betterpolitics.foundation/resilient-futures-call-2026",
     "sourceRefId": 37,
@@ -8104,7 +9040,7 @@
     "monto": 6500000,
     "montoTexto": "Variable (> EUR 580M en cluster)",
     "fecha_cierre": "2026-09-17",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Innovación y Tecnología Agropecuaria",
     "url_bases": "https://rea.ec.europa.eu/funding-and-grants/horizon-europe-cluster-6-food-bioeconomy-natural-resources-agriculture-and-environment/biodiversity-and-ecosystem-services_en",
     "regiones": [
@@ -8132,7 +9068,7 @@
       "Plan de difusión y transferencia tecnológica"
     ],
     "ambito": "Internacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Alta",
     "porcentajeViabilidad": 93,
     "objetivo": "Call de etapa única sobre declive de insectos, ecosistemas subterráneos, economía nature-positive y agrobiodiversidad.",
@@ -8149,7 +9085,7 @@
     "complejidad": "Alta",
     "rolIICA": "Implementador",
     "createdAt": "2026-08-12T12:00:00.000Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
     "lastCheckedAt": "2026-08-12T12:00:00.000Z",
     "canonicalUrl": "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/topic-details/horizon-cl6-2026-biodiv",
     "sourceRefId": 38,
@@ -8167,7 +9103,7 @@
     "monto": 8500000,
     "montoTexto": "EUR 173,5 M (de EUR 601,5 M totales)",
     "fecha_cierre": "2026-09-22",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Sostenibilidad y Cambio Climático",
     "url_bases": "https://cinea.ec.europa.eu/life-calls-proposals-2026_en",
     "regiones": [
@@ -8193,7 +9129,7 @@
       "Evaluación de impacto ambiental"
     ],
     "ambito": "Internacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Alta",
     "porcentajeViabilidad": 89,
     "objetivo": "Standard Action Projects (SAP) para Nature & Biodiversity dedicados a conservación y restauración de ecosistemas.",
@@ -8210,7 +9146,7 @@
     "complejidad": "Alta",
     "rolIICA": "Implementador",
     "createdAt": "2026-08-12T12:00:00.000Z",
-    "updatedAt": "2026-08-12T16:30:02.192Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
     "lastCheckedAt": "2026-08-12T12:00:00.000Z",
     "canonicalUrl": "https://cinea.ec.europa.eu/life/nature-biodiversity-2026",
     "sourceRefId": 39,
@@ -8228,7 +9164,7 @@
     "monto": 8000000,
     "montoTexto": "Parte de EUR 601,5 M totales (LIFE 2026)",
     "fecha_cierre": "2026-09-22",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Sostenibilidad y Cambio Climático",
     "url_bases": "https://cinea.ec.europa.eu/life-calls-proposals-2026_en",
     "regiones": [
@@ -8255,7 +9191,7 @@
       "Cálculo de reducción de emisiones CO2e"
     ],
     "ambito": "Internacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Alta",
     "porcentajeViabilidad": 91,
     "objetivo": "Línea de cambio climático del programa LIFE 2026 para proyectos de mitigación, adaptación y transición energética.",
@@ -8272,7 +9208,7 @@
     "complejidad": "Alta",
     "rolIICA": "Ejecutor",
     "createdAt": "2026-08-12T12:00:00.000Z",
-    "updatedAt": "2026-08-12T16:30:02.192Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
     "lastCheckedAt": "2026-08-12T12:00:00.000Z",
     "canonicalUrl": "https://cinea.ec.europa.eu/life/climate-action-2026",
     "sourceRefId": 39,
@@ -8290,7 +9226,7 @@
     "monto": 1500000,
     "montoTexto": "Hasta USD 1,5 M (Deuda/Impact Finance; USD 300k Fast-Track)",
     "fecha_cierre": "2026-10-01",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Desarrollo Rural y Cadenas de Valor",
     "url_bases": "https://common-fund.org/index.php/call-for-proposals",
     "regiones": [
@@ -8318,7 +9254,7 @@
       "Impacto social y en pequeños agricultores"
     ],
     "ambito": "Internacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Alta",
     "porcentajeViabilidad": 87,
     "objetivo": "Financia proyectos comercialmente viables que fortalecen cadenas de valor de commodities y medios de vida de pequeños productores.",
@@ -8335,7 +9271,7 @@
     "complejidad": "Media",
     "rolIICA": "Asesor",
     "createdAt": "2026-08-12T12:00:00.000Z",
-    "updatedAt": "2026-08-12T16:30:02.192Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
     "lastCheckedAt": "2026-08-12T12:00:00.000Z",
     "canonicalUrl": "https://common-fund.org/call-for-proposals-29th",
     "sourceRefId": 40,
@@ -8353,7 +9289,7 @@
     "monto": 500000,
     "montoTexto": "Evaluación caso a caso (Awards ≥ USD 250.000 en fechas fijas)",
     "fecha_cierre": "2026-10-01",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Sostenibilidad y Cambio Climático",
     "url_bases": "https://www.rainforesttrust.org/get-involved/apply-for-funding/",
     "regiones": [
@@ -8378,7 +9314,7 @@
       "Plan de gobernanza territorial"
     ],
     "ambito": "Internacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Media",
     "porcentajeViabilidad": 83,
     "objetivo": "Apoya creación/expansión de áreas protegidas, corredores biológicos y OECM. Concept notes continuas; cierres de awards en mar/jul/oct.",
@@ -8395,7 +9331,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-08-12T12:00:00.000Z",
-    "updatedAt": "2026-08-12T16:30:02.192Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
     "lastCheckedAt": "2026-08-12T12:00:00.000Z",
     "canonicalUrl": "https://www.rainforesttrust.org/apply-for-funding-protected-areas",
     "sourceRefId": 41,
@@ -8413,7 +9349,7 @@
     "monto": 35000,
     "montoTexto": "USD 25.000 – 50.000",
     "fecha_cierre": "2026-09-15",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Innovación y Tecnología Agropecuaria",
     "url_bases": "https://genderenvironmentdata.org/",
     "regiones": [
@@ -8439,7 +9375,7 @@
       "Metodología de recolección de datos de género"
     ],
     "ambito": "Internacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Alta",
     "porcentajeViabilidad": 86,
     "objetivo": "Financiar herramientas digitales e indicadores de género aplicados al monitoreo del cambio climático y agricultura sostenible.",
@@ -8456,7 +9392,7 @@
     "complejidad": "Baja",
     "rolIICA": "Asesor",
     "createdAt": "2026-08-12T12:00:00.000Z",
-    "updatedAt": "2026-08-12T12:00:00.000Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
     "lastCheckedAt": "2026-08-12T12:00:00.000Z",
     "canonicalUrl": "https://genderenvironmentdata.org/seed-fund-2026",
     "sourceRefId": 33,
@@ -8784,7 +9720,7 @@
     "monto": 1840000,
     "montoTexto": "€ 600.000 – 1.840.000",
     "fecha_cierre": "2026-09-18",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Inteligencia Artificial y AgriTech",
     "url_bases": "https://www.nwo.nl/en/researchprogrammes/kic/kic-ai-for-agriculture-food",
     "regiones": [
@@ -8811,7 +9747,7 @@
       "Propuesta de IA explicable aplicada a cultivos o gestión del agua"
     ],
     "ambito": "Internacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Alta",
     "porcentajeViabilidad": 92,
     "objetivo": "Financiamiento de I+D para consorcios internacionales que desarrollen modelos de IA para sostenibilidad, horticultura de precisión y gestión inteligente de cuencas.",
@@ -8830,7 +9766,7 @@
     "complejidad": "Alta",
     "rolIICA": "Asesor",
     "createdAt": "2026-08-12T14:00:00.000Z",
-    "updatedAt": "2026-08-12T14:00:00.000Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
     "lastCheckedAt": "2026-08-12T14:00:00.000Z",
     "canonicalUrl": "https://www.nwo.nl/kic-ai-agro-2026",
     "sourceRefId": 43,
@@ -8848,7 +9784,7 @@
     "monto": 50000,
     "montoTexto": "Financiamiento + Mentoría IICA",
     "fecha_cierre": "2026-09-30",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Inteligencia Artificial y AgriTech",
     "url_bases": "https://apps.iica.int/agtech-accelerator/",
     "regiones": [
@@ -8875,7 +9811,7 @@
       "Video demostrativo de pitch técnico"
     ],
     "ambito": "Internacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Alta",
     "porcentajeViabilidad": 99,
     "objetivo": "Aceleración, validación en terreno y conexión con fondos de inversión para soluciones de IA, imágenes satelitales y robótica desarrolladas en las Américas.",
@@ -8892,7 +9828,7 @@
     "complejidad": "Baja",
     "rolIICA": "Ejecutor",
     "createdAt": "2026-08-12T14:00:00.000Z",
-    "updatedAt": "2026-08-12T14:00:00.000Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
     "lastCheckedAt": "2026-08-12T14:00:00.000Z",
     "canonicalUrl": "https://apps.iica.int/agtech-accelerator-2026",
     "sourceRefId": 44,
@@ -9038,7 +9974,7 @@
     "monto": 50000000,
     "montoTexto": "Hasta $50.000.000 CLP",
     "fecha_cierre": "2026-09-15",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Inteligencia Artificial y AgriTech",
     "url_bases": "https://convocatoria.fia.cl/",
     "regiones": [
@@ -9066,7 +10002,7 @@
       "Demostración de TRL 3 a TRL 5"
     ],
     "ambito": "Nacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Alta",
     "porcentajeViabilidad": 96,
     "objetivo": "Financiamiento no reembolsable para validación técnica y empaquetamiento de soluciones de IA, robótica y automatización de riego en el agro chileno.",
@@ -9085,7 +10021,7 @@
     "complejidad": "Baja",
     "rolIICA": "Asesor",
     "createdAt": "2026-08-12T14:00:00.000Z",
-    "updatedAt": "2026-08-12T14:00:00.000Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
     "lastCheckedAt": "2026-08-12T14:00:00.000Z",
     "canonicalUrl": "https://convocatoria.fia.cl/ia-agrotech-2026",
     "sourceRefId": 47,
@@ -9233,7 +10169,7 @@
     "monto": 6000000,
     "montoTexto": "Hasta $6.000.000 CLP",
     "fecha_cierre": "2026-09-20",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Riego y Recursos Hídricos",
     "url_bases": "https://www.cnr.gob.cl/concursos-oua/",
     "regiones": [
@@ -9259,7 +10195,7 @@
       "Presupuesto cotizado para aforo, software o paneles fotovoltaicos"
     ],
     "ambito": "Nacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Alta",
     "porcentajeViabilidad": 97,
     "objetivo": "Financiamiento no reembolsable para adquisición de activos, telemetría, software de gestión hídrica y energía solar en organizaciones de usuarios de agua de Chile.",
@@ -9276,7 +10212,7 @@
     "complejidad": "Baja",
     "rolIICA": "Asesor",
     "createdAt": "2026-08-12T14:30:00.000Z",
-    "updatedAt": "2026-08-12T14:30:00.000Z",
+    "updatedAt": "2026-10-07T14:14:41.716Z",
     "lastCheckedAt": "2026-08-12T14:30:00.000Z",
     "canonicalUrl": "https://www.cnr.gob.cl/concurso-oua-2026",
     "sourceRefId": 50,
@@ -9613,8 +10549,8 @@
     "monto": 0,
     "montoTexto": "Ver bases",
     "fecha_cierre": "2026-09-08",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
     "categoria": "Fondos Concursables",
     "url_bases": "https://www.fia.cl/convocatorias/convocatoria-nacional-de-proyectos-de-innovacion-de-interes-privado-2026-linea-3-trl7-a-trl8/",
     "regiones": [
@@ -9653,7 +10589,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-07T14:14:41.716Z"
   },
   {
     "id": 1002,
@@ -11475,8 +12411,8 @@
     "monto": 0,
     "montoTexto": "300 UF",
     "fecha_cierre": "2026-09-09",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
     "categoria": "Fondos Concursables",
     "url_bases": "https://ley18450.cnr.gob.cl/ley18450/pages/CalendarioConcurso?concurso=18-2026",
     "regiones": [
@@ -11515,7 +12451,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-07T14:14:41.716Z"
   },
   {
     "id": 1040,
@@ -11573,8 +12509,8 @@
     "monto": 0,
     "montoTexto": "1.400 UF",
     "fecha_cierre": "2026-10-06",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
     "categoria": "Fondos Concursables",
     "url_bases": "https://ley18450.cnr.gob.cl/ley18450/pages/CalendarioConcurso?concurso=20-2026",
     "regiones": [
@@ -11613,7 +12549,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "O’Higgins Maule Ñuble Biobío Araucanía Los Ríos Los Lagos Aysén Magallanes",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-07T14:14:41.716Z"
   },
   {
     "id": 1042,
@@ -11965,8 +12901,8 @@
     "monto": 0,
     "montoTexto": "Ver bases",
     "fecha_cierre": "2026-09-16",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
     "categoria": "Fondos Concursables",
     "url_bases": "https://iica.int/es/bids/honduras-licitacion-no-016-2026-compra-de-cintas-de-riego-y-kits-para-sistemas-de-riego-parcelario-por-goteo-destinados-a-apoyar-el-fortalecimiento-de-programas-y-proyectos-de-la-secretaria-en-los/",
     "regiones": [
@@ -12005,7 +12941,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-07T14:14:41.716Z"
   },
   {
     "id": 1050,
@@ -12014,8 +12950,8 @@
     "monto": 0,
     "montoTexto": "Ver bases",
     "fecha_cierre": "2026-09-08",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
     "categoria": "Fondos Concursables",
     "url_bases": "https://iica.int/es/bids/honduras-licitacion-no-017-2026-compra-de-pajillas-de-semen-bovino-convencional-congelado-destinada-a-fortalecer-el-programa-bono-ganadero-ano-2025/",
     "regiones": [
@@ -12054,7 +12990,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-07T14:14:41.716Z"
   },
   {
     "id": 1051,
@@ -12063,8 +12999,8 @@
     "monto": 0,
     "montoTexto": "Ver bases",
     "fecha_cierre": "2026-09-08",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
     "categoria": "Fondos Concursables",
     "url_bases": "https://iica.int/es/bids/honduras-licitacion-no-014-2026-compra-de-sal-mineral-para-uso-pecuario-destinada-a-apoyar-el-fortalecimiento-de-programas-y-proyectos-de-la-secretaria-en-los-despachos-de-agricultura-y-ganaderia/",
     "regiones": [
@@ -12103,7 +13039,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-07T14:14:41.716Z"
   },
   {
     "id": 1052,
@@ -12112,8 +13048,8 @@
     "monto": 0,
     "montoTexto": "Ver bases",
     "fecha_cierre": "2026-09-04",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
     "categoria": "Fondos Concursables",
     "url_bases": "https://iica.int/es/bids/honduras-licitacion-no-015-2026-suministro-e-instalacion-de-geomembrana-hdpe-para-el-revestimiento-y-rehabilitacion-de-reservorios-de-agua-para-uso-agropecuario-destinados-a-apoyar-el-fortalecimient/",
     "regiones": [
@@ -12152,7 +13088,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-07T14:14:41.716Z"
   },
   {
     "id": 1053,
@@ -12161,8 +13097,8 @@
     "monto": 0,
     "montoTexto": "Ver bases",
     "fecha_cierre": "2026-09-02",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
     "categoria": "Fondos Concursables",
     "url_bases": "https://iica.int/es/bids/honduras-licitacion-no-012-2026-compra-de-fertilizantes-destinados-a-fortalecer-el-programa-bono-tecnologico-productivo-ano-2025-2026/",
     "regiones": [
@@ -12201,7 +13137,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-07T14:14:41.716Z"
   },
   {
     "id": 1054,
@@ -12406,8 +13342,8 @@
     "monto": 0,
     "montoTexto": "Ver bases",
     "fecha_cierre": "2026-09-11",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
     "categoria": "Fondos Concursables",
     "url_bases": "https://iica.int/en/bids/surinam-no-atn-az-21079-su-sur-iica-01-2026-provision-of-consultancy-services-to-assess-the-agricultural-potential-of-flood-resilient-lands-using-in-an-integrated-and-participatory-gis-based-multic/",
     "regiones": [
@@ -12446,7 +13382,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-07T14:14:41.716Z"
   },
   {
     "id": 1059,
@@ -12749,8 +13685,8 @@
     "monto": 0,
     "montoTexto": "Ver bases",
     "fecha_cierre": "2026-09-16",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
     "categoria": "Fondos Concursables",
     "url_bases": "https://projects.worldbank.org/en/projects-operations/procurement-detail/OP00466325",
     "regiones": [
@@ -12789,203 +13725,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Bolivia",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
-  },
-  {
-    "id": 1066,
-    "nombre": "Bolivia Resilient Water Management for Community and Household Irrigation Project",
-    "institucion": "World Bank",
-    "monto": 0,
-    "montoTexto": "Ver bases",
-    "fecha_cierre": "2026-09-16",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
-    "categoria": "Fondos Concursables",
-    "url_bases": "https://projects.worldbank.org/en/projects-operations/procurement-detail/OP00466307",
-    "regiones": [
-      "Bolivia"
-    ],
-    "beneficiarios": [
-      "Agricultores",
-      "Empresas Agrícolas",
-      "Organizaciones"
-    ],
-    "requiere_cofinanciamiento": false,
-    "idioma": "en",
-    "faq_disponible": false,
-    "permite_adendas": false,
-    "bases_estado": "published",
-    "requiere_firma": false,
-    "tipos_solicitante": [
-      "Persona Natural",
-      "Persona Jurídica"
-    ],
-    "checklist": [],
-    "ambito": "Internacional",
-    "viabilidadIICA": "Media",
-    "porcentajeViabilidad": 75,
-    "objetivo": "SERVICIO DE FORTALECIMIENTO ORGANIZACIONAL Y ASISTENCIA TECNICA PRODUCTIVA (FORATP) PAQUETE 3: “MEJORAMIENTO SISTEMA DE RIEGO TECNIFICADO CALA CALA (SORACAHI)” Y “CONSTRUCCIÓN SISTEMA DE RIEGO TECNIFICADO PASTO DE LOBOS (GAIOC SALINAS)”",
-    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
-    "requisitos": [
-      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
-    ],
-    "fortalezas": [
-      "Alineación con prioridades del sector silvoagropecuario chileno."
-    ],
-    "debilidades": [],
-    "complejidad": "Media",
-    "rolIICA": "Asesor",
-    "publishable": true,
-    "relevanciaChile": true,
-    "region": "Bolivia",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
-  },
-  {
-    "id": 1067,
-    "nombre": "Bolivia Resilient Water Management for Community and Household Irrigation Project",
-    "institucion": "World Bank",
-    "monto": 0,
-    "montoTexto": "Ver bases",
-    "fecha_cierre": "2026-09-16",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
-    "categoria": "Fondos Concursables",
-    "url_bases": "https://projects.worldbank.org/en/projects-operations/procurement-detail/OP00466316",
-    "regiones": [
-      "Bolivia"
-    ],
-    "beneficiarios": [
-      "Agricultores",
-      "Empresas Agrícolas",
-      "Organizaciones"
-    ],
-    "requiere_cofinanciamiento": false,
-    "idioma": "en",
-    "faq_disponible": false,
-    "permite_adendas": false,
-    "bases_estado": "published",
-    "requiere_firma": false,
-    "tipos_solicitante": [
-      "Persona Natural",
-      "Persona Jurídica"
-    ],
-    "checklist": [],
-    "ambito": "Internacional",
-    "viabilidadIICA": "Media",
-    "porcentajeViabilidad": 75,
-    "objetivo": "SERVICIO DE FORTALECIMIENTO ORGANIZACIONAL Y ASISTENCIA TECNICA PRODUCTIVA (FORATP) PAQUETE 6: “CONST. SISTEMA DE RIEGO COMUNIDAD SASARI” Y “CONSTRUCCION SISTEMA DE RIEGO VAQUERIA MACHACAMARCA (INQUISIVI)”",
-    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
-    "requisitos": [
-      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
-    ],
-    "fortalezas": [
-      "Alineación con prioridades del sector silvoagropecuario chileno."
-    ],
-    "debilidades": [],
-    "complejidad": "Media",
-    "rolIICA": "Asesor",
-    "publishable": true,
-    "relevanciaChile": true,
-    "region": "Bolivia",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
-  },
-  {
-    "id": 1068,
-    "nombre": "Bolivia Resilient Water Management for Community and Household Irrigation Project",
-    "institucion": "World Bank",
-    "monto": 0,
-    "montoTexto": "Ver bases",
-    "fecha_cierre": "2026-09-16",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
-    "categoria": "Fondos Concursables",
-    "url_bases": "https://projects.worldbank.org/en/projects-operations/procurement-detail/OP00466320",
-    "regiones": [
-      "Bolivia"
-    ],
-    "beneficiarios": [
-      "Agricultores",
-      "Empresas Agrícolas",
-      "Organizaciones"
-    ],
-    "requiere_cofinanciamiento": false,
-    "idioma": "en",
-    "faq_disponible": false,
-    "permite_adendas": false,
-    "bases_estado": "published",
-    "requiere_firma": false,
-    "tipos_solicitante": [
-      "Persona Natural",
-      "Persona Jurídica"
-    ],
-    "checklist": [],
-    "ambito": "Internacional",
-    "viabilidadIICA": "Media",
-    "porcentajeViabilidad": 75,
-    "objetivo": "SERVICIO DE FORTALECIMIENTO ORGANIZACIONAL Y ASISTENCIA TECNICA PRODUCTIVA (FORATP) PAQUETE 7: “CONST. SISTEMA DE RIEGO COLLPA HUANCARANI” Y “CONSTRUCCIÓN SISTEMA DE RIEGO TECNIFICADO SUB CENTRAL CARAZANI”",
-    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
-    "requisitos": [
-      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
-    ],
-    "fortalezas": [
-      "Alineación con prioridades del sector silvoagropecuario chileno."
-    ],
-    "debilidades": [],
-    "complejidad": "Media",
-    "rolIICA": "Asesor",
-    "publishable": true,
-    "relevanciaChile": true,
-    "region": "Bolivia",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
-  },
-  {
-    "id": 1069,
-    "nombre": "Bolivia Resilient Water Management for Community and Household Irrigation Project",
-    "institucion": "World Bank",
-    "monto": 0,
-    "montoTexto": "Ver bases",
-    "fecha_cierre": "2026-09-16",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
-    "categoria": "Fondos Concursables",
-    "url_bases": "https://projects.worldbank.org/en/projects-operations/procurement-detail/OP00466328",
-    "regiones": [
-      "Bolivia"
-    ],
-    "beneficiarios": [
-      "Agricultores",
-      "Empresas Agrícolas",
-      "Organizaciones"
-    ],
-    "requiere_cofinanciamiento": false,
-    "idioma": "en",
-    "faq_disponible": false,
-    "permite_adendas": false,
-    "bases_estado": "published",
-    "requiere_firma": false,
-    "tipos_solicitante": [
-      "Persona Natural",
-      "Persona Jurídica"
-    ],
-    "checklist": [],
-    "ambito": "Internacional",
-    "viabilidadIICA": "Media",
-    "porcentajeViabilidad": 75,
-    "objetivo": "SERVICIO DE FORTALECIMIENTO ORGANIZACIONAL Y ASISTENCIA TECNICA PRODUCTIVA (FORATP) PAQUETE 5: “CONST. SISTEMA DE RIEGO CALASAYA” Y “CONSTRUCCIÓN SISTEMA DE RIEGO ISCU ISCU (YOCALLA)”",
-    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
-    "requisitos": [
-      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
-    ],
-    "fortalezas": [
-      "Alineación con prioridades del sector silvoagropecuario chileno."
-    ],
-    "debilidades": [],
-    "complejidad": "Media",
-    "rolIICA": "Asesor",
-    "publishable": true,
-    "relevanciaChile": true,
-    "region": "Bolivia",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-07T14:14:41.716Z"
   },
   {
     "id": 1070,
@@ -17546,13 +18286,13 @@
   },
   {
     "id": 1163,
-    "nombre": "[MINAGRI Licitación] Servicio de Mantenci�n de Aire Acondicionado",
+    "nombre": "[MINAGRI Licitación] Servicio de Mantención de Aire Acondicionado",
     "institucion": "MINAGRI",
     "monto": 0,
     "montoTexto": "Ver bases",
     "fecha_cierre": "2026-09-07",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
     "categoria": "Licitaciones / Procurement",
     "url_bases": "https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?qs=1590-6-LE26",
     "regiones": [
@@ -17577,7 +18317,7 @@
     "ambito": "Nacional",
     "viabilidadIICA": "Media",
     "porcentajeViabilidad": 75,
-    "objetivo": "Descripcion: E1O2RT9: contar con un servicio de mantenci�n preventiva y correctiva para los equipos de aire acondicionado de la la Subsecretar�a de Agricultura, ACHIPIA y la SEREMI de la Regi�n Metropolitana de Santiago, a fin de permitir y garantizar su �ptimo funcionamiento, usabilidad y extensi�n de la vida �til de los mismos; en los t�rminos y condiciones generales que se�alan los fabricantes.",
+    "objetivo": "Descripcion: E1O2RT9: contar con un servicio de Mantención preventiva y correctiva para los equipos de aire acondicionado de la la SUBSECRETARÍA de Agricultura, ACHIPIA y la SEREMI de la Regin Metropolitana de Santiago, a fin de permitir y garantizar su ptimo funcionamiento, usabilidad y extensin de la vida til de los mismos; en los trminos y condiciones generales que sealan los fabricantes.",
     "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
     "requisitos": [
       "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
@@ -17588,20 +18328,20 @@
     "debilidades": [],
     "complejidad": "Media",
     "rolIICA": "Asesor",
-    "publishable": true,
-    "relevanciaChile": true,
+    "publishable": false,
+    "relevanciaChile": false,
     "region": "Nacional",
     "updatedAt": "2026-09-02T18:58:50.342Z"
   },
   {
     "id": 1164,
-    "nombre": "[MINAGRI Licitación] SERVICIO DE LAVANDER�A INTEGRAL PARA LA SUBSECRETAR�A DE AGRICULTURA CODIGO E102RT9",
+    "nombre": "[MINAGRI Licitación] SERVICIO DE LAVANDERÍA INTEGRAL PARA LA SUBSECRETARÍA DE AGRICULTURA CODIGO E102RT9",
     "institucion": "MINAGRI",
     "monto": 0,
     "montoTexto": "Ver bases",
     "fecha_cierre": "2026-09-04",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
     "categoria": "Licitaciones / Procurement",
     "url_bases": "https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?qs=1590-5-L126",
     "regiones": [
@@ -17626,7 +18366,7 @@
     "ambito": "Nacional",
     "viabilidadIICA": "Media",
     "porcentajeViabilidad": 75,
-    "objetivo": "Descripcion: Contar con un servicio de lavander�a integral que comprenda el retiro, lavado, secado, planchado, doblado y posterior entrega de las distintas prendas utilizadas en ba�os, cocinas, salas de reuniones y otras dependencias de la Subsecretar�a de Agricultura, con el objeto de mantenerlas en adecuadas condiciones de higiene, limpieza y presentaci�n, asegurando su disponibilidad oportuna y continua para el normal desarrollo de las actividades institucionales.",
+    "objetivo": "Descripcion: Contar con un servicio de LAVANDERÍA integral que comprenda el retiro, lavado, secado, planchado, doblado y posterior entrega de las distintas prendas utilizadas en baos, cocinas, salas de reuniones y otras dependencias de la SUBSECRETARÍA de Agricultura, con el objeto de mantenerlas en adecuadas condiciones de higiene, limpieza y presentacin, asegurando su disponibilidad oportuna y continua para el normal desarrollo de las actividades institucionales.",
     "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
     "requisitos": [
       "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
@@ -17637,20 +18377,20 @@
     "debilidades": [],
     "complejidad": "Media",
     "rolIICA": "Asesor",
-    "publishable": true,
-    "relevanciaChile": true,
+    "publishable": false,
+    "relevanciaChile": false,
     "region": "Nacional",
     "updatedAt": "2026-09-02T18:58:50.342Z"
   },
   {
     "id": 1165,
-    "nombre": "[MINAGRI Licitación] SERVICIO DE ASEO Y MANTENCI�N DE OFICINAS",
+    "nombre": "[MINAGRI Licitación] SERVICIO DE ASEO Y Mantención DE OFICINAS",
     "institucion": "MINAGRI",
     "monto": 0,
     "montoTexto": "Ver bases",
     "fecha_cierre": "2026-09-03",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
     "categoria": "Licitaciones / Procurement",
     "url_bases": "https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?qs=2491-1-LE26",
     "regiones": [
@@ -17675,7 +18415,7 @@
     "ambito": "Nacional",
     "viabilidadIICA": "Media",
     "porcentajeViabilidad": 75,
-    "objetivo": "Descripcion: Contar con un servicio de aseo integral que permita mantener en perfecto estado de presentaci�n las dependencias de la Secretar�a Regional Ministerial de Agricultura Regi�n de Arica y Parinacota, en adecuadas condiciones de higiene, limpieza y orden de los recintos.",
+    "objetivo": "Descripcion: Contar con un servicio de aseo integral que permita mantener en perfecto estado de presentacin las dependencias de la Secretara Regional Ministerial de Agricultura Regin de Arica y Parinacota, en adecuadas condiciones de higiene, limpieza y orden de los recintos.",
     "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
     "requisitos": [
       "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
@@ -17686,8 +18426,8 @@
     "debilidades": [],
     "complejidad": "Media",
     "rolIICA": "Asesor",
-    "publishable": true,
-    "relevanciaChile": true,
+    "publishable": false,
+    "relevanciaChile": false,
     "region": "Nacional",
     "updatedAt": "2026-09-02T18:58:50.342Z"
   },

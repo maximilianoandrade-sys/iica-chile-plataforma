@@ -70,6 +70,35 @@ interface LocalProject {
 const PROJECTS_FILE = path.join(__dirname, '..', 'data', 'projects.json');
 const METADATA_FILE = path.join(__dirname, '..', 'data', 'metadata.json');
 
+function cleanMojibake(text: string): string {
+  if (!text) return text;
+  return text
+    .replace(/Mantenci[\uFFFD]n/gi, 'Mantención')
+    .replace(/LAVANDER[\uFFFD]A/gi, 'LAVANDERÍA')
+    .replace(/SUBSECRETAR[\uFFFD]A/gi, 'SUBSECRETARÍA')
+    .replace(/MANTENCI[\uFFFD]N/gi, 'MANTENCIÓN')
+    .replace(/Investigaci[\uFFFD]n/gi, 'Investigación')
+    .replace(/Tecnol[\uFFFD]gico/gi, 'Tecnológico')
+    .replace(/Agr[\uFFFD]cola/gi, 'Agrícola')
+    .replace(/Innovaci[\uFFFD]n/gi, 'Innovación')
+    .replace(/Gesti[\uFFFD]n/gi, 'Gestión')
+    .replace(/Cooperaci[\uFFFD]n/gi, 'Cooperación')
+    .replace(/Capacitaci[\uFFFD]n/gi, 'Capacitación')
+    .replace(/Informaci[\uFFFD]n/gi, 'Información')
+    .replace(/[\uFFFD]/g, '');
+}
+
+const NON_AGRO_KEYWORDS = [
+  'aire acondicionado',
+  'lavandería',
+  'lavanderia',
+  'aseo y mantención',
+  'aseo y mantencion',
+  'aseo de oficina',
+  'servicio de café',
+  'arriendo de inmueble',
+];
+
 function normalizeUrl(url: string): string {
   try {
     const u = new URL(url.trim());
@@ -143,24 +172,36 @@ async function main() {
       : '2099-12-31';
 
     const isOpen = deadlineStr >= todayStr || deadlineStr.startsWith('2099');
+    const cleanedTitle = cleanMojibake(raw.title.trim());
+    const cleanedDesc = cleanMojibake(raw.description || '');
+
+    const isJunk = NON_AGRO_KEYWORDS.some(kw => 
+      cleanedTitle.toLowerCase().includes(kw) || cleanedDesc.toLowerCase().includes(kw)
+    );
 
     if (existing) {
       // Actualizar datos
+      existing.nombre = cleanMojibake(existing.nombre);
       existing.fecha_cierre = deadlineStr;
       existing.estado = isOpen ? 'Abierto' : 'Cerrado';
       existing.estadoPostulacion = isOpen ? 'Abierta' : 'Cerrada';
       if (raw.description && (!existing.objetivo || existing.objetivo.length < 50)) {
-        existing.objetivo = raw.description;
+        existing.objetivo = cleanedDesc;
+      }
+      if (isJunk) {
+        existing.publishable = false;
+        existing.relevanciaChile = false;
       }
       existing.updatedAt = now.toISOString();
       updatedCount++;
     } else {
+      if (isJunk) continue; // Descartar licitaciones irrelevantes nuevas
       // Crear nuevo proyecto
       maxId++;
       const newProj: LocalProject = {
         id: maxId,
-        nombre: raw.title.trim(),
-        institucion: raw.institution || scraperSlug.toUpperCase(),
+        nombre: cleanedTitle,
+        institucion: cleanMojibake(raw.institution || scraperSlug.toUpperCase()),
         monto: 0,
         montoTexto: raw.budget || 'Ver bases',
         fecha_cierre: deadlineStr,
@@ -181,7 +222,7 @@ async function main() {
         ambito: raw.ambito || 'Nacional',
         viabilidadIICA: 'Media',
         porcentajeViabilidad: 75,
-        objetivo: raw.description || `Convocatoria oficial publicada por ${raw.institution || scraperSlug}.`,
+        objetivo: cleanedDesc || `Convocatoria oficial publicada por ${raw.institution || scraperSlug}.`,
         descripcionIICA: `Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.`,
         requisitos: ['Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante.'],
         fortalezas: ['Alineación con prioridades del sector silvoagropecuario chileno.'],
@@ -202,6 +243,8 @@ async function main() {
 
   // 4. Actualizar estados de convocatorias permanentes y verificar vencimientos
   for (const p of existingProjects) {
+    p.nombre = cleanMojibake(p.nombre);
+    if (p.objetivo) p.objetivo = cleanMojibake(p.objetivo);
     // Si la fecha de cierre es 2099 o sin fecha, mantener abierta
     if (!p.fecha_cierre || p.fecha_cierre.startsWith('2099')) {
       p.estadoPostulacion = 'Abierta';
@@ -221,10 +264,16 @@ async function main() {
   console.log(`[Sync] Guardado data/projects.json: ${existingProjects.length} proyectos (${insertedCount} nuevos, ${updatedCount} actualizados)`);
 
   // 6. Guardar metadata.json con timestamp
+  const activeProjects = existingProjects.filter(p => 
+    p.publishable !== false && 
+    p.relevanciaChile !== false && 
+    p.estadoPostulacion === 'Abierta'
+  ).length;
+
   const metadata = {
     lastUpdatedAt: now.toISOString(),
     totalProjects: existingProjects.length,
-    activeProjects: existingProjects.filter(p => p.estadoPostulacion === 'Abierta').length,
+    activeProjects,
   };
   fs.writeFileSync(METADATA_FILE, JSON.stringify(metadata, null, 2), 'utf-8');
   console.log(`[Sync] Guardado data/metadata.json: Actualizado ${metadata.lastUpdatedAt} (${metadata.activeProjects} activas)`);

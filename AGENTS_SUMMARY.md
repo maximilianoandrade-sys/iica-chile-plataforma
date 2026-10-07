@@ -13,6 +13,16 @@
 
 ## Progress
 ### Done
+- **Saneamiento y Actualización Integral del Catálogo de Proyectos (Octubre 2026)**:
+  - **Depuración de Vigencias**: Transición de 28 convocatorias vencidas a 'Cerrada'. 0 convocatorias abiertas vencidas en el catálogo.
+  - **Saneamiento Textual y Mojibake**: Reparados caracteres rotos (`\uFFFD`) en nombres, objetivos y bases.
+  - **Filtro de Relevancia Agrícola**: Despublicadas licitaciones residuales no agrícolas (aire acondicionado, lavandería, aseo).
+  - **Desduplicación**: Depurados registros repetidos de adquisiciones multilaterales.
+  - **Nuevas Convocatorias Vigentes Q4 2026 / 2027**: Incorporadas 17 convocatorias prioritarias para Chile (CNR Ley 18.450 concursos 24 a 27 y 01-2027; FIA Innovación y Jóvenes Innovadores; CORFO Innova Región, Semilla Inicia y Crea y Valida; INDAP PRI, PDI y SIRSD-S; ANID Fondef IDeA; IICA/FAO AgTech; GCF Cono Sur; Horizon Europe).
+  - **Metadatos y Frescura**: `data/metadata.json` actualizado a fecha de hoy (410 proyectos totales, 195 activos). El radar y la sección de fuentes muestran estado en vivo ("Actualizado hoy").
+  - **Script de Sincronización Local**: `scripts/sync-local-projects.ts` robustecido con sanitización automática de mojibake, descarte de palabras clave no agrícolas y conteo certero de proyectos publicables.
+  - **Tests y Build**: 67 test suites verdes (387 tests pasando), 224 páginas estáticas SSG generadas limpiamente en `npm run build`.
+
 - **Revisión total, auditoría con skills y mejoras mayores implementadas y pusheadas a main** (commit `33d5841`):
   - **Desacoplamiento cliente/servidor**: creado `lib/project-utils.ts` con tipos y formateadores puros. Componentes cliente ya no importan `lib/data.ts` ni arrastran dependencias de base de datos.
   - **Resiliencia de datos**: fallback garantizado a `getStaticProjects(today)` en `lib/data.ts` si Prisma/Supabase no responde.
@@ -26,7 +36,7 @@
 - **Suite de tests 100% verde** (pusheado a `main`).
 
 ### In Progress
-- Nada pendiente de código. Todo comiteado y sincronizado con `origin/main`.
+- Todo el código y catálogo probados y listos para revisión/commit por parte del usuario.
 
 ### Blocked
 - **Migración BD producción #79**: `scripts/sql/2026-07-15-linkcheck-lastmodified.sql` (columna `last_modified` en `LinkCheck`) no aplicada en Supabase. Requiere acción del usuario en Supabase SQL Editor o `npx prisma db push` desde entorno con conectividad.
