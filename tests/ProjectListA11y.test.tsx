@@ -103,7 +103,7 @@ describe('ProjectList accessibility', () => {
   it('offers include-international action in empty strict mode', () => {
     render(<ProjectList projects={[]} totalCount={0} />);
 
-    const expandButton = screen.getByRole('button', { name: /Incluir internacionales/i });
+    const expandButton = screen.getByRole('button', { name: /Ver todas las oportunidades/i });
     fireEvent.click(expandButton);
 
     expect(pushMock).toHaveBeenCalledWith('/?relevanceMode=all', { scroll: false });

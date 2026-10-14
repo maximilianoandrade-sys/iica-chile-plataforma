@@ -14,8 +14,9 @@
 
 import { NextRequest } from 'next/server';
 import { createErrorResponse, createSuccessResponse } from '@/lib/utils/api-response';
-import { isAllowedPublicHttpUrl, verifyHostnameResolvesToPublicIps } from '@/lib/utils/network-security';
+import { isAllowedPublicHttpUrl, verifyHostnameResolvesToPublicIps, fetchPublicUrl } from '@/lib/utils/network-security';
 import { getLogger } from '@/lib/utils/logger';
+import { checkDistributedRateLimit } from '@/lib/utils/rateLimit';
 
 export const runtime = 'nodejs';
 const logger = getLogger('CheckLinkApi');
@@ -68,6 +69,12 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
     try {
+        const clientIp = request.headers.get('x-real-ip') || request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
+        const rateLimit = await checkDistributedRateLimit(`check-link:${clientIp}`, 30, 60_000);
+        if (!rateLimit.success) {
+            return createErrorResponse('Demasiadas solicitudes; reintenta más tarde', 429);
+        }
+
         const { searchParams } = new URL(request.url);
         const url = searchParams.get('url');
 
@@ -97,9 +104,8 @@ export async function GET(request: NextRequest) {
 
             // 1) HEAD primero (rápido y liviano)
             try {
-                const headResponse = await fetch(url, {
+                const headResponse = await fetchPublicUrl(url, {
                     method: 'HEAD',
-                    redirect: 'follow',
                     headers: baseHeaders,
                     signal: controller.signal,
                 });
@@ -113,9 +119,8 @@ export async function GET(request: NextRequest) {
             // 2) Si HEAD no confirmó validez, intentar GET con range mínimo
             if (!response) {
                 try {
-                    response = await fetch(url, {
+                    response = await fetchPublicUrl(url, {
                         method: 'GET',
-                        redirect: 'follow',
                         headers: {
                             ...baseHeaders,
                             Range: 'bytes=0-0',
@@ -128,9 +133,8 @@ export async function GET(request: NextRequest) {
 
             // 3) Fallback final: GET normal (algunos sitios bloquean Range)
             if (!response) {
-                response = await fetch(url, {
+                response = await fetchPublicUrl(url, {
                     method: 'GET',
-                    redirect: 'follow',
                     headers: baseHeaders,
                     signal: controller.signal,
                 });

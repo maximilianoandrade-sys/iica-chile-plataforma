@@ -3,11 +3,18 @@ import { createHmac, timingSafeEqual } from "crypto";
 import { getLogger } from '@/lib/utils/logger';
 import { createSuccessResponse, createErrorResponse } from '@/lib/utils/api-response';
 import { getAuthEnv } from '@/lib/utils/env';
+import { checkDistributedRateLimit } from '@/lib/utils/rateLimit';
 const logger = getLogger('AdminLogin');
 
 const ADMIN_LOGIN_RATE_LIMIT = { maxRequests: 5, windowSizeSeconds: 60 };
 
 export async function POST(req: NextRequest) {
+  const clientIp = req.headers.get('x-real-ip') || req.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
+  const rateLimit = await checkDistributedRateLimit(`admin-login:${clientIp}`, ADMIN_LOGIN_RATE_LIMIT.maxRequests, ADMIN_LOGIN_RATE_LIMIT.windowSizeSeconds * 1000);
+  if (!rateLimit.success) {
+    return createErrorResponse('Demasiados intentos; reintenta más tarde', 429);
+  }
+
   let env: ReturnType<typeof getAuthEnv>;
   try {
     env = getAuthEnv();
@@ -39,7 +46,7 @@ export async function POST(req: NextRequest) {
 
   const sessionSecret = env.ADMIN_SESSION_SECRET;
   if (!sessionSecret) {
-    logger.error('ADMIN_SESSION_SECRET not set');
+    logger.error('ADMIN_SESSION_SECRET not set', new Error('Missing admin session secret'));
     return createErrorResponse("server config error", 500);
   }
 

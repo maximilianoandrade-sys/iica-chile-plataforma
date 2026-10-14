@@ -189,3 +189,33 @@ model NewsletterSubscriber {
   
   @@index([email])
 }
+
+model UserIssueReport {
+  id            Int      @id @default(autoincrement())
+  title         String
+  description   String
+  projectId     Int?
+  projectUrl    String?
+  reporterEmail String?
+  status        String   @default("received")
+  createdAt     DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([status])
+}
+
+model PushSubscription {
+  id             Int      @id @default(autoincrement())
+  endpoint       String   @unique
+  ownerHash      String
+  p256dh         String
+  auth           String
+  expirationTime DateTime?
+  userAgent      String?
+  active         Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([ownerHash])
+  @@index([active])
+}

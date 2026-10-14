@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import { getLogger } from '@/lib/utils/logger';
 import prisma from '@/lib/prisma';
+import { createHash } from 'crypto';
 
 const logger = getLogger('FavoritesTrackingAPI');
 
@@ -9,61 +10,54 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { projectId, action, deviceId } = body;
 
-    logger.info('POST request received', { projectId, action, deviceId });
+    logger.info('POST request received', { projectId, action });
 
-    if (!projectId || !action) {
+    if (!projectId || !['add', 'remove'].includes(action) || typeof deviceId !== 'string' || deviceId.length < 8 || deviceId.length > 200) {
       return new Response(JSON.stringify({ error: 'Missing parameters', code: 'VALIDATION_FAILED' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' },
       });
     }
 
-    // Log the event to Analytics table for tracking popularity
+    const numProjectId = typeof projectId === 'number' ? projectId : Number.parseInt(String(projectId), 10);
+    if (!Number.isInteger(numProjectId) || numProjectId <= 0) {
+      return new Response(JSON.stringify({ error: 'Invalid projectId', code: 'VALIDATION_FAILED' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    const deviceHash = createHash('sha256').update(deviceId).digest('hex');
+    const anonymousEmail = `anonymous+${deviceHash}@local.invalid`;
+
+    const project = await prisma.project.findUnique({ where: { id: numProjectId }, select: { id: true } });
+    if (!project) {
+      return new Response(JSON.stringify({ error: 'Project not found', code: 'NOT_FOUND' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    const user = await prisma.usuario.upsert({
+      where: { email: anonymousEmail },
+      update: {},
+      create: { email: anonymousEmail, intereses: [] },
+    });
+
+    if (action === 'add') {
+      await prisma.favorito.upsert({
+        where: { usuarioId_proyectoId: { usuarioId: user.id, proyectoId: numProjectId } },
+        create: { usuarioId: user.id, proyectoId: numProjectId },
+        update: {},
+      });
+    } else {
+      await prisma.favorito.deleteMany({ where: { usuarioId: user.id, proyectoId: numProjectId } });
+    }
+
     await prisma.analytics.create({
       data: {
         event: action === 'add' ? 'favorite_added' : 'favorite_removed',
-        properties: { projectId, deviceId },
+        properties: { projectId: numProjectId, deviceHash },
         userAgent: request.headers.get('user-agent') || 'Unknown',
-        ipHash: 'anonymized', // we shouldn't store raw IPs ideally
-      }
+        ipHash: deviceHash,
+      },
     });
 
-    // Save/Remove in Favorito table if numeric projectId and valid user/device reference exist
-    const numProjectId = typeof projectId === 'number' ? projectId : Number.parseInt(String(projectId), 10);
-    const numUserId = typeof body.userId === 'number' ? body.userId : Number.parseInt(String(body.userId), 10);
-
-    if (Number.isFinite(numProjectId)) {
-      try {
-        const targetUserId = Number.isFinite(numUserId) ? numUserId : 1; // default anonymous system user
-        if (action === 'add') {
-          await prisma.favorito.upsert({
-            where: {
-              usuarioId_proyectoId: {
-                usuarioId: targetUserId,
-                proyectoId: numProjectId,
-              },
-            },
-            create: {
-              usuarioId: targetUserId,
-              proyectoId: numProjectId,
-            },
-            update: {},
-          });
-        } else if (action === 'remove') {
-          await prisma.favorito.deleteMany({
-            where: {
-              usuarioId: targetUserId,
-              proyectoId: numProjectId,
-            },
-          });
-        }
-      } catch (favErr) {
-        // Non-blocking fallback if FK or DB is temporarily unavailable
-        logger.warn('Non-blocking favorite DB update warning', { error: String(favErr) });
-      }
-    }
-
-    logger.info('Favorite action tracked successfully', { projectId, action });
+    logger.info('Favorite action tracked successfully', { projectId: numProjectId, action });
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },

@@ -177,7 +177,7 @@ export function isClosingSoon(project: Project): boolean {
     return d >= 0 && d <= 7;
 }
 
-/** Retorna true si está abierta (fecha de cierre es hoy o en el futuro) */
+/** Retorna true si aún puede postularse, incluido el día del cierre. */
 export function isOpen(project: Project): boolean {
     return daysUntilClose(project) >= 0;
 }

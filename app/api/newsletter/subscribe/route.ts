@@ -1,13 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getLogger } from '@/lib/utils/logger';
+import { checkDistributedRateLimit } from '@/lib/utils/rateLimit';
 
 const logger = getLogger('SubscriptionAPI');
 
 export async function POST(request: NextRequest) {
   try {
+    const clientIp = request.headers.get('x-real-ip') || request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
+    const rateLimit = await checkDistributedRateLimit(`newsletter:${clientIp}`, 5, 60_000);
+    if (!rateLimit.success) {
+      return NextResponse.json({ ok: false, error: 'Demasiadas solicitudes; reintenta más tarde' }, { status: 429 });
+    }
     const body = await request.json();
     const { contact, type, regions, categories, frequency } = body;
+
+    if (type !== 'email' && type !== 'whatsapp') {
+      return NextResponse.json({ ok: false, error: 'El tipo de suscripción debe ser email o whatsapp' }, { status: 400 });
+    }
 
     if (!contact || typeof contact !== 'string' || !contact.trim()) {
       return NextResponse.json({ ok: false, error: 'Debes proporcionar un correo o número de WhatsApp válido' }, { status: 400 });

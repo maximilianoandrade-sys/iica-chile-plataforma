@@ -1,19 +1,14 @@
 import type { Metadata, Viewport } from 'next'
 import { Poppins } from 'next/font/google'
-import dynamic from 'next/dynamic'
 import Script from 'next/script'
 import './globals.css'
 import { ThemeProvider } from 'next-themes'
 import { ToastProvider } from '@/components/ui/ToastProvider'
 import OfflineIndicator from '@/components/OfflineIndicator';
 import { getEnv } from '@/lib/utils/env';
+import ClientOnlyGlobalComponents from '@/components/ClientOnlyGlobalComponents';
 
 const env = getEnv();
-
-const PWAInstallBanner = dynamic(() => import('@/components/PWAInstallBanner'), { ssr: false });
-const ScrollToTop = dynamic(() => import('@/components/ScrollToTop'), { ssr: false });
-const PushNotificationManager = dynamic(() => import('@/components/PushNotificationManager'), { ssr: false });
-const RouteAnnouncer = dynamic(() => import('@/components/RouteAnnouncer'), { ssr: false });
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -206,11 +201,8 @@ export default function RootLayout({
           </ToastProvider>
 
         {/* Componentes globales */}
-        <PWAInstallBanner />
-        <ScrollToTop />
-        <PushNotificationManager />
-        {/* Accesibilidad SPA — anuncia cambios de ruta y gestiona foco (WCAG 2.4.3 / 4.1.3) */}
-        <RouteAnnouncer />
+        {/* Accesibilidad y controles browser-only en un límite cliente. */}
+        <ClientOnlyGlobalComponents />
 
         {/* Service Worker Registration */}
         <script

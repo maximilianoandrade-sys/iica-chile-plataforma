@@ -5,7 +5,7 @@ import { getLogger } from "@/lib/utils/logger";
 import { GenerateProposalSchema, formatZodError } from "@/lib/utils/validation";
 import { createSuccessResponse, createErrorResponse } from "@/lib/utils/api-response";
 import { getAiEnv } from '@/lib/utils/env';
-import { checkRateLimit } from "@/lib/utils/rateLimit";
+import { checkDistributedRateLimit } from "@/lib/utils/rateLimit";
 
 const logger = getLogger("GenerateProposal");
 const PROPOSAL_RATE_LIMIT = { maxRequests: 5, windowSizeMs: 60000 };
@@ -30,7 +30,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const clientIp = request.headers.get("x-forwarded-for")?.split(",")[0] || "127.0.0.1";
-    const rl = checkRateLimit(`proposal:${clientIp}`, PROPOSAL_RATE_LIMIT.maxRequests, PROPOSAL_RATE_LIMIT.windowSizeMs);
+    const rl = await checkDistributedRateLimit(`proposal:${clientIp}`, PROPOSAL_RATE_LIMIT.maxRequests, PROPOSAL_RATE_LIMIT.windowSizeMs);
     if (!rl.success) {
       return createErrorResponse(`Demasiadas solicitudes. Por favor reintente en ${rl.resetSeconds} segundos.`, 429);
     }
@@ -56,7 +56,7 @@ export async function POST(request: Request) {
     }
 
     const project = await prisma.project.findUnique({
-      where: { id: projectId },
+      where: { id: projectId, publishable: true, needsReview: false },
     });
 
     if (!project) {

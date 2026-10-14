@@ -12,8 +12,9 @@ import { sendEmail } from '@/lib/email';
 import { getLogger } from '@/lib/utils/logger';
 import { sendAlert } from '@/lib/utils/alerts';
 import { createSuccessResponse, createErrorResponse } from '@/lib/utils/api-response';
-import { isAllowedPublicHttpUrl, verifyHostnameResolvesToPublicIps } from '@/lib/utils/network-security';
+import { isAllowedPublicHttpUrl, verifyHostnameResolvesToPublicIps, fetchPublicUrl } from '@/lib/utils/network-security';
 import { getEnv } from '@/lib/utils/env';
+import { sendPushNotification } from '@/lib/push';
 
 const logger = getLogger('CronCheckUpdates');
 
@@ -95,7 +96,7 @@ async function checkLinkForUpdates(url: string, projectName: string): Promise<Li
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 segundos
 
-        const response = await fetch(url, {
+        const response = await fetchPublicUrl(url, {
             method: 'HEAD',
             signal: controller.signal,
             headers: {
@@ -200,13 +201,28 @@ async function sendNotification(notification: UpdateNotification): Promise<void>
         to: adminEmail,
         subject: `[IICA] Actualización de Convocatorias - ${notification.changedProjects.length} cambios, ${notification.brokenLinks.length} enlaces rotos`,
         text: message,
-        html: `<pre style="font-family: monospace; white-space: pre-wrap;">${message}</pre>`,
+        html: `<pre style="font-family: monospace; white-space: pre-wrap;">${escapeHtml(message)}</pre>`,
+    });
+
+    await sendPushNotification({
+        title: '[IICA] Actualización de convocatorias',
+        body: `${notification.changedProjects.length} cambios y ${notification.brokenLinks.length} enlaces requieren revisión.`,
+        url: '/'
     });
 
     logger.info('Update notification sent', {
         changedCount: notification.changedProjects.length,
         brokenCount: notification.brokenLinks.length,
     });
+}
+
+function escapeHtml(value: string): string {
+    return value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
 
 function formatNotificationMessage(notification: UpdateNotification): string {

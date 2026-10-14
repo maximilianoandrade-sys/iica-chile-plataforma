@@ -1,14 +1,18 @@
+import { fetchPublicUrl } from '@/lib/utils/network-security';
+
 export async function fetchWithRetry(
   input: string,
   init: RequestInit,
   attempts = 3,
   baseDelayMs = 500,
+  publicOnly = false,
 ): Promise<Response> {
   let lastError: Error | null = null;
 
   for (let attempt = 1; attempt <= attempts; attempt++) {
     try {
-      const response = await fetch(input, {
+      const fetcher = publicOnly ? fetchPublicUrl : fetch;
+      const response = await fetcher(input, {
         ...init,
         signal: init?.signal ?? AbortSignal.timeout(30000),
       });

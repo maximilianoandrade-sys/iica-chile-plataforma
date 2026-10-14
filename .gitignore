@@ -47,6 +47,9 @@ yarn-error.log*
 
 # Prisma
 prisma/migrations/
+!prisma/migrations/
+!prisma/migrations/manual/
+!prisma/migrations/manual/*.sql
 *.db
 *.db-journal
 
@@ -78,3 +81,4 @@ public/sw.js
 public/workbox-*.js
 public/sw.js.map
 public/worker-*.js
+.env*

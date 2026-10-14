@@ -3,11 +3,21 @@ import prisma from '@/lib/prisma';
 import { scrapeUrlWithAI } from '@/lib/ingestion/universal-ai-scraper';
 import { normalizeUrl } from '@/lib/ingestion/utils';
 import { getLogger } from '@/lib/utils/logger';
+import { checkDistributedRateLimit } from '@/lib/utils/rateLimit';
 
 const logger = getLogger('ProjectSubmitAPI');
 
 export async function POST(request: Request) {
   try {
+    const contentLength = Number(request.headers.get('content-length') || 0);
+    if (contentLength > 8_000) {
+      return NextResponse.json({ error: 'Solicitud demasiado grande' }, { status: 413 });
+    }
+    const clientIp = request.headers.get('x-real-ip') || request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
+    const rateLimit = await checkDistributedRateLimit(`project-submit:${clientIp}`, 5, 60_000);
+    if (!rateLimit.success) {
+      return NextResponse.json({ error: 'Demasiadas solicitudes; reintenta más tarde' }, { status: 429 });
+    }
     const body = await request.json();
     const rawUrl = body.url;
 
@@ -64,7 +74,10 @@ export async function POST(request: Request) {
 
     logger.info('Project submitted by community successfully', { projectId: dbProject.id, url: canonicalUrl });
 
-    return NextResponse.json({ ok: true, success: true, project: dbProject }, { status: 201 });
+    return NextResponse.json(
+      { ok: true, success: true, id: dbProject.id, status: 'needs_review' },
+      { status: 201 },
+    );
   } catch (error) {
     logger.error('Error submitting project', error as Error);
     return NextResponse.json({ ok: false, error: 'Error interno procesando la sugerencia' }, { status: 500 });

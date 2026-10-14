@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
 import { getLogger } from '@/lib/utils/logger';
 
 const logger = getLogger('IssueReportAPI');
@@ -18,19 +19,25 @@ export async function POST(request: Request) {
 
     logger.info('Nuevo reporte de issue recibido', { title, projectId, reporterEmail });
 
-    // Format GitHub Issue body with metadata
-    const issueBody = `### Reporte de Usuario IICA\n\n**Descripción:**\n${description.trim()}\n\n---\n**Metadata:**\n- **Proyecto ID:** ${projectId || 'N/A'}\n- **URL del Proyecto:** ${projectUrl || 'N/A'}\n- **Reportado por:** ${reporterEmail || 'Técnico IICA Anónimo'}\n- **Fecha:** ${new Date().toISOString()}`;
+    if (title.length > 200 || description.length > 10000) {
+      return NextResponse.json({ error: 'El reporte excede el tamaño permitido' }, { status: 400 });
+    }
 
-    // Return success response to the client
+    const report = await prisma.userIssueReport.create({
+      data: {
+        title: title.trim(),
+        description: description.trim(),
+        projectId: typeof projectId === 'number' ? projectId : null,
+        projectUrl: typeof projectUrl === 'string' ? projectUrl.slice(0, 2000) : null,
+        reporterEmail: typeof reporterEmail === 'string' ? reporterEmail.slice(0, 254) : null,
+      },
+    });
+
     return NextResponse.json(
       {
         success: true,
-        message: 'Reporte registrado exitosamente. Se ha sincronizado con el equipo técnico.',
-        issue: {
-          title: title.trim(),
-          body: issueBody,
-          createdAt: new Date().toISOString(),
-        },
+        message: 'Reporte recibido y guardado para revisión técnica.',
+        issue: { id: report.id, title: report.title, createdAt: report.createdAt.toISOString() },
       },
       { status: 201 }
     );

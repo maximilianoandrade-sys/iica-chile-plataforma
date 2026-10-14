@@ -61,6 +61,43 @@ export function checkRateLimit(
   };
 }
 
+/** Uses the configured Upstash-compatible REST store across serverless instances. */
+export async function checkDistributedRateLimit(
+  identifier: string,
+  limit = 10,
+  windowMs = 60000,
+): Promise<RateLimitResult> {
+  const restUrl = process.env.KV_REST_API_URL;
+  const token = process.env.KV_REST_API_TOKEN;
+  if (!restUrl || !token) return checkRateLimit(identifier, limit, windowMs);
+
+  const bucket = Math.floor(Date.now() / windowMs);
+  const key = `iica:ratelimit:${identifier}:${bucket}`;
+  try {
+    const response = await fetch(`${restUrl.replace(/\/$/, '')}/pipeline`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify([
+        ['INCR', key],
+        ['PEXPIRE', key, windowMs],
+      ]),
+    });
+    if (!response.ok) throw new Error(`Rate limit store returned ${response.status}`);
+    const result = await response.json() as Array<{ result?: number }>;
+    const count = Number(result[0]?.result);
+    if (!Number.isFinite(count)) throw new Error('Invalid rate limit store response');
+    return {
+      success: count <= limit,
+      limit,
+      remaining: Math.max(0, limit - count),
+      resetSeconds: Math.ceil(windowMs / 1000),
+    };
+  } catch (error) {
+    // Availability of the public API must not depend on an optional rate-limit service.
+    return checkRateLimit(identifier, limit, windowMs);
+  }
+}
+
 /** Clean up stale entries every 5 minutes */
 if (typeof setInterval !== 'undefined') {
   const cleanupTimer = setInterval(() => {

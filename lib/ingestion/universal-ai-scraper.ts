@@ -7,6 +7,7 @@ import { cleanText } from "./utils";
 import type { RawProject } from "./types";
 
 const logger = getLogger("UniversalAIScraper");
+const MAX_RESPONSE_BYTES = 1_000_000;
 
 const SYSTEM_PROMPT = `
 Eres un analista experto en fondos concursables y proyectos agrícolas.
@@ -40,9 +41,10 @@ export async function scrapeUrlWithAI(url: string): Promise<RawProject | null> {
       url,
       { headers: { "User-Agent": "IICA-Chile-Bot/1.0 (+contacto@iica.cl)" } },
       3,
-      2000
+      2000,
+      true,
     );
-    const html = await res.text();
+    const html = await readResponseText(res, MAX_RESPONSE_BYTES);
 
     // 2. Extract visible text using Cheerio
     const $ = load(html);
@@ -124,18 +126,37 @@ export async function scrapeUrlWithAI(url: string): Promise<RawProject | null> {
     }
 
   } catch (err) {
-    logger.error("Error in AI scrape execution, applying fallback", { url, error: String(err) });
-    return {
-      title: "Oportunidad pendiente de revisión",
-      institution: "Desconocida (Extraído por Fallback)",
-      url: url,
-      canonicalKey: url,
-      description: "URL scrapeada correctamente pero hubo un fallo en la API de Inteligencia Artificial (cuota excedida). Requiere procesar manualmente.",
-      opportunityType: "Convocatoria",
-      region: "Nacional",
-      ambito: "Nacional",
-      idioma: "es",
-      deadline: null,
-    };
+    logger.error("Error in AI scrape execution", err as Error, { url });
+    return null;
+  }
+}
+
+async function readResponseText(response: Response, maxBytes: number): Promise<string> {
+  if (!response.body) {
+    const text = await response.text();
+    if (Buffer.byteLength(text, 'utf8') > maxBytes) {
+      throw new Error('Remote response exceeds the maximum allowed size');
+    }
+    return text;
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let bytesRead = 0;
+  let text = '';
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      bytesRead += value.byteLength;
+      if (bytesRead > maxBytes) {
+        throw new Error('Remote response exceeds the maximum allowed size');
+      }
+      text += decoder.decode(value, { stream: true });
+    }
+    return text + decoder.decode();
+  } finally {
+    await reader.cancel();
   }
 }

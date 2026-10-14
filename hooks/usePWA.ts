@@ -119,9 +119,11 @@ export function usePushNotifications() {
             let sub = await registration.pushManager.getSubscription();
 
             if (!sub) {
-                // Crear nueva suscripción
-                // NOTA: Necesitas generar tus propias VAPID keys
                 const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || '';
+                if (!vapidPublicKey) {
+                    logger.warn('VAPID public key missing; push remains disabled');
+                    return null;
+                }
 
                 sub = await registration.pushManager.subscribe({
                     userVisibleOnly: true,
@@ -129,14 +131,21 @@ export function usePushNotifications() {
                 });
             }
 
-            setSubscription(sub);
+            let deviceId = localStorage.getItem('iica_device_id');
+            if (!deviceId) {
+                deviceId = crypto.randomUUID();
+                localStorage.setItem('iica_device_id', deviceId);
+            }
 
             // Enviar suscripción al servidor
-            await fetch('/api/push/subscribe', {
+            const response = await fetch('/api/push/subscribe', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(sub)
+                body: JSON.stringify({ ...sub.toJSON(), deviceId })
             });
+            if (!response.ok) return null;
+
+            setSubscription(sub);
 
             return sub;
         } catch (error) {
@@ -148,14 +157,15 @@ export function usePushNotifications() {
     const unsubscribe = useCallback(async () => {
         if (subscription) {
             await subscription.unsubscribe();
-            setSubscription(null);
+            const deviceId = localStorage.getItem('iica_device_id');
 
             // Notificar al servidor
-            await fetch('/api/push/unsubscribe', {
+            const response = await fetch('/api/push/unsubscribe', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(subscription)
+                body: JSON.stringify({ endpoint: subscription.endpoint, deviceId })
             });
+            if (response.ok) setSubscription(null);
         }
     }, [subscription]);
 

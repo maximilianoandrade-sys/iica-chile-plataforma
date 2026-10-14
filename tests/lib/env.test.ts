@@ -48,4 +48,15 @@ describe('módulo env', () => {
     const env2 = getEnv();
     expect(env2.DATABASE_URL).toBe('postgresql://localhost/test'); // cached
   });
+
+  it('acepta subjects VAPID mailto y HTTPS', () => {
+    process.env.DATABASE_URL = 'postgresql://localhost/test';
+    process.env.ADMIN_SESSION_SECRET = 'secret12345678';
+    process.env.VAPID_SUBJECT = 'mailto:admin@example.com';
+    expect(getEnv().VAPID_SUBJECT).toBe('mailto:admin@example.com');
+
+    _resetEnvCache();
+    process.env.VAPID_SUBJECT = 'https://example.com/contact';
+    expect(getEnv().VAPID_SUBJECT).toBe('https://example.com/contact');
+  });
 });

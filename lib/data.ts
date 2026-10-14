@@ -91,30 +91,7 @@ const logger = getLogger('Data');
 // CARGA DE DATOS DESDE SUPABASE
 // ============================================================================
 
-// ── Limpieza de proyectos ficticios ────────────────────────────────────
-// IDs insertados por prisma/seed.ts que NO corresponden a convocatorias
-// reales: FIDA(103), BID(104), EUROCLIMA+(106), FIA-Silvoagro(110),
-// CNR-Ley18450(113). Ya eliminados de data/projects.json; esta rutina
-// borra las filas residuales de la DB en el primer request del deploy.
 const FAKE_PROJECT_IDS = [103, 104, 106, 110, 113];
-let _fakesCleaned = false;
-
-async function purgeFakeProjects(): Promise<void> {
-    if (_fakesCleaned) return;
-    _fakesCleaned = true;
-    try {
-        const { count } = await prisma.project.deleteMany({
-            where: { id: { in: FAKE_PROJECT_IDS } },
-        });
-        if (count > 0) {
-            logger.info('Eliminados proyectos ficticios de la DB', { count, ids: FAKE_PROJECT_IDS });
-        }
-    } catch (err) {
-        // No crítico: el filtro notIn los excluye de todas formas.
-        _fakesCleaned = false; // reintentar en el siguiente request
-        logger.error('purgeFakeProjects error (no crítico)', err as Error);
-    }
-}
 
 type UrlProject = { id: number; url_bases: string };
 
@@ -159,9 +136,6 @@ export async function getProjects(): Promise<GetProjectsResult> {
     const today = new Date();
     today.setUTCHours(0, 0, 0, 0);
 
-    // Limpieza one-shot de filas ficticias en la DB
-    await purgeFakeProjects();
-
     try {
         const dbProjects = await prisma.project.findMany({
             where: {
@@ -169,7 +143,6 @@ export async function getProjects(): Promise<GetProjectsResult> {
                 NOT: { estadoPostulacion: 'Cerrada' },
                 publishable: true,
                 relevanciaChile: true,
-                // Defensa redundante: si purgeFakeProjects falló, esto los excluye
                 id: { notIn: FAKE_PROJECT_IDS },
             },
             orderBy: { fecha_cierre: 'asc' },
@@ -207,8 +180,6 @@ export async function getProjects(): Promise<GetProjectsResult> {
 export async function getProjectFilterSnapshot(): Promise<GetProjectFilterSnapshotResult> {
     const today = new Date();
     today.setUTCHours(0, 0, 0, 0);
-
-    await purgeFakeProjects();
 
     try {
         const dbProjects = await prisma.project.findMany({

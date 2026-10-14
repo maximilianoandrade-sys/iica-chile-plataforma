@@ -62,7 +62,8 @@ export async function GET(request: NextRequest) {
 
     const escapeCSV = (val: string | number | undefined): string => {
         if (val === undefined || val === null) return '';
-        const str = String(val);
+        const raw = String(val);
+        const str = typeof val === 'string' && /^[=+\-@]/.test(raw) ? `'${raw}` : raw;
         if (str.includes(';') || str.includes('"') || str.includes('\n')) {
             return `"${str.replace(/"/g, '""')}"`;
         }

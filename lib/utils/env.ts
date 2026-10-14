@@ -25,7 +25,7 @@ const optionalUrl = z
 const EnvSchema = z.object({
   // Requeridas
   DATABASE_URL: z.string().min(1),
-  ADMIN_SESSION_SECRET: z.string().min(8).default('development_default_admin_secret_32chars_long'),
+  ADMIN_SESSION_SECRET: z.string().min(8),
   ADMIN_PASSWORD: z.string().min(1).optional(),
   // Requeridas en producción
   CRON_SECRET: z.string().min(1).optional(),
@@ -41,6 +41,15 @@ const EnvSchema = z.object({
   NEXT_PUBLIC_SITE_URL: optionalUrl,
   NEXT_PUBLIC_GA_MEASUREMENT_ID: z.string().optional(),
   NEXT_PUBLIC_VAPID_PUBLIC_KEY: z.string().optional(),
+  VAPID_PRIVATE_KEY: z.string().optional(),
+  VAPID_SUBJECT: z.string().refine((value) => {
+    if (value.startsWith('mailto:')) return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.slice('mailto:'.length));
+    try {
+      return new URL(value).protocol === 'https:';
+    } catch {
+      return false;
+    }
+  }, 'VAPID_SUBJECT debe ser un email mailto: o una URL HTTPS').optional(),
   SEARCH_EXTERNAL_ENABLED: z.enum(['true', 'false']).optional(),
   SEARCH_SOURCE_MODE_DEFAULT: z.enum(['internal', 'external', 'mixed']).optional(),
   SEARCH_EXTERNAL_DISABLED_PROVIDERS: z.string().optional(),
@@ -77,6 +86,9 @@ export function getEnv(): Env {
 
 export function getAuthEnv(): AuthEnv {
   const env = getEnv();
+  if (env.NODE_ENV === 'production' && env.ADMIN_SESSION_SECRET.length < 32) {
+    throw new Error('ADMIN_SESSION_SECRET debe tener al menos 32 caracteres en producción');
+  }
   return {
     ADMIN_SESSION_SECRET: env.ADMIN_SESSION_SECRET,
     ADMIN_PASSWORD: env.ADMIN_PASSWORD,

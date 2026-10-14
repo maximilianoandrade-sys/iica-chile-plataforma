@@ -244,8 +244,8 @@ describe('data utilities', () => {
         ],
       });
 
-      const module = await import('@/app/proyecto/[id]/page');
-      const Page = module.default;
+      const projectPageModule = await import('@/app/proyecto/[id]/page');
+      const Page = projectPageModule.default;
       const element = await Page({ params: Promise.resolve({ id: '777' }) });
 
       render(element);
