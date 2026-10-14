@@ -20,6 +20,12 @@ export default function InstitutionFilter({
     () => institutions.map((inst) => ({ value: inst.name, label: inst.name, count: inst.count })),
     [institutions]
   );
+  const quickAccessValues = useMemo(
+    () => QUICK_ACCESS_CHIPS
+      .map((alias) => institutions.find((institution) => institution.name.toLowerCase().includes(alias.toLowerCase()))?.name)
+      .filter((value): value is string => Boolean(value)),
+    [institutions]
+  );
 
   return (
     <div className="space-y-1.5">
@@ -36,7 +42,7 @@ export default function InstitutionFilter({
         onChange={onChange}
         placeholder="Todas las instituciones"
         selectedLabel={(n) => `${n} institución${n > 1 ? 'es' : ''} seleccionada${n > 1 ? 's' : ''}`}
-        quickAccessValues={QUICK_ACCESS_CHIPS}
+        quickAccessValues={quickAccessValues}
         searchPlaceholder="Buscar institución..."
         ariaLabel="Filtrar por institución"
       />

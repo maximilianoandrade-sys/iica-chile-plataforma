@@ -26,9 +26,9 @@ export function TipoTabs() {
     };
 
     return (
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-6 max-w-full overflow-x-auto px-1">
             <Tabs value={currentTipo} onValueChange={handleTabChange}>
-                <TabsList>
+            <TabsList className="min-w-max">
                     <TabsTrigger value="all">Todos</TabsTrigger>
                     <TabsTrigger value="fondo">Fondos Concursables</TabsTrigger>
                     <TabsTrigger value="licitacion">Licitaciones / Procurement</TabsTrigger>

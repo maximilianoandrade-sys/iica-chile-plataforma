@@ -2,11 +2,17 @@ import { NextRequest } from 'next/server';
 import { getLogger } from '@/lib/utils/logger';
 import prisma from '@/lib/prisma';
 import { createHash } from 'crypto';
+import { checkDistributedRateLimit } from '@/lib/utils/rateLimit';
 
 const logger = getLogger('FavoritesTrackingAPI');
 
 export async function POST(request: NextRequest) {
   try {
+    const contentLength = Number(request.headers.get('content-length') || 0);
+    if (contentLength > 2_000) return new Response(JSON.stringify({ error: 'Solicitud demasiado grande' }), { status: 413 });
+    const clientIp = request.headers.get('x-real-ip') || request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
+    const rateLimit = await checkDistributedRateLimit(`favorites:${clientIp}`, 60, 60_000);
+    if (!rateLimit.success) return new Response(JSON.stringify({ error: 'Demasiadas solicitudes' }), { status: 429 });
     const body = await request.json();
     const { projectId, action, deviceId } = body;
 

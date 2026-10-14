@@ -19,6 +19,7 @@ const ITEMS_PER_PAGE = 16;
 
 interface ProjectListProps {
   projects: Project[];
+  favoriteCatalog?: Project[];
   totalCount: number;
   pageSize?: number;
   activeFilterLabels?: string[];
@@ -26,6 +27,7 @@ interface ProjectListProps {
 
 export default function ProjectList({
   projects,
+  favoriteCatalog = projects,
   totalCount,
   pageSize = ITEMS_PER_PAGE,
   activeFilterLabels = [],
@@ -481,7 +483,7 @@ export default function ProjectList({
       <FavoritesDrawer
         isOpen={isFavoritesOpen}
         onClose={() => setIsFavoritesOpen(false)}
-        allProjects={projects}
+        allProjects={favoriteCatalog}
       />
     </div>
   );

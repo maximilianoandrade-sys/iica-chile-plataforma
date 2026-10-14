@@ -1,6 +1,8 @@
 import prisma from "@/lib/prisma";
+import { getLogger } from "@/lib/utils/logger";
 
 export const dynamic = "force-dynamic";
+const logger = getLogger("AdminSourcesPage");
 
 function statusEmoji(status: string | null): string {
   if (status === "success") return "✅";
@@ -33,7 +35,14 @@ function relative(date: Date | null): string {
 }
 
 export default async function SourcesPage() {
-  const sources = await prisma.source.findMany({ orderBy: { slug: "asc" } });
+  let sources: Awaited<ReturnType<typeof prisma.source.findMany>> = [];
+  let loadError = false;
+  try {
+    sources = await prisma.source.findMany({ orderBy: { slug: "asc" } });
+  } catch (error) {
+    loadError = true;
+    logger.error("Failed to load source status", error as Error);
+  }
 
   return (
     <div className="mx-auto max-w-6xl p-4 md:p-6 space-y-6">
@@ -41,6 +50,12 @@ export default async function SourcesPage() {
         <h1 className="text-2xl md:text-3xl font-black text-gray-900 tracking-tight">Estado de Fuentes de Datos</h1>
         <p className="text-sm text-gray-600">Seguimiento de cada scraper y proceso de descubrimiento.</p>
       </div>
+
+      {loadError && (
+        <div role="alert" className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+          No pudimos cargar el estado de las fuentes. Revise la conexión de datos e inténtelo nuevamente.
+        </div>
+      )}
 
       <div className="overflow-x-auto rounded-2xl border border-gray-200 bg-white shadow-sm">
         <table className="min-w-full text-sm">

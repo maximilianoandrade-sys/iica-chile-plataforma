@@ -23,7 +23,7 @@ export async function rejectProject(id: number) {
   try {
     await prisma.project.update({
       where: { id },
-      data: { needsReview: false, bases_estado: "rejected" },
+      data: { needsReview: false, bases_estado: "rejected", publishable: false },
     });
     revalidatePath("/admin/projects/needsReview");
   } catch (err) {

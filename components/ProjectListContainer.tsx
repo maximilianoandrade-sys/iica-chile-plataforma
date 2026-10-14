@@ -1,7 +1,7 @@
 import { getCachedProjectFilterSnapshot, getCachedProjects, type Project } from '@/lib/data';
 import ProjectList from "@/components/ProjectList";
 import JsonLd from "@/components/JsonLd";
-import { hybridSearch } from '@/lib/searchHybrid';
+import { hybridSearch, LICITACION_CATEGORIES, LICITACION_INSTITUTIONS } from '@/lib/searchHybrid';
 import DatabaseError from "@/components/DatabaseError";
 
 const DEFAULT_PAGE_SIZE = 16;
@@ -37,6 +37,7 @@ export default async function ProjectListContainer({
 
     // Run DB check and search in parallel for better performance
     const filterSnapshot = await getCachedProjectFilterSnapshot();
+    const favoriteCatalogResult = await getCachedProjects();
     let searchResult: Awaited<ReturnType<typeof hybridSearch>>;
 
     try {
@@ -76,9 +77,28 @@ export default async function ProjectListContainer({
             const matchesInstitution = selectedInstitutions.length === 0 || selectedInstitutions.includes(project.institucion);
             const matchesRegion = selectedRegions.length === 0 || selectedRegions.some((region) => project.regiones?.includes(region) || project.region === region);
             const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(project.categoria);
-            return matchesQuery && matchesStatus && matchesAmbito && matchesInstitution && matchesRegion && matchesCategory;
+            const isLicitacion = LICITACION_CATEGORIES.includes(project.categoria) || LICITACION_INSTITUTIONS.includes(project.institucion);
+            const matchesTipo = tipo === 'all' || (tipo === 'licitacion' ? isLicitacion : !isLicitacion);
+            const amountKnown = Number.isFinite(project.monto) && project.monto > 0;
+            const matchesAmount = (minAmount <= 0 || (amountKnown && project.monto >= minAmount))
+                && (maxAmount === Infinity || (amountKnown && project.monto <= maxAmount));
+            const createdAt = new Date((project as Project & { createdAt?: string }).createdAt || '');
+            const matchesPostedFrom = !postedFrom || (!Number.isNaN(createdAt.getTime()) && createdAt >= new Date(`${postedFrom}T00:00:00.000Z`));
+            const matchesPostedTill = !postedTill || (!Number.isNaN(createdAt.getTime()) && createdAt <= new Date(`${postedTill}T23:59:59.999Z`));
+            const closeDate = new Date(project.fecha_cierre);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const maxClose = new Date(today);
+            maxClose.setDate(maxClose.getDate() + (closingWithinDays || 0));
+            const matchesUrgency = !closingWithinDays || (closeDate >= today && closeDate <= maxClose);
+            return matchesQuery && matchesStatus && matchesAmbito && matchesInstitution && matchesRegion && matchesCategory
+                && matchesTipo && matchesAmount && matchesPostedFrom && matchesPostedTill && matchesUrgency;
         });
-        const sorted = [...filtered].sort((a, b) => new Date(a.fecha_cierre).getTime() - new Date(b.fecha_cierre).getTime());
+        const sorted = [...filtered].sort((a, b) => {
+            if (sort === 'amount_desc') return b.monto - a.monto;
+            if (sort === 'newest') return b.id - a.id;
+            return new Date(a.fecha_cierre).getTime() - new Date(b.fecha_cierre).getTime();
+        });
         const offset = (currentPage - 1) * DEFAULT_PAGE_SIZE;
         const fallbackProjects = sorted.slice(offset, offset + DEFAULT_PAGE_SIZE).map((project) => ({
             ...project,
@@ -128,6 +148,7 @@ export default async function ProjectListContainer({
             <JsonLd projects={filteredProjects} />
             <ProjectList
                 projects={filteredProjects}
+                favoriteCatalog={favoriteCatalogResult.ok ? favoriteCatalogResult.projects : filteredProjects}
                 totalCount={resultTotal}
                 pageSize={DEFAULT_PAGE_SIZE}
                 activeFilterLabels={activeFilterLabels}

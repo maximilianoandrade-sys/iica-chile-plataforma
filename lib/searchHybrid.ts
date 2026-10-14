@@ -84,8 +84,8 @@ function buildHybridFilters(opts: HybridSearchOptions): HybridQueryFilters {
   };
 }
 
-const LICITACION_CATEGORIES = ['Licitación', 'Procurement', 'Adquisiciones', 'UNGM', 'FAO'];
-const LICITACION_INSTITUTIONS = ['FAO (UN)', 'FAO', 'UNGM', 'WORLD BANK', 'Mercado Público'];
+export const LICITACION_CATEGORIES = ['Licitación', 'Procurement', 'Adquisiciones', 'UNGM', 'FAO'];
+export const LICITACION_INSTITUTIONS = ['FAO (UN)', 'FAO', 'UNGM', 'WORLD BANK', 'Mercado Público'];
 
 export function buildProjectWhere(filters: HybridQueryFilters): Prisma.ProjectWhereInput {
   const where: Prisma.ProjectWhereInput = {
@@ -279,8 +279,24 @@ function getFilteredStaticProjects(filters: HybridQueryFilters, query?: string):
     }
 
     // Amounts
-    if (filters.minAmount > 0 && p.monto && p.monto < filters.minAmount) return false;
-    if (filters.maxAmount < Number.POSITIVE_INFINITY && p.monto && p.monto > filters.maxAmount) return false;
+    if (filters.minAmount > 0 && (!Number.isFinite(p.monto) || p.monto <= 0 || p.monto < filters.minAmount)) return false;
+    if (filters.maxAmount < Number.POSITIVE_INFINITY && (!Number.isFinite(p.monto) || p.monto <= 0 || p.monto > filters.maxAmount)) return false;
+
+    const createdAt = new Date((p as { createdAt?: string }).createdAt || '');
+    if (filters.postedFrom || filters.postedTill) {
+      if (Number.isNaN(createdAt.getTime())) return false;
+      if (filters.postedFrom && createdAt < new Date(`${filters.postedFrom}T00:00:00.000Z`)) return false;
+      if (filters.postedTill && createdAt > new Date(`${filters.postedTill}T23:59:59.999Z`)) return false;
+    }
+
+    if (filters.closingWithinDays != null && filters.closingWithinDays > 0) {
+      const closingDate = new Date(p.fecha_cierre);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const maxDate = new Date(today);
+      maxDate.setDate(maxDate.getDate() + filters.closingWithinDays);
+      if (Number.isNaN(closingDate.getTime()) || closingDate < today || closingDate > maxDate) return false;
+    }
 
     // Search query
     if (q) {

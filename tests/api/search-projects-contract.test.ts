@@ -75,7 +75,7 @@ describe('/api/search-projects request contract', () => {
     expect(Array.isArray(json.data.results)).toBe(true);
     expect(typeof json.data.meta.mode).toBe('string');
     expect(mockHybridSearch).toHaveBeenCalledWith(
-      expect.objectContaining({ query: 'riego', ambito: 'all', limit: 50 })
+      expect.objectContaining({ query: 'riego', ambito: 'all', limit: 100 })
     );
   });
 

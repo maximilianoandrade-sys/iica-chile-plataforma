@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calculator, DollarSign, Download, Info, CheckCircle2, ShieldCheck, X } from 'lucide-react';
 import { type Project } from '@/lib/project-utils';
 import { exportProjectsToCsv } from '@/lib/utils/exportCsv';
@@ -17,6 +17,15 @@ export default function CofinancingCalculator({ project, isOpen, onClose }: Cofi
   );
   const [entityType, setEntityType] = useState<'micro_small' | 'medium' | 'large' | 'ngo_coop'>('micro_small');
   const [currency, setCurrency] = useState<'CLP' | 'USD'>('CLP');
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -48,7 +57,7 @@ export default function CofinancingCalculator({ project, isOpen, onClose }: Cofi
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-labelledby="cofinancing-title">
       <div className="relative w-full max-w-2xl bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-800 overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-[var(--iica-navy)] to-blue-900 text-white">
@@ -57,7 +66,7 @@ export default function CofinancingCalculator({ project, isOpen, onClose }: Cofi
               <Calculator className="h-6 w-6" />
             </div>
             <div>
-              <h3 className="font-bold text-lg leading-tight">Simulador de Cofinanciamiento y Aporte Propio</h3>
+              <h3 id="cofinancing-title" className="font-bold text-lg leading-tight">Simulador de Cofinanciamiento y Aporte Propio</h3>
               <p className="text-xs text-blue-200">
                 {project ? project.nombre : 'Calculadora de presupuesto IICA'}
               </p>

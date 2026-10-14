@@ -39,7 +39,7 @@ function isPrivateIpv6(hostname: string): boolean {
   if (mappedIpv4) {
     const address = mappedIpv4[1]
       ? mappedIpv4.slice(1, 5).join('.')
-      : `${Number.parseInt(mappedIpv4[5], 16) >> 8}.${Number.parseInt(mappedIpv4[5], 16) & 255}.${Number.parseInt(mappedIpv4[6], 16) >> 8}.${Number.parseInt(mappedIpv4[6], 16) & 255}`;
+      : `${Number.parseInt(mappedIpv4[2], 16) >> 8}.${Number.parseInt(mappedIpv4[2], 16) & 255}.${Number.parseInt(mappedIpv4[3], 16) >> 8}.${Number.parseInt(mappedIpv4[3], 16) & 255}`;
     return isPrivateIpv4(address);
   }
   if (normalized.startsWith('fc') || normalized.startsWith('fd')) return true; // fc00::/7

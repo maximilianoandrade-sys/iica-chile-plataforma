@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { X, Scale, ExternalLink, Calendar, MapPin, Coins, ShieldCheck, Sparkles, Check, Download, AlertCircle } from 'lucide-react';
 import type { Project } from '@/lib/project-utils';
 import { InstitutionLogo } from '@/components/InstitutionLogo';
@@ -15,6 +15,15 @@ interface TenderComparatorProps {
 
 export function TenderComparator({ selectedProjects, onRemoveProject, onClear }: TenderComparatorProps) {
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsOpen(false);
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
 
   if (selectedProjects.length === 0) return null;
 
@@ -75,7 +84,7 @@ export function TenderComparator({ selectedProjects, onRemoveProject, onClear }:
 
       {/* Comparison Modal Overlay */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 md:p-6 overflow-y-auto animate-fade-in">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 md:p-6 overflow-y-auto animate-fade-in" role="dialog" aria-modal="true" aria-labelledby="tender-comparator-title">
           <div className="bg-white dark:bg-gray-900 border-2 border-blue-200 dark:border-gray-800 rounded-3xl max-w-6xl w-full max-h-[92vh] overflow-hidden shadow-2xl flex flex-col relative">
             
             {/* Modal Header */}
@@ -86,7 +95,7 @@ export function TenderComparator({ selectedProjects, onRemoveProject, onClear }:
                 </div>
                 <div>
                   <h2 className="text-lg md:text-xl font-extrabold text-[var(--iica-navy)] dark:text-white flex items-center gap-2">
-                    Matriz Comparativa de Convocatorias
+                    <span id="tender-comparator-title">Matriz Comparativa de Convocatorias</span>
                   </h2>
                   <p className="text-xs text-gray-600 dark:text-gray-400">
                     Alineación fila por fila para contrastar montos, exigencia de cofinanciamiento, fechas y viabilidad IICA.

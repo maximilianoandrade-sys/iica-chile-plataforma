@@ -3,11 +3,17 @@ import { NextRequest } from 'next/server';
 import prisma from '@/lib/prisma';
 import { createErrorResponse, createSuccessResponse } from '@/lib/utils/api-response';
 import { getLogger } from '@/lib/utils/logger';
+import { checkDistributedRateLimit } from '@/lib/utils/rateLimit';
 
 const logger = getLogger('PushSubscribeAPI');
 
 export async function POST(request: NextRequest) {
   try {
+    const contentLength = Number(request.headers.get('content-length') || 0);
+    if (contentLength > 5_000) return createErrorResponse('Solicitud demasiado grande', 413);
+    const clientIp = request.headers.get('x-real-ip') || request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
+    const rateLimit = await checkDistributedRateLimit(`push-subscribe:${clientIp}`, 10, 60_000);
+    if (!rateLimit.success) return createErrorResponse('Demasiadas solicitudes', 429);
     const body = await request.json();
     const { endpoint, expirationTime, keys, deviceId } = body;
     if (typeof endpoint !== 'string' || !endpoint.startsWith('https://') || endpoint.length > 2048) {
