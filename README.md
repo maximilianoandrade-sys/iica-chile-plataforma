@@ -83,6 +83,10 @@ El módulo `exportProjectsToExcel` genera reportes en formato **SpreadsheetML XM
 
 ## 🚀 Guía de Desarrollo Local
 
+### Identidad confiable para rate limiting
+
+En Vercel configure `TRUSTED_PROXY_IP_HEADER=x-real-ip` como variable de entorno de producción. La aplicación solo acepta ese header cuando está declarado explícitamente; los headers reenviados no configurados se ignoran para evitar que un cliente suplante su IP.
+
 ### Requisitos Previos
 - Node.js 18+ o Node.js 20+
 - npm 9+

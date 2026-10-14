@@ -16,7 +16,7 @@ import { NextRequest } from 'next/server';
 import { createErrorResponse, createSuccessResponse } from '@/lib/utils/api-response';
 import { isAllowedPublicHttpUrl, verifyHostnameResolvesToPublicIps, fetchPublicUrl } from '@/lib/utils/network-security';
 import { getLogger } from '@/lib/utils/logger';
-import { checkDistributedRateLimit } from '@/lib/utils/rateLimit';
+import { checkDistributedRateLimit, getRateLimitIdentifier } from '@/lib/utils/rateLimit';
 
 export const runtime = 'nodejs';
 const logger = getLogger('CheckLinkApi');
@@ -69,8 +69,8 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
     try {
-        const clientIp = request.headers.get('x-real-ip') || request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
-        const rateLimit = await checkDistributedRateLimit(`check-link:${clientIp}`, 30, 60_000);
+        const clientId = getRateLimitIdentifier(request, 'check-link');
+        const rateLimit = await checkDistributedRateLimit(clientId, 30, 60_000);
         if (!rateLimit.success) {
             return createErrorResponse('Demasiadas solicitudes; reintenta más tarde', 429);
         }

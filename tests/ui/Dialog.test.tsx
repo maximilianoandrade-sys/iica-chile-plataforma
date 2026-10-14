@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Dialog } from "@/components/ui/Dialog";
 
 describe("Dialog", () => {
@@ -38,5 +38,25 @@ describe("Dialog", () => {
   it("boton cerrar tiene aria-label", () => {
     render(<Dialog open onClose={jest.fn()} title="Test"><p>Content</p></Dialog>);
     expect(screen.getByLabelText("Cerrar")).toBeInTheDocument();
+  });
+
+  it("atrapa el foco y lo devuelve al elemento que abrio el dialogo", async () => {
+    const opener = document.createElement("button");
+    document.body.appendChild(opener);
+    opener.focus();
+    const onClose = jest.fn();
+
+    render(<Dialog open onClose={onClose} title="Test"><button>Accion</button></Dialog>);
+
+    await waitFor(() => expect(screen.getByRole("dialog")).toContainElement(document.activeElement as HTMLElement));
+    const closeButton = screen.getByLabelText("Cerrar");
+    fireEvent.keyDown(document, { key: "Tab" });
+    expect(document.activeElement).toBe(closeButton);
+    fireEvent.keyDown(document, { key: "Tab", shiftKey: true });
+    expect(document.activeElement).toBe(screen.getByRole("button", { name: "Accion" }));
+
+    fireEvent.click(closeButton);
+    expect(onClose).toHaveBeenCalled();
+    opener.remove();
   });
 });

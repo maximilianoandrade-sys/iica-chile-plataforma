@@ -22,6 +22,11 @@ describe('ProjectCard', () => {
     expect(link).toHaveAttribute('href', '/proyecto/1');
   });
 
+  it('envia el enlace de bases al detalle verificado', () => {
+    render(<ProjectCard project={mockProject} />);
+    expect(screen.getByRole('link', { name: /Bases/i })).toHaveAttribute('href', '/proyecto/1#bases');
+  });
+
   it('renders institution name', () => {
     render(<ProjectCard project={mockProject} />);
     expect(screen.getByText('CORFO')).toBeInTheDocument();

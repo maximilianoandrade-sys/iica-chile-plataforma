@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, type RefObject } from "react";
 import { cn } from "@/lib/utils/cn";
 import { X } from "lucide-react";
 
@@ -11,50 +11,64 @@ interface DialogProps {
   className?: string;
 }
 
-export function Dialog({ open, onClose, title, children, className }: DialogProps) {
+const FOCUSABLE_SELECTOR = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+export function useDialogAccessibility(open: boolean, onClose: () => void): RefObject<HTMLDivElement> {
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
 
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === "Escape") { onClose(); return; }
-      if (e.key !== "Tab" || !dialogRef.current) return;
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (event.key === "Escape") {
+      event.preventDefault();
+      onClose();
+      return;
+    }
+    if (event.key !== "Tab") return;
 
-      const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      );
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last?.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first?.focus();
-      }
-    },
-    [onClose]
-  );
+    const focusable = Array.from(dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
+    if (focusable.length === 0) {
+      event.preventDefault();
+      dialog.focus();
+      return;
+    }
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && (document.activeElement === first || !dialog.contains(document.activeElement))) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && (document.activeElement === last || !dialog.contains(document.activeElement))) {
+      event.preventDefault();
+      first.focus();
+    }
+  }, [onClose]);
 
   useEffect(() => {
-    if (open) {
-      previousFocusRef.current = document.activeElement as HTMLElement;
-      document.addEventListener("keydown", handleKeyDown);
-      setTimeout(() => {
-        const first = dialogRef.current?.querySelector<HTMLElement>(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
-        first?.focus();
-      }, 50);
-      document.body.style.overflow = "hidden";
-    }
+    if (!open) return;
+    previousFocusRef.current = document.activeElement as HTMLElement;
+    document.addEventListener("keydown", handleKeyDown);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const focusTimer = window.setTimeout(() => {
+      const first = dialogRef.current?.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+      (first ?? dialogRef.current)?.focus();
+    }, 0);
+
     return () => {
+      window.clearTimeout(focusTimer);
       document.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "";
+      document.body.style.overflow = previousOverflow;
       previousFocusRef.current?.focus();
+      previousFocusRef.current = null;
     };
   }, [open, handleKeyDown]);
+
+  return dialogRef;
+}
+
+export function Dialog({ open, onClose, title, children, className }: DialogProps) {
+  const dialogRef = useDialogAccessibility(open, onClose);
 
   if (!open) return null;
 
@@ -66,6 +80,7 @@ export function Dialog({ open, onClose, title, children, className }: DialogProp
         role="dialog"
         aria-modal="true"
         aria-labelledby="dialog-title"
+        tabIndex={-1}
         className={cn("relative bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[85vh] overflow-y-auto p-6", className)}
       >
         <div className="flex items-center justify-between mb-4">

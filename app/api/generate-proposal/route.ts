@@ -5,7 +5,7 @@ import { getLogger } from "@/lib/utils/logger";
 import { GenerateProposalSchema, formatZodError } from "@/lib/utils/validation";
 import { createSuccessResponse, createErrorResponse } from "@/lib/utils/api-response";
 import { getAiEnv } from '@/lib/utils/env';
-import { checkDistributedRateLimit } from "@/lib/utils/rateLimit";
+import { checkDistributedRateLimit, getRateLimitIdentifier } from "@/lib/utils/rateLimit";
 
 const logger = getLogger("GenerateProposal");
 const PROPOSAL_RATE_LIMIT = { maxRequests: 5, windowSizeMs: 60000 };
@@ -29,8 +29,8 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const clientIp = request.headers.get("x-forwarded-for")?.split(",")[0] || "127.0.0.1";
-    const rl = await checkDistributedRateLimit(`proposal:${clientIp}`, PROPOSAL_RATE_LIMIT.maxRequests, PROPOSAL_RATE_LIMIT.windowSizeMs);
+    const clientId = getRateLimitIdentifier(request, 'proposal');
+    const rl = await checkDistributedRateLimit(clientId, PROPOSAL_RATE_LIMIT.maxRequests, PROPOSAL_RATE_LIMIT.windowSizeMs);
     if (!rl.success) {
       return createErrorResponse(`Demasiadas solicitudes. Por favor reintente en ${rl.resetSeconds} segundos.`, 429);
     }

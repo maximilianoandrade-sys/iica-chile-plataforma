@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getLogger } from '@/lib/utils/logger';
-import { checkDistributedRateLimit } from '@/lib/utils/rateLimit';
+import { checkDistributedRateLimit, getRateLimitIdentifier } from '@/lib/utils/rateLimit';
 
 const logger = getLogger('SubscriptionAPI');
 
 export async function POST(request: NextRequest) {
   try {
-    const clientIp = request.headers.get('x-real-ip') || request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
-    const rateLimit = await checkDistributedRateLimit(`newsletter:${clientIp}`, 5, 60_000);
+    const clientId = getRateLimitIdentifier(request, 'newsletter');
+    const rateLimit = await checkDistributedRateLimit(clientId, 5, 60_000);
     if (!rateLimit.success) {
       return NextResponse.json({ ok: false, error: 'Demasiadas solicitudes; reintenta más tarde' }, { status: 429 });
     }

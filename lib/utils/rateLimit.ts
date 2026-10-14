@@ -16,6 +16,27 @@ export interface RateLimitResult {
   resetSeconds: number;
 }
 
+import { isIP } from 'node:net';
+
+type RequestWithClientIp = {
+  headers: { get(name: string): string | null };
+  ip?: string;
+};
+
+/** Returns a stable client key without trusting arbitrary forwarded headers. */
+export function getRateLimitIdentifier(request: RequestWithClientIp, namespace: string): string {
+  const runtimeIp = request.ip?.trim();
+  if (runtimeIp && isIP(runtimeIp)) return `${namespace}:${runtimeIp}`;
+
+  const trustedHeader = process.env.TRUSTED_PROXY_IP_HEADER?.trim().toLowerCase();
+  if (trustedHeader) {
+    const headerValue = request.headers.get(trustedHeader)?.split(',')[0]?.trim();
+    if (headerValue && isIP(headerValue)) return `${namespace}:${headerValue}`;
+  }
+
+  return `${namespace}:unknown`;
+}
+
 /**
  * Checks rate limit for a given identifier (e.g., client IP or device ID).
  * 

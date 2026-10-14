@@ -1,5 +1,4 @@
 import { MetadataRoute } from "next";
-import prisma from "@/lib/prisma";
 import { getProjects } from "@/lib/data";
 import { getEnv } from "@/lib/utils/env";
 
@@ -24,35 +23,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let projectUrls: MetadataRoute.Sitemap = [];
 
   try {
-    const projects = await prisma.project.findMany({
-      select: { id: true, updatedAt: true },
-    });
-
-    if (projects && projects.length > 0) {
-      projectUrls = projects.map((p) => ({
+    const result = await getProjects();
+    if (result.ok) {
+      projectUrls = result.projects.map((p) => ({
         url: `${BASE_URL}/proyecto/${p.id}`,
-        lastModified: p.updatedAt,
+        lastModified: new Date(),
         changeFrequency: "weekly",
         priority: 0.8,
       }));
-    } else {
-      throw new Error("No projects found in DB");
     }
   } catch {
-    // Fallback if DB is unreachable or empty: load from projects.json via getProjects()
-    try {
-      const result = await getProjects();
-      if (result.ok && result.projects) {
-        projectUrls = result.projects.map((p) => ({
-          url: `${BASE_URL}/proyecto/${p.id}`,
-          lastModified: new Date(),
-          changeFrequency: "weekly",
-          priority: 0.8,
-        }));
-      }
-    } catch {
-      // Graceful fallback
-    }
+    // Graceful fallback when the catalog cannot be loaded.
   }
 
   return [

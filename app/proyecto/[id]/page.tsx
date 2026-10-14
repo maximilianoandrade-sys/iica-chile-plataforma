@@ -9,8 +9,9 @@ import { CalendarReminderButton } from '@/components/CalendarReminderButton';
 import { PrintProjectButton } from '@/components/PrintProjectButton';
 import { ProposalGeneratorButton } from '@/components/ProposalGeneratorButton';
 import { ProjectCard } from '@/components/ProjectCard';
+import { LinkGuardianAnchor } from '@/lib/linkGuardian';
 import Link from 'next/link';
-import { ExternalLink, ArrowLeft, Calendar, CheckCircle, Info, MapPin, Users, DollarSign, Layers } from 'lucide-react';
+import { ArrowLeft, Calendar, CheckCircle, Info, MapPin, Users, DollarSign, Layers } from 'lucide-react';
 
 const getCachedProjects = cache(getProjects);
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL
@@ -232,7 +233,7 @@ export default async function ProyectoDetallePage({ params }: Props) {
                         )}
 
                         {/* Botones de Acción: Bases, IA, Calendario e Impresión */}
-                        <div className="pt-6 border-t border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div id="bases" className="pt-6 border-t border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row items-center justify-between gap-4">
                             <div>
                                 <h3 className="font-bold text-[var(--iica-navy)] dark:text-white">¿Listo para postular?</h3>
                                 <p className="text-xs text-gray-500 dark:text-gray-400">Accede a las bases oficiales, redacta un borrador con IA o descarga la minuta.</p>
@@ -241,15 +242,12 @@ export default async function ProyectoDetallePage({ params }: Props) {
                                 <ProposalGeneratorButton project={project} />
                                 <CalendarReminderButton project={project} />
                                 <PrintProjectButton />
-                                <a
-                                    href={project.url_bases}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                <LinkGuardianAnchor
+                                    url={project.url_bases}
+                                    projectName={project.nombre}
+                                    institution={project.institucion}
                                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] text-white font-extrabold px-6 py-3 rounded-xl transition-all shadow-md min-h-[44px]"
-                                >
-                                    Ver Bases en Sitio Oficial
-                                    <ExternalLink className="h-4 w-4" />
-                                </a>
+                                />
                             </div>
                         </div>
 

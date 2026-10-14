@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getLogger } from '@/lib/utils/logger';
-import { checkDistributedRateLimit } from '@/lib/utils/rateLimit';
+import { checkDistributedRateLimit, getRateLimitIdentifier } from '@/lib/utils/rateLimit';
 
 const logger = getLogger('IssueReportAPI');
 
@@ -9,8 +9,8 @@ export async function POST(request: Request) {
   try {
     const contentLength = Number(request.headers.get('content-length') || 0);
     if (contentLength > 12_000) return NextResponse.json({ error: 'El reporte excede el tamaño permitido' }, { status: 413 });
-    const clientIp = request.headers.get('x-real-ip') || request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
-    const rateLimit = await checkDistributedRateLimit(`issues:${clientIp}`, 10, 60_000);
+    const clientId = getRateLimitIdentifier(request, 'issues');
+    const rateLimit = await checkDistributedRateLimit(clientId, 10, 60_000);
     if (!rateLimit.success) return NextResponse.json({ error: 'Demasiados reportes; reintenta más tarde' }, { status: 429 });
     const body = await request.json();
     const { title, description, projectId, projectUrl, reporterEmail } = body;

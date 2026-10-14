@@ -5,6 +5,7 @@ import { Star, X, ExternalLink, Calendar, Trash2 } from 'lucide-react';
 import { type Project } from '@/lib/project-utils';
 import { getFavoriteIds, toggleFavorite } from '@/lib/utils/favorites';
 import Link from 'next/link';
+import { useDialogAccessibility } from '@/components/ui/Dialog';
 
 interface FavoritesDrawerProps {
   allProjects: Project[];
@@ -29,14 +30,7 @@ export default function FavoritesDrawer({ allProjects, isOpen, onClose }: Favori
     return () => window.removeEventListener('iica_favorites_updated', handleUpdate);
   }, [refreshFavorites]);
 
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  const dialogRef = useDialogAccessibility(isOpen, onClose);
 
   if (!isOpen) return null;
 
@@ -48,7 +42,7 @@ export default function FavoritesDrawer({ allProjects, isOpen, onClose }: Favori
   return (
     <div className="fixed inset-0 z-50 overflow-hidden bg-black/50 backdrop-blur-sm animate-in fade-in duration-200" role="dialog" aria-modal="true" aria-labelledby="favorites-title">
       <div className="absolute inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-800 shadow-2xl flex flex-col">
+        <div ref={dialogRef} tabIndex={-1} className="w-screen max-w-md bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-800 shadow-2xl flex flex-col">
           {/* Header */}
           <div className="p-5 bg-gradient-to-r from-[var(--iica-navy)] to-blue-900 text-white flex items-center justify-between">
             <div className="flex items-center gap-2">

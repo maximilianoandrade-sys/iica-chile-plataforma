@@ -11,6 +11,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { createElement } from 'react';
 import { getLogger } from '@/lib/utils/logger';
 import { getPreferredProjectUrl } from '@/lib/urlOverrides';
 const logger = getLogger('LinkGuardian');
@@ -310,6 +311,38 @@ export function useLinkGuardian(url: string, projectName: string, institution?: 
         archivedUrl: linkStatus.archivedUrl,
         isFallback: linkStatus.status === 'fallback'
     };
+}
+
+export function LinkGuardianAnchor({
+    url,
+    projectName,
+    institution,
+    className,
+}: {
+    url: string;
+    projectName: string;
+    institution?: string;
+    className: string;
+}) {
+    const { shouldShow, finalUrl, isFallback, isLoading } = useLinkGuardian(url, projectName, institution);
+
+    if (!shouldShow) return null;
+
+    return createElement(
+        'a',
+        {
+            href: finalUrl || url,
+            target: '_blank',
+            rel: 'noopener noreferrer',
+            'aria-busy': isLoading,
+            onClick: (event: MouseEvent) => {
+                if (isLoading) event.preventDefault();
+            },
+            className,
+            title: isFallback ? 'La página original cambió; buscar bases actualizadas' : 'Ver bases en sitio web oficial',
+        },
+        isFallback ? 'Buscar bases actualizadas' : 'Ver Bases en Sitio Oficial',
+    );
 }
 
 // ============================================================================

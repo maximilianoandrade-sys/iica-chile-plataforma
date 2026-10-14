@@ -57,6 +57,7 @@ const EnvSchema = z.object({
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).optional(),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   VERCEL_URL: z.string().optional(),
+  TRUSTED_PROXY_IP_HEADER: z.enum(['x-real-ip', 'x-forwarded-for', 'x-vercel-forwarded-for']).optional(),
   IICA_HEADLESS: z.string().optional(),
   IICA_DELAY_MS: z.string().optional(),
   IICA_USER_DATA_DIR: z.string().optional(),

@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { X, Scale, ExternalLink, Calendar, MapPin, Coins, ShieldCheck, Sparkles, Check, Download, AlertCircle } from 'lucide-react';
 import type { Project } from '@/lib/project-utils';
 import { InstitutionLogo } from '@/components/InstitutionLogo';
 import { CalendarReminderButton } from '@/components/CalendarReminderButton';
 import { exportProjectsToCsv } from '@/lib/utils/exportCsv';
+import { useDialogAccessibility } from '@/components/ui/Dialog';
 
 interface TenderComparatorProps {
   selectedProjects: Project[];
@@ -16,14 +17,7 @@ interface TenderComparatorProps {
 export function TenderComparator({ selectedProjects, onRemoveProject, onClear }: TenderComparatorProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setIsOpen(false);
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen]);
+  const dialogRef = useDialogAccessibility(isOpen, () => setIsOpen(false));
 
   if (selectedProjects.length === 0) return null;
 
@@ -85,7 +79,7 @@ export function TenderComparator({ selectedProjects, onRemoveProject, onClear }:
       {/* Comparison Modal Overlay */}
       {isOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 md:p-6 overflow-y-auto animate-fade-in" role="dialog" aria-modal="true" aria-labelledby="tender-comparator-title">
-          <div className="bg-white dark:bg-gray-900 border-2 border-blue-200 dark:border-gray-800 rounded-3xl max-w-6xl w-full max-h-[92vh] overflow-hidden shadow-2xl flex flex-col relative">
+          <div ref={dialogRef} tabIndex={-1} className="bg-white dark:bg-gray-900 border-2 border-blue-200 dark:border-gray-800 rounded-3xl max-w-6xl w-full max-h-[92vh] overflow-hidden shadow-2xl flex flex-col relative">
             
             {/* Modal Header */}
             <div className="flex items-center justify-between p-5 md:p-6 border-b dark:border-gray-800 bg-gray-50/80 dark:bg-gray-800/50 shrink-0">

@@ -229,12 +229,10 @@ export function ProjectCard({
           <CalendarReminderButton project={project} variant="icon" />
           {project.url_bases && (
             <a
-              href={project.url_bases}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={`/proyecto/${project.id}#bases`}
               onClick={(e) => e.stopPropagation()}
               className="text-xs font-bold text-[var(--iica-blue)] dark:text-blue-400 hover:underline flex items-center gap-1 bg-blue-50 dark:bg-blue-900/30 px-2.5 py-1 rounded-md"
-              title="Ver bases en sitio web oficial"
+              title="Verificar y abrir las bases oficiales"
             >
               Bases ↗
             </a>
