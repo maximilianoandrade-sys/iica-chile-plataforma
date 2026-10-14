@@ -104,7 +104,26 @@ function normalizeMercadoPublicoDocs(docs: Record<string, unknown>[]): Record<st
     return {
       ...doc,
       sourceId: `mercado_publico:${sourceSuffix}`,
+      institucion: 'Mercado Público',
+      categoria: 'Licitación',
+      monto: 0,
+      publishable: true,
     };
+  });
+}
+
+function filterMercadoPublicoDocs(
+  docs: Record<string, unknown>[],
+  filters: { institutions: string[]; categories: string[]; minAmount: number; maxAmount: number; postedFrom?: string; postedTill?: string },
+): Record<string, unknown>[] {
+  return docs.filter((doc) => {
+    if (filters.institutions.length > 0 && !filters.institutions.includes(String(doc.institucion))) return false;
+    if (filters.categories.length > 0 && !filters.categories.includes(String(doc.categoria))) return false;
+    if (filters.minAmount > 0 || Number.isFinite(filters.maxAmount)) return false;
+    const createdAt = new Date(String(doc.createdAt || new Date().toISOString()));
+    if (filters.postedFrom && createdAt < new Date(`${filters.postedFrom}T00:00:00.000Z`)) return false;
+    if (filters.postedTill && createdAt > new Date(`${filters.postedTill}T23:59:59.999Z`)) return false;
+    return true;
   });
 }
 
@@ -252,8 +271,8 @@ export async function POST(req: NextRequest) {
         postedFrom,
         postedTill,
         sort,
-        offset,
-        limit: safePageSize,
+        offset: runMercadoPublico ? 0 : offset,
+        limit: runMercadoPublico ? 100 : safePageSize,
       }),
       externalRunsInHybrid
         ? runExternalSearch(createProviders(enabledProviderIds), requestBody)
@@ -284,9 +303,13 @@ export async function POST(req: NextRequest) {
       hiddenExternalByQuality = result.hidden;
     }
 
-    const normalizedMpDocs = normalizeMercadoPublicoDocs(mpDocs as unknown as Record<string, unknown>[]);
+    const normalizedMpDocs = filterMercadoPublicoDocs(
+      normalizeMercadoPublicoDocs(mpDocs as unknown as Record<string, unknown>[]),
+      { institutions: selectedInstitutions, categories: selectedCategories, minAmount, maxAmount, postedFrom, postedTill },
+    );
     const merged = [...publishableHybrid, ...publishableExternal, ...normalizedMpDocs] as Record<string, unknown>[];
     const policy = applyRelevanceAndAmbitoPolicy(merged, { relevanceMode, ambito });
+    const results = runMercadoPublico ? policy.results.slice(offset, offset + safePageSize) : policy.results;
 
     const mercadoPublicoCount = countBySourcePrefix(policy.results, 'mercado_publico');
     const externalCount = countBySourcePrefix(policy.results, 'linkedin_public');
@@ -308,7 +331,7 @@ export async function POST(req: NextRequest) {
       page,
       page_size: safePageSize,
       // ponytail: base has_next on the same pagination basis the internal search actually uses
-      has_next: offset + safePageSize < hybridTotal,
+      has_next: offset + safePageSize < policy.results.length,
       query,
       searched_at: new Date().toISOString(),
     };
@@ -328,7 +351,7 @@ export async function POST(req: NextRequest) {
       meta.provider_stats = [];
     }
 
-    return createSuccessResponse({ results: policy.results, meta });
+    return createSuccessResponse({ results, meta });
   } catch (error) {
     logger.error('Search projects error', error as Error);
     return createErrorResponse('Error interno del servidor', 500);
