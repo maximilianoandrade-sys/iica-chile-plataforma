@@ -32,6 +32,42 @@ const nextConfig = {
         source: '/:all*(svg|jpg|png|webp|avif|woff2)',
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+        ],
+      },
+      {
+        // Headers específicos para permitir embebido institucional seguro de /widget
+        source: '/widget',
+        headers: [
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on'
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff'
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin'
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === 'development' ? " 'unsafe-eval'" : ''} https://www.googletagmanager.com https://www.google-analytics.com`,
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "img-src 'self' data: https: blob:",
+              "font-src 'self' https://fonts.gstatic.com",
+              "connect-src 'self' https://www.google-analytics.com https://*.supabase.co https://*.gob.cl https://*.corfo.cl https://*.indap.cl https://images.unsplash.com",
+              "frame-src 'self'",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'self'",
+              "frame-ancestors *",
+              "upgrade-insecure-requests"
+            ].join('; ')
+          }
         ],
       },
       {
@@ -54,16 +90,16 @@ const nextConfig = {
             value: 'nosniff'
           },
           {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block'
-          },
-          {
             key: 'Referrer-Policy',
             value: 'strict-origin-when-cross-origin'
           },
           {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=()'
+          },
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin'
           },
           {
             key: 'Content-Security-Policy',
@@ -73,7 +109,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "img-src 'self' data: https: blob:",
               "font-src 'self' https://fonts.gstatic.com",
-              "connect-src 'self' https://www.google-analytics.com https://*.gob.cl https://*.corfo.cl https://*.indap.cl https://images.unsplash.com",
+              "connect-src 'self' https://www.google-analytics.com https://*.supabase.co wss://*.supabase.co https://*.gob.cl https://*.corfo.cl https://*.indap.cl https://images.unsplash.com",
               "frame-src 'self' https://www.youtube.com",
               "object-src 'none'",
               "base-uri 'self'",

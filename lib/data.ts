@@ -63,7 +63,7 @@ import projectsJson from '../data/projects.json';
 
 export function getStaticProjects(today: Date): Project[] {
     const todayStr = today.toISOString().split('T')[0];
-    return (projectsJson as any[])
+    return (projectsJson as unknown as Array<Project & { relevanciaChile?: boolean }>)
         .filter(p => {
             if ([103, 104, 106, 110, 113].includes(p.id)) return false;
             if (p.publishable === false) return false;

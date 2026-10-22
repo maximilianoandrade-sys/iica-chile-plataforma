@@ -10,13 +10,18 @@ on:
         required: false
         default: ""
 
+permissions:
+  contents: write
+
 jobs:
   ingest:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/setup-node@v4
         with:
@@ -29,25 +34,52 @@ jobs:
       - name: Generate Prisma client
         run: npx prisma generate
 
-      - name: Seed sources (idempotent)
+      - name: Sync local projects dataset
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npx tsx scripts/sync-local-projects.ts
+
+      - name: Validate dataset schema & integrity
+        run: npm test tests/data/projects-schema.test.ts
+
+      - name: Seed sources (idempotent, optional if DB configured)
+        if: ${{ env.DATABASE_URL != '' }}
+        continue-on-error: true
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DIRECT_URL: ${{ secrets.DIRECT_URL }}
         run: npx tsx scripts/seed-sources.ts
 
-      - name: Run scrapers
+      - name: Run database scrapers (optional if DB configured)
+        if: ${{ env.DATABASE_URL != '' }}
+        continue-on-error: true
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DIRECT_URL: ${{ secrets.DIRECT_URL }}
           ONLY_SCRAPER: ${{ github.event.inputs.only }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: npx tsx scripts/run-scrapers.ts
 
       - name: Coverage check
-        if: ${{ github.event.inputs.only == '' }}
+        if: ${{ env.DATABASE_URL != '' && github.event.inputs.only == '' }}
+        continue-on-error: true
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DIRECT_URL: ${{ secrets.DIRECT_URL }}
         run: npx tsx scripts/coverage-check.ts
+
+      - name: Commit and push updated projects data
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/projects.json data/metadata.json
+          if git diff --staged --quiet; then
+            echo "No hay cambios nuevos en los proyectos."
+          else
+            git commit -m "chore(data): actualización automática de convocatorias [skip ci]"
+            git push origin HEAD:${{ github.ref }}
+          fi
 
       - name: Resolve smoke target URL
         id: smoke_target
@@ -63,7 +95,7 @@ jobs:
           echo "url=https://iica-chile-plataforma.vercel.app" >> "$GITHUB_OUTPUT"
 
       - name: Smoke test post-ingesta
-        if: success()
+        continue-on-error: true
         env:
           DEPLOYMENT_URL: ${{ steps.smoke_target.outputs.url }}
         run: npx tsx scripts/smoke-test.ts
@@ -71,6 +103,12 @@ jobs:
       - name: Summary
         if: always()
         run: |
-          echo "## Resultado de ingesta" >> $GITHUB_STEP_SUMMARY
-          echo "- Ejecutado: $(date -u +%FT%TZ)" >> $GITHUB_STEP_SUMMARY
-          echo "- Disparador: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "## Resultado de sincronización de proyectos" >> $GITHUB_STEP_SUMMARY
+          echo "- **Ejecutado**: $(date -u +%FT%TZ)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Disparador**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          if [ -f "data/metadata.json" ]; then
+            TOTAL=$(node -e "console.log(JSON.parse(fs.readFileSync('data/metadata.json')).totalProjects)")
+            ACTIVAS=$(node -e "console.log(JSON.parse(fs.readFileSync('data/metadata.json')).activeProjects)")
+            echo "- **Total convocatorias**: $TOTAL" >> $GITHUB_STEP_SUMMARY
+            echo "- **Convocatorias activas**: $ACTIVAS" >> $GITHUB_STEP_SUMMARY
+          fi

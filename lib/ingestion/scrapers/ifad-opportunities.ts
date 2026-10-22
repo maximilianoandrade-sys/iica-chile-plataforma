@@ -1,4 +1,5 @@
-import { load } from "cheerio";
+import { load, type Cheerio } from "cheerio";
+import type { AnyNode } from "domhandler";
 import { getLogger } from "@/lib/utils/logger";
 import type { Scraper, ScraperResult, RawProject } from "../types";
 import { absoluteUrl, cleanText } from "../utils";
@@ -99,11 +100,11 @@ function parseUngmDeadline(value: string | null): Date | null {
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
-function extractMetaValue($row: any, label: string): string {
+function extractMetaValue($row: Cheerio<AnyNode>, label: string): string {
   const match = $row
     .find(".undb-meta-data")
     .toArray()
-    .map((el: unknown) => cleanText($row.find(el as any).text()))
+    .map((el) => cleanText($row.find(el).text()))
     .find((text: string) => text.toLowerCase().startsWith(`${label.toLowerCase()}:`));
 
   if (!match) return "";

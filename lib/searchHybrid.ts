@@ -40,8 +40,12 @@ export interface HybridSearchOptions {
   limit?: number;
 }
 
+export type HybridProjectItem = Prisma.ProjectGetPayload<{
+  include: { source: { select: { slug: true; name: true } } };
+}>;
+
 export interface HybridSearchResult {
-  projects: Awaited<ReturnType<typeof prisma.project.findMany>>;
+  projects: HybridProjectItem[];
   mode: 'hybrid' | 'lexical_only' | 'all';
   total: number;
   rankings?: Map<number, { rrf: number; lex: number; sem: number }>;
@@ -231,7 +235,7 @@ function deduplicateProjects<T extends { id: number; url_bases?: string }>(proje
   return Array.from(seen.values());
 }
 
-function getFilteredStaticProjects(filters: HybridQueryFilters, query?: string): any[] {
+function getFilteredStaticProjects(filters: HybridQueryFilters, query?: string): HybridProjectItem[] {
   const today = new Date();
   today.setUTCHours(0, 0, 0, 0);
   const staticList = getStaticProjects(today);
@@ -312,7 +316,7 @@ function getFilteredStaticProjects(filters: HybridQueryFilters, query?: string):
     created_at: new Date(),
     updated_at: new Date(),
     source: { slug: (p.institucion || '').toLowerCase(), name: p.institucion || '' },
-  }));
+  })) as unknown as HybridProjectItem[];
 }
 
 /**
@@ -329,7 +333,7 @@ export async function hybridSearch(opts: HybridSearchOptions): Promise<HybridSea
   if (!query || !query.trim()) {
     const where = buildProjectWhere(filters);
 
-    let dbProjects: any[] = [];
+    let dbProjects: HybridProjectItem[] = [];
     try {
       dbProjects = await prisma.project.findMany({
         where,
@@ -346,7 +350,7 @@ export async function hybridSearch(opts: HybridSearchOptions): Promise<HybridSea
     const total = sorted.length;
     const projects = sorted.slice(safeOffset, safeOffset + safeLimit);
 
-    return { projects: projects as any, mode: 'all', total };
+    return { projects: projects as HybridProjectItem[], mode: 'all', total };
   }
 
   let queryEmbedding: number[] | null = null;
@@ -390,7 +394,7 @@ export async function hybridSearch(opts: HybridSearchOptions): Promise<HybridSea
   const total = sorted.length;
   const projects = sorted.slice(safeOffset, safeOffset + safeLimit);
 
-  return { projects: projects as any, mode: dbResult.mode, total };
+  return { projects: projects as HybridProjectItem[], mode: dbResult.mode, total };
 }
 
 async function runFullHybrid(

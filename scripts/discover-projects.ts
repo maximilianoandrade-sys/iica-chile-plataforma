@@ -59,7 +59,7 @@ Convertí esta información a un JSON con esta forma exacta. Solo incluí las co
 
 Respondé SOLO con el JSON, sin markdown, sin backticks, sin texto adicional.`;
 
-function extractJsonObject(text: string): any | null {
+function extractJsonObject(text: string): Record<string, unknown> | null {
   if (!text) return null;
   const cleaned = text.replace(/```json\s*/gi, "").replace(/```\s*/g, "").trim();
   const start = cleaned.indexOf("{");
@@ -90,7 +90,7 @@ async function discover(query: string): Promise<AiResult[]> {
 
   logger.info("[discover] paso 1: investigación con Google Search...");
   const research = await ai.models.generateContent({
-    model: "gemini-2.0-flash",
+    model: "gemini-2.5-flash",
     contents: researchPrompt,
     config: {
       tools: [{ googleSearch: {} }],
@@ -105,12 +105,12 @@ async function discover(query: string): Promise<AiResult[]> {
   }
 
   const groundingChunks =
-    (research.candidates as any)?.[0]?.groundingMetadata?.groundingChunks?.length || 0;
+    (research.candidates?.[0] as { groundingMetadata?: { groundingChunks?: unknown[] } })?.groundingMetadata?.groundingChunks?.length || 0;
   logger.info(`[discover] investigación: ${researchText.length} chars, ${groundingChunks} fuentes citadas`);
 
   logger.info("[discover] paso 2: estructurando a JSON...");
   const structured = await ai.models.generateContent({
-    model: "gemini-2.0-flash",
+    model: "gemini-2.5-flash",
     contents: STRUCTURE_PROMPT(researchText),
     config: { temperature: 0 },
   });

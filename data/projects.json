@@ -1262,7 +1262,7 @@
     "monto": 1500000,
     "montoTexto": "EUR 1,500,000",
     "fecha_cierre": "2026-10-15",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Riego y Recursos Hídricos",
     "url_bases": "https://www.euroclima.org/",
     "regiones": [
@@ -1283,7 +1283,7 @@
     ],
     "checklist": [],
     "ambito": "Internacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Alta",
     "porcentajeViabilidad": 92,
     "objetivo": "Programa de cooperación de la Unión Europea enfocado en la gestión sustentable del agua y adaptación climática agrícola.",
@@ -1752,7 +1752,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:48:54.794Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:48:54.794Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/produccion-encuentro-nacional-premio-mujer-agroinnnovadora-2024",
     "sourceRefId": 2,
@@ -1790,7 +1790,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:48:58.366Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:48:58.366Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/programa-de-innovacion-cooperativas-en-el-marco-de-agrocoopinnova-regiones-de-atacama-coquimbo-valparaiso-y-metropolitana",
     "sourceRefId": 2,
@@ -1828,7 +1828,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:49:00.871Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:49:00.871Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/programa-de-innovacion-cooperativas-en-el-marco-agrocoopinnova-regiones-de-la-araucania-y-los-rios",
     "sourceRefId": 2,
@@ -1866,7 +1866,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:48:57.239Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:48:57.239Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/proyecto-desafio-de-innovacion-para-jovenes-rurales-hortaliceros-comuna-de-la-union",
     "sourceRefId": 2,
@@ -1904,7 +1904,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:48:59.616Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:48:59.616Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/programa-de-innovacion-cooperativas-en-el-marco-de-agrocoopinnova-regiones-de-maule-nuble-y-biobio",
     "sourceRefId": 2,
@@ -1942,7 +1942,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:48:55.893Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:48:55.893Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/proyecto-desafio-de-innovacion-para-jovenes-rurales-hortaliceros-comuna-de-angol-y-renaico",
     "sourceRefId": 2,
@@ -1980,7 +1980,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:47:04.060Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:47:04.060Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/produccion-premio-nacional-mujer-agroinnovadora-2024",
     "sourceRefId": 2,
@@ -2018,7 +2018,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:47:02.113Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:47:02.113Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/licitacion-consultoria-auditoria-de-los-estados-financieros-2024",
     "sourceRefId": 2,
@@ -2056,7 +2056,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:48:53.707Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:48:53.707Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/premio-nacional-mujer-agroinnovadora-categoria-academica-investigadora-2024",
     "sourceRefId": 2,
@@ -2094,7 +2094,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:47:05.540Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:47:05.540Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/premio-nacional-mujer-agroinnovadora-categoria-agricultora-emprendedora-2024",
     "sourceRefId": 2,
@@ -2132,7 +2132,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:47:01.024Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:47:01.024Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/traslado-y-habilitacion-de-cableado-estructurado-y-fibra-optica-para-la-fundacion-para-la-innovacion-agraria",
     "sourceRefId": 2,
@@ -2170,7 +2170,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:59.869Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:59.869Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/licenciamiento-office-365-y-herramienta-de-proteccion-ante-amenazas-sobre-plataforma-office-365-2024",
     "sourceRefId": 2,
@@ -2208,7 +2208,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:55.763Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:55.763Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/licenciamiento-office-365-y-herramienta-de-proteccion-ante-amenazas-sobre-plataforma-office-365-2024-2da-apertura",
     "sourceRefId": 2,
@@ -2246,7 +2246,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:57.013Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:57.013Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/convocatoria-nacional-de-proyectos-de-innovacion-bienes-publicos-para-el-agro-con-enfasis-regional-2024-2025",
     "sourceRefId": 2,
@@ -2284,7 +2284,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:58.401Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:58.401Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/convocatoria-nacional-de-proyectos-de-innovacion-de-interes-privado-para-el-agro-con-enfasis-regional-2024-2025",
     "sourceRefId": 2,
@@ -2322,7 +2322,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:49.776Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:49.776Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/garantia-extendida-de-servidores-de-produccion-2024",
     "sourceRefId": 2,
@@ -2360,7 +2360,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:48.543Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:48.543Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/compra-de-servidor-storage-para-implementacion-del-proyecto-de-disaster-recovery-plan-drp",
     "sourceRefId": 2,
@@ -2398,7 +2398,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:42.798Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:42.798Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/renovacion-de-licenciamiento-de-firewallcheckpoint-quantum-spark-1800-appliance",
     "sourceRefId": 2,
@@ -2436,7 +2436,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:51.220Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:51.220Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/consultorias-de-innovacion-para-la-region-del-maule-2025",
     "sourceRefId": 2,
@@ -2474,7 +2474,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:52.539Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:52.539Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/eventos-de-innovacion-para-la-region-del-maule-2025",
     "sourceRefId": 2,
@@ -2512,7 +2512,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:53.654Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:53.654Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/giras-de-innovacion-para-la-region-del-maule-2025",
     "sourceRefId": 2,
@@ -2550,7 +2550,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:45.794Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:45.794Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/convocatoria-nacional-de-proyectos-de-innovacion-de-interes-privado-para-el-agro-con-enfasis-regional-2024-2025-etapa-2",
     "sourceRefId": 2,
@@ -2588,7 +2588,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:46.963Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:46.963Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/convocatoria-nacional-de-proyectos-de-innovacion-bienes-publicos-para-el-agro-con-enfasis-regional-2024-2025-etapa-2",
     "sourceRefId": 2,
@@ -2626,7 +2626,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:41.529Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:41.529Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/contratacion-convocatoria-y-ejecucion-talleres-formativos-para-juventud-rural-emprendedora-vinculada-al-sector-silvoagropecuario-y-agroalimentario-nacional",
     "sourceRefId": 2,
@@ -2664,7 +2664,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:39.176Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:39.176Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/desarrollo-e-implementacion-de-plataforma-de-conexion-web-potenciada-por-ia-con-impacto-360",
     "sourceRefId": 2,
@@ -2702,7 +2702,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:40.418Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:40.418Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/desafio-de-innovacion-en-herramientas-y-o-servicios-tecnologicos-para-cooperativas-del-agrocoopinnova-2025",
     "sourceRefId": 2,
@@ -2740,7 +2740,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:37.701Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:37.701Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/produccion-de-talleres-regionales-asociados-al-programa-de-juventud-rural-innovadora-rebrota-2025",
     "sourceRefId": 2,
@@ -2778,7 +2778,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:44.512Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:44.512Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/seleccion-de-cooperativas-participantes-del-programa-agrocoopinnova-2025",
     "sourceRefId": 2,
@@ -2816,7 +2816,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:48:39.386Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:48:39.386Z",
     "canonicalUrl": "https://iica.int/es/bids/esquinero-y-perfil-tubular-de-aluminio",
     "sourceRefId": 5,
@@ -2854,7 +2854,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:48:35.457Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:48:35.457Z",
     "canonicalUrl": "https://iica.int/es/bids/mexico-licitacion-no-iica-mos-2025-02-bateria-para-ups-adquisicion-de-250-piezas-bateria-tipo-power-ps-12350-nb-28-piezas-ps-12180-f2-106-piezas-ps-1290-f2-50-piezas-y-ps-12260-66-piezas",
     "sourceRefId": 5,
@@ -3158,7 +3158,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:36.332Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:36.332Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/giras-nacionales-para-la-innovacion-2025",
     "sourceRefId": 2,
@@ -3196,7 +3196,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:35.021Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:35.021Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/eventos-nacionales-para-la-innovacion-2025",
     "sourceRefId": 2,
@@ -3653,7 +3653,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:48:55.725Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:48:55.725Z",
     "canonicalUrl": "https://ley18450.cnr.gob.cl/ley18450/pages/calendarioconcurso?concurso=102-2025",
     "sourceRefId": 7,
@@ -3805,7 +3805,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:33.742Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:33.742Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/convocatoria-nacional-de-proyectos-de-innovacion-de-bienes-publicos-para-el-agro-con-enfasis-regional-2025-2026",
     "sourceRefId": 2,
@@ -3843,7 +3843,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:32.501Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:32.501Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/convocatoria-nacional-de-proyectos-de-innovacion-de-interes-privado-para-el-agro-con-enfasis-regional-2025-2026",
     "sourceRefId": 2,
@@ -3881,7 +3881,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:27.971Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:27.971Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/diseno-y-ejecucion-de-una-gira-nacional-de-innovacion-para-cooperativas-del-programa-agrocoopinnova-2025",
     "sourceRefId": 2,
@@ -4071,7 +4071,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:29.098Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:29.098Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/programa-de-innovacion-cooperativas-en-el-marco-de-agrocoopinnova-regiones-la-araucania-y-los-lagos",
     "sourceRefId": 2,
@@ -4109,7 +4109,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:31.298Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:31.298Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/programa-de-innovacion-cooperativas-en-el-marco-de-agrocoopinnova-regiones-ohiggins-maule-y-nuble",
     "sourceRefId": 2,
@@ -4147,7 +4147,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:30.242Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:30.242Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/programa-de-innovacion-cooperativas-en-el-marco-de-agrocoopinnova-regiones-biobio-y-araucania",
     "sourceRefId": 2,
@@ -4185,7 +4185,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:52.335Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:52.335Z",
     "canonicalUrl": "https://iica.int/es/bids/contratacao-de-pessoa-juridica-especializada-na-prestacao-de-servicos-de-comunicacao-visual-com-atuacao-em-eventos-corporativos-e-institucionais-para-apoiar-ao-evento-barra-agroshow-feira-de-agronego",
     "sourceRefId": 5,
@@ -4261,7 +4261,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:57.202Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:57.202Z",
     "canonicalUrl": "https://iica.int/es/bids/contratacao-de-consultoria-pessoa-juridica-qualificada-com-experiencia-em-ater-assistencia-tecnica-e-extensao-rural-agroecologia-permacultura-e-projetos-de-conservacao-e-biodiversidade-para-re",
     "sourceRefId": 5,
@@ -4299,7 +4299,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:49:19.282Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:49:19.282Z",
     "canonicalUrl": "https://iica.int/es/bids/honduras-licitacion-no-019-2025-compra-de-1000-kits-apicolas-destinado-a-fortalecer-el-programa-bono-ganadero-2025",
     "sourceRefId": 5,
@@ -4337,7 +4337,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:47:01.894Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:47:01.894Z",
     "canonicalUrl": "https://iica.int/es/bids/contratacao-de-empresa-especializada-na-prestacao-de-servicos-de-consultoria-na-modalidade-pessoa-juridica-com-o-objetivo-de-desenvolver-modelo-de-padronizacao-das-analises-dos-planos-de-trabalho-e",
     "sourceRefId": 5,
@@ -4375,7 +4375,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:49:12.877Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:49:12.877Z",
     "canonicalUrl": "https://iica.int/es/bids/honduras-licitacion-no-022-2025-compra-de-300-maquinas-de-ordeno-destinado-a-fortalecer-el-programa-bono-ganadero-2025",
     "sourceRefId": 5,
@@ -4413,7 +4413,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:49:08.272Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:49:08.272Z",
     "canonicalUrl": "https://iica.int/es/bids/honduras-licitacion-no-024-2025-compra-de-fertilizante-destinado-a-fortalecer-el-programa-bono-ganadero-2025",
     "sourceRefId": 5,
@@ -4451,7 +4451,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:49:02.846Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:49:02.846Z",
     "canonicalUrl": "https://iica.int/es/bids/honduras-licitacion-no-023-2025-compra-de-carpas-mesas-y-sillas-para-apoyar-al-fortalecimiento-de-programas-y-proyectos-de-la-secretaria-de-estado-en-los-despachos-de-agricultura-y-ganade",
     "sourceRefId": 5,
@@ -4489,7 +4489,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:47:11.196Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:47:11.196Z",
     "canonicalUrl": "https://iica.int/es/bids/contratacao-de-servicos-de-consultoria-pessoa-juridica-especializada-para-o-desenvolvimento-regional-e-ordenamento-territorial-incluindo-design-instrucional-adaptacao-de-conteudos-para-formatos-mult",
     "sourceRefId": 5,
@@ -4527,7 +4527,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:48:57.661Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:48:57.661Z",
     "canonicalUrl": "https://iica.int/es/bids/honduras-licitacion-no-025-2025-compra-de-kit-de-herramientas-y-kit-fitosanitarios-destinados-a-fortalecer-el-programa-bono-cafetalero-para-la-fertilizacion-en-apoyo-a-pequenos-y-medianos",
     "sourceRefId": 5,
@@ -4565,7 +4565,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:21.914Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:21.914Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/premio-nacional-mujer-agroinnovadora-categoria-agricultora-emprendedora",
     "sourceRefId": 2,
@@ -4603,7 +4603,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:23.158Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:23.158Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/premio-nacional-mujer-agroinnovadora-categoria-academica-investigadora-profesional",
     "sourceRefId": 2,
@@ -4641,7 +4641,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:24.293Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:24.293Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/giras-nacionales-de-innovacion-para-mujeres-agroinnovadoras-2025",
     "sourceRefId": 2,
@@ -4679,7 +4679,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:25.379Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:25.379Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/hacia-sistemas-alimentarios-sostenibles-eventos-de-innovacion-soluciones-para-el-agro-chileno-que-considere-el-rol-de-la-mujer-agroinnovadora-en-los-procesos-de-desarrollo-en-el-sector-agroalimentar",
     "sourceRefId": 2,
@@ -4717,7 +4717,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:26.774Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:26.774Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/consultorias-regionales-para-la-innovacion-2025",
     "sourceRefId": 2,
@@ -4755,7 +4755,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:48:53.746Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:48:53.746Z",
     "canonicalUrl": "https://iica.int/es/bids/honduras-licitacion-no-027-2025-compra-de-drones-agricolas-destinados-a-fortalecer-el-programa-bono-tecnologico-productivo-ano-2025-ciclo-de-postrera",
     "sourceRefId": 5,
@@ -4793,7 +4793,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:48:48.824Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:48:48.824Z",
     "canonicalUrl": "https://iica.int/es/bids/honduras-licitacion-no-026-2025-compra-de-300-geomembranas-estanques-destinado-a-fortalecer-el-programa-bono-ganadero-2025",
     "sourceRefId": 5,
@@ -4831,7 +4831,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:48.533Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:48.533Z",
     "canonicalUrl": "https://iica.int/es/bids/contratacao-de-instituicao-do-terceiro-setor-para-prestacao-de-servicos-especializados-voltados-ao-melhoramento-participativo-dos-recursos-geneticos-e-sistemas-de-sementes-para-producao-agroecologica",
     "sourceRefId": 5,
@@ -4869,7 +4869,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:48:44.142Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:48:44.142Z",
     "canonicalUrl": "https://iica.int/es/bids/honduras-licitacion-no-028-2025-compra-de-500-kits-de-inseminacion-para-bovinos-destinado-afortalecer-el-programa-bono-ganadero-2025",
     "sourceRefId": 5,
@@ -4907,7 +4907,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:48:26.910Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:48:26.910Z",
     "canonicalUrl": "https://iica.int/es/bids/honduras-licitacion-no-029-2025-compra-de-equipos-y-materiales-agricolas-destinados-a-fortalecer-el-programa-bono-tecnologico-productivo-ano-2025",
     "sourceRefId": 5,
@@ -4945,7 +4945,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:48:21.505Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:48:21.505Z",
     "canonicalUrl": "https://iica.int/es/bids/chile-licitacion-institucional-abierta-no-cl01-2025-adquisicion-de-equipos-portatiles-de-medicion-de-emisiones-de-gases-de-efecto-invernadero-en-arroz",
     "sourceRefId": 5,
@@ -4983,7 +4983,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:48:31.005Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:48:31.005Z",
     "canonicalUrl": "https://iica.int/es/bids/honduras-licitacion-no-030-2025-construccion-del-centro-de-operaciones-de-emergencia-nacional-coen-del-icf-para-el-cumplimiento-del-ava-flegt-ubicado-en-la-colonia-brisas-de-olancho-m-d-c-dep",
     "sourceRefId": 5,
@@ -5021,7 +5021,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:47:06.215Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:47:06.215Z",
     "canonicalUrl": "https://iica.int/es/bids/contratacao-de-empresa-especializada-na-modalidade-pessoa-juridica-para-realizar-o-mapeamento-avaliacao-e-capacitacao-de-cooperativas-localizadas-nos-estados-da-regiao-centro-oeste-visando-a-ampli",
     "sourceRefId": 5,
@@ -5060,7 +5060,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:48:54.551Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:48:54.551Z",
     "canonicalUrl": "https://ley18450.cnr.gob.cl/ley18450/pages/calendarioconcurso?concurso=302-2025",
     "sourceRefId": 7,
@@ -5098,7 +5098,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:35.985Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:35.985Z",
     "canonicalUrl": "https://iica.int/es/bids/barbados-request-for-proposals-rfp-development-of-a-regional-food-safety-culture-awareness-and-capacity-building-programme-ref-carc-bb-fssps-rfp-c3-03-26",
     "sourceRefId": 5,
@@ -5136,7 +5136,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:31.858Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:31.858Z",
     "canonicalUrl": "https://iica.int/es/bids/barbados-request-for-proposals-rfp-development-of-a-regional-fresh-produce-safety-and-quality-assurance-framework-and-capacity-building-in-selected-pilot-countries-ref-carc-bb-fssps-rfp-c3-02-2",
     "sourceRefId": 5,
@@ -5174,7 +5174,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:40.252Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:40.252Z",
     "canonicalUrl": "https://iica.int/es/bids/barbados-request-for-proposals-rfp-integrated-capacity-building-in-fish-hygiene-food-safety-and-traceability-for-primary-producers-and-processors-ref-carc-bb-fssps-rfp-c4-01-26",
     "sourceRefId": 5,
@@ -5212,7 +5212,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:44.554Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:44.554Z",
     "canonicalUrl": "https://iica.int/es/bids/barbados-request-for-proposals-rfp-enhancing-food-safety-standards-and-certification-readiness-in-agro-processing-smes-ref-carc-bb-fssps-rfp-c3-01-26",
     "sourceRefId": 5,
@@ -5251,7 +5251,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:56.941Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:56.941Z",
     "canonicalUrl": "https://ley18450.cnr.gob.cl/ley18450/pages/calendarioconcurso?concurso=201-2026",
     "sourceRefId": 7,
@@ -5289,7 +5289,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:22.151Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:22.151Z",
     "canonicalUrl": "https://iica.int/en/bids/barbados-request-for-proposals-rfp-integrated-capacity-building-in-fish-hygiene-food-safety-and-traceability-for-primary-producers-and-processors-ref-carc-bb-fssps-rfp-c4-01-26-2",
     "sourceRefId": 5,
@@ -5327,7 +5327,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:21.235Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:21.235Z",
     "canonicalUrl": "https://iica.int/en/bids/barbados-request-for-proposals-rfp-enhancing-food-safety-standards-and-certification-readiness-in-agro-processing-smes-ref-carc-bb-fssps-rfp-c3-01-26-2",
     "sourceRefId": 5,
@@ -5365,7 +5365,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:23.069Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:23.069Z",
     "canonicalUrl": "https://iica.int/en/bids/barbados-request-for-proposals-rfp-development-of-a-regional-food-safety-culture-awareness-and-capacity-building-programme-ref-carc-bb-fssps-rfp-c3-03-26-2",
     "sourceRefId": 5,
@@ -5404,7 +5404,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:21.168Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:21.168Z",
     "canonicalUrl": "https://ley18450.cnr.gob.cl/ley18450/pages/calendarioconcurso?concurso=01-2026",
     "sourceRefId": 7,
@@ -5443,7 +5443,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:22.316Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:22.316Z",
     "canonicalUrl": "https://ley18450.cnr.gob.cl/ley18450/pages/calendarioconcurso?concurso=02-2026",
     "sourceRefId": 7,
@@ -5482,7 +5482,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:47:04.060Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:47:04.060Z",
     "canonicalUrl": "https://ley18450.cnr.gob.cl/ley18450/pages/calendarioconcurso?concurso=51-2026",
     "sourceRefId": 7,
@@ -5521,7 +5521,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:24.033Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:24.033Z",
     "canonicalUrl": "https://ley18450.cnr.gob.cl/ley18450/pages/calendarioconcurso?concurso=03-2026",
     "sourceRefId": 7,
@@ -5560,7 +5560,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:25.216Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:25.216Z",
     "canonicalUrl": "https://ley18450.cnr.gob.cl/ley18450/pages/calendarioconcurso?concurso=04-2026",
     "sourceRefId": 7,
@@ -5598,7 +5598,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:20.371Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:20.371Z",
     "canonicalUrl": "https://iica.int/es/bids/sede-central-licitacion-institucional-01-2026-servicios-de-catering-para-el-comedor-de-la-sede-central-del-iica-y-la-representacion-del-iica-en-costa-rica",
     "sourceRefId": 5,
@@ -5637,7 +5637,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:26.402Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:26.402Z",
     "canonicalUrl": "https://ley18450.cnr.gob.cl/ley18450/pages/calendarioconcurso?concurso=05-2026",
     "sourceRefId": 7,
@@ -5675,7 +5675,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:27.782Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:27.782Z",
     "canonicalUrl": "https://iica.int/en/bids/barbados-request-for-proposals-rfp-development-of-a-regional-fresh-produce-safety-and-quality-assurance-framework-and-capacity-building-in-selected-pilot-countries-ref-carc-bb-fssps-rfp-c3-02-2-2",
     "sourceRefId": 5,
@@ -5751,7 +5751,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:20.764Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:20.764Z",
     "canonicalUrl": "https://www.fia.cl/convocatorias/seleccion-de-cooperativas-participantes-del-programa-agrocoopinnova-2026",
     "sourceRefId": 2,
@@ -5790,7 +5790,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:27.776Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:27.776Z",
     "canonicalUrl": "https://ley18450.cnr.gob.cl/ley18450/pages/calendarioconcurso?concurso=06-2026",
     "sourceRefId": 7,
@@ -5936,7 +5936,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:28.942Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:28.942Z",
     "canonicalUrl": "https://ley18450.cnr.gob.cl/ley18450/pages/calendarioconcurso?concurso=07-2026",
     "sourceRefId": 7,
@@ -5975,7 +5975,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:58.159Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:58.159Z",
     "canonicalUrl": "https://ley18450.cnr.gob.cl/ley18450/pages/calendarioconcurso?concurso=202-2026",
     "sourceRefId": 7,
@@ -6148,7 +6148,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:19.398Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:19.398Z",
     "canonicalUrl": "https://iica.int/es/bids/honduras-licitacion-no-01-2026-compra-de-fertilizante-e-insumos-para-el-programa-bono-tecnologico-productivo-2025-2026-siembra-de-primera-destinados-a-fortalecer-el-programa-bono-tecnologico-produc",
     "sourceRefId": 5,
@@ -6187,7 +6187,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:30.056Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:30.056Z",
     "canonicalUrl": "https://ley18450.cnr.gob.cl/ley18450/pages/calendarioconcurso?concurso=08-2026",
     "sourceRefId": 7,
@@ -6226,7 +6226,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:31.211Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:31.211Z",
     "canonicalUrl": "https://ley18450.cnr.gob.cl/ley18450/pages/calendarioconcurso?concurso=09-2026",
     "sourceRefId": 7,
@@ -6437,7 +6437,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:32.412Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:32.412Z",
     "canonicalUrl": "https://ley18450.cnr.gob.cl/ley18450/pages/calendarioconcurso?concurso=10-2026",
     "sourceRefId": 7,
@@ -6476,7 +6476,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:33.588Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:33.588Z",
     "canonicalUrl": "https://ley18450.cnr.gob.cl/ley18450/pages/calendarioconcurso?concurso=11-2026",
     "sourceRefId": 7,
@@ -6819,7 +6819,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:46:34.736Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:46:34.736Z",
     "canonicalUrl": "https://ley18450.cnr.gob.cl/ley18450/pages/calendarioconcurso?concurso=12-2026",
     "sourceRefId": 7,
@@ -7355,7 +7355,7 @@
     "institucion": "Comisión Nacional de Riego (CNR)",
     "monto": 1.95,
     "fecha_cierre": "2026-10-15",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Desarrollo Territorial",
     "url_bases": "https://www.cnr.gob.cl/agricultores/calendario-de-concurso/",
     "regiones": [],
@@ -7369,7 +7369,7 @@
     "tipos_solicitante": [],
     "checklist": [],
     "ambito": "Nacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Media",
     "region": "Arica y Parinacota Tarapacá Antofagasta Atacama Coquimbo Valparaíso Metropolitana O'Higgins Maule Ñuble Biobío Araucanía Los Ríos Los Lagos Aysén Magallanes",
     "objetivo": "Monto: 1.950 UF. Regiones: Arica y Parinacota Tarapacá Antofagasta Atacama Coquimbo Valparaíso Metropolitana O'Higgins Maule Ñuble Biobío Araucanía Los Ríos Los Lagos Aysén Magallanes. Ley 18.450 — subsidios para obras de riego.",
@@ -7657,7 +7657,7 @@
     "complejidad": "Media",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-13T02:47:02.743Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-13T02:47:02.743Z",
     "canonicalUrl": "https://www.cnr.gob.cl/agricultores/calendario-de-concurso/?concurso=206-2026",
     "sourceRefId": 7,
@@ -7702,7 +7702,7 @@
     "complejidad": "Fácil",
     "rolIICA": "Indirecto",
     "createdAt": "2026-05-11T20:43:38.708Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-05-11T20:43:38.708Z",
     "discoveredBy": "manual",
     "needsReview": false,
@@ -8618,7 +8618,7 @@
     "monto": 350000000,
     "montoTexto": "CLP $350.000.000",
     "fecha_cierre": "2026-10-10",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Sustentabilidad y Medio Ambiente",
     "url_bases": "https://www.gorearaucania.cl/fic-r-2026",
     "regiones": [
@@ -8643,7 +8643,7 @@
       "Enfoque de interculturalidad y bioeconomía"
     ],
     "ambito": "Regional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Alta",
     "porcentajeViabilidad": 92,
     "objetivo": "Recuperar suelos degradados mediante bioinsumos y prácticas regenerativas en comunidades agrícolas de La Araucanía.",
@@ -8796,7 +8796,7 @@
     "monto": 150000,
     "montoTexto": "Hasta USD 150.000 (Asistencia Técnica)",
     "fecha_cierre": "2026-10-07",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Riego y Recursos Hídricos",
     "url_bases": "https://www.ctc-n.org/adaptation-fund-climate-innovation-accelerator",
     "regiones": [
@@ -8826,7 +8826,7 @@
       "Plan de escalabilidad técnica"
     ],
     "ambito": "Internacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Alta",
     "porcentajeViabilidad": 92,
     "objetivo": "Asistencia técnica especializada (no efectivo directo) para pilotear e implementar soluciones innovadoras de adaptación climática.",
@@ -9022,7 +9022,7 @@
     "complejidad": "Alta",
     "rolIICA": "Ejecutor",
     "createdAt": "2026-08-12T12:00:00.000Z",
-    "updatedAt": "2026-10-07T14:14:41.716Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-08-12T12:00:00.000Z",
     "canonicalUrl": "https://www.betterpolitics.foundation/resilient-futures-call-2026",
     "sourceRefId": 37,
@@ -9085,7 +9085,7 @@
     "complejidad": "Alta",
     "rolIICA": "Implementador",
     "createdAt": "2026-08-12T12:00:00.000Z",
-    "updatedAt": "2026-10-07T14:14:41.716Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-08-12T12:00:00.000Z",
     "canonicalUrl": "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/topic-details/horizon-cl6-2026-biodiv",
     "sourceRefId": 38,
@@ -9410,7 +9410,7 @@
     "monto": 350000,
     "montoTexto": "USD 250.000 – 500.000",
     "fecha_cierre": "2026-10-15",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Riego y Recursos Hídricos",
     "url_bases": "https://www.adaptation-fund.org/afcia/",
     "regiones": [
@@ -9436,7 +9436,7 @@
       "Plan de escalamiento comercial/territorial"
     ],
     "ambito": "Internacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Alta",
     "porcentajeViabilidad": 94,
     "objetivo": "Escalar prototipos probados de eficiencia hídrica y desalinización agrícola a escala comunitaria.",
@@ -9471,7 +9471,7 @@
     "monto": 5500000,
     "montoTexto": "Variable (€ 3M – € 8M por consorcio)",
     "fecha_cierre": "2026-10-08",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Capacitación y Asistencia Técnica",
     "url_bases": "https://rea.ec.europa.eu/funding-and-grants/horizon-europe-cluster-6-food-bioeconomy-natural-resources-agriculture-and-environment/soil-health-and-food_en",
     "regiones": [
@@ -9498,7 +9498,7 @@
       "Matriz de impacto agroecológico"
     ],
     "ambito": "Internacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Alta",
     "porcentajeViabilidad": 92,
     "objetivo": "Crear laboratorios vivientes (Living Labs) para la restauración microbiológica y química de suelos agrícolas degradados por la sequía.",
@@ -9638,7 +9638,7 @@
     "complejidad": "Baja",
     "rolIICA": "Indirecto",
     "createdAt": "2026-08-12T12:00:00.000Z",
-    "updatedAt": "2026-09-02T18:58:50.342Z",
+    "updatedAt": "2026-10-22T15:06:39.984Z",
     "lastCheckedAt": "2026-08-12T12:00:00.000Z",
     "canonicalUrl": "https://www.rainforesttrust.org/rapid-action-fund",
     "sourceRefId": 41,
@@ -9656,7 +9656,7 @@
     "monto": 2500000,
     "montoTexto": "USD 100.000 – 2.500.000",
     "fecha_cierre": "2026-10-10",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Inteligencia Artificial y AgriTech",
     "url_bases": "https://www.ifc.org/en/what-we-do/sector-expertise/agribusiness",
     "regiones": [
@@ -9683,7 +9683,7 @@
       "Plan de escalamiento en América Latina"
     ],
     "ambito": "Internacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Alta",
     "porcentajeViabilidad": 95,
     "objetivo": "Subvención e inversión directa para escalamiento de plataformas de agricultura de precisión, analítica predictiva de cultivos e inteligencia artificial aplicada al campo.",
@@ -10230,7 +10230,7 @@
     "monto": 120000000,
     "montoTexto": "Hasta $120.000.000 CLP",
     "fecha_cierre": "2026-10-15",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Riego y Recursos Hídricos",
     "url_bases": "https://www.dga.mop.gob.cl/fiie/",
     "regiones": [
@@ -10257,7 +10257,7 @@
       "Convenio de colaboración público-privada"
     ],
     "ambito": "Nacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Alta",
     "porcentajeViabilidad": 94,
     "objetivo": "Financiamiento de I+D para proyectos de seguridad hídrica, modelos de recarga artificial de acuíferos y soluciones tecnológicas para cuencas prioritarias.",
@@ -10423,7 +10423,7 @@
     "monto": 200000,
     "montoTexto": "USD 100.000 – 200.000",
     "fecha_cierre": "2026-10-20",
-    "estado": "Abierto",
+    "estado": "Cerrado",
     "categoria": "Innovación y Bioeconomía",
     "url_bases": "https://www.innovationbridge.info/funding/power-of-diversity",
     "regiones": [
@@ -10451,7 +10451,7 @@
       "Estrategia de comercialización y valor agregado"
     ],
     "ambito": "Internacional",
-    "estadoPostulacion": "Abierta",
+    "estadoPostulacion": "Cerrada",
     "viabilidadIICA": "Alta",
     "porcentajeViabilidad": 93,
     "objetivo": "Subvenciones no reembolsables para impulsar la biodiversidad cultivada, diversificación productiva y acceso a mercados para pequeños productores agrícolas.",
@@ -10589,7 +10589,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-10-07T14:14:41.716Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1002,
@@ -10638,7 +10638,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1003,
@@ -10646,9 +10646,9 @@
     "institucion": "FIA",
     "monto": 0,
     "montoTexto": "Ver bases",
-    "fecha_cierre": "2026-10-08",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
+    "fecha_cierre": "2026-10-14",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
     "categoria": "Fondos Concursables",
     "url_bases": "https://www.fia.cl/convocatorias/convocatoria-nacional-de-proyectos-de-innovacion-desafios-publicos-para-el-agro/",
     "regiones": [
@@ -10687,7 +10687,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1004,
@@ -10736,7 +10736,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1005,
@@ -10785,7 +10785,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1006,
@@ -10834,7 +10834,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1007,
@@ -10883,7 +10883,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1008,
@@ -10932,7 +10932,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1009,
@@ -10981,7 +10981,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1010,
@@ -11079,7 +11079,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1012,
@@ -11128,7 +11128,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1013,
@@ -11177,7 +11177,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1014,
@@ -11226,7 +11226,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1015,
@@ -11275,7 +11275,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1016,
@@ -11324,7 +11324,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1017,
@@ -11373,7 +11373,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1018,
@@ -11422,7 +11422,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1019,
@@ -11471,7 +11471,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1020,
@@ -11520,7 +11520,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1021,
@@ -11569,7 +11569,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1022,
@@ -11618,7 +11618,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1023,
@@ -11667,7 +11667,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1024,
@@ -11716,7 +11716,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1025,
@@ -11765,7 +11765,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1026,
@@ -11814,7 +11814,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1027,
@@ -11863,7 +11863,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1028,
@@ -11912,7 +11912,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1029,
@@ -11961,7 +11961,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1030,
@@ -12010,7 +12010,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1031,
@@ -12059,7 +12059,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1032,
@@ -12108,7 +12108,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1033,
@@ -12157,7 +12157,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1034,
@@ -12255,7 +12255,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Arica y Parinacota Tarapacá Antofagasta Atacama Coquimbo Valparaíso Metropolitana O’Higgins Maule Ñuble Biobío Araucanía Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1036,
@@ -12304,7 +12304,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Atacama Coquimbo Valparaíso Metropolitana O’Higgins Maule Ñuble Biobío Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1037,
@@ -12353,7 +12353,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Arica y Parinacota Antofagasta Atacama Coquimbo Valparaíso Metropolitana O’Higgins Maule Ñuble Biobío Araucanía",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1038,
@@ -12402,7 +12402,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Arica y Parinacota Tarapacá Antofagasta Atacama Coquimbo Valparaíso Metropolitana ‘Higgins Maule Ñuble Biobío Araucanía Los Ríos Los Lagos Aysén Magallanes",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1039,
@@ -12451,7 +12451,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-10-07T14:14:41.716Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1040,
@@ -12500,7 +12500,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "O’Higgins Maule",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1041,
@@ -12549,7 +12549,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "O’Higgins Maule Ñuble Biobío Araucanía Los Ríos Los Lagos Aysén Magallanes",
-    "updatedAt": "2026-10-07T14:14:41.716Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1042,
@@ -12558,8 +12558,8 @@
     "monto": 0,
     "montoTexto": "650 UF",
     "fecha_cierre": "2026-10-15",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
     "categoria": "Fondos Concursables",
     "url_bases": "https://ley18450.cnr.gob.cl/ley18450/pages/CalendarioConcurso?concurso=21-2026",
     "regiones": [
@@ -12598,7 +12598,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1043,
@@ -12647,7 +12647,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1044,
@@ -12696,7 +12696,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Atacama Coquimbo Valparaiso",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1045,
@@ -12745,7 +12745,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Atacama Coquimbo Valparaíso Metropolitana O’Higgins Maule Ñuble Biobío",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1046,
@@ -12754,8 +12754,8 @@
     "monto": 0,
     "montoTexto": "$6.000.000",
     "fecha_cierre": "2026-10-14",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
     "categoria": "Fondos Concursables",
     "url_bases": "https://fondos.gob.cl/ficha/mma/fpa_psc_2026/",
     "regiones": [
@@ -12803,8 +12803,8 @@
     "monto": 0,
     "montoTexto": "$6.000.000",
     "fecha_cierre": "2026-10-14",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
     "categoria": "Fondos Concursables",
     "url_bases": "https://fondos.gob.cl/ficha/mma/fpa_pspi_2026/",
     "regiones": [
@@ -12852,8 +12852,8 @@
     "monto": 0,
     "montoTexto": "$6.000.000",
     "fecha_cierre": "2026-10-14",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
     "categoria": "Fondos Concursables",
     "url_bases": "https://fondos.gob.cl/ficha/mma/fpa_psee_2026/",
     "regiones": [
@@ -12941,7 +12941,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-10-07T14:14:41.716Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1050,
@@ -12990,7 +12990,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-10-07T14:14:41.716Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1051,
@@ -13039,7 +13039,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-10-07T14:14:41.716Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1052,
@@ -13088,7 +13088,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-10-07T14:14:41.716Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1053,
@@ -13137,7 +13137,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-10-07T14:14:41.716Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1054,
@@ -13186,7 +13186,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1055,
@@ -13235,7 +13235,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1056,
@@ -13284,7 +13284,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1057,
@@ -13333,7 +13333,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1058,
@@ -13382,7 +13382,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-10-07T14:14:41.716Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1059,
@@ -13431,7 +13431,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1060,
@@ -13480,7 +13480,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1061,
@@ -13529,7 +13529,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1062,
@@ -13578,7 +13578,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1063,
@@ -13627,7 +13627,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1064,
@@ -13676,7 +13676,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1065,
@@ -13734,8 +13734,8 @@
     "monto": 0,
     "montoTexto": "Ver bases",
     "fecha_cierre": "2026-10-13",
-    "estado": "Abierto",
-    "estadoPostulacion": "Abierta",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
     "categoria": "Fondos Concursables",
     "url_bases": "https://projects.worldbank.org/en/projects-operations/procurement-detail/OP00461433",
     "regiones": [
@@ -14068,7 +14068,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Ecuador",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1077,
@@ -14117,7 +14117,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Grenada",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1078,
@@ -14166,7 +14166,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Suriname",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1079,
@@ -14215,7 +14215,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Ecuador",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1080,
@@ -14264,7 +14264,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Ecuador",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1081,
@@ -14313,7 +14313,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Bolivia, Haiti, Dominica, Guatemala, St. Lucia",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1082,
@@ -14362,7 +14362,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Dominica",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1083,
@@ -14411,7 +14411,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Antigua and Barbuda",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1084,
@@ -14460,7 +14460,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "St. Lucia",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1085,
@@ -14509,7 +14509,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Antigua and Barbuda, Mexico",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1086,
@@ -14558,7 +14558,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Honduras",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1087,
@@ -14607,7 +14607,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Argentina",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1088,
@@ -14656,7 +14656,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Dominican Republic",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1089,
@@ -14705,7 +14705,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Bahamas",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1090,
@@ -14754,7 +14754,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Peru",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1091,
@@ -14803,7 +14803,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Trinidad and Tobago",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1092,
@@ -14852,7 +14852,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Chile, Costa Rica",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1093,
@@ -14901,7 +14901,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Peru, Suriname, Bolivia, Brazil, Colombia, Ecuador",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1094,
@@ -14950,7 +14950,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Paraguay, St. Kitts And Nevis",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1095,
@@ -14999,7 +14999,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1096,
@@ -15048,7 +15048,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1097,
@@ -15097,7 +15097,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1098,
@@ -15146,7 +15146,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1099,
@@ -15195,7 +15195,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1100,
@@ -15244,7 +15244,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1101,
@@ -15293,7 +15293,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1102,
@@ -15342,7 +15342,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1103,
@@ -15391,7 +15391,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1104,
@@ -15440,7 +15440,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1105,
@@ -15489,7 +15489,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1106,
@@ -15538,7 +15538,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1107,
@@ -15587,7 +15587,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1108,
@@ -15636,7 +15636,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1109,
@@ -15685,7 +15685,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1110,
@@ -15734,7 +15734,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1111,
@@ -15783,7 +15783,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1112,
@@ -15832,7 +15832,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1113,
@@ -15881,7 +15881,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1114,
@@ -15930,7 +15930,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1115,
@@ -15979,7 +15979,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1116,
@@ -16028,7 +16028,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1117,
@@ -16077,7 +16077,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1118,
@@ -16126,7 +16126,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1119,
@@ -16175,7 +16175,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1120,
@@ -16224,7 +16224,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1121,
@@ -16273,7 +16273,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1122,
@@ -16322,7 +16322,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1123,
@@ -16371,7 +16371,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1124,
@@ -16420,7 +16420,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1125,
@@ -16469,7 +16469,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1126,
@@ -16518,7 +16518,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1127,
@@ -16567,7 +16567,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1128,
@@ -16616,7 +16616,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1129,
@@ -16665,7 +16665,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1130,
@@ -16714,7 +16714,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1131,
@@ -16763,7 +16763,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1132,
@@ -16812,7 +16812,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1133,
@@ -16861,7 +16861,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1134,
@@ -16910,7 +16910,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1135,
@@ -16959,7 +16959,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1136,
@@ -17008,7 +17008,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1137,
@@ -17057,7 +17057,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1138,
@@ -17106,7 +17106,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1139,
@@ -17155,7 +17155,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1140,
@@ -17204,7 +17204,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1141,
@@ -17253,7 +17253,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1142,
@@ -17302,7 +17302,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1143,
@@ -17351,7 +17351,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1144,
@@ -17400,7 +17400,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1145,
@@ -17449,7 +17449,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1146,
@@ -17498,7 +17498,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1147,
@@ -17547,7 +17547,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1148,
@@ -17596,7 +17596,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1149,
@@ -17645,7 +17645,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1150,
@@ -17694,7 +17694,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1151,
@@ -17743,7 +17743,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1152,
@@ -18478,7 +18478,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1167,
@@ -18527,7 +18527,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1168,
@@ -18576,7 +18576,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1169,
@@ -18625,7 +18625,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1170,
@@ -18674,7 +18674,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1171,
@@ -18723,7 +18723,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1172,
@@ -18772,7 +18772,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1173,
@@ -18821,7 +18821,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1174,
@@ -18870,7 +18870,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1175,
@@ -18919,7 +18919,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1176,
@@ -18968,7 +18968,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1177,
@@ -19017,7 +19017,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1178,
@@ -19213,7 +19213,7 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   },
   {
     "id": 1182,
@@ -19262,6 +19262,2113 @@
     "publishable": true,
     "relevanciaChile": true,
     "region": "Nacional",
-    "updatedAt": "2026-09-02T18:58:50.342Z"
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1200,
+    "nombre": "[FIA Licitación] FORTALECIMIENTO DE PRODUCCIÓN VITIVINICOLA",
+    "institucion": "FIA",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2026-10-29",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Licitaciones / Procurement",
+    "url_bases": "https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?qs=1147293-25-LE26",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Nacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Descripcion: Fortalecer la produccin vitivincola de pequeos productores de la comuna de Teodoro Schmidt mediante la incorporacin de prcticas productivas y enolgicas adaptadas a las condiciones de la Araucana Costera, contribuyendo a mejorar la calidad, diferenciacin y comercializacin de sus vinos.",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1201,
+    "nombre": "Programa Agropecuario para el Desarrollo Integral de los Pequeños Productores Campesinos del Secano de la Región de Coquimbo (PADIS)",
+    "institucion": "INDAP",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2099-12-31",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www.indap.gob.cl/plataforma-de-servicios/programa-agropecuario-para-el-desarrollo-integral-de-los-pequenos",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Nacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Aumentar la producción silvoagropecuaria y su valor socioproductivo, desarrollada por los agricultores y agricultoras beneficiarios del programa, incluyendo las actividades conexas vinculadas a la producción, mediante el fortalecimiento productivo y tecnológico sostenible. Junto con articularla oferta programática público-privada que contribuya a mejorar las condiciones de vida de los usuarios en los territorios donde opera el programa.",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1202,
+    "nombre": "Ver información",
+    "institucion": "FONTAGRO",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2099-12-31",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www.fontagro.org/es/iniciativas/convocatorias/convocatoria-2027",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Convocatoria oficial publicada por FONTAGRO.",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1203,
+    "nombre": "Concurso CNR 204-2026: Segundo concurso de pequeña agricultura para proyectos no seleccionados",
+    "institucion": "Comisión Nacional de Riego (CNR)",
+    "monto": 0,
+    "montoTexto": "1.550 UF",
+    "fecha_cierre": "2026-10-15",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://ley18450.cnr.gob.cl/ley18450/pages/CalendarioConcurso?concurso=204-2026",
+    "regiones": [
+      "Arica y Parinacota Tarapacá Antofagasta Atacama Coquimbo Valparaíso Metropolitana O’Higgins Maule Ñuble Biobío Araucanía Los Ríos Los Lagos Aysén Magallanes"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Nacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Monto: 1.550 UF. Regiones: Arica y Parinacota Tarapacá Antofagasta Atacama Coquimbo Valparaíso Metropolitana O’Higgins Maule Ñuble Biobío Araucanía Los Ríos Los Lagos Aysén Magallanes. Ley 18.450 — subsidios para obras de riego.",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Arica y Parinacota Tarapacá Antofagasta Atacama Coquimbo Valparaíso Metropolitana O’Higgins Maule Ñuble Biobío Araucanía Los Ríos Los Lagos Aysén Magallanes",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1204,
+    "nombre": "Concurso CNR 205-2026: Concurso para la pequeña agricultura del centro norte y centro sur y proyectos asociativos",
+    "institucion": "Comisión Nacional de Riego (CNR)",
+    "monto": 0,
+    "montoTexto": "1.050 UF",
+    "fecha_cierre": "2026-10-27",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://ley18450.cnr.gob.cl/ley18450/pages/CalendarioConcurso?concurso=205-2026",
+    "regiones": [
+      "Valparaíso Metropolitana O’Higgins Maule Ñuble Biobío"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Nacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Monto: 1.050 UF. Regiones: Valparaíso Metropolitana O’Higgins Maule Ñuble Biobío. Ley 18.450 — subsidios para obras de riego.",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Valparaíso Metropolitana O’Higgins Maule Ñuble Biobío",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1205,
+    "nombre": "Contratação de empresa especializada para a prestação de serviços de reserva, emissão, marcação, remarcação, endosso e fornecimento de passagens aéreas nacionais e internacionais, em voos regulares e não regulares destinadas aos consultores e colaboradores quando em viagens a serviço ou no interesse do Projeto Poli-LAC – GIZ/IICA “Ação regional para maior proteção de insetos polinizadores e serviços de polinização na América Latina e Caribe”.",
+    "institucion": "IICA Sede Central",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2025-03-13",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://iica.int/pt/bids/66866/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Convocatoria oficial publicada por IICA Sede Central.",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1206,
+    "nombre": "CONTRATAÇÃO DE CONSULTORIA PESSOA JURÍDICA PARA ELABORAÇÃO DE PROPOSTA DE SISTEMA DE GESTÃO INSTITUCIONAL E ESTUDOS DE PRÉ-VIABILIDADE DO MODELO DE OPERAÇÃO DO CANAL, ATRAVÉS DA CASAL, PARA APOIAR O GOVERNO DO ESTADO DE ALAGOAS NA GESTÃO DO CANAL DO SERTÃO ALAGOANO.",
+    "institucion": "IICA Sede Central",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2025-04-04",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://iica.int/pt/bids/contratacao-de-consultoria-pessoa-juridica-para-elaboracao-de-proposta-de-sistema-de-gestao-institucional-e-estudos-de-pre-viabilidade-do-modelo-de-operacao-do-canal-atraves-da-casal-para-apoiar-o-g/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Convocatoria oficial publicada por IICA Sede Central.",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1207,
+    "nombre": "CONTRATAÇÃO DE PESSOA JURÍDICA PARA A PRESTAÇÃO DE SERVIÇOS DE DESENVOLVIMENTO METODOLÓGICO, FACILITAÇÃO E RELATORIA, BEM COMO O FORNECIMENTO DE 8 (OITO) COFFEE BREAKS, COM O INTUITO CONDUZIR AS SEGUINTES OFICINAS: I) OFICINA DE DESENHO DA PNOT; II) OFICINA PARA DEFINIÇÃO DE ESTRATÉGIA DE IMPLEMENTAÇÃO; E III) OFICINA PARA DEBATER ESTRATÉGIA DE MONITORAMENTO, PARTICIPAÇÃO E CONTROLE SOCIAL.",
+    "institucion": "IICA Sede Central",
+    "monto": 0,
+    "montoTexto": "R$ 109.000,00",
+    "fecha_cierre": "2025-01-21",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://iica.int/pt/bids/contratacao-de-pessoa-juridica-para-a-prestacao-de-servicos-de-desenvolvimento-metodologico-facilitacao-e-relatoria-bem-como-o-fornecimento-de-8-oito-coffee-breaks-com-o-intuito-conduzir-as-segui/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Convocatoria oficial publicada por IICA Sede Central.",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1208,
+    "nombre": "Honduras. Licitación No. 022/2026. COMPRA E INSTALACIÓN DE SEIS SECADORAS SOLARES PARA CAFÉ, DESTINADA A FORTALECER EL PROGRAMA BONO CAFETALERO EN APOYO A PEQUEÑOS Y MEDIANOS PRODUCTORES AÑO 2026.",
+    "institucion": "IICA Sede Central",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2026-10-26",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://iica.int/es/bids/honduras-licitacion-no-022-2026-compra-e-instalacion-de-seis-secadoras-solares-para-cafe-destinada-a-fortalecer-el-programa-bono-cafetalero-en-apoyo-a-pequenos-y-medianos-productores-ano-2026/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Convocatoria oficial publicada por IICA Sede Central.",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1209,
+    "nombre": "Honduras. Licitación No. 020/2026. COMPRA DE CUARTOS FRÍOS DE ALMACENAMIENTO Y CONSERVACIÓN, Y DESCREMADORAS CENTRÍFUGAS DE LECHE DESTINADA A FORTALECER EL PROGRAMA BONO GANADERO, AÑO 2025.",
+    "institucion": "IICA Sede Central",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2026-10-13",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://iica.int/es/bids/honduras-licitacion-no-020-2026-compra-de-cuartos-frios-de-almacenamiento-y-conservacion-y-descremadoras-centrifugas-de-leche-destinada-a-fortalecer-el-programa-bono-ganadero-ano-2025/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Convocatoria oficial publicada por IICA Sede Central.",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1210,
+    "nombre": "Integrated Risk Management in the Rural Agroindustrial System",
+    "institucion": "World Bank",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2099-12-31",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://projects.worldbank.org/en/projects-operations/procurement-detail/OP00476398",
+    "regiones": [
+      "Argentina"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Obra de infraestructura en el marco del subproyecto \"Fortalecimiento de la capacidad de gestión del riesgo en la ganadería rionegrina\" de la provincia de Rio Negro",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Argentina",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1211,
+    "nombre": "Integrated Risk Management in the Rural Agroindustrial System",
+    "institucion": "World Bank",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2099-12-31",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://projects.worldbank.org/en/projects-operations/procurement-detail/OP00476401",
+    "regiones": [
+      "Argentina"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Obra de infraestructura en el marco del subproyecto \"Fortalecimiento de la capacidad de gestión del riesgo en la ganadería rionegrina\" de la provincia de Rio Negro",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Argentina",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1212,
+    "nombre": "Irrigation for Climate Resilient Agriculture",
+    "institucion": "World Bank",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2099-12-31",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://projects.worldbank.org/en/projects-operations/procurement-detail/OP00476435",
+    "regiones": [
+      "Peru"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "ELABORACIÓN DE 03 EXPEDIENTES TÉCNICOS PROY MEJOR EL SERVICIO DE AGUA A NIVEL PARCELARIO CON UN SISTEMA DE RIEGO TEC DE LOS GGE: COMUNIDAD CAMPESINA DE LLOCLLOPAMPA - VALLE PROGRESO VISTA ALEGRE, MAIZALES DE HUARACAYO",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Peru",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1213,
+    "nombre": "Ceara Rural Sustainable Development and Competitiveness Phase II",
+    "institucion": "World Bank",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2099-12-31",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://projects.worldbank.org/en/projects-operations/procurement-detail/OP00476376",
+    "regiones": [
+      "Brazil"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Aquisição, montagem e instalação de 01 (um) elevador de passageiros, para a nova sede do Projeto São José III – 2ª Fase, com garantia de 12 (doze) meses, em conformidade com as especificações no edital",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Brazil",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1214,
+    "nombre": "Forest Conservation and Sustainability in the Heart of the Colombian Amazon",
+    "institucion": "World Bank",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2099-12-31",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://projects.worldbank.org/en/projects-operations/procurement-detail/OP00476219",
+    "regiones": [
+      "Colombia"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Adquisición de elementos de ferretería, herramientas y maquinaria para la implementación de acuerdos de conservación para la restauración activa con las familias campesinas de los Parques Nacionales Naturales Sierra de la Macarena, Tinigua y Cordillera",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Colombia",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1215,
+    "nombre": "Forest Conservation and Sustainability in the Heart of the Colombian Amazon",
+    "institucion": "World Bank",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2099-12-31",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://projects.worldbank.org/en/projects-operations/procurement-detail/OP00476216",
+    "regiones": [
+      "Colombia"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Adquisición de elementos de ferretería, herramientas y maquinaria para la implementación de acuerdos de conservación para la restauración activa con las familias campesinas de los Parques Nacionales Naturales Sierra de la Macarena, Tinigua y Cordillera",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Colombia",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1216,
+    "nombre": "Forest Conservation and Sustainability in the Heart of the Colombian Amazon",
+    "institucion": "World Bank",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2099-12-31",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://projects.worldbank.org/en/projects-operations/procurement-detail/OP00476222",
+    "regiones": [
+      "Colombia"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Adquisición de elementos de ferretería, herramientas y maquinaria para la implementación de acuerdos de conservación para la restauración activa con las familias campesinas de los Parques Nacionales Naturales Sierra de la Macarena, Tinigua y Cordillera",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Colombia",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1217,
+    "nombre": "Forest Conservation and Sustainability in the Heart of the Colombian Amazon",
+    "institucion": "World Bank",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2099-12-31",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://projects.worldbank.org/en/projects-operations/procurement-detail/OP00476220",
+    "regiones": [
+      "Colombia"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Adquisición de elementos de ferretería, herramientas y maquinaria para la implementación de acuerdos de conservación para la restauración activa con las familias campesinas de los Parques Nacionales Naturales Sierra de la Macarena, Tinigua y Cordillera",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Colombia",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1218,
+    "nombre": "Exposiciones",
+    "institucion": "AECID (España)",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2099-12-31",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Licitaciones / Procurement",
+    "url_bases": "https://www.aecid.es/en/exposiciones-cultura",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Convocatoria oficial publicada por AECID (España).",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1219,
+    "nombre": "Research Grant Program for Female Postgraduate Researchers",
+    "institucion": "FundsforNGOs (Aggregator)",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2026-10-31",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www2.fundsforngos.org/innovation/research-grant-program-for-female-postgraduate-researchers/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "<a href=\"https://www2.fundsforngos.org/innovation/research-grant-program-for-female-postgraduate-researchers/\" title=\"Research Grant Program for Female Postgraduate Researchers\" rel=\"nofollow\"><img width=\"300\" height=\"220\" src=\"https://www2.fundsforngos.org/wp-content/uploads/2025/06/Female-Entrepreneur-300x220.jpg\" class=\"webfeedsFeaturedVisual wp-post-image\" alt=\"\" style=\"float: left; margin-rig",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-21T15:14:57.935Z"
+  },
+  {
+    "id": 1220,
+    "nombre": "Applications open for Research Fellowship Program in Kuwait",
+    "institucion": "FundsforNGOs (Aggregator)",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2026-10-01",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www2.fundsforngos.org/individuals/applications-open-for-research-fellowship-program-in-kuwait/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "<a href=\"https://www2.fundsforngos.org/individuals/applications-open-for-research-fellowship-program-in-kuwait/\" title=\"Applications open for Research Fellowship Program in Kuwait\" rel=\"nofollow\"><img width=\"300\" height=\"200\" src=\"https://www2.fundsforngos.org/wp-content/uploads/2026/06/RESEARCH-2-300x200.jpg\" class=\"webfeedsFeaturedVisual wp-post-image\" alt=\"Man in a dress shirt sits at a desk, a",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-21T15:14:57.935Z"
+  },
+  {
+    "id": 1221,
+    "nombre": "Low Value Grant for PPPs and PPCPs in Sorong (Indonesia)",
+    "institucion": "FundsforNGOs (Aggregator)",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2026-11-05",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www2.fundsforngos.org/environment-2/low-value-grant-for-ppps-and-ppcps-in-sorong-indonesia/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "<a href=\"https://www2.fundsforngos.org/environment-2/low-value-grant-for-ppps-and-ppcps-in-sorong-indonesia/\" title=\"Low Value Grant for PPPs and PPCPs in Sorong (Indonesia)\" rel=\"nofollow\"><img width=\"300\" height=\"200\" src=\"https://www2.fundsforngos.org/wp-content/uploads/2024/08/land--300x200.jpg\" class=\"webfeedsFeaturedVisual wp-post-image\" alt=\"Landscape Scale Restoration Grant Program in Nort",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-21T15:14:57.935Z"
+  },
+  {
+    "id": 1222,
+    "nombre": "Call for Proposals: GEF Small Grants Programme (Papua New Guinea)",
+    "institucion": "FundsforNGOs (Aggregator)",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2026-11-15",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www2.fundsforngos.org/innovation/call-for-proposals-gef-small-grants-programme-papua-new-guinea/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "<a href=\"https://www2.fundsforngos.org/innovation/call-for-proposals-gef-small-grants-programme-papua-new-guinea/\" title=\"Call for Proposals: GEF Small Grants Programme (Papua New Guinea)\" rel=\"nofollow\"><img width=\"300\" height=\"193\" src=\"https://www2.fundsforngos.org/wp-content/uploads/2018/10/tribal_indigenous_791920243-300x193.jpg\" class=\"webfeedsFeaturedVisual wp-post-image\" alt=\"Indigenous Co",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-21T15:14:57.935Z"
+  },
+  {
+    "id": 1223,
+    "nombre": "Direct Aid Program Small Grants for Community Development in Pakistan",
+    "institucion": "FundsforNGOs (Aggregator)",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2026-10-08",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www2.fundsforngos.org/individuals/direct-aid-program-2026-27-funding-opportunity-for-community-development/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "<a href=\"https://www2.fundsforngos.org/individuals/direct-aid-program-2026-27-funding-opportunity-for-community-development/\" title=\"Direct Aid Program Small Grants for Community Development in Pakistan\" rel=\"nofollow\"><img width=\"300\" height=\"200\" src=\"https://www2.fundsforngos.org/wp-content/uploads/2024/12/community-1-1-300x200.jpg\" class=\"webfeedsFeaturedVisual wp-post-image\" alt=\"Call for App",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-21T15:14:57.935Z"
+  },
+  {
+    "id": 1224,
+    "nombre": "Apply Now: Conservation, Food and Health Foundation Fund",
+    "institucion": "FundsforNGOs (Aggregator)",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2026-01-01",
+    "estado": "Cerrado",
+    "estadoPostulacion": "Cerrada",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www2.fundsforngos.org/environment-2/apply-now-conservation-food-and-health-foundation-fund/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "<a href=\"https://www2.fundsforngos.org/environment-2/apply-now-conservation-food-and-health-foundation-fund/\" title=\"Apply Now: Conservation, Food and Health Foundation Fund\" rel=\"nofollow\"><img width=\"300\" height=\"200\" src=\"https://www2.fundsforngos.org/wp-content/uploads/2025/05/food-2-1-300x200.jpg\" class=\"webfeedsFeaturedVisual wp-post-image\" alt=\"Call for EOIs: Ecosystem Restoration in Turkan",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-21T15:14:57.935Z"
+  },
+  {
+    "id": 1225,
+    "nombre": "Power and Water Community Partnership Program Grants (Australia)",
+    "institucion": "FundsforNGOs (Aggregator)",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2026-11-02",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www2.fundsforngos.org/community-development-2/power-and-water-2027-community-partnership-program-funding-for-initiatives/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "<a href=\"https://www2.fundsforngos.org/community-development-2/power-and-water-2027-community-partnership-program-funding-for-initiatives/\" title=\"Power and Water Community Partnership Program Grants (Australia)\" rel=\"nofollow\"><img width=\"300\" height=\"200\" src=\"https://www2.fundsforngos.org/wp-content/uploads/2026/05/community-300x200.jpg\" class=\"webfeedsFeaturedVisual wp-post-image\" alt=\"Group o",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-21T15:14:57.935Z"
+  },
+  {
+    "id": 1226,
+    "nombre": "CFPs: FBIS Africa Freshwater Biodiversity Data Mobilisation Small Grants",
+    "institucion": "FundsforNGOs (Aggregator)",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2026-11-09",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www2.fundsforngos.org/cat/fbis-africa-freshwater-biodiversity-data-mobilisation-small-grants/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "<a href=\"https://www2.fundsforngos.org/cat/fbis-africa-freshwater-biodiversity-data-mobilisation-small-grants/\" title=\"CFPs: FBIS Africa Freshwater Biodiversity Data Mobilisation Small Grants\" rel=\"nofollow\"><img width=\"300\" height=\"200\" src=\"https://www2.fundsforngos.org/wp-content/uploads/2025/01/water-5-300x200.jpg\" class=\"webfeedsFeaturedVisual wp-post-image\" alt=\"UAE Research Program for Rain",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-21T15:14:57.935Z"
+  },
+  {
+    "id": 1227,
+    "nombre": "[MINAGRI Licitación] SERVICIO DE ASEO Y MANENCIN OF. SEREMI MAGALLANES",
+    "institucion": "MINAGRI",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2026-10-26",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Licitaciones / Procurement",
+    "url_bases": "https://www.mercadopublico.cl/Procurement/Modules/RFB/DetailsAcquisition.aspx?qs=4552-2-LE26",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "es",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Nacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Descripcion: Contar con un servicio de aseo integral que permita mantener en perfecto estado de presentacin las dependencias de la Secretara Regional Ministerial de Agricultura Regin de Magallanes y de la Antrtica Chilena, en adecuadas condiciones de higiene, limpieza y orden de los recintos, por un periodo de 24 meses.",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1228,
+    "nombre": "Global Health EDCTP3, the MAGNETS initiative is offering 10 Fully Funded, 2 Master’s Fellowships Across Four African Research Institutions.",
+    "institucion": "Global South Opportunities",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2099-12-31",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www.globalsouthopportunities.com/2026/10/21/magnets/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Early- and mid-career researchers in sub-Saharan Africa have an opportunity to pursue fully funded Master’s studies in malaria research through the Malaria Genomic Epidemiology and Biostatistics Network for Enhancing Talent in Sub-Saharan Africa (MAGNETS) fellowship programme. Funded by the European Union through Global Health EDCTP3, the MAGNETS initiative is offering 10 fully funded, two-year Ma",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-21T15:14:57.935Z"
+  },
+  {
+    "id": 1229,
+    "nombre": "How to Apply for the 2027 African Peacebuilding and Development Fellowships: Research and PhD Funding Opportunities",
+    "institucion": "Global South Opportunities",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2099-12-31",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www.globalsouthopportunities.com/2026/10/21/peacebuilding-2/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Applications are now open for the 2027 African Peacebuilding and Developmental Dynamics (APDD) Fellowships, offering research and doctoral support opportunities for African scholars and practitioners working on peacebuilding, development and state-society relations. The programme, hosted by the Social Science Research Council (SSRC), supports early- to mid-career researchers, practitioners and doc",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-21T15:14:57.935Z"
+  },
+  {
+    "id": 1230,
+    "nombre": "British Academy Innovation Fellowships 2026: Apply for £120,000 in Funding for 12-Month Policy Research Fellowships",
+    "institucion": "Global South Opportunities",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2099-12-31",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www.globalsouthopportunities.com/2026/10/21/fellowship-309/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Are you an early-career or mid-career researcher looking to take your expertise beyond academia and influence real-world government policy? The British Academy Innovation Fellowships Scheme 2026 – Route B: Policy-Led (FCDO) is now open for applications, offering an exciting opportunity to work directly with policymakers and contribute to important national and international policy challenges. With",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-21T15:14:57.935Z"
+  },
+  {
+    "id": 1231,
+    "nombre": "African Development Bank Announces New Consultancy Opportunities for 2026: Applications Close Between October and December",
+    "institucion": "Global South Opportunities",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2099-12-31",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www.globalsouthopportunities.com/2026/10/21/consultancy-10/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "The African Development Bank (AfDB) has announced a new round of consultancy opportunities for individual consultants and consulting firms across several professional and development-related fields. The assignments cover areas including digital financial services, public finance, legal services, evaluation, climate risk, school-feeding infrastructure, economic research and technology. The opportun",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-21T15:14:57.935Z"
+  },
+  {
+    "id": 1232,
+    "nombre": "Apply for the International Social Forestry Programme in Indonesia – Batch 7: Accommodation, Meals and Allowance Provided",
+    "institucion": "Global South Opportunities",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2099-12-31",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www.globalsouthopportunities.com/2026/10/21/social-22/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "University students and recent graduates interested in environmental sustainability, food security and social forestry have an opportunity to participate in an international learning programme in Bogor, Indonesia. The International Program on Building Food System Resilience through Social Forestry – Batch 7 is organised by LATIN in collaboration with the Singapore University of Social Sciences (SU",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-21T15:14:57.935Z"
+  },
+  {
+    "id": 1233,
+    "nombre": "DR Resilient Agriculture and Integrated Water Resources Management",
+    "institucion": "World Bank",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2099-12-31",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://projects.worldbank.org/en/projects-operations/procurement-detail/OP00476665",
+    "regiones": [
+      "Dominican Republic"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Adquisición de Cloradores de Pastillas para las ASOCAR",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Dominican Republic",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1234,
+    "nombre": "Apply now for Pasture Reserve Area Assessment Program (Mongolia)",
+    "institucion": "FundsforNGOs (Aggregator)",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2026-11-02",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www2.fundsforngos.org/community-development-2/apply-now-for-pasture-reserve-area-assessment-program-mongolia/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "<a href=\"https://www2.fundsforngos.org/community-development-2/apply-now-for-pasture-reserve-area-assessment-program-mongolia/\" title=\"Apply now for Pasture Reserve Area Assessment Program (Mongolia)\" rel=\"nofollow\"><img width=\"300\" height=\"200\" src=\"https://www2.fundsforngos.org/wp-content/uploads/2023/02/environment--300x200.jpg\" class=\"webfeedsFeaturedVisual wp-post-image\" alt=\"Call for Project",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1235,
+    "nombre": "Submit Entries for Treehouse Climate Action Poem Prize (US)",
+    "institucion": "FundsforNGOs (Aggregator)",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2026-12-14",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www2.fundsforngos.org/individuals/treehouse-climate-action-poem-prize-celebrating-environmental-awareness/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "<a href=\"https://www2.fundsforngos.org/individuals/treehouse-climate-action-poem-prize-celebrating-environmental-awareness/\" title=\"Submit Entries for Treehouse Climate Action Poem Prize (US)\" rel=\"nofollow\"><img width=\"300\" height=\"200\" src=\"https://www2.fundsforngos.org/wp-content/uploads/2025/04/climate-3-1-1-300x200.jpg\" class=\"webfeedsFeaturedVisual wp-post-image\" alt=\"Strategic Integrated Pr",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1236,
+    "nombre": "Call for Text and Video Reports on Renewable Energy in India",
+    "institucion": "FundsforNGOs (Aggregator)",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2026-11-15",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www2.fundsforngos.org/individuals/call-for-text-and-video-reports-on-renewable-energy-in-india/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "<a href=\"https://www2.fundsforngos.org/individuals/call-for-text-and-video-reports-on-renewable-energy-in-india/\" title=\"Call for Text and Video Reports on Renewable Energy in India\" rel=\"nofollow\"><img width=\"300\" height=\"200\" src=\"https://www2.fundsforngos.org/wp-content/uploads/2022/12/energy-3-300x200.jpg\" class=\"webfeedsFeaturedVisual wp-post-image\" alt=\"\" style=\"float: left; margin-right: 5p",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1237,
+    "nombre": "RFPs: Local Culture Project Grant Program (Finland)",
+    "institucion": "FundsforNGOs (Aggregator)",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2026-10-30",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www2.fundsforngos.org/individuals/local-culture-projects-grant-by-finnish-cultural-foundation/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "<a href=\"https://www2.fundsforngos.org/individuals/local-culture-projects-grant-by-finnish-cultural-foundation/\" title=\"RFPs: Local Culture Project Grant Program (Finland)\" rel=\"nofollow\"><img width=\"300\" height=\"200\" src=\"https://www2.fundsforngos.org/wp-content/uploads/2026/05/art-2-300x200.jpg\" class=\"webfeedsFeaturedVisual wp-post-image\" alt=\"Abstract splash of vibrant pink, purple, orange, an",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1238,
+    "nombre": "Community Funding through the WBS Charitable Trust (New Zealand)",
+    "institucion": "FundsforNGOs (Aggregator)",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2026-10-31",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www2.fundsforngos.org/environment-2/community-funding-through-the-wbs-charitable-trust-new-zealand/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "<a href=\"https://www2.fundsforngos.org/environment-2/community-funding-through-the-wbs-charitable-trust-new-zealand/\" title=\"Community Funding through the WBS Charitable Trust (New Zealand)\" rel=\"nofollow\"><img width=\"300\" height=\"200\" src=\"https://www2.fundsforngos.org/wp-content/uploads/2024/12/Aditya-6-1-300x200.webp\" class=\"webfeedsFeaturedVisual wp-post-image\" alt=\"United States: Fund for Isl",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1239,
+    "nombre": "Submit Applications for Agape Foundation of London Community Grants (Canada)",
+    "institucion": "FundsforNGOs (Aggregator)",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2027-02-03",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www2.fundsforngos.org/community-development-2/agape-foundation-of-london-grants-for-non-profits-and-charities/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "<a href=\"https://www2.fundsforngos.org/community-development-2/agape-foundation-of-london-grants-for-non-profits-and-charities/\" title=\"Submit Applications for Agape Foundation of London Community Grants (Canada)\" rel=\"nofollow\"><img width=\"300\" height=\"200\" src=\"https://www2.fundsforngos.org/wp-content/uploads/2026/06/community-6-300x200.jpg\" class=\"webfeedsFeaturedVisual wp-post-image\" alt=\"Colo",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1240,
+    "nombre": "Princeton University AI Postdoctoral Fellowship 2027: Earn $100,000 Per Year in the USA",
+    "institucion": "Global South Opportunities",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2099-12-31",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www.globalsouthopportunities.com/2026/10/22/princeton-7/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Princeton University is inviting applications for an exciting AI Postdoctoral Research Fellowship 2027 through its Natural and Artificial Minds (NAM) research initiative. This opportunity is designed for doctoral researchers interested in artificial intelligence, cognitive science, psychology, computer science, philosophy, and related disciplines. The successful candidates will have the opportunit",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1241,
+    "nombre": "Education Collaborative Research Fellows Program 2026/27: Apply for a Nine-Month African Higher Education Research Fellowship",
+    "institucion": "Global South Opportunities",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2099-12-31",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www.globalsouthopportunities.com/2026/10/22/education-19/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Are you a researcher passionate about higher education, institutional transformation, innovation, and entrepreneurship in Africa? The Education Collaborative Research Fellows Program 2026/27 offers an opportunity to investigate how African universities and higher education institutions can implement sustainable change and improve graduate employability, entrepreneurship, and innovation. The nine-m",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
+  },
+  {
+    "id": 1242,
+    "nombre": "IDM-Africa Fellowship Programme 2026: Paid Infectious Disease Modelling Fellowship for African Researchers – Apply Before 30 October!",
+    "institucion": "Global South Opportunities",
+    "monto": 0,
+    "montoTexto": "Ver bases",
+    "fecha_cierre": "2099-12-31",
+    "estado": "Abierto",
+    "estadoPostulacion": "Abierta",
+    "categoria": "Fondos Concursables",
+    "url_bases": "https://www.globalsouthopportunities.com/2026/10/21/fellowship-310/",
+    "regiones": [
+      "Nacional"
+    ],
+    "beneficiarios": [
+      "Agricultores",
+      "Empresas Agrícolas",
+      "Organizaciones"
+    ],
+    "requiere_cofinanciamiento": false,
+    "idioma": "en",
+    "faq_disponible": false,
+    "permite_adendas": false,
+    "bases_estado": "published",
+    "requiere_firma": false,
+    "tipos_solicitante": [
+      "Persona Natural",
+      "Persona Jurídica"
+    ],
+    "checklist": [],
+    "ambito": "Internacional",
+    "viabilidadIICA": "Media",
+    "porcentajeViabilidad": 75,
+    "objetivo": "Are you an African researcher passionate about infectious disease modelling, epidemiology, data science, and public health? The IDM-Africa Fellowship Programme in Infectious Disease Modelling 2026 is inviting applications from eligible early-career and mid-career researchers across sub-Saharan Africa. This 12-month fellowship offers an exciting opportunity to strengthen your technical modelling sk",
+    "descripcionIICA": "Oportunidad identificada automáticamente por el monitor de fondos IICA Chile.",
+    "requisitos": [
+      "Cumplir con las bases oficiales publicadas en el sitio web de la institución convocante."
+    ],
+    "fortalezas": [
+      "Alineación con prioridades del sector silvoagropecuario chileno."
+    ],
+    "debilidades": [],
+    "complejidad": "Media",
+    "rolIICA": "Asesor",
+    "publishable": true,
+    "relevanciaChile": true,
+    "region": "Nacional",
+    "updatedAt": "2026-10-22T15:06:39.984Z"
   }
 ]

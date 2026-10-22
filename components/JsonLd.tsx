@@ -1,4 +1,4 @@
-import { Project } from "@/lib/data";
+import type { Project } from "@/types";
 
 /** Escape sequences that could break out of a script tag */
 function safeJsonStringify(data: unknown): string {

@@ -54,8 +54,8 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
       }
 
       setSuccessMessage(data.message || 'Suscripción exitosa');
-    } catch (err: any) {
-      setErrorMessage(err.message || 'Error inesperado');
+    } catch (err: unknown) {
+      setErrorMessage(err instanceof Error ? err.message : 'Error inesperado');
     } finally {
       setIsSubmitting(false);
     }
@@ -191,7 +191,7 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
                 <label className="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Frecuencia de Alerta</label>
                 <select
                   value={frequency}
-                  onChange={(e) => setFrequency(e.target.value as any)}
+                  onChange={(e) => setFrequency(e.target.value as 'instant_urgent' | 'weekly')}
                   className="w-full px-3 py-2 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 >
                   <option value="instant_urgent">Instantánea (Solo cuando abre un fondo urgente ≤7d)</option>

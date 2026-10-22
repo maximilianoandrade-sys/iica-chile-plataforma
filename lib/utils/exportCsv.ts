@@ -1,6 +1,6 @@
 import type { Project } from '@/lib/data';
 
-function escapeXml(unsafe: any): string {
+function escapeXml(unsafe: unknown): string {
   if (unsafe === null || unsafe === undefined) return '';
   return String(unsafe)
     .replace(/&/g, '&amp;')

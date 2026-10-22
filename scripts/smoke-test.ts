@@ -103,17 +103,17 @@ async function main() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const expiredOpen = (payload.results || []).filter((project: any) => {
+    const expiredOpen = (payload.results || []).filter((project: { estadoPostulacion?: string; fecha_cierre?: string; id?: number }) => {
       const status = project?.estadoPostulacion;
       if (status && status !== "Abierta" && status !== "Próxima") return false;
 
-      const close = new Date(project?.fecha_cierre);
+      const close = new Date(project?.fecha_cierre || '');
       if (Number.isNaN(close.getTime())) return false;
       return close < today;
     });
 
     if (expiredOpen.length > 0) {
-      const ids = expiredOpen.slice(0, 5).map((p: any) => p.id).join(", ");
+      const ids = expiredOpen.slice(0, 5).map((p: { id?: number }) => p.id).join(", ");
       throw new Error(`se detectaron ${expiredOpen.length} abiertas vencidas (ids: ${ids})`);
     }
 

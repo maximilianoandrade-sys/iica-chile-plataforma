@@ -59,7 +59,7 @@ export async function embedText(text: string): Promise<number[] | null> {
   });
 
   // El SDK puede devolver `.embeddings[0].values` o `.embedding.values`.
-  const anyResult = result as any;
+  const anyResult = result as unknown as { embeddings?: Array<{ values?: number[] }>; embedding?: { values?: number[] } };
   const values: number[] | undefined =
     anyResult.embeddings?.[0]?.values ?? anyResult.embedding?.values;
 

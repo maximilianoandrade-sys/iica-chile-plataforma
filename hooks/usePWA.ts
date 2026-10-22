@@ -7,6 +7,12 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { getLogger } from '@/lib/utils/logger';
+import type {
+    BeforeInstallPromptEvent,
+    ServiceWorkerRegistrationWithSync,
+    NavigatorExtended,
+    BatteryManager
+} from '@/types/pwa';
 
 const logger = getLogger('usePWA');
 
@@ -204,7 +210,7 @@ function urlBase64ToUint8Array(base64String: string): Uint8Array {
  * Hook para gestionar instalación de PWA
  */
 export function useInstallPrompt() {
-    const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+    const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
     const [isInstallable, setIsInstallable] = useState(false);
     const [isInstalled, setIsInstalled] = useState(false);
 
@@ -216,7 +222,7 @@ export function useInstallPrompt() {
 
         const handleBeforeInstallPrompt = (e: Event) => {
             e.preventDefault();
-            setDeferredPrompt(e);
+            setDeferredPrompt(e as BeforeInstallPromptEvent);
             setIsInstallable(true);
         };
 
@@ -324,7 +330,7 @@ export function useBackgroundSync() {
 
         try {
             const registration = await navigator.serviceWorker.ready;
-            await (registration as any).sync.register(tag);
+            await (registration as ServiceWorkerRegistrationWithSync).sync.register(tag);
             logger.info('Sync registrado', { tag });
             return true;
         } catch (error) {
@@ -474,9 +480,10 @@ export function useNetworkInformation() {
     }>({});
 
     useEffect(() => {
-        const connection = (navigator as any).connection ||
-            (navigator as any).mozConnection ||
-            (navigator as any).webkitConnection;
+        const nav = navigator as NavigatorExtended;
+        const connection = nav.connection ||
+            nav.mozConnection ||
+            nav.webkitConnection;
 
         if (connection) {
             const updateNetworkInfo = () => {
@@ -516,8 +523,9 @@ export function useBatteryStatus() {
     }>({});
 
     useEffect(() => {
-        if ('getBattery' in navigator) {
-            (navigator as any).getBattery().then((battery: any) => {
+        const nav = navigator as NavigatorExtended;
+        if (typeof nav.getBattery === 'function') {
+            nav.getBattery().then((battery: BatteryManager) => {
                 const updateBattery = () => {
                     setBattery({
                         level: battery.level,
