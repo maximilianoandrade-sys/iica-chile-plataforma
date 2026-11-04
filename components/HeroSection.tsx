@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Bell } from 'lucide-react';
@@ -18,10 +19,18 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ stats }: HeroSectionProps) {
+    const router = useRouter();
     const [isNewsletterOpen, setIsNewsletterOpen] = useState(false);
+    const [query, setQuery] = useState('');
     const totalOportunidades = stats?.total ?? 0;
     const abiertas = stats?.abiertas ?? 0;
     const urgentes = stats?.urgentes ?? 0;
+
+    const handleSearch = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const value = query.trim();
+        router.push(value ? `/?q=${encodeURIComponent(value)}#convocatorias` : '#convocatorias');
+    };
 
     return (
         <section
@@ -56,6 +65,29 @@ export function HeroSection({ stats }: HeroSectionProps) {
                     <p className="text-base md:text-lg text-gray-100 mb-6 max-w-xl leading-relaxed drop-shadow-md">
                         Compare convocatorias vigentes, revise requisitos clave y acceda a fuentes oficiales en minutos.
                     </p>
+
+                    <form
+                        onSubmit={handleSearch}
+                        className="mb-5 flex max-w-2xl rounded-lg bg-white p-1 shadow-lg"
+                        role="search"
+                    >
+                        <label htmlFor="hero-search" className="sr-only">
+                            Buscar oportunidades
+                        </label>
+                        <input
+                            id="hero-search"
+                            value={query}
+                            onChange={(event) => setQuery(event.target.value)}
+                            placeholder="Palabra clave, sector o institución"
+                            className="min-w-0 flex-1 rounded-md border-0 px-3 py-2 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-[var(--iica-yellow)]"
+                        />
+                        <button
+                            type="submit"
+                            className="min-h-[44px] rounded-md bg-green-600 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-green-700"
+                        >
+                            Buscar
+                        </button>
+                    </form>
 
                     <div className="flex flex-wrap gap-3 items-center">
                         <Link

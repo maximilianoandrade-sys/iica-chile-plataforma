@@ -9,6 +9,7 @@ import SkeletonProjectList from "@/components/SkeletonProjectList";
 import Newsletter from "@/components/Newsletter";
 import FuentesOficiales from "@/components/FuentesOficiales";
 import PipelineStatus from "@/components/PipelineStatus";
+import InstitutionStrip from "@/components/InstitutionStrip";
 import { FilterChips } from "@/components/FilterChips";
 import { TipoTabs } from "@/components/TipoTabs";
 import { getCachedProjectFilterSnapshot, getCachedProjects } from "@/lib/data";
@@ -149,6 +150,8 @@ export default async function DashboardPage({
           internacionales={heroStats.internacionales}
           urgentes={heroStats.urgentes}
         />
+
+        <InstitutionStrip />
 
         {/* 4. Search/Filter bar — sticky below header, se pega solo al pasar el hero */}
         <Suspense fallback={<div className="h-16" />}>
