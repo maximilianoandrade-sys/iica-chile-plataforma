@@ -12,7 +12,7 @@ export interface CatalogMetadata {
   activeProjects: number;
 }
 
-const ACTIVE_STATES = new Set(["Abierto", "Abierta", "Próximo", "Permanente"]);
+const ACTIVE_STATES = new Set(["Abierto", "Abierta", "Próximo", "Próxima", "Permanente"]);
 
 export function buildCatalogMetadata(
   projects: CatalogProjectForMetadata[],
