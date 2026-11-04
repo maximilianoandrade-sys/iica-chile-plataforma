@@ -287,7 +287,7 @@ export default function ProjectList({
           className={`transition-opacity duration-200 ${isPending ? 'opacity-70' : 'opacity-100'}`}
         >
           {viewMode === 'grid' ? (
-            <ul className="grid grid-cols-1 gap-4 md:grid-cols-2" aria-label="Resultados de oportunidades">
+            <ul className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3" aria-label="Resultados de oportunidades">
               {paginated.map((project) => (
                 <li key={project.id} className="list-none">
                   <ProjectCard

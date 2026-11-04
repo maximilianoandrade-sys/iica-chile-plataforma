@@ -9,10 +9,11 @@ import { CalendarReminderButton } from '@/components/CalendarReminderButton';
 import { PrintProjectButton } from '@/components/PrintProjectButton';
 import { ProposalGeneratorButton } from '@/components/ProposalGeneratorButton';
 import { ProjectCard } from '@/components/ProjectCard';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { LinkGuardianAnchor } from '@/lib/linkGuardian';
 import { getCatalogRouteKey } from '@/lib/catalog-merge';
 import Link from 'next/link';
-import { ArrowLeft, Calendar, CheckCircle, Info, MapPin, Users, DollarSign, Layers } from 'lucide-react';
+import { ArrowLeft, Calendar, CheckCircle, Info, MapPin, Users, DollarSign, Layers, Laptop, FileText, ClipboardCheck } from 'lucide-react';
 
 const getCachedProjects = cache(getProjects);
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL
@@ -123,7 +124,9 @@ export default async function ProyectoDetallePage({ params }: Props) {
                 <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
 
                     {/* Header del fondo */}
-                    <div className="bg-gradient-to-r from-[var(--iica-navy)] to-[var(--iica-blue)] p-8 text-white">
+                    <div className="relative overflow-hidden bg-[var(--iica-navy)] p-6 text-white md:p-8">
+                        <div className="absolute -right-20 -top-32 h-96 w-96 rotate-12 bg-[var(--iica-blue)]/30" aria-hidden="true" />
+                        <div className="relative z-10">
                         <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
                             <div className="flex flex-wrap gap-2">
                                 <span className="bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full border border-white/30">
@@ -145,10 +148,44 @@ export default async function ProyectoDetallePage({ params }: Props) {
                             {project.nombre}
                         </h1>
                         <p className="text-blue-100 font-semibold text-lg">{project.institucion}</p>
+                        {project.resumen?.observaciones && (
+                            <p className="mt-4 max-w-4xl text-sm leading-relaxed text-blue-50">{project.resumen.observaciones}</p>
+                        )}
+                        <LinkGuardianAnchor
+                            url={project.url_bases}
+                            projectName={project.nombre}
+                            institution={project.institucion}
+                            className="mt-5 inline-flex min-h-[44px] items-center justify-center rounded-full bg-blue-500 px-5 py-2 text-sm font-bold text-white transition-colors hover:bg-blue-400"
+                        />
+                        </div>
                     </div>
 
-                    {/* Métricas clave */}
-                    <div className={`grid grid-cols-2 ${hasRegions || hasBeneficiaries ? 'md:grid-cols-4' : 'md:grid-cols-2'} divide-x divide-y md:divide-y-0 divide-gray-100 dark:divide-gray-700 border-b border-gray-100 dark:border-gray-700`}>
+                    {/* Fechas de postulación, inspired by fondos.gob.cl */}
+                    <div className="border-b border-gray-100 bg-white px-6 py-7 dark:border-gray-700 dark:bg-gray-800 md:px-12">
+                        <h2 className="text-center text-lg font-bold text-gray-800 dark:text-white">Fechas de postulación</h2>
+                        <div className="mx-auto mt-7 grid max-w-2xl grid-cols-[1fr_auto_1fr] items-start gap-3">
+                            <div className="text-center">
+                                <span className="mx-auto block h-3 w-3 rounded-full border-2 border-emerald-500 bg-white" />
+                                <span className="mt-2 inline-block rounded bg-emerald-600 px-2 py-1 text-xs font-bold text-white">
+                                    Publicación
+                                </span>
+                                <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">Inicio disponible</p>
+                            </div>
+                            <div className="mt-1 h-px w-20 bg-gray-300 dark:bg-gray-600 md:w-40" aria-hidden="true" />
+                            <div className="text-center">
+                                <span className={`mx-auto block h-3 w-3 rounded-full border-2 ${isClosed ? 'border-red-500' : 'border-rose-400'} bg-white`} />
+                                <span className={`mt-2 inline-block rounded px-2 py-1 text-xs font-bold text-white ${isClosed ? 'bg-red-600' : 'bg-rose-500'}`}>
+                                    {isClosed ? 'Cerrado' : formatDeadline(project.fecha_cierre)}
+                                </span>
+                                <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">Fecha de cierre</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Detalles del fondo */}
+                    <div className="bg-[#f1f1f1] px-4 py-8 dark:bg-gray-900 md:px-8">
+                        <h2 className="mb-5 text-center text-lg font-bold text-gray-800 dark:text-white">Detalles del fondo</h2>
+                        <div className={`grid grid-cols-1 gap-3 ${hasRegions || hasBeneficiaries ? 'md:grid-cols-4' : 'md:grid-cols-2'}`}>
                         <div className="p-5 flex flex-col gap-1">
                             <div className="flex items-center gap-1.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                                 <DollarSign className="h-3.5 w-3.5" /> Monto Máximo
@@ -185,10 +222,32 @@ export default async function ProyectoDetallePage({ params }: Props) {
                                 </div>
                             </div>
                         )}
+                        <div className="rounded-lg border border-gray-200 bg-white p-5 text-center shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                            <Laptop className="mx-auto h-5 w-5 text-rose-500" aria-hidden="true" />
+                            <p className="mt-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Modalidad</p>
+                            <p className="mt-1 text-sm font-bold text-rose-500">Postulación en línea</p>
+                        </div>
+                        </div>
                     </div>
 
                     {/* Contenido detallado */}
-                    <div className="p-6 md:p-8 space-y-8">
+                    <div className="bg-[#f1f1f1] px-4 pb-8 md:px-8">
+                    <Tabs defaultValue="requisitos" className="rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                        <TabsList className="flex h-auto w-full justify-start overflow-x-auto rounded-none border-b border-gray-200 bg-white p-0 dark:border-gray-700 dark:bg-gray-800">
+                            <TabsTrigger value="requisitos" className="min-h-[52px] rounded-none border-b-2 border-transparent px-4 text-xs data-[state=active]:border-blue-600 data-[state=active]:bg-white md:px-8">
+                                <ClipboardCheck className="mr-2 h-4 w-4" aria-hidden="true" /> Requisitos
+                            </TabsTrigger>
+                            <TabsTrigger value="documentacion" className="min-h-[52px] rounded-none border-b-2 border-transparent px-4 text-xs data-[state=active]:border-blue-600 data-[state=active]:bg-white md:px-8">
+                                <FileText className="mr-2 h-4 w-4" aria-hidden="true" /> Documentación
+                            </TabsTrigger>
+                            <TabsTrigger value="evaluacion" className="min-h-[52px] rounded-none border-b-2 border-transparent px-4 text-xs data-[state=active]:border-blue-600 data-[state=active]:bg-white md:px-8">
+                                Evaluación
+                            </TabsTrigger>
+                            <TabsTrigger value="bases" className="min-h-[52px] rounded-none border-b-2 border-transparent px-4 text-xs data-[state=active]:border-blue-600 data-[state=active]:bg-white md:px-8">
+                                Bases y consultas
+                            </TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="requisitos" className="p-6 md:p-8">
 
                         {/* Asistente de Elegibilidad Rápidas */}
                         <EligibilityAssistant project={project} />
@@ -232,6 +291,20 @@ export default async function ProyectoDetallePage({ params }: Props) {
                                 </div>
                             </div>
                         )}
+                        </TabsContent>
+                        <TabsContent value="documentacion" className="p-6 md:p-8">
+                            <h2 className="text-lg font-bold text-[var(--iica-navy)] dark:text-white">Documentación y bases</h2>
+                            <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-300">Revise la documentación oficial y los antecedentes solicitados directamente en la fuente de la convocatoria.</p>
+                            <div className="mt-5">{/* The official-link action remains below for consistent verification. */}</div>
+                        </TabsContent>
+                        <TabsContent value="evaluacion" className="p-6 md:p-8">
+                            <h2 className="text-lg font-bold text-[var(--iica-navy)] dark:text-white">Evaluación preliminar IICA</h2>
+                            <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-300">Esta ficha resume la información pública disponible y no reemplaza la evaluación oficial de la institución convocante.</p>
+                        </TabsContent>
+                        <TabsContent value="bases" className="p-6 md:p-8">
+                            <h2 className="text-lg font-bold text-[var(--iica-navy)] dark:text-white">Bases y consultas</h2>
+                            <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-300">Consulte las bases oficiales, fechas y canales de atención antes de postular.</p>
+                        </TabsContent>
 
                         {/* Botones de Acción: Bases, IA, Calendario e Impresión */}
                         <div id="bases" className="pt-6 border-t border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -261,6 +334,7 @@ export default async function ProyectoDetallePage({ params }: Props) {
                             </div>
                         </div>
 
+                    </Tabs>
                     </div>
                 </div>
 
