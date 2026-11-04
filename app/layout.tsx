@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from 'next'
-import { Poppins } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
 import { ThemeProvider } from 'next-themes'
@@ -10,11 +9,6 @@ import ClientOnlyGlobalComponents from '@/components/ClientOnlyGlobalComponents'
 
 const env = getEnv();
 
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
-  display: 'swap',
-})
 const SITE_URL = env.NEXT_PUBLIC_SITE_URL || 'https://iica-chile-plataforma.vercel.app'
 
 const organizationJsonLd = {
@@ -22,7 +16,7 @@ const organizationJsonLd = {
   '@type': 'Organization',
   name: 'IICA Chile',
   url: SITE_URL,
-  logo: `${SITE_URL}/logos/official/iica.png`,
+  logo: `${SITE_URL}/logos/pending/iica.png`,
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'customer support',
@@ -155,7 +149,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es" dir="ltr" className={`${poppins.className} scroll-smooth`}>
+    <html lang="es" dir="ltr" className="scroll-smooth">
       <head>
         {/* DNS Prefetch */}
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />

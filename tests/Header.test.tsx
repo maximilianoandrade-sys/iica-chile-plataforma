@@ -20,7 +20,7 @@ describe('Header', () => {
     expect(screen.getAllByRole('link', { name: /Oportunidades/i }).length).toBeGreaterThanOrEqual(1);
     expect(screen.getByRole('link', { name: /Sobre IICA/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Fuentes/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Explorar Oportunidades/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Explorar oportunidades/i })).toBeInTheDocument();
     expect(screen.getByRole('img', { name: /Logo oficial IICA Chile/i })).toBeInTheDocument();
     const logoLink = screen.getByRole('link', { name: /Logo oficial IICA Chile/i });
     expect(logoLink).toHaveAttribute('href', 'https://iica.int/es/countries/chile-es/');

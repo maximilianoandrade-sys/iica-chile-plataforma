@@ -22,7 +22,7 @@ export function Footer() {
                     <div>
                         <div className="flex items-center gap-3 mb-4">
                             <Image
-                                src="/logos/official/iica.png"
+                                src="/logos/pending/iica.png"
                                 alt="Logo oficial IICA Chile"
                                 width={48}
                                 height={48}
@@ -98,4 +98,3 @@ export function Footer() {
         </footer>
     );
 }
-

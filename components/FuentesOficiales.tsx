@@ -781,7 +781,7 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
                         return (
                             <div
                                 key={fuente.id}
-                                className={`border-2 rounded-2xl overflow-hidden transition-all animate-fade-in-up ${fuente.bgColor} ${fuente.darkBgColor} ${isExpanded ? 'shadow-lg' : 'shadow-sm hover:shadow-md'}`}
+                                className={`border rounded-2xl overflow-hidden transition-all animate-fade-in-up bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 ${isExpanded ? 'shadow-lg' : 'shadow-sm hover:shadow-md'}`}
                                 style={{ animationDelay: `${i * 80}ms` }}
                             >
                                 {/* Card Header */}
@@ -795,7 +795,7 @@ export default function FuentesOficiales({ institutionCounts = {}, lastUpdatedAt
                                     <InstitutionLogo nombre={fuente.sigla} size={32} />
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2 flex-wrap mb-1">
-                                            <span className={`text-xl font-extrabold ${fuente.color} ${fuente.darkColor}`}>{fuente.sigla}</span>
+                                            <span className="text-xl font-extrabold text-[var(--iica-navy)] dark:text-white">{fuente.sigla}</span>
                                             <span className="text-xs font-bold text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 px-2 py-0.5 rounded-full border border-gray-200 dark:border-gray-600">
                                                 {fuente.fondosActivos} fondos activos
                                             </span>

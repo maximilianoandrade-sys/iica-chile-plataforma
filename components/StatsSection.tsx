@@ -18,15 +18,15 @@ export default function StatsSection({ total, abiertas, internacionales, urgente
     const stats = [
         {
             icon: <Zap className="w-6 h-6" />,
-            label: 'Total',
+            label: 'Oportunidades',
             value: total,
             description: total > 0 ? 'Oportunidades disponibles' : 'Fuentes monitorizadas',
-            iconClass: 'text-[var(--iica-blue)] bg-blue-50 dark:bg-blue-950/40',
+            iconClass: 'text-[var(--iica-navy)] bg-slate-100 dark:bg-slate-800',
             href: '/?estado=all#convocatorias',
         },
         {
             icon: <TrendingUp className="w-6 h-6" />,
-            label: 'Activas',
+            label: 'Abiertas',
             value: abiertas,
             description: 'Abiertas ahora',
             iconClass: 'text-secondary dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40',
@@ -37,7 +37,7 @@ export default function StatsSection({ total, abiertas, internacionales, urgente
             label: 'Internacionales',
             value: internacionales,
             description: 'Oportunidades globales',
-            iconClass: 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40',
+            iconClass: 'text-[var(--iica-navy)] dark:text-blue-300 bg-slate-100 dark:bg-slate-800',
             href: '/?ambito=Internacional#convocatorias',
         },
         {
@@ -45,7 +45,7 @@ export default function StatsSection({ total, abiertas, internacionales, urgente
             label: 'Urgentes',
             value: urgentes,
             description: 'Cierran en ≤7 días',
-            iconClass: 'text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40',
+            iconClass: 'text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40',
             href: '/?urgencia=7#convocatorias',
         },
     ];

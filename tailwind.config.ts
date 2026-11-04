@@ -43,7 +43,7 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        sans: ['Tahoma', 'Arial', 'Helvetica', 'sans-serif'],
       },
     },
   },

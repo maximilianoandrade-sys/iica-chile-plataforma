@@ -19,7 +19,7 @@ interface HeaderProps {
     urgentCount?: number;
 }
 
-export function Header({ urgentCount = 0 }: HeaderProps) {
+export function Header(_props: HeaderProps) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     return (
@@ -44,7 +44,7 @@ export function Header({ urgentCount = 0 }: HeaderProps) {
                         className="flex items-center gap-3 hover:opacity-90 transition-opacity"
                     >
                         <Image
-                            src="/logos/official/iica.png"
+                            src="/logos/pending/iica.png"
                             alt="Logo oficial IICA Chile"
                             width={36}
                             height={36}
@@ -84,15 +84,7 @@ export function Header({ urgentCount = 0 }: HeaderProps) {
                             href="/#convocatorias"
                             className="hidden md:flex items-center gap-2 px-5 py-2 bg-secondary hover:bg-emerald-800 text-white font-semibold rounded-xl text-sm transition-all hover:-translate-y-0.5 shadow-sm"
                         >
-                            <span>Explorar Oportunidades</span>
-                            {urgentCount > 0 && (
-                                <span
-                                    className="ml-1 bg-rose-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black animate-pulse"
-                                    aria-label={`${urgentCount} oportunidades urgentes`}
-                                >
-                                    {urgentCount}
-                                </span>
-                            )}
+                            <span>Explorar oportunidades</span>
                         </Link>
 
                         <button

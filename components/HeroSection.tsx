@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, AlertTriangle, Loader2, Bell } from 'lucide-react';
+import { ArrowRight, Bell } from 'lucide-react';
 import NewsletterModal from '@/components/NewsletterModal';
 
 interface HeroStats {
@@ -19,22 +18,14 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ stats }: HeroSectionProps) {
-    const router = useRouter();
-    const [isPending, startTransition] = useTransition();
     const [isNewsletterOpen, setIsNewsletterOpen] = useState(false);
     const totalOportunidades = stats?.total ?? 0;
     const abiertas = stats?.abiertas ?? 0;
     const urgentes = stats?.urgentes ?? 0;
 
-    const handleUrgentClick = () => {
-        startTransition(() => {
-            router.push('/?estado=Abierta&sort=date_asc#convocatorias');
-        });
-    };
-
     return (
         <section
-            className="relative min-h-[580px] flex items-center overflow-hidden"
+            className="relative min-h-[440px] flex items-center overflow-hidden"
         >
             {/* LCP hero image — self-hosted for performance */}
             <Image
@@ -49,7 +40,7 @@ export function HeroSection({ stats }: HeroSectionProps) {
             <div
                 className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/55 to-black/20"
             />
-            <div className="container mx-auto max-w-[1200px] px-4 relative z-10 py-20">
+            <div className="container mx-auto max-w-[1200px] px-4 relative z-10 py-14 md:py-16">
                 <div className="max-w-2xl">
                     <div className="mb-5">
                         <span className="inline-block text-[var(--iica-yellow)] font-semibold text-sm tracking-widest uppercase">
@@ -57,19 +48,19 @@ export function HeroSection({ stats }: HeroSectionProps) {
                         </span>
                     </div>
 
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-5 leading-tight drop-shadow-lg">
+                    <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-4 leading-tight drop-shadow-lg">
                         Encuentre financiamiento{' '}
                         <span className="text-[var(--iica-yellow)]">verificado para Chile</span>
                     </h1>
 
-                    <p className="text-lg text-gray-100 mb-8 max-w-xl leading-relaxed drop-shadow-md">
+                    <p className="text-base md:text-lg text-gray-100 mb-6 max-w-xl leading-relaxed drop-shadow-md">
                         Compare convocatorias vigentes, revise requisitos clave y acceda a fuentes oficiales en minutos.
                     </p>
 
-                    <div className="flex flex-wrap gap-4 items-center">
+                    <div className="flex flex-wrap gap-3 items-center">
                         <Link
                             href="#convocatorias"
-                            className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold text-lg py-4 px-8 rounded-lg shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl group min-h-[48px]"
+                            className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold text-base py-3 px-6 rounded-lg shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl group min-h-[48px]"
                         >
                             Explorar {totalOportunidades > 0 ? `${totalOportunidades} ` : ''}Oportunidades
                             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -78,7 +69,7 @@ export function HeroSection({ stats }: HeroSectionProps) {
                         <button
                             type="button"
                             onClick={() => setIsNewsletterOpen(true)}
-                            className="flex items-center justify-center gap-2 bg-amber-400 hover:bg-amber-500 text-gray-900 font-bold text-base py-3.5 px-6 rounded-lg shadow-lg transition-all hover:-translate-y-0.5 min-h-[48px]"
+                            className="flex items-center justify-center gap-2 bg-white/95 hover:bg-white text-[var(--iica-navy)] font-bold text-sm py-3 px-5 rounded-lg shadow-lg transition-all hover:-translate-y-0.5 min-h-[48px]"
                         >
                             <Bell className="w-5 h-5 text-gray-900" />
                             Recibir Alertas WhatsApp
@@ -92,23 +83,9 @@ export function HeroSection({ stats }: HeroSectionProps) {
                 onClose={() => setIsNewsletterOpen(false)}
             />
 
-            {/* Badge urgentes */}
-            {urgentes > 0 && (
-                <button
-                    type="button"
-                    onClick={handleUrgentClick}
-                    disabled={isPending}
-                    className="absolute top-6 right-6 flex items-center gap-2 bg-rose-600/90 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg hover:bg-rose-600 transition-colors disabled:opacity-70"
-                    aria-label={`${urgentes} oportunidades cierran pronto`}
-                >
-                    {isPending ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                        <AlertTriangle className="w-4 h-4" />
-                    )}
-                    {urgentes} cierran pronto
-                </button>
-            )}
+            <p className="absolute bottom-4 right-4 hidden text-xs text-white/85 md:block">
+                {urgentes > 0 ? `${urgentes} oportunidades cierran pronto` : 'Datos actualizados continuamente'}
+            </p>
         </section>
     );
 }

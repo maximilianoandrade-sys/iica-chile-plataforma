@@ -1,7 +1,7 @@
 {
-    "name": "IICA Chile - Plataforma de Financiamiento Agrícola",
+    "name": "IICA Chile - Plataforma de Financiamiento Agricola",
     "short_name": "IICA Chile",
-    "description": "Plataforma oficial para buscar y comparar oportunidades de financiamiento agrícola en Chile",
+    "description": "Plataforma oficial para buscar y comparar oportunidades de financiamiento agricola en Chile",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
@@ -17,7 +17,7 @@
     ],
     "icons": [
         {
-            "src": "/logos/official/iica.png",
+            "src": "/logos/pending/iica.png",
             "sizes": "any",
             "type": "image/png",
             "purpose": "any"

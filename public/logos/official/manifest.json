@@ -1,12 +1,22 @@
 {
   "version": 1,
-  "lastUpdated": "2026-05-22",
+  "lastUpdated": "2026-11-04",
   "policy": {
-    "allowedSources": ["official", "wikimedia", "google"],
+    "allowedSources": ["official"],
     "preferSvg": true,
     "allowPngFallback": true,
     "allowAiGenerated": false,
-    "allowVectorizedRecreations": false
+    "allowVectorizedRecreations": false,
+    "requireDirectInstitutionConfirmation": true
   },
-  "institutions": []
+  "institutions": [],
+  "pendingAssets": [
+    { "id": "iica", "name": "Instituto Interamericano de Cooperación para la Agricultura", "file": "iica.png", "source": "pending-direct-confirmation", "site": "https://www.iica.int/es/pais/chile" },
+    { "id": "cnr", "name": "Comisión Nacional de Riego", "file": "cnr.png", "source": "pending-direct-confirmation", "site": "https://www.cnr.gob.cl/" },
+    { "id": "indap", "name": "Instituto de Desarrollo Agropecuario", "file": "indap.png", "source": "pending-direct-confirmation", "site": "https://www.indap.gob.cl/" },
+    { "id": "fia", "name": "Fundación para la Innovación Agraria", "file": "fia.svg", "source": "pending-direct-confirmation", "site": "https://www.fia.cl/" },
+    { "id": "corfo", "name": "Corporación de Fomento de la Producción", "file": "corfo.png", "source": "pending-direct-confirmation", "site": "https://www.corfo.gob.cl/sites/cpp/" },
+    { "id": "agcid", "name": "Agencia Chilena de Cooperación Internacional para el Desarrollo", "file": "agcid.webp", "source": "pending-direct-confirmation", "site": "https://www.agcid.gob.cl/" },
+    { "id": "oecd", "name": "Organización para la Cooperación y el Desarrollo Económicos", "file": "oecd.svg", "source": "not-approved", "site": "https://www.oecd.org/" }
+  ]
 }

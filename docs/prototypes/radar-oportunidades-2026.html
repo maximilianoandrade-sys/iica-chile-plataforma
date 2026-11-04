@@ -1,0 +1,144 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Radar de Oportunidades | Prototipo IICA Chile</title>
+  <style>
+    :root {
+      --navy:#07355f; --navy-2:#0e4778; --green:#237348; --ink:#17232f;
+      --muted:#5e6b76; --soft:#f4f7f8; --line:#dce4e8; --white:#fff;
+      --amber:#a05b00; --amber-bg:#fff5df; --red:#b42318; --red-bg:#fff0ee;
+      --shadow:0 12px 30px rgba(7,53,95,.08);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:#fbfcfc;color:var(--ink);font:16px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    button,input{font:inherit}
+    button,a{min-height:44px}
+    button{cursor:pointer}
+    a{color:inherit}
+    .skip{position:absolute;left:-999px}.skip:focus{left:16px;top:12px;background:#fff;padding:10px;z-index:10}
+    .container{width:min(1160px,calc(100% - 32px));margin:auto}
+    .topline{background:var(--navy);color:#eaf3f8;font-size:13px;padding:8px 0}
+    .topline .container{display:flex;justify-content:space-between;gap:12px}
+    header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+    .nav{display:flex;align-items:center;justify-content:space-between;min-height:72px;gap:20px}
+    .brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+    .brand-mark{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:var(--navy);color:#fff;font-weight:800;letter-spacing:-1px}
+    .brand strong{display:block;color:var(--navy);font-size:18px}.brand small{display:block;color:var(--muted);font-size:12px;letter-spacing:.08em}
+    nav{display:flex;gap:24px;color:var(--muted);font-size:14px}nav a{text-decoration:none;display:flex;align-items:center}
+    .nav-actions{display:flex;gap:8px;align-items:center}.icon-btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;color:var(--navy)}
+    .primary{background:var(--green);border:0;color:#fff;border-radius:10px;padding:11px 18px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+    .hero{background:linear-gradient(120deg,var(--navy),#12618b);color:#fff;padding:58px 0 64px}
+    .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;align-items:end;gap:48px}
+    .eyebrow{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#b9e6d0}
+    h1{font-size:clamp(34px,5vw,58px);line-height:1.05;letter-spacing:-.04em;margin:12px 0 18px;max-width:680px}
+    .hero p{color:#d8e9f2;max-width:600px;font-size:18px;margin:0 0 28px}
+    .hero-search{display:flex;background:#fff;border-radius:12px;padding:5px;max-width:620px;box-shadow:0 12px 30px #00264b55}
+    .hero-search input{flex:1;border:0;outline:0;padding:12px 14px;min-width:0;color:var(--ink)}
+    .hero-search button{border:0;border-radius:9px;background:var(--green);color:#fff;padding:0 18px;font-weight:700}
+    .hero-note{border-left:1px solid #ffffff55;padding-left:28px}.hero-note strong{display:block;font-size:54px;line-height:1}.hero-note span{color:#d8e9f2}.hero-note p{font-size:14px;margin-top:12px}
+    .section{padding:42px 0}.section-title{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:20px}.section-title h2{margin:0;font-size:28px;letter-spacing:-.03em}.section-title p{margin:0;color:var(--muted)}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:-30px;position:relative}.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}.stat strong{display:block;font-size:28px;color:var(--navy)}.stat span{font-size:13px;color:var(--muted)}
+    .filters{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 4px 16px #07355f0c}.filter-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.filter-label{font-size:13px;font-weight:800;color:var(--muted);margin-right:2px}.pill{background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 14px;color:var(--ink);min-height:42px}.pill.active{background:var(--navy);border-color:var(--navy);color:#fff}.pill.urgent.active{background:var(--red);border-color:var(--red)}.filter-foot{border-top:1px solid var(--line);margin-top:14px;padding-top:12px;display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{background:#edf5f8;border-radius:999px;color:var(--navy);padding:5px 10px;font-size:13px}.chip button{border:0;background:none;color:inherit;min-height:20px;padding:0 0 0 5px}.clear{background:none;border:0;color:var(--navy);text-decoration:underline;font-weight:700;padding:4px}
+    .results-head{display:flex;justify-content:space-between;align-items:center;margin:26px 0 14px;gap:12px}.results-head h2{margin:0;font-size:22px}.sort{border:1px solid var(--line);border-radius:9px;padding:9px 12px;background:#fff;color:var(--ink)}
+    .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;position:relative;transition:.2s}.card:hover{box-shadow:var(--shadow);transform:translateY(-2px)}.card.urgent{border-left:4px solid var(--red)}.card.soon{border-left:4px solid #d99000}.card-top{display:flex;justify-content:space-between;gap:12px;align-items:start}.source{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:13px;font-weight:700}.monogram{width:34px;height:34px;border:1px solid var(--line);border-radius:9px;display:grid;place-items:center;font-size:11px;font-weight:800;color:var(--navy);background:#f7fafb}.status{border-radius:999px;padding:5px 9px;font-size:12px;font-weight:800;white-space:nowrap}.status.open{background:#e8f5ed;color:#176138}.status.soon{background:var(--amber-bg);color:var(--amber)}.status.urgent{background:var(--red-bg);color:var(--red)}.card h3{font-size:19px;line-height:1.25;margin:17px 0 9px;letter-spacing:-.02em}.desc{color:var(--muted);font-size:14px;margin:0 0 15px}.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}.tag{border:1px solid var(--line);border-radius:999px;padding:4px 8px;font-size:12px;color:var(--muted)}.tag.green{color:var(--green);border-color:#b9dec7;background:#f2faf5}.meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;border-top:1px solid var(--line);padding-top:15px}.meta small{display:block;color:var(--muted);font-size:12px}.meta strong{display:block;font-size:15px;margin-top:2px}.meta .missing{color:#7a8790;font-weight:500}.card-actions{display:flex;justify-content:space-between;gap:10px;margin-top:18px}.card-actions a{font-size:14px;color:var(--navy);font-weight:800;display:flex;align-items:center}.card-actions button{background:#fff;border:1px solid var(--line);border-radius:9px;padding:7px 12px;color:var(--navy);font-weight:700}.card-actions button.selected{background:#e9f3f7;border-color:#8bb9cb}
+    .pagination{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:26px}.pagination button{border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 14px;color:var(--navy)}.pagination span{color:var(--muted);font-size:14px}
+    .sources{background:var(--soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.source-list{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.source-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}.source-card strong{display:block;color:var(--navy)}.source-card p{color:var(--muted);font-size:13px;margin:5px 0 10px}.source-card a{font-size:13px;color:var(--navy);font-weight:800}.more-sources{margin-top:14px;width:100%;border:1px dashed #9aaab4;background:transparent;border-radius:12px;padding:13px;color:var(--navy);font-weight:700}
+    .newsletter{background:var(--navy);color:#fff;border-radius:18px;padding:34px;display:grid;grid-template-columns:1fr .8fr;gap:30px;align-items:center}.newsletter h2{font-size:28px;line-height:1.15;margin:7px 0 10px}.newsletter p{color:#d8e9f2;margin:0}.newsletter form{display:flex;flex-direction:column;gap:10px}.newsletter input{border:0;border-radius:9px;padding:13px}.newsletter .consent{font-size:12px;color:#d8e9f2;display:flex;gap:8px;align-items:start}.newsletter .consent input{min-height:20px;width:20px}.newsletter button{border:0;border-radius:9px;background:#3e9b68;color:#fff;padding:12px;font-weight:800}
+    footer{background:#11283c;color:#c4d2da;padding:34px 0;margin-top:42px}.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:30px}.footer-grid h3{color:#fff;margin:0 0 10px;font-size:14px}.footer-grid p,.footer-grid a{font-size:13px;color:#c4d2da;text-decoration:none;display:block;margin:5px 0}.compare-tray{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;border-radius:13px;padding:12px 14px 12px 18px;display:none;align-items:center;gap:14px;box-shadow:0 12px 28px #00264b55;z-index:8;width:min(520px,calc(100% - 32px))}.compare-tray.show{display:flex}.compare-tray strong{flex:1;font-size:14px}.compare-tray button{border:0;border-radius:8px;background:#fff;color:var(--navy);padding:8px 12px;font-weight:800}
+    @media(max-width:800px){nav{display:none}.hero-grid{grid-template-columns:1fr}.hero-note{border-left:0;border-top:1px solid #ffffff55;padding:20px 0 0}.stats{grid-template-columns:repeat(2,1fr);margin-top:-22px}.cards{grid-template-columns:1fr}.source-list{grid-template-columns:1fr 1fr}.newsletter{grid-template-columns:1fr;padding:26px}.footer-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:520px){.topline span:last-child{display:none}.container{width:min(100% - 24px,1160px)}.nav{min-height:64px}.brand small{font-size:10px}.hero{padding:40px 0 48px}.hero-search{flex-direction:column;background:transparent;gap:8px;box-shadow:none}.hero-search input,.hero-search button{min-height:48px;border-radius:9px}.section{padding:32px 0}.stats{gap:8px}.stat{padding:14px}.stat strong{font-size:24px}.filter-label{width:100%;margin-bottom:-2px}.filter-foot{align-items:flex-start}.results-head{align-items:flex-start;flex-direction:column}.sort{width:100%}.source-list{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr}.newsletter h2{font-size:24px}}
+    /* HÃ­brido IICA: conserva la fotografÃ­a, el encabezado y el acento amarillo del sitio actual. */
+    .hero{min-height:460px;background:linear-gradient(90deg,rgba(0,45,114,.88),rgba(0,45,114,.62)),url("../../public/hero-campo.webp") center/cover;color:#fff;padding:76px 0 82px}
+    .hero-grid{grid-template-columns:minmax(0,1.3fr) minmax(240px,.7fr);align-items:center}
+    .hero h1{font-size:clamp(34px,4.5vw,52px);letter-spacing:-.03em}
+    .hero h1 span{color:var(--iica-yellow)}
+    .hero p{font-size:17px}
+    .hero-note{border-left:0;border-top:4px solid var(--iica-yellow);padding:19px 0 0}
+    .hero-note strong{font-size:46px}
+    .primary{background:#2d7a4a;box-shadow:0 4px 10px rgba(0,0,0,.13)}
+    .brand-mark{background:transparent;width:46px;height:46px}
+    .brand-mark img{display:block;width:46px;height:46px;object-fit:contain}
+    .stat{border-radius:12px;box-shadow:0 2px 8px rgba(7,53,95,.05)}
+    .stat strong{font-weight:900}
+    .filters{border-radius:12px;box-shadow:0 2px 8px rgba(7,53,95,.05)}
+    .pill{border-radius:10px}
+    .pill.active{background:var(--navy);border-color:var(--navy)}
+    .card{border-radius:12px;box-shadow:0 2px 8px rgba(7,53,95,.04)}
+    .card h3{font-size:17px}
+    .source{font-size:12px}
+    .newsletter{border-radius:12px;border-top:4px solid var(--iica-yellow)}
+    .eyebrow{color:var(--iica-yellow)}
+    @media(max-width:800px){.hero{min-height:0;padding:52px 0 58px}.hero-grid{grid-template-columns:1fr}.hero-note{margin-top:12px}.nav-actions .primary{display:none}}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#oportunidades">Saltar al listado</a>
+  <div class="topline"><div class="container"><span>Instituto Interamericano de CooperaciÃ³n para la Agricultura Â· Oficina Chile</span><span>Datos referenciales Â· actualizaciÃ³n continua</span></div></div>
+  <header><div class="container nav">
+    <a class="brand" href="#" aria-label="IICA Chile, Radar de Oportunidades"><span class="brand-mark"><img src="../../public/logos/pending/iica.png" alt=""></span><span><strong>IICA Chile</strong><small>RADAR DE OPORTUNIDADES 2026</small></span></a>
+    <nav aria-label="NavegaciÃ³n principal"><a href="#oportunidades">Oportunidades</a><a href="#fuentes">Fuentes oficiales</a><a href="#como-funciona">CÃ³mo funciona</a></nav>
+    <div class="nav-actions"><button class="icon-btn" type="button" aria-label="Cambiar contraste" title="Cambiar contraste">â—</button><a class="primary" href="#oportunidades">Explorar oportunidades</a></div>
+  </div></header>
+
+  <main>
+    <section class="hero"><div class="container hero-grid"><div>
+      <div class="eyebrow">Financiamiento para el sector agropecuario</div>
+      <h1>Encuentre financiamiento <span>verificado para Chile</span></h1>
+      <p>Un solo lugar para revisar fondos, subsidios y convocatorias oficiales para productores, organizaciones y empresas del agro.</p>
+      <form class="hero-search" id="search-form"><label class="sr-only" for="search">Buscar oportunidades</label><input id="search" type="search" placeholder="Palabra clave, sector o instituciÃ³n"><button type="submit">Buscar</button></form>
+    </div><div class="hero-note"><strong>57</strong><span>oportunidades activas hoy</span><p>InformaciÃ³n referencial. Confirme siempre los requisitos y plazos en las bases oficiales.</p></div></div></section>
+
+    <section class="container section" id="oportunidades">
+      <div class="stats"><div class="stat"><strong>57</strong><span>Oportunidades activas</span></div><div class="stat"><strong>41</strong><span>Abiertas por mÃ¡s de 7 dÃ­as</span></div><div class="stat"><strong>9</strong><span>Cierres en los prÃ³ximos 7 dÃ­as</span></div><div class="stat"><strong>18</strong><span>Con alcance internacional</span></div></div>
+      <div style="height:34px"></div>
+      <div class="section-title"><div><h2>Oportunidades disponibles</h2><p id="result-copy">Mostrando 1â€“6 de 57 oportunidades</p></div><span style="font-size:13px;color:var(--muted)">Actualizado hoy Â· 04 nov 2026</span></div>
+      <div class="filters" aria-label="Filtros de oportunidades">
+        <div class="filter-row"><span class="filter-label">Estado</span><button class="pill active" data-filter="estado" data-value="abiertas">Abiertas <b>57</b></button><button class="pill urgent" data-filter="estado" data-value="urgentes">Urgentes â‰¤7 dÃ­as <b>9</b></button></div>
+        <div class="filter-row" style="margin-top:10px"><span class="filter-label">Alcance</span><button class="pill active" data-filter="ambito" data-value="todos">Todos</button><button class="pill" data-filter="ambito" data-value="chile">Solo Chile</button><button class="pill" data-filter="ambito" data-value="internacional">Internacional</button><span class="filter-label" style="margin-left:8px">Tipo de fondo</span><button class="pill" data-filter="tipo" data-value="subsidio">Subsidio</button><button class="pill" data-filter="tipo" data-value="credito">CrÃ©dito</button></div>
+        <div class="filter-foot"><div class="chips" id="active-chips"><span class="chip">Estado: abiertas <button type="button" aria-label="Quitar filtro de estado">Ã—</button></span></div><button class="clear" id="clear-filters" type="button">Limpiar filtros</button></div>
+      </div>
+      <div class="results-head"><h2>Recomendadas para usted</h2><select class="sort" aria-label="Ordenar resultados"><option>MÃ¡s relevantes</option><option>Cierre mÃ¡s prÃ³ximo</option><option>Monto mayor</option></select></div>
+      <div class="cards" id="cards"></div>
+      <div class="pagination"><button type="button">â† Anterior</button><span>PÃ¡gina 1 de 10</span><button type="button">Siguiente â†’</button></div>
+    </section>
+
+    <section class="sources section" id="fuentes"><div class="container"><div class="section-title"><div><h2>Fuentes oficiales</h2><p>Instituciones que publican las oportunidades de este radar.</p></div><a href="#" style="color:var(--navy);font-weight:800">Ver todas las fuentes â†’</a></div><div class="source-list">
+      <article class="source-card"><div class="source"><span class="monogram">CNR</span><strong>ComisiÃ³n Nacional de Riego</strong></div><p>4 oportunidades activas Â· subsidios para riego y obras hidrÃ¡ulicas.</p><a href="#">Ver oportunidades de CNR â†’</a></article>
+      <article class="source-card"><div class="source"><span class="monogram">INDAP</span><strong>Instituto de Desarrollo Agropecuario</strong></div><p>17 oportunidades activas Â· apoyo para la agricultura familiar campesina.</p><a href="#">Ver oportunidades de INDAP â†’</a></article>
+      <article class="source-card"><div class="source"><span class="monogram">FIA</span><strong>FundaciÃ³n para la InnovaciÃ³n Agraria</strong></div><p>4 oportunidades activas Â· innovaciÃ³n, AgTech y sostenibilidad.</p><a href="#">Ver oportunidades de FIA â†’</a></article>
+    </div><button class="more-sources" id="more-sources" type="button">Ver 28 fuentes mÃ¡s en monitoreo</button></div></section>
+
+    <section class="container section" id="como-funciona"><div class="newsletter"><div><div class="eyebrow">IICA Informa</div><h2>Reciba un resumen semanal, sin spam.</h2><p>Nuevas oportunidades, prÃ³ximos cierres y enlaces oficiales directamente en su correo.</p></div><form id="newsletter-form"><label class="sr-only" for="email">Correo electrÃ³nico</label><input id="email" type="email" required placeholder="correo@ejemplo.com"><label class="consent"><input type="checkbox" required> Acepto recibir informaciÃ³n segÃºn la polÃ­tica de privacidad.</label><button type="submit">Suscribirme al boletÃ­n â†’</button></form></div></section>
+  </main>
+  <footer><div class="container footer-grid"><div><h3>IICA Chile Â· Radar 2026</h3><p>Una herramienta referencial para encontrar financiamiento agropecuario.</p></div><div><h3>OrientaciÃ³n</h3><a href="#">CÃ³mo funciona</a><a href="#">Fuentes oficiales</a><a href="#">Incrustar widget</a></div><div><h3>Contacto</h3><a href="#">iica.chile@iica.int</a><a href="#">Aviso legal y privacidad</a></div></div></footer>
+  <div class="compare-tray" id="compare-tray"><strong id="compare-text">0 oportunidades seleccionadas</strong><button type="button" id="compare-button">Comparar ahora</button></div>
+  <script>
+    const opportunities = [
+      {source:"FIA", title:"Programa Mujer Agroinnovadora 2026", description:"Apoya soluciones innovadoras lideradas por mujeres para mejorar la productividad y sostenibilidad agrÃ­cola.", status:"open", statusText:"Abierta", amount:"Hasta $15M por proyecto", close:"Cierra en 57 dÃ­as", detail:"30 nov 2026", tags:["InnovaciÃ³n","Sin cofinanciamiento"], scope:"chile"},
+      {source:"CORFO", title:"Activa InversiÃ³n Agro 2026", description:"Financiamiento para incorporar tecnologÃ­as, infraestructura y equipamiento que aumenten la competitividad.", status:"soon", statusText:"Cierra pronto", amount:"Hasta $100M por proyecto", close:"Cierra en 5 dÃ­as", detail:"09 nov 2026", tags:["Subsidio","Empresas"], scope:"chile"},
+      {source:"CNR", title:"Concurso de tecnificaciÃ³n del riego", description:"BonificaciÃ³n para obras de riego y drenaje que mejoren la seguridad hÃ­drica de su predio.", status:"open", statusText:"Abierta", amount:"Hasta 90% del proyecto", close:"Cierra en 24 dÃ­as", detail:"28 nov 2026", tags:["Riego","Subsidio"], scope:"chile"},
+      {source:"INDAP", title:"Programa de Desarrollo Local â€” PRODESAL", description:"AsesorÃ­a tÃ©cnica y apoyo para fortalecer la producciÃ³n y comercializaciÃ³n de pequeÃ±os agricultores.", status:"open", statusText:"Abierta", amount:"Monto no especificado", close:"PostulaciÃ³n permanente", detail:"Revise disponibilidad local", tags:["Asistencia tÃ©cnica","Agricultura familiar"], scope:"chile"},
+      {source:"AGCID", title:"Fondo Chile contra el Hambre y la Pobreza", description:"CooperaciÃ³n para proyectos que fortalezcan sistemas alimentarios sostenibles en la regiÃ³n.", status:"urgent", statusText:"Cierra pronto", amount:"Hasta US$80.000 por proyecto", close:"Cierra en 6 dÃ­as", detail:"10 nov 2026", tags:["Internacional","CooperaciÃ³n"], scope:"internacional"},
+      {source:"OCDE", title:"Agricultural Policy Monitoring 2026", description:"Convocatoria internacional para estudios aplicados sobre polÃ­ticas pÃºblicas y desarrollo rural.", status:"open", statusText:"Abierta", amount:"Presupuesto total no publicado", close:"PostulaciÃ³n permanente", detail:"Revise bases oficiales", tags:["Internacional","InvestigaciÃ³n"], scope:"internacional"}
+    ];
+    let activeFilters={estado:"abiertas",ambito:"todos",tipo:null}, selected=new Set();
+    const cards=document.querySelector("#cards"), copy=document.querySelector("#result-copy"), tray=document.querySelector("#compare-tray"), compareText=document.querySelector("#compare-text");
+    function render(list=opportunities){
+      cards.innerHTML=list.map((o,i)=>`<article class="card ${o.status==='urgent'?'urgent':o.status==='soon'?'soon':''}"><div class="card-top"><div class="source"><span class="monogram">${o.source}</span><span>${o.source === "FIA" ? "FundaciÃ³n para la InnovaciÃ³n Agraria" : o.source === "INDAP" ? "Instituto de Desarrollo Agropecuario" : o.source}</span></div><span class="status ${o.status}">${o.statusText}</span></div><h3>${o.title}</h3><p class="desc">${o.description}</p><div class="tags">${o.tags.map(t=>'<span class="tag '+(t.includes("cofinanciamiento")?"green":"")+'">'+t+'</span>').join("")}</div><div class="meta"><div><small>Monto</small><strong class="${o.amount.includes("no")?"missing":""}">${o.amount}</strong></div><div><small>Cierre</small><strong class="${o.close.includes("permanente")?"missing":""}">${o.close}</strong><small>${o.detail}</small></div></div><div class="card-actions"><a href="#">Ver detalle y requisitos â†’</a><button type="button" class="${selected.has(i)?"selected":""}" data-compare="${i}">${selected.has(i)?"âœ“ Comparando":"+ Comparar"}</button></div></article>`).join("");
+      copy.textContent=`Mostrando 1â€“${list.length} de ${list.length===opportunities.length?57:list.length} oportunidades`;
+      cards.querySelectorAll("[data-compare]").forEach(b=>b.onclick=()=>{const i=Number(b.dataset.compare);selected.has(i)?selected.delete(i):selected.add(i);render(list);updateTray()});
+    }
+    function updateTray(){compareText.textContent=`${selected.size} oportunidad${selected.size===1?"":"es"} seleccionada${selected.size===1?"":"s"}`;tray.classList.toggle("show",selected.size>0)}
+    function filter(){let list=opportunities.filter(o=>activeFilters.ambito==="todos"||o.scope===activeFilters.ambito);if(activeFilters.estado==="urgentes")list=list.filter(o=>o.status!=="open");render(list)}
+    document.querySelectorAll("[data-filter]").forEach(b=>b.onclick=()=>{const key=b.dataset.filter,value=b.dataset.value;activeFilters[key]=value;document.querySelectorAll(`[data-filter="${key}"]`).forEach(x=>x.classList.toggle("active",x===b));filter()});
+    document.querySelector("#clear-filters").onclick=()=>{activeFilters={estado:"abiertas",ambito:"todos",tipo:null};document.querySelectorAll(".pill").forEach(x=>x.classList.toggle("active",x.dataset.value==="abiertas"||x.dataset.value==="todos"));render()};
+    document.querySelector("#search-form").onsubmit=e=>{e.preventDefault();const q=document.querySelector("#search").value.toLowerCase();render(opportunities.filter(o=>(o.title+" "+o.description+" "+o.source).toLowerCase().includes(q)))};
+    document.querySelector("#more-sources").onclick=e=>{e.currentTarget.textContent="Las fuentes en monitoreo se mostrarÃ¡n aquÃ­ al publicar oportunidades activas.";e.currentTarget.disabled=true};
+    document.querySelector("#newsletter-form").onsubmit=e=>{e.preventDefault();e.currentTarget.innerHTML="<p style='margin:0;color:#b9e6d0;font-weight:700'>Listo. Revise su correo para confirmar la suscripciÃ³n.</p>"};
+    render();
+  </script>
+</body>
+</html>
+
