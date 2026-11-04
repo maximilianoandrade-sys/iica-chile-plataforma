@@ -57,7 +57,7 @@ export default function StatsSection({ total, abiertas, internacionales, urgente
     };
 
     return (
-        <section className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 py-10">
+        <section className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 py-7 sm:py-10">
             <div className="container mx-auto max-w-[1200px] px-4">
                 {isPending && (
                     <div className="flex items-center gap-2 mb-3 text-sm text-iica-blue animate-pulse">
@@ -65,7 +65,7 @@ export default function StatsSection({ total, abiertas, internacionales, urgente
                         <span>Filtrando oportunidades...</span>
                     </div>
                 )}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:grid-cols-4">
                     {stats.map((stat, i) => (
                         <button
                             key={i}
@@ -74,17 +74,17 @@ export default function StatsSection({ total, abiertas, internacionales, urgente
                             onClick={() => handleCardClick(stat.href)}
                             onMouseEnter={() => router.prefetch(stat.href)}
                             disabled={isPending}
-                            className={`text-left bg-white dark:bg-gray-800 rounded-xl p-5 md:p-6 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md hover:border-[var(--iica-blue)] transition-all cursor-pointer group ${
+                            className={`text-left bg-white dark:bg-gray-800 rounded-xl p-3.5 sm:p-5 md:p-6 border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md hover:border-[var(--iica-blue)] transition-all cursor-pointer group ${
                                 isPending ? 'opacity-70 pointer-events-none' : ''
                             }`}
                         >
-                            <div className={`w-11 h-11 rounded-lg ${stat.iconClass} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                            <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-lg ${stat.iconClass} group-hover:scale-110 transition-transform sm:mb-4 sm:h-11 sm:w-11`}>
                                 {stat.icon}
                             </div>
                             <p className="text-xs font-black uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-1">
                                 {stat.label}
                             </p>
-                            <p className="text-3xl font-black text-gray-900 dark:text-white mb-0.5 leading-none">
+                            <p className="text-2xl font-black leading-none text-gray-900 dark:text-white sm:text-3xl">
                                 {stat.value}
                             </p>
                             <p className="text-sm text-gray-500 dark:text-gray-400">

@@ -91,12 +91,12 @@ export function EligibilityAssistant({ project }: EligibilityAssistantProps) {
 
   return (
     <div className="bg-gradient-to-br from-blue-50/80 via-white to-emerald-50/80 dark:from-gray-800 dark:via-gray-800/90 dark:to-emerald-950/30 border-2 border-blue-200 dark:border-blue-800/60 rounded-2xl p-6 shadow-sm my-6">
-      <div className="flex items-center gap-3 mb-4">
+      <div className="mb-4 flex items-start gap-3 sm:items-center">
         <div className="p-2.5 bg-[var(--iica-blue)]/10 dark:bg-blue-900/40 rounded-xl text-[var(--iica-blue)] dark:text-blue-300">
           <Sparkles className="w-5 h-5" aria-hidden="true" />
         </div>
-        <div>
-          <h3 className="text-lg font-extrabold text-[var(--iica-navy)] dark:text-white flex items-center gap-2">
+        <div className="min-w-0">
+          <h3 className="flex flex-wrap items-center gap-2 text-lg font-extrabold text-[var(--iica-navy)] dark:text-white">
             Asistente de Elegibilidad — ¿Puedo Postular?
           </h3>
           <p className="text-xs text-gray-600 dark:text-gray-400">
@@ -171,9 +171,9 @@ export function EligibilityAssistant({ project }: EligibilityAssistantProps) {
           {evaluation.verdict === 'conditional' && <AlertTriangle className="w-6 h-6 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" aria-hidden="true" />}
           {evaluation.verdict === 'ineligible' && <XCircle className="w-6 h-6 text-red-600 dark:text-red-400 shrink-0 mt-0.5" aria-hidden="true" />}
 
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-1">
-              <span className={`text-sm font-extrabold px-3 py-0.5 rounded-full ${
+          <div className="min-w-0 flex-1">
+            <div className="mb-1 flex items-start gap-2">
+              <span className={`max-w-full break-words text-sm font-extrabold px-3 py-1 rounded-full ${
                 evaluation.verdict === 'eligible'
                   ? 'bg-emerald-200 text-emerald-900 dark:bg-emerald-800 dark:text-emerald-100'
                   : evaluation.verdict === 'conditional'

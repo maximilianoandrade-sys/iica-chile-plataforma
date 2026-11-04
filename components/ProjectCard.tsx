@@ -114,7 +114,7 @@ export function ProjectCard({
       }`}
     >
       {/* Header inspired by the requested reference card */}
-      <div className="relative bg-[var(--iica-navy)] px-5 pb-12 pt-5 text-white dark:bg-slate-900">
+      <div className="relative bg-[var(--iica-navy)] px-4 pb-12 pt-4 text-white dark:bg-slate-900 sm:px-5 sm:pt-5">
         <div className="relative z-20 flex items-start justify-between gap-3">
           <span
             className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-bold ${styles.badge}`}
@@ -122,28 +122,28 @@ export function ProjectCard({
             {urgency === 'critical' && <AlertCircle className="h-3 w-3" />}
             {urgency === 'closed' ? 'CERRADA' : urgency === 'warning' ? 'CIERRA PRONTO' : 'ABIERTA'}
           </span>
-          <span className="inline-flex items-center gap-1 text-sm font-medium">
+          <span className="inline-flex max-w-[45%] items-center gap-1 text-right text-xs font-medium sm:max-w-none sm:text-sm">
             <MapPin className="h-4 w-4" aria-hidden="true" />
             {scopeLabel}
           </span>
         </div>
 
         <div className="relative z-20 mt-4">
-          <p className="mb-2 line-clamp-2 text-xs font-bold uppercase tracking-wide text-rose-200">
+          <p className="mb-2 line-clamp-2 break-words text-xs font-bold uppercase tracking-wide text-rose-200">
             {project.institucion}
           </p>
           <Link
             href={`/proyecto/${getCatalogRouteKey(project)}`}
             className="stretched-link block line-clamp-3 text-lg font-bold leading-snug text-white transition-colors hover:text-blue-100 focus-visible:outline-none"
           >
-            {project.nombre}
+            <span className="break-words">{project.nombre}</span>
           </Link>
         </div>
 
         <div className="absolute inset-x-0 -bottom-1 z-10 h-9 rounded-[50%_50%_0_0/100%_100%_0_0] border-t-4 border-blue-200 bg-white dark:border-blue-800 dark:bg-gray-800" />
       </div>
 
-      <div className="flex flex-1 flex-col bg-white px-5 pb-4 pt-1 dark:bg-gray-800">
+      <div className="flex flex-1 flex-col bg-white px-4 pb-4 pt-1 dark:bg-gray-800 sm:px-5">
         {/* Compare, favorite and secondary indicators remain available without crowding the header. */}
         <div className="relative z-20 mb-3 flex min-h-[36px] items-center justify-between gap-2">
           <div className="flex flex-wrap items-center gap-1.5">
@@ -155,7 +155,7 @@ export function ProjectCard({
                   e.stopPropagation();
                   onToggleCompare(project);
                 }}
-                className={`rounded border px-2 py-1 text-[11px] font-bold transition-colors ${
+                className={`min-h-[44px] rounded border px-3 py-2 text-[11px] font-bold transition-colors ${
                   isSelectedForComparison
                     ? 'border-blue-600 bg-blue-600 text-white'
                     : 'border-gray-300 bg-gray-50 text-gray-700 hover:bg-blue-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300'

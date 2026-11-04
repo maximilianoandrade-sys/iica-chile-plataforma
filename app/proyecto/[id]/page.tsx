@@ -107,10 +107,10 @@ export default async function ProyectoDetallePage({ params }: Props) {
         <div className="min-h-screen flex flex-col bg-[#f4f7f9] dark:bg-gray-900">
             <Header />
 
-            <main className="flex-grow container mx-auto max-w-[900px] px-4 py-10">
+            <main className="container mx-auto flex-grow max-w-[900px] px-3 py-6 sm:px-4 sm:py-10">
 
                 {/* Breadcrumb */}
-                <div className="mb-6">
+                <div className="mb-5 sm:mb-6">
                     <Link
                         href="/#convocatorias"
                         className="inline-flex items-center gap-2 text-sm text-[var(--iica-blue)] hover:text-[var(--iica-navy)] font-medium transition-colors"
@@ -124,10 +124,10 @@ export default async function ProyectoDetallePage({ params }: Props) {
                 <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
 
                     {/* Header del fondo */}
-                    <div className="relative overflow-hidden bg-[var(--iica-navy)] p-6 text-white md:p-8">
+                    <div className="relative overflow-hidden bg-[var(--iica-navy)] p-4 text-white sm:p-6 md:p-8">
                         <div className="absolute -right-20 -top-32 h-96 w-96 rotate-12 bg-[var(--iica-blue)]/30" aria-hidden="true" />
                         <div className="relative z-10">
-                        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+                        <div className="mb-4 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
                             <div className="flex flex-wrap gap-2">
                                 <span className="bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full border border-white/30">
                                     {project.categoria}
@@ -161,9 +161,9 @@ export default async function ProyectoDetallePage({ params }: Props) {
                     </div>
 
                     {/* Fechas de postulación, inspired by fondos.gob.cl */}
-                    <div className="border-b border-gray-100 bg-white px-6 py-7 dark:border-gray-700 dark:bg-gray-800 md:px-12">
+                    <div className="border-b border-gray-100 bg-white px-4 py-6 dark:border-gray-700 dark:bg-gray-800 sm:px-6 sm:py-7 md:px-12">
                         <h2 className="text-center text-lg font-bold text-gray-800 dark:text-white">Fechas de postulación</h2>
-                        <div className="mx-auto mt-7 grid max-w-2xl grid-cols-[1fr_auto_1fr] items-start gap-3">
+                        <div className="mx-auto mt-6 grid max-w-2xl grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-start gap-2 sm:mt-7 sm:gap-3">
                             <div className="text-center">
                                 <span className="mx-auto block h-3 w-3 rounded-full border-2 border-emerald-500 bg-white" />
                                 <span className="mt-2 inline-block rounded bg-emerald-600 px-2 py-1 text-xs font-bold text-white">
@@ -171,7 +171,7 @@ export default async function ProyectoDetallePage({ params }: Props) {
                                 </span>
                                 <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">Inicio disponible</p>
                             </div>
-                            <div className="mt-1 h-px w-20 bg-gray-300 dark:bg-gray-600 md:w-40" aria-hidden="true" />
+                            <div className="mt-1 h-px w-8 bg-gray-300 dark:bg-gray-600 sm:w-20 md:w-40" aria-hidden="true" />
                             <div className="text-center">
                                 <span className={`mx-auto block h-3 w-3 rounded-full border-2 ${isClosed ? 'border-red-500' : 'border-rose-400'} bg-white`} />
                                 <span className={`mt-2 inline-block rounded px-2 py-1 text-xs font-bold text-white ${isClosed ? 'bg-red-600' : 'bg-rose-500'}`}>
@@ -231,9 +231,9 @@ export default async function ProyectoDetallePage({ params }: Props) {
                     </div>
 
                     {/* Contenido detallado */}
-                    <div className="bg-[#f1f1f1] px-4 pb-8 md:px-8">
+                    <div className="bg-[#f1f1f1] px-2 pb-6 sm:px-4 sm:pb-8 md:px-8">
                     <Tabs defaultValue="requisitos" className="rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
-                        <TabsList className="flex h-auto w-full justify-start overflow-x-auto rounded-none border-b border-gray-200 bg-white p-0 dark:border-gray-700 dark:bg-gray-800">
+                        <TabsList className="flex h-auto w-full max-w-full justify-start overflow-x-auto rounded-none border-b border-gray-200 bg-white p-0 dark:border-gray-700 dark:bg-gray-800">
                             <TabsTrigger value="requisitos" className="min-h-[52px] rounded-none border-b-2 border-transparent px-4 text-xs data-[state=active]:border-blue-600 data-[state=active]:bg-white md:px-8">
                                 <ClipboardCheck className="mr-2 h-4 w-4" aria-hidden="true" /> Requisitos
                             </TabsTrigger>
@@ -247,7 +247,7 @@ export default async function ProyectoDetallePage({ params }: Props) {
                                 Bases y consultas
                             </TabsTrigger>
                         </TabsList>
-                        <TabsContent value="requisitos" className="p-6 md:p-8">
+                        <TabsContent value="requisitos" className="p-4 sm:p-6 md:p-8">
 
                         {/* Asistente de Elegibilidad Rápidas */}
                         <EligibilityAssistant project={project} />
@@ -292,16 +292,16 @@ export default async function ProyectoDetallePage({ params }: Props) {
                             </div>
                         )}
                         </TabsContent>
-                        <TabsContent value="documentacion" className="p-6 md:p-8">
+                        <TabsContent value="documentacion" className="p-4 sm:p-6 md:p-8">
                             <h2 className="text-lg font-bold text-[var(--iica-navy)] dark:text-white">Documentación y bases</h2>
                             <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-300">Revise la documentación oficial y los antecedentes solicitados directamente en la fuente de la convocatoria.</p>
                             <div className="mt-5">{/* The official-link action remains below for consistent verification. */}</div>
                         </TabsContent>
-                        <TabsContent value="evaluacion" className="p-6 md:p-8">
+                        <TabsContent value="evaluacion" className="p-4 sm:p-6 md:p-8">
                             <h2 className="text-lg font-bold text-[var(--iica-navy)] dark:text-white">Evaluación preliminar IICA</h2>
                             <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-300">Esta ficha resume la información pública disponible y no reemplaza la evaluación oficial de la institución convocante.</p>
                         </TabsContent>
-                        <TabsContent value="bases" className="p-6 md:p-8">
+                        <TabsContent value="bases" className="p-4 sm:p-6 md:p-8">
                             <h2 className="text-lg font-bold text-[var(--iica-navy)] dark:text-white">Bases y consultas</h2>
                             <p className="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-300">Consulte las bases oficiales, fechas y canales de atención antes de postular.</p>
                         </TabsContent>

@@ -30,8 +30,14 @@ export function TipoTabs() {
             <Tabs value={currentTipo} onValueChange={handleTabChange}>
             <TabsList className="min-w-max">
                     <TabsTrigger value="all">Todos</TabsTrigger>
-                    <TabsTrigger value="fondo">Fondos Concursables</TabsTrigger>
-                    <TabsTrigger value="licitacion">Licitaciones / Procurement</TabsTrigger>
+                    <TabsTrigger value="fondo">
+                        <span className="sm:hidden">Fondos</span>
+                        <span className="hidden sm:inline">Fondos Concursables</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="licitacion">
+                        <span className="sm:hidden">Licitaciones</span>
+                        <span className="hidden sm:inline">Licitaciones / Procurement</span>
+                    </TabsTrigger>
                 </TabsList>
             </Tabs>
         </div>

@@ -25,7 +25,7 @@ export function Header(_props: HeaderProps) {
     return (
         <header className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-[var(--iica-border)] dark:border-gray-700 shadow-sm">
             {/* Institutional Top Bar */}
-            <div className="bg-[var(--iica-navy)] dark:bg-gray-800 text-white text-xs py-1.5 px-4">
+            <div className="bg-[var(--iica-navy)] dark:bg-gray-800 text-white text-[10px] sm:text-xs py-1.5 px-3 sm:px-4">
                 <div className="container mx-auto max-w-[1200px] flex justify-between items-center">
                     <span className="font-medium truncate">Instituto Interamericano de Cooperación para la Agricultura — Oficina Chile</span>
                     <span className="opacity-75 hidden sm:block tracking-wide">Radar de Oportunidades 2026</span>
@@ -34,14 +34,14 @@ export function Header(_props: HeaderProps) {
 
             {/* Main Navigation */}
             <div className="container mx-auto max-w-[1200px] px-4">
-                <div className="flex items-center justify-between h-16">
+                <div className="flex items-center justify-between h-14 sm:h-16">
 
                     {/* Logo — mantiene logo oficial IICA */}
                     <a
                         href={OFFICIAL_IICA_CHILE_URL}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-3 hover:opacity-90 transition-opacity"
+                        className="flex min-w-0 items-center gap-2 sm:gap-3 hover:opacity-90 transition-opacity"
                     >
                         <Image
                             src="/logos/pending/iica.png"
@@ -49,10 +49,10 @@ export function Header(_props: HeaderProps) {
                             width={36}
                             height={36}
                             priority
-                            className="h-8 w-auto"
+                            className="h-8 w-auto shrink-0"
                         />
-                        <div className="hidden sm:flex flex-col leading-tight">
-                            <span className="font-black text-[var(--iica-navy)] dark:text-white text-base">
+                        <div className="hidden min-w-0 sm:flex flex-col leading-tight">
+                            <span className="truncate font-black text-[var(--iica-navy)] dark:text-white text-base">
                                 IICA <span className="text-[var(--iica-blue)] dark:text-blue-400">Chile</span>
                             </span>
                             <span className="text-xs font-bold uppercase tracking-widest text-gray-400">Radar 2026</span>
@@ -76,7 +76,7 @@ export function Header(_props: HeaderProps) {
                     </nav>
 
                     {/* Right Actions */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex shrink-0 items-center gap-1 sm:gap-2">
                         <ThemeToggle />
                         <AccessibilityToolbar />
 
@@ -88,7 +88,7 @@ export function Header(_props: HeaderProps) {
                         </Link>
 
                         <button
-                            className="md:hidden p-2 text-[var(--iica-navy)] dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                            className="md:hidden flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg p-2 text-[var(--iica-navy)] transition-colors hover:bg-gray-100 dark:text-white dark:hover:bg-gray-800"
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                             aria-label={mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
                             aria-expanded={mobileMenuOpen}

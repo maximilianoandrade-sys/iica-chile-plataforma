@@ -57,18 +57,18 @@ export function HeroSection({ stats }: HeroSectionProps) {
                         </span>
                     </div>
 
-                    <h1 className="text-3xl md:text-5xl font-extrabold text-white mb-4 leading-tight drop-shadow-lg">
+                    <h1 className="max-w-full break-words text-3xl font-extrabold leading-tight text-white drop-shadow-lg md:mb-4 md:text-5xl">
                         Encuentre financiamiento{' '}
-                        <span className="text-[var(--iica-yellow)]">verificado para Chile</span>
+                        <span className="text-[var(--iica-yellow)] sm:inline">verificado para Chile</span>
                     </h1>
 
-                    <p className="text-base md:text-lg text-gray-100 mb-6 max-w-xl leading-relaxed drop-shadow-md">
+                    <p className="mb-6 max-w-xl break-words text-base leading-relaxed text-gray-100 drop-shadow-md md:text-lg">
                         Compare convocatorias vigentes, revise requisitos clave y acceda a fuentes oficiales en minutos.
                     </p>
 
                     <form
                         onSubmit={handleSearch}
-                        className="mb-5 flex max-w-2xl rounded-lg bg-white p-1 shadow-lg"
+                        className="mb-5 flex max-w-2xl flex-col gap-1 rounded-lg bg-white p-1 shadow-lg sm:flex-row"
                         role="search"
                     >
                         <label htmlFor="hero-search" className="sr-only">
@@ -79,20 +79,20 @@ export function HeroSection({ stats }: HeroSectionProps) {
                             value={query}
                             onChange={(event) => setQuery(event.target.value)}
                             placeholder="Palabra clave, sector o institución"
-                            className="min-w-0 flex-1 rounded-md border-0 px-3 py-2 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-[var(--iica-yellow)]"
+                            className="min-h-[44px] min-w-0 flex-1 rounded-md border-0 px-3 py-2 text-sm text-gray-900 outline-none focus:ring-2 focus:ring-[var(--iica-yellow)]"
                         />
                         <button
                             type="submit"
-                            className="min-h-[44px] rounded-md bg-green-600 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-green-700"
+                            className="min-h-[44px] w-full rounded-md bg-green-600 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-green-700 sm:w-auto"
                         >
                             Buscar
                         </button>
                     </form>
 
-                    <div className="flex flex-wrap gap-3 items-center">
+                    <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
                         <Link
                             href="#convocatorias"
-                            className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold text-base py-3 px-6 rounded-lg shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl group min-h-[48px]"
+                            className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-lg bg-green-600 px-6 py-3 text-base font-semibold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl group sm:w-auto"
                         >
                             Explorar {totalOportunidades > 0 ? `${totalOportunidades} ` : ''}Oportunidades
                             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -101,7 +101,7 @@ export function HeroSection({ stats }: HeroSectionProps) {
                         <button
                             type="button"
                             onClick={() => setIsNewsletterOpen(true)}
-                            className="flex items-center justify-center gap-2 bg-white/95 hover:bg-white text-[var(--iica-navy)] font-bold text-sm py-3 px-5 rounded-lg shadow-lg transition-all hover:-translate-y-0.5 min-h-[48px]"
+                            className="flex min-h-[48px] w-full items-center justify-center gap-2 rounded-lg bg-white/95 px-5 py-3 text-sm font-bold text-[var(--iica-navy)] shadow-lg transition-all hover:-translate-y-0.5 sm:w-auto"
                         >
                             <Bell className="w-5 h-5 text-gray-900" />
                             Recibir Alertas WhatsApp

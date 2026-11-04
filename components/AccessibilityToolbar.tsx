@@ -111,7 +111,7 @@ export function AccessibilityToolbar() {
         aria-label="Opciones de accesibilidad"
         title="Opciones de accesibilidad"
         className={`
-          relative flex items-center justify-center w-9 h-9 rounded-lg transition-all
+          relative flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg transition-all
           ${isModified
             ? 'bg-[var(--iica-blue)] text-white shadow-md'
             : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'

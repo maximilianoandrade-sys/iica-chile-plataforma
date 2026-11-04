@@ -176,12 +176,12 @@ export default function ProjectList({
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+        <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
           {/* Favorites Drawer Toggle Button */}
           <button
             type="button"
             onClick={() => setIsFavoritesOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold bg-amber-50 dark:bg-amber-900/30 hover:bg-amber-100 text-amber-900 dark:text-amber-200 border border-amber-200 dark:border-amber-700 transition-all min-h-[44px] cursor-pointer"
+            className="inline-flex min-h-[44px] w-full items-center justify-center gap-1.5 rounded-lg bg-amber-50 px-3 py-2 text-xs font-bold text-amber-900 transition-all hover:bg-amber-100 dark:border dark:border-amber-700 dark:bg-amber-900/30 dark:text-amber-200 sm:w-auto"
             title="Ver mis convocatorias guardadas en el navegador"
           >
             <Star size={15} className="fill-amber-400 text-amber-500" />
@@ -192,7 +192,7 @@ export default function ProjectList({
           <button
             type="button"
             onClick={() => setIsCalculatorOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 text-[var(--iica-blue)] dark:text-blue-200 border border-blue-200 dark:border-blue-700 transition-all min-h-[44px] cursor-pointer"
+            className="inline-flex min-h-[44px] w-full items-center justify-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-bold text-[var(--iica-blue)] transition-all hover:bg-blue-100 dark:border-blue-700 dark:bg-blue-900/30 dark:text-blue-200 sm:w-auto"
             title="Calcular aporte propio y cofinanciamiento"
           >
             <Calculator size={15} className="text-[var(--iica-blue)] dark:text-blue-400" />
@@ -203,7 +203,7 @@ export default function ProjectList({
           <button
             type="button"
             onClick={() => exportProjectsToCsv(projects)}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold bg-emerald-50 dark:bg-emerald-900/30 hover:bg-emerald-100 text-emerald-800 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-700 transition-all min-h-[44px] cursor-pointer"
+            className="inline-flex min-h-[44px] w-full items-center justify-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-800 transition-all hover:bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-200 sm:w-auto"
             title="Exportar listado actual a Excel / CSV"
           >
             <Download size={15} className="text-emerald-600 dark:text-emerald-400" />
@@ -211,7 +211,7 @@ export default function ProjectList({
           </button>
 
           {/* Dual View Toggle Switcher */}
-          <div className="flex items-center rounded-lg border border-iica-border bg-gray-50 dark:bg-gray-700/50 p-1" role="group" aria-label="Modo de vista">
+          <div className="flex min-h-[44px] w-full items-center justify-center rounded-lg border border-iica-border bg-gray-50 p-1 dark:bg-gray-700/50 sm:w-auto" role="group" aria-label="Modo de vista">
             <button
               type="button"
               onClick={() => handleSetViewMode('grid')}
@@ -243,7 +243,7 @@ export default function ProjectList({
           <select
             value={sort}
             onChange={(e) => updateSort(e.target.value)}
-            className="text-sm border border-iica-border rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none min-h-[44px]"
+            className="min-h-[44px] w-full rounded-lg border border-iica-border bg-white px-3 py-2 text-sm text-gray-700 focus-visible:ring-2 focus-visible:ring-iica-yellow focus:outline-none dark:bg-gray-800 dark:text-gray-200 sm:w-auto"
             aria-label="Ordenar por"
             title="Prioriza convocatorias nacionales con cierre próximo y monto disponible"
           >
