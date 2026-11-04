@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Calendar, Download, ExternalLink, ChevronDown } from 'lucide-react';
 import type { Project } from '@/lib/project-utils';
+import { getCatalogRouteKey } from '@/lib/catalog-merge';
 
 interface CalendarReminderButtonProps {
   project: Project;
@@ -37,7 +38,7 @@ export function CalendarReminderButton({ project, variant = 'button', className 
 
   const title = encodeURIComponent(`[Cierre Concurso] ${project.nombre} (${project.institucion})`);
   const siteOrigin = typeof window !== 'undefined' ? window.location.origin : 'https://iica-chile-plataforma.vercel.app';
-  const projectDetailUrl = `${siteOrigin}/proyecto/${project.id}#bases`;
+  const projectDetailUrl = `${siteOrigin}/proyecto/${getCatalogRouteKey(project)}#bases`;
   const details = encodeURIComponent(
     `Recordatorio de Cierre de Convocatoria IICA Chile:\n\n` +
     `Proyecto: ${project.nombre}\n` +

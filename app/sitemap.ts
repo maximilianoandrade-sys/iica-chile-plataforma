@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { getProjects } from "@/lib/data";
 import { getEnv } from "@/lib/utils/env";
+import { getCatalogRouteKey } from "@/lib/catalog-merge";
 
 export const dynamic = "force-dynamic";
 
@@ -26,7 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const result = await getProjects();
     if (result.ok) {
       projectUrls = result.projects.map((p) => ({
-        url: `${BASE_URL}/proyecto/${p.id}`,
+        url: `${BASE_URL}/proyecto/${getCatalogRouteKey(p)}`,
         lastModified: new Date(),
         changeFrequency: "weekly",
         priority: 0.8,
@@ -44,4 +45,3 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...projectUrls,
   ];
 }
-

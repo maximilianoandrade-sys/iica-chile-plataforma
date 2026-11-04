@@ -60,6 +60,7 @@ import { cache } from 'react';
 import { getLogger } from '@/lib/utils/logger';
 import prisma from './prisma';
 import projectsJson from '../data/projects.json';
+import { mergeCatalogProjects } from './catalog-merge';
 
 export function getStaticProjects(today: Date): Project[] {
     const todayStr = today.toISOString().split('T')[0];
@@ -92,24 +93,6 @@ const logger = getLogger('Data');
 // ============================================================================
 
 const FAKE_PROJECT_IDS = [103, 104, 106, 110, 113];
-
-type UrlProject = { id: number; url_bases: string };
-
-/** Deduplica proyectos por url_bases para evitar entradas duplicadas (ej: CNR) */
-function deduplicateByUrl<T extends UrlProject>(projects: T[]): T[] {
-    const seen = new Map<string, T>();
-    for (const p of projects) {
-        const key = p.url_bases?.toLowerCase().trim();
-        if (!key) {
-            // Sin URL, siempre incluir (usar id como key única)
-            seen.set(`__no_url_${p.id}`, p);
-        } else if (!seen.has(key)) {
-            seen.set(key, p);
-        }
-        // Si ya existe esa URL, se descarta el duplicado
-    }
-    return Array.from(seen.values());
-}
 
 export type GetProjectsResult =
     | { ok: true; projects: Project[] }
@@ -168,7 +151,7 @@ export async function getProjects(): Promise<GetProjectsResult> {
         })) as Project[];
 
         const staticList = getStaticProjects(today);
-        const combined = deduplicateByUrl([...mapped, ...staticList]);
+        const combined = mergeCatalogProjects(mapped, staticList);
         return { ok: true, projects: combined };
     } catch (error) {
         logger.warn('getProjects Prisma/Supabase no disponible, usando catálogo estático', { error: (error as Error).message });
@@ -230,7 +213,7 @@ export async function getProjectFilterSnapshot(): Promise<GetProjectFilterSnapsh
             categoria: p.categoria,
             url_bases: p.url_bases,
         }));
-        const deduped = deduplicateByUrl([...mapped, ...staticList]);
+        const deduped = mergeCatalogProjects<ProjectFilterSnapshot>(mapped, staticList);
 
         return { ok: true, projects: deduped };
     } catch (error) {

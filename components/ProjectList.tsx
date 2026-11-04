@@ -13,6 +13,7 @@ import FavoritesDrawer from '@/components/FavoritesDrawer';
 import { exportProjectsToCsv } from '@/lib/utils/exportCsv';
 import { getLogger } from '@/lib/utils/logger';
 import { type Project, daysUntilClose, formatDeadline, formatMontoCLP } from '@/lib/project-utils';
+import { getCatalogRouteKey } from '@/lib/catalog-merge';
 
 const logger = getLogger('ProjectList');
 const ITEMS_PER_PAGE = 16;
@@ -319,7 +320,7 @@ export default function ProjectList({
                     return (
                       <tr key={project.id} className="hover:bg-gray-50/80 dark:hover:bg-gray-700/30 transition-colors">
                         <td className="px-4 py-3.5 font-medium text-gray-900 dark:text-white max-w-md">
-                          <Link href={`/proyecto/${project.id}`} className="hover:text-iica-blue font-semibold line-clamp-2">
+                          <Link href={`/proyecto/${getCatalogRouteKey(project)}`} className="hover:text-iica-blue font-semibold line-clamp-2">
                             {project.nombre}
                           </Link>
                           <span className="block text-xs text-gray-500 dark:text-gray-400 mt-0.5">
@@ -362,7 +363,7 @@ export default function ProjectList({
                           <div className="flex items-center justify-end gap-2">
                             <FavoriteButton projectId={project.id} />
                             <Link
-                              href={`/proyecto/${project.id}`}
+                              href={`/proyecto/${getCatalogRouteKey(project)}`}
                               className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-md bg-iica-blue text-white hover:bg-iica-navy transition-colors min-h-[36px]"
                             >
                               Ver Ficha <ArrowRight size={13} />

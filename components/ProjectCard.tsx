@@ -6,6 +6,7 @@ import { type Project, daysUntilClose, formatDeadline, pluralizeDias } from '@/l
 import { InstitutionLogo } from '@/components/InstitutionLogo';
 import { FavoriteButton } from '@/components/FavoriteButton';
 import { CalendarReminderButton } from '@/components/CalendarReminderButton';
+import { getCatalogRouteKey } from '@/lib/catalog-merge';
 
 /** Urgency semaphore: 3 levels + closed */
 type UrgencyLevel = 'critical' | 'warning' | 'normal' | 'closed';
@@ -155,7 +156,7 @@ export function ProjectCard({
 
         {/* Título — primary visual element */}
         <Link
-          href={`/proyecto/${project.id}`}
+          href={`/proyecto/${getCatalogRouteKey(project)}`}
           className="stretched-link block mb-2 line-clamp-2 text-[15px] font-medium leading-snug text-gray-900 dark:text-white hover:text-[var(--iica-blue)] dark:hover:text-blue-400 transition-colors rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--iica-yellow)]"
         >
           {project.nombre}
@@ -229,7 +230,7 @@ export function ProjectCard({
           <CalendarReminderButton project={project} variant="icon" />
           {project.url_bases && (
             <a
-              href={`/proyecto/${project.id}#bases`}
+              href={`/proyecto/${getCatalogRouteKey(project)}#bases`}
               onClick={(e) => e.stopPropagation()}
               className="text-xs font-bold text-[var(--iica-blue)] dark:text-blue-400 hover:underline flex items-center gap-1 bg-blue-50 dark:bg-blue-900/30 px-2.5 py-1 rounded-md"
               title="Verificar y abrir las bases oficiales"

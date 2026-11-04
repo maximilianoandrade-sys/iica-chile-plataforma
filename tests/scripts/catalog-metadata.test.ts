@@ -5,7 +5,7 @@ describe("buildCatalogMetadata", () => {
     const metadata = buildCatalogMetadata(
       [
         { estadoPostulacion: "Abierta" },
-        { estado: "Próximo" },
+        { estado: "Próximo", fecha_cierre: "2099-12-31" },
         { estadoPostulacion: "Cerrada" },
         { estadoPostulacion: "Abierta", publishable: false },
         { estadoPostulacion: "Abierta", relevanciaChile: false },

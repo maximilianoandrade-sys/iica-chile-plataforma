@@ -7,6 +7,7 @@ import { InstitutionLogo } from '@/components/InstitutionLogo';
 import { CalendarReminderButton } from '@/components/CalendarReminderButton';
 import { exportProjectsToCsv } from '@/lib/utils/exportCsv';
 import { useDialogAccessibility } from '@/components/ui/Dialog';
+import { getCatalogRouteKey } from '@/lib/catalog-merge';
 
 interface TenderComparatorProps {
   selectedProjects: Project[];
@@ -252,7 +253,7 @@ export function TenderComparator({ selectedProjects, onRemoveProject, onClear }:
                     {selectedProjects.map((p) => (
                       <td key={p.id} className="p-4 border-l border-gray-200 dark:border-gray-800">
                         <a
-                          href={`/proyecto/${p.id}#bases`}
+                          href={`/proyecto/${getCatalogRouteKey(p)}#bases`}
                           className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] text-white font-extrabold text-xs rounded-xl transition-all shadow-md min-h-[44px]"
                         >
                           <span>Ver Bases Oficiales</span>

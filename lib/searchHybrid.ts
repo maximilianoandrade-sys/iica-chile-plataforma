@@ -14,6 +14,7 @@ import { Prisma } from '@prisma/client';
 import { embedText, toPgVector } from '@/lib/ingestion/embeddings';
 import { getLogger } from '@/lib/utils/logger';
 import { getStaticProjects } from '@/lib/data';
+import { mergeCatalogProjects } from '@/lib/catalog-merge';
 
 const logger = getLogger('HybridSearch');
 
@@ -222,19 +223,6 @@ function sortProjectsByMode<T extends { fecha_cierre: Date; monto: number; id: n
   });
 }
 
-function deduplicateProjects<T extends { id: number; url_bases?: string }>(projects: T[]): T[] {
-  const seen = new Map<string, T>();
-  for (const p of projects) {
-    const key = p.url_bases?.toLowerCase().trim();
-    if (!key) {
-      seen.set(`__no_url_${p.id}`, p);
-    } else if (!seen.has(key)) {
-      seen.set(key, p);
-    }
-  }
-  return Array.from(seen.values());
-}
-
 function getFilteredStaticProjects(filters: HybridQueryFilters, query?: string): HybridProjectItem[] {
   const today = new Date();
   today.setUTCHours(0, 0, 0, 0);
@@ -345,7 +333,7 @@ export async function hybridSearch(opts: HybridSearchOptions): Promise<HybridSea
     }
 
     const staticMatched = getFilteredStaticProjects(filters);
-    const combined = deduplicateProjects([...dbProjects, ...staticMatched]);
+    const combined = mergeCatalogProjects(dbProjects, staticMatched);
     const sorted = sortProjectsByMode(combined, normalizedSort);
     const total = sorted.length;
     const projects = sorted.slice(safeOffset, safeOffset + safeLimit);
@@ -389,7 +377,7 @@ export async function hybridSearch(opts: HybridSearchOptions): Promise<HybridSea
     logger.error('DB search failed, relying on static search', err as Error);
   }
 
-  const combined = deduplicateProjects([...dbResult.projects, ...staticMatched]);
+  const combined = mergeCatalogProjects(dbResult.projects, staticMatched);
   const sorted = sortProjectsByMode(combined, normalizedSort);
   const total = sorted.length;
   const projects = sorted.slice(safeOffset, safeOffset + safeLimit);

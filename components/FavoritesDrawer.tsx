@@ -6,6 +6,7 @@ import { type Project } from '@/lib/project-utils';
 import { getFavoriteIds, toggleFavorite } from '@/lib/utils/favorites';
 import Link from 'next/link';
 import { useDialogAccessibility } from '@/components/ui/Dialog';
+import { getCatalogRouteKey } from '@/lib/catalog-merge';
 
 interface FavoritesDrawerProps {
   allProjects: Project[];
@@ -87,7 +88,7 @@ export default function FavoritesDrawer({ allProjects, isOpen, onClose }: Favori
                     </div>
 
                     <Link
-                      href={`/proyecto/${project.id}`}
+                      href={`/proyecto/${getCatalogRouteKey(project)}`}
                       onClick={onClose}
                       className="font-bold text-sm text-[var(--iica-navy)] dark:text-white hover:text-[var(--iica-blue)] line-clamp-2"
                     >
@@ -104,7 +105,7 @@ export default function FavoritesDrawer({ allProjects, isOpen, onClose }: Favori
 
                   <div className="mt-3 pt-2 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
                     <Link
-                      href={`/proyecto/${project.id}`}
+                      href={`/proyecto/${getCatalogRouteKey(project)}`}
                       onClick={onClose}
                       className="text-xs font-bold text-[var(--iica-blue)] hover:underline flex items-center gap-1"
                     >
@@ -112,7 +113,7 @@ export default function FavoritesDrawer({ allProjects, isOpen, onClose }: Favori
                     </Link>
                     {project.url_bases && (
                       <a
-                        href={`/proyecto/${project.id}#bases`}
+                        href={`/proyecto/${getCatalogRouteKey(project)}#bases`}
                         onClick={onClose}
                         className="text-xs text-gray-500 hover:text-gray-900 dark:hover:text-white flex items-center gap-1"
                       >

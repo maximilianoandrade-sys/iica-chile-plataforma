@@ -1,6 +1,7 @@
 import { getProjects } from '@/lib/data';
 import { ExternalLink, Sparkles, Search } from 'lucide-react';
 import Link from 'next/link';
+import { getCatalogRouteKey } from '@/lib/catalog-merge';
 
 export const metadata = {
   title: 'Widget de Oportunidades | IICA Chile',
@@ -69,7 +70,7 @@ export default async function WidgetPage({
                 {project.fecha_cierre ? `Cierra: ${project.fecha_cierre}` : 'Ventanilla Abierta'}
               </span>
               <a
-                href={`/proyecto/${project.id}#bases`}
+                href={`/proyecto/${getCatalogRouteKey(project)}#bases`}
                 className="text-[11px] font-bold text-[var(--iica-blue)] dark:text-blue-400 hover:underline flex items-center gap-0.5"
               >
                 Bases <ExternalLink className="w-3 h-3" />

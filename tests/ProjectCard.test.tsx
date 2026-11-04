@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { ProjectCard } from '@/components/ProjectCard';
+import { getCatalogRouteKey } from '@/lib/catalog-merge';
 
 const mockProject = {
   id: 1,
@@ -16,15 +17,17 @@ const mockProject = {
 };
 
 describe('ProjectCard', () => {
+  const projectPath = `/proyecto/${getCatalogRouteKey(mockProject)}`;
+
   it('renders project name as link', () => {
     render(<ProjectCard project={mockProject} />);
     const link = screen.getByRole('link', { name: /Programa de Riego/i });
-    expect(link).toHaveAttribute('href', '/proyecto/1');
+    expect(link).toHaveAttribute('href', projectPath);
   });
 
   it('envia el enlace de bases al detalle verificado', () => {
     render(<ProjectCard project={mockProject} />);
-    expect(screen.getByRole('link', { name: /Bases/i })).toHaveAttribute('href', '/proyecto/1#bases');
+    expect(screen.getByRole('link', { name: /Bases/i })).toHaveAttribute('href', `${projectPath}#bases`);
   });
 
   it('renders institution name', () => {

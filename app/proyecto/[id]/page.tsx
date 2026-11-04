@@ -10,6 +10,7 @@ import { PrintProjectButton } from '@/components/PrintProjectButton';
 import { ProposalGeneratorButton } from '@/components/ProposalGeneratorButton';
 import { ProjectCard } from '@/components/ProjectCard';
 import { LinkGuardianAnchor } from '@/lib/linkGuardian';
+import { getCatalogRouteKey } from '@/lib/catalog-merge';
 import Link from 'next/link';
 import { ArrowLeft, Calendar, CheckCircle, Info, MapPin, Users, DollarSign, Layers } from 'lucide-react';
 
@@ -29,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { id } = await params;
     const result = await getCachedProjects();
     const projects = result.ok ? result.projects : [];
-    const project = projects.find(p => p.id === parseInt(id));
+    const project = projects.find(p => getCatalogRouteKey(p) === id || String(p.id) === id);
 
     if (!project) {
         return { title: 'Fondo no encontrado | IICA Chile' };
@@ -64,14 +65,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export async function generateStaticParams() {
     const result = await getCachedProjects();
     const projects = result.ok ? result.projects : [];
-    return projects.map(p => ({ id: String(p.id) }));
+    return projects.map(p => ({ id: getCatalogRouteKey(p) }));
 }
 
 export default async function ProyectoDetallePage({ params }: Props) {
     const { id } = await params;
     const result = await getCachedProjects();
     const projects = result.ok ? result.projects : [];
-    const project = projects.find(p => p.id === parseInt(id));
+    const project = projects.find(p => getCatalogRouteKey(p) === id || String(p.id) === id);
 
     if (!project) notFound();
 
@@ -96,7 +97,7 @@ export default async function ProyectoDetallePage({ params }: Props) {
     const beneficiariesPreview = hasBeneficiaries
         ? meaningfulBeneficiarios.slice(0, 2).join(', ')
         : null;
-    const projectUrl = `${SITE_URL}/proyecto/${id}`;
+    const projectUrl = `${SITE_URL}/proyecto/${getCatalogRouteKey(project)}`;
     const similarProjects = projects
         .filter(p => p.id !== project.id && (p.institucion === project.institucion || p.categoria === project.categoria))
         .slice(0, 3);
