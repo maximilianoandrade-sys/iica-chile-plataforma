@@ -69,6 +69,13 @@ jobs:
           DIRECT_URL: ${{ secrets.DIRECT_URL }}
         run: npx tsx scripts/coverage-check.ts
 
+      - name: Export fallback catalog
+        if: success()
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+        run: npx tsx scripts/export-projects-json.ts
+
       - name: Commit and push updated projects data
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"

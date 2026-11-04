@@ -112,9 +112,8 @@ export default function FavoritesDrawer({ allProjects, isOpen, onClose }: Favori
                     </Link>
                     {project.url_bases && (
                       <a
-                        href={project.url_bases}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        href={`/proyecto/${project.id}#bases`}
+                        onClick={onClose}
                         className="text-xs text-gray-500 hover:text-gray-900 dark:hover:text-white flex items-center gap-1"
                       >
                         Bases <ExternalLink className="h-3 w-3" />

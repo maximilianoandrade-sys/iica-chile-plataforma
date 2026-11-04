@@ -36,15 +36,17 @@ export function CalendarReminderButton({ project, variant = 'button', className 
   const endDateStr = closingDate.toISOString().replace(/-|:|\.\d+/g, '').substring(0, 8) + 'T170000Z';
 
   const title = encodeURIComponent(`[Cierre Concurso] ${project.nombre} (${project.institucion})`);
+  const siteOrigin = typeof window !== 'undefined' ? window.location.origin : 'https://iica-chile-plataforma.vercel.app';
+  const projectDetailUrl = `${siteOrigin}/proyecto/${project.id}#bases`;
   const details = encodeURIComponent(
     `Recordatorio de Cierre de Convocatoria IICA Chile:\n\n` +
     `Proyecto: ${project.nombre}\n` +
     `Institución: ${project.institucion}\n` +
     `Monto: ${project.montoTexto || 'Ver bases'}\n` +
-    `Enlace a bases oficiales: ${project.url_bases || 'https://iica-chile-plataforma.vercel.app'}\n\n` +
+    `Enlace a bases oficiales: ${projectDetailUrl}\n\n` +
     `Plataforma Radar de Oportunidades IICA Chile`
   );
-  const location = encodeURIComponent(project.url_bases || 'Plataforma IICA Chile');
+  const location = encodeURIComponent(projectDetailUrl);
 
   const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startDateStr}/${endDateStr}&details=${details}&location=${location}`;
 
@@ -62,8 +64,8 @@ export function CalendarReminderButton({ project, variant = 'button', className 
       `DTSTART:${startDateStr}`,
       `DTEND:${endDateStr}`,
       `SUMMARY:[Cierre Concurso] ${project.nombre.replace(/\n/g, ' ')}`,
-      `DESCRIPTION:${project.nombre.replace(/\n/g, ' ')} - ${project.institucion} - Bases: ${project.url_bases || ''}`,
-      `LOCATION:${project.url_bases || 'IICA Chile'}`,
+      `DESCRIPTION:${project.nombre.replace(/\n/g, ' ')} - ${project.institucion} - Bases: ${projectDetailUrl}`,
+      `LOCATION:${projectDetailUrl}`,
       'STATUS:CONFIRMED',
       'END:VEVENT',
       'END:VCALENDAR'

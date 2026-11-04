@@ -69,9 +69,7 @@ export default async function WidgetPage({
                 {project.fecha_cierre ? `Cierra: ${project.fecha_cierre}` : 'Ventanilla Abierta'}
               </span>
               <a
-                href={project.url_bases}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={`/proyecto/${project.id}#bases`}
                 className="text-[11px] font-bold text-[var(--iica-blue)] dark:text-blue-400 hover:underline flex items-center gap-0.5"
               >
                 Bases <ExternalLink className="w-3 h-3" />
