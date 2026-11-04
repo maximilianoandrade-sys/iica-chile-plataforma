@@ -20,11 +20,11 @@ export interface ResolvedLogo {
 }
 
 const registry: InstitutionEntry[] = [
-  { slug: "cnr", sigla: "CNR", path: "/logos/cnr.png", sourceType: "png-legacy", brandColor: "#01579B" },
-  { slug: "corfo", sigla: "CORFO", path: "/logos/corfo.png", sourceType: "png-legacy", brandColor: "#E53935" },
-  { slug: "fia", sigla: "FIA", path: "/logos/fia.png", sourceType: "png-legacy", brandColor: "#E65100" },
+  { slug: "cnr", sigla: "CNR", path: "/logos/official/cnr.png", sourceType: "official", brandColor: "#01579B" },
+  { slug: "corfo", sigla: "CORFO", path: "/logos/official/corfo.png", sourceType: "official", brandColor: "#E53935" },
+  { slug: "fia", sigla: "FIA", path: "/logos/official/fia.svg", sourceType: "official", brandColor: "#E65100" },
   { slug: "fontagro", sigla: "FNTG", path: "/logos/fontagro.png", sourceType: "png-legacy", brandColor: "#2E7D32" },
-  { slug: "indap", sigla: "INDAP", path: "/logos/indap.png", sourceType: "png-legacy", brandColor: "#33691E" },
+  { slug: "indap", sigla: "INDAP", path: "/logos/official/indap.png", sourceType: "official", brandColor: "#33691E" },
   { slug: "fao", sigla: "FAO", path: "/logos/official/fao.svg", sourceType: "wikimedia", brandColor: "#009EDB" },
   { slug: "bid", sigla: "BID", path: null, sourceType: null, brandColor: "#003876" },
   { slug: "gcf", sigla: "GCF", path: null, sourceType: null, brandColor: "#00B398" },
@@ -36,7 +36,7 @@ const registry: InstitutionEntry[] = [
   { slug: "ue-euroclima", sigla: "UE", path: null, sourceType: null, brandColor: "#003399" },
   { slug: "ue-aecid", sigla: "AECID", path: null, sourceType: null, brandColor: "#C62828" },
   { slug: "anid", sigla: "ANID", path: null, sourceType: null, brandColor: "#1A237E" },
-  { slug: "agcid", sigla: "AGCID", path: null, sourceType: null, brandColor: "#C8102E" },
+  { slug: "agcid", sigla: "AGCID", path: "/logos/official/agcid.webp", sourceType: "official", brandColor: "#C8102E" },
   { slug: "pnud", sigla: "PNUD", path: "/logos/official/pnud.svg", sourceType: "official", brandColor: "#0468B1" },
   { slug: "sag", sigla: "SAG", path: null, sourceType: null, brandColor: "#388E3C" },
   { slug: "ocde", sigla: "OCDE", path: null, sourceType: null, brandColor: "#0077B6" },

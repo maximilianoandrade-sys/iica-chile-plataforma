@@ -9,7 +9,53 @@
     "allowVectorizedRecreations": false,
     "requireDirectInstitutionConfirmation": true
   },
-  "institutions": [],
+  "institutions": [
+    {
+      "id": "cnr",
+      "name": "Comisión Nacional de Riego",
+      "file": "cnr.png",
+      "source": "official-public-asset",
+      "sourceUrl": "https://www.cnr.gob.cl/wp-content/uploads/2024/01/LOGO-SIGLA-CNR-2025.png",
+      "site": "https://www.cnr.gob.cl/",
+      "verifiedAt": "2026-11-04"
+    },
+    {
+      "id": "indap",
+      "name": "Instituto de Desarrollo Agropecuario",
+      "file": "indap.png",
+      "source": "official-public-asset",
+      "sourceUrl": "https://www.indap.gob.cl/themes/custom/indap/assets/img/logo-indap.png",
+      "site": "https://www.indap.gob.cl/",
+      "verifiedAt": "2026-11-04"
+    },
+    {
+      "id": "fia",
+      "name": "Fundación para la Innovación Agraria",
+      "file": "fia.svg",
+      "source": "official-public-asset",
+      "sourceUrl": "https://www.fia.cl/wp-content/uploads/2021/10/Logo-FIA.svg",
+      "site": "https://www.fia.cl/",
+      "verifiedAt": "2026-11-04"
+    },
+    {
+      "id": "corfo",
+      "name": "Corporación de Fomento de la Producción",
+      "file": "corfo.png",
+      "source": "official-public-asset",
+      "sourceUrl": "https://www.corfo.gob.cl/sites/cpp/wp-content/uploads/2025/02/logo_corfo2024_azul_min.png",
+      "site": "https://www.corfo.gob.cl/sites/cpp/",
+      "verifiedAt": "2026-11-04"
+    },
+    {
+      "id": "agcid",
+      "name": "Agencia Chilena de Cooperación Internacional para el Desarrollo",
+      "file": "agcid.webp",
+      "source": "official-public-asset",
+      "sourceUrl": "https://www.agcid.gob.cl/images/Insumos_IMG/home/logo_header_AGCID_GOB_35.webp",
+      "site": "https://www.agcid.gob.cl/",
+      "verifiedAt": "2026-11-04"
+    }
+  ],
   "pendingAssets": [
     { "id": "iica", "name": "Instituto Interamericano de Cooperación para la Agricultura", "file": "iica.png", "source": "pending-direct-confirmation", "site": "https://www.iica.int/es/pais/chile" },
     { "id": "cnr", "name": "Comisión Nacional de Riego", "file": "cnr.png", "source": "pending-direct-confirmation", "site": "https://www.cnr.gob.cl/" },

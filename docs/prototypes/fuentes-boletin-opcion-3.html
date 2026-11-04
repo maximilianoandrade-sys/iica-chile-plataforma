@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fuentes y alertas | Radar IICA Chile</title>
+  <style>
+    :root {
+      --navy: #003366;
+      --blue: #005cb9;
+      --green: #00a651;
+      --yellow: #ffd100;
+      --ink: #17324d;
+      --muted: #587087;
+      --line: #dce6ee;
+      --wash: #f4f8fb;
+      --white: #fff;
+      font-family: Tahoma, Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: #f7fafc;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; background: linear-gradient(180deg, #f8fbfd 0%, #fff 58%); }
+    a { color: inherit; }
+    .wrap { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+    .eyebrow { color: var(--blue); font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .intro { padding: 54px 0 24px; text-align: center; }
+    .intro h1 { margin: 10px 0 12px; color: var(--navy); font-size: clamp(28px, 4vw, 42px); line-height: 1.08; }
+    .intro p { max-width: 680px; margin: 0 auto; color: var(--muted); line-height: 1.55; }
+    .summary { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 24px 0 34px; }
+    .pill { display: inline-flex; align-items: center; gap: 7px; min-height: 36px; padding: 7px 13px; border: 1px solid var(--line); border-radius: 999px; background: var(--white); color: var(--muted); font-size: 13px; font-weight: 700; box-shadow: 0 3px 12px #16456d0b; }
+    .pill strong { color: var(--navy); }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+    .dot.yellow { background: var(--yellow); }
+    .feature { display: grid; grid-template-columns: 1.2fr .8fr; overflow: hidden; margin: 0 0 22px; border: 1px solid #b9d1e4; border-radius: 18px; background: var(--navy); color: #fff; box-shadow: 0 16px 34px #0033661c; }
+    .feature-main { padding: 28px 30px; background: radial-gradient(circle at 85% 20%, #1476c84d, transparent 34%), var(--navy); }
+    .feature-main h2 { max-width: 610px; margin: 8px 0 10px; font-size: clamp(22px, 3vw, 31px); line-height: 1.15; }
+    .feature-main p { max-width: 620px; margin: 0; color: #dbeafa; line-height: 1.5; }
+    .feature-side { display: flex; flex-direction: column; justify-content: center; gap: 13px; padding: 24px; background: #fff; color: var(--ink); }
+    .feature-stat { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+    .feature-stat:last-child { padding-bottom: 0; border-bottom: 0; }
+    .feature-stat span { color: var(--muted); font-size: 13px; }
+    .feature-stat strong { color: var(--navy); font-size: 20px; }
+    .source-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .source-card { position: relative; display: flex; flex-direction: column; min-width: 0; min-height: 202px; padding: 20px; border: 1px solid var(--line); border-radius: 15px; background: var(--white); box-shadow: 0 7px 22px #16456d0a; transition: transform .2s, box-shadow .2s, border-color .2s; }
+    .source-card:hover { border-color: #9dc1df; box-shadow: 0 12px 26px #16456d16; transform: translateY(-2px); }
+    .source-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; min-width: 0; }
+    .source-brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .monogram { display: grid; place-items: center; width: 42px; height: 42px; overflow: hidden; border: 1px solid #cfe0ec; border-radius: 11px; background: var(--wash); color: var(--navy); font-size: 12px; font-weight: 700; }
+    .monogram img { width: 100%; height: 100%; padding: 5px; object-fit: contain; }
+    .source-brand h3 { margin: 0; color: var(--navy); font-size: 17px; overflow-wrap: anywhere; }
+    .source-brand small { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
+    .count { white-space: nowrap; padding: 5px 8px; border-radius: 999px; background: #e8f7ef; color: #08763e; font-size: 11px; font-weight: 700; }
+    .source-card p { margin: 17px 0 18px; color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .source-meta { display: flex; flex-wrap: wrap; gap: 7px; margin-top: auto; }
+    .meta { padding: 6px 8px; border-radius: 7px; background: var(--wash); color: var(--muted); font-size: 11px; }
+    .source-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 13px; color: var(--blue); font-size: 13px; font-weight: 700; text-decoration: none; }
+    .source-link:hover { text-decoration: underline; }
+    .monitor { margin-top: 30px; padding: 22px; border: 1px solid var(--line); border-radius: 15px; background: #fbfdff; }
+    .monitor summary { cursor: pointer; color: var(--navy); font-weight: 700; list-style: none; }
+    .monitor summary::-webkit-details-marker { display: none; }
+    .monitor summary::after { content: "＋"; float: right; color: var(--blue); font-size: 20px; line-height: 15px; }
+    .monitor[open] summary::after { content: "−"; }
+    .monitor p { margin: 7px 0 17px; color: var(--muted); font-size: 13px; }
+    .monitor-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .monitor-item { display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 9px; background: #fff; color: var(--muted); font-size: 12px; font-weight: 700; }
+    .monitor-item i { width: 7px; height: 7px; border-radius: 50%; background: #a7b9c9; }
+    .notice { display: flex; gap: 12px; align-items: flex-start; margin: 22px 0 30px; padding: 16px 18px; border: 1px solid #f1d36b; border-radius: 12px; background: #fffbee; color: #715900; }
+    .notice b { display: block; margin-bottom: 4px; color: #654f00; font-size: 13px; }
+    .notice p { margin: 0; font-size: 12px; line-height: 1.5; }
+    .newsletter { display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: 28px; padding: 28px 30px; border-top: 4px solid var(--yellow); border-radius: 17px; background: var(--navy); color: #fff; box-shadow: 0 15px 32px #00336620; }
+    .newsletter h2 { margin: 8px 0 9px; font-size: clamp(22px, 3vw, 30px); line-height: 1.13; }
+    .newsletter p { margin: 0; color: #dbeafa; font-size: 14px; line-height: 1.5; }
+    .newsletter form { padding: 18px; border-radius: 13px; background: #fff; }
+    .newsletter label { display: block; margin-bottom: 7px; color: var(--navy); font-size: 12px; font-weight: 700; }
+    .newsletter input { width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid #c6d6e2; border-radius: 8px; font: inherit; }
+    .newsletter button { width: 100%; min-height: 46px; margin-top: 10px; border: 0; border-radius: 8px; background: var(--green); color: #fff; cursor: pointer; font: inherit; font-weight: 700; }
+    .newsletter button:hover { background: #008f45; }
+    .check { display: flex; align-items: flex-start; gap: 8px; margin-top: 10px; color: var(--muted); font-size: 11px; line-height: 1.4; }
+    .check input { width: 18px; min-height: 18px; margin-top: 0; accent-color: var(--green); }
+    .fine { margin-top: 9px !important; color: #7990a3 !important; font-size: 11px !important; text-align: center; }
+    footer { padding: 32px 0; color: var(--muted); font-size: 12px; text-align: center; }
+    @media (max-width: 760px) {
+      .wrap { width: min(100% - 24px, 560px); }
+      .intro { padding-top: 34px; }
+      .feature, .newsletter { grid-template-columns: 1fr; }
+      .source-grid { grid-template-columns: 1fr; }
+      .source-top { flex-wrap: wrap; }
+      .source-brand { flex: 1 1 180px; }
+      .count { margin-left: 53px; }
+      .monitor-grid { grid-template-columns: repeat(2, 1fr); }
+      .feature-side { padding: 20px 24px; }
+    }
+    @media (max-width: 390px) {
+      .summary { justify-content: flex-start; }
+      .pill { font-size: 12px; }
+      .monitor-grid { grid-template-columns: 1fr 1fr; }
+      .newsletter { padding: 23px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="intro" aria-labelledby="page-title">
+      <div class="eyebrow">Radar IICA Chile · Fuentes oficiales</div>
+      <h1 id="page-title">Fuentes monitoreadas para Chile</h1>
+      <p>Reunimos oportunidades publicadas por instituciones y organismos oficiales. Revise siempre las bases antes de postular y confirme la información en el sitio de origen.</p>
+      <div class="summary" aria-label="Resumen de fuentes">
+        <span class="pill"><i class="dot"></i><strong>6</strong> fuentes activas</span>
+        <span class="pill"><i class="dot"></i><strong>86</strong> oportunidades vigentes</span>
+        <span class="pill"><i class="dot yellow"></i>Actualizado hoy, 11:48 a. m.</span>
+      </div>
+    </section>
+
+    <section class="feature" aria-labelledby="feature-title">
+      <div class="feature-main">
+        <div class="eyebrow" style="color:#ffd100">La fuente más activa ahora</div>
+        <h2 id="feature-title">Encuentre apoyos para riego, suelos y productividad rural.</h2>
+        <p>INDAP concentra la mayor cantidad de oportunidades vigentes para la Agricultura Familiar Campesina. Revise los programas disponibles y consulte los requisitos directamente en su plataforma oficial.</p>
+      </div>
+      <div class="feature-side">
+        <div class="feature-stat"><span>Oportunidades vigentes</span><strong>17</strong></div>
+        <div class="feature-stat"><span>Alcance</span><strong>Nacional</strong></div>
+        <div class="feature-stat"><span>Verificación</span><strong style="color:#08763e">Activa</strong></div>
+      </div>
+    </section>
+
+    <section class="source-grid" aria-label="Fuentes con oportunidades vigentes">
+      <article class="source-card">
+        <div class="source-top"><div class="source-brand"><span class="monogram"><img src="../../public/logos/official/cnr.png" alt="Logo CNR" onerror="this.hidden=true; this.parentElement.textContent='CNR'"></span><div><h3>Comisión Nacional de Riego</h3><small>Riego y obras hidráulicas</small></div></div><span class="count">3 fondos activos</span></div>
+        <p>Subsidios para tecnificación del riego, drenaje y obras de acumulación de agua.</p>
+        <div class="source-meta"><span class="meta">Hasta 90% del proyecto</span><span class="meta">Cobertura nacional</span></div>
+        <a class="source-link" href="https://www.cnr.gob.cl/agricultores/concursos-de-riego/">Ver convocatorias oficiales ↗</a>
+      </article>
+      <article class="source-card">
+        <div class="source-top"><div class="source-brand"><span class="monogram"><img src="../../public/logos/official/indap.png" alt="Logo INDAP" onerror="this.hidden=true; this.parentElement.textContent='INDAP'"></span><div><h3>Instituto de Desarrollo Agropecuario</h3><small>Agricultura Familiar Campesina</small></div></div><span class="count">17 fondos activos</span></div>
+        <p>Bonos, asistencia técnica, programas de suelos y créditos para pequeños agricultores.</p>
+        <div class="source-meta"><span class="meta">Programas para AFC</span><span class="meta">Todas las regiones</span></div>
+        <a class="source-link" href="https://www.indap.gob.cl/plataforma-de-servicios/">Ver convocatorias oficiales ↗</a>
+      </article>
+      <article class="source-card">
+        <div class="source-top"><div class="source-brand"><span class="monogram"><img src="../../public/logos/official/fia.svg" alt="Logo FIA" onerror="this.hidden=true; this.parentElement.textContent='FIA'"></span><div><h3>Fundación para la Innovación Agraria</h3><small>Innovación y AgTech</small></div></div><span class="count">4 fondos activos</span></div>
+        <p>Innovación agrícola, sostenibilidad, nuevos cultivos y soluciones tecnológicas.</p>
+        <div class="source-meta"><span class="meta">Proyectos de innovación</span><span class="meta">Cofinanciamiento</span></div>
+        <a class="source-link" href="https://www.fia.cl/convocatorias/">Ver convocatorias oficiales ↗</a>
+      </article>
+      <article class="source-card">
+        <div class="source-top"><div class="source-brand"><span class="monogram"><img src="../../public/logos/official/corfo.png" alt="Logo CORFO" onerror="this.hidden=true; this.parentElement.textContent='CORFO'"></span><div><h3>Corporación de Fomento</h3><small>Productividad y crecimiento</small></div></div><span class="count">40 fondos activos</span></div>
+        <p>Escalamiento productivo, economía circular, eficiencia energética y exportación.</p>
+        <div class="source-meta"><span class="meta">Empresas y cooperativas</span><span class="meta">Fondos regionales</span></div>
+        <a class="source-link" href="https://www.corfo.gob.cl/">Ver convocatorias oficiales ↗</a>
+      </article>
+      <article class="source-card">
+        <div class="source-top"><div class="source-brand"><span class="monogram"><img src="../../public/logos/official/agcid.webp" alt="Logo AGCID" onerror="this.hidden=true; this.parentElement.textContent='AGCID'"></span><div><h3>Agencia de Cooperación Internacional</h3><small>Cooperación para el desarrollo</small></div></div><span class="count">1 fondo activo</span></div>
+        <p>Cooperación internacional y oportunidades para proyectos con impacto sostenible.</p>
+        <div class="source-meta"><span class="meta">Cooperación técnica</span><span class="meta">Chile y región</span></div>
+        <a class="source-link" href="https://www.agci.cl/">Ver convocatorias oficiales ↗</a>
+      </article>
+      <article class="source-card">
+        <div class="source-top"><div class="source-brand"><span class="monogram"><img src="../../public/logos/pending/oecd.svg" alt="Logo OCDE" onerror="this.hidden=true; this.parentElement.textContent='OCDE'"></span><div><h3>Organización para la Cooperación</h3><small>Fondos y cooperación internacional</small></div></div><span class="count">1 fondo activo</span></div>
+        <p>Programas y oportunidades de cooperación para innovación y desarrollo agrícola.</p>
+        <div class="source-meta"><span class="meta">Cooperación internacional</span><span class="meta">Convocatorias globales</span></div>
+        <a class="source-link" href="https://www.oecd.org/">Ver convocatorias oficiales ↗</a>
+      </article>
+    </section>
+
+    <details class="monitor">
+      <summary>Otras fuentes en monitoreo <span style="color:#587087;font-weight:400">(28 fuentes sin fondos activos)</span></summary>
+      <p>Las revisamos periódicamente. Se mostrarán aquí cuando encontremos oportunidades vigentes y verificables.</p>
+      <div class="monitor-grid">
+        <span class="monitor-item"><i></i>PNUD</span><span class="monitor-item"><i></i>FAO</span><span class="monitor-item"><i></i>FIDA</span><span class="monitor-item"><i></i>FONTAGRO</span>
+        <span class="monitor-item"><i></i>ANID</span><span class="monitor-item"><i></i>SAG</span><span class="monitor-item"><i></i>GEF</span><span class="monitor-item"><i></i>AFRICA</span>
+        <span class="monitor-item"><i></i>FFN</span><span class="monitor-item"><i></i>GCF</span><span class="monitor-item"><i></i>RFF</span><span class="monitor-item"><i></i>HORIZON</span>
+        <span class="monitor-item"><i></i>LIFE</span><span class="monitor-item"><i></i>CPC</span><span class="monitor-item"><i></i>RFT</span><span class="monitor-item"><i></i>MSFT-AI</span>
+      </div>
+    </details>
+
+    <aside class="notice">
+      <div aria-hidden="true">⚠</div>
+      <div><b>Importante sobre los plazos</b><p>Las fechas de cierre pueden modificarse. Verifique siempre la convocatoria y las bases en el sitio oficial antes de postular.</p></div>
+    </aside>
+
+    <section class="newsletter" aria-labelledby="newsletter-title">
+      <div>
+        <div class="eyebrow" style="color:#ffd100">IICA Informa · Sin spam</div>
+        <h2 id="newsletter-title">Reciba oportunidades que sí le interesan.</h2>
+        <p>Un resumen semanal con nuevos fondos, fechas de cierre y enlaces oficiales. Usted elige cuándo dejar de recibirlo.</p>
+      </div>
+      <form>
+        <label for="email">Correo electrónico</label>
+        <input id="email" type="email" placeholder="nombre@ejemplo.cl">
+        <label class="check"><input type="checkbox"> <span>Acepto recibir información según la <u>política de privacidad</u>.</span></label>
+        <button type="button">Suscribirme al boletín →</button>
+        <p class="fine">1 correo por semana · Sin promociones · Cancelación en cualquier momento</p>
+      </form>
+    </section>
+    <footer>Radar de Oportunidades IICA Chile · Prototipo de diseño · Los datos son referenciales.</footer>
+  </main>
+</body>
+</html>
