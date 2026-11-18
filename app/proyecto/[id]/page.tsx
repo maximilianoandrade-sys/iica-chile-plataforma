@@ -95,7 +95,7 @@ export default async function ProyectoDetallePage({ params }: Props) {
     const isUrgent = diffDays <= 7 && diffDays >= 0;
 
     const montoDisplay = displayMonto(project);
-    const montoFormatted = montoDisplay === 'Ver bases' ? 'Consultar en bases' : montoDisplay;
+    const montoFormatted = montoDisplay === 'Ver bases' ? 'Consultar institución' : montoDisplay;
     const EN_VALIDACION = 'en validación editorial';
     const isEmptyField = (val: string | undefined | null) => !val || val.trim() === '' || val.trim().toLowerCase() === EN_VALIDACION;
     const meaningfulRegiones = (project.regiones ?? []).filter(r => !isEmptyField(r));

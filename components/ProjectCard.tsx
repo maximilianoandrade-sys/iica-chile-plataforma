@@ -45,7 +45,7 @@ function formatDeadlineStatus(project: Project): {
 function formatMonto(project: Project): string {
   if (project.montoTexto && project.montoTexto.trim()) return project.montoTexto;
   if (project.monto) return `$${Math.round(project.monto / 1_000_000)}M CLP`;
-  return 'Ver bases oficiales';
+  return 'No especificado — ver bases';
 }
 
 /** Semáforo de urgencia — badge, border, and deadline text styles */
@@ -186,11 +186,11 @@ export function ProjectCard({
           <div className="flex items-start gap-3">
             <CalendarDays className="mt-0.5 h-5 w-5 shrink-0 text-gray-700 dark:text-gray-300" aria-hidden="true" />
             <div>
-              <p className="font-bold">Fechas:</p>
+              <p className="font-bold">Cierra</p>
               <p className="mt-0.5 leading-snug">
                 {daysUntilClose(project) === 999
                   ? 'Postulación continua'
-                  : `Fecha límite: ${formatDeadline(project.fecha_cierre)}`}
+                  : formatDeadline(project.fecha_cierre)}
               </p>
             </div>
           </div>
@@ -198,7 +198,7 @@ export function ProjectCard({
           <div className="flex items-start gap-3">
             <DollarSign className="mt-0.5 h-5 w-5 shrink-0 text-gray-700 dark:text-gray-300" aria-hidden="true" />
             <div>
-              <p className="font-bold">Montos:</p>
+              <p className="font-bold">Monto</p>
               <p className="mt-0.5 leading-snug">{monto}</p>
             </div>
           </div>
@@ -206,7 +206,11 @@ export function ProjectCard({
 
         {/* Preserve useful metadata without returning to the former dense card. */}
         <div className="mt-4 flex flex-wrap items-center gap-2">
-          {region && <span className="text-xs text-gray-500 dark:text-gray-400">Cobertura: {region}</span>}
+          {region && (
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              <span className="font-medium">Región</span> {region}
+            </span>
+          )}
           {project.requiere_cofinanciamiento === false && (
             <span className="rounded-full bg-green-50 px-2 py-1 text-[11px] font-semibold text-green-700 dark:bg-green-900/30 dark:text-green-300">
               Sin cofinanciamiento
@@ -224,7 +228,7 @@ export function ProjectCard({
                 className="inline-flex min-h-[44px] items-center gap-1 rounded-full border border-gray-400 px-4 py-2 text-sm font-medium text-gray-800 transition-colors hover:border-[var(--iica-blue)] hover:text-[var(--iica-blue)] dark:border-gray-500 dark:text-gray-100"
                 title="Ver detalles y bases oficiales"
               >
-                Ver detalles <ChevronRight className="h-4 w-4" aria-hidden="true" />
+                Ver bases y detalles <ChevronRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             )}
           </div>

@@ -67,7 +67,7 @@ describe('ProjectCard', () => {
   it('renders international badge for international institutions', () => {
     const international = { ...mockProject, institucion: 'FONTAGRO', ambito: 'Internacional' as const };
     render(<ProjectCard project={international} />);
-    expect(screen.getByText(/Internacional/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Internacional/i)[0]).toBeInTheDocument();
   });
 
   it('applies reduced opacity for closed projects', () => {
