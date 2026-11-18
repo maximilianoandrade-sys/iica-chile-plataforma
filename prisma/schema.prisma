@@ -11,6 +11,7 @@ datasource db {
 model Usuario {
   id            Int           @id @default(autoincrement())
   email         String        @unique
+  telefono      String?       @unique
   nombre        String?
   region        String?
   intereses     String[]
@@ -177,6 +178,9 @@ model LinkCheck {
   lastModified String?  @map("last_modified")
   lastChecked  DateTime @default(now())
   isValid      Boolean  @default(true)
+
+  @@index([isValid])
+  @@index([lastChecked])
 }
 
 model NewsletterSubscriber {

@@ -69,11 +69,13 @@ export async function POST(request: NextRequest) {
     const user = await prisma.usuario.upsert({
       where: { email: userIdentifier },
       update: {
+        telefono: type === 'whatsapp' ? trimmedContact : undefined,
         region: safeRegions[0] !== 'Todas' ? safeRegions[0] : undefined,
         intereses: safeCategories,
       },
       create: {
         email: userIdentifier,
+        telefono: type === 'whatsapp' ? trimmedContact : null,
         region: safeRegions[0] !== 'Todas' ? safeRegions[0] : null,
         intereses: safeCategories,
       },

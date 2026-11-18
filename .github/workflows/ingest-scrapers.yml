@@ -76,6 +76,15 @@ jobs:
           DIRECT_URL: ${{ secrets.DIRECT_URL }}
         run: npx tsx scripts/export-projects-json.ts
 
+      - name: Backfill incremental embeddings for new projects
+        if: ${{ env.DATABASE_URL != '' && env.GEMINI_API_KEY != '' }}
+        continue-on-error: true
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DIRECT_URL }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: npx tsx scripts/backfill-embeddings.ts
+
       - name: Commit and push updated projects data
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
