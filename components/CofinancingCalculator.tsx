@@ -19,6 +19,18 @@ export default function CofinancingCalculator({ project, isOpen, onClose }: Cofi
   const [entityType, setEntityType] = useState<'micro_small' | 'medium' | 'large' | 'ngo_coop'>('micro_small');
   const [currency, setCurrency] = useState<'CLP' | 'USD'>('CLP');
 
+  const USD_EXCHANGE_RATE = 950;
+
+  const handleCurrencyChange = (newCurrency: 'CLP' | 'USD') => {
+    if (newCurrency === currency) return;
+    if (newCurrency === 'USD') {
+      setEstimatedBudget((prev) => Math.max(1, Math.round(prev / USD_EXCHANGE_RATE)));
+    } else {
+      setEstimatedBudget((prev) => Math.round(prev * USD_EXCHANGE_RATE));
+    }
+    setCurrency(newCurrency);
+  };
+
   const dialogRef = useDialogAccessibility(isOpen, onClose);
 
   if (!isOpen) return null;
@@ -93,9 +105,27 @@ export default function CofinancingCalculator({ project, isOpen, onClose }: Cofi
           {/* Form Controls */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5">
-                Presupuesto Total Estimado del Proyecto
-              </label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-semibold text-gray-700 dark:text-gray-300">
+                  Presupuesto Total Estimado
+                </label>
+                <div className="inline-flex rounded-lg border border-gray-200 dark:border-gray-700 p-0.5 bg-gray-50 dark:bg-gray-800 text-xs">
+                  <button
+                    type="button"
+                    onClick={() => handleCurrencyChange('CLP')}
+                    className={`px-2 py-0.5 rounded font-bold transition-colors ${currency === 'CLP' ? 'bg-[var(--iica-blue)] text-white' : 'text-gray-600 dark:text-gray-400'}`}
+                  >
+                    CLP
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleCurrencyChange('USD')}
+                    className={`px-2 py-0.5 rounded font-bold transition-colors ${currency === 'USD' ? 'bg-[var(--iica-blue)] text-white' : 'text-gray-600 dark:text-gray-400'}`}
+                  >
+                    USD
+                  </button>
+                </div>
+              </div>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
                 <input
@@ -105,6 +135,11 @@ export default function CofinancingCalculator({ project, isOpen, onClose }: Cofi
                   className="w-full pl-8 pr-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm font-semibold"
                 />
               </div>
+              {currency === 'USD' && (
+                <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">
+                  * Tipo de cambio referencial: 1 USD ≈ ${USD_EXCHANGE_RATE} CLP
+                </p>
+              )}
             </div>
 
             <div>

@@ -26,6 +26,7 @@ import { EligibilityAssistant } from '@/components/EligibilityAssistant';
 import { CalendarReminderButton } from '@/components/CalendarReminderButton';
 import { PrintProjectButton } from '@/components/PrintProjectButton';
 import { ProposalGeneratorButton } from '@/components/ProposalGeneratorButton';
+import { ReportIssueButton } from '@/components/ReportIssueButton';
 import { ProjectCard } from '@/components/ProjectCard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { LinkGuardianAnchor } from '@/lib/linkGuardian';
@@ -439,6 +440,13 @@ export default async function ProyectoDetallePage({ params }: Props) {
                                         projectName={project.nombre}
                                         institution={project.institucion}
                                         className="shrink-0 inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-[var(--iica-blue)] hover:bg-[var(--iica-navy)] text-white px-5 py-2.5 text-xs sm:text-sm font-bold shadow-sm transition-all"
+                                    />
+                                </div>
+
+                                <div className="flex justify-end pt-2">
+                                    <ReportIssueButton
+                                        projectId={project.id}
+                                        projectTitle={project.nombre}
                                     />
                                 </div>
                             </TabsContent>

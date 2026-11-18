@@ -94,6 +94,7 @@ export async function POST(request: NextRequest) {
         region: extractedProject.region || 'Nacional',
         discoveredBy: 'community',
         needsReview: true,
+        publishable: false,
         estadoPostulacion: 'Abierta',
       },
     });

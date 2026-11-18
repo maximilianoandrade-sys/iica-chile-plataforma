@@ -63,8 +63,10 @@ export async function GET(request: NextRequest) {
     const escapeCSV = (val: string | number | undefined): string => {
         if (val === undefined || val === null) return '';
         const raw = String(val);
-        const str = typeof val === 'string' && /^[=+\-@]/.test(raw) ? `'${raw}` : raw;
-        if (str.includes(';') || str.includes('"') || str.includes('\n')) {
+        const trimmed = raw.trimStart();
+        const isFormula = /^[=+\-@\t\r]/.test(trimmed);
+        const str = typeof val === 'string' && isFormula ? `'${raw}` : raw;
+        if (str.includes(';') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
             return `"${str.replace(/"/g, '""')}"`;
         }
         return str;

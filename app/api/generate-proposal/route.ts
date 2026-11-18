@@ -29,6 +29,11 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const contentLength = Number(request.headers.get('content-length') || 0);
+    if (contentLength > 16_000) {
+      return createErrorResponse('Solicitud demasiado grande', 413);
+    }
+
     const clientId = getRateLimitIdentifier(request, 'proposal');
     const rl = await checkDistributedRateLimit(clientId, PROPOSAL_RATE_LIMIT.maxRequests, PROPOSAL_RATE_LIMIT.windowSizeMs);
     if (!rl.success) {
@@ -74,8 +79,11 @@ Estructura la propuesta con las siguientes secciones:
 
 Genera únicamente el contenido de la propuesta, sin comentarios adicionales.`;
 
+    const sanitizeField = (str?: string) =>
+      str ? str.replace(/[\r\n\t]/g, ' ').replace(/["`]/g, "'").slice(0, 150).trim() : '';
+
     const applicantContext = applicantInfo
-      ? `\nInformación del solicitante:\n- Nombre: ${applicantInfo.name || "No especificado"}\n- Organización: ${applicantInfo.organization || "No especificada"}\n- Región: ${applicantInfo.region || "No especificada"}`
+      ? `\nInformación del solicitante:\n- Nombre: ${sanitizeField(applicantInfo.name) || "No especificado"}\n- Organización: ${sanitizeField(applicantInfo.organization) || "No especificada"}\n- Región: ${sanitizeField(applicantInfo.region) || "No especificada"}`
       : "";
 
     const userContent = `Información del proyecto:

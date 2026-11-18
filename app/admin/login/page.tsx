@@ -1,8 +1,10 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { AlertCircle, LockKeyhole, ShieldCheck } from "lucide-react";
 
 export default function AdminLogin() {
+  const router = useRouter();
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -22,9 +24,8 @@ export default function AdminLogin() {
       });
 
       if (res.ok) {
-        // Full page reload ensures the cookie is sent on the next request
-        // and bypasses any Service Worker cache from the PWA.
-        window.location.href = "/admin/pipeline-dashboard";
+        router.push("/admin/pipeline-dashboard");
+        router.refresh();
         return;
       }
 

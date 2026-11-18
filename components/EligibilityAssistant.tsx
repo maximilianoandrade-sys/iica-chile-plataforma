@@ -152,12 +152,13 @@ export function EligibilityAssistant({ project }: EligibilityAssistantProps) {
       <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
         {/* Perfil */}
         <div>
-          <label className="mb-1.5 flex items-center gap-1.5 text-xs font-bold text-gray-700 dark:text-gray-300">
+          <label htmlFor="assistant-applicant-type" className="mb-1.5 flex items-center gap-1.5 text-xs font-bold text-gray-700 dark:text-gray-300">
             <Building2 className="h-3.5 w-3.5 text-[var(--iica-blue)]" aria-hidden="true" />
             1. Perfil del Postulante
           </label>
           <div className="relative">
             <select
+              id="assistant-applicant-type"
               value={selectedApplicant}
               onChange={(e) => setSelectedApplicant(e.target.value)}
               className="w-full appearance-none rounded-xl border border-gray-300 bg-white py-2.5 pl-3 pr-8 text-xs font-semibold text-gray-800 shadow-sm transition-all focus:border-[var(--iica-blue)] focus:outline-none focus:ring-2 focus:ring-[var(--iica-blue)]/20 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 min-h-[44px]"
@@ -172,12 +173,13 @@ export function EligibilityAssistant({ project }: EligibilityAssistantProps) {
 
         {/* Región */}
         <div>
-          <label className="mb-1.5 flex items-center gap-1.5 text-xs font-bold text-gray-700 dark:text-gray-300">
+          <label htmlFor="assistant-region" className="mb-1.5 flex items-center gap-1.5 text-xs font-bold text-gray-700 dark:text-gray-300">
             <MapPin className="h-3.5 w-3.5 text-[var(--iica-blue)]" aria-hidden="true" />
             2. Ubicación / Región
           </label>
           <div className="relative">
             <select
+              id="assistant-region"
               value={selectedRegion}
               onChange={(e) => setSelectedRegion(e.target.value)}
               className="w-full appearance-none rounded-xl border border-gray-300 bg-white py-2.5 pl-3 pr-8 text-xs font-semibold text-gray-800 shadow-sm transition-all focus:border-[var(--iica-blue)] focus:outline-none focus:ring-2 focus:ring-[var(--iica-blue)]/20 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 min-h-[44px]"
@@ -192,12 +194,13 @@ export function EligibilityAssistant({ project }: EligibilityAssistantProps) {
 
         {/* Cofinanciamiento */}
         <div>
-          <label className="mb-1.5 flex items-center gap-1.5 text-xs font-bold text-gray-700 dark:text-gray-300">
+          <label htmlFor="assistant-cofinancing" className="mb-1.5 flex items-center gap-1.5 text-xs font-bold text-gray-700 dark:text-gray-300">
             <Coins className="h-3.5 w-3.5 text-[var(--iica-blue)]" aria-hidden="true" />
             3. Aporte Propio Disponible
           </label>
           <div className="relative">
             <select
+              id="assistant-cofinancing"
               value={hasCofinancing}
               onChange={(e) => setHasCofinancing(e.target.value)}
               className="w-full appearance-none rounded-xl border border-gray-300 bg-white py-2.5 pl-3 pr-8 text-xs font-semibold text-gray-800 shadow-sm transition-all focus:border-[var(--iica-blue)] focus:outline-none focus:ring-2 focus:ring-[var(--iica-blue)]/20 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 min-h-[44px]"

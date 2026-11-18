@@ -1,27 +1,13 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import AdminLogin from '@/app/admin/login/page';
 
-// Mock window.location.href assignment
-const locationHrefSpy = jest.fn();
-const originalLocation = window.location;
-
-beforeAll(() => {
-  Object.defineProperty(window, 'location', {
-    writable: true,
-    value: { ...originalLocation, href: '' },
-  });
-  Object.defineProperty(window.location, 'href', {
-    set: locationHrefSpy,
-    get: () => 'http://localhost:3000/admin/login',
-  });
-});
-
-afterAll(() => {
-  Object.defineProperty(window, 'location', {
-    writable: true,
-    value: originalLocation,
-  });
-});
+const pushMock = jest.fn();
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: pushMock,
+    refresh: jest.fn(),
+  }),
+}));
 
 describe('AdminLogin', () => {
   beforeEach(() => {
@@ -44,7 +30,7 @@ describe('AdminLogin', () => {
     expect(screen.getByRole('button', { name: /Verificando/i })).toBeDisabled();
 
     await waitFor(() => {
-      expect(locationHrefSpy).toHaveBeenCalledWith('/admin/pipeline-dashboard');
+      expect(pushMock).toHaveBeenCalledWith('/admin/pipeline-dashboard');
     });
   });
 

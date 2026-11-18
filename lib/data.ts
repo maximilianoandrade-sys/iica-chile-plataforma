@@ -66,7 +66,6 @@ export function getStaticProjects(today: Date): Project[] {
     const todayStr = today.toISOString().split('T')[0];
     return (projectsJson as unknown as Array<Project & { relevanciaChile?: boolean }>)
         .filter(p => {
-            if ([103, 104, 106, 110, 113].includes(p.id)) return false;
             if (p.publishable === false) return false;
             if (p.relevanciaChile === false) return false;
             if (p.estadoPostulacion === 'Cerrada') return false;
@@ -91,8 +90,6 @@ const logger = getLogger('Data');
 // ============================================================================
 // CARGA DE DATOS DESDE SUPABASE
 // ============================================================================
-
-const FAKE_PROJECT_IDS = [103, 104, 106, 110, 113];
 
 export type GetProjectsResult =
     | { ok: true; projects: Project[] }
@@ -126,7 +123,6 @@ export async function getProjects(): Promise<GetProjectsResult> {
                 NOT: { estadoPostulacion: 'Cerrada' },
                 publishable: true,
                 relevanciaChile: true,
-                id: { notIn: FAKE_PROJECT_IDS },
             },
             orderBy: { fecha_cierre: 'asc' },
         });
@@ -171,7 +167,6 @@ export async function getProjectFilterSnapshot(): Promise<GetProjectFilterSnapsh
                 NOT: { estadoPostulacion: 'Cerrada' },
                 publishable: true,
                 relevanciaChile: true,
-                id: { notIn: FAKE_PROJECT_IDS },
             },
             orderBy: { fecha_cierre: 'asc' },
             select: {

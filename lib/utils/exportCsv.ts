@@ -30,12 +30,12 @@ export function exportProjectsToExcel(projects: Project[], filename: string = 'R
 
   const xmlContent = `<?xml version="1.0" encoding="UTF-8"?>
 <?mso-application progid="Excel.Sheet"?>
-<Workbook xmlns="urn:schemas-microsoft-microsoft-com:office:spreadsheet"
- xmlns:o="urn:schemas-microsoft-microsoft-com:office:office"
- xmlns:x="urn:schemas-microsoft-microsoft-com:office:excel"
- xmlns:ss="urn:schemas-microsoft-microsoft-com:office:spreadsheet"
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
  xmlns:html="http://www.w3.org/TR/REC-html40">
- <DocumentProperties xmlns="urn:schemas-microsoft-microsoft-com:office:office">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
   <Title>Radar de Oportunidades IICA Chile</Title>
   <Subject>Reporte Ejecutivo Convocatorias Silvoagropecuarias y Clima</Subject>
   <Author>Instituto Interamericano de Cooperacion para la Agricultura (IICA)</Author>
@@ -275,7 +275,7 @@ export function exportProjectsToExcel(projects: Project[], filename: string = 'R
    }).join('')}
 
   </Table>
-  <WorksheetOptions xmlns="urn:schemas-microsoft-microsoft-com:office:excel">
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
    <PageSetup>
     <Layout x:Orientation="Landscape"/>
     <Header x:Margin="0.3"/>
