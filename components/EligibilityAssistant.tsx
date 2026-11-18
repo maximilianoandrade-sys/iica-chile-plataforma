@@ -34,6 +34,30 @@ const REGION_OPTIONS = [
   'Internacional'
 ];
 
+const VERDICT_THEMES = {
+  eligible: {
+    box: 'border-emerald-200 bg-emerald-50/90 text-emerald-950 dark:border-emerald-800/60 dark:bg-emerald-950/40 dark:text-emerald-100',
+    bg: 'bg-emerald-500',
+    badge: 'bg-emerald-200/80 text-emerald-900 dark:bg-emerald-800 dark:text-emerald-100',
+    title: 'Preevaluación favorable: Perfil compatible',
+    Icon: CheckCircle2,
+  },
+  conditional: {
+    box: 'border-amber-200 bg-amber-50/90 text-amber-950 dark:border-amber-800/60 dark:bg-amber-950/40 dark:text-amber-100',
+    bg: 'bg-amber-500',
+    badge: 'bg-amber-200/80 text-amber-900 dark:bg-amber-800 dark:text-amber-100',
+    title: 'Elegible con condiciones o alianza técnica requerida',
+    Icon: AlertTriangle,
+  },
+  ineligible: {
+    box: 'border-rose-200 bg-rose-50/90 text-rose-950 dark:border-rose-800/60 dark:bg-rose-950/40 dark:text-rose-100',
+    bg: 'bg-rose-500',
+    badge: 'bg-rose-200/80 text-rose-900 dark:bg-rose-800 dark:text-rose-100',
+    title: 'Perfil no prioritario según bases oficiales',
+    Icon: XCircle,
+  },
+};
+
 export function EligibilityAssistant({ project }: EligibilityAssistantProps) {
   const [selectedApplicant, setSelectedApplicant] = useState<string>('pequeno_agricultor');
   const [selectedRegion, setSelectedRegion] = useState<string>('Nacional (Todas las Regiones)');
@@ -187,72 +211,50 @@ export function EligibilityAssistant({ project }: EligibilityAssistantProps) {
       </div>
 
       {/* Veredicto de Elegibilidad */}
-      <div className={`mt-5 rounded-xl border p-4 sm:p-5 transition-all ${
-        evaluation.verdict === 'eligible'
-          ? 'border-emerald-200 bg-emerald-50/90 text-emerald-950 dark:border-emerald-800/60 dark:bg-emerald-950/40 dark:text-emerald-100'
-          : evaluation.verdict === 'conditional'
-          ? 'border-amber-200 bg-amber-50/90 text-amber-950 dark:border-amber-800/60 dark:bg-amber-950/40 dark:text-amber-100'
-          : 'border-rose-200 bg-rose-50/90 text-rose-950 dark:border-rose-800/60 dark:bg-rose-950/40 dark:text-rose-100'
-      }`}>
-        <div className="flex items-start gap-3.5">
-          <div className="mt-0.5 shrink-0">
-            {evaluation.verdict === 'eligible' && (
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500 text-white shadow-sm">
-                <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
-              </div>
-            )}
-            {evaluation.verdict === 'conditional' && (
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-amber-500 text-white shadow-sm">
-                <AlertTriangle className="h-4 w-4" aria-hidden="true" />
-              </div>
-            )}
-            {evaluation.verdict === 'ineligible' && (
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-rose-500 text-white shadow-sm">
-                <XCircle className="h-5 w-5" aria-hidden="true" />
-              </div>
-            )}
-          </div>
-
-          <div className="flex-1">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-sm sm:text-base font-extrabold">
-                {evaluation.verdict === 'eligible' && 'Preevaluación favorable: Perfil compatible'}
-                {evaluation.verdict === 'conditional' && 'Elegible con condiciones o alianza técnica requerida'}
-                {evaluation.verdict === 'ineligible' && 'Perfil no prioritario según bases oficiales'}
-              </span>
-              <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${
-                evaluation.verdict === 'eligible'
-                  ? 'bg-emerald-200/80 text-emerald-900 dark:bg-emerald-800 dark:text-emerald-100'
-                  : evaluation.verdict === 'conditional'
-                  ? 'bg-amber-200/80 text-amber-900 dark:bg-amber-800 dark:text-amber-100'
-                  : 'bg-rose-200/80 text-rose-900 dark:bg-rose-800 dark:text-rose-100'
-              }`}>
-                Puntaje de afinidad: {evaluation.score}%
-              </span>
-            </div>
-
-            {/* Listado de motivos */}
-            <div className="mt-3 space-y-1.5 text-xs">
-              {evaluation.reasons.map((r, i) => (
-                <div key={i} className="flex items-start gap-2">
-                  <span className="mt-0.5 text-emerald-600 dark:text-emerald-400 font-bold">✓</span>
-                  <span className="leading-relaxed">{r}</span>
+      {(() => {
+        const theme = VERDICT_THEMES[evaluation.verdict];
+        const VerdictIcon = theme.Icon;
+        return (
+          <div className={`mt-5 rounded-xl border p-4 sm:p-5 transition-all ${theme.box}`}>
+            <div className="flex items-start gap-3.5">
+              <div className="mt-0.5 shrink-0">
+                <div className={`flex h-7 w-7 items-center justify-center rounded-full ${theme.bg} text-white shadow-sm`}>
+                  <VerdictIcon className="h-4.5 w-4.5" aria-hidden="true" />
                 </div>
-              ))}
-              {evaluation.missing.map((m, i) => (
-                <div key={i} className="flex items-start gap-2 font-medium text-amber-900 dark:text-amber-300">
-                  <span className="mt-0.5 font-bold text-amber-600 dark:text-amber-400">!</span>
-                  <span className="leading-relaxed">{m}</span>
-                </div>
-              ))}
-            </div>
+              </div>
 
-            <p className="mt-3.5 border-t border-black/10 pt-2 text-[11px] leading-relaxed text-gray-500 dark:border-white/10 dark:text-gray-400">
-              * Esta orientación técnica es determinística y referencial generada por el Radar IICA Chile. La resolución definitiva corresponde a la institución convocante.
-            </p>
+              <div className="flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-sm sm:text-base font-extrabold">{theme.title}</span>
+                  <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${theme.badge}`}>
+                    Puntaje de afinidad: {evaluation.score}%
+                  </span>
+                </div>
+
+                {/* Listado de motivos */}
+                <div className="mt-3 space-y-1.5 text-xs">
+                  {evaluation.reasons.map((r, i) => (
+                    <div key={i} className="flex items-start gap-2">
+                      <span className="mt-0.5 text-emerald-600 dark:text-emerald-400 font-bold">✓</span>
+                      <span className="leading-relaxed">{r}</span>
+                    </div>
+                  ))}
+                  {evaluation.missing.map((m, i) => (
+                    <div key={i} className="flex items-start gap-2 font-medium text-amber-900 dark:text-amber-300">
+                      <span className="mt-0.5 font-bold text-amber-600 dark:text-amber-400">!</span>
+                      <span className="leading-relaxed">{m}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <p className="mt-3.5 border-t border-black/10 pt-2 text-[11px] leading-relaxed text-gray-500 dark:border-white/10 dark:text-gray-400">
+                  * Esta orientación técnica es determinística y referencial generada por el Radar IICA Chile. La resolución definitiva corresponde a la institución convocante.
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        );
+      })()}
 
     </div>
   );

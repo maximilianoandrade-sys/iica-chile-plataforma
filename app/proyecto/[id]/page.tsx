@@ -8,7 +8,6 @@ import {
   CheckCircle2, 
   Info, 
   MapPin, 
-  Users, 
   DollarSign, 
   Layers, 
   Laptop, 
@@ -33,12 +32,6 @@ import { LinkGuardianAnchor } from '@/lib/linkGuardian';
 import { getCatalogRouteKey } from '@/lib/catalog-merge';
 
 const getCachedProjects = cache(getProjects);
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL
-    || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
-
-function safeJsonLd(obj: Record<string, unknown>): string {
-    return JSON.stringify(obj).replace(/</g, '\\u003c');
-}
 
 interface Props {
     params: Promise<{ id: string }>;
@@ -106,14 +99,11 @@ export default async function ProyectoDetallePage({ params }: Props) {
     const EN_VALIDACION = 'en validación editorial';
     const isEmptyField = (val: string | undefined | null) => !val || val.trim() === '' || val.trim().toLowerCase() === EN_VALIDACION;
     const meaningfulRegiones = (project.regiones ?? []).filter(r => !isEmptyField(r));
-    const meaningfulBeneficiarios = (project.beneficiarios ?? []).filter(b => !isEmptyField(b));
     const hasRegions = meaningfulRegiones.length > 0;
-    const hasBeneficiaries = meaningfulBeneficiarios.length > 0;
     const regionPreview = hasRegions
         ? (meaningfulRegiones.includes('Todas') ? 'Todo Chile' : meaningfulRegiones.slice(0, 2).join(', '))
         : (project.ambito || 'Nacional');
 
-    const projectUrl = `${SITE_URL}/proyecto/${getCatalogRouteKey(project)}`;
     const similarProjects = projects
         .filter(p => p.id !== project.id && (p.institucion === project.institucion || p.categoria === project.categoria))
         .slice(0, 3);
