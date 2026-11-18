@@ -1,16 +1,9 @@
+'use client';
+
 import React, { useState } from 'react';
-import { Bell, Mail, Phone, CheckCircle2, X, Send } from 'lucide-react';
-
-const CHILE_REGIONS: string[] = [
-  'Arica y Parinacota', 'Tarapacá', 'Antofagasta', 'Atacama', 'Coquimbo', 'Valparaíso',
-  'Metropolitana', "O'Higgins", 'Maule', 'Ñuble', 'Bío Bío', 'La Araucanía',
-   'Los Ríos', 'Los Lagos', 'Aysén', 'Magallanes'
-];
-
-const AGRICULTURAL_SECTORS: string[] = [
-  'Riego y Eficiencia Hídrica', 'Inteligencia Artificial y AgriTech', 'Sostenibilidad y Cambio Climático',
-  'Innovación y Bioeconomía', 'Desarrollo Territorial', 'Capacitación y Asistencia Técnica'
-];
+import Link from 'next/link';
+import { X, Bell, Mail, Phone, CheckCircle2, Send, ShieldCheck } from 'lucide-react';
+import { CHILE_REGIONS, AGRICULTURAL_SECTORS } from '@/lib/project-utils';
 
 interface NewsletterModalProps {
   isOpen: boolean;
@@ -23,6 +16,7 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
   const [selectedRegion, setSelectedRegion] = useState('Todas');
   const [selectedCategory, setSelectedCategory] = useState('Todas');
   const [frequency, setFrequency] = useState<'instant_urgent' | 'weekly'>('instant_urgent');
+  const [consent, setConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -31,6 +25,11 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!consent) {
+      setErrorMessage('Debes aceptar el consentimiento informado para activar las alertas (Ley 21.719).');
+      return;
+    }
+
     setIsSubmitting(true);
     setErrorMessage(null);
     setSuccessMessage(null);
@@ -44,8 +43,9 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
           type: contactType,
           regions: [selectedRegion],
           categories: [selectedCategory],
-          frequency
-        })
+          frequency,
+          consent: true,
+        }),
       });
 
       const data = await res.json();
@@ -53,7 +53,7 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
         throw new Error(data.error || 'Error al suscribirse');
       }
 
-      setSuccessMessage(data.message || 'Suscripción exitosa');
+      setSuccessMessage(data.message || data.data?.message || '¡Suscripción exitosa!');
     } catch (err: unknown) {
       setErrorMessage(err instanceof Error ? err.message : 'Error inesperado');
     } finally {
@@ -71,14 +71,13 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
               <Bell className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="font-bold text-base leading-tight">Alertas de Financiamiento IICA</h3>
-              <p className="text-xs text-blue-200">Recibe oportunidades en tu teléfono o correo</p>
+              <h3 className="font-bold text-sm">Alertas Personalizadas IICA</h3>
+              <p className="text-[11px] text-blue-200">Recibe fondos del agro directo a tu teléfono o correo</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-blue-200 hover:text-white hover:bg-white/10 transition-colors"
-            aria-label="Cerrar modal"
+            className="p-1 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
@@ -199,6 +198,26 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
                 </select>
               </div>
 
+              {/* Consentimiento Ley 21.719 */}
+              <div className="pt-1">
+                <label className="flex items-start gap-2.5 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={consent}
+                    onChange={(e) => setConsent(e.target.checked)}
+                    required
+                    className="mt-0.5 h-4 w-4 rounded border-gray-300 text-[var(--iica-blue)] focus:ring-blue-500"
+                  />
+                  <span className="text-[11px] leading-tight text-gray-600 dark:text-gray-300">
+                    Acepto el tratamiento de mis datos de contacto para recibir alertas de convocatorias según la{' '}
+                    <Link href="/legal/privacidad" target="_blank" className="text-[var(--iica-blue)] underline">
+                      Política de Privacidad
+                    </Link>{' '}
+                    (Ley 21.719). Puedo darme de baja en cualquier momento.
+                  </span>
+                </label>
+              </div>
+
               {/* Botón de Enviar */}
               <button
                 type="submit"
@@ -206,7 +225,7 @@ export default function NewsletterModal({ isOpen, onClose }: NewsletterModalProp
                 className="w-full mt-2 flex items-center justify-center gap-2 py-3 px-4 bg-[var(--iica-blue)] hover:bg-blue-800 text-white font-bold rounded-xl transition-all shadow-md disabled:opacity-50"
               >
                 <Send className="h-4 w-4" />
-                {isSubmitting ? 'Procesando...' : 'Activar Mis Alertas Gratuita'}
+                {isSubmitting ? 'Procesando...' : 'Activar Mis Alertas Gratuitas'}
               </button>
             </form>
           )}

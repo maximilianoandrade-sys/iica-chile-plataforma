@@ -1,33 +1,65 @@
-import { NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
+import { z } from 'zod';
 import prisma from '@/lib/prisma';
 import { scrapeUrlWithAI } from '@/lib/ingestion/universal-ai-scraper';
 import { normalizeUrl } from '@/lib/ingestion/utils';
 import { getLogger } from '@/lib/utils/logger';
 import { checkDistributedRateLimit, getRateLimitIdentifier } from '@/lib/utils/rateLimit';
+import { isAllowedPublicHttpUrl, verifyHostnameResolvesToPublicIps } from '@/lib/utils/network-security';
+import { createSuccessResponse, createErrorResponse } from '@/lib/utils/api-response';
 
 const logger = getLogger('ProjectSubmitAPI');
 
-export async function POST(request: Request) {
+const SubmitSchema = z.object({
+  url: z.string().url('URL no válida').max(2000, 'URL demasiado larga'),
+});
+
+export async function POST(request: NextRequest) {
   try {
     const contentLength = Number(request.headers.get('content-length') || 0);
     if (contentLength > 8_000) {
-      return NextResponse.json({ error: 'Solicitud demasiado grande' }, { status: 413 });
+      return createErrorResponse('Solicitud demasiado grande', 413);
     }
+
     const clientId = getRateLimitIdentifier(request, 'project-submit');
     const rateLimit = await checkDistributedRateLimit(clientId, 5, 60_000);
     if (!rateLimit.success) {
-      return NextResponse.json({ error: 'Demasiadas solicitudes; reintenta más tarde' }, { status: 429 });
-    }
-    const body = await request.json();
-    const rawUrl = body.url;
-
-    if (!rawUrl || typeof rawUrl !== 'string') {
-      return NextResponse.json({ error: 'URL es requerida' }, { status: 400 });
+      return createErrorResponse('Demasiadas solicitudes; reintenta más tarde', 429);
     }
 
+    let jsonBody: unknown;
+    try {
+      jsonBody = await request.json();
+    } catch {
+      return createErrorResponse('Cuerpo JSON inválido', 400);
+    }
+
+    const parsed = SubmitSchema.safeParse(jsonBody);
+    if (!parsed.success) {
+      return createErrorResponse(parsed.error.issues?.[0]?.message || 'URL inválida', 400);
+    }
+
+    const rawUrl = parsed.data.url;
     const canonicalUrl = normalizeUrl(rawUrl);
     if (!canonicalUrl) {
-      return NextResponse.json({ error: 'URL inválida' }, { status: 400 });
+      return createErrorResponse('URL inválida o no normalizable', 400);
+    }
+
+    // SSRF prevention: verify protocol, block private IPs and non-public hostnames
+    if (!isAllowedPublicHttpUrl(canonicalUrl)) {
+      logger.warn('SSRF blocked in project submit', { url: canonicalUrl });
+      return createErrorResponse('Solo se permiten URLs públicas accesibles (HTTP/HTTPS)', 400);
+    }
+
+    try {
+      const parsedUrl = new URL(canonicalUrl);
+      const resolvesToPublic = await verifyHostnameResolvesToPublicIps(parsedUrl.hostname);
+      if (!resolvesToPublic) {
+        logger.warn('SSRF private IP resolution blocked', { hostname: parsedUrl.hostname });
+        return createErrorResponse('La URL apunta a una dirección IP interna o no autorizada', 400);
+      }
+    } catch {
+      return createErrorResponse('No se pudo verificar el host de la URL', 400);
     }
 
     // Check if it already exists
@@ -36,20 +68,14 @@ export async function POST(request: Request) {
     });
 
     if (existing) {
-      return NextResponse.json(
-        { error: 'Esta oportunidad ya existe en la plataforma' },
-        { status: 409 }
-      );
+      return createErrorResponse('Esta oportunidad ya existe en la plataforma', 409);
     }
 
     // Extract info via LLM
     const extractedProject = await scrapeUrlWithAI(canonicalUrl);
 
     if (!extractedProject) {
-      return NextResponse.json(
-        { error: 'No se pudo extraer información estructurada de este enlace' },
-        { status: 422 }
-      );
+      return createErrorResponse('No se pudo extraer información estructurada de este enlace', 422);
     }
 
     // Save as needsReview
@@ -68,18 +94,18 @@ export async function POST(request: Request) {
         region: extractedProject.region || 'Nacional',
         discoveredBy: 'community',
         needsReview: true,
-        estadoPostulacion: 'Abierta'
+        estadoPostulacion: 'Abierta',
       },
     });
 
     logger.info('Project submitted by community successfully', { projectId: dbProject.id, url: canonicalUrl });
 
-    return NextResponse.json(
-      { ok: true, success: true, id: dbProject.id, status: 'needs_review' },
-      { status: 201 },
+    return createSuccessResponse(
+      { id: dbProject.id, status: 'needs_review', message: 'Sugerencia recibida exitosamente para revisión técnica' },
+      201
     );
   } catch (error) {
     logger.error('Error submitting project', error as Error);
-    return NextResponse.json({ ok: false, error: 'Error interno procesando la sugerencia' }, { status: 500 });
+    return createErrorResponse('Error interno procesando la sugerencia', 500);
   }
 }

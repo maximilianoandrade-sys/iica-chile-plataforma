@@ -6,6 +6,25 @@ import { EXTERNAL_PROVIDER_IDS, SEARCH_RELEVANCE_MODES, SEARCH_SOURCE_MODES } fr
  * Importar y usar .safeParse() en route handlers.
  */
 
+export const AiChatSchema = z.object({
+  message: z
+    .string()
+    .trim()
+    .min(1, 'El campo message es requerido')
+    .max(2000, 'El mensaje no puede exceder 2000 caracteres'),
+  model: z.string().trim().max(100, 'Nombre de modelo inválido').optional(),
+  systemPrompt: z
+    .string()
+    .trim()
+    .max(4000, 'El system prompt no puede exceder 4000 caracteres')
+    .optional(),
+  temperature: z
+    .number()
+    .min(0, 'Temperatura mínima es 0')
+    .max(2, 'Temperatura máxima es 2')
+    .optional(),
+});
+
 export const AiSearchSchema = z.object({
   query: z
     .string()

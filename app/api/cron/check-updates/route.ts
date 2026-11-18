@@ -15,6 +15,7 @@ import { createSuccessResponse, createErrorResponse } from '@/lib/utils/api-resp
 import { isAllowedPublicHttpUrl, verifyHostnameResolvesToPublicIps, fetchPublicUrl } from '@/lib/utils/network-security';
 import { getEnv } from '@/lib/utils/env';
 import { sendPushNotification } from '@/lib/push';
+import { markStaleProjects } from '@/lib/ingestion/persistence';
 
 const logger = getLogger('CronCheckUpdates');
 
@@ -295,6 +296,17 @@ export async function GET(request: NextRequest) {
                     if (result.status === 0 || result.status >= 400) brokenLinks.push(result);
                 }
             }
+        }
+
+        // ==================================================================
+        // AUTO-ARCHIVADO DE CONVOCATORIAS VENCIDAS (fecha_cierre < hoy)
+        // ==================================================================
+        let staleStats = { markedByLastSeen: 0, markedByDeadline: 0 };
+        try {
+            staleStats = await markStaleProjects();
+            logger.info('Auto-archivado de proyectos vencidos completado', staleStats);
+        } catch (staleErr) {
+            logger.error('Error auto-archivando proyectos vencidos', staleErr as Error);
         }
 
         // ==================================================================

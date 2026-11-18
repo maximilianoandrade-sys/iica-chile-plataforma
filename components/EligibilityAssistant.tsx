@@ -1,7 +1,17 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { CheckCircle2, AlertTriangle, XCircle, HelpCircle, ShieldCheck, Sparkles, Building2, MapPin, Coins } from 'lucide-react';
+import { 
+  CheckCircle2, 
+  AlertTriangle, 
+  XCircle, 
+  Sparkles, 
+  Building2, 
+  MapPin, 
+  Coins,
+  ChevronDown,
+  Info
+} from 'lucide-react';
 import type { Project } from '@/lib/project-utils';
 
 interface EligibilityAssistantProps {
@@ -9,11 +19,11 @@ interface EligibilityAssistantProps {
 }
 
 const APPLICANT_TYPES = [
-  { id: 'pequeno_agricultor', label: 'Pequeño Agricultor / INDAP', keywords: ['pequeño', 'indap', 'campesino', 'agricultor'] },
+  { id: 'pequeno_agricultor', label: 'Pequeño Agricultor / INDAP', keywords: ['pequeño', 'indap', 'campesino', 'agricultor', 'persona natural'] },
   { id: 'cooperativa', label: 'Cooperativa o Asociación Agrícola', keywords: ['cooperativa', 'asociación', 'agrupación', 'organización'] },
-  { id: 'pyme', label: 'PYME / Empresa Agrícola', keywords: ['empresa', 'pyme', 'sociedad', 'agrícola', 'privada'] },
+  { id: 'pyme', label: 'PYME / Empresa Agrícola', keywords: ['empresa', 'pyme', 'sociedad', 'agrícola', 'privada', 'startup'] },
   { id: 'ong', label: 'ONG / Sociedad Civil / Colectivo', keywords: ['ong', 'sociedad civil', 'colectivo', 'mujeres', 'jóvenes'] },
-  { id: 'universidad', label: 'Universidad / Centro I+D', keywords: ['universidad', 'centro', 'investigación', 'academia'] },
+  { id: 'universidad', label: 'Universidad / Centro I+D', keywords: ['universidad', 'centro', 'investigación', 'academia', 'instituto'] },
 ];
 
 const REGION_OPTIONS = [
@@ -49,12 +59,12 @@ export function EligibilityAssistant({ project }: EligibilityAssistantProps) {
     if (isMatchProfile) {
       score += 40;
       if (allProfiles.length > 0) {
-        reasons.push(`Perfil "${applicantLabel}" coincide con los requisitos registrados en las bases.`);
+        reasons.push(`Tu perfil "${applicantLabel}" coincide con los requisitos y beneficiarios registrados en las bases.`);
       } else {
-        reasons.push(`Perfil "${applicantLabel}" aplica a esta convocatoria de ventanilla o criterios generales.`);
+        reasons.push(`Tu perfil "${applicantLabel}" califica para esta convocatoria abierta de criterios generales.`);
       }
     } else {
-      missing.push(`Las bases enfatizan candidatos tipo: ${project.tipos_solicitante?.join(', ') || project.beneficiarios?.join(', ') || 'Consorcios o Entidades Acreditadas'}.`);
+      missing.push(`Las bases priorizan postulantes tipo: ${project.tipos_solicitante?.join(', ') || project.beneficiarios?.join(', ') || 'Consorcios o Entidades Acreditadas'}.`);
     }
 
     // 2. Region / Coverage evaluation
@@ -73,12 +83,12 @@ export function EligibilityAssistant({ project }: EligibilityAssistantProps) {
     // 3. Cofinancing evaluation
     if (!project.requiere_cofinanciamiento) {
       score += 30;
-      reasons.push('Fondo 100% Subvención: No exige aporte en efectivo propio.');
+      reasons.push('Fondo 100% Subvención: No exige aporte en efectivo propio contraparte.');
     } else if (hasCofinancing === 'si') {
       score += 30;
-      reasons.push('Dispones de capacidad de cofinanciamiento para el aporte contraparte.');
+      reasons.push('Cuentas con capacidad para cofinanciar el porcentaje requerido por las bases.');
     } else {
-      missing.push('El fondo requiere cofinanciamiento obligatorio del postulante.');
+      missing.push('Esta convocatoria exige aporte propio o de terceros (cofinanciamiento obligatorio).');
     }
 
     let verdict: 'eligible' | 'conditional' | 'ineligible' = 'eligible';
@@ -90,123 +100,162 @@ export function EligibilityAssistant({ project }: EligibilityAssistantProps) {
   }, [project, selectedApplicant, selectedRegion, hasCofinancing]);
 
   return (
-    <div className="bg-gradient-to-br from-blue-50/80 via-white to-emerald-50/80 dark:from-gray-800 dark:via-gray-800/90 dark:to-emerald-950/30 border-2 border-blue-200 dark:border-blue-800/60 rounded-2xl p-6 shadow-sm my-6">
-      <div className="mb-4 flex items-start gap-3 sm:items-center">
-        <div className="p-2.5 bg-[var(--iica-blue)]/10 dark:bg-blue-900/40 rounded-xl text-[var(--iica-blue)] dark:text-blue-300">
-          <Sparkles className="w-5 h-5" aria-hidden="true" />
+    <div className="rounded-2xl border border-blue-200/70 bg-gradient-to-br from-blue-50/70 via-white to-indigo-50/50 p-5 sm:p-6 shadow-sm dark:border-blue-900/50 dark:from-gray-800/90 dark:via-gray-800/70 dark:to-blue-950/30">
+      
+      {/* Header del asistente */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b border-blue-100 dark:border-gray-700/80">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--iica-blue)] text-white shadow-sm shadow-blue-500/20">
+            <Sparkles className="h-5 w-5" aria-hidden="true" />
+          </div>
+          <div>
+            <h3 className="text-base sm:text-lg font-bold text-[var(--iica-navy)] dark:text-white">
+              Asistente de Elegibilidad Rápida
+            </h3>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Verifica en tiempo real si cumples con las condiciones básicas para postular.
+            </p>
+          </div>
         </div>
-        <div className="min-w-0">
-          <h3 className="flex flex-wrap items-center gap-2 text-lg font-extrabold text-[var(--iica-navy)] dark:text-white">
-            Asistente de Elegibilidad — ¿Puedo Postular?
-          </h3>
-          <p className="text-xs text-gray-600 dark:text-gray-400">
-            Verificación determinística en tiempo real contrastando tu perfil contra los requisitos reales almacenados en las bases oficiales.
-          </p>
+
+        <div className="inline-flex items-center gap-1.5 self-start sm:self-auto rounded-full bg-blue-100/70 px-3 py-1 text-xs font-semibold text-blue-800 dark:bg-blue-950/70 dark:text-blue-300">
+          <Info className="h-3.5 w-3.5" />
+          <span>Filtro Automatizado</span>
         </div>
       </div>
 
-      {/* Selectors Form */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        {/* Tipo de Solicitante */}
+      {/* Selectores */}
+      <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
+        {/* Perfil */}
         <div>
-          <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5 flex items-center gap-1.5">
-            <Building2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" aria-hidden="true" />
+          <label className="mb-1.5 flex items-center gap-1.5 text-xs font-bold text-gray-700 dark:text-gray-300">
+            <Building2 className="h-3.5 w-3.5 text-[var(--iica-blue)]" aria-hidden="true" />
             1. Perfil del Postulante
           </label>
-          <select
-            value={selectedApplicant}
-            onChange={(e) => setSelectedApplicant(e.target.value)}
-            className="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2.5 text-xs font-bold text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-[var(--iica-blue)] min-h-[44px]"
-          >
-            {APPLICANT_TYPES.map(a => (
-              <option key={a.id} value={a.id}>{a.label}</option>
-            ))}
-          </select>
+          <div className="relative">
+            <select
+              value={selectedApplicant}
+              onChange={(e) => setSelectedApplicant(e.target.value)}
+              className="w-full appearance-none rounded-xl border border-gray-300 bg-white py-2.5 pl-3 pr-8 text-xs font-semibold text-gray-800 shadow-sm transition-all focus:border-[var(--iica-blue)] focus:outline-none focus:ring-2 focus:ring-[var(--iica-blue)]/20 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 min-h-[44px]"
+            >
+              {APPLICANT_TYPES.map(a => (
+                <option key={a.id} value={a.id}>{a.label}</option>
+              ))}
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          </div>
         </div>
 
         {/* Región */}
         <div>
-          <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5 flex items-center gap-1.5">
-            <MapPin className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" aria-hidden="true" />
+          <label className="mb-1.5 flex items-center gap-1.5 text-xs font-bold text-gray-700 dark:text-gray-300">
+            <MapPin className="h-3.5 w-3.5 text-[var(--iica-blue)]" aria-hidden="true" />
             2. Ubicación / Región
           </label>
-          <select
-            value={selectedRegion}
-            onChange={(e) => setSelectedRegion(e.target.value)}
-            className="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2.5 text-xs font-bold text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-[var(--iica-blue)] min-h-[44px]"
-          >
-            {REGION_OPTIONS.map(r => (
-              <option key={r} value={r}>{r}</option>
-            ))}
-          </select>
+          <div className="relative">
+            <select
+              value={selectedRegion}
+              onChange={(e) => setSelectedRegion(e.target.value)}
+              className="w-full appearance-none rounded-xl border border-gray-300 bg-white py-2.5 pl-3 pr-8 text-xs font-semibold text-gray-800 shadow-sm transition-all focus:border-[var(--iica-blue)] focus:outline-none focus:ring-2 focus:ring-[var(--iica-blue)]/20 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 min-h-[44px]"
+            >
+              {REGION_OPTIONS.map(r => (
+                <option key={r} value={r}>{r}</option>
+              ))}
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          </div>
         </div>
 
         {/* Cofinanciamiento */}
         <div>
-          <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5 flex items-center gap-1.5">
-            <Coins className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" aria-hidden="true" />
+          <label className="mb-1.5 flex items-center gap-1.5 text-xs font-bold text-gray-700 dark:text-gray-300">
+            <Coins className="h-3.5 w-3.5 text-[var(--iica-blue)]" aria-hidden="true" />
             3. Aporte Propio Disponible
           </label>
-          <select
-            value={hasCofinancing}
-            onChange={(e) => setHasCofinancing(e.target.value)}
-            className="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2.5 text-xs font-bold text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-[var(--iica-blue)] min-h-[44px]"
-          >
-            <option value="si">Sí tengo fondos para cofinanciar</option>
-            <option value="no">Busco 100% Subvención (sin aporte)</option>
-          </select>
+          <div className="relative">
+            <select
+              value={hasCofinancing}
+              onChange={(e) => setHasCofinancing(e.target.value)}
+              className="w-full appearance-none rounded-xl border border-gray-300 bg-white py-2.5 pl-3 pr-8 text-xs font-semibold text-gray-800 shadow-sm transition-all focus:border-[var(--iica-blue)] focus:outline-none focus:ring-2 focus:ring-[var(--iica-blue)]/20 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 min-h-[44px]"
+            >
+              <option value="si">Dispongo de fondos de contraparte</option>
+              <option value="no">Busco financiamiento 100% subsidio</option>
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          </div>
         </div>
       </div>
 
-      {/* Verdict Result */}
-      <div className={`p-4 rounded-xl border-2 transition-all ${
+      {/* Veredicto de Elegibilidad */}
+      <div className={`mt-5 rounded-xl border p-4 sm:p-5 transition-all ${
         evaluation.verdict === 'eligible'
-          ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-700'
+          ? 'border-emerald-200 bg-emerald-50/90 text-emerald-950 dark:border-emerald-800/60 dark:bg-emerald-950/40 dark:text-emerald-100'
           : evaluation.verdict === 'conditional'
-          ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-700'
-          : 'bg-red-50 dark:bg-red-950/40 border-red-300 dark:border-red-700'
+          ? 'border-amber-200 bg-amber-50/90 text-amber-950 dark:border-amber-800/60 dark:bg-amber-950/40 dark:text-amber-100'
+          : 'border-rose-200 bg-rose-50/90 text-rose-950 dark:border-rose-800/60 dark:bg-rose-950/40 dark:text-rose-100'
       }`}>
-        <div className="flex items-start gap-3">
-          {evaluation.verdict === 'eligible' && <CheckCircle2 className="w-6 h-6 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" aria-hidden="true" />}
-          {evaluation.verdict === 'conditional' && <AlertTriangle className="w-6 h-6 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" aria-hidden="true" />}
-          {evaluation.verdict === 'ineligible' && <XCircle className="w-6 h-6 text-red-600 dark:text-red-400 shrink-0 mt-0.5" aria-hidden="true" />}
+        <div className="flex items-start gap-3.5">
+          <div className="mt-0.5 shrink-0">
+            {evaluation.verdict === 'eligible' && (
+              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500 text-white shadow-sm">
+                <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
+              </div>
+            )}
+            {evaluation.verdict === 'conditional' && (
+              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-amber-500 text-white shadow-sm">
+                <AlertTriangle className="h-4 w-4" aria-hidden="true" />
+              </div>
+            )}
+            {evaluation.verdict === 'ineligible' && (
+              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-rose-500 text-white shadow-sm">
+                <XCircle className="h-5 w-5" aria-hidden="true" />
+              </div>
+            )}
+          </div>
 
-          <div className="min-w-0 flex-1">
-            <div className="mb-1 flex items-start gap-2">
-              <span className={`max-w-full break-words text-sm font-extrabold px-3 py-1 rounded-full ${
+          <div className="flex-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-sm sm:text-base font-extrabold">
+                {evaluation.verdict === 'eligible' && 'Preevaluación favorable: Perfil compatible'}
+                {evaluation.verdict === 'conditional' && 'Elegible con condiciones o alianza técnica requerida'}
+                {evaluation.verdict === 'ineligible' && 'Perfil no prioritario según bases oficiales'}
+              </span>
+              <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${
                 evaluation.verdict === 'eligible'
-                  ? 'bg-emerald-200 text-emerald-900 dark:bg-emerald-800 dark:text-emerald-100'
+                  ? 'bg-emerald-200/80 text-emerald-900 dark:bg-emerald-800 dark:text-emerald-100'
                   : evaluation.verdict === 'conditional'
-                  ? 'bg-amber-200 text-amber-900 dark:bg-amber-800 dark:text-amber-100'
-                  : 'bg-red-200 text-red-900 dark:bg-red-800 dark:text-red-100'
+                  ? 'bg-amber-200/80 text-amber-900 dark:bg-amber-800 dark:text-amber-100'
+                  : 'bg-rose-200/80 text-rose-900 dark:bg-rose-800 dark:text-rose-100'
               }`}>
-                {evaluation.verdict === 'eligible' && '✅ Preevaluación favorable'}
-                {evaluation.verdict === 'conditional' && '⚠️ Elegible con Condiciones o Socio Técnico'}
-                {evaluation.verdict === 'ineligible' && '❌ Perfil no prioritario según bases'}
+                Puntaje de afinidad: {evaluation.score}%
               </span>
             </div>
 
-            <ul className="mt-2 space-y-1 text-xs text-gray-700 dark:text-gray-300">
+            {/* Listado de motivos */}
+            <div className="mt-3 space-y-1.5 text-xs">
               {evaluation.reasons.map((r, i) => (
-                <li key={i} className="flex items-start gap-1.5">
-                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">•</span>
-                  <span>{r}</span>
-                </li>
+                <div key={i} className="flex items-start gap-2">
+                  <span className="mt-0.5 text-emerald-600 dark:text-emerald-400 font-bold">✓</span>
+                  <span className="leading-relaxed">{r}</span>
+                </div>
               ))}
               {evaluation.missing.map((m, i) => (
-                <li key={i} className="flex items-start gap-1.5 text-amber-800 dark:text-amber-300 font-medium">
-                  <span className="text-amber-600 dark:text-amber-400 font-bold">!</span>
-                  <span>{m}</span>
-                </li>
+                <div key={i} className="flex items-start gap-2 font-medium text-amber-900 dark:text-amber-300">
+                  <span className="mt-0.5 font-bold text-amber-600 dark:text-amber-400">!</span>
+                  <span className="leading-relaxed">{m}</span>
+                </div>
               ))}
-            </ul>
+            </div>
 
-            <p className="mt-3 text-[11px] text-gray-500 dark:text-gray-400 italic border-t border-gray-200 dark:border-gray-700/60 pt-2">
-              Nota: La preevaluación mostrada es una orientación técnica previa del Radar IICA Chile. La decisión final de admisibilidad y adjudicación corresponde exclusivamente a la institución convocante según sus bases oficiales.
+            <p className="mt-3.5 border-t border-black/10 pt-2 text-[11px] leading-relaxed text-gray-500 dark:border-white/10 dark:text-gray-400">
+              * Esta orientación técnica es determinística y referencial generada por el Radar IICA Chile. La resolución definitiva corresponde a la institución convocante.
             </p>
           </div>
         </div>
       </div>
+
     </div>
   );
 }
+
+export default EligibilityAssistant;

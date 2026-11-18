@@ -5,15 +5,6 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
 
-  // Configuración de paths
-  webpack: (config) => {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@': __dirname,
-    };
-    return config;
-  },
-
   // Redirect rutas eliminadas
   async redirects() {
     return [
@@ -109,7 +100,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "img-src 'self' data: https: blob:",
               "font-src 'self' https://fonts.gstatic.com",
-              "connect-src 'self' https://www.google-analytics.com https://*.supabase.co wss://*.supabase.co https://*.gob.cl https://*.corfo.cl https://*.indap.cl https://images.unsplash.com",
+              "connect-src 'self' https://www.google-analytics.com https://*.supabase.co wss://*.supabase.co https://*.gob.cl https://*.corfo.cl https://*.indap.cl https://images.unsplash.com https://openrouter.ai",
               "frame-src 'self' https://www.youtube.com",
               "object-src 'none'",
               "base-uri 'self'",
@@ -129,10 +120,6 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'upload.wikimedia.org',
-      },
-      {
-        protocol: 'https',
-        hostname: 'www.google.com',
       },
       {
         protocol: 'https',
@@ -158,12 +145,8 @@ const nextConfig = {
         protocol: 'https',
         hostname: '**.worldbank.org',
       },
-
-
     ],
     formats: ['image/avif', 'image/webp'],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
 }
 

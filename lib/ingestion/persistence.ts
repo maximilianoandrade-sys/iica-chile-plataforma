@@ -80,7 +80,6 @@ export async function upsertProject(
 
   const textualDuplicate = await prisma.project.findFirst({
     where: {
-      sourceRefId: source.id,
       canonicalUrl: { not: canonicalUrl },
       nombre: { equals: baseFields.nombre, mode: 'insensitive' },
       institucion: { equals: baseFields.institucion, mode: 'insensitive' },
@@ -264,6 +263,8 @@ export async function markStale(
 
   return { markedByLastSeen: byLastSeen.count, markedByDeadline: byDeadline.count };
 }
+
+export const markStaleProjects = markStale;
 
 export async function updateSourceStatus(
   slug: string,

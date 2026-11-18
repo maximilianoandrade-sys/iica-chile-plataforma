@@ -154,13 +154,6 @@ export default function RootLayout({
         {/* DNS Prefetch */}
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
 
-        {/* Theme Color */}
-        <meta name="theme-color" content="#0066CC" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-
-        {/* Security Headers — X-Frame-Options y X-XSS-Protection se envían como HTTP headers en next.config.js, no como <meta> */}
-        <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: safeJsonStringify(organizationJsonLd) }}

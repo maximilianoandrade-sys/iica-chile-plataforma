@@ -7,7 +7,6 @@ import { LayoutGrid, List, Calendar, ArrowRight, ExternalLink, ShieldCheck, Down
 import { ProjectCard } from '@/components/ProjectCard';
 import { FavoriteButton } from '@/components/FavoriteButton';
 import { TenderComparator } from '@/components/TenderComparator';
-import ActiveFiltersBar from '@/components/ActiveFiltersBar';
 import CofinancingCalculator from '@/components/CofinancingCalculator';
 import FavoritesDrawer from '@/components/FavoritesDrawer';
 import { exportProjectsToCsv } from '@/lib/utils/exportCsv';

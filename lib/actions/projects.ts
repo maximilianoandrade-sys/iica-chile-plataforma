@@ -2,10 +2,12 @@
 import prisma from "@/lib/prisma";
 import { getLogger } from "@/lib/utils/logger";
 import { revalidatePath } from "next/cache";
+import { assertAdminSession } from "@/lib/utils/admin-auth";
 
 const logger = getLogger("ProjectActions");
 
 export async function approveProject(id: number) {
+  await assertAdminSession();
   try {
     await prisma.project.update({
       where: { id },
@@ -20,12 +22,14 @@ export async function approveProject(id: number) {
 }
 
 export async function rejectProject(id: number) {
+  await assertAdminSession();
   try {
     await prisma.project.update({
       where: { id },
       data: { needsReview: false, bases_estado: "rejected", publishable: false },
     });
     revalidatePath("/admin/projects/needsReview");
+    revalidatePath("/");
   } catch (err) {
     logger.error("Failed to reject project", err as Error, { id });
     throw err;
@@ -33,6 +37,7 @@ export async function rejectProject(id: number) {
 }
 
 export async function getProjectsNeedingReview() {
+  await assertAdminSession();
   try {
     return await prisma.project.findMany({
       where: {

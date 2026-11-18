@@ -29,6 +29,19 @@ export interface Project {
         observaciones?: string;
     };
 
+    // ── Plan Maestro v2: Gobernanza, Rigor y Necesidades ──────────────────
+    tipoOportunidad?: 'fondo_concursable' | 'subsidio' | 'cooperacion_internacional' | 'beca' | 'licitacion';
+    verificationTier?: 'TIER_1_MANUAL' | 'TIER_2_AUTOMATIC' | 'TIER_3_PENDING';
+    verificationDate?: string; // YYYY-MM-DD
+    verifiedBy?: string;
+    auditNotes?: string;
+    montoEquivalenteClp?: number | null;
+    montoMaximoProyecto?: number | null;
+    montoTotalFondo?: number | null;
+    necesidad?: 'riego' | 'maquinaria' | 'suelos' | 'innovacion' | 'asistencia' | 'investigacion' | 'general';
+    perfilesBeneficiario?: string[];
+    historialCambios?: Array<{ fecha: string; tipo: string; descripcion: string }>;
+
     // ── Campos técnicos de gestión ────────────────────────────────────────
     monto_min?: number;
     monto_max?: number;
@@ -249,3 +262,36 @@ export function rolIICAInfo(rol?: string): { text: string; bg: string; border: s
         default: return { text: 'text-gray-500', bg: 'bg-gray-50', border: 'border-gray-200', label: 'Sin definir', icon: '❓' };
     }
 }
+
+export const CHILE_REGIONS = [
+    'Arica y Parinacota',
+    'Tarapacá',
+    'Antofagasta',
+    'Atacama',
+    'Coquimbo',
+    'Valparaíso',
+    'Metropolitana',
+    "O'Higgins",
+    'Maule',
+    'Ñuble',
+    'Biobío',
+    'La Araucanía',
+    'Los Ríos',
+    'Los Lagos',
+    'Aysén',
+    'Magallanes',
+    'Nacional'
+];
+
+export const AGRICULTURAL_SECTORS = [
+    'Frutícola',
+    'Vitivinícola',
+    'Hortícola',
+    'Cereales y Granos',
+    'Ganadería y Lechería',
+    'Apicultura',
+    'Agroindustria',
+    'Riego y Eficiencia Hídrica',
+    'Sostenibilidad y Cambio Climático',
+    'AgTech e Innovación'
+];

@@ -24,7 +24,6 @@ const customConfig = {
     "<rootDir>/.next/",
     "<rootDir>/e2e/",
     "[/\\\\]e2e[/\\\\]",
-    "<rootDir>/.worktrees/",
     "<rootDir>/iica-chile-plataforma/",
   ],
   collectCoverageFrom: [

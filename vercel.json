@@ -1,41 +1,30 @@
 {
-    "crons": [
-        {
-            "path": "/api/cron/check-updates",
-            "schedule": "0 2 * * *"
-        }
-    ],
-    "buildCommand": "npm run prisma:generate && npm run build",
-    "installCommand": "npm install",
-    "framework": "nextjs",
-    "functions": {
-        "app/api/ai-search/route.ts": {
-            "memory": 512,
-            "maxDuration": 30
-        },
-        "app/api/generate-proposal/route.ts": {
-            "memory": 512,
-            "maxDuration": 30
-        },
-        "app/api/cron/check-updates/route.ts": {
-            "memory": 512,
-            "maxDuration": 60
-        },
-        "app/api/search-projects/route.ts": {
-            "memory": 512,
-            "maxDuration": 30
-        },
-        "app/api/**/*.ts": {
-            "memory": 512,
-            "maxDuration": 10
-        }
+  "crons": [
+    {
+      "path": "/api/cron/check-updates",
+      "schedule": "0 2 * * *"
+    }
+  ],
+  "functions": {
+    "app/api/ai-search/route.ts": {
+      "memory": 512,
+      "maxDuration": 30
     },
-    "headers": [
-        {
-            "source": "/api/(.*)",
-            "headers": [
-                { "key": "Cache-Control", "value": "no-store, must-revalidate" }
-            ]
-        }
-    ]
+    "app/api/generate-proposal/route.ts": {
+      "memory": 512,
+      "maxDuration": 30
+    },
+    "app/api/cron/check-updates/route.ts": {
+      "memory": 512,
+      "maxDuration": 60
+    },
+    "app/api/search-projects/route.ts": {
+      "memory": 512,
+      "maxDuration": 30
+    },
+    "app/api/**/*.ts": {
+      "memory": 512,
+      "maxDuration": 10
+    }
+  }
 }
